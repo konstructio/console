@@ -1,0 +1,6 @@
+body, #app {
+  background-image: radial-gradient(circle farthest-corner at 0% 0%, #181626, #3c356c 45%, #d0bae9 75%, #d1ff96);
+  margin: 0;
+  height: 100vh;
+  font-family: 'DM Sans', sans-serif;
+}
