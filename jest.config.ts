@@ -7,8 +7,14 @@ const config: Config.InitialOptions = {
   moduleFileExtensions: ['js', 'json', 'tsx', 'ts'],
   setupFilesAfterEnv: ['<rootDir>/tests/jest.setup.ts'],
   transformIgnorePatterns: ['<rootDir>/node_modules/'],
-  coveragePathIgnorePatterns: ['/node_modules/', '/tests/', '/assets/', './jest.config.ts'],
-  collectCoverageFrom: ['**/*.{ts,tsx}', '!**/*.d.{ts,tsx}'],
+  coveragePathIgnorePatterns: [
+    '/node_modules/',
+    '/tests/',
+    '/assets/',
+    './jest.config.ts',
+    './storybook',
+  ],
+  collectCoverageFrom: ['**/*.{ts,tsx}', '!**/*.d.{ts,tsx}', '!**/*.stories.{ts,tsx}'],
   transform: {
     '^.+\\.js$': 'babel-jest',
     '^.+\\.(ts|tsx)?$': 'ts-jest',
