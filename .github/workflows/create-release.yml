@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [12.x, 14.x, 16.x]
+        node-version: [16.x]
     steps:
       - uses: actions/checkout@v3
       - name: Use Node.js ${{ matrix.node-version }}
@@ -20,9 +20,15 @@ jobs:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
       - name: Install Dependencies
-        run: npm ci
+        uses: borales/actions-yarn@v3.0.0
+        with:
+          cmd: install
       - name: Building App
-        run: npm run build --if-present       
+        uses: borales/actions-yarn@v3.0.0
+        with:
+          cmd: build
+      - name: ZIP build
+        run: zip -r dist.zip dist
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
@@ -33,7 +39,13 @@ jobs:
           release_name: Release ${{ github.ref }}
           draft: false
           prerelease: false
-      - uses: actions/upload-artifact@v3.1.0
+      - name: Upload Release Asset
+        id: upload-release-asset 
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          name: dist-${{ github.ref }}
-          path: dist
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./dist.zip
+          asset_name: ${{ github.ref_name }}.zip
+          asset_content_type: application/zip
