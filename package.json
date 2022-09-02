@@ -4,7 +4,7 @@
   "source": "src/index.html",
   "license": "MIT",
   "scripts": {
-    "build": "./env.sh && cp env-config.js ./src/ && parcel build ./src/index.html",
+    "build": "parcel build ./src/index.html",
     "check-types": "tsc -p tsconfig.json",
     "start": "./env.sh && cp env-config.js ./src/ && parcel ./src/index.html --open",
     "lint": "eslint './src/**/*.{js,jsx,ts,tsx}'",
