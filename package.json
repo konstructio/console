@@ -1,5 +1,6 @@
 {
   "name": "kubefirst-console",
+  "version": "0.1.1",
   "source": "src/index.html",
   "license": "MIT",
   "scripts": {

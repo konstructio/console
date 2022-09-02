@@ -3,7 +3,6 @@
 .parcel-cache/
 node_modules/
 dist/
-yarn.lock
 env-config.js
 .env
 coverage
