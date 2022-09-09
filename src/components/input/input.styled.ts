@@ -10,6 +10,16 @@ export const InputContainer = styled.div<{ hasIcon: boolean }>`
   display: flex;
   justify-content: ${({ hasIcon }) => (hasIcon ? 'space-evenly' : 'initial')};
   width: 100%;
+
+  & svg {
+    cursor: pointer;
+    color: darkgray;
+    font-size: 18px;
+
+    &:hover {
+      color: black;
+    }
+  }
 `;
 
 export const InputStyled = styled.input<{ hasIcon: boolean }>`
@@ -22,11 +32,4 @@ export const InputStyled = styled.input<{ hasIcon: boolean }>`
   padding: 5px 0px 5px 10px;
   outline: none;
   width: ${({ hasIcon }) => (hasIcon ? 'calc(100% - 40px)' : 'calc(100% - 20px)')};
-`;
-
-export const InputIcon = styled.img`
-  cursor: pointer;
-  height: 20px;
-  margin-right: 5px;
-  width: 20px;
 `;

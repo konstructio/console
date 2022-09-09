@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { FunctionComponent } from 'react';
 
 import { TYPES } from '../../enums/typography';
 import Card from '../card';
@@ -8,16 +8,23 @@ import { Container, Content, Header } from './home.styled';
 
 const { TITLE, SUBTITLE } = TYPES;
 
-const Home = () => {
+export interface IHomeProps {
+  adminEmail: string;
+  cards: Array<any>;
+  hostedZoneName: string;
+}
+
+const Home: FunctionComponent<IHomeProps> = ({ adminEmail, cards, hostedZoneName }) => {
   return (
     <Container data-testid="home-component">
-      <Header>
-        <Text type={TITLE}>Kubefirst</Text>
-        <Text type={SUBTITLE}>cristhian@kubeshop.io</Text>
-      </Header>
-
       <Content>
-        <Card />
+        <Header>
+          <Text type={TITLE}>Kubefirst</Text>
+          <Text type={SUBTITLE}>{adminEmail}</Text>
+        </Header>
+        {cards.map((card) => (
+          <Card key={card.appName} {...card} hostedZoneName={hostedZoneName} />
+        ))}
       </Content>
     </Container>
   );

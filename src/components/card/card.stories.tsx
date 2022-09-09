@@ -2,6 +2,8 @@ import React from 'react';
 import styled from 'styled-components';
 import { ComponentStory, ComponentMeta } from '@storybook/react';
 
+import ArgoCDLogo from '../../assets/argocd.png';
+
 import Card from './index';
 
 export default {
@@ -16,10 +18,18 @@ const Wrapper = styled.div`
   width: 400px;
 `;
 
-const Template: ComponentStory<typeof Card> = () => (
+const Template: ComponentStory<typeof Card> = (props) => (
   <Wrapper>
-    <Card />
+    <Card {...props} />
   </Wrapper>
 );
 
 export const Basic = Template.bind({});
+Basic.args = {
+  appName: 'Argo',
+  companyName: 'Intuit',
+  domain: 'https://argo.your-company.io',
+  username: 'kubefirst-bot',
+  password: 'ThisIsAStrongPassword',
+  logo: ArgoCDLogo,
+};

@@ -1,6 +1,5 @@
 import styled from 'styled-components';
-
-import Copy from '../../assets/copy.png';
+import { MdContentCopy } from 'react-icons/md';
 
 export const Container = styled.div`
   align-items: center;
@@ -10,7 +9,10 @@ export const Container = styled.div`
 export const InputContainer = styled.div<{ showPassword: boolean }>`
   position: relative;
   height: 34px;
-  width: 100%;
+
+  & div {
+    border: none;
+  }
 
   & input {
     color: ${({ theme }) => theme.colors.ultimateGrey};
@@ -20,9 +22,14 @@ export const InputContainer = styled.div<{ showPassword: boolean }>`
   }
 `;
 
-export const CopyIcon = styled.img.attrs({ src: Copy })`
+export const CopyIcon = styled(MdContentCopy)`
+  color: darkgray;
   cursor: pointer;
-  height: 20px;
-  margin-left: 10px;
-  width: 20px;
+  font-size: 18px;
+  margin-left: 4px;
+  margin-bottom: 2px;
+
+  &:hover {
+    color: black;
+  }
 `;

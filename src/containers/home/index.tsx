@@ -1,17 +1,21 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 
-import { useAppDispatch } from '../../hooks';
-import { setUser } from '../../slices/user.slice';
+import { useAppSelector } from '../../hooks';
+import {
+  selectConfigAdminEmail,
+  selectConfigCardValues,
+  selectHostedZoneName,
+} from '../../selectors/config.selector';
 import HomeComponent from '../../components/home';
 
 const Home = () => {
-  const dispatch = useAppDispatch();
+  const configValues = useAppSelector(selectConfigCardValues());
+  const adminEmail = useAppSelector(selectConfigAdminEmail());
+  const hostedZoneName = useAppSelector(selectHostedZoneName());
 
-  useEffect(() => {
-    dispatch(setUser({ name: 'test', lastName: 'test' }));
-  }, [dispatch]);
-
-  return <HomeComponent />;
+  return (
+    <HomeComponent adminEmail={adminEmail} cards={configValues} hostedZoneName={hostedZoneName} />
+  );
 };
 
 export default Home;

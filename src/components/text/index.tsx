@@ -1,4 +1,4 @@
-import React, { FunctionComponent, PropsWithChildren } from 'react';
+import React, { FunctionComponent, HTMLAttributes, PropsWithChildren } from 'react';
 
 import theme from '../../theme';
 import { TYPES, FONT_WEIGHTS, SIZES, SIZE_DEFINITIONS } from '../../enums/typography';
@@ -30,13 +30,21 @@ export const TYPOGRAPHIES = {
   },
 };
 
-export interface IText extends PropsWithChildren {
+export interface IText {
+  children: JSX.Element | string;
   fontWeight?: FONT_WEIGHTS;
   size?: SIZES;
-  type: TYPES;
+  style?: React.CSSProperties;
+  type?: TYPES;
 }
 
-const Text: FunctionComponent<IText> = ({ children, fontWeight, size, type, ...rest }) => {
+const Text: FunctionComponent<IText> = ({
+  children,
+  fontWeight,
+  size,
+  type = TYPES.BODY,
+  ...rest
+}) => {
   const typography = TYPOGRAPHIES[type] || TYPOGRAPHIES[BODY];
   let typographyProps = {
     ...rest,
@@ -51,7 +59,7 @@ const Text: FunctionComponent<IText> = ({ children, fontWeight, size, type, ...r
     };
   }
 
-  return <TextStyled {...typographyProps}>{children as string}</TextStyled>;
+  return <TextStyled {...typographyProps}>{children}</TextStyled>;
 };
 
 export default Text;

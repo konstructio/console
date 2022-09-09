@@ -2,22 +2,35 @@ import styled from 'styled-components';
 
 import PasswordInput from '../password';
 import Text from '../text';
+import ThreeDotsIcon from '../../assets/dots.svg';
 
 export const Container = styled.div`
   background-color: ${({ theme }) => theme.colors.white};
   border-radius: 10px;
   box-shadow: 0px 1px 4px 1px darkgrey;
+  cursor: default;
   display: flex;
   flex-direction: column;
-  height: 270px;
+  height: 260px;
   justify-content: space-between;
+  margin: 2px;
   padding: 16px;
-  width: 410px;
+  width: 300px;
 `;
-export const CardHeader = styled.div`
+
+export const CardContent = styled.div`
   align-items: center;
   display: flex;
-  margin-bottom: 30px;
+  position: relative;
+  flex-direction: column;
+  margin-bottom: 10px;
+
+  & > div {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
 `;
 
 export const CardFooter = styled.div`
@@ -26,15 +39,16 @@ export const CardFooter = styled.div`
   margin-top: 30px;
 `;
 
-export const Column = styled.div`
+export const Column = styled.div<{ width: number }>`
   display: flex;
   flex-direction: column;
-  width: 50%;
+  width: ${({ width }) => width && `${width}%`};
 `;
 
 export const Image = styled.img`
   height: 100px;
-  margin-right: 16px;
+  object-fit: contain;
+  width: 68px;
 `;
 
 export const Password = styled(PasswordInput)`
@@ -53,14 +67,48 @@ export const PasswordTitle = styled(Text)`
   display: flex;
 `;
 
+export const Link = styled.a`
+  align-items: center;
+  display: flex;
+  text-decoration: none;
+
+  & span {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  & > svg {
+    color: gray;
+    margin-left: 5px;
+  }
+
+  &:hover > span,
+  &:hover > svg {
+    color: ${({ theme }) => theme.colors.purpleCabbage};
+  }
+`;
+
 export const Tags = styled.div`
   display: flex;
   gap: 10px;
+  margin-top: 8px;
 `;
 
 export const TextHeader = styled.div`
-  align-items: flex-end;
+  align-items: baseline;
   display: flex;
   gap: 10px;
-  margin-bottom: 6px;
+  margin-bottom: 10px;
+`;
+
+export const ThreeDots = styled.img.attrs({ src: ThreeDotsIcon })`
+  cursor: pointer;
+  position absolute;
+  right: 0px;
+  top: 10px;
+`;
+
+export const UserName = styled(Text)`
+  margin-top: 5px;
 `;

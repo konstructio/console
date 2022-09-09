@@ -10,4 +10,8 @@ export const Container = styled.div<{
   cursor: pointer;
   padding: 5px 10px;
   width: fit-content;
+
+  & > span {
+    color: ${({ color, theme }) => color || theme.colors.black};
+  }
 `;

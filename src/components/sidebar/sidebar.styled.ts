@@ -30,6 +30,7 @@ export const Row = styled.div<{ shouldShowHoverState?: boolean }>`
   align-items: center;
   display: flex;
   cursor: pointer;
+  font-size: 24px;
   justify-content: center;
   padding: 20px 0;
   width: 100%;

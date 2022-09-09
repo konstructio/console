@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { FunctionComponent } from 'react';
 import { render } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
@@ -7,7 +7,10 @@ import { ThemeProvider } from 'styled-components';
 import theme from '../src/theme';
 import { store } from '../src/store';
 
-function setupComponent<T>(Component: React.FC<T>, defaultProps?: T) {
+function setupComponent<T extends React.ReactElement>(
+  Component: FunctionComponent<T>,
+  defaultProps?: T,
+) {
   return async function (props?: T) {
     return await render(
       <Provider store={store}>

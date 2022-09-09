@@ -1,10 +1,12 @@
 import { Action, configureStore, ThunkAction } from '@reduxjs/toolkit';
 
-import userSlice from './slices/user.slice';
+import { internalApi } from './api/internalApi';
+import configSlice from './slices/config.slice';
 
 export const store = configureStore({
   reducer: {
-    users: userSlice,
+    [internalApi.reducerPath]: internalApi.reducer,
+    config: configSlice,
   },
 });
 

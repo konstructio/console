@@ -8,7 +8,10 @@ export interface ITheme extends DefaultTheme {
     danger: string;
     dawnDeparts: string;
     gravelFint: string;
+    greenJelly: string;
     naivePeach: string;
+    purpleCabbage: string;
+    stomyShower: string;
     transparentBlue: string;
     ultimateGrey: string;
     yellowOrange: string;
@@ -25,7 +28,10 @@ const theme: ITheme = {
     danger: '#F53A2A',
     dawnDeparts: '#CCF8FE',
     gravelFint: '#BBBBBB',
+    greenJelly: '#2E9485',
     naivePeach: '#FDE5D2',
+    purpleCabbage: '#3636A1',
+    stomyShower: '#0487AF',
     transparentBlue: '#DAD7FE',
     ultimateGrey: '#A9A9A9',
     yellowOrange: '#FAB203',

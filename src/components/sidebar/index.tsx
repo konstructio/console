@@ -1,29 +1,22 @@
 import React, { FunctionComponent } from 'react';
-
-import PersonIcon from '../../assets/person.svg';
-import CogIcon from '../../assets/cog.svg';
+import { IoHomeOutline } from 'react-icons/io5';
 
 import { Container, Divider, Icon, Row, SidebarItems } from './sidebar.styled';
 
 type SidebarItem = {
   name: string;
   link: string;
-  icon?: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  icon?: any;
 };
 
-const SIDEBAR_FOOTER_ITEMS: Array<SidebarItem> = [
-  {
-    name: 'settings',
-    link: '/settings',
-    icon: CogIcon,
-  },
-];
+const SIDEBAR_FOOTER_ITEMS: Array<SidebarItem> = [];
 
 const SIDEBAR_ITEMS: Array<SidebarItem> = [
   {
-    name: 'profile',
-    link: '/profile',
-    icon: PersonIcon,
+    name: 'home',
+    link: '/',
+    icon: IoHomeOutline,
   },
 ];
 
@@ -35,17 +28,14 @@ const Sidebar: FunctionComponent<ISidebarProps> = ({ onSidebarItemClick }) => {
   const buildSidebarItems = (items: Array<SidebarItem>) => {
     return items.map((item) => (
       <Row shouldShowHoverState onClick={() => onSidebarItemClick(item)} key={item.name}>
-        <img src={item.icon} alt={item.name} />
+        {React.createElement(item.icon)}
       </Row>
     ));
   };
 
   return (
     <Container data-testid="sidebar-component">
-      <Row
-        data-testid="home-item"
-        onClick={() => onSidebarItemClick({ name: 'home', link: '/home' })}
-      >
+      <Row data-testid="home-item" onClick={() => onSidebarItemClick({ name: 'home', link: '/' })}>
         <Icon />
       </Row>
       <Divider />
