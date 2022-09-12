@@ -69,23 +69,25 @@ export const PasswordTitle = styled(Text)`
 
 export const Link = styled.a`
   align-items: center;
+  cursor: pointer;
   display: flex;
   text-decoration: none;
 
   & span {
-    white-space: nowrap;
+    color: ${({ theme }) => theme.colors.jordyBlue};
     overflow: hidden;
     text-overflow: ellipsis;
+    white-space: nowrap;
   }
 
   & > svg {
-    color: gray;
+    color: ${({ theme }) => theme.colors.jordyBlue};
     margin-left: 5px;
   }
 
   &:hover > span,
   &:hover > svg {
-    color: ${({ theme }) => theme.colors.purpleCabbage};
+    color: ${({ theme }) => theme.colors.americanBlue};
   }
 `;
 

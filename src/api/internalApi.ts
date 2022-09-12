@@ -22,14 +22,10 @@ const {
   ADMIN_EMAIL,
   ATLANTIS_URL,
   ARGO_URL,
-  ARGOCD_USERNAME,
-  ARGOCD_PASSWORD,
   ARGOCD_URL,
   GITHUB_GITOPS,
   GITHUB_METAPHOR,
   GITLAB_URL,
-  GITLAB_USERNAME,
-  GITLAB_PASSWORD,
   IS_GITHUB_ENABLED,
   HOSTED_ZONE_NAME,
   METAPHOR_DEV,
@@ -42,7 +38,6 @@ const {
   METAPHOR_GO_PROD,
   METAPHOR_FRONT_PROD,
   VAULT_URL,
-  VAULT_TOKEN,
 } = ConfigKeys;
 
 const INTERNAL_API_URL = `${window.location.protocol}//${window.location.hostname}:9095`;
@@ -71,8 +66,6 @@ export const internalApi = createApi({
             ARGO_URL: getFromResponse(response, ARGO_URL),
           },
           [ARGOCD]: {
-            ARGOCD_USERNAME: getFromResponse(response, ARGOCD_USERNAME),
-            ARGOCD_PASSWORD: getFromResponse(response, ARGOCD_PASSWORD),
             ARGOCD_URL: getFromResponse(response, ARGOCD_URL),
           },
           [GITHUB]: {
@@ -81,8 +74,6 @@ export const internalApi = createApi({
           },
           [GITLAB]: {
             GITLAB_URL: getFromResponse(response, GITLAB_URL),
-            GITLAB_USERNAME: getFromResponse(response, GITLAB_USERNAME),
-            GITLAB_PASSWORD: getFromResponse(response, GITLAB_PASSWORD),
           },
           [METAPHOR]: {
             URL: getFromResponse(response, METAPHOR_DEV),
@@ -101,7 +92,6 @@ export const internalApi = createApi({
           },
           [VAULT]: {
             VAULT_URL: getFromResponse(response, VAULT_URL),
-            VAULT_TOKEN: getFromResponse(response, VAULT_TOKEN),
           },
         } as Config;
       },

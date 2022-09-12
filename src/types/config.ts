@@ -23,18 +23,14 @@ export type Config = {
     ARGO_URL: string;
   };
   [ARGOCD]?: {
-    ARGOCD_USERNAME: string;
-    ARGOCD_PASSWORD: string;
     ARGOCD_URL: string;
   };
-  [GITHUB]: {
+  [GITHUB]?: {
     GITHUB_GITOPS: string;
     GITHUB_METAPHOR: string;
   };
   [GITLAB]?: {
     GITLAB_URL: string;
-    GITLAB_USERNAME: string;
-    GITLAB_PASSWORD: string;
   };
   [METAPHOR]?: {
     URL: string;
@@ -53,6 +49,5 @@ export type Config = {
   };
   [VAULT]?: {
     VAULT_URL: string;
-    VAULT_TOKEN: string;
   };
 };

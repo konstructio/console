@@ -12,7 +12,7 @@ export const Body = styled.div`
 `;
 
 export const Button = styled.button`
-  background-color: ${({ theme }) => theme.colors.stomyShower};
+  background-color: ${({ theme }) => theme.colors.americanBlue};
   border: none;
   border-radius: 4px;
   color: white;
@@ -20,20 +20,24 @@ export const Button = styled.button`
   padding: 6px 10px;
 
   &:hover {
-    background-color: #3a8ca5;
+    opacity: 0.8;
   }
 `;
 
 export const Container = styled.div`
-  height: 250px;
+  max-height: 250px;
   padding: 30px;
 `;
 
-export const Code = styled.code`
-  font-size: 16px;
-  padding: 10px;
+export const Code = styled.span`
   background-color: ${({ theme }) => theme.colors.bleachedSilk};
   border-radius: 4px;
+  font-size: 16px;
+  font-family: monospace;
+  margin: 0 10px;
+  max-width: 260px;
+  overflow: auto;
+  padding: 5px;
 `;
 
 export const Divider = styled.hr`
@@ -71,6 +75,12 @@ export const Header = styled.div`
 export const Image = styled.img`
   height: 40px;
   margin-right: 15px;
+`;
+
+export const Links = styled.div`
+  align-items: center;
+  display: flex;
+  flex-direction: column;
 `;
 
 export const List = styled.li`

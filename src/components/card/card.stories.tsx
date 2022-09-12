@@ -28,7 +28,7 @@ export const Basic = Template.bind({});
 Basic.args = {
   appName: 'Argo',
   companyName: 'Intuit',
-  domain: 'https://argo.your-company.io',
+  links: ['https://argo.your-company.io'],
   username: 'kubefirst-bot',
   password: 'ThisIsAStrongPassword',
   logo: ArgoCDLogo,

@@ -8,6 +8,11 @@ import GitHubLogo from '../assets/github.png';
 import VaultLogo from '../assets/vault.png';
 import AtlantisLogo from '../assets/atlantis.png';
 import MetaphorLogo from '../assets/metaphor.png';
+import theme from '../theme';
+
+const {
+  colors: { bleachedSilk, greenJelly, white },
+} = theme;
 
 const configSelector = (state: RootState): IConfigState => state.config;
 
@@ -16,9 +21,20 @@ const selectGitTitle = ({ config: { configs: configValues } }: RootState) => {
     return {
       appName: 'GitHub',
       companyName: 'GitHub',
+      tags: [
+        {
+          value: 'Docs',
+          url: 'https://docs.kubefirst.io/kubefirst/github.html',
+          backgroundColor: bleachedSilk,
+        },
+        {
+          value: 'Argo CD',
+          url: `${configValues.ARGOCD?.ARGOCD_URL}/applications/github`,
+          backgroundColor: greenJelly,
+          color: white,
+        },
+      ],
       links: [configValues.GITHUB?.GITHUB_GITOPS, configValues.GITHUB?.GITHUB_METAPHOR],
-      username: configValues.GITLAB?.GITLAB_USERNAME,
-      password: configValues.GITLAB?.GITLAB_PASSWORD || 'ThisIsAnStrongPassword!@',
       logo: GitHubLogo,
     };
   }
@@ -26,9 +42,20 @@ const selectGitTitle = ({ config: { configs: configValues } }: RootState) => {
   return {
     appName: 'Gitlab',
     companyName: 'Gitlab',
+    tags: [
+      {
+        value: 'Docs',
+        url: 'https://docs.kubefirst.io/kubefirst/gitlab.html',
+        backgroundColor: bleachedSilk,
+      },
+      {
+        value: 'Argo CD',
+        url: `${configValues.ARGOCD?.ARGOCD_URL}/applications/gitlab`,
+        backgroundColor: greenJelly,
+        color: white,
+      },
+    ],
     links: [configValues.GITLAB?.GITLAB_URL],
-    username: configValues.GITLAB?.GITLAB_USERNAME,
-    password: configValues.GITLAB?.GITLAB_PASSWORD || 'ThisIsAnStrongPassword!@',
     logo: GitLabLogo,
   };
 };
@@ -41,32 +68,94 @@ export const selectConfigCardValues = () =>
           {
             appName: 'Argo CD',
             companyName: 'Intuit',
+            tags: [
+              {
+                value: 'Docs',
+                url: 'https://docs.kubefirst.io/kubefirst/argocd.html',
+                backgroundColor: bleachedSilk,
+              },
+              {
+                value: 'Argo CD',
+                url: `${configValues.ARGOCD?.ARGOCD_URL}/applications/argocd`,
+                backgroundColor: greenJelly,
+                color: white,
+              },
+            ],
             links: [configValues.ARGOCD?.ARGOCD_URL],
-            username: configValues.ARGOCD?.ARGOCD_USERNAME,
-            password: configValues.ARGOCD?.ARGOCD_PASSWORD,
             logo: ArgoCDLogo,
           },
           {
-            appName: 'Argo Workflow',
+            appName: 'Argo Workflows',
             companyName: 'Intuit',
+            tags: [
+              {
+                value: 'Docs',
+                url: 'https://docs.kubefirst.io/tooling/argo.html',
+                backgroundColor: bleachedSilk,
+              },
+              {
+                value: 'Argo CD',
+                url: `${configValues.ARGOCD?.ARGOCD_URL}/applications/argo-workflows-cwfts`,
+                backgroundColor: greenJelly,
+                color: white,
+              },
+            ],
             links: [configValues.ARGO?.ARGO_URL],
             logo: ArgoCDLogo,
           },
           {
             appName: 'Vault',
             companyName: 'Hashicorp',
+            tags: [
+              {
+                value: 'Docs',
+                url: 'https://docs.kubefirst.io/kubefirst/vault.html',
+                backgroundColor: bleachedSilk,
+              },
+              {
+                value: 'Argo CD',
+                url: `${configValues.ARGOCD?.ARGOCD_URL}/applications/vault`,
+                backgroundColor: greenJelly,
+                color: white,
+              },
+            ],
             links: [configValues.VAULT?.VAULT_URL],
-            password: configValues.VAULT?.VAULT_TOKEN,
             logo: VaultLogo,
           },
           {
             appName: 'Atlantis',
+            tags: [
+              {
+                value: 'Docs',
+                url: 'https://docs.kubefirst.io/kubefirst/terraform.html',
+                backgroundColor: bleachedSilk,
+              },
+              {
+                value: 'Argo CD',
+                url: `${configValues.ARGOCD?.ARGOCD_URL}/applications/atlantis`,
+                backgroundColor: greenJelly,
+                color: white,
+              },
+            ],
             links: [configValues.ATLANTIS?.ATLANTIS_URL],
             logo: AtlantisLogo,
           },
           {
             appName: 'Metaphor DEV',
             companyName: 'Kubefirst',
+            tags: [
+              {
+                value: 'Docs',
+                url: `https://docs.kubefirst.io/kubefirst/metaphor.html`,
+                backgroundColor: bleachedSilk,
+              },
+              {
+                value: 'Argo CD',
+                url: `${configValues.ARGOCD?.ARGOCD_URL}/applications/metaphor-development`,
+                backgroundColor: greenJelly,
+                color: white,
+              },
+            ],
             links: [
               configValues.METAPHOR?.URL,
               configValues.METAPHOR?.GO_URL,
@@ -77,6 +166,14 @@ export const selectConfigCardValues = () =>
           {
             appName: 'Metaphor STG',
             companyName: 'Kubefirst',
+            tags: [
+              {
+                value: 'Argo CD',
+                url: `${configValues.ARGOCD?.ARGOCD_URL}/applications/metaphor-staging`,
+                backgroundColor: greenJelly,
+                color: white,
+              },
+            ],
             links: [
               configValues.METAPHOR_STAGING?.URL,
               configValues.METAPHOR_STAGING?.GO_URL,
@@ -87,6 +184,14 @@ export const selectConfigCardValues = () =>
           {
             appName: 'Metaphor PROD',
             companyName: 'Kubefirst',
+            tags: [
+              {
+                value: 'Argo CD',
+                url: `${configValues.ARGOCD?.ARGOCD_URL}/applications/metaphor-production`,
+                backgroundColor: greenJelly,
+                color: white,
+              },
+            ],
             links: [
               configValues.METAPHOR_PRODUCTION?.URL,
               configValues.METAPHOR_PRODUCTION?.GO_URL,

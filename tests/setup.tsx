@@ -7,10 +7,8 @@ import { ThemeProvider } from 'styled-components';
 import theme from '../src/theme';
 import { store } from '../src/store';
 
-function setupComponent<T extends React.ReactElement>(
-  Component: FunctionComponent<T>,
-  defaultProps?: T,
-) {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function setupComponent<T>(Component: any, defaultProps?: T) {
   return async function (props?: T) {
     return await render(
       <Provider store={store}>

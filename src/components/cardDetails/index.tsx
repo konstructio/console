@@ -2,6 +2,7 @@ import React, { FunctionComponent } from 'react';
 import CopyToClipboard from 'react-copy-to-clipboard';
 
 import { FONT_WEIGHTS, SIZES, TYPES } from '../../enums/typography';
+import { Link } from '../card/card.styled';
 import Modal from '../modal';
 import Text from '../text';
 
@@ -15,6 +16,7 @@ import {
   Footer,
   Header,
   Image,
+  Links,
   List,
   Row,
 } from './cardDetails.styled';
@@ -58,16 +60,21 @@ const CardDetails: FunctionComponent<ICardDetailsProps> = ({
             </Header>
           </Modal.Header>
           <Divider />
+          <Links>
+            {links.map((link) => (
+              <Link href={link} target="_blank" key={link}>
+                <Text type={TYPES.DISABLED}>{link}</Text>
+              </Link>
+            ))}
+          </Links>
           <Modal.Body>
             <Body>
               {userName && (
                 <>
                   <Row>
                     <Text fontWeight={FONT_WEIGHTS.SEMIBOLD} size={SIZES.S1}>
-                      Username:
+                      <>Username:</>
                     </Text>
-                  </Row>
-                  <Row>
                     <Code>{userName}</Code>
                   </Row>
                 </>
@@ -75,16 +82,16 @@ const CardDetails: FunctionComponent<ICardDetailsProps> = ({
 
               <Row>
                 <Text fontWeight={FONT_WEIGHTS.SEMIBOLD} size={SIZES.S1}>
-                  Password:
+                  <>Password:</>
                 </Text>
-              </Row>
-              <Row>
                 <Code>{password}</Code>
               </Row>
               <Actions>
-                <CopyToClipboard text={userName}>
-                  <Button>Copy Username</Button>
-                </CopyToClipboard>
+                {userName && (
+                  <CopyToClipboard text={userName}>
+                    <Button>Copy Username</Button>
+                  </CopyToClipboard>
+                )}
                 <CopyToClipboard text={password}>
                   <Button>Copy Password</Button>
                 </CopyToClipboard>

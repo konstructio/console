@@ -30,9 +30,9 @@ const Template: ComponentStory<typeof Modal> = (props) => {
     <>
       <input type="button" value="Open modal" onClick={openModal} />
       <Wrapper>
-        <Modal {...props} isModalVisible={isOpen}>
+        <Modal {...props} isModalVisible={isOpen} onCloseModal={closeModal}>
           <Content>
-            <Modal.Header onCloseModal={closeModal}>
+            <Modal.Header>
               <span>This is a modal</span>
             </Modal.Header>
           </Content>
@@ -43,6 +43,4 @@ const Template: ComponentStory<typeof Modal> = (props) => {
 };
 
 export const Basic = Template.bind({});
-Basic.args = {
-  isFullHeight: true,
-};
+Basic.args = {};

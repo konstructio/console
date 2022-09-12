@@ -27,7 +27,7 @@ export interface ISidebarProps {
 const Sidebar: FunctionComponent<ISidebarProps> = ({ onSidebarItemClick }) => {
   const buildSidebarItems = (items: Array<SidebarItem>) => {
     return items.map((item) => (
-      <Row shouldShowHoverState onClick={() => onSidebarItemClick(item)} key={item.name}>
+      <Row isActive shouldShowHoverState onClick={() => onSidebarItemClick(item)} key={item.name}>
         {React.createElement(item.icon)}
       </Row>
     ));

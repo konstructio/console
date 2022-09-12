@@ -10,6 +10,7 @@ const { TITLE, SUBTITLE } = TYPES;
 
 export interface IHomeProps {
   adminEmail: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   cards: Array<any>;
   hostedZoneName: string;
 }

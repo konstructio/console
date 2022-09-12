@@ -1,4 +1,4 @@
-import React, { FunctionComponent, HTMLAttributes, PropsWithChildren } from 'react';
+import React, { FunctionComponent } from 'react';
 
 import theme from '../../theme';
 import { TYPES, FONT_WEIGHTS, SIZES, SIZE_DEFINITIONS } from '../../enums/typography';

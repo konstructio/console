@@ -26,8 +26,9 @@ export const Icon = styled.img.attrs({ src: Ray })`
   width: 80px;
 `;
 
-export const Row = styled.div<{ shouldShowHoverState?: boolean }>`
+export const Row = styled.div<{ shouldShowHoverState?: boolean; isActive?: boolean }>`
   align-items: center;
+  background-color: ${({ isActive, theme }) => isActive && theme.colors.bleachedSilk};
   display: flex;
   cursor: pointer;
   font-size: 24px;
