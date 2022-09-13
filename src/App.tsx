@@ -1,9 +1,11 @@
-import React, { FunctionComponent } from 'react';
+import React, { FunctionComponent, useEffect } from 'react';
 import { Routes, Route, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
+import { getConfigs } from './actions/config.action';
 import Sidebar from './components/sidebar';
 import Home from './containers/home';
+import { useAppDispatch } from './hooks';
 
 const Layout = styled.div`
   background-color: ${({ theme }) => theme.colors.bleachedSilk};
@@ -13,9 +15,17 @@ const Layout = styled.div`
 
 const App: FunctionComponent = () => {
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+
   const onSidebarItemClick = ({ link }: { link: string }) => {
     navigate(link);
   };
+
+  useEffect(() => {
+    const getConfigValues = async () => await dispatch(getConfigs()).unwrap();
+
+    getConfigValues();
+  }, [dispatch]);
 
   return (
     <Layout>

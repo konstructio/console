@@ -1,18 +1,25 @@
 import React, { FunctionComponent, InputHTMLAttributes } from 'react';
 
-import { InputContainer, InputIcon, InputStyled } from './input.styled';
+import { InputContainer, InputStyled } from './input.styled';
 
 export interface IInputProps extends InputHTMLAttributes<HTMLInputElement> {
-  icon?: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  icon?: any;
   onIconClick?: () => void;
   type: string;
   value: string;
 }
 
-const Input: FunctionComponent<IInputProps> = ({ icon, onIconClick, type, value, ...rest }) => (
-  <InputContainer hasIcon={!!icon}>
-    <InputStyled hasIcon={!!icon} type={type} value={value} {...rest} />
-    {icon && <InputIcon alt={value} src={icon} onClick={onIconClick} />}
+const Input: FunctionComponent<IInputProps> = ({
+  icon: Icon,
+  onIconClick,
+  type,
+  value,
+  ...rest
+}) => (
+  <InputContainer hasIcon={!!Icon}>
+    <InputStyled hasIcon={!!Icon} type={type} value={value} {...rest} />
+    {Icon && <Icon onClick={onIconClick} />}
   </InputContainer>
 );
 

@@ -14,5 +14,5 @@
     "allowSyntheticDefaultImports": true,
     "resolveJsonModule": true
   },
-  "exclude": ["*config.js", "build", "node_modules", "dist"]
+  "exclude": ["*config.js", "build", "node_modules", "dist", "src/env-config.js", "tests"]
 }

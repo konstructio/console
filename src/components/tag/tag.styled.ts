@@ -10,4 +10,17 @@ export const Container = styled.div<{
   cursor: pointer;
   padding: 5px 10px;
   width: fit-content;
+
+  & a > span {
+    color: ${({ color, theme }) => color || theme.colors.black};
+  }
+
+  &:hover {
+    opacity: 0.8;
+  }
+`;
+
+export const Link = styled.a`
+  color: ${({ color, theme }) => color || theme.colors.black};
+  text-decoration: none;
 `;

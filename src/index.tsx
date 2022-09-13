@@ -20,3 +20,7 @@ root.render(
     </BrowserRouter>
   </Provider>,
 );
+
+if (module.hot) {
+  module.hot.accept();
+}

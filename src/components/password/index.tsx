@@ -1,8 +1,7 @@
 import React, { FunctionComponent, useState } from 'react';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
+import { FiEye, FiEyeOff } from 'react-icons/fi';
 
-import EyeIcon from '../../assets/eye.svg';
-import EyeOffIcon from '../../assets/eye-off.svg';
 import Input from '../input';
 
 import { Container, CopyIcon, InputContainer } from './password.styled';
@@ -21,13 +20,13 @@ const Password: FunctionComponent<IPasswordProps> = ({ canCopyValue, value, ...r
           type={showPassword ? 'text' : 'password'}
           value={value}
           readOnly
-          icon={showPassword ? EyeOffIcon : EyeIcon}
+          icon={showPassword ? FiEyeOff : FiEye}
           onIconClick={() => setShowPassword(!showPassword)}
         />
       </InputContainer>
       {canCopyValue && (
         <CopyToClipboard text={value}>
-          <CopyIcon src={CopyIcon} />
+          <CopyIcon />
         </CopyToClipboard>
       )}
     </Container>
