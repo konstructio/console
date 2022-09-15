@@ -35,9 +35,6 @@ RUN set -x ; \
 
 USER www-data
 
-COPY --from=build --chown=www-data:www-data /opt/app/dist /opt/app/env.sh /opt/app/.env ./
+COPY --from=build --chown=www-data:www-data /opt/app/dist ./
 
-# inject local environment variables dynamically
-RUN sed -i 's|<!-- env-config-here -->|<script src="./static/env-config.js"></script>|g' index.html
-
-CMD ["/bin/sh", "-c", "/usr/share/nginx/html/env.sh && mv env-config.js static && nginx -g \"daemon off;\""]
+CMD ["/bin/sh", "-c", "nginx -g \"daemon off;\""]
