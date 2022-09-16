@@ -48,6 +48,8 @@ const Card: FunctionComponent<ICardProps> = ({
         return hostname.replace(`.${hostedZoneName}`, '');
       } else if (hostname && hostname.includes('github')) {
         return `${hostname}${pathname}`;
+      } else if (hostname && hostname.includes('vault')) {
+        return `${hostname}`;
       }
 
       return hostname;

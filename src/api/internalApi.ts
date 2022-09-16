@@ -59,7 +59,7 @@ export const internalApi = createApi({
         return {
           [ADMIN_EMAIL]: getFromResponse(response, ADMIN_EMAIL),
           [HOSTED_ZONE_NAME]: getFromResponse(response, HOSTED_ZONE_NAME),
-          [IS_GITHUB_ENABLED]: Boolean(getFromResponse(response, HOSTED_ZONE_NAME)),
+          [IS_GITHUB_ENABLED]: getFromResponse(response, IS_GITHUB_ENABLED) === 'true',
           [ATLANTIS]: {
             ATLANTIS_URL: getFromResponse(response, ATLANTIS_URL),
           },
