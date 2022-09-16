@@ -24,7 +24,7 @@ const selectGitTitle = ({ config: { configs: configValues } }: RootState) => {
       tags: [
         {
           value: 'Docs',
-          url: 'https://docs.kubefirst.io/kubefirst/github.html',
+          url: 'https://docs.kubefirst.io/kubefirst/github/github-repositories/index.html',
           backgroundColor: bleachedSilk,
         },
         {
@@ -45,7 +45,7 @@ const selectGitTitle = ({ config: { configs: configValues } }: RootState) => {
     tags: [
       {
         value: 'Docs',
-        url: 'https://docs.kubefirst.io/kubefirst/gitlab.html',
+        url: 'https://docs.kubefirst.io/kubefirst/gitlab/gitlab/index.html',
         backgroundColor: bleachedSilk,
       },
       {
@@ -62,6 +62,8 @@ const selectGitTitle = ({ config: { configs: configValues } }: RootState) => {
 
 export const selectConfigCardValues = () =>
   createSelector(configSelector, selectGitTitle, ({ configs: configValues }, gitTile) => {
+    const gitPath = configValues.IS_GITHUB_ENABLED ? 'github' : 'gitlab';
+
     return configValues
       ? [
           gitTile,
@@ -71,7 +73,7 @@ export const selectConfigCardValues = () =>
             tags: [
               {
                 value: 'Docs',
-                url: 'https://docs.kubefirst.io/kubefirst/argocd.html',
+                url: `https://docs.kubefirst.io/kubefirst/${gitPath}/argocd/index.html`,
                 backgroundColor: bleachedSilk,
               },
               {
@@ -90,7 +92,7 @@ export const selectConfigCardValues = () =>
             tags: [
               {
                 value: 'Docs',
-                url: 'https://docs.kubefirst.io/tooling/argo.html',
+                url: 'https://docs.kubefirst.io/tooling/argo/index.html',
                 backgroundColor: bleachedSilk,
               },
               {
@@ -109,7 +111,7 @@ export const selectConfigCardValues = () =>
             tags: [
               {
                 value: 'Docs',
-                url: 'https://docs.kubefirst.io/kubefirst/vault.html',
+                url: `https://docs.kubefirst.io/kubefirst/${gitPath}/vault/index.html`,
                 backgroundColor: bleachedSilk,
               },
               {
@@ -119,7 +121,7 @@ export const selectConfigCardValues = () =>
                 color: white,
               },
             ],
-            links: [configValues.VAULT?.VAULT_URL],
+            links: [`${configValues.VAULT?.VAULT_URL}/ui/vault/auth?with=userpass`],
             logo: VaultLogo,
           },
           {
@@ -127,7 +129,7 @@ export const selectConfigCardValues = () =>
             tags: [
               {
                 value: 'Docs',
-                url: 'https://docs.kubefirst.io/kubefirst/terraform.html',
+                url: `https://docs.kubefirst.io/kubefirst/${gitPath}/terraform/index.html`,
                 backgroundColor: bleachedSilk,
               },
               {
@@ -146,7 +148,7 @@ export const selectConfigCardValues = () =>
             tags: [
               {
                 value: 'Docs',
-                url: `https://docs.kubefirst.io/kubefirst/metaphor.html`,
+                url: `https://docs.kubefirst.io/kubefirst/${gitPath}/metaphor/index.html`,
                 backgroundColor: bleachedSilk,
               },
               {
