@@ -27,9 +27,6 @@ const Template: ComponentStory<typeof Card> = (props) => (
 export const Basic = Template.bind({});
 Basic.args = {
   appName: 'Argo',
-  companyName: 'Intuit',
   links: ['https://argo.your-company.io'],
-  username: 'kubefirst-bot',
-  password: 'ThisIsAStrongPassword',
   logo: ArgoCDLogo,
 };
