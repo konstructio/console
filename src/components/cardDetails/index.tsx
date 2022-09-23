@@ -1,33 +1,17 @@
 import React, { FunctionComponent } from 'react';
-import CopyToClipboard from 'react-copy-to-clipboard';
 
-import { FONT_WEIGHTS, SIZES, TYPES } from '../../enums/typography';
+import { SIZES, TYPES } from '../../enums/typography';
 import { Link } from '../card/card.styled';
 import Modal from '../modal';
 import Text from '../text';
 
-import {
-  Actions,
-  Body,
-  Button,
-  Code,
-  Container,
-  Divider,
-  Footer,
-  Header,
-  Image,
-  Links,
-  List,
-  Row,
-} from './cardDetails.styled';
+import { Body, Container, Divider, Footer, Header, Image, Links, List } from './cardDetails.styled';
 
 export interface ICardDetailsProps {
   appName: string;
   companyName?: string;
   links: Array<string>;
   logo: string;
-  userName: string;
-  password: string;
   isOpen: boolean;
   closeModal: () => void;
 }
@@ -37,8 +21,6 @@ const CardDetails: FunctionComponent<ICardDetailsProps> = ({
   companyName,
   links,
   logo,
-  userName,
-  password,
   isOpen,
   closeModal,
 }) => {
@@ -68,35 +50,7 @@ const CardDetails: FunctionComponent<ICardDetailsProps> = ({
             ))}
           </Links>
           <Modal.Body>
-            <Body>
-              {userName && (
-                <>
-                  <Row>
-                    <Text fontWeight={FONT_WEIGHTS.SEMIBOLD} size={SIZES.S1}>
-                      <>Username:</>
-                    </Text>
-                    <Code>{userName}</Code>
-                  </Row>
-                </>
-              )}
-
-              <Row>
-                <Text fontWeight={FONT_WEIGHTS.SEMIBOLD} size={SIZES.S1}>
-                  <>Password:</>
-                </Text>
-                <Code>{password}</Code>
-              </Row>
-              <Actions>
-                {userName && (
-                  <CopyToClipboard text={userName}>
-                    <Button>Copy Username</Button>
-                  </CopyToClipboard>
-                )}
-                <CopyToClipboard text={password}>
-                  <Button>Copy Password</Button>
-                </CopyToClipboard>
-              </Actions>
-            </Body>
+            <Body></Body>
           </Modal.Body>
         </Container>
         <Modal.Footer>

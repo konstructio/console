@@ -23,9 +23,10 @@ const Home: FunctionComponent<IHomeProps> = ({ adminEmail, cards, hostedZoneName
           <Text type={TITLE}>Kubefirst</Text>
           <Text type={SUBTITLE}>{adminEmail}</Text>
         </Header>
-        {cards.map((card) => (
-          <Card key={card.appName} {...card} hostedZoneName={hostedZoneName} />
-        ))}
+        {cards &&
+          cards.map((card) => (
+            <Card key={card.appName} {...card} hostedZoneName={hostedZoneName} />
+          ))}
       </Content>
     </Container>
   );

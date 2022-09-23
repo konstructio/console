@@ -6,7 +6,7 @@ import Home from './index';
 const setup = setupComponent(Home);
 describe('home', () => {
   test('should render the home component', async () => {
-    await setup();
+    await setup({ cards: [] });
     expect(screen.queryByTestId('home-component')).toBeInTheDocument();
   });
 });

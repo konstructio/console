@@ -1,11 +1,13 @@
 import React from 'react';
 import styled from 'styled-components';
 import { ComponentStory, ComponentMeta } from '@storybook/react';
+import { faker } from '@faker-js/faker';
 
 import theme from '../../theme';
 
 import Tag from './index';
 
+const url = faker.internet.url();
 const {
   colors: { bleachedSilk, dawnDeparts, naivePeach, transparentBlue },
 } = theme;
@@ -22,10 +24,18 @@ const Wrapper = styled.div`
 
 const Template: ComponentStory<typeof Tag> = () => (
   <Wrapper>
-    <Tag backgroundColor={bleachedSilk}>Docs</Tag>
-    <Tag backgroundColor={transparentBlue}>Datadog</Tag>
-    <Tag backgroundColor={naivePeach}>Argo CD</Tag>
-    <Tag backgroundColor={dawnDeparts}>GitHub</Tag>
+    <Tag url={url} backgroundColor={bleachedSilk}>
+      Docs
+    </Tag>
+    <Tag url={url} backgroundColor={transparentBlue}>
+      Datadog
+    </Tag>
+    <Tag url={url} backgroundColor={naivePeach}>
+      Argo CD
+    </Tag>
+    <Tag url={url} backgroundColor={dawnDeparts}>
+      GitHub
+    </Tag>
   </Wrapper>
 );
 
