@@ -148,7 +148,7 @@ export const selectConfigCardValues = () =>
             tags: [
               {
                 value: 'Docs',
-                url: `https://docs.kubefirst.io/kubefirst/${gitPath}/metaphors.html`,
+                url: `https://docs.kubefirst.io/common/metaphors.html`,
                 backgroundColor: bleachedSilk,
               },
               {
