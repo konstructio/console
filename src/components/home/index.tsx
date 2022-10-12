@@ -6,22 +6,29 @@ import Text from '../text';
 
 import { Container, Content, Header } from './home.styled';
 
-const { TITLE, SUBTITLE } = TYPES;
+const { SUBTITLE, TITLE } = TYPES;
 
 export interface IHomeProps {
   adminEmail: string;
+  clusterName: string;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   cards: Array<any>;
   hostedZoneName: string;
 }
 
-const Home: FunctionComponent<IHomeProps> = ({ adminEmail, cards, hostedZoneName }) => {
+const Home: FunctionComponent<IHomeProps> = ({
+  adminEmail,
+  clusterName,
+  cards,
+  hostedZoneName,
+}) => {
   return (
     <Container data-testid="home-component">
       <Content>
         <Header>
           <Text type={TITLE}>Kubefirst</Text>
-          <Text type={SUBTITLE}>{adminEmail}</Text>
+          <Text type={SUBTITLE}>{`Admin Email: ${adminEmail}`}</Text>
+          <Text type={SUBTITLE}>{`Cluster Name: ${clusterName}`}</Text>
         </Header>
         {cards &&
           cards.map((card) => (

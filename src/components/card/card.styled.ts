@@ -16,6 +16,7 @@ export const Container = styled.div`
   margin: 2px;
   padding: 16px;
   width: 300px;
+  z-index: 2;
 `;
 
 export const CardContent = styled.div`
