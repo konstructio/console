@@ -26,7 +26,7 @@ jobs:
       - name: Building App
         uses: borales/actions-yarn@v3.0.0
         with:
-          cmd: build
+          cmd: clean-build
       - name: ZIP build
         run: zip -r dist.zip dist
       - name: Create Release
