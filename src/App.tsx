@@ -6,6 +6,7 @@ import { getConfigs } from './actions/config.action';
 import Sidebar from './components/sidebar';
 import Home from './containers/home';
 import { useAppDispatch } from './hooks';
+import Footer from './containers/footer';
 
 const Layout = styled.div`
   background-color: ${({ theme }) => theme.colors.bleachedSilk};
@@ -28,12 +29,15 @@ const App: FunctionComponent = () => {
   }, [dispatch]);
 
   return (
-    <Layout>
-      <Sidebar onSidebarItemClick={onSidebarItemClick} />
-      <Routes>
-        <Route path="/" element={<Home />} />
-      </Routes>
-    </Layout>
+    <>
+      <Layout>
+        <Sidebar onSidebarItemClick={onSidebarItemClick} />
+        <Routes>
+          <Route path="/" element={<Home />} />
+        </Routes>
+      </Layout>
+      <Footer />
+    </>
   );
 };
 

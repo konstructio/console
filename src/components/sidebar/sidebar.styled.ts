@@ -8,6 +8,7 @@ export const Container = styled.div`
   box-shadow: 1px 1px 5px 0px lightgrey;
   height: 100%;
   width: 120px;
+  z-index: 2;
 `;
 
 export const Divider = styled.hr`

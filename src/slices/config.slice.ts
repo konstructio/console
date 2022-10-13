@@ -4,11 +4,11 @@ import { Config } from '../types/config';
 import { getConfigs } from '../actions/config.action';
 
 export interface IConfigState {
-  configs: Config;
+  configs?: Config;
 }
 
 export const initialState: IConfigState = {
-  configs: {},
+  configs: undefined,
 };
 
 const configSlice = createSlice({

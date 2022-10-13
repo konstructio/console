@@ -5,7 +5,7 @@ import RayImage from '../../assets/k-ray.svg';
 
 export const Container = styled.div`
   height: calc(100% - 60px);
-  padding: 30px 60px;
+  padding: 30px 0 30px 60px;
   overflow: auto;
   width: 100%;
 `;
@@ -14,6 +14,7 @@ export const Content = styled.div`
   display: flex;
   flex-wrap: wrap;
   gap: 30px;
+  height: calc(100% - 150px);
   margin: 0 auto;
   overflow: auto;
   max-width: 1450px;
