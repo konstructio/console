@@ -25,7 +25,9 @@ export const buildCardsContent = ({
   hostedZoneName,
 }: CardsContentProps) => {
   const atlantisUrl = `https://atlantis.${hostedZoneName}`;
-  const argoUrl = `https://argocd.${hostedZoneName}`;
+  const argoUrl = `https://argocd.${hostedZoneName}/auth/login?return_url=${encodeURIComponent(
+    `https://argocd.${hostedZoneName}/applications`,
+  )}`;
   const argoWorkflowsUrl = `https://argo.${hostedZoneName}`;
   const vaultUrl = `https://vault.${hostedZoneName}`;
 
@@ -42,7 +44,7 @@ export const buildCardsContent = ({
             },
             {
               value: 'Argo CD',
-              url: `${argoUrl}/applications/github`,
+              url: `${argoUrl}/github`,
               backgroundColor: greenJelly,
               color: white,
             },
@@ -64,7 +66,7 @@ export const buildCardsContent = ({
             },
             {
               value: 'Argo CD',
-              url: `${argoUrl}/applications/gitlab`,
+              url: `${argoUrl}/gitlab`,
               backgroundColor: greenJelly,
               color: white,
             },
@@ -86,7 +88,7 @@ export const buildCardsContent = ({
         },
         {
           value: 'Argo CD',
-          url: `${argoUrl}/applications/argocd`,
+          url: `${argoUrl}/argocd`,
           backgroundColor: greenJelly,
           color: white,
         },
@@ -105,7 +107,7 @@ export const buildCardsContent = ({
         },
         {
           value: 'Argo CD',
-          url: `${argoUrl}/applications/argo-workflows-cwfts`,
+          url: `${argoUrl}/argo-workflows-cwfts`,
           backgroundColor: greenJelly,
           color: white,
         },
@@ -124,7 +126,7 @@ export const buildCardsContent = ({
         },
         {
           value: 'Argo CD',
-          url: `${argoUrl}/applications/vault`,
+          url: `${argoUrl}/vault`,
           backgroundColor: greenJelly,
           color: white,
         },
@@ -142,7 +144,7 @@ export const buildCardsContent = ({
         },
         {
           value: 'Argo CD',
-          url: `${argoUrl}/applications/atlantis`,
+          url: `${argoUrl}/atlantis`,
           backgroundColor: greenJelly,
           color: white,
         },
@@ -161,7 +163,7 @@ export const buildCardsContent = ({
         },
         {
           value: 'Argo CD',
-          url: `${argoUrl}/applications/metaphor-development`,
+          url: `${argoUrl}/metaphor-development`,
           backgroundColor: greenJelly,
           color: white,
         },
