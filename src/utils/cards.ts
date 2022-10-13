@@ -105,12 +105,12 @@ export const buildCardsContent = ({
         },
         {
           value: 'Argo CD',
-          url: `${argoWorkflowsUrl}/applications/argo-workflows-cwfts`,
+          url: `${argoUrl}/applications/argo-workflows-cwfts`,
           backgroundColor: greenJelly,
           color: white,
         },
       ],
-      links: [argoUrl],
+      links: [argoWorkflowsUrl],
       logo: ArgoCDLogo,
     },
     {

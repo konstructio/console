@@ -6,19 +6,12 @@ import { getConfigs } from './actions/config.action';
 import Sidebar from './components/sidebar';
 import Home from './containers/home';
 import { useAppDispatch } from './hooks';
-import Wave from './assets/wave.svg';
+import Footer from './containers/footer';
 
 const Layout = styled.div`
   background-color: ${({ theme }) => theme.colors.bleachedSilk};
   display: flex;
   height: 100%;
-`;
-
-const Background = styled.img.attrs({ src: Wave })`
-  position: absolute;
-  bottom: 0;
-  left: 106px;
-  width: calc(100% - 106px);
 `;
 
 const App: FunctionComponent = () => {
@@ -36,13 +29,15 @@ const App: FunctionComponent = () => {
   }, [dispatch]);
 
   return (
-    <Layout>
-      <Sidebar onSidebarItemClick={onSidebarItemClick} />
-      <Routes>
-        <Route path="/" element={<Home />} />
-      </Routes>
-      <Background />
-    </Layout>
+    <>
+      <Layout>
+        <Sidebar onSidebarItemClick={onSidebarItemClick} />
+        <Routes>
+          <Route path="/" element={<Home />} />
+        </Routes>
+      </Layout>
+      <Footer />
+    </>
   );
 };
 
