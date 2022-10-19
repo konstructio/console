@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 
+import { media } from '../../theme/media';
 import Ray from '../../assets/ray.svg';
 
 export const Container = styled.div`
@@ -9,6 +10,10 @@ export const Container = styled.div`
   height: 100%;
   width: 120px;
   z-index: 2;
+
+  ${media.lessThan('sm')`
+    display: none;
+  `}
 `;
 
 export const Divider = styled.hr`

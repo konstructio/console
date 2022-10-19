@@ -6,7 +6,7 @@ import { ConfigKeys } from '../enums/config';
 import IKeyValue from '../types/common';
 import { Config } from '../types/config';
 
-const { ADMIN_EMAIL, HOSTED_ZONE_NAME, GITHUB_HOST, GITHUB_OWNER } = ConfigKeys;
+const { ADMIN_EMAIL, CLUSTER_NAME, HOSTED_ZONE_NAME, GITHUB_HOST, GITHUB_OWNER } = ConfigKeys;
 
 const INTERNAL_API_URL = `${window.location.protocol}//${window.location.hostname}:9095`;
 
@@ -28,6 +28,7 @@ export const internalApi = createApi({
           [HOSTED_ZONE_NAME]: getFromResponse(response, HOSTED_ZONE_NAME),
           [GITHUB_HOST]: getFromResponse(response, GITHUB_HOST),
           [GITHUB_OWNER]: getFromResponse(response, GITHUB_OWNER),
+          [CLUSTER_NAME]: getFromResponse(response, CLUSTER_NAME),
         } as Config),
     }),
   }),

@@ -44,7 +44,7 @@ export const buildCardsContent = ({
             },
             {
               value: 'Argo CD',
-              url: `${argoUrl}/github`,
+              url: `${argoUrl}/actions-runner-components`,
               backgroundColor: greenJelly,
               color: white,
             },
