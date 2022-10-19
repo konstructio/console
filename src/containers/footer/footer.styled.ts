@@ -1,9 +1,14 @@
 import styled from 'styled-components';
 
+import { media } from '../../theme/media';
 import Wave from '../../assets/wave.svg';
 
 export const Background = styled.img.attrs({ src: Wave })`
   z-index: 1;
+
+  ${media.lessThan('sm')`
+    display: none;
+  `}
 `;
 
 export const Container = styled.div`
@@ -26,4 +31,18 @@ export const SocialIcons = styled.div`
     cursor: pointer;
     margin: 5px;
   }
+
+  ${media.lessThan('sm')`
+    align-items: center;
+    bottom: 10px;
+    display: flex;
+    justify-content: center;
+    left: auto;
+    position: relative;
+    width: 100%;
+
+    & > a > svg {
+      color: black;
+    }
+  `}
 `;

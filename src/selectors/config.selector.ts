@@ -12,7 +12,7 @@ export const selectConfigCardValues = () =>
   createSelector(configSelector, ({ configs: configValues }) => {
     const { HOSTED_ZONE_NAME, GITHUB_HOST, GITHUB_OWNER } = !isEmpty(configValues)
       ? configValues
-      : window.__env__;
+      : window.__env__ || {};
 
     const params: CardsContentProps = {
       gitProvider: GITHUB_OWNER ? GIT_PROVIDERS.GITHUB : GIT_PROVIDERS.GITLAB,

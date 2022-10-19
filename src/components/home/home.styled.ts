@@ -8,6 +8,10 @@ export const Container = styled.div`
   padding: 30px 0 30px 60px;
   overflow: auto;
   width: 100%;
+
+  ${media.lessThan('sm')`
+    padding: 30px 0 0 20px;
+  `};
 `;
 
 export const Content = styled.div`
@@ -15,9 +19,14 @@ export const Content = styled.div`
   flex-wrap: wrap;
   gap: 30px;
   height: calc(100% - 150px);
+  justify-content: center;
   margin: 0 auto;
   overflow: auto;
   max-width: 1450px;
+
+  ${media.lessThan('sm')`
+    height: calc(100% - 30px);
+  `};
 `;
 
 export const Header = styled.div`
@@ -35,7 +44,7 @@ export const Template = styled.div`
 export const Ray = styled.img.attrs({ src: RayImage })`
   height: 500px;
 
-  ${media.lessThan('md')`
+  ${media.lessThan('sm')`
     display: none;
   `}
 `;
