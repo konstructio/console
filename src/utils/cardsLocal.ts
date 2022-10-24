@@ -21,68 +21,14 @@ export type CardsContentProps = {
   gitProvider: string;
   gitHost: string;
   gitOwner: string;
-  hostedZoneName: string;
+  url: string;
 };
 
-export const buildCardsContent = ({
+export const buildCardsContentLocal = ({
   gitProvider,
-  gitHost,
   gitOwner,
-  hostedZoneName,
 }: CardsContentProps) => {
-  const atlantisUrl = hostedZoneName == "" ? `https://atlantis.${hostedZoneName}`: `http://localhost:4141`;
-  const argoUrl = hostedZoneName == "" ? `http://localhost:8080`:  `https://argocd.${hostedZoneName}/auth/login?return_url=${encodeURIComponent(
-    `https://argocd.${hostedZoneName}/applications`,
-  )}`;
-  const argoWorkflowsUrl = hostedZoneName == "" ? `http://localhost:2746`:  `https://argo.${hostedZoneName}`;
-  const vaultUrl = hostedZoneName == "" ? `http://localhost:8200`:  `https://vault.${hostedZoneName}`;
 
-  let {  ARGO_WORKFLOWS_URL, VAULT_URL, ARGO_CD_URL, MINIO_URL, MINIO_CONOSLE_URL } = process.env
-  console.log(ARGO_WORKFLOWS_URL)
-
-  const gitTile =
-    gitProvider === GIT_PROVIDERS.GITHUB
-      ? {
-          appName: 'GitHub',
-          companyName: 'GitHub',
-          tags: [
-            {
-              value: 'Docs',
-              url: 'https://docs.kubefirst.io/kubefirst/github/github-repositories.html',
-              backgroundColor: bleachedSilk,
-            },
-            {
-              value: 'Argo CD',
-              url: `${argoUrl}/actions-runner-components`,
-              backgroundColor: greenJelly,
-              color: white,
-            },
-          ],
-          links: [
-            `https://${gitHost}/${gitOwner}/gitops`,
-            `https://${gitHost}/${gitOwner}/metaphor`,
-          ],
-          logo: GitHubLogo,
-        }
-      : {
-          appName: 'Gitlab',
-          companyName: 'Gitlab',
-          tags: [
-            {
-              value: 'Docs',
-              url: 'https://docs.kubefirst.io/kubefirst/gitlab/gitlab.html',
-              backgroundColor: bleachedSilk,
-            },
-            {
-              value: 'Argo CD',
-              url: `${argoUrl}/gitlab`,
-              backgroundColor: greenJelly,
-              color: white,
-            },
-          ],
-          links: [`https://gitlab.${hostedZoneName}`],
-          logo: GitLabLogo,
-        };
 
   return [
     {
@@ -102,8 +48,8 @@ export const buildCardsContent = ({
         },
       ],
       links: [
-        `https://${gitHost}/${gitOwner}/gitops`,
-        `https://${gitHost}/${gitOwner}/metaphor`,
+        `https://github.com/${gitOwner}/gitops`,
+        `https://github.com/${gitOwner}/metaphor`,
       ],
       logo: GitHubLogo,
     },
@@ -118,12 +64,12 @@ export const buildCardsContent = ({
         },
         {
           value: 'Argo CD',
-          url: `${argoUrl}/argocd`,
+          url: `${argoCdUrl}/argocd`,
           backgroundColor: greenJelly,
           color: white,
         },
       ],
-      links: [argoUrl],
+      links: [argoCdUrl],
       logo: ArgoCDLogo,
     },
     {
@@ -245,5 +191,5 @@ export const buildCardsContent = ({
 };
 
 export default {
-  buildCardsContent,
+    buildCardsContentLocal,
 };
