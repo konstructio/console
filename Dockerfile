@@ -1,5 +1,5 @@
 # build
-FROM node:16 AS build
+FROM --platform=linux/amd64 node:16 AS build
 
 WORKDIR /opt/app
 
@@ -18,7 +18,7 @@ RUN yarn build
 COPY env.sh .env ./
 
 # production
-FROM nginx:1.23-alpine AS production
+FROM --platform=linux/amd64 nginx:1.23-alpine AS production
 
 RUN apk add -u bash
 
