@@ -2,7 +2,7 @@ window.__env__ = {
   ADMIN_EMAIL: "jared@kubefirst.com",
   CLUSTER_NAME: "pando",
   GITHUB_HOST: "github.com",
-  GITHUB_OWNER: "jarededwards",
+  GITHUB_OWNER: "johndietz",
   HOSTED_ZONE_NAME: "",
   ARGO_WORKFLOWS_URL: ""http://localhost:2746"",
   VAULT_URL: ""http://localhost:8200"",

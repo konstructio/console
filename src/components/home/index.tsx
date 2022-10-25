@@ -24,7 +24,7 @@ const {
   colors: { bleachedSilk, greenJelly, white },
 } = theme;
 
-const gitOwner = "jarededwards" // hack
+const { GITHUB_OWNER } = process.env
 const atlantisUrl = `http://localhost:4141`;
 const argoCdUrl = `http://localhost:8080`;
 const argoWorkflowsUrl = `http://localhost:2746`
