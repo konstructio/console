@@ -24,7 +24,7 @@ const {
   colors: { bleachedSilk, greenJelly, white },
 } = theme;
 
-const { GITHUB_OWNER: gitOwner } = process.env
+// const { GITHUB_OWNER: gitOwner } = process.env
 const atlantisUrl = `http://localhost:4141`;
 const argoCdUrl = `http://localhost:8080`;
 const argoWorkflowsUrl = `http://localhost:2746`
@@ -49,8 +49,8 @@ const cardz = [
     },
   ],
   links: [
-    `https://github.com/${gitOwner}/gitops`,
-    `https://github.com/${gitOwner}/metaphor`,
+    `https://github.com/${window.__env__?.GITHUB_OWNER}/gitops`,
+    `https://github.com/${window.__env__?.GITHUB_OWNER}/metaphor`,
   ],
   logo: GitHubLogo,
 },{
