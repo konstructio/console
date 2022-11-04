@@ -6,7 +6,26 @@ import { ConfigKeys } from '../enums/config';
 import IKeyValue from '../types/common';
 import { Config } from '../types/config';
 
-const { ADMIN_EMAIL, CLUSTER_NAME, HOSTED_ZONE_NAME, GITHUB_HOST, GITHUB_OWNER } = ConfigKeys;
+const {
+  ADMIN_EMAIL,
+  CLUSTER_NAME,
+  HOSTED_ZONE_NAME,
+  GITHUB_HOST,
+  GITHUB_OWNER,
+  ARGO_WORKFLOWS_URL,
+  VAULT_URL,
+  ARGO_CD_URL,
+  ATLANTIS_URL,
+  METAPHOR_DEV,
+  METAPHOR_GO_DEV,
+  METAPHOR_FRONT_DEV,
+  METAPHOR_STAGING,
+  METAPHOR_GO_STAGING,
+  METAPHOR_FRONT_STAGING,
+  METAPHOR_PROD,
+  METAPHOR_GO_PROD,
+  METAPHOR_FRONT_PROD,
+} = ConfigKeys;
 
 const INTERNAL_API_URL = `${window.location.protocol}//${window.location.hostname}:9095`;
 
@@ -29,6 +48,19 @@ export const internalApi = createApi({
           [GITHUB_HOST]: getFromResponse(response, GITHUB_HOST),
           [GITHUB_OWNER]: getFromResponse(response, GITHUB_OWNER),
           [CLUSTER_NAME]: getFromResponse(response, CLUSTER_NAME),
+          [ARGO_WORKFLOWS_URL]: getFromResponse(response, ARGO_WORKFLOWS_URL),
+          [VAULT_URL]: getFromResponse(response, VAULT_URL),
+          [ARGO_CD_URL]: getFromResponse(response, ARGO_CD_URL),
+          [ATLANTIS_URL]: getFromResponse(response, ATLANTIS_URL),
+          [METAPHOR_DEV]: getFromResponse(response, METAPHOR_DEV),
+          [METAPHOR_GO_DEV]: getFromResponse(response, METAPHOR_GO_DEV),
+          [METAPHOR_FRONT_DEV]: getFromResponse(response, METAPHOR_FRONT_DEV),
+          [METAPHOR_STAGING]: getFromResponse(response, METAPHOR_STAGING),
+          [METAPHOR_GO_STAGING]: getFromResponse(response, METAPHOR_GO_STAGING),
+          [METAPHOR_FRONT_STAGING]: getFromResponse(response, METAPHOR_FRONT_STAGING),
+          [METAPHOR_PROD]: getFromResponse(response, METAPHOR_PROD),
+          [METAPHOR_GO_PROD]: getFromResponse(response, METAPHOR_GO_PROD),
+          [METAPHOR_FRONT_PROD]: getFromResponse(response, METAPHOR_FRONT_PROD),
         } as Config),
     }),
   }),

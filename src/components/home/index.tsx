@@ -27,8 +27,8 @@ const Home: FunctionComponent<IHomeProps> = ({
       <Content>
         <Header>
           <Text type={TITLE}>Kubefirst</Text>
-          <Text type={SUBTITLE}>{`Admin Email: ${adminEmail}`}</Text>
-          <Text type={SUBTITLE}>{`Cluster Name: ${clusterName}`}</Text>
+          {adminEmail && <Text type={SUBTITLE}>{`Admin Email: ${adminEmail}`}</Text>}
+          {clusterName && <Text type={SUBTITLE}>{`Cluster Name: ${clusterName}`}</Text>}
         </Header>
         {cards &&
           cards.map((card) => (
