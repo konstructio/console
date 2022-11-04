@@ -8,7 +8,7 @@ import MetaphorLogo from '../assets/metaphor.png';
 import theme from '../theme';
 
 const {
-  colors: { bleachedSilk, greenJelly, white },
+  colors: { bleachedSilk, caribeanSea, ferntastic, greenJelly, white },
 } = theme;
 
 export type CardsContentProps = {
@@ -16,38 +16,74 @@ export type CardsContentProps = {
   gitHost: string;
   gitOwner: string;
   hostedZoneName: string;
+
+  argoWorkflowsUrl: string;
+  vaultUrl: string;
+  argoUrl: string;
+  atlantisUrl: string;
+
+  metaphor: {
+    goUrl: string;
+    nodeJsUrl: string;
+    reactUrl: string;
+  };
+  metaphorStaging: {
+    goUrl: string;
+    nodeJsUrl: string;
+    reactUrl: string;
+  };
+  metaphorProduction: {
+    goUrl: string;
+    nodeJsUrl: string;
+    reactUrl: string;
+  };
 };
+
+const buildTag = (name: string, url: string, backgroundColor: string) => ({
+  value: name,
+  url,
+  backgroundColor: backgroundColor,
+  color: white,
+});
+
+const buildArgoCDTag = (argoUrl: string, component: string) => ({
+  value: 'Argo CD',
+  url:
+    argoUrl && argoUrl.includes('//localhost')
+      ? `${argoUrl}/applications/${component}`
+      : `${argoUrl}/auth/login?return_url=${encodeURIComponent(
+          `${argoUrl}/applications/${component}`,
+        )}`,
+  backgroundColor: greenJelly,
+  color: white,
+});
+
+const buildDocsTag = (pageUrl: string, path?: string) => ({
+  value: 'Docs',
+  url: `https://docs.kubefirst.io/${path ? path : 'kubefirst'}/${pageUrl}`,
+  backgroundColor: bleachedSilk,
+});
 
 export const buildCardsContent = ({
   gitProvider,
   gitHost,
   gitOwner,
   hostedZoneName,
+  argoWorkflowsUrl,
+  vaultUrl,
+  argoUrl,
+  atlantisUrl,
+  metaphor,
+  metaphorStaging,
+  metaphorProduction,
 }: CardsContentProps) => {
-  const atlantisUrl = `https://atlantis.${hostedZoneName}`;
-  const argoUrl = `https://argocd.${hostedZoneName}/auth/login?return_url=${encodeURIComponent(
-    `https://argocd.${hostedZoneName}/applications`,
-  )}`;
-  const argoWorkflowsUrl = `https://argo.${hostedZoneName}`;
-  const vaultUrl = `https://vault.${hostedZoneName}`;
-
   const gitTile =
     gitProvider === GIT_PROVIDERS.GITHUB
       ? {
           appName: 'GitHub',
-          companyName: 'GitHub',
           tags: [
-            {
-              value: 'Docs',
-              url: 'https://docs.kubefirst.io/kubefirst/github/github-repositories.html',
-              backgroundColor: bleachedSilk,
-            },
-            {
-              value: 'Argo CD',
-              url: `${argoUrl}/actions-runner-components`,
-              backgroundColor: greenJelly,
-              color: white,
-            },
+            buildDocsTag('github/github-repositories.html'),
+            buildArgoCDTag(argoUrl, 'actions-runner-contoller'),
           ],
           links: [
             `https://${gitHost}/${gitOwner}/gitops`,
@@ -57,20 +93,7 @@ export const buildCardsContent = ({
         }
       : {
           appName: 'Gitlab',
-          companyName: 'Gitlab',
-          tags: [
-            {
-              value: 'Docs',
-              url: 'https://docs.kubefirst.io/kubefirst/gitlab/gitlab.html',
-              backgroundColor: bleachedSilk,
-            },
-            {
-              value: 'Argo CD',
-              url: `${argoUrl}/gitlab`,
-              backgroundColor: greenJelly,
-              color: white,
-            },
-          ],
+          tags: [buildDocsTag('gitlab/gitlab.html'), buildArgoCDTag(argoUrl, 'gitlab')],
           links: [`https://gitlab.${hostedZoneName}`],
           logo: GitLabLogo,
         };
@@ -79,136 +102,53 @@ export const buildCardsContent = ({
     gitTile,
     {
       appName: 'Argo CD',
-      companyName: 'Intuit',
-      tags: [
-        {
-          value: 'Docs',
-          url: `https://docs.kubefirst.io/kubefirst/${gitProvider}/argocd.html`,
-          backgroundColor: bleachedSilk,
-        },
-        {
-          value: 'Argo CD',
-          url: `${argoUrl}/argocd`,
-          backgroundColor: greenJelly,
-          color: white,
-        },
-      ],
+      tags: [buildDocsTag(`${gitProvider}/argocd.html`), buildArgoCDTag(argoUrl, 'argocd')],
       links: [argoUrl],
       logo: ArgoCDLogo,
     },
     {
       appName: 'Argo Workflows',
-      companyName: 'Intuit',
-      tags: [
-        {
-          value: 'Docs',
-          url: 'https://docs.kubefirst.io/tooling/argo.html',
-          backgroundColor: bleachedSilk,
-        },
-        {
-          value: 'Argo CD',
-          url: `${argoUrl}/argo-workflows-cwfts`,
-          backgroundColor: greenJelly,
-          color: white,
-        },
-      ],
+      tags: [buildDocsTag('tooling/argo.html'), buildArgoCDTag(argoUrl, 'argo-workflows-cwfts')],
       links: [argoWorkflowsUrl],
       logo: ArgoCDLogo,
     },
     {
       appName: 'Vault',
-      companyName: 'Hashicorp',
-      tags: [
-        {
-          value: 'Docs',
-          url: `https://docs.kubefirst.io/kubefirst/${gitProvider}/vault.html`,
-          backgroundColor: bleachedSilk,
-        },
-        {
-          value: 'Argo CD',
-          url: `${argoUrl}/vault`,
-          backgroundColor: greenJelly,
-          color: white,
-        },
-      ],
+      tags: [buildDocsTag(`${gitProvider}/vault.html`), buildArgoCDTag(argoUrl, 'vault')],
       links: [`${vaultUrl}/ui/vault/auth?with=userpass`],
       logo: VaultLogo,
     },
     {
       appName: 'Atlantis',
-      tags: [
-        {
-          value: 'Docs',
-          url: `https://docs.kubefirst.io/kubefirst/${gitProvider}/terraform.html`,
-          backgroundColor: bleachedSilk,
-        },
-        {
-          value: 'Argo CD',
-          url: `${argoUrl}/atlantis`,
-          backgroundColor: greenJelly,
-          color: white,
-        },
-      ],
+      tags: [buildDocsTag(`${gitProvider}/terraform.html`), buildArgoCDTag(argoUrl, 'atlantis')],
       links: [atlantisUrl],
       logo: AtlantisLogo,
     },
     {
-      appName: 'Metaphor DEV',
-      companyName: 'Kubefirst',
+      appName: 'ReactJS',
       tags: [
-        {
-          value: 'Docs',
-          url: `https://docs.kubefirst.io/common/metaphors.html`,
-          backgroundColor: bleachedSilk,
-        },
-        {
-          value: 'Argo CD',
-          url: `${argoUrl}/metaphor-development`,
-          backgroundColor: greenJelly,
-          color: white,
-        },
+        buildDocsTag('metaphors.html', 'common'),
+        buildTag('ReactJS', 'https://reactjs.org', greenJelly),
       ],
-      links: [
-        `https://metaphor-development.${hostedZoneName}/app`,
-        `https://metaphor-go-development.${hostedZoneName}/app`,
-        `https://metaphor-frontend-development.${hostedZoneName}`,
-      ],
+      links: [metaphor.reactUrl, metaphorStaging.reactUrl, metaphorProduction.reactUrl],
       logo: MetaphorLogo,
     },
     {
-      appName: 'Metaphor STG',
-      companyName: 'Kubefirst',
+      appName: 'NodeJS',
       tags: [
-        {
-          value: 'Argo CD',
-          url: `${argoUrl}/applications/metaphor-staging`,
-          backgroundColor: greenJelly,
-          color: white,
-        },
+        buildDocsTag('metaphors.html', 'common'),
+        buildTag('NodeJS', 'https://expressjs.com', ferntastic),
       ],
-      links: [
-        `https://metaphor-staging.${hostedZoneName}/app`,
-        `https://metaphor-go-staging.${hostedZoneName}/app`,
-        `https://metaphor-frontend-staging.${hostedZoneName}`,
-      ],
+      links: [metaphor.nodeJsUrl, metaphorStaging.nodeJsUrl, metaphorProduction.nodeJsUrl],
       logo: MetaphorLogo,
     },
     {
-      appName: 'Metaphor PROD',
-      companyName: 'Kubefirst',
+      appName: 'Golang',
       tags: [
-        {
-          value: 'Argo CD',
-          url: `${argoUrl}/applications/metaphor-production`,
-          backgroundColor: greenJelly,
-          color: white,
-        },
+        buildDocsTag('metaphors.html', 'common'),
+        buildTag('Golang', 'https://go.dev', caribeanSea),
       ],
-      links: [
-        `https://metaphor-production.${hostedZoneName}/app`,
-        `https://metaphor-go-production.${hostedZoneName}/app`,
-        `https://metaphor-frontend-production.${hostedZoneName}`,
-      ],
+      links: [metaphor.goUrl, metaphorStaging.goUrl, metaphorProduction.goUrl],
       logo: MetaphorLogo,
     },
   ];

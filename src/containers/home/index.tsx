@@ -10,7 +10,7 @@ import {
 import HomeComponent from '../../components/home';
 
 const Home = () => {
-  const configValues = useAppSelector(selectConfigCardValues());
+  const configCardValues = useAppSelector(selectConfigCardValues());
   const adminEmail = useAppSelector(selectConfigAdminEmail());
   const clusterName = useAppSelector(selectConfigClusterName());
   const hostedZoneName = useAppSelector(selectHostedZoneName());
@@ -19,7 +19,7 @@ const Home = () => {
     <HomeComponent
       adminEmail={adminEmail}
       clusterName={clusterName}
-      cards={configValues}
+      cards={configCardValues}
       hostedZoneName={hostedZoneName}
     />
   );

@@ -17,6 +17,10 @@ export interface ICardProps {
   logo: string;
 }
 
+const LOCAL_URL_TRANSFORMS: { [key: string]: string } = {
+  ['http://localhost:8200/ui/vault/auth?with=userpass']: 'http://localhost:8200',
+};
+
 const Card: FunctionComponent<ICardProps> = ({
   appName,
   tags,
@@ -24,8 +28,18 @@ const Card: FunctionComponent<ICardProps> = ({
   hostedZoneName = '',
   logo,
 }) => {
+  const transformLocalValues = (domain: string) => {
+    const transformedDomain = LOCAL_URL_TRANSFORMS[domain];
+
+    return transformedDomain || domain;
+  };
+
   const getHostname = useCallback(
     (domain: string) => {
+      if (domain && domain.includes('//localhost')) {
+        return transformLocalValues(domain);
+      }
+
       const { hostname, pathname } =
         domain && domain.includes('http') ? new URL(domain) : { hostname: domain, pathname: '' };
 

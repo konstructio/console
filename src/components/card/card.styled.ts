@@ -73,6 +73,7 @@ export const Link = styled.a`
   cursor: pointer;
   display: flex;
   text-decoration: none;
+  text-transform: lowercase;
 
   & span {
     color: ${({ theme }) => theme.colors.jordyBlue};
