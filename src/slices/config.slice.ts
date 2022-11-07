@@ -1,25 +1,25 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 import { Config } from '../types/config';
-import { getConfigs } from '../actions/config.action';
 
 export interface IConfigState {
-  configs?: Config;
+  configs: Config;
 }
 
 export const initialState: IConfigState = {
-  configs: undefined,
+  configs: {} as Config,
 };
 
 const configSlice = createSlice({
   name: 'configs',
   initialState,
-  reducers: {},
-  extraReducers(builder) {
-    builder.addCase(getConfigs.fulfilled, (state, action) => {
+  reducers: {
+    setConfigs(state, action: PayloadAction<Config>) {
       state.configs = action.payload;
-    });
+    },
   },
 });
+
+export const { setConfigs } = configSlice.actions;
 
 export default configSlice.reducer;
