@@ -1,11 +1,9 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { Config } from 'src/types/config';
 
-import { endpoints } from '../api/internalApi';
+import { setConfigs } from '../slices/config.slice';
 
-const { getConfigs: getConfigsAPI } = endpoints;
+export const getConfigs = createAsyncThunk('config/getConfigs', async (_, { dispatch }) => {
+  const configValues = window?.__env__ || {};
 
-export const getConfigs = createAsyncThunk<Config>('config/getConfigs', async (_, { dispatch }) => {
-  const configValues = await getConfigsAPI.initiate({});
-  return dispatch(configValues).unwrap();
+  return await dispatch(setConfigs(configValues));
 });

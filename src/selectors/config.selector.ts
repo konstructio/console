@@ -1,4 +1,3 @@
-import { isEmpty } from 'lodash';
 import { createSelector } from '@reduxjs/toolkit';
 
 import { IConfigState } from '../slices/config.slice';
@@ -9,7 +8,7 @@ import { GIT_PROVIDERS } from '../enums/utils';
 const configSelector = (state: RootState): IConfigState => state.config;
 
 export const selectConfigCardValues = () =>
-  createSelector(configSelector, ({ configs: configValues }) => {
+  createSelector(configSelector, ({ configs }) => {
     const {
       HOSTED_ZONE_NAME,
       GITHUB_HOST,
@@ -27,7 +26,7 @@ export const selectConfigCardValues = () =>
       METAPHOR_PROD,
       METAPHOR_GO_PROD,
       METAPHOR_FRONT_PROD,
-    } = !isEmpty(configValues) ? configValues : window.__env__ || {};
+    } = configs;
 
     const params: CardsContentProps = {
       gitProvider: GITHUB_OWNER ? GIT_PROVIDERS.GITHUB : GIT_PROVIDERS.GITLAB,
@@ -39,18 +38,18 @@ export const selectConfigCardValues = () =>
       argoUrl: ARGO_CD_URL,
       atlantisUrl: ATLANTIS_URL,
       metaphor: {
-        goUrl: `${METAPHOR_GO_DEV}/app`,
-        nodeJsUrl: `${METAPHOR_DEV}/app`,
+        goUrl: METAPHOR_GO_DEV && `${METAPHOR_GO_DEV}/app`,
+        nodeJsUrl: METAPHOR_DEV && `${METAPHOR_DEV}/app`,
         reactUrl: METAPHOR_FRONT_DEV,
       },
       metaphorStaging: {
-        goUrl: `${METAPHOR_GO_STAGING}/app`,
-        nodeJsUrl: `${METAPHOR_STAGING}/app`,
+        goUrl: METAPHOR_GO_STAGING && `${METAPHOR_GO_STAGING}/app`,
+        nodeJsUrl: METAPHOR_STAGING && `${METAPHOR_STAGING}/app`,
         reactUrl: METAPHOR_FRONT_STAGING,
       },
       metaphorProduction: {
-        goUrl: `${METAPHOR_GO_PROD}/app`,
-        nodeJsUrl: `${METAPHOR_PROD}/app`,
+        goUrl: METAPHOR_GO_PROD && `${METAPHOR_GO_PROD}/app`,
+        nodeJsUrl: METAPHOR_PROD && `${METAPHOR_PROD}/app`,
         reactUrl: METAPHOR_FRONT_PROD,
       },
     };
@@ -59,19 +58,10 @@ export const selectConfigCardValues = () =>
   });
 
 export const selectConfigClusterName = () =>
-  createSelector(
-    configSelector,
-    ({ configs }) => configs?.CLUSTER_NAME || window.__env__?.CLUSTER_NAME,
-  );
+  createSelector(configSelector, ({ configs }) => configs?.CLUSTER_NAME);
 
 export const selectConfigAdminEmail = () =>
-  createSelector(
-    configSelector,
-    ({ configs }) => configs?.ADMIN_EMAIL || window.__env__?.ADMIN_EMAIL,
-  );
+  createSelector(configSelector, ({ configs }) => configs?.ADMIN_EMAIL);
 
 export const selectHostedZoneName = () =>
-  createSelector(
-    configSelector,
-    ({ configs }) => configs?.HOSTED_ZONE_NAME || window.__env__?.HOSTED_ZONE_NAME,
-  );
+  createSelector(configSelector, ({ configs }) => configs?.HOSTED_ZONE_NAME);

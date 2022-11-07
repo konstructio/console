@@ -77,6 +77,11 @@ export const buildCardsContent = ({
   metaphorStaging,
   metaphorProduction,
 }: CardsContentProps) => {
+  const argoUrlAuth =
+    argoUrl && argoUrl.includes('//localhost')
+      ? argoUrl
+      : `${argoUrl}/auth/login?return_url=${encodeURIComponent(`${argoUrl}/applications/`)}`;
+
   const gitTile =
     gitProvider === GIT_PROVIDERS.GITHUB
       ? {
@@ -103,12 +108,12 @@ export const buildCardsContent = ({
     {
       appName: 'Argo CD',
       tags: [buildDocsTag(`${gitProvider}/argocd.html`), buildArgoCDTag(argoUrl, 'argocd')],
-      links: [argoUrl],
+      links: [argoUrlAuth],
       logo: ArgoCDLogo,
     },
     {
       appName: 'Argo Workflows',
-      tags: [buildDocsTag('tooling/argo.html'), buildArgoCDTag(argoUrl, 'argo-workflows-cwfts')],
+      tags: [buildDocsTag('argo.html', 'tooling'), buildArgoCDTag(argoUrl, 'argo-workflows-cwfts')],
       links: [argoWorkflowsUrl],
       logo: ArgoCDLogo,
     },

@@ -18,7 +18,10 @@ export interface ICardProps {
 }
 
 const LOCAL_URL_TRANSFORMS: { [key: string]: string } = {
-  ['http://localhost:8200/ui/vault/auth?with=userpass']: 'http://localhost:8200',
+  'http://localhost:8200/ui/vault/auth?with=userpass': 'http://localhost:8200',
+  'http://localhost:8080/applications/argo-workflows-cwfts':
+    'http://localhost:8080/applications/argo-cwft-components',
+  'http://localhost:8080/applications/argocd': 'http://localhost:8080/applications/argo',
 };
 
 const Card: FunctionComponent<ICardProps> = ({
@@ -28,10 +31,18 @@ const Card: FunctionComponent<ICardProps> = ({
   hostedZoneName = '',
   logo,
 }) => {
-  const transformLocalValues = (domain: string) => {
+  const transformLocalValues = (domain: string): string => {
     const transformedDomain = LOCAL_URL_TRANSFORMS[domain];
 
     return transformedDomain || domain;
+  };
+
+  const transformLocalTagUrl = (url: string): string => {
+    if (url && url.includes('//localhost')) {
+      return transformLocalValues(url);
+    }
+
+    return url;
   };
 
   const getHostname = useCallback(
@@ -57,25 +68,30 @@ const Card: FunctionComponent<ICardProps> = ({
   return (
     <Container data-testid="card-component">
       <CardContent>
-        <>
-          <Image src={logo} />
-          <TextHeader>
-            <Text type={TYPES.TITLE}>{appName}</Text>
-          </TextHeader>
-          {links.map((domain) => (
+        <Image src={logo} />
+        <TextHeader>
+          <Text type={TYPES.TITLE}>{appName}</Text>
+        </TextHeader>
+        {links &&
+          links.map((domain) => (
             <Link href={domain} target="_blank" key={domain}>
               <Text type={TYPES.DISABLED}>{getHostname(domain)}</Text>
               <FiExternalLink />
             </Link>
           ))}
-        </>
       </CardContent>
       <Tags>
-        {tags.map(({ value, url, backgroundColor, color }) => (
-          <Tag key={value} backgroundColor={backgroundColor} color={color} url={url}>
-            {value}
-          </Tag>
-        ))}
+        {tags &&
+          tags.map(({ value, url, backgroundColor, color }) => (
+            <Tag
+              key={value}
+              backgroundColor={backgroundColor}
+              color={color}
+              url={transformLocalTagUrl(url)}
+            >
+              {value}
+            </Tag>
+          ))}
       </Tags>
     </Container>
   );
