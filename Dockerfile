@@ -1,43 +1,45 @@
-# build
-FROM --platform=linux/amd64 node:16 AS build
+FROM node:16-alpine AS deps
+RUN apk add --no-cache libc6-compat
+WORKDIR /app
 
-WORKDIR /opt/app
+COPY package.json yarn.lock ./
+RUN \
+  if [ -f yarn.lock ]; then yarn --frozen-lockfile; \
+  else echo "Lockfile not found." && exit 1; \
+  fi
 
-COPY package*.json ./
 
-RUN yarn install
+# Rebuild the source code only when needed
+FROM node:16-alpine AS builder
+WORKDIR /app
+COPY --from=deps /app/node_modules ./node_modules
+COPY . .
 
-COPY ./ .
-
-ENV PORT=3000
-
-EXPOSE $PORT
+ENV NEXT_TELEMETRY_DISABLED 1
 
 RUN yarn build
 
-COPY env.sh .env ./
+# Production image, copy all the files and run next
+FROM node:16-alpine AS runner
+WORKDIR /app
 
-# production
-FROM --platform=linux/amd64 nginx:1.23-alpine AS production
+ENV NODE_ENV production
+ENV NEXT_TELEMETRY_DISABLED 1
 
-RUN apk add -u bash
+RUN addgroup --system --gid 1001 nodejs
+RUN adduser --system --uid 1001 nextjs
 
-WORKDIR /usr/share/nginx/html
+COPY --from=builder /app/public ./public
 
-# remove default nginx static assets
-RUN rm -rf ./*
+# Automatically leverage output traces to reduce image size
+# https://nextjs.org/docs/advanced-features/output-file-tracing
+COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
+COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
+
+USER nextjs
 
 EXPOSE 80
 
-RUN set -x ; \
-  addgroup -g 82 -S www-data ; \
-  adduser -u 82 -D -S -G www-data www-data && exit 0 ; exit 1 \
+ENV PORT 80
 
-USER www-data
-
-COPY --from=build --chown=www-data:www-data /opt/app/dist /opt/app/env.sh /opt/app/.env ./
-
-# inject local environment variables dynamically
-RUN sed -i 's|<!-- env-config-here -->|<script src="./static/env-config.js"></script>|g' index.html
-
-CMD ["/bin/sh", "-c", "/usr/share/nginx/html/env.sh && mv env-config.js static && nginx -g \"daemon off;\""]
+CMD ["node", "server.js"]
