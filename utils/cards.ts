@@ -43,7 +43,7 @@ const buildTag = (name: string, url: string, backgroundColor: string) => ({
 const buildArgoCDTag = (argoUrl: string, component: string) => ({
   value: 'Argo CD',
   url:
-    argoUrl && argoUrl.includes('//localhost')
+    argoUrl && (argoUrl.includes('//localhost') || argoUrl.includes('localdev.me'))
       ? `${argoUrl}/applications/${component}`
       : `${argoUrl}/auth/login?return_url=${encodeURIComponent(
           `${argoUrl}/applications/${component}`,
@@ -72,7 +72,7 @@ export const buildCardsContent = ({
   metaphorProduction,
 }: CardsContentProps) => {
   const argoUrlAuth =
-    argoUrl && argoUrl.includes('//localhost')
+    argoUrl && (argoUrl.includes('//localhost') || argoUrl.includes('localdev.me'))
       ? argoUrl
       : `${argoUrl}/auth/login?return_url=${encodeURIComponent(`${argoUrl}/applications/`)}`;
 
