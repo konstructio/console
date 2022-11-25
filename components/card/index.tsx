@@ -31,6 +31,8 @@ export interface ICardProps {
   tags: Array<any>;
   links: Array<string>;
   logo: string;
+  onClickLink: (url: string) => void;
+  onClickTag: (url: string) => void;
 }
 
 const LOCAL_URL_TRANSFORMS: { [key: string]: string } = {
@@ -46,6 +48,8 @@ const Card: FunctionComponent<ICardProps> = ({
   links,
   hostedZoneName = '',
   logo,
+  onClickLink,
+  onClickTag,
 }) => {
   const logoImage = CARD_IMAGES[logo];
   const transformLocalValues = (domain: string): string => {
@@ -91,7 +95,7 @@ const Card: FunctionComponent<ICardProps> = ({
         </TextHeader>
         {links &&
           links.map((domain) => (
-            <Link href={domain} target="_blank" key={domain}>
+            <Link href={domain} target="_blank" key={domain} onClick={() => onClickLink(domain)}>
               <Text type={TYPES.DISABLED}>{getHostname(domain)}</Text>
               <FiExternalLink />
             </Link>
@@ -105,6 +109,7 @@ const Card: FunctionComponent<ICardProps> = ({
               backgroundColor={backgroundColor}
               color={color}
               url={transformLocalTagUrl(url)}
+              onClick={onClickTag}
             >
               {value}
             </Tag>

@@ -12,10 +12,16 @@ export interface ITagProps {
   color?: string;
   children: string;
   url: string;
+  onClick: (url: string) => void;
 }
 
-const Tag: FunctionComponent<ITagProps> = ({ backgroundColor, color, children, url }) => (
-  <Container backgroundColor={backgroundColor} color={color} data-testid="tag">
+const Tag: FunctionComponent<ITagProps> = ({ backgroundColor, color, children, url, onClick }) => (
+  <Container
+    backgroundColor={backgroundColor}
+    color={color}
+    data-testid="tag"
+    onClick={() => onClick(url)}
+  >
     <Link href={url} target="_blank">
       <Text type={BODY}>{children}</Text>
     </Link>

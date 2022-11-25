@@ -1,13 +1,13 @@
 import React from 'react';
 
 import { GIT_PROVIDERS } from '../enums/utils';
-import Componetn from '../containers/home';
+import HomeComponent from '../containers/home';
 import { CardsContentProps, buildCardsContent } from '../utils/cards';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export default function Home({ configCardValues, adminEmail, clusterName, hostedZoneName }: any) {
   return (
-    <Componetn
+    <HomeComponent
       configCardValues={configCardValues}
       adminEmail={adminEmail}
       clusterName={clusterName}
