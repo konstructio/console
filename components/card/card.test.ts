@@ -1,9 +1,9 @@
 import { screen } from '@testing-library/react';
 import { faker } from '@faker-js/faker';
 
-import Card, { ICardProps } from './index';
+import setupComponent from '../../tests/setup';
 
-import setupComponent from 'tests/setup';
+import Card, { ICardProps } from './index';
 
 const defaultProps: ICardProps = {
   appName: 'Argo CD',
@@ -16,6 +16,8 @@ const defaultProps: ICardProps = {
   links: [faker.internet.url()],
   logo: faker.internet.avatar(),
   hostedZoneName: 'your-company.io',
+  onClickLink: jest.fn(),
+  onClickTag: jest.fn(),
 };
 
 const setup = setupComponent<ICardProps>(Card, defaultProps);

@@ -1,10 +1,9 @@
 import React from 'react';
 import { Provider } from 'react-redux';
-import { BrowserRouter } from 'react-router-dom';
 import { ThemeProvider } from 'styled-components';
 
-import { store } from '../src/store';
-import theme from '../src/theme';
+import { makeStore } from '../redux/store';
+import theme from '../theme';
 
 export const parameters = {
   actions: { argTypesRegex: '^on[A-Z].*' },
@@ -16,14 +15,14 @@ export const parameters = {
   },
 };
 
+const store = makeStore();
+
 export const decorators = [
   (Story) => (
     <Provider store={store}>
-      <BrowserRouter>
-        <ThemeProvider theme={theme}>
-          <Story />
-        </ThemeProvider>
-      </BrowserRouter>
+      <ThemeProvider theme={theme}>
+        <Story />
+      </ThemeProvider>
     </Provider>
   ),
 ];

@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { ComponentStory, ComponentMeta } from '@storybook/react';
 import { faker } from '@faker-js/faker';
+import { action } from '@storybook/addon-actions';
 
 import theme from '../../theme';
 
@@ -22,21 +23,24 @@ const Wrapper = styled.div`
   gap: 10px;
 `;
 
-const Template: ComponentStory<typeof Tag> = () => (
+const Template: ComponentStory<typeof Tag> = (args) => (
   <Wrapper>
-    <Tag url={url} backgroundColor={bleachedSilk}>
+    <Tag {...args} url={url} backgroundColor={bleachedSilk}>
       Docs
     </Tag>
-    <Tag url={url} backgroundColor={transparentBlue}>
+    <Tag {...args} url={url} backgroundColor={transparentBlue}>
       Datadog
     </Tag>
-    <Tag url={url} backgroundColor={naivePeach}>
+    <Tag {...args} url={url} backgroundColor={naivePeach}>
       Argo CD
     </Tag>
-    <Tag url={url} backgroundColor={dawnDeparts}>
+    <Tag {...args} url={url} backgroundColor={dawnDeparts}>
       GitHub
     </Tag>
   </Wrapper>
 );
 
 export const Basic = Template.bind({});
+Basic.args = {
+  onClick: action('onTagClick'),
+};

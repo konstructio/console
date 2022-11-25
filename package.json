@@ -1,5 +1,5 @@
 {
-  "name": "k1-console",
+  "name": "console",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -7,7 +7,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
+    "lint": "next lint && eslint './**/*.{js,jsx,ts,tsx}'",
     "lint:fix": "eslint --fix './**/*.{js,jsx,ts,tsx}'",
     "format": "prettier --write './**/*.{js,jsx,ts,tsx}' --config ./.prettierrc",
     "test": "jest --silent",
