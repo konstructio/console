@@ -65,9 +65,9 @@ export async function getServerSideProps() {
   return {
     props: {
       configCardValues: buildCardsContent(params),
-      adminEmail: process.env.ADMIN_EMAIL,
-      clusterName: process.env.CLUSTER_NAME,
-      hostedZoneName: process.env.HOSTED_ZONE_NAME,
+      adminEmail: process.env.ADMIN_EMAIL || '',
+      clusterName: process.env.CLUSTER_NAME || '',
+      hostedZoneName: process.env.HOSTED_ZONE_NAME || '',
     }, // will be passed to the page component as props
   };
 }
