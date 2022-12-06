@@ -1,5 +1,7 @@
 import React from 'react';
 
+import { useAppSelector } from '../../redux/store';
+import { selectIsTelemetryEnabled } from '../../redux/selectors/config.selector';
 import { LINK_CLICK_EVENT, TAG_CLICK_EVENT } from '../../enums/telemetry';
 import HomeComponent from '../../components/home';
 import { useTrackMutation } from '../../redux/api';
@@ -14,13 +16,18 @@ export interface HomeProps {
 
 const Home = ({ configCardValues, adminEmail, clusterName, hostedZoneName }: HomeProps) => {
   const [sendTrackEvent] = useTrackMutation();
+  const isTelemetryEnabled = useAppSelector(selectIsTelemetryEnabled());
 
   const onClickLink = (url: string) => {
-    sendTrackEvent({ event: LINK_CLICK_EVENT, properties: { url, type: 'link' } });
+    if (isTelemetryEnabled) {
+      sendTrackEvent({ event: LINK_CLICK_EVENT, properties: { url, type: 'link' } });
+    }
   };
 
   const onClickTag = (url: string) => {
-    sendTrackEvent({ event: TAG_CLICK_EVENT, properties: { url, type: 'tag' } });
+    if (isTelemetryEnabled) {
+      sendTrackEvent({ event: TAG_CLICK_EVENT, properties: { url, type: 'tag' } });
+    }
   };
 
   return (

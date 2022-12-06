@@ -3,11 +3,13 @@ import { Action, configureStore, getDefaultMiddleware, ThunkAction } from '@redu
 import { createWrapper } from 'next-redux-wrapper';
 
 import { consoleApi } from './api';
+import configSlice from './slices/config.slice';
 
 export const makeStore = () =>
   configureStore({
     reducer: {
       [consoleApi.reducerPath]: consoleApi.reducer,
+      config: configSlice,
     },
     middleware: [
       ...getDefaultMiddleware({
