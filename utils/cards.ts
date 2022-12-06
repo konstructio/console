@@ -100,6 +100,12 @@ export const buildCardsContent = ({
   return [
     gitTile,
     {
+      appName: 'Vault',
+      tags: [buildDocsTag(`${gitProvider}/vault.html`), buildArgoCDTag(argoUrl, 'vault')],
+      links: [`${vaultUrl}/ui/vault/auth?with=userpass`],
+      logo: 'VaultLogo',
+    },
+    {
       appName: 'Argo CD',
       tags: [buildDocsTag(`${gitProvider}/argocd.html`), buildArgoCDTag(argoUrl, 'argocd')],
       links: [argoUrlAuth],
@@ -110,12 +116,6 @@ export const buildCardsContent = ({
       tags: [buildDocsTag('argo.html', 'tooling'), buildArgoCDTag(argoUrl, 'argo-workflows-cwfts')],
       links: [argoWorkflowsUrl],
       logo: 'ArgoCDLogo',
-    },
-    {
-      appName: 'Vault',
-      tags: [buildDocsTag(`${gitProvider}/vault.html`), buildArgoCDTag(argoUrl, 'vault')],
-      links: [`${vaultUrl}/ui/vault/auth?with=userpass`],
-      logo: 'VaultLogo',
     },
     {
       appName: 'Atlantis',
