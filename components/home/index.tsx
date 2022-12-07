@@ -14,8 +14,8 @@ export interface IHomeProps {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   cards: Array<any>;
   hostedZoneName: string;
-  onClickLink: (url: string) => void;
-  onClickTag: (url: string) => void;
+  onClickLink: (url: string, serviceName: string) => void;
+  onClickTag: (url: string, serviceName: string) => void;
 }
 
 const Home: FunctionComponent<IHomeProps> = ({
