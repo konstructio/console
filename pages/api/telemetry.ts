@@ -1,7 +1,6 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from 'next';
-
-import { sendTelemetry } from '../../services/telemetry';
+import { sendTelemetry } from 'services/telemetry';
 
 type Data = {
   success: boolean;
@@ -9,10 +8,13 @@ type Data = {
 
 export default function handler(req: NextApiRequest, res: NextApiResponse<Data>) {
   try {
-    sendTelemetry('kubefirst.console.healthz');
+    if (req.method === 'POST') {
+      const { event, properties } = req.body;
+      sendTelemetry(event, properties);
+    }
   } catch (error) {
     // eslint-disable-next-line no-console
-    console.log('error: sending segment event');
+    console.log('error: sending segment event', error);
   }
 
   res.status(200).json({ success: true });

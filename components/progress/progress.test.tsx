@@ -1,8 +1,8 @@
 import { screen } from '@testing-library/react';
 
-import Progress, { IProgressProps } from './index';
+import setupComponent from '../../tests/setup';
 
-import setupComponent from 'tests/setup';
+import Progress, { IProgressProps } from './index';
 
 const defaultProps: IProgressProps = {
   progress: 10,

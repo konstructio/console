@@ -1,14 +1,15 @@
 import { screen } from '@testing-library/react';
 import { faker } from '@faker-js/faker';
 
-import Tag, { ITagProps } from './index';
+import setupComponent from '../../tests/setup';
 
-import setupComponent from 'tests/setup';
+import Tag, { ITagProps } from './index';
 
 const defaultProps = {
   backgroundColor: 'red',
   children: 'Tag',
   url: faker.internet.url(),
+  onClick: jest.fn(),
 };
 
 const setup = setupComponent<ITagProps>(Tag, defaultProps);

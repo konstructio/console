@@ -14,6 +14,8 @@ export interface IHomeProps {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   cards: Array<any>;
   hostedZoneName: string;
+  onClickLink: (url: string, serviceName: string) => void;
+  onClickTag: (url: string, serviceName: string) => void;
 }
 
 const Home: FunctionComponent<IHomeProps> = ({
@@ -21,6 +23,8 @@ const Home: FunctionComponent<IHomeProps> = ({
   clusterName,
   cards,
   hostedZoneName,
+  onClickLink,
+  onClickTag,
 }) => {
   return (
     <Container data-testid="home-component">
@@ -32,7 +36,13 @@ const Home: FunctionComponent<IHomeProps> = ({
         </Header>
         {cards &&
           cards.map((card) => (
-            <Card key={card.appName} {...card} hostedZoneName={hostedZoneName} />
+            <Card
+              key={card.appName}
+              {...card}
+              hostedZoneName={hostedZoneName}
+              onClickLink={onClickLink}
+              onClickTag={onClickTag}
+            />
           ))}
       </Content>
     </Container>

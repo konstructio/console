@@ -36,7 +36,7 @@ const Sidebar: FunctionComponent<ISidebarProps> = ({ onSidebarItemClick }) => {
   return (
     <Container data-testid="sidebar-component">
       <Row data-testid="home-item" onClick={() => onSidebarItemClick({ name: 'home', link: '/' })}>
-        <Icon alt="k-ray" />
+        <Icon alt="k-ray" width={80} height={80} />
       </Row>
       <Divider />
       <SidebarItems data-testid="sidebar-items">

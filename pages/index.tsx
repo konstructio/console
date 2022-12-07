@@ -1,13 +1,35 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { setConfigValues } from 'redux/slices/config.slice';
 
 import { GIT_PROVIDERS } from '../enums/utils';
-import Componetn from '../containers/home';
+import HomeComponent from '../containers/home';
 import { CardsContentProps, buildCardsContent } from '../utils/cards';
+import { useAppDispatch } from '../redux/store';
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export default function Home({ configCardValues, adminEmail, clusterName, hostedZoneName }: any) {
+export interface HomePageProps {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  configCardValues: any;
+  adminEmail: string;
+  clusterName: string;
+  hostedZoneName: string;
+  useTelemetry: string;
+}
+
+export default function Home({
+  configCardValues,
+  adminEmail,
+  clusterName,
+  hostedZoneName,
+  useTelemetry,
+}: HomePageProps) {
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    dispatch(setConfigValues({ isTelemetryEnabled: useTelemetry === 'true' }));
+  }, [dispatch, useTelemetry]);
+
   return (
-    <Componetn
+    <HomeComponent
       configCardValues={configCardValues}
       adminEmail={adminEmail}
       clusterName={clusterName}
@@ -68,6 +90,7 @@ export async function getServerSideProps() {
       adminEmail: process.env.ADMIN_EMAIL || '',
       clusterName: process.env.CLUSTER_NAME || '',
       hostedZoneName: process.env.HOSTED_ZONE_NAME || '',
-    }, // will be passed to the page component as props
+      useTelemetry: process.env.USE_TELEMETRY || false,
+    },
   };
 }
