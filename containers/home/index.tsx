@@ -19,15 +19,14 @@ const Home = ({ configCardValues, adminEmail, clusterName, hostedZoneName }: Hom
 
   const onClickLink = (url: string, serviceName: string) => {
     if (isTelemetryEnabled) {
-      const event = `console.${serviceName.toLowerCase()}.link`;
+      const event = `console.${serviceName.toLowerCase()}.link`.replace(/ /g, '');
       sendTrackEvent({ event, properties: { url, type: 'link' } });
     }
   };
 
   const onClickTag = (url: string, serviceName: string) => {
     if (isTelemetryEnabled) {
-      const event = `console.${serviceName.toLowerCase()}.tag`;
-
+      const event = `console.${serviceName.toLowerCase()}.tag`.replace(/ /g, '');
       sendTrackEvent({ event, properties: { url, type: 'tag' } });
     }
   };
