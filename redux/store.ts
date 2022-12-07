@@ -1,5 +1,5 @@
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
-import { Action, configureStore, getDefaultMiddleware, ThunkAction } from '@reduxjs/toolkit';
+import { Action, configureStore, ThunkAction } from '@reduxjs/toolkit';
 import { createWrapper } from 'next-redux-wrapper';
 
 import { consoleApi } from './api';
@@ -11,12 +11,7 @@ export const makeStore = () =>
       [consoleApi.reducerPath]: consoleApi.reducer,
       config: configSlice,
     },
-    middleware: [
-      ...getDefaultMiddleware({
-        serializableCheck: false,
-      }),
-      consoleApi.middleware,
-    ],
+    middleware: (gDM) => gDM().concat(consoleApi.middleware),
   });
 
 export const useAppDispatch: () => AppDispatch = useDispatch;

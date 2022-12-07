@@ -1,5 +1,5 @@
 {
-  "name": "console",
+  "name": "k1-console",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -24,7 +24,7 @@
     "@types/react-dom": "18.0.8",
     "analytics-node": "^6.2.0",
     "lodash": "^4.17.21",
-    "next": "13.0.2",
+    "next": "13.0.3",
     "next-redux-wrapper": "^8.0.0",
     "react": "18.2.0",
     "react-copy-to-clipboard": "^5.1.0",
