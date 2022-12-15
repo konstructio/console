@@ -109,11 +109,15 @@ export const TextHeader = styled.div`
 
 export const ThreeDots = styled.img.attrs({ src: ThreeDotsIcon })`
   cursor: pointer;
-  position absolute;
+  position: absolute;
   right: 0px;
   top: 10px;
 `;
 
 export const UserName = styled(Text)`
   margin-top: 5px;
+`;
+
+export const PopoverContainer = styled.div`
+  flex-direction: row !important;
 `;

@@ -7,3 +7,5 @@ const configSelector = (state: RootState): ConfigState => state.config;
 
 export const selectIsTelemetryEnabled = () =>
   createSelector(configSelector, ({ isTelemetryEnabled }) => !!isTelemetryEnabled);
+
+export const selectIsLocal = () => createSelector(configSelector, ({ isLocal }) => !!isLocal);

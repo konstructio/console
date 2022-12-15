@@ -10,6 +10,7 @@ export type CardsContentProps = {
   gitHost: string;
   gitOwner: string;
   hostedZoneName: string;
+  isLocal: boolean;
 
   argoWorkflowsUrl: string;
   vaultUrl: string;
@@ -43,7 +44,7 @@ const buildTag = (name: string, url: string, backgroundColor: string) => ({
 const buildArgoCDTag = (argoUrl: string, component: string) => ({
   value: 'Argo CD',
   url:
-    argoUrl && (argoUrl.includes('//localhost') || argoUrl.includes('localdev.me'))
+    argoUrl && argoUrl.includes('localdev.me')
       ? `${argoUrl}/applications/${component}`
       : `${argoUrl}/auth/login?return_url=${encodeURIComponent(
           `${argoUrl}/applications/${component}`,
@@ -63,6 +64,7 @@ export const buildCardsContent = ({
   gitHost,
   gitOwner,
   hostedZoneName,
+  isLocal,
   argoWorkflowsUrl,
   vaultUrl,
   argoUrl,
@@ -72,7 +74,7 @@ export const buildCardsContent = ({
   metaphorProduction,
 }: CardsContentProps) => {
   const argoUrlAuth =
-    argoUrl && (argoUrl.includes('//localhost') || argoUrl.includes('localdev.me'))
+    argoUrl && argoUrl.includes('localdev.me')
       ? argoUrl
       : `${argoUrl}/auth/login?return_url=${encodeURIComponent(`${argoUrl}/applications/`)}`;
 
@@ -86,7 +88,7 @@ export const buildCardsContent = ({
           ],
           links: [
             `https://${gitHost}/${gitOwner}/gitops`,
-            `https://${gitHost}/${gitOwner}/metaphor`,
+            `https://${gitHost}/${gitOwner}/metaphor${isLocal ? '-frontend' : ''}`,
           ],
           logo: 'GitHubLogo',
         }
@@ -124,7 +126,7 @@ export const buildCardsContent = ({
       logo: 'AtlantisLogo',
     },
     {
-      appName: 'ReactJS',
+      appName: isLocal ? 'Metaphor' : 'ReactJS',
       tags: [
         buildDocsTag('metaphors.html', 'common'),
         buildTag('ReactJS', 'https://reactjs.org', greenJelly),
@@ -132,23 +134,27 @@ export const buildCardsContent = ({
       links: [metaphor.reactUrl, metaphorStaging.reactUrl, metaphorProduction.reactUrl],
       logo: 'MetaphorLogo',
     },
-    {
-      appName: 'NodeJS',
-      tags: [
-        buildDocsTag('metaphors.html', 'common'),
-        buildTag('NodeJS', 'https://expressjs.com', ferntastic),
-      ],
-      links: [metaphor.nodeJsUrl, metaphorStaging.nodeJsUrl, metaphorProduction.nodeJsUrl],
-      logo: 'MetaphorLogo',
-    },
-    {
-      appName: 'Golang',
-      tags: [
-        buildDocsTag('metaphors.html', 'common'),
-        buildTag('Golang', 'https://go.dev', caribeanSea),
-      ],
-      links: [metaphor.goUrl, metaphorStaging.goUrl, metaphorProduction.goUrl],
-      logo: 'MetaphorLogo',
-    },
+    !isLocal
+      ? {
+          appName: 'NodeJS',
+          tags: [
+            buildDocsTag('metaphors.html', 'common'),
+            buildTag('NodeJS', 'https://expressjs.com', ferntastic),
+          ],
+          links: [metaphor.nodeJsUrl, metaphorStaging.nodeJsUrl, metaphorProduction.nodeJsUrl],
+          logo: 'MetaphorLogo',
+        }
+      : {},
+    !isLocal
+      ? {
+          appName: 'Golang',
+          tags: [
+            buildDocsTag('metaphors.html', 'common'),
+            buildTag('Golang', 'https://go.dev', caribeanSea),
+          ],
+          links: [metaphor.goUrl, metaphorStaging.goUrl, metaphorProduction.goUrl],
+          logo: 'MetaphorLogo',
+        }
+      : {},
   ];
 };

@@ -1,6 +1,8 @@
-import React, { FunctionComponent, useCallback } from 'react';
+import React, { FunctionComponent, useCallback, useEffect, useState } from 'react';
 import { FiExternalLink } from 'react-icons/fi';
 import { StaticImageData } from 'next/image';
+import CircularProgress from '@mui/material/CircularProgress';
+import Box from '@mui/material/Box';
 
 import { TYPES } from '../../enums/typography';
 import Text from '../text';
@@ -11,8 +13,17 @@ import GitHubLogo from '../../assets/github.png';
 import VaultLogo from '../../assets/vault.png';
 import AtlantisLogo from '../../assets/atlantis.png';
 import MetaphorLogo from '../../assets/metaphor.png';
+import Popover from '../popover/index';
 
-import { CardContent, Container, Image, Link, Tags, TextHeader } from './card.styled';
+import {
+  CardContent,
+  Container,
+  Image,
+  Link,
+  PopoverContainer,
+  Tags,
+  TextHeader,
+} from './card.styled';
 
 const CARD_IMAGES: { [key: string]: StaticImageData } = {
   ['ArgoCDLogo']: ArgoCDLogo,
@@ -35,13 +46,6 @@ export interface ICardProps {
   onClickTag: (url: string, serviceName: string) => void;
 }
 
-const LOCAL_URL_TRANSFORMS: { [key: string]: string } = {
-  'http://localhost:8200/ui/vault/auth?with=userpass': 'http://localhost:8200',
-  'http://localhost:8080/applications/argo-workflows-cwfts':
-    'http://localhost:8080/applications/argo-cwft-components',
-  'http://localhost:8080/applications/argocd': 'http://localhost:8080/applications/argo',
-};
-
 const Card: FunctionComponent<ICardProps> = ({
   appName,
   tags,
@@ -51,32 +55,18 @@ const Card: FunctionComponent<ICardProps> = ({
   onClickLink,
   onClickTag,
 }) => {
+  const [metaphorLinks, setMetaphorLinks] = useState<Array<string>>([]);
   const logoImage = CARD_IMAGES[logo];
-  const transformLocalValues = (domain: string): string => {
-    const transformedDomain = LOCAL_URL_TRANSFORMS[domain];
 
-    return transformedDomain || domain;
-  };
-
-  const transformLocalTagUrl = (url: string): string => {
-    if (url && url.includes('//localhost')) {
-      return transformLocalValues(url);
-    }
-
-    return url;
-  };
+  const isMetaphor = appName === 'Metaphor';
 
   const getHostname = useCallback(
     (domain: string) => {
-      if (domain && domain.includes('//localhost')) {
-        return transformLocalValues(domain);
-      }
-
       const { hostname, pathname } =
         domain && domain.includes('http') ? new URL(domain) : { hostname: domain, pathname: '' };
 
-      if (hostedZoneName && hostname && hostname.includes('metaphor')) {
-        return hostname.replace(`.${hostedZoneName}`, '');
+      if (hostname && hostname.includes('metaphor')) {
+        return hostname.replace('.localdev.me', '').replace(`.${hostedZoneName}`, '');
       } else if (hostname && hostname.includes('github')) {
         return pathname.substring(1);
       }
@@ -86,6 +76,33 @@ const Card: FunctionComponent<ICardProps> = ({
     [hostedZoneName],
   );
 
+  const metaphorDnsResolution = async (link: string) => {
+    try {
+      if (!metaphorLinks.includes(link)) {
+        await fetch(`${link}/api/healthz`, { mode: 'no-cors' });
+        setMetaphorLinks((oldState) => [...oldState, link]);
+      }
+    } catch (error) {
+      // supressing error until dns resolution
+    }
+  };
+
+  if (isMetaphor) {
+    links.map(metaphorDnsResolution);
+  }
+
+  if (!appName) {
+    return null;
+  }
+
+  useEffect(() => {
+    if (isMetaphor) {
+      const interval = setInterval(() => links.map(metaphorDnsResolution), 20000);
+
+      return () => clearInterval(interval);
+    }
+  });
+
   return (
     <Container data-testid="card-component">
       <CardContent>
@@ -94,17 +111,33 @@ const Card: FunctionComponent<ICardProps> = ({
           <Text type={TYPES.TITLE}>{appName}</Text>
         </TextHeader>
         {links &&
-          links.map((domain) => (
-            <Link
-              href={domain}
-              target="_blank"
-              key={domain}
-              onClick={() => onClickLink(domain, appName)}
-            >
-              <Text type={TYPES.DISABLED}>{getHostname(domain)}</Text>
-              <FiExternalLink />
-            </Link>
-          ))}
+          links.map((domain) => {
+            const link = getHostname(domain);
+            return isMetaphor && !metaphorLinks.includes(domain) ? (
+              <PopoverContainer
+                key={domain}
+                onClick={() => setMetaphorLinks((oldState) => [...oldState, domain])}
+              >
+                <Popover
+                  content={<Text type={TYPES.DISABLED}>{getHostname(domain)}</Text>}
+                  popover={`${link} is not ready yet`}
+                />
+                <Box sx={{ display: 'flex', marginLeft: 2 }}>
+                  <CircularProgress size={15} />
+                </Box>
+              </PopoverContainer>
+            ) : (
+              <Link
+                href={domain}
+                target="_blank"
+                key={domain}
+                onClick={() => onClickLink(domain, appName)}
+              >
+                <Text type={TYPES.DISABLED}>{getHostname(domain)}</Text>
+                <FiExternalLink />
+              </Link>
+            );
+          })}
       </CardContent>
       <Tags>
         {tags &&
@@ -113,7 +146,7 @@ const Card: FunctionComponent<ICardProps> = ({
               key={value}
               backgroundColor={backgroundColor}
               color={color}
-              url={transformLocalTagUrl(url)}
+              url={url}
               onClick={() => onClickTag(url, appName)}
             >
               {value}
