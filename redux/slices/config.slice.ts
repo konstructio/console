@@ -2,10 +2,12 @@ import { createSlice } from '@reduxjs/toolkit';
 
 export interface ConfigState {
   isTelemetryEnabled: boolean;
+  isLocal: boolean;
 }
 
 export const initialState: ConfigState = {
   isTelemetryEnabled: false,
+  isLocal: false,
 };
 
 const configSlice = createSlice({
@@ -13,8 +15,9 @@ const configSlice = createSlice({
   initialState,
   reducers: {
     setConfigValues(state, payload) {
-      const { isTelemetryEnabled } = payload.payload;
+      const { isTelemetryEnabled, isLocal } = payload.payload;
       state.isTelemetryEnabled = isTelemetryEnabled;
+      state.isLocal = isLocal;
     },
   },
 });

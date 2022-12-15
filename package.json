@@ -18,6 +18,9 @@
     "build-storybook": "build-storybook"
   },
   "dependencies": {
+    "@emotion/react": "^11.10.5",
+    "@emotion/styled": "^11.10.5",
+    "@mui/material": "^5.11.0",
     "@next/font": "^13.0.2",
     "@reduxjs/toolkit": "^1.8.6",
     "@types/node": "18.11.9",

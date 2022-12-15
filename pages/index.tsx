@@ -13,6 +13,7 @@ export interface HomePageProps {
   clusterName: string;
   hostedZoneName: string;
   useTelemetry: string;
+  isLocal: string;
 }
 
 export default function Home({
@@ -21,12 +22,15 @@ export default function Home({
   clusterName,
   hostedZoneName,
   useTelemetry,
+  isLocal,
 }: HomePageProps) {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    dispatch(setConfigValues({ isTelemetryEnabled: useTelemetry === 'true' }));
-  }, [dispatch, useTelemetry]);
+    dispatch(
+      setConfigValues({ isTelemetryEnabled: useTelemetry === 'true', isLocal: isLocal === 'true' }),
+    );
+  }, [dispatch, isLocal, useTelemetry]);
 
   return (
     <HomeComponent
@@ -56,6 +60,7 @@ export async function getServerSideProps() {
     METAPHOR_PROD = '',
     METAPHOR_GO_PROD = '',
     METAPHOR_FRONT_PROD = '',
+    IS_LOCAL = '',
   } = process.env;
 
   const params: CardsContentProps = {
@@ -67,6 +72,7 @@ export async function getServerSideProps() {
     vaultUrl: VAULT_URL,
     argoUrl: ARGO_CD_URL,
     atlantisUrl: ATLANTIS_URL,
+    isLocal: IS_LOCAL === 'true',
     metaphor: {
       goUrl: METAPHOR_GO_DEV && `${METAPHOR_GO_DEV}/app`,
       nodeJsUrl: METAPHOR_DEV && `${METAPHOR_DEV}/app`,
@@ -91,6 +97,7 @@ export async function getServerSideProps() {
       clusterName: process.env.CLUSTER_NAME || '',
       hostedZoneName: process.env.HOSTED_ZONE_NAME || '',
       useTelemetry: process.env.USE_TELEMETRY || false,
+      isLocal: IS_LOCAL,
     },
   };
 }

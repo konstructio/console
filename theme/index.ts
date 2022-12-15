@@ -12,6 +12,7 @@ export interface ITheme extends DefaultTheme {
     dawnDeparts: string;
     ferntastic: string;
     gravelFint: string;
+    gray: string;
     greenJelly: string;
     naivePeach: string;
     purpleCabbage: string;
@@ -41,6 +42,7 @@ const theme: ITheme = {
     dawnDeparts: '#CCF8FE',
     ferntastic: '#75AD64',
     gravelFint: '#BBBBBB',
+    gray: 'gray',
     greenJelly: '#2E9485',
     jordyBlue: '#7AA5E2',
     naivePeach: '#FDE5D2',

@@ -14,7 +14,7 @@ export const Container = styled.div`
   `};
 `;
 
-export const Content = styled.div`
+export const Content = styled.div<{ isLocal: boolean }>`
   display: flex;
   flex-wrap: wrap;
   gap: 30px;
@@ -22,7 +22,7 @@ export const Content = styled.div`
   justify-content: center;
   margin: 0 auto;
   overflow: auto;
-  max-width: 1450px;
+  max-width: ${({ isLocal }) => (isLocal ? '1250px' : '1450px')};
 
   ${media.lessThan('sm')`
     height: calc(100% - 30px);

@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { useAppSelector } from '../../redux/store';
-import { selectIsTelemetryEnabled } from '../../redux/selectors/config.selector';
+import { selectIsLocal, selectIsTelemetryEnabled } from '../../redux/selectors/config.selector';
 import HomeComponent from '../../components/home';
 import { useTrackMutation } from '../../redux/api';
 
@@ -16,6 +16,7 @@ export interface HomeProps {
 const Home = ({ configCardValues, adminEmail, clusterName, hostedZoneName }: HomeProps) => {
   const [sendTrackEvent] = useTrackMutation();
   const isTelemetryEnabled = useAppSelector(selectIsTelemetryEnabled());
+  const isLocal = useAppSelector(selectIsLocal());
 
   const onClickLink = (url: string, serviceName: string) => {
     if (isTelemetryEnabled) {
@@ -37,6 +38,7 @@ const Home = ({ configCardValues, adminEmail, clusterName, hostedZoneName }: Hom
       clusterName={clusterName}
       cards={configCardValues}
       hostedZoneName={hostedZoneName}
+      isLocal={isLocal}
       onClickLink={onClickLink}
       onClickTag={onClickTag}
     />

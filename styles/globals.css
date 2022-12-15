@@ -1,4 +1,5 @@
-body, #app {
+body,
+#app {
   margin: 0;
   height: 100vh;
   font-family: 'DM Sans', sans-serif;
@@ -6,4 +7,9 @@ body, #app {
 
 button {
   font-family: 'DM Sans', sans-serif;
+}
+
+.MuiPopover-paper {
+  color: rgb(255, 255, 255);
+  background-color: rgb(18, 18, 18);
 }

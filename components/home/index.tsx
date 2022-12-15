@@ -14,6 +14,7 @@ export interface IHomeProps {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   cards: Array<any>;
   hostedZoneName: string;
+  isLocal: boolean;
   onClickLink: (url: string, serviceName: string) => void;
   onClickTag: (url: string, serviceName: string) => void;
 }
@@ -23,12 +24,13 @@ const Home: FunctionComponent<IHomeProps> = ({
   clusterName,
   cards,
   hostedZoneName,
+  isLocal,
   onClickLink,
   onClickTag,
 }) => {
   return (
     <Container data-testid="home-component">
-      <Content>
+      <Content isLocal={isLocal}>
         <Header>
           <Text type={TITLE}>Kubefirst</Text>
           {adminEmail && <Text type={SUBTITLE}>{`Admin Email: ${adminEmail}`}</Text>}
