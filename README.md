@@ -35,6 +35,11 @@ Note: You might need an AWS Managament Account
 
 3. Go to the [Console Chart](https://github.com/kubefirst/charts/tree/gh-pages/charts/console) and bump up the docker version and chart version. Follow the [README](https://github.com/kubefirst/charts) instructions.
 
+### Multiplaform
+
+`docker buildx create --use`
+`docker buildx build --platform linux/amd64,linux/arm64 -t public.ecr.aws/kubefirst/console:{version} --push .`
+
 ### Chart
 
 1. The console chart is stored in the [Charts repository](https://github.com/kubefirst/charts)
