@@ -31,4 +31,4 @@ jobs:
         with:
           context: "{{defaultContext}}"
           push: true
-          tags: kubefirst/console:0.0.0
+          tags: public.ecr.aws/kubefirst/console:0.0.0
