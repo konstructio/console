@@ -1,9 +1,9 @@
+import { ThemeProvider } from '@mui/material';
 import React from 'react';
 import { Provider } from 'react-redux';
-import { ThemeProvider } from 'styled-components';
 
 import { makeStore } from '../redux/store';
-import theme from '../theme';
+import theme from '../theme/muiTheme';
 
 export const parameters = {
   actions: { argTypesRegex: '^on[A-Z].*' },

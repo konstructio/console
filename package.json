@@ -15,12 +15,14 @@
     "test:coverage": "jest --coverage",
     "test:coverage:watch": "jest --coverage --watch",
     "storybook": "start-storybook -p 6006",
+    "storybook-production": "node .storybook/server.js",
     "build-storybook": "build-storybook"
   },
   "dependencies": {
     "@emotion/react": "^11.10.5",
     "@emotion/styled": "^11.10.5",
-    "@mui/material": "^5.11.0",
+    "@mui/icons-material": "^5.11.0",
+    "@mui/material": "^5.11.1",
     "@next/font": "^13.0.2",
     "@reduxjs/toolkit": "^1.8.6",
     "@types/node": "18.11.9",
