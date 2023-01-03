@@ -119,7 +119,7 @@ const palleteColors = {
 };
 
 const theme = createTheme({
-  typography: { fontFamily: 'Roboto', ...typographies },
+  typography: { ...typographies },
   palette: palleteColors,
 });
 
@@ -168,5 +168,14 @@ declare module '@mui/material/styles' {
     body2?: React.CSSProperties;
     body3?: React.CSSProperties;
     tooltip?: React.CSSProperties;
+  }
+}
+
+declare module '@material-ui/core/styles/createPalette' {
+  interface Palette {
+    menu?: Palette['primary'];
+  }
+  interface PaletteOptions {
+    menu?: PaletteOptions['primary'];
   }
 }
