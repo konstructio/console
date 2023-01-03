@@ -37,9 +37,7 @@ const CARD_ITEMS = [
   },
 ];
 
-export interface DashboardProps {}
-
-const Dashboard: FunctionComponent<DashboardProps> = ({ ...props }) => {
+const Dashboard: FunctionComponent = () => {
   const { currentStep } = useStep();
   const { steps, installationType, onChangeInstallationType } = useInstallation();
 
