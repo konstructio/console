@@ -7,4 +7,7 @@ module.exports = {
     'storybook-addon-next-router',
   ],
   framework: '@storybook/react',
+  features: {
+    previewMdx2: true,
+  },
 };
