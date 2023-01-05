@@ -11,6 +11,7 @@ import {
 import React, { FunctionComponent } from 'react';
 
 import Typography from '../typography';
+import themeST from '../../theme';
 
 import { Container } from './progress.styled';
 
@@ -24,7 +25,7 @@ const Label = styled(StepLabel)(() => ({
     color: '#334155',
   },
   [`& .${stepLabelClasses.disabled}`]: {
-    color: '#64748B',
+    color: themeST.colors.saltboxBlue,
   },
 }));
 
@@ -58,7 +59,7 @@ const ColorlibStepIconRoot = styled('div')<{
   backgroundColor: 'transparent',
   border: '2px solid #424867',
   zIndex: 1,
-  color: '#64748B',
+  color: themeST.colors.saltboxBlue,
   width: 52,
   height: 52,
   display: 'flex',

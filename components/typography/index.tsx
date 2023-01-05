@@ -1,5 +1,5 @@
 import React, { FunctionComponent } from 'react';
-import { Typography as TypographyMUI } from '@mui/material';
+import { Typography as TypographyMUI, TypographyProps } from '@mui/material';
 
 type Variant =
   | 'h1'
@@ -25,7 +25,7 @@ export interface ITypographyProps {
   children: React.ReactNode;
 }
 
-const Typography: FunctionComponent<ITypographyProps> = ({ variant, ...props }) => {
+const Typography: FunctionComponent<TypographyProps> = ({ variant, ...props }) => {
   return <TypographyMUI variant={variant as Variant} {...props} />;
 };
 

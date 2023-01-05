@@ -12,7 +12,7 @@ import '../styles/globals.css';
 import Navigation from '../components/navigation';
 
 const Layout = styled.div`
-  background-color: ${({ theme }) => theme.colors.white};
+  background-color: ${({ theme }) => theme.colors.washMe};
   display: flex;
   height: 100%;
 `;
