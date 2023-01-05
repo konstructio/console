@@ -83,7 +83,7 @@ export const buildCardsContent = ({
       ? {
           appName: 'GitHub',
           tags: [
-            buildDocsTag('github/github-repositories.html'),
+            buildDocsTag(`${isLocal ? 'local' : 'github'}/github-repositories.html`),
             buildArgoCDTag(argoUrl, 'actions-runner-contoller'),
           ],
           links: [
@@ -103,13 +103,19 @@ export const buildCardsContent = ({
     gitTile,
     {
       appName: 'Vault',
-      tags: [buildDocsTag(`${gitProvider}/vault.html`), buildArgoCDTag(argoUrl, 'vault')],
+      tags: [
+        buildDocsTag(`${isLocal ? 'local' : gitProvider}/vault.html`),
+        buildArgoCDTag(argoUrl, 'vault'),
+      ],
       links: [`${vaultUrl}/ui/vault/auth?with=userpass`],
       logo: 'VaultLogo',
     },
     {
       appName: 'Argo CD',
-      tags: [buildDocsTag(`${gitProvider}/argocd.html`), buildArgoCDTag(argoUrl, 'argocd')],
+      tags: [
+        buildDocsTag(`${isLocal ? 'local' : gitProvider}/argocd.html`),
+        buildArgoCDTag(argoUrl, 'argocd'),
+      ],
       links: [argoUrlAuth],
       logo: 'ArgoCDLogo',
     },
@@ -121,14 +127,17 @@ export const buildCardsContent = ({
     },
     {
       appName: 'Atlantis',
-      tags: [buildDocsTag(`${gitProvider}/terraform.html`), buildArgoCDTag(argoUrl, 'atlantis')],
+      tags: [
+        buildDocsTag(`${isLocal ? 'local' : gitProvider}/terraform.html`),
+        buildArgoCDTag(argoUrl, 'atlantis'),
+      ],
       links: [atlantisUrl],
       logo: 'AtlantisLogo',
     },
     {
       appName: isLocal ? 'Metaphor' : 'ReactJS',
       tags: [
-        buildDocsTag('metaphors.html', 'common'),
+        buildDocsTag('metaphor.html', 'common'),
         buildTag('ReactJS', 'https://reactjs.org', greenJelly),
       ],
       links: [metaphor.reactUrl, metaphorStaging.reactUrl, metaphorProduction.reactUrl],
@@ -138,7 +147,7 @@ export const buildCardsContent = ({
       ? {
           appName: 'NodeJS',
           tags: [
-            buildDocsTag('metaphors.html', 'common'),
+            buildDocsTag('metaphor.html', 'common'),
             buildTag('NodeJS', 'https://expressjs.com', ferntastic),
           ],
           links: [metaphor.nodeJsUrl, metaphorStaging.nodeJsUrl, metaphorProduction.nodeJsUrl],
@@ -149,7 +158,7 @@ export const buildCardsContent = ({
       ? {
           appName: 'Golang',
           tags: [
-            buildDocsTag('metaphors.html', 'common'),
+            buildDocsTag('metaphor.html', 'common'),
             buildTag('Golang', 'https://go.dev', caribeanSea),
           ],
           links: [metaphor.goUrl, metaphorStaging.goUrl, metaphorProduction.goUrl],
