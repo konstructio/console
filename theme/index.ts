@@ -28,6 +28,10 @@ export interface ITheme extends DefaultTheme {
     moonlessMystery: string;
     jordyBlue: string;
     primary: string;
+    saltboxBlue: string;
+    volcanicSand: string;
+    washMe: string;
+    whiteSmoke: string;
   };
 }
 
@@ -53,11 +57,15 @@ const theme: ITheme = {
     naivePeach: '#FDE5D2',
     primary: '#8851C8',
     purpleCabbage: '#3636A1',
+    saltboxBlue: '#64748B',
     stomyShower: '#0487AF',
     transparentBlue: '#DAD7FE',
     ultimateGrey: '#A9A9A9',
     yellowOrange: '#FAB203',
+    volcanicSand: '#3F3F46',
+    washMe: '#F8FAFC',
     white: '#FFFFFF',
+    whiteSmoke: '#F5F5F5',
   },
 };
 
