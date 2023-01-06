@@ -13,7 +13,7 @@ import GitHubLogo from '../../assets/github.png';
 import VaultLogo from '../../assets/vault.png';
 import AtlantisLogo from '../../assets/atlantis.png';
 import MetaphorLogo from '../../assets/metaphor.png';
-import Popover from '../popover/index';
+import Popover from '../popover';
 
 import {
   CardContent,

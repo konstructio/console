@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { setConfigValues } from 'redux/slices/config.slice';
 
 import { GIT_PROVIDERS } from '../enums/utils';
-import HomeComponent from '../containers/home/index';
+import HomeComponent from '../containers/home';
 import { CardsContentProps, buildCardsContent } from '../utils/cards';
 import { useAppDispatch } from '../redux/store';
 

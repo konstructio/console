@@ -1,5 +1,6 @@
-import Dashboard from 'containers/dashboard/index';
 import React, { FunctionComponent } from 'react';
+
+import Dashboard from '../containers/dashboard';
 
 export interface DashboardPageProps {
   children: FunctionComponent;
