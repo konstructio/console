@@ -1,12 +1,61 @@
 import React, { FunctionComponent } from 'react';
+import { Control, Controller } from 'react-hook-form';
 
-import { Container } from './setupForm.styled';
+import Password from '../../../../components/password/';
+import TextField from '../../../../components/textField';
 
-const SetupForm: FunctionComponent = () => {
+export interface FormProps {
+  control: Control;
+}
+
+const SetupForm: FunctionComponent<FormProps> = ({ control }) => {
   return (
-    <Container>
-      <h1>Setup Form</h1>
-    </Container>
+    <>
+      <Controller
+        control={control}
+        name="githubToken"
+        rules={{
+          required: true,
+        }}
+        render={({ field, fieldState: { error } }) => (
+          <Password
+            {...field}
+            label="GitHub token"
+            error={error !== undefined}
+            helperText="Note: this token will expire in 8 hours"
+            sx={{ mb: '24px', width: '100%' }}
+          />
+        )}
+      />
+      <Controller
+        control={control}
+        name="gitOpsBranch"
+        rules={{ required: true }}
+        render={({ field, fieldState: { error } }) => (
+          <TextField
+            {...field}
+            variant="outlined"
+            label="GitOps branch"
+            error={error !== undefined}
+            sx={{ mb: '24px', width: '100%' }}
+          />
+        )}
+      />
+      <Controller
+        control={control}
+        name="templateRepoUrl"
+        rules={{ required: true }}
+        render={({ field, fieldState: { error } }) => (
+          <TextField
+            {...field}
+            variant="outlined"
+            label="Template repo url"
+            sx={{ mb: '24px', width: '100%' }}
+            error={error !== undefined}
+          />
+        )}
+      />
+    </>
   );
 };
 

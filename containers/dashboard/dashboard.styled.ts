@@ -1,7 +1,8 @@
-import Link from 'next/link';
 import styled from 'styled-components';
+import Link from 'next/link';
+import { Box } from '@mui/material';
 
-export const Container = styled.div`
+export const Form = styled(Box)`
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -48,6 +49,8 @@ export const Content = styled.div`
   justify-content: center;
   gap: 25px;
   height: calc(100vh - 375px);
+  margin-bottom: 20px;
+  overflow-y: auto;
 `;
 
 export const CardContainer = styled.div`
@@ -131,4 +134,17 @@ export const Footer = styled.div`
   & button {
     text-transform: capitalize;
   }
+`;
+
+export const FormContainer = styled(Box)<{ isLastStep: boolean }>`
+  align-items: flex-start;
+  background: ${({ isLastStep, theme }) => (isLastStep ? 'transparent' : theme.colors.white)};
+  border-radius: 8px;
+  box-shadow: ${({ isLastStep }) =>
+    !isLastStep && '0px 1px 1px rgba(100, 116, 139, 0.06), 0px 1px 2px rgba(100, 116, 139, 0.1)'};
+  display: flex;
+  flex-direction: column;
+  height: fit-content;
+  padding: 32px 24px;
+  width: calc(100% - 225px);
 `;

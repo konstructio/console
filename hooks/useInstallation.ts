@@ -8,6 +8,26 @@ export enum InstallationTypes {
   AWS_GITLAB = 3,
 }
 
+export const titleBySteps: { [key: number]: { [key: number]: string } } = {
+  [InstallationTypes.LOCAL]: {
+    1: `Let’s configure your local cluster`,
+    2: `Grab a cup of tea or coffee while we set up your cluster...`,
+    3: 'You’re all set!',
+  },
+  [InstallationTypes.AWS_GITHUB]: {
+    1: `Now, test your hosted zone name is accessible`,
+    2: `Let’s configure your local cluster`,
+    3: `Grab a cup of tea or coffee while we set up your cluster...`,
+    4: 'You’re all set!',
+  },
+  [InstallationTypes.AWS_GITLAB]: {
+    1: `Now, test your hosted zone name is accessible`,
+    2: `Let’s configure your local cluster`,
+    3: `Grab a cup of tea or coffee while we set up your cluster...`,
+    4: 'You’re all set!',
+  },
+};
+
 const InstallationSteps = {
   [InstallationTypes.LOCAL]: ['Select platform', 'Set up cluster', 'Preparing', 'Ready'],
   [InstallationTypes.AWS_GITHUB]: [
