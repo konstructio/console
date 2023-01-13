@@ -103,19 +103,13 @@ export const buildCardsContent = ({
     gitTile,
     {
       appName: 'Vault',
-      tags: [
-        buildDocsTag(`${isLocal ? 'local' : gitProvider}/vault.html`),
-        buildArgoCDTag(argoUrl, 'vault'),
-      ],
+      tags: [buildDocsTag('vault.html', 'common'), buildArgoCDTag(argoUrl, 'vault')],
       links: [`${vaultUrl}/ui/vault/auth?with=userpass`],
       logo: 'VaultLogo',
     },
     {
       appName: 'Argo CD',
-      tags: [
-        buildDocsTag(`${isLocal ? 'local' : gitProvider}/argocd.html`),
-        buildArgoCDTag(argoUrl, 'argocd'),
-      ],
+      tags: [buildDocsTag('argocd.html', 'common'), buildArgoCDTag(argoUrl, 'argocd')],
       links: [argoUrlAuth],
       logo: 'ArgoCDLogo',
     },
@@ -127,10 +121,7 @@ export const buildCardsContent = ({
     },
     {
       appName: 'Atlantis',
-      tags: [
-        buildDocsTag(`${isLocal ? 'local' : gitProvider}/terraform.html`),
-        buildArgoCDTag(argoUrl, 'atlantis'),
-      ],
+      tags: [buildDocsTag('terraform.html', 'common'), buildArgoCDTag(argoUrl, 'atlantis')],
       links: [atlantisUrl],
       logo: 'AtlantisLogo',
     },
