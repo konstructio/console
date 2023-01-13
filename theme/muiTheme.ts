@@ -6,6 +6,7 @@ export const typographies: {
     fontWeight: number;
     lineHeight: string;
     letterSpacing?: number;
+    textTransform?: string;
   };
 } = {
   h1: {
@@ -67,12 +68,14 @@ export const typographies: {
     fontWeight: 500,
     lineHeight: '16px',
     letterSpacing: 0.5,
+    textTransform: 'uppercase',
   },
   labelSmall: {
     fontSize: 11,
     fontWeight: 500,
     lineHeight: '16px',
     letterSpacing: 0.5,
+    textTransform: 'uppercase',
   },
   buttonSmall: {
     fontSize: 14,
@@ -121,6 +124,21 @@ const palleteColors = {
 const theme = createTheme({
   typography: { ...typographies },
   palette: palleteColors,
+  components: {
+    MuiButton: {
+      styleOverrides: {
+        root: () => ({
+          height: '40px',
+          fontWeight: 600,
+          padding: '10px 16px',
+          lineHeight: '20px',
+          letterSpacing: '0.0025em',
+          textTransform: 'capitalize',
+          width: 'fit-content',
+        }),
+      },
+    },
+  },
 });
 
 export default theme;

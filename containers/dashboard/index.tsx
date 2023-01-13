@@ -14,6 +14,7 @@ import Typography from '../../components/typography';
 import useInstallation, { InstallationTypes, titleBySteps } from '../../hooks/useInstallation';
 import Button from '../../components/button';
 import { useAppDispatch } from '../../redux/store';
+import { setLocalValues } from '../../redux/slices/installation.slice';
 
 import {
   Card,
@@ -32,8 +33,6 @@ import {
   InfoContainer,
   Title,
 } from './dashboard.styled';
-
-import { setLocalValues } from '.../../redux/slices/installation.slice';
 
 const CARD_ITEMS = [
   {

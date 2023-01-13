@@ -1,9 +1,20 @@
 import React, { FunctionComponent } from 'react';
-import ButtonMUI from '@mui/material/Button';
 import { ButtonProps } from '@mui/material';
 
-const Button: FunctionComponent<ButtonProps> = ({ variant, color, ...rest }) => {
-  return <ButtonMUI variant={variant} color={color} {...rest} />;
+import { Container, PrimaryButton, SecondaryButton, ErrorButton } from './button.styled';
+
+const BUTTONS_MAP = {
+  ['primary']: PrimaryButton,
+  ['secondary']: SecondaryButton,
+  ['error']: ErrorButton,
+};
+const Button: FunctionComponent<ButtonProps> = ({ variant, color, disabled, ...rest }) => {
+  const StyledButton = BUTTONS_MAP[color as string];
+  return (
+    <Container disabled={disabled}>
+      <StyledButton variant={variant} disabled={disabled} {...rest} />
+    </Container>
+  );
 };
 
 export default Button;

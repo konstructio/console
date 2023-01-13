@@ -21,19 +21,19 @@ const Wrapper = styled.div`
 
 const DefaultTemplate: ComponentStory<typeof TextFieldComponent> = () => (
   <Wrapper>
-    <TextFieldComponent variant="outlined" label="Default" />
+    <TextFieldComponent label="Default" fullWidth />
   </Wrapper>
 );
 
 const OutlinedTemplate: ComponentStory<typeof TextFieldComponent> = () => (
   <Wrapper>
-    <TextFieldComponent variant="outlined" label="Outlined" />
+    <TextFieldComponent label="Outlined" />
   </Wrapper>
 );
 
 const DisabledTemplate: ComponentStory<typeof TextFieldComponent> = () => (
   <Wrapper>
-    <TextFieldComponent variant="outlined" color="primary" label="Disabled" disabled value="Text" />
+    <TextFieldComponent color="primary" label="Disabled" disabled value="Text" />
   </Wrapper>
 );
 

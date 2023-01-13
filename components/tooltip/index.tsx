@@ -16,6 +16,7 @@ const Tooltip: FunctionComponent<TooltipProps> = ({ children, title, ...props })
       alignItems: 'center',
       backgroundColor: '#334155',
       borderRadius: '2px',
+      boxShadow: '0px 9px 28px 8px rgba(0, 0, 0, 0.05), 0px 3px 6px -4px rgba(0, 0, 0, 0.12)',
       display: 'flex',
       height: '34px',
     },

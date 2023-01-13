@@ -14,18 +14,21 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   gap: 10px;
-  width: 200px;
 `;
 
 const PrimaryTemplate: ComponentStory<typeof Button> = () => (
   <Wrapper>
-    <Button variant="contained">Primary</Button>
+    <Button variant="contained" color="primary">
+      Primary
+    </Button>
   </Wrapper>
 );
 
 const SecondaryTemplate: ComponentStory<typeof Button> = () => (
   <Wrapper>
-    <Button variant="outlined">Secondary</Button>
+    <Button variant="outlined" color="secondary">
+      Secondary
+    </Button>
   </Wrapper>
 );
 
@@ -39,7 +42,15 @@ const DangerTemplate: ComponentStory<typeof Button> = () => (
 
 const DisabledTemplate: ComponentStory<typeof Button> = () => (
   <Wrapper>
-    <Button variant="contained" disabled>
+    <Button variant="contained" color="secondary" disabled>
+      Disabled
+    </Button>
+  </Wrapper>
+);
+
+const DisabledOutlineTemplate: ComponentStory<typeof Button> = () => (
+  <Wrapper>
+    <Button variant="outlined" color="secondary" disabled>
       Disabled
     </Button>
   </Wrapper>
@@ -49,3 +60,4 @@ export const Primary = PrimaryTemplate.bind({});
 export const Secondary = SecondaryTemplate.bind({});
 export const Danger = DangerTemplate.bind({});
 export const Disabled = DisabledTemplate.bind({});
+export const DisabledSecondary = DisabledOutlineTemplate.bind({});
