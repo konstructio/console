@@ -1,6 +1,6 @@
 {
   "name": "k1-console",
-  "version": "2.0.5",
+  "version": "2.0.6",
   "private": true,
   "scripts": {
     "check-types": "tsc -p tsconfig.json",
