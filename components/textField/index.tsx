@@ -49,7 +49,7 @@ const TextField: FunctionComponent<TextFieldProps> = ({
         disabled={disabled}
         size="small"
         endAdornment={endAdornment}
-        sx={{ marginBottom: endAdornment ? 0 : 3 }}
+        sx={{ marginBottom: helperText ? 0 : 3 }}
       />
       {helperText && (
         <FormHelperText disabled={disabled} error={error} sx={{ marginBottom: 3 }}>
