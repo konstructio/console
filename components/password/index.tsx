@@ -1,23 +1,32 @@
 import React, { FunctionComponent, MouseEvent, useState } from 'react';
-import { Visibility, VisibilityOff } from '@mui/icons-material';
-import {
-  FormControl,
-  FormHelperText,
-  IconButton,
-  InputAdornment,
-  InputLabel,
-  OutlinedInput,
-  SxProps,
-} from '@mui/material';
+import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
+import VisibilityOffOutlinedIcon from '@mui/icons-material/VisibilityOffOutlined';
+import { FormControl, IconButton, InputBase, styled, SxProps } from '@mui/material';
+
+import { InputAdornmentContainer } from './password.styled';
 
 export interface PasswordProps {
   error?: boolean;
-  helperText?: string;
-  label: string;
   sx?: SxProps;
 }
 
-const Password: FunctionComponent<PasswordProps> = ({ error, helperText, label, sx, ...rest }) => {
+export const Input = styled(InputBase)(({ theme }) => ({
+  '& .MuiInputBase-input': {
+    'borderRadius': 4,
+    'border': '1px solid #ced4da',
+    'fontSize': 14,
+    'height': 18,
+    'line-height': 20,
+    'letter-spacing': 0.25,
+    'padding': '8px 40px 8px 12px',
+    'position': 'relative',
+    '&:focus': {
+      border: `1px solid ${theme.palette.primary.main}`,
+    },
+  },
+}));
+
+const Password: FunctionComponent<PasswordProps> = ({ error, sx, ...rest }) => {
   const [showPassword, setShowPassword] = useState<boolean>(false);
 
   const handleClickShowPassword = () => setShowPassword((show: boolean) => !show);
@@ -27,30 +36,25 @@ const Password: FunctionComponent<PasswordProps> = ({ error, helperText, label, 
   };
 
   return (
-    <FormControl size="small" variant="outlined" sx={sx}>
-      <InputLabel htmlFor="outlined-adornment-password" error={error}>
-        {label}
-      </InputLabel>
-      <OutlinedInput
+    <FormControl size="small" sx={sx}>
+      <Input
         {...rest}
-        id="outlined-adornment-password"
         type={showPassword ? 'text' : 'password'}
         error={error}
         endAdornment={
-          <InputAdornment position="end">
+          <InputAdornmentContainer position="end">
             <IconButton
               aria-label="toggle password visibility"
               onClick={handleClickShowPassword}
               onMouseDown={handleMouseDownPassword}
               edge="end"
+              disableRipple
             >
-              {showPassword ? <VisibilityOff /> : <Visibility />}
+              {showPassword ? <VisibilityOffOutlinedIcon /> : <VisibilityOutlinedIcon />}
             </IconButton>
-          </InputAdornment>
+          </InputAdornmentContainer>
         }
-        label={label}
       />
-      <FormHelperText error={error}>{helperText}</FormHelperText>
     </FormControl>
   );
 };

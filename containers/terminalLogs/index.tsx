@@ -1,5 +1,5 @@
 import { Box, Tab, Tabs } from '@mui/material';
-import React, { FunctionComponent, useEffect } from 'react';
+import React, { FunctionComponent } from 'react';
 
 import Typography from '../../components/typography';
 

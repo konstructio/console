@@ -33,6 +33,7 @@ const Terminal: FunctionComponent = () => {
 
   const searchAddon = useMemo(() => new SearchAddon(), []);
   searchAddon.onDidChangeResults((result) => {
+    // eslint-disable-next-line no-console
     console.log(result);
   });
 
@@ -61,7 +62,6 @@ const Terminal: FunctionComponent = () => {
       setInterval(() => {
         if (i <= logs.length) {
           terminal.write(`${logs[i]}\n`.replace(DATE_REGEX, '\x1b[0;37m$1\x1B[0m'));
-          console.log(terminal.buffer.normal.length);
           i++;
           // terminal.write(`${new Date().toISOString()}: INF: Hello Kubefirst \n`);
         }

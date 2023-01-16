@@ -25,12 +25,6 @@ const DefaultTemplate: ComponentStory<typeof TextFieldComponent> = () => (
   </Wrapper>
 );
 
-const OutlinedTemplate: ComponentStory<typeof TextFieldComponent> = () => (
-  <Wrapper>
-    <TextFieldComponent label="Outlined" />
-  </Wrapper>
-);
-
 const DisabledTemplate: ComponentStory<typeof TextFieldComponent> = () => (
   <Wrapper>
     <TextFieldComponent color="primary" label="Disabled" disabled value="Text" />
@@ -39,7 +33,7 @@ const DisabledTemplate: ComponentStory<typeof TextFieldComponent> = () => (
 
 const PasswordTemplate: ComponentStory<typeof TextFieldComponent> = () => (
   <Wrapper>
-    <PasswordComponent label="Password" />
+    <PasswordComponent />
   </Wrapper>
 );
 
@@ -47,18 +41,15 @@ const ErrorTemplate: ComponentStory<typeof TextFieldComponent> = () => (
   <Wrapper>
     <TextFieldComponent
       error
+      required
       id="standard-error-helper-text"
-      label="Label *"
-      defaultValue="Hello World"
+      label="Label"
       helperText="Incorrect entry."
-      variant="standard"
     />
   </Wrapper>
 );
 
 export const Default = DefaultTemplate.bind({});
-
-export const Outlined = OutlinedTemplate.bind({});
 
 export const Disabled = DisabledTemplate.bind({});
 
