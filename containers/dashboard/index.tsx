@@ -1,15 +1,19 @@
-import React, { FunctionComponent, useMemo, useState } from 'react';
-import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
-import ContentCopyOutlinedIcon from '@mui/icons-material/ContentCopyOutlined';
-import LaunchOutlinedIcon from '@mui/icons-material/LaunchOutlined';
+import React, { FunctionComponent, useMemo } from 'react';
+import { useRouter } from 'next/router';
+import { FieldValues, useForm } from 'react-hook-form';
 import CopyToClipboard from 'react-copy-to-clipboard';
 import { Snackbar } from '@mui/material';
+import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
+import LaunchOutlinedIcon from '@mui/icons-material/LaunchOutlined';
+import ContentCopyOutlinedIcon from '@mui/icons-material/ContentCopyOutlined';
 
+import useToggle from '../../hooks/useToggle';
 import useStep from '../../hooks/useStep';
 import Progress from '../../components/progress';
 import Typography from '../../components/typography';
-import useInstallation, { InstallationTypes } from '../../hooks/useInstallation';
+import useInstallation, { InstallationTypes, titleBySteps } from '../../hooks/useInstallation';
 import Button from '../../components/button';
+import { useAppDispatch } from '../../redux/store';
 
 import {
   Card,
@@ -20,13 +24,16 @@ import {
   CardLink,
   CartTitle,
   Code,
-  Container,
   Content,
   Footer,
+  Form,
+  FormContainer,
   Header,
   InfoContainer,
   Title,
 } from './dashboard.styled';
+
+import { setLocalValues } from '.../../redux/slices/installation.slice';
 
 const CARD_ITEMS = [
   {
@@ -49,31 +56,55 @@ const CARD_ITEMS = [
 ];
 
 const Dashboard: FunctionComponent = () => {
-  const [open, setOpen] = useState(false);
+  const dispatch = useAppDispatch();
+  const router = useRouter();
 
-  const handleClick = () => {
-    setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-  };
-
+  const { isOpen, open, close } = useToggle(false);
   const { currentStep, goToNext, goToPrev } = useStep();
   const { info, steps, installationType, onChangeInstallationType, FormFlowComponent } =
     useInstallation();
+  const {
+    control,
+    handleSubmit,
+    formState: { isValid },
+  } = useForm();
+
+  const isLastStep = useMemo(() => currentStep === steps.length - 1, [currentStep, steps]);
 
   const isInfoListDescription = useMemo(
     () => info?.description && Array.isArray(info?.description),
     [info?.description],
   );
 
+  const title = useMemo(() => {
+    const titlesByStep = titleBySteps[installationType] || {};
+    return titlesByStep[currentStep];
+  }, [currentStep, installationType]);
+
+  const onFinish = () => {
+    router.push('/cluster');
+  };
+
+  const onSubmit = (fieldValues: FieldValues) => {
+    if (isValid) {
+      switch (installationType) {
+        case InstallationTypes.LOCAL:
+          dispatch(setLocalValues(fieldValues));
+          break;
+        default:
+          break;
+      }
+
+      goToNext();
+    }
+  };
+
   return (
-    <Container>
+    <Form component="form" onSubmit={handleSubmit(onSubmit)}>
       <Header />
       <Progress activeStep={currentStep} steps={steps} />
       <Title>
-        <Typography variant="h6">First, choose your Kubefirst adventure</Typography>
+        <Typography variant="h6">{title || `First, choose your Kubefirst adventure`}</Typography>
       </Title>
       <Content>
         {currentStep === 0 ? (
@@ -129,7 +160,7 @@ const Dashboard: FunctionComponent = () => {
                 {info?.code && (
                   <Code>
                     <Typography variant="body2">{info?.code}</Typography>
-                    <CopyToClipboard text={info?.code} onCopy={handleClick}>
+                    <CopyToClipboard text={info?.code} onCopy={open}>
                       <ContentCopyOutlinedIcon />
                     </CopyToClipboard>
                     <Snackbar
@@ -137,9 +168,9 @@ const Dashboard: FunctionComponent = () => {
                         vertical: 'bottom',
                         horizontal: 'right',
                       }}
-                      open={open}
+                      open={isOpen}
                       autoHideDuration={3000}
-                      onClose={handleClose}
+                      onClose={close}
                       message="Copied!"
                     />
                   </Code>
@@ -152,20 +183,30 @@ const Dashboard: FunctionComponent = () => {
             </InfoContainer>
           </>
         ) : (
-          <FormFlowComponent step={currentStep} />
+          <FormContainer isLastStep={isLastStep}>
+            <FormFlowComponent step={currentStep} control={control} />
+          </FormContainer>
         )}
       </Content>
       <Footer>
-        {currentStep > 0 && (
-          <Button variant="outlined" onClick={() => currentStep > 0 && goToPrev()}>
-            Back
+        {isLastStep ? (
+          <Button variant="contained" onClick={onFinish}>
+            Close
           </Button>
+        ) : (
+          <>
+            {currentStep > 0 && (
+              <Button variant="outlined" onClick={goToPrev}>
+                Back
+              </Button>
+            )}
+            <Button variant="contained" type="submit" disabled={!isValid}>
+              Next
+            </Button>
+          </>
         )}
-        <Button variant="contained" onClick={goToNext}>
-          Next
-        </Button>
       </Footer>
-    </Container>
+    </Form>
   );
 };
 

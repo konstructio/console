@@ -4,12 +4,14 @@ import { createWrapper } from 'next-redux-wrapper';
 
 import { consoleApi } from './api';
 import configSlice from './slices/config.slice';
+import installationSlice from './slices/installation.slice';
 
 export const makeStore = () =>
   configureStore({
     reducer: {
       [consoleApi.reducerPath]: consoleApi.reducer,
       config: configSlice,
+      installation: installationSlice,
     },
     middleware: (gDM) => gDM().concat(consoleApi.middleware),
   });
