@@ -46,7 +46,7 @@ const theme: ITheme = {
     caribeanSea: '#007D9C',
     childOfLight: '#F1F5F9',
     chineseOrange: '#F06F3C',
-    danger: '#F53A2A',
+    danger: '#DC2626',
     dawnDeparts: '#CCF8FE',
     ferntastic: '#75AD64',
     gravelFint: '#BBBBBB',

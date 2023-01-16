@@ -147,4 +147,5 @@ export const FormContainer = styled(Box)<{ isLastStep: boolean }>`
   height: fit-content;
   padding: 32px 24px;
   width: calc(100% - 225px);
+  max-width: 1024px;
 `;

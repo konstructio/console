@@ -23,7 +23,7 @@ const Wrapper = styled.div`
 const DefaultTemplate: ComponentStory<typeof TooltipComponent> = () => (
   <Wrapper>
     <TooltipComponent title="This is a tooltip">
-      <Button variant="contained">
+      <Button variant="contained" color="primary">
         <Typography variant="body2">Hover here</Typography>
       </Button>
     </TooltipComponent>

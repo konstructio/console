@@ -14,6 +14,7 @@ import Typography from '../../components/typography';
 import useInstallation, { InstallationTypes, titleBySteps } from '../../hooks/useInstallation';
 import Button from '../../components/button';
 import { useAppDispatch } from '../../redux/store';
+import { setLocalValues } from '../../redux/slices/installation.slice';
 
 import {
   Card,
@@ -32,8 +33,6 @@ import {
   InfoContainer,
   Title,
 } from './dashboard.styled';
-
-import { setLocalValues } from '.../../redux/slices/installation.slice';
 
 const CARD_ITEMS = [
   {
@@ -190,17 +189,17 @@ const Dashboard: FunctionComponent = () => {
       </Content>
       <Footer>
         {isLastStep ? (
-          <Button variant="contained" onClick={onFinish}>
+          <Button variant="contained" color="primary" onClick={onFinish}>
             Close
           </Button>
         ) : (
           <>
             {currentStep > 0 && (
-              <Button variant="outlined" onClick={goToPrev}>
+              <Button variant="outlined" color="secondary" onClick={goToPrev}>
                 Back
               </Button>
             )}
-            <Button variant="contained" type="submit" disabled={!isValid}>
+            <Button variant="contained" color="primary" type="submit" disabled={!isValid}>
               Next
             </Button>
           </>

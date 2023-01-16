@@ -1,7 +1,7 @@
 import React, { FunctionComponent } from 'react';
 import { Typography as TypographyMUI, TypographyProps } from '@mui/material';
 
-type Variant =
+export type Variant =
   | 'h1'
   | 'h2'
   | 'h3'

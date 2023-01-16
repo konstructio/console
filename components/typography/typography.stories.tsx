@@ -11,7 +11,7 @@ import Paper from '@mui/material/Paper';
 
 import { typographies } from '../../theme/muiTheme';
 
-import Typography from './index';
+import Typography, { Variant } from './index';
 
 export default {
   title: 'Layout/Typography',
@@ -49,14 +49,16 @@ const VariationsTemplate: ComponentStory<typeof Typography> = () => (
                 sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
               >
                 <TableCell component="th" scope="row">
-                  <Typography variant={typographyVariant}>{typographyVariant}</Typography>
+                  <Typography variant={typographyVariant as Variant}>
+                    {typographyVariant}
+                  </Typography>
                 </TableCell>
                 <TableCell align="right">{fontWeight}</TableCell>
                 <TableCell align="right">{fontSize}</TableCell>
                 <TableCell align="right">{lineHeight}</TableCell>
                 <TableCell align="right">{`${letterSpacing || 0}px`}</TableCell>
                 <TableCell>
-                  <Typography variant={typographyVariant}>
+                  <Typography variant={typographyVariant as Variant}>
                     Almost before we knew it, we had left the ground.
                   </Typography>
                 </TableCell>

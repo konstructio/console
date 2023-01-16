@@ -20,8 +20,9 @@ const SetupForm: FunctionComponent<FormProps> = ({ control }) => {
         render={({ field, fieldState: { error } }) => (
           <Password
             {...field}
-            label="GitHub token"
             error={error !== undefined}
+            fullWidth
+            label="GitHub token"
             helperText="Note: this token will expire in 8 hours"
             sx={{ mb: '24px', width: '100%' }}
           />
@@ -34,7 +35,7 @@ const SetupForm: FunctionComponent<FormProps> = ({ control }) => {
         render={({ field, fieldState: { error } }) => (
           <TextField
             {...field}
-            variant="outlined"
+            fullWidth
             label="GitOps branch"
             error={error !== undefined}
             sx={{ mb: '24px', width: '100%' }}
@@ -48,7 +49,7 @@ const SetupForm: FunctionComponent<FormProps> = ({ control }) => {
         render={({ field, fieldState: { error } }) => (
           <TextField
             {...field}
-            variant="outlined"
+            fullWidth
             label="Template repo url"
             sx={{ mb: '24px', width: '100%' }}
             error={error !== undefined}

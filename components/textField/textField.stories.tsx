@@ -21,19 +21,13 @@ const Wrapper = styled.div`
 
 const DefaultTemplate: ComponentStory<typeof TextFieldComponent> = () => (
   <Wrapper>
-    <TextFieldComponent variant="outlined" label="Default" />
-  </Wrapper>
-);
-
-const OutlinedTemplate: ComponentStory<typeof TextFieldComponent> = () => (
-  <Wrapper>
-    <TextFieldComponent variant="outlined" label="Outlined" />
+    <TextFieldComponent label="Default" fullWidth />
   </Wrapper>
 );
 
 const DisabledTemplate: ComponentStory<typeof TextFieldComponent> = () => (
   <Wrapper>
-    <TextFieldComponent variant="outlined" color="primary" label="Disabled" disabled value="Text" />
+    <TextFieldComponent color="primary" label="Disabled" disabled value="Text" />
   </Wrapper>
 );
 
@@ -47,18 +41,15 @@ const ErrorTemplate: ComponentStory<typeof TextFieldComponent> = () => (
   <Wrapper>
     <TextFieldComponent
       error
+      required
       id="standard-error-helper-text"
-      label="Label *"
-      defaultValue="Hello World"
+      label="Label"
       helperText="Incorrect entry."
-      variant="standard"
     />
   </Wrapper>
 );
 
 export const Default = DefaultTemplate.bind({});
-
-export const Outlined = OutlinedTemplate.bind({});
 
 export const Disabled = DisabledTemplate.bind({});
 
