@@ -1,14 +1,11 @@
 import React, { FunctionComponent, MouseEvent, useState } from 'react';
 import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
 import VisibilityOffOutlinedIcon from '@mui/icons-material/VisibilityOffOutlined';
-import { FormControl, IconButton, InputBase, styled, SxProps } from '@mui/material';
+import { IconButton, InputBase, InputProps, styled } from '@mui/material';
+
+import TextField from '../textField';
 
 import { InputAdornmentContainer } from './password.styled';
-
-export interface PasswordProps {
-  error?: boolean;
-  sx?: SxProps;
-}
 
 export const Input = styled(InputBase)(({ theme }) => ({
   '& .MuiInputBase-input': {
@@ -24,9 +21,17 @@ export const Input = styled(InputBase)(({ theme }) => ({
       border: `1px solid ${theme.palette.primary.main}`,
     },
   },
+  '& .MuiInputBase-adornedEnd': {
+    'margin-bottom': '10px',
+  },
 }));
 
-const Password: FunctionComponent<PasswordProps> = ({ error, sx, ...rest }) => {
+export interface PasswordProps extends InputProps {
+  label: string;
+  helperText?: string;
+}
+
+const Password: FunctionComponent<PasswordProps> = ({ label, ...props }) => {
   const [showPassword, setShowPassword] = useState<boolean>(false);
 
   const handleClickShowPassword = () => setShowPassword((show: boolean) => !show);
@@ -36,26 +41,24 @@ const Password: FunctionComponent<PasswordProps> = ({ error, sx, ...rest }) => {
   };
 
   return (
-    <FormControl size="small" sx={sx}>
-      <Input
-        {...rest}
-        type={showPassword ? 'text' : 'password'}
-        error={error}
-        endAdornment={
-          <InputAdornmentContainer position="end">
-            <IconButton
-              aria-label="toggle password visibility"
-              onClick={handleClickShowPassword}
-              onMouseDown={handleMouseDownPassword}
-              edge="end"
-              disableRipple
-            >
-              {showPassword ? <VisibilityOffOutlinedIcon /> : <VisibilityOutlinedIcon />}
-            </IconButton>
-          </InputAdornmentContainer>
-        }
-      />
-    </FormControl>
+    <TextField
+      {...props}
+      label={label}
+      type={showPassword ? 'text' : 'password'}
+      endAdornment={
+        <InputAdornmentContainer position="end">
+          <IconButton
+            aria-label="toggle password visibility"
+            onClick={handleClickShowPassword}
+            onMouseDown={handleMouseDownPassword}
+            edge="end"
+            disableRipple
+          >
+            {showPassword ? <VisibilityOffOutlinedIcon /> : <VisibilityOutlinedIcon />}
+          </IconButton>
+        </InputAdornmentContainer>
+      }
+    />
   );
 };
 

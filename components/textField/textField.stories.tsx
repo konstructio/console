@@ -33,7 +33,7 @@ const DisabledTemplate: ComponentStory<typeof TextFieldComponent> = () => (
 
 const PasswordTemplate: ComponentStory<typeof TextFieldComponent> = () => (
   <Wrapper>
-    <PasswordComponent />
+    <PasswordComponent label="Password" />
   </Wrapper>
 );
 

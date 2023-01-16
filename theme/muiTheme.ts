@@ -188,12 +188,3 @@ declare module '@mui/material/styles' {
     tooltip?: React.CSSProperties;
   }
 }
-
-declare module '@material-ui/core/styles/createPalette' {
-  interface Palette {
-    menu?: Palette['primary'];
-  }
-  interface PaletteOptions {
-    menu?: PaletteOptions['primary'];
-  }
-}

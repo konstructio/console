@@ -1,6 +1,8 @@
 import styled from 'styled-components';
 
 export const Container = styled.div<{ isDisabled?: boolean }>`
+  width: 100%;
+
   & > label {
     margin-bottom: 8px;
   }

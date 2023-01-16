@@ -8,8 +8,14 @@ const BUTTONS_MAP = {
   ['secondary']: SecondaryButton,
   ['error']: ErrorButton,
 };
-const Button: FunctionComponent<ButtonProps> = ({ variant, color, disabled, ...rest }) => {
-  const StyledButton = BUTTONS_MAP[color as string];
+
+export interface IButtonProps extends ButtonProps {
+  color: 'primary' | 'secondary' | 'error';
+}
+
+const Button: FunctionComponent<IButtonProps> = ({ variant, color, disabled, ...rest }) => {
+  const StyledButton = BUTTONS_MAP[color] || BUTTONS_MAP['primary'];
+
   return (
     <Container disabled={disabled}>
       <StyledButton variant={variant} disabled={disabled} {...rest} />

@@ -5,10 +5,6 @@ import Typography from '../../components/typography';
 
 import { Container } from './terminalLogs.styled';
 
-export interface TerminalLogsProps {
-  children: FunctionComponent;
-}
-
 interface TabPanelProps {
   children?: React.ReactNode;
   index: number;
@@ -35,7 +31,7 @@ function TabPanel(props: TabPanelProps) {
   );
 }
 
-const TerminalLogs: FunctionComponent<TerminalLogsProps> = () => {
+const TerminalLogs: FunctionComponent = () => {
   const [value, setValue] = React.useState(0);
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {

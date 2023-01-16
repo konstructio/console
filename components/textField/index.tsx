@@ -4,6 +4,7 @@ import { FormHelperText, InputLabel, InputProps, InputBase, styled } from '@mui/
 import Typography from '../typography';
 
 import { Container, Required } from './textField.styled';
+
 export interface TextFieldProps extends InputProps {
   label: string;
   helperText?: string;
@@ -18,6 +19,7 @@ export const Input = styled(InputBase)(({ theme, error }) => ({
     'line-height': 20,
     'letter-spacing': 0.25,
     'padding': '8px 12px',
+    'width': '100%',
     '&:focus': {
       border: `1px solid ${theme.palette.primary.main}`,
     },
@@ -30,6 +32,7 @@ const TextField: FunctionComponent<TextFieldProps> = ({
   error,
   disabled,
   helperText,
+  endAdornment,
   ...props
 }) => {
   return (
@@ -39,9 +42,17 @@ const TextField: FunctionComponent<TextFieldProps> = ({
           {label} {required && <Required>*</Required>}
         </Typography>
       </InputLabel>
-      <Input {...props} required={required} error={error} disabled={disabled} size="small" />
+      <Input
+        {...props}
+        required={required}
+        error={error}
+        disabled={disabled}
+        size="small"
+        endAdornment={endAdornment}
+        sx={{ marginBottom: endAdornment ? 0 : 3 }}
+      />
       {helperText && (
-        <FormHelperText disabled={disabled} error={error}>
+        <FormHelperText disabled={disabled} error={error} sx={{ marginBottom: 3 }}>
           {helperText}
         </FormHelperText>
       )}

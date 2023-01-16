@@ -189,17 +189,17 @@ const Dashboard: FunctionComponent = () => {
       </Content>
       <Footer>
         {isLastStep ? (
-          <Button variant="contained" onClick={onFinish}>
+          <Button variant="contained" color="primary" onClick={onFinish}>
             Close
           </Button>
         ) : (
           <>
             {currentStep > 0 && (
-              <Button variant="outlined" onClick={goToPrev}>
+              <Button variant="outlined" color="secondary" onClick={goToPrev}>
                 Back
               </Button>
             )}
-            <Button variant="contained" type="submit" disabled={!isValid}>
+            <Button variant="contained" color="primary" type="submit" disabled={!isValid}>
               Next
             </Button>
           </>
