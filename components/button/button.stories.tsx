@@ -42,7 +42,7 @@ const DangerTemplate: ComponentStory<typeof Button> = () => (
 
 const DisabledTemplate: ComponentStory<typeof Button> = () => (
   <Wrapper>
-    <Button variant="contained" color="secondary" disabled>
+    <Button variant="contained" color="primary" disabled>
       Disabled
     </Button>
   </Wrapper>

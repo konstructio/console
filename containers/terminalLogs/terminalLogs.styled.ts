@@ -1,10 +1,25 @@
+import { Box } from '@mui/system';
 import styled from 'styled-components';
 
 export const Container = styled.div`
-  background-color: #1e293b;
+  align-items: flex-start;
+  background: #1e293b;
   border-radius: 4px;
-  padding: 60px 16px 16px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding: 0 16px;
   position: relative;
+  height: 551px;
+  width: 1024px;
+`;
+
+export const TabContainer = styled(Box)`
+  background: #0f172a;
+  border-radius: 4px;
+  height: calc(100% - 122px);
+  padding: 16px;
+  width: calc(100% - 32px);
 `;
 
 export const Search = styled.div`
@@ -27,6 +42,11 @@ export const Search = styled.div`
 export const TerminalView = styled.div`
   & > div {
     border-radius: 4px;
+    height: 400px;
     padding: 16px;
+  }
+
+  & .xterm-helper-textarea {
+    display: none;
   }
 `;
