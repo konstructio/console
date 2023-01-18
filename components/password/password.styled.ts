@@ -4,4 +4,8 @@ import { InputAdornment } from '@mui/material';
 export const InputAdornmentContainer = styled(InputAdornment)`
   position: absolute;
   right: 15px;
+
+  & svg {
+    color: #a1a1aa;
+  }
 `;

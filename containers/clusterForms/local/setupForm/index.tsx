@@ -20,6 +20,7 @@ const SetupForm: FunctionComponent<FormProps> = ({ control }) => {
         render={({ field, fieldState: { error } }) => (
           <Password
             {...field}
+            inputRef={field.ref}
             error={error !== undefined}
             fullWidth
             label="GitHub token"
@@ -35,6 +36,7 @@ const SetupForm: FunctionComponent<FormProps> = ({ control }) => {
         render={({ field, fieldState: { error } }) => (
           <TextField
             {...field}
+            inputRef={field.ref}
             fullWidth
             label="GitOps branch"
             error={error !== undefined}
@@ -49,6 +51,7 @@ const SetupForm: FunctionComponent<FormProps> = ({ control }) => {
         render={({ field, fieldState: { error } }) => (
           <TextField
             {...field}
+            inputRef={field.ref}
             fullWidth
             label="Template repo url"
             sx={{ mb: '24px', width: '100%' }}

@@ -136,16 +136,18 @@ export const Footer = styled.div`
   }
 `;
 
-export const FormContainer = styled(Box)<{ isLastStep: boolean }>`
+export const FormContainer = styled(Box)<{ shouldShowBackground?: boolean }>`
   align-items: flex-start;
-  background: ${({ isLastStep, theme }) => (isLastStep ? 'transparent' : theme.colors.white)};
+  background: ${({ shouldShowBackground, theme }) =>
+    shouldShowBackground ? 'transparent' : theme.colors.white};
   border-radius: 8px;
-  box-shadow: ${({ isLastStep }) =>
-    !isLastStep && '0px 1px 1px rgba(100, 116, 139, 0.06), 0px 1px 2px rgba(100, 116, 139, 0.1)'};
+  box-shadow: ${({ shouldShowBackground }) =>
+    !shouldShowBackground &&
+    '0px 1px 1px rgba(100, 116, 139, 0.06), 0px 1px 2px rgba(100, 116, 139, 0.1)'};
   display: flex;
   flex-direction: column;
   height: fit-content;
-  padding: 32px 24px;
+  padding: ${({ shouldShowBackground }) => !shouldShowBackground && '32px 24px'};
   width: calc(100% - 225px);
   max-width: 1024px;
 `;

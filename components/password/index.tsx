@@ -13,8 +13,8 @@ export const Input = styled(InputBase)(({ theme }) => ({
     'border': '1px solid #ced4da',
     'fontSize': 14,
     'height': 18,
-    'line-height': 20,
-    'letter-spacing': 0.25,
+    'lineHeight': 20,
+    'letterSpacing': 0.25,
     'padding': '8px 40px 8px 12px',
     'position': 'relative',
     '&:focus': {
@@ -62,4 +62,8 @@ const Password: FunctionComponent<PasswordProps> = ({ label, ...props }) => {
   );
 };
 
-export default Password;
+export const PasswordWithRef = React.forwardRef<unknown, PasswordProps>((props, ref) => {
+  return <Password inputRef={ref} {...props} />;
+});
+
+export default PasswordWithRef;

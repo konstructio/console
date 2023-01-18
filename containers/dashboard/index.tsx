@@ -182,9 +182,7 @@ const Dashboard: FunctionComponent = () => {
             </InfoContainer>
           </>
         ) : (
-          <FormContainer isLastStep={isLastStep}>
-            <FormFlowComponent step={currentStep} control={control} />
-          </FormContainer>
+          <FormFlowComponent step={currentStep} control={control} />
         )}
       </Content>
       <Footer>

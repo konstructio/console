@@ -16,8 +16,8 @@ export const Input = styled(InputBase)(({ theme, error }) => ({
     'border': `1px solid ${error ? theme.palette.error.main : '#ced4da'}`,
     'fontSize': 14,
     'height': 18,
-    'line-height': 20,
-    'letter-spacing': 0.25,
+    'lineHeight': 20,
+    'letterSpacing': 0.25,
     'padding': '8px 12px',
     'width': '100%',
     '&:focus': {
@@ -60,4 +60,8 @@ const TextField: FunctionComponent<TextFieldProps> = ({
   );
 };
 
-export default TextField;
+export const TextFieldWithRef = React.forwardRef<unknown, TextFieldProps>((props, ref) => {
+  return <TextField inputRef={ref} {...props} />;
+});
+
+export default TextFieldWithRef;

@@ -78,10 +78,8 @@ const Navigation: FunctionComponent<NavigationProps> = ({ collapsible }) => {
           {ROUTES.map(({ icon, path, title }) => (
             <Link href={path} key={path}>
               <MenuItem isActive={isActive(path)} collapsible={collapsible}>
-                <>
-                  {icon}
-                  {!collapsible && <Typography variant="body1">{title}</Typography>}
-                </>
+                {icon}
+                {!collapsible && <Typography variant="body1">{title}</Typography>}
               </MenuItem>
             </Link>
           ))}
@@ -91,10 +89,8 @@ const Navigation: FunctionComponent<NavigationProps> = ({ collapsible }) => {
         {FOOTER_ITEMS.map(({ icon, path, title }) => (
           <Link href={path} key={path}>
             <MenuItem collapsible={collapsible}>
-              <>
-                {icon}
-                {!collapsible && <Typography variant="body1">{title}</Typography>}
-              </>
+              {icon}
+              {!collapsible && <Typography variant="body1">{title}</Typography>}
             </MenuItem>
           </Link>
         ))}

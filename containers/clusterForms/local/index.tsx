@@ -1,6 +1,8 @@
 import React, { FunctionComponent } from 'react';
 import { Control } from 'react-hook-form';
 
+import { FormContainer } from '../../dashboard/dashboard.styled';
+
 import SetupForm from './setupForm';
 import PreparingForm from './preparingForm';
 import ReadyForm from './ready';
@@ -29,7 +31,13 @@ const LocalForms: FunctionComponent<LocalFormsProps> = ({ control, step }) => {
     return null;
   }
 
-  return <ActiveFormStep control={control} />;
+  return (
+    <FormContainer
+      shouldShowBackground={[LOCAL_FORM_STEPS.PREPARING, LOCAL_FORM_STEPS.READY].includes(step)}
+    >
+      <ActiveFormStep control={control} />
+    </FormContainer>
+  );
 };
 
 export default LocalForms;
