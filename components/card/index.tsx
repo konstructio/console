@@ -97,7 +97,7 @@ const Card: FunctionComponent<ICardProps> = ({
 
   useEffect(() => {
     if (isMetaphor) {
-      const interval = setInterval(() => links.map(metaphorDnsResolution), 20000);
+      const interval = setInterval(() => links.map(metaphorDnsResolution), 600000);
 
       return () => clearInterval(interval);
     }
