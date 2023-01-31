@@ -12,7 +12,7 @@ export const sendTelemetry = (event: string, properties?: TelemetryProperties) =
     const isTelemetryEnabled = process.env.USE_TELEMETRY === 'true';
 
     if (isTelemetryEnabled) {
-      const userId = process.env.HOSTED_ZONE_NAME || process.env.MACHINE_ID;
+      const userId = process.env.HOSTED_ZONE_NAME || process.env.CLUSTER_ID;
       analytics.identify({
         userId: userId,
       });

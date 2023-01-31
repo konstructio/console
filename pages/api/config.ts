@@ -26,7 +26,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse<Config
     METAPHOR_FRONT_PROD = '',
     KUBEFIRST_VERSION = '',
     USE_TELEMETRY = '',
-    MACHINE_ID = '',
+    CLUSTER_ID = '',
     IS_LOCAL = '',
   } = process.env;
 
@@ -51,7 +51,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse<Config
     METAPHOR_FRONT_PROD,
     KUBEFIRST_VERSION,
     USE_TELEMETRY,
-    MACHINE_ID,
+    CLUSTER_ID,
     IS_LOCAL,
   });
 }
