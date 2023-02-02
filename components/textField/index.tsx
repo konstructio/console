@@ -1,9 +1,10 @@
-import React, { FunctionComponent } from 'react';
+import React, { FunctionComponent, useMemo } from 'react';
 import { FormHelperText, InputLabel, InputProps, InputBase, styled } from '@mui/material';
+import ErrorIcon from '@mui/icons-material/Error';
 
 import Typography from '../typography';
 
-import { Container, Required } from './textField.styled';
+import { Container, InputAdornmentError, Required } from './textField.styled';
 
 export interface TextFieldProps extends InputProps {
   label: string;
@@ -21,7 +22,7 @@ export const Input = styled(InputBase)(({ theme, error }) => ({
     'padding': '8px 12px',
     'width': '100%',
     '&:focus': {
-      border: `1px solid ${theme.palette.primary.main}`,
+      border: `1px solid ${error ? theme.palette.error.main : theme.palette.primary.main}`,
     },
   },
 }));
@@ -35,6 +36,16 @@ const TextField: FunctionComponent<TextFieldProps> = ({
   endAdornment,
   ...props
 }) => {
+  const errorIcon = useMemo(
+    () =>
+      error && (
+        <InputAdornmentError position="end">
+          <ErrorIcon color="error" fontSize="small" />
+        </InputAdornmentError>
+      ),
+    [error],
+  );
+
   return (
     <Container isDisabled={disabled}>
       <InputLabel disabled={disabled}>
@@ -44,11 +55,12 @@ const TextField: FunctionComponent<TextFieldProps> = ({
       </InputLabel>
       <Input
         {...props}
+        autoComplete="off"
         required={required}
         error={error}
         disabled={disabled}
         size="small"
-        endAdornment={endAdornment}
+        endAdornment={error ? errorIcon : endAdornment}
         sx={{ marginBottom: helperText ? 0 : 3 }}
       />
       {helperText && (
@@ -60,7 +72,7 @@ const TextField: FunctionComponent<TextFieldProps> = ({
   );
 };
 
-export const TextFieldWithRef = React.forwardRef<unknown, TextFieldProps>((props, ref) => {
+const TextFieldWithRef = React.forwardRef<unknown, TextFieldProps>((props, ref) => {
   return <TextField inputRef={ref} {...props} />;
 });
 

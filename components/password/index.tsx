@@ -31,7 +31,7 @@ export interface PasswordProps extends InputProps {
   helperText?: string;
 }
 
-const Password: FunctionComponent<PasswordProps> = ({ label, ...props }) => {
+const Password: FunctionComponent<PasswordProps> = ({ label, helperText, ...props }) => {
   const [showPassword, setShowPassword] = useState<boolean>(false);
 
   const handleClickShowPassword = () => setShowPassword((show: boolean) => !show);
@@ -44,6 +44,7 @@ const Password: FunctionComponent<PasswordProps> = ({ label, ...props }) => {
     <TextField
       {...props}
       label={label}
+      helperText={helperText}
       type={showPassword ? 'text' : 'password'}
       endAdornment={
         <InputAdornmentContainer position="end">

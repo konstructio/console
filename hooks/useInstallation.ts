@@ -1,6 +1,7 @@
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 
 import LocalForms from '../containers/clusterForms/local';
+import AwsGithubForms from '../containers/clusterForms/awsGithub';
 
 export enum InstallationTypes {
   LOCAL = 1,
@@ -16,7 +17,7 @@ export const titleBySteps: { [key: number]: { [key: number]: string } } = {
   },
   [InstallationTypes.AWS_GITHUB]: {
     1: `Now, test your hosted zone name is accessible`,
-    2: `Let’s configure your local cluster`,
+    2: `Let’s configure your AWS - GitHub cluster`,
     3: `Grab a cup of tea or coffee while we set up your cluster...`,
     4: 'You’re all set!',
   },
@@ -84,18 +85,16 @@ const InstallationInfoByType: {
   },
 };
 
-const FormFlowByType = {
+export const FormFlowByType = {
   [InstallationTypes.LOCAL]: LocalForms,
-  [InstallationTypes.AWS_GITHUB]: LocalForms,
-  [InstallationTypes.AWS_GITLAB]: LocalForms,
+  [InstallationTypes.AWS_GITHUB]: AwsGithubForms,
+  [InstallationTypes.AWS_GITLAB]: AwsGithubForms,
 };
 
 export default function useInstallation(type: InstallationTypes = InstallationTypes.LOCAL) {
   const [installationType, setInstallationType] = useState(type);
   const [info, setInfo] = useState(InstallationInfoByType[type]);
   const [steps, setSteps] = useState<Array<string>>(InstallationSteps[type]);
-
-  const FormFlowComponent = useMemo(() => FormFlowByType[type], [type]);
 
   const onChangeInstallationType = (type: InstallationTypes) => {
     setInstallationType(type);
@@ -108,6 +107,5 @@ export default function useInstallation(type: InstallationTypes = InstallationTy
     onChangeInstallationType,
     steps,
     info,
-    FormFlowComponent,
   };
 }
