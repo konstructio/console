@@ -17,6 +17,7 @@ import { Terminal as XTerminal } from 'xterm';
 import ConciseLogs from '../conciseLogs';
 
 import { Container, Search, TabContainer, TerminalView } from './terminalLogs.styled';
+import logs from './logs';
 
 import 'xterm/css/xterm.css';
 
@@ -120,12 +121,12 @@ const TerminalLogs: FunctionComponent = () => {
 
     if (terminalRef.current) {
       terminal.open(terminalRef.current);
-      terminal.write('Hello there \n');
-      let i = 0;
+      terminal.write('Hello \n');
 
+      let i = 0;
       setInterval(() => {
-        if (i <= 10) {
-          terminal.write(`${[i]}\n`.replace(DATE_REGEX, '\x1b[0;37m$1\x1B[0m'));
+        if (i <= logs.length) {
+          terminal.write(`${logs[i]}\n`.replace(DATE_REGEX, '\x1b[0;37m$1\x1B[0m'));
           i++;
           // terminal.write(`${new Date().toISOString()}: INF: Hello Kubefirst \n`);
         }

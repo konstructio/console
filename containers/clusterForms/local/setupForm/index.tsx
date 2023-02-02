@@ -1,8 +1,8 @@
 import React, { FunctionComponent } from 'react';
-import { Control, Controller } from 'react-hook-form';
+import { Control } from 'react-hook-form';
 
-import Password from '../../../../components/password/';
-import TextField from '../../../../components/textField';
+import ControlledTextField from '../../../controlledFields/TextField';
+import ControlledPassword from '../../../controlledFields/Password';
 
 export interface FormProps {
   control: Control;
@@ -11,53 +11,28 @@ export interface FormProps {
 const SetupForm: FunctionComponent<FormProps> = ({ control }) => {
   return (
     <>
-      <Controller
+      <ControlledPassword
         control={control}
         name="githubToken"
+        label="GitHub token"
         rules={{
           required: true,
         }}
-        render={({ field, fieldState: { error } }) => (
-          <Password
-            {...field}
-            inputRef={field.ref}
-            error={error !== undefined}
-            fullWidth
-            label="GitHub token"
-            helperText="Note: this token will expire in 8 hours"
-            sx={{ mb: '24px', width: '100%' }}
-          />
-        )}
+        required
+        helperText="Note: this token will expire in 8 hours"
       />
-      <Controller
+      <ControlledTextField
         control={control}
         name="gitOpsBranch"
         rules={{ required: true }}
-        render={({ field, fieldState: { error } }) => (
-          <TextField
-            {...field}
-            inputRef={field.ref}
-            fullWidth
-            label="GitOps branch"
-            error={error !== undefined}
-            sx={{ mb: '24px', width: '100%' }}
-          />
-        )}
+        label="GitOps branch"
+        required
       />
-      <Controller
+      <ControlledTextField
         control={control}
         name="templateRepoUrl"
-        rules={{ required: true }}
-        render={({ field, fieldState: { error } }) => (
-          <TextField
-            {...field}
-            inputRef={field.ref}
-            fullWidth
-            label="Template repo url"
-            sx={{ mb: '24px', width: '100%' }}
-            error={error !== undefined}
-          />
-        )}
+        rules={{ required: false }}
+        label="Template repo url"
       />
     </>
   );

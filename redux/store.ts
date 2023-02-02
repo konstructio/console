@@ -3,17 +3,21 @@ import { Action, configureStore, ThunkAction } from '@reduxjs/toolkit';
 import { createWrapper } from 'next-redux-wrapper';
 
 import { consoleApi } from './api';
+import { githubApi } from './api/github';
 import configSlice from './slices/config.slice';
 import installationSlice from './slices/installation.slice';
+import githubSlice from './slices/github.slice';
 
 export const makeStore = () =>
   configureStore({
     reducer: {
       [consoleApi.reducerPath]: consoleApi.reducer,
+      [githubApi.reducerPath]: githubApi.reducer,
       config: configSlice,
       installation: installationSlice,
+      github: githubSlice,
     },
-    middleware: (gDM) => gDM().concat(consoleApi.middleware),
+    middleware: (gDM) => gDM().concat(consoleApi.middleware, githubApi.middleware),
   });
 
 export const useAppDispatch: () => AppDispatch = useDispatch;

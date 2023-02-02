@@ -125,6 +125,11 @@ const theme = createTheme({
   typography: { ...typographies },
   palette: palleteColors,
   components: {
+    MuiIconButton: {
+      defaultProps: {
+        disableRipple: true,
+      },
+    },
     MuiButton: {
       styleOverrides: {
         root: () => ({

@@ -1,3 +1,4 @@
+import React, { FunctionComponent } from 'react';
 import {
   Step,
   StepConnector,
@@ -8,7 +9,7 @@ import {
   Stepper,
   styled,
 } from '@mui/material';
-import React, { FunctionComponent } from 'react';
+import CheckIcon from '@mui/icons-material/Check';
 
 import Typography from '../typography';
 import themeST from '../../theme';
@@ -73,15 +74,32 @@ const ColorlibStepIconRoot = styled('div')<{
   }),
   ...(ownerState.completed && {
     border: `2px solid ${theme.palette.primary.main}`,
-    backgroundColor: theme.palette.primary.main,
+    backgroundColor: 'transparent',
     color: '#fff',
   }),
+}));
+
+const CompletedStep = styled('div')(({ theme }) => ({
+  backgroundColor: 'transparent',
+  border: `2px solid ${theme.palette.primary.main}`,
+  zIndex: 1,
+  color: themeST.colors.saltboxBlue,
+  width: 52,
+  height: 52,
+  display: 'flex',
+  borderRadius: '50%',
+  justifyContent: 'center',
+  alignItems: 'center',
 }));
 
 function ColorlibStepIcon(props: StepIconProps) {
   const { active, completed, className } = props;
 
-  return (
+  return completed ? (
+    <CompletedStep>
+      <CheckIcon color="primary" />
+    </CompletedStep>
+  ) : (
     <ColorlibStepIconRoot ownerState={{ completed, active }} className={className}>
       {props.icon}
     </ColorlibStepIconRoot>

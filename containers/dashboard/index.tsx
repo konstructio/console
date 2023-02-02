@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useMemo } from 'react';
+import React, { FunctionComponent, useEffect, useMemo } from 'react';
 import { useRouter } from 'next/router';
 import { FieldValues, useForm } from 'react-hook-form';
 import CopyToClipboard from 'react-copy-to-clipboard';
@@ -11,10 +11,14 @@ import useToggle from '../../hooks/useToggle';
 import useStep from '../../hooks/useStep';
 import Progress from '../../components/progress';
 import Typography from '../../components/typography';
-import useInstallation, { InstallationTypes, titleBySteps } from '../../hooks/useInstallation';
+import useInstallation, {
+  FormFlowByType,
+  InstallationTypes,
+  titleBySteps,
+} from '../../hooks/useInstallation';
 import Button from '../../components/button';
 import { useAppDispatch } from '../../redux/store';
-import { setLocalValues } from '../../redux/slices/installation.slice';
+import { setAWSGitHubValues, setLocalValues } from '../../redux/slices/installation.slice';
 
 import {
   Card,
@@ -28,7 +32,6 @@ import {
   Content,
   Footer,
   Form,
-  FormContainer,
   Header,
   InfoContainer,
   Title,
@@ -60,12 +63,16 @@ const Dashboard: FunctionComponent = () => {
 
   const { isOpen, open, close } = useToggle(false);
   const { currentStep, goToNext, goToPrev } = useStep();
-  const { info, steps, installationType, onChangeInstallationType, FormFlowComponent } =
-    useInstallation();
+  const { info, steps, installationType, onChangeInstallationType } = useInstallation();
   const {
     control,
     handleSubmit,
     formState: { isValid },
+    reset,
+    trigger,
+    watch,
+    setValue,
+    clearErrors,
   } = useForm();
 
   const isLastStep = useMemo(() => currentStep === steps.length - 1, [currentStep, steps]);
@@ -88,7 +95,10 @@ const Dashboard: FunctionComponent = () => {
     if (isValid) {
       switch (installationType) {
         case InstallationTypes.LOCAL:
-          dispatch(setLocalValues(fieldValues));
+          dispatch(setLocalValues({ step: currentStep, ...fieldValues }));
+          break;
+        case InstallationTypes.AWS_GITHUB:
+          dispatch(setAWSGitHubValues({ step: currentStep, ...fieldValues }));
           break;
         default:
           break;
@@ -97,6 +107,12 @@ const Dashboard: FunctionComponent = () => {
       goToNext();
     }
   };
+
+  const FormFlowComponent = useMemo(() => FormFlowByType[installationType], [installationType]);
+
+  useEffect(() => {
+    reset();
+  }, [reset, installationType, currentStep]);
 
   return (
     <Form component="form" onSubmit={handleSubmit(onSubmit)}>
@@ -182,7 +198,14 @@ const Dashboard: FunctionComponent = () => {
             </InfoContainer>
           </>
         ) : (
-          <FormFlowComponent step={currentStep} control={control} />
+          <FormFlowComponent
+            control={control}
+            setValue={setValue}
+            step={currentStep}
+            trigger={trigger}
+            watch={watch}
+            clearErrors={clearErrors}
+          />
         )}
       </Content>
       <Footer>
