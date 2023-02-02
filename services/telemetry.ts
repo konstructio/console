@@ -9,7 +9,7 @@ type TelemetryProperties = {
 export const sendTelemetry = (event: string, properties?: TelemetryProperties) => {
   try {
     const {
-      CLOUD_PROVIDER,
+      CLOUD,
       CLUSTER_ID,
       CLUSTER_TYPE,
       GIT_PROVIDER,
@@ -33,7 +33,7 @@ export const sendTelemetry = (event: string, properties?: TelemetryProperties) =
         event,
         properties: {
           cli_version: KUBEFIRST_VERSION,
-          cloud_provider: CLOUD_PROVIDER,
+          cloud_provider: CLOUD,
           cluster_id: userId,
           cluster_type: CLUSTER_TYPE,
           domain: userId,
