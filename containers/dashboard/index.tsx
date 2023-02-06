@@ -18,7 +18,7 @@ import useInstallation, {
 } from '../../hooks/useInstallation';
 import Button from '../../components/button';
 import { useAppDispatch } from '../../redux/store';
-import { setAWSGitHubValues, setLocalValues } from '../../redux/slices/installation.slice';
+import { setAWSGitValues, setLocalValues } from '../../redux/slices/installation.slice';
 
 import {
   Card,
@@ -98,7 +98,8 @@ const Dashboard: FunctionComponent = () => {
           dispatch(setLocalValues({ step: currentStep, ...fieldValues }));
           break;
         case InstallationTypes.AWS_GITHUB:
-          dispatch(setAWSGitHubValues({ step: currentStep, ...fieldValues }));
+        case InstallationTypes.AWS_GITLAB:
+          dispatch(setAWSGitValues({ step: currentStep, ...fieldValues }));
           break;
         default:
           break;

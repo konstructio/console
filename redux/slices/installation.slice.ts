@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-import { AWS_GITHUB_STEPS } from '../../enums/installation';
+import { AWS_GIT_STEPS } from '../../enums/installation';
 
 type LocalInstallation = {
   githubToken: string;
@@ -8,7 +8,7 @@ type LocalInstallation = {
   templateRepoUrl: string;
 };
 
-type AWSGitHubInstallation = {
+type AWSGitInstallation = {
   step: number;
   profile?: string;
   hostedZoneName?: string;
@@ -24,12 +24,12 @@ type AWSGitHubInstallation = {
 
 export interface InstallationState {
   local?: LocalInstallation;
-  awsGitHub?: AWSGitHubInstallation;
+  awsGit?: AWSGitInstallation;
 }
 
 export const initialState: InstallationState = {
   local: undefined,
-  awsGitHub: undefined,
+  awsGit: undefined,
 };
 
 const installationSlice = createSlice({
@@ -44,22 +44,22 @@ const installationSlice = createSlice({
         templateRepoUrl: templateRepoUrl,
       };
     },
-    setAWSGitHubValues(state, { payload }) {
+    setAWSGitValues(state, { payload }) {
       const { step } = payload;
 
-      if (step === AWS_GITHUB_STEPS.READINESS) {
+      if (step === AWS_GIT_STEPS.READINESS) {
         const { profile, hostedZoneName } = payload;
 
-        state.awsGitHub = {
+        state.awsGit = {
           step,
           profile,
           hostedZoneName,
-          ...state.awsGitHub,
+          ...state.awsGit,
         };
-      } else if (step === AWS_GITHUB_STEPS.SETUP) {
-        state.awsGitHub = {
+      } else if (step === AWS_GIT_STEPS.SETUP) {
+        state.awsGit = {
           ...payload,
-          ...state.awsGitHub,
+          ...state.awsGit,
           step,
         };
       }
@@ -67,6 +67,6 @@ const installationSlice = createSlice({
   },
 });
 
-export const { setAWSGitHubValues, setLocalValues } = installationSlice.actions;
+export const { setAWSGitValues, setLocalValues } = installationSlice.actions;
 
 export default installationSlice.reducer;
