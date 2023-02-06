@@ -2,6 +2,7 @@ import { useState } from 'react';
 
 import LocalForms from '../containers/clusterForms/local';
 import AwsGithubForms from '../containers/clusterForms/awsGithub';
+import AwsGitlabForms from '../containers/clusterForms/awsGitlab';
 
 export enum InstallationTypes {
   LOCAL = 1,
@@ -88,7 +89,7 @@ const InstallationInfoByType: {
 export const FormFlowByType = {
   [InstallationTypes.LOCAL]: LocalForms,
   [InstallationTypes.AWS_GITHUB]: AwsGithubForms,
-  [InstallationTypes.AWS_GITLAB]: AwsGithubForms,
+  [InstallationTypes.AWS_GITLAB]: AwsGitlabForms,
 };
 
 export default function useInstallation(type: InstallationTypes = InstallationTypes.LOCAL) {

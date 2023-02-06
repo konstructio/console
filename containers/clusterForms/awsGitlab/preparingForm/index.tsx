@@ -1,6 +1,6 @@
 import React, { FunctionComponent } from 'react';
 
-import TerminalLogs from '../../../../containers/terminalLogs';
+import TerminalLogs from '../../../terminalLogs';
 
 const PreparingForm: FunctionComponent = () => {
   return <TerminalLogs />;

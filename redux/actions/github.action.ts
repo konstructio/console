@@ -13,6 +13,7 @@ export const getUser = createAsyncThunk<any, string>(
   },
 );
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const getGitUserOrganizations = createAsyncThunk<any, string>(
   'github/getGitUserOrganizations',
   async (queryTerm, { dispatch }) => {

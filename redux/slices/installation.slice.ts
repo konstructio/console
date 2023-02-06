@@ -1,5 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { AWS_GITHUB_STEPS } from 'enums/installation';
+
+import { AWS_GITHUB_STEPS } from '../../enums/installation';
 
 type LocalInstallation = {
   githubToken: string;
