@@ -1,22 +1,19 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
 import { endpoints } from '../api/github';
 
 const { getUserInfo, getUserOrganizations } = endpoints;
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const getUser = createAsyncThunk<any, string>(
-  'github/getUser',
-  async (queryTerm, { dispatch }) => {
-    const user = await getUserInfo.initiate(queryTerm);
-    return dispatch(user).unwrap();
-  },
-);
+export const getUser = createAsyncThunk('github/getUser', async (queryTerm: string) => {
+  return await getUserInfo.initiate(queryTerm);
+});
 
-export const getGitUserOrganizations = createAsyncThunk<any, string>(
+export const getGitUserOrganizations = createAsyncThunk(
   'github/getGitUserOrganizations',
-  async (queryTerm, { dispatch }) => {
-    const organizations = await getUserOrganizations.initiate(queryTerm);
-    return dispatch(organizations).unwrap();
+  async (queryTerm: string, { dispatch }) => {
+    const response = await getUserOrganizations.initiate(queryTerm);
+
+    return dispatch(response).unwrap();
   },
 );

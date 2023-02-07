@@ -17,7 +17,7 @@ export const makeStore = () =>
       installation: installationSlice,
       github: githubSlice,
     },
-    middleware: (gDM) => gDM().concat(consoleApi.middleware, githubApi.middleware),
+    // middleware: (gDM) => gDM().concat(consoleApi.middleware, githubApi.middleware),
   });
 
 export const useAppDispatch: () => AppDispatch = useDispatch;

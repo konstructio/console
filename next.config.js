@@ -13,6 +13,10 @@ const nextConfig = {
   experimental: {
     fontLoaders: [{ loader: '@next/font/google', options: { display: 'auto' } }],
   },
+  typescript: {
+    // nextjs doees not read the tsconfig.json properly and it's triggering different errors that we can't see using `yarn check-types`
+    ignoreBuildErrors: true,
+  },
 };
 
 module.exports = nextConfig;

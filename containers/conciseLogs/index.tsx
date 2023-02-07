@@ -17,7 +17,7 @@ const STEPS = [
   'still working away...',
 ];
 
-const ConciseLogs: FunctionComponent = ({ ...props }) => {
+const ConciseLogs: FunctionComponent = () => {
   return (
     <Container>
       {STEPS.map((step, index) => (

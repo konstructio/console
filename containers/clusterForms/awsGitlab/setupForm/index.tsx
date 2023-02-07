@@ -5,13 +5,6 @@ import ControlledAutocomplete from '../../../controlledFields/AutoComplete';
 import ControlledPassword from '../../../controlledFields/Password';
 import ControlledCheckbox from '../../../controlledFields/Checkbox';
 import { AWS_REGIONS } from '../../../../utils/region';
-import { getUser, getGitUserOrganizations } from '../../../../redux/actions/github.action';
-import { useAppDispatch, useAppSelector } from '../../../../redux/store';
-import {
-  selectGitUserOrganizations,
-  selectIsLoading,
-  selectIsValidToken,
-} from '../../../../redux/selectors/github.selector';
 import ControlledTextField from '../../../controlledFields/TextField';
 
 export interface FormProps {
@@ -22,16 +15,6 @@ export interface FormProps {
 const EMAIL_REGEX = /.+@.+\..+/;
 
 const SetupForm: FunctionComponent<FormProps> = ({ control }) => {
-  const dispatch = useAppDispatch();
-  const organizations = useAppSelector(selectGitUserOrganizations());
-  const isValidToken = useAppSelector(selectIsValidToken());
-  const isLoading = useAppSelector(selectIsLoading());
-
-  const handleGitHubTokenOnBlur = (token: string) => {
-    dispatch(getUser(token)).unwrap();
-    dispatch(getGitUserOrganizations(token)).unwrap();
-  };
-
   return (
     <>
       <ControlledTextField
@@ -81,28 +64,6 @@ const SetupForm: FunctionComponent<FormProps> = ({ control }) => {
           required: true,
         }}
         onErrorText="Maximum 63 characters."
-      />
-      <ControlledPassword
-        control={control}
-        name="githubToken"
-        label="GitHub token"
-        rules={{
-          required: true,
-        }}
-        required
-        onBlur={handleGitHubTokenOnBlur}
-        helperText="Note: this token will expire in 8 hours"
-      />
-      <ControlledAutocomplete
-        control={control}
-        required
-        name="githubOrganization"
-        rules={{ required: true }}
-        loading={isLoading}
-        disabled={!isValidToken}
-        options={organizations.map(({ login }) => ({ label: login, value: login }))}
-        label="Github organization"
-        placeholder="Select"
       />
       <ControlledCheckbox
         control={control}

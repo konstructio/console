@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 import { getUser, getGitUserOrganizations } from '../actions/github.action';
 
@@ -35,10 +35,13 @@ const github = createSlice({
     builder.addCase(getGitUserOrganizations.rejected, (state) => {
       state.isLoading = false;
     });
-    builder.addCase(getGitUserOrganizations.fulfilled, (state, action) => {
-      state.organizations = action.payload;
-      state.isLoading = false;
-    });
+    builder.addCase(
+      getGitUserOrganizations.fulfilled,
+      (state, action: PayloadAction<Array<any>>) => {
+        state.organizations = action.payload;
+        state.isLoading = false;
+      },
+    );
   },
 });
 
