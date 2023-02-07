@@ -12,7 +12,6 @@ export const githubApi = createApi({
       return action.payload[reducerPath];
     }
   },
-  tagTypes: [],
   endpoints: (builder: any) => ({
     getUserInfo: builder.query({
       query: (token: string) => ({

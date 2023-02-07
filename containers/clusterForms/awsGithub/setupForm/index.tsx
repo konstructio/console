@@ -1,11 +1,11 @@
 import React, { FunctionComponent } from 'react';
 import { Control, FieldValues, UseFormWatch } from 'react-hook-form';
-import { getUser, getGitUserOrganizations } from 'redux/actions/github.action';
-import { AWS_REGIONS } from 'utils/region';
-import ControlledAutocomplete from 'containers/controlledFields/AutoComplete';
-import ControlledPassword from 'containers/controlledFields/Password';
-import ControlledCheckbox from 'containers/controlledFields/Checkbox';
 
+import ControlledAutocomplete from '../../../controlledFields/AutoComplete';
+import ControlledPassword from '../../../controlledFields/Password';
+import ControlledCheckbox from '../../../controlledFields/Checkbox';
+import { AWS_REGIONS } from '../../../../utils/region';
+import { getUser, getGitUserOrganizations } from '../../../../redux/actions/github.action';
 import { useAppDispatch, useAppSelector } from '../../../../redux/store';
 import {
   selectGitUserOrganizations,
