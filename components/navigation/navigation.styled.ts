@@ -56,12 +56,12 @@ export const MenuItem = styled.div<{ isActive?: boolean; collapsible?: boolean }
   ${({ isActive }) =>
     isActive &&
     `
-    background-color: #252a41;
-    color: white;
-
-    svg {
+      background-color: #252a41;
       color: white;
-    }
+
+      svg {
+        color: white;
+      }
   `}
 
   ${({ collapsible }) =>
@@ -75,6 +75,7 @@ export const MenuItem = styled.div<{ isActive?: boolean; collapsible?: boolean }
 
 export const Title = styled.div<{ collapsible?: boolean }>`
   padding: 24px 16px 0;
+  position: relative;
   margin-bottom: 32px;
 
   ${({ collapsible }) =>

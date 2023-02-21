@@ -10,7 +10,7 @@ import {
 
 import { FormContainer } from '../../dashboard/dashboard.styled';
 import ReadyForm from '../local/ready';
-import ReadinessForm from '../awsGithub/readinessForm/index';
+import ReadinessForm from '../awsGithub/readinessForm';
 
 import SetupForm from './setupForm';
 import PreparingForm from './preparingForm';

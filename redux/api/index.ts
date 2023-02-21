@@ -21,7 +21,15 @@ export const consoleApi = createApi({
         body,
       }),
     }),
+    readiness: builder.mutation({
+      query: (body: unknown) => ({
+        url: '/api/readiness',
+        method: 'POST',
+        body,
+      }),
+      invalidatesTags: [],
+    }),
   }),
 });
 
-export const { useTrackMutation, endpoints } = consoleApi;
+export const { useTrackMutation, useReadinessMutation, endpoints } = consoleApi;

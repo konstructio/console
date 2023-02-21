@@ -24,7 +24,7 @@ export const titleBySteps: { [key: number]: { [key: number]: string } } = {
   },
   [InstallationTypes.AWS_GITLAB]: {
     1: `Now, test your hosted zone name is accessible`,
-    2: `Let’s configure your local cluster`,
+    2: `Let’s configure your AWS - GitLab cluster`,
     3: `Grab a cup of tea or coffee while we set up your cluster...`,
     4: 'You’re all set!',
   },

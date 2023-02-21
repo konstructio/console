@@ -12,6 +12,7 @@ export interface ControlledTextFieldProps {
     pattern?: RegExp;
   };
   helperText?: string;
+  error?: boolean;
   onErrorText?: string;
   onBlur?: (value: string) => void;
 }
@@ -22,6 +23,7 @@ const ControlledPassword: FunctionComponent<ControlledTextFieldProps> = ({
   required,
   rules,
   helperText,
+  error,
   onErrorText,
   onBlur,
   ...props
@@ -33,7 +35,7 @@ const ControlledPassword: FunctionComponent<ControlledTextFieldProps> = ({
       name={name}
       rules={rules}
       {...props}
-      render={({ field, fieldState: { error } }) => (
+      render={({ field, fieldState: { error: fieldError } }) => (
         <Password
           {...field}
           onBlur={() => {
@@ -45,8 +47,10 @@ const ControlledPassword: FunctionComponent<ControlledTextFieldProps> = ({
           fullWidth
           required={required}
           label={label}
-          error={isBlur && error !== undefined}
-          helperText={isBlur && error !== undefined ? onErrorText || helperText : helperText}
+          error={(isBlur && fieldError !== undefined) || error}
+          helperText={
+            (isBlur && fieldError !== undefined) || error ? onErrorText || helperText : helperText
+          }
         />
       )}
     />

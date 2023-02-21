@@ -19,6 +19,8 @@ const Tooltip: FunctionComponent<TooltipProps> = ({ children, title, ...props })
       boxShadow: '0px 9px 28px 8px rgba(0, 0, 0, 0.05), 0px 3px 6px -4px rgba(0, 0, 0, 0.12)',
       display: 'flex',
       height: '34px',
+      maxWidth: 'min-content',
+      whiteSpace: 'nowrap',
     },
   }));
 
@@ -26,7 +28,6 @@ const Tooltip: FunctionComponent<TooltipProps> = ({ children, title, ...props })
     <StyledTooltip
       {...props}
       title={<Typography variant="tooltip">{title}</Typography>}
-      placement="bottom"
       TransitionComponent={Fade}
       TransitionProps={{ timeout: 600 }}
       arrow

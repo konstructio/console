@@ -14,7 +14,7 @@ import { SearchAddon } from 'xterm-addon-search';
 import { FitAddon } from 'xterm-addon-fit';
 import { Terminal as XTerminal } from 'xterm';
 
-import ConciseLogs from '../conciseLogs/index';
+import ConciseLogs from '../conciseLogs';
 
 import { Container, Search, TabContainer, TerminalView } from './terminalLogs.styled';
 import logs from './logs';

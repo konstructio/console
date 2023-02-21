@@ -2,12 +2,12 @@ import { createSlice } from '@reduxjs/toolkit';
 
 export interface ConfigState {
   isTelemetryEnabled: boolean;
-  isLocal: boolean;
+  kubefirstVersion: string;
 }
 
 export const initialState: ConfigState = {
   isTelemetryEnabled: false,
-  isLocal: false,
+  kubefirstVersion: '',
 };
 
 const configSlice = createSlice({
@@ -15,9 +15,9 @@ const configSlice = createSlice({
   initialState,
   reducers: {
     setConfigValues(state, payload) {
-      const { isTelemetryEnabled, isLocal } = payload.payload;
+      const { isTelemetryEnabled, kubefirstVersion } = payload.payload;
       state.isTelemetryEnabled = isTelemetryEnabled;
-      state.isLocal = isLocal;
+      state.kubefirstVersion = kubefirstVersion;
     },
   },
 });
