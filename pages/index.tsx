@@ -1,11 +1,19 @@
-import React, { FunctionComponent } from 'react';
+import { useRouter } from 'next/router';
+import { FunctionComponent, useEffect } from 'react';
 
-import Dashboard from '../containers/dashboard';
+// import Dashboard from '../containers/dashboard';
 
-export interface DashboardPageProps {
-  children: FunctionComponent;
-}
+const DashboardPage: FunctionComponent = () => {
+  const { replace } = useRouter();
 
-const DashboardPage: FunctionComponent<DashboardPageProps> = () => <Dashboard />;
+  useEffect(() => {
+    // redirect fallback to services
+    replace('/services');
+  });
+
+  return null;
+
+  // return <Dashboard />;
+};
 
 export default DashboardPage;

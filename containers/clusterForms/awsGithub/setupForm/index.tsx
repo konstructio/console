@@ -1,4 +1,4 @@
-import React, { FunctionComponent } from 'react';
+import React, { FunctionComponent, useState } from 'react';
 import { Control, FieldValues, UseFormWatch } from 'react-hook-form';
 
 import ControlledAutocomplete from '../../../controlledFields/AutoComplete';
@@ -22,12 +22,14 @@ export interface FormProps {
 const EMAIL_REGEX = /.+@.+\..+/;
 
 const SetupForm: FunctionComponent<FormProps> = ({ control }) => {
+  const [hasTokenValue, setHasTokenValue] = useState<boolean>(false);
   const dispatch = useAppDispatch();
   const organizations = useAppSelector(selectGitUserOrganizations());
   const isValidToken = useAppSelector(selectIsValidToken());
   const isLoading = useAppSelector(selectIsLoading());
 
   const handleGitHubTokenOnBlur = (token: string) => {
+    setHasTokenValue(!!token);
     dispatch(getUser(token)).unwrap();
     dispatch(getGitUserOrganizations(token)).unwrap();
   };
@@ -92,6 +94,8 @@ const SetupForm: FunctionComponent<FormProps> = ({ control }) => {
         required
         onBlur={handleGitHubTokenOnBlur}
         helperText="Note: this token will expire in 8 hours"
+        error={!isValidToken && hasTokenValue}
+        onErrorText="Invalid token."
       />
       <ControlledAutocomplete
         control={control}

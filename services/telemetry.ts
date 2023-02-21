@@ -7,14 +7,16 @@ type TelemetryProperties = {
 };
 
 export const sendTelemetry = (event: string, properties?: TelemetryProperties) => {
+  const { HOSTED_ZONE_NAME, KUBEFIRST_VERSION, MACHINE_ID, USE_TELEMETRY } = process.env;
+
   try {
-    const isTelemetryEnabled = process.env.USE_TELEMETRY === 'true';
+    const isTelemetryEnabled = USE_TELEMETRY === 'true';
     const analytics = new Analytics(ANALYTICS_ID, {
       enable: isTelemetryEnabled,
     });
 
     if (isTelemetryEnabled) {
-      const userId = process.env.HOSTED_ZONE_NAME || process.env.MACHINE_ID;
+      const userId = HOSTED_ZONE_NAME || MACHINE_ID;
       analytics.identify({
         userId,
       });
@@ -23,8 +25,7 @@ export const sendTelemetry = (event: string, properties?: TelemetryProperties) =
         userId,
         event,
         properties: {
-          isLocal: !process.env.HOSTED_ZONE_NAME,
-          cli_version: process.env.KUBEFIRST_VERSION,
+          cli_version: KUBEFIRST_VERSION,
           domain: userId,
           ...properties,
         },

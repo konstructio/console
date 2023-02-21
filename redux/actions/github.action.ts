@@ -5,9 +5,13 @@ import { endpoints } from '../api/github';
 
 const { getUserInfo, getUserOrganizations } = endpoints;
 
-export const getUser = createAsyncThunk('github/getUser', async (queryTerm: string) => {
-  return await getUserInfo.initiate(queryTerm);
-});
+export const getUser = createAsyncThunk(
+  'github/getUser',
+  async (queryTerm: string, { dispatch }) => {
+    const response = await getUserInfo.initiate(queryTerm);
+    return dispatch(response).unwrap();
+  },
+);
 
 export const getGitUserOrganizations = createAsyncThunk(
   'github/getGitUserOrganizations',

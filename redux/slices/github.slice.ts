@@ -31,6 +31,7 @@ const github = createSlice({
     });
     builder.addCase(getGitUserOrganizations.pending, (state) => {
       state.isLoading = true;
+      state.isTokenValid = false;
     });
     builder.addCase(getGitUserOrganizations.rejected, (state) => {
       state.isLoading = false;
@@ -40,6 +41,7 @@ const github = createSlice({
       (state, action: PayloadAction<Array<any>>) => {
         state.organizations = action.payload;
         state.isLoading = false;
+        state.isTokenValid = true;
       },
     );
   },

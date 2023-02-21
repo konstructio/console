@@ -32,7 +32,6 @@ import {
   Content,
   Footer,
   Form,
-  Header,
   InfoContainer,
   Title,
 } from './dashboard.styled';
@@ -88,7 +87,7 @@ const Dashboard: FunctionComponent = () => {
   }, [currentStep, installationType]);
 
   const onFinish = () => {
-    router.push('/cluster');
+    router.push('/services');
   };
 
   const onSubmit = (fieldValues: FieldValues) => {
@@ -117,7 +116,6 @@ const Dashboard: FunctionComponent = () => {
 
   return (
     <Form component="form" onSubmit={handleSubmit(onSubmit)}>
-      <Header />
       <Progress activeStep={currentStep} steps={steps} />
       <Title>
         <Typography variant="h6">{title || `First, choose your Kubefirst adventure`}</Typography>

@@ -17,6 +17,21 @@ const Layout = styled.div`
   height: 100%;
 `;
 
+export const Header = styled.div`
+  background-color: ${({ theme }) => theme.colors.white};
+  height: 40px;
+  width: calc(100% - 50px);
+  border-radius: 0px;
+  padding: 12px 24px 12px 24px;
+`;
+
+export const Content = styled.div`
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+`;
+
 export default function App({ Component, ...rest }: AppProps) {
   const { store, props } = wrapper.useWrappedStore(rest);
 
@@ -31,9 +46,11 @@ export default function App({ Component, ...rest }: AppProps) {
           <ThemeProvider theme={theme}>
             <Layout {...props.pageProps}>
               <Navigation />
-              <Component {...props.pageProps} />
+              <Content>
+                <Header />
+                <Component {...props.pageProps} />
+              </Content>
             </Layout>
-            {/* <Footer /> */}
           </ThemeProvider>
         </ThemeProviderMUI>
       </Provider>

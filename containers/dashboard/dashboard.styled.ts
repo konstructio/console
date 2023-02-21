@@ -8,14 +8,6 @@ export const Form = styled(Box)`
   width: 100%;
 `;
 
-export const Header = styled.div`
-  background-color: ${({ theme }) => theme.colors.white};
-  height: 40px;
-  width: calc(100% - 50px);
-  border-radius: 0px;
-  padding: 12px 24px 12px 24px;
-`;
-
 export const Title = styled.div`
   margin: 40px auto;
 `;
