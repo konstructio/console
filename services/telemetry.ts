@@ -19,17 +19,6 @@ export const sendTelemetry = (event: string, properties?: TelemetryProperties) =
   } = process.env;
 
   try {
-    const {
-      CLOUD,
-      CLUSTER_ID,
-      CLUSTER_TYPE,
-      GIT_PROVIDER,
-      HOSTED_ZONE_NAME,
-      KUBEFIRST_TEAM,
-      KUBEFIRST_VERSION,
-      USE_TELEMETRY,
-    } = process.env;
-
     const analytics = new Analytics(ANALYTICS_ID);
     const isTelemetryEnabled = USE_TELEMETRY === 'true';
 
