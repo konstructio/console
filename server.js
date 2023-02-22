@@ -31,7 +31,15 @@ const currentPort = parseInt(process.env.PORT, 10) || 3000;
 const ANALYTICS_ID = '0gAYkX5RV3vt7s4pqCOOsDb6WHPLT30M';
 
 function sendHeartbeat() {
-  const { HOSTED_ZONE_NAME, KUBEFIRST_VERSION, MACHINE_ID, USE_TELEMETRY } = process.env;
+  const {
+    CLOUD,
+    CLUSTER_ID,
+    CLUSTER_TYPE,
+    DOMAIN_NAME,
+    KUBEFIRST_TEAM,
+    KUBEFIRST_VERSION,
+    USE_TELEMETRY,
+  } = process.env;
 
   try {
     const isTelemetryEnabled = USE_TELEMETRY === 'true';
@@ -40,7 +48,7 @@ function sendHeartbeat() {
     });
 
     if (isTelemetryEnabled) {
-      const userId = HOSTED_ZONE_NAME || MACHINE_ID;
+      const userId = DOMAIN_NAME || CLUSTER_ID;
       analytics.identify({
         userId,
       });
@@ -50,7 +58,12 @@ function sendHeartbeat() {
         event: 'kubefirst.console.healthz',
         properties: {
           cli_version: KUBEFIRST_VERSION,
+          cloud_provider: CLOUD,
+          cluster_id: userId,
+          cluster_type: CLUSTER_TYPE,
           domain: userId,
+          git_provider: GIT_PROVIDER,
+          kubefirst_team: KUBEFIRST_TEAM,
         },
       });
     }
