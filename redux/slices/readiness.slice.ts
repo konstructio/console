@@ -16,8 +16,11 @@ const readiness = createSlice({
   reducers: {},
   extraReducers(builder) {
     builder.addCase(checkReadiness.fulfilled, (state, action) => {
-      const { url } = action.payload;
-      state.metaphorValidSites?.push(url);
+      const { success, url } = action.payload;
+
+      if (success) {
+        state.metaphorValidSites?.push(url);
+      }
     });
   },
 });

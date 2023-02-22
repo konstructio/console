@@ -1,3 +1,5 @@
+import https from 'https';
+
 import axios from 'axios';
 import type { NextApiRequest, NextApiResponse } from 'next';
 
@@ -6,11 +8,15 @@ type Data = {
   url: string;
 };
 
+const httpsAgent = new https.Agent({
+  rejectUnauthorized: false,
+});
+
 export default async function handler(req: NextApiRequest, res: NextApiResponse<Data>) {
   const { url } = req.body;
   try {
     if (req.method === 'POST') {
-      await axios.get(url);
+      await axios.get(url, { httpsAgent: httpsAgent });
       res.status(200).json({ success: true, url });
     }
   } catch (error) {

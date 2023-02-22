@@ -8,6 +8,8 @@ process.chdir(__dirname);
 
 const nextConfig = require('./next.config');
 
+const { HEARTBEAT_PERIOD_MINUTES } = process.env;
+
 const http = require('http');
 
 process.on('SIGTERM', () => process.exit(0));
@@ -54,12 +56,10 @@ function sendHeartbeat() {
     }
   } catch (error) {
     console.log('error sending hearbeat event', error);
-    // supressing telemetry issues until we move the calls from the healthz
   }
 }
 
-// heartbeats every ten minutes
-setInterval(sendHeartbeat, 600000);
+setInterval(sendHeartbeat, (HEARTBEAT_PERIOD_MINUTES || 20) * 60 * 1000);
 
 server.listen(currentPort, (err) => {
   if (err) {
