@@ -53,7 +53,7 @@ const Service: FunctionComponent<ServiceProps> = ({
     () => (
       <Links>
         {links?.map((link) => {
-          const { origin, pathname } = new URL(link);
+          const { origin, pathname } = (link && new URL(link)) || { origin: '', pathname: '' };
           const shouldUseTooltip = pathname.length > 40 || origin.length > 40;
           const linkComponent = serviceLink(link);
 
