@@ -7,29 +7,29 @@ type TelemetryProperties = {
 };
 
 export const sendTelemetry = (event: string, properties?: TelemetryProperties) => {
-  try {
-    const {
-      CLOUD,
-      CLUSTER_ID,
-      CLUSTER_TYPE,
-      GIT_PROVIDER,
-      HOSTED_ZONE_NAME,
-      KUBEFIRST_TEAM,
-      KUBEFIRST_VERSION,
-      USE_TELEMETRY,
-    } = process.env;
+  const {
+    CLOUD,
+    CLUSTER_ID,
+    CLUSTER_TYPE,
+    DOMAIN_NAME,
+    GIT_PROVIDER,
+    KUBEFIRST_VERSION,
+    KUBEFIRST_TEAM,
+    USE_TELEMETRY,
+  } = process.env;
 
+  try {
     const analytics = new Analytics(ANALYTICS_ID);
     const isTelemetryEnabled = USE_TELEMETRY === 'true';
 
     if (isTelemetryEnabled) {
-      const userId = HOSTED_ZONE_NAME || CLUSTER_ID;
+      const userId = DOMAIN_NAME || CLUSTER_ID;
       analytics.identify({
-        userId: userId,
+        userId,
       });
 
       analytics.track({
-        userId: userId,
+        userId,
         event,
         properties: {
           cli_version: KUBEFIRST_VERSION,
@@ -38,7 +38,6 @@ export const sendTelemetry = (event: string, properties?: TelemetryProperties) =
           cluster_type: CLUSTER_TYPE,
           domain: userId,
           git_provider: GIT_PROVIDER,
-          isLocal: !HOSTED_ZONE_NAME,
           kubefirst_team: KUBEFIRST_TEAM,
           ...properties,
         },

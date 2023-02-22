@@ -1,15 +1,22 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&display=swap');
+
+html {
+  scroll-behavior: smooth;
+}
+
 body,
 #app {
   margin: 0;
   height: 100vh;
-  font-family: 'DM Sans', sans-serif;
-}
-
-button {
-  font-family: 'DM Sans', sans-serif;
+  font-family: 'Roboto', sans-serif;
 }
 
 .MuiPopover-paper {
   color: rgb(255, 255, 255);
   background-color: rgb(18, 18, 18);
+}
+
+.xterm-cursor {
+  display: none !important;
 }

@@ -24,7 +24,14 @@ export interface ITheme extends DefaultTheme {
 
     // Kubefirst color palette
     americanBlue: string;
+    childOfLight: string;
+    moonlessMystery: string;
     jordyBlue: string;
+    primary: string;
+    saltboxBlue: string;
+    volcanicSand: string;
+    washMe: string;
+    whiteSmoke: string;
   };
 }
 
@@ -37,21 +44,28 @@ const theme: ITheme = {
     black: '#000000',
     bleachedSilk: '#F2F2F2',
     caribeanSea: '#007D9C',
+    childOfLight: '#F1F5F9',
     chineseOrange: '#F06F3C',
-    danger: '#F53A2A',
+    danger: '#DC2626',
     dawnDeparts: '#CCF8FE',
     ferntastic: '#75AD64',
     gravelFint: '#BBBBBB',
     gray: 'gray',
     greenJelly: '#2E9485',
     jordyBlue: '#7AA5E2',
+    moonlessMystery: '#1E2235',
     naivePeach: '#FDE5D2',
+    primary: '#8851C8',
     purpleCabbage: '#3636A1',
+    saltboxBlue: '#64748B',
     stomyShower: '#0487AF',
     transparentBlue: '#DAD7FE',
     ultimateGrey: '#A9A9A9',
     yellowOrange: '#FAB203',
+    volcanicSand: '#3F3F46',
+    washMe: '#F8FAFC',
     white: '#FFFFFF',
+    whiteSmoke: '#F5F5F5',
   },
 };
 

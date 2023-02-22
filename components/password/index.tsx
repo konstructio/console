@@ -1,36 +1,70 @@
-import React, { FunctionComponent, useState } from 'react';
-import { CopyToClipboard } from 'react-copy-to-clipboard';
-import { FiEye, FiEyeOff } from 'react-icons/fi';
+import React, { FunctionComponent, MouseEvent, useState } from 'react';
+import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
+import VisibilityOffOutlinedIcon from '@mui/icons-material/VisibilityOffOutlined';
+import { IconButton, InputBase, InputProps, styled } from '@mui/material';
 
-import Input from '../input';
+import TextField from '../textField';
 
-import { Container, CopyIcon, InputContainer } from './password.styled';
+import { InputAdornmentContainer } from './password.styled';
 
-export interface IPasswordProps {
-  canCopyValue?: boolean;
-  value: string;
+export const Input = styled(InputBase)(({ theme }) => ({
+  '& .MuiInputBase-input': {
+    'borderRadius': 4,
+    'border': '1px solid #ced4da',
+    'fontSize': 14,
+    'height': 18,
+    'lineHeight': 20,
+    'letterSpacing': 0.25,
+    'padding': '8px 40px 8px 12px',
+    'position': 'relative',
+    '&:focus': {
+      border: `1px solid ${theme.palette.primary.main}`,
+    },
+  },
+  '& .MuiInputBase-adornedEnd': {
+    'margin-bottom': '10px',
+  },
+}));
+
+export interface PasswordProps extends InputProps {
+  label: string;
+  helperText?: string;
 }
 
-const Password: FunctionComponent<IPasswordProps> = ({ canCopyValue, value, ...rest }) => {
+const Password: FunctionComponent<PasswordProps> = ({ label, helperText, ...props }) => {
   const [showPassword, setShowPassword] = useState<boolean>(false);
+
+  const handleClickShowPassword = () => setShowPassword((show: boolean) => !show);
+
+  const handleMouseDownPassword = (event: MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
+  };
+
   return (
-    <Container {...rest}>
-      <InputContainer showPassword={showPassword}>
-        <Input
-          type={showPassword ? 'text' : 'password'}
-          value={value}
-          readOnly
-          icon={showPassword ? FiEyeOff : FiEye}
-          onIconClick={() => setShowPassword(!showPassword)}
-        />
-      </InputContainer>
-      {canCopyValue && (
-        <CopyToClipboard text={value}>
-          <CopyIcon />
-        </CopyToClipboard>
-      )}
-    </Container>
+    <TextField
+      {...props}
+      label={label}
+      helperText={helperText}
+      type={showPassword ? 'text' : 'password'}
+      endAdornment={
+        <InputAdornmentContainer position="end">
+          <IconButton
+            aria-label="toggle password visibility"
+            onClick={handleClickShowPassword}
+            onMouseDown={handleMouseDownPassword}
+            edge="end"
+            disableRipple
+          >
+            {showPassword ? <VisibilityOffOutlinedIcon /> : <VisibilityOutlinedIcon />}
+          </IconButton>
+        </InputAdornmentContainer>
+      }
+    />
   );
 };
 
-export default Password;
+export const PasswordWithRef = React.forwardRef<unknown, PasswordProps>((props, ref) => {
+  return <Password inputRef={ref} {...props} />;
+});
+
+export default PasswordWithRef;
