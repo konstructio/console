@@ -32,6 +32,7 @@ export interface ServicesProps {
   argoWorkflowsUrl: string;
   atlantisUrl: string;
   domainName: string;
+  githubOwner: string;
   gitProvider: string;
   kubefirstVersion: string;
   useTelemetry: boolean;
@@ -48,6 +49,7 @@ const Services: FunctionComponent<ServicesProps> = ({
   argoWorkflowsUrl,
   atlantisUrl,
   domainName,
+  githubOwner,
   gitProvider,
   kubefirstVersion,
   useTelemetry,
@@ -73,9 +75,12 @@ const Services: FunctionComponent<ServicesProps> = ({
   const gitLinks = useMemo(
     () =>
       gitProvider === GIT_PROVIDERS.GITHUB
-        ? ['https://github.com/kubefirst/gitops', 'https://github.com/kubefirst/metaphor-frontend']
+        ? [
+            `https://github.com/${githubOwner}/gitops`,
+            `https://github.com/${githubOwner}/metaphor-frontend`,
+          ]
         : [`https://gitlab.${domainName}`],
-    [gitProvider, domainName],
+    [gitProvider, githubOwner, domainName],
   );
 
   const services = useMemo(
