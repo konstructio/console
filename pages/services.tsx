@@ -7,6 +7,7 @@ interface ServicesPageProps {
   argoWorkflowsUrl: string;
   atlantisUrl: string;
   domainName: string;
+  githubOwner: string;
   gitProvider: string;
   kubefirstVersion: string;
   useTelemetry: boolean;
@@ -27,12 +28,13 @@ export async function getServerSideProps() {
     ARGO_CD_URL = '',
     ARGO_WORKFLOWS_URL = '',
     ATLANTIS_URL = '',
+    GITHUB_OWNER = '',
     GIT_PROVIDER = '',
     DOMAIN_NAME = '',
     KUBEFIRST_VERSION = '',
-    METAPHOR_FRONT_DEV = '',
-    METAPHOR_FRONT_STAGING = '',
-    METAPHOR_FRONT_PROD = '',
+    METAPHOR_DEVELOPMENT_URL = '',
+    METAPHOR_STAGING_URL = '',
+    METAPHOR_PRODUCTION_URL = '',
     USE_TELEMETRY = '',
     VAULT_URL = '',
   } = process.env;
@@ -43,14 +45,15 @@ export async function getServerSideProps() {
       argoWorkflowsUrl: ARGO_WORKFLOWS_URL,
       atlantisUrl: ATLANTIS_URL,
       domainName: DOMAIN_NAME,
+      githubOwner: GITHUB_OWNER,
       gitProvider: GIT_PROVIDER,
       kubefirstVersion: KUBEFIRST_VERSION,
       useTelemetry: USE_TELEMETRY === 'true',
       vaultUrl: VAULT_URL,
       metaphor: {
-        development: METAPHOR_FRONT_DEV,
-        staging: METAPHOR_FRONT_STAGING,
-        production: METAPHOR_FRONT_PROD,
+        development: METAPHOR_DEVELOPMENT_URL,
+        staging: METAPHOR_STAGING_URL,
+        production: METAPHOR_PRODUCTION_URL,
       },
     },
   };
