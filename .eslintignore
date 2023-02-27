@@ -4,4 +4,3 @@ next.config.js
 storybook-static
 coverage
 .next
-server.js
