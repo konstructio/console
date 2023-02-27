@@ -1,4 +1,7 @@
+/* eslint-disable no-undef */
+/* eslint-disable @typescript-eslint/no-var-requires */
 const path = require('path');
+const http = require('http');
 
 const NextServer = require('next/dist/server/next-server').default;
 const defaultNextConfig = require('next/dist/server/config-shared').defaultConfig;
@@ -8,9 +11,7 @@ process.chdir(__dirname);
 
 const nextConfig = require('./next.config');
 
-const { HEARTBEAT_PERIOD_MINUTES } = process.env;
-
-const http = require('http');
+const { GIT_PROVIDER, HEARTBEAT_PERIOD_MINUTES } = process.env;
 
 process.on('SIGTERM', () => process.exit(0));
 process.on('SIGINT', () => process.exit(0));
@@ -21,6 +22,7 @@ const server = http.createServer(async (req, res) => {
   try {
     await handler(req, res);
   } catch (err) {
+    // eslint-disable-next-line no-console
     console.error(err);
     res.statusCode = 500;
     res.end('internal server error');
@@ -68,6 +70,7 @@ function sendHeartbeat() {
       });
     }
   } catch (error) {
+    // eslint-disable-next-line no-console
     console.log('error sending hearbeat event', error);
   }
 }
@@ -76,6 +79,7 @@ setInterval(sendHeartbeat, (HEARTBEAT_PERIOD_MINUTES || 20) * 60 * 1000);
 
 server.listen(currentPort, (err) => {
   if (err) {
+    // eslint-disable-next-line no-console
     console.error('Failed to start server', err);
     process.exit(1);
   }
@@ -98,5 +102,6 @@ server.listen(currentPort, (err) => {
   });
   handler = nextServer.getRequestHandler();
 
+  // eslint-disable-next-line no-console
   console.log('Kubefirst is Ready on port', currentPort);
 });
