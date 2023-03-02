@@ -4,6 +4,7 @@ import type { AppProps } from 'next/app';
 import Head from 'next/head';
 import { ThemeProvider as ThemeProviderMUI } from '@mui/material';
 import styled, { ThemeProvider } from 'styled-components';
+import { useRouter } from 'next/router';
 
 import themeMUI from '../theme/muiTheme';
 import theme from '../theme';
@@ -34,6 +35,9 @@ export const Content = styled.div`
 
 export default function App({ Component, ...rest }: AppProps) {
   const { store, props } = wrapper.useWrappedStore(rest);
+  const router = useRouter();
+
+  const shouldShowMenu = !router.asPath.includes('/login');
 
   return (
     <main id="app">
@@ -45,9 +49,9 @@ export default function App({ Component, ...rest }: AppProps) {
         <ThemeProviderMUI theme={themeMUI}>
           <ThemeProvider theme={theme}>
             <Layout {...props.pageProps}>
-              <Navigation />
+              {shouldShowMenu && <Navigation />}
               <Content>
-                <Header />
+                {shouldShowMenu && <Header />}
                 <Component {...props.pageProps} />
               </Content>
             </Layout>

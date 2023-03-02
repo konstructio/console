@@ -77,6 +77,13 @@ export const typographies: {
     letterSpacing: 0.5,
     textTransform: 'uppercase',
   },
+  button: {
+    fontSize: 14,
+    fontWeight: 600,
+    lineHeight: '20px',
+    letterSpacing: 0.25,
+    textTransform: 'inherit',
+  },
   buttonSmall: {
     fontSize: 14,
     fontWeight: 600,
@@ -164,6 +171,7 @@ declare module '@mui/material/styles' {
     labelLarge: React.CSSProperties;
     labelMedium: React.CSSProperties;
     labelSmall: React.CSSProperties;
+    button: React.CSSProperties;
     buttonSmall: React.CSSProperties;
     body1: React.CSSProperties;
     body2: React.CSSProperties;
@@ -186,6 +194,7 @@ declare module '@mui/material/styles' {
     labelLarge?: React.CSSProperties;
     labelMedium?: React.CSSProperties;
     labelSmall?: React.CSSProperties;
+    button?: React.CSSProperties;
     buttonSmall?: React.CSSProperties;
     body1?: React.CSSProperties;
     body2?: React.CSSProperties;

@@ -14,6 +14,7 @@ export type Variant =
   | 'labelLarge'
   | 'labelMedium'
   | 'labelSmall'
+  | 'button'
   | 'buttonSmall'
   | 'body1'
   | 'body2'
@@ -46,13 +47,13 @@ declare module '@mui/material/Typography' {
     labelLarge: true;
     labelMedium: true;
     labelSmall: true;
+    button: true;
     buttonSmall: true;
     body1: true;
     body2: true;
     body3: true;
     tooltip: true;
     caption: false;
-    button: false;
     overline: false;
   }
 }

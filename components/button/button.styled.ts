@@ -2,6 +2,8 @@ import styled from 'styled-components';
 import Button from '@mui/material/Button';
 
 export const Container = styled.div<{ disabled?: boolean }>`
+  width: 100%;
+
   ${({ disabled }) =>
     disabled &&
     `
@@ -50,4 +52,19 @@ export const ErrorButton = styled(Button)`
   &:hover {
     background-color: #b91c1c !important;
   }
+`;
+
+export const InheritButton = styled(Button)`
+  box-shadow: none !important;
+  border: 1px solid #e2e8f0;
+  color: ${({ theme }) => theme.colors.volcanicSand};
+  text-transform: capitalize !important;
+
+  ${({ disabled }) =>
+    disabled &&
+    `
+    background-color: #E4E4E7 !important;
+    color: #71717A !important;
+    cursor: not-allowed !important;
+  `};
 `;

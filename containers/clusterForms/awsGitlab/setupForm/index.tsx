@@ -1,18 +1,16 @@
 import React, { FunctionComponent } from 'react';
-import { Control, FieldValues, UseFormWatch } from 'react-hook-form';
+import { Control } from 'react-hook-form';
 
 import ControlledAutocomplete from '../../../controlledFields/AutoComplete';
 import ControlledPassword from '../../../controlledFields/Password';
 import ControlledCheckbox from '../../../controlledFields/Checkbox';
 import { AWS_REGIONS } from '../../../../utils/region';
 import ControlledTextField from '../../../controlledFields/TextField';
+import { EMAIL_REGEX } from '../../../../utils/regex';
 
 export interface FormProps {
   control: Control;
-  watch: UseFormWatch<FieldValues>;
 }
-
-const EMAIL_REGEX = /.+@.+\..+/;
 
 const SetupForm: FunctionComponent<FormProps> = ({ control }) => {
   return (

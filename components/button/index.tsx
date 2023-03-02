@@ -1,16 +1,23 @@
 import React, { FunctionComponent } from 'react';
 import { ButtonProps } from '@mui/material';
 
-import { Container, PrimaryButton, SecondaryButton, ErrorButton } from './button.styled';
+import {
+  Container,
+  PrimaryButton,
+  SecondaryButton,
+  ErrorButton,
+  InheritButton,
+} from './button.styled';
 
 const BUTTONS_MAP = {
   ['primary']: PrimaryButton,
   ['secondary']: SecondaryButton,
   ['error']: ErrorButton,
+  ['inherit']: InheritButton,
 };
 
 export interface IButtonProps extends ButtonProps {
-  color: 'primary' | 'secondary' | 'error';
+  color: 'primary' | 'secondary' | 'error' | 'inherit';
 }
 
 const Button: FunctionComponent<IButtonProps> = ({ variant, color, disabled, ...rest }) => {

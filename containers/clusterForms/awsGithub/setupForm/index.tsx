@@ -13,13 +13,12 @@ import {
   selectIsValidToken,
 } from '../../../../redux/selectors/github.selector';
 import ControlledTextField from '../../../controlledFields/TextField';
+import { EMAIL_REGEX } from '../../../../utils/regex';
 
 export interface FormProps {
   control: Control;
   watch: UseFormWatch<FieldValues>;
 }
-
-const EMAIL_REGEX = /.+@.+\..+/;
 
 const SetupForm: FunctionComponent<FormProps> = ({ control }) => {
   const [hasTokenValue, setHasTokenValue] = useState<boolean>(false);
