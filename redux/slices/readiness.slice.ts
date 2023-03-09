@@ -13,16 +13,24 @@ export const initialState: ReadinessState = {
 const readiness = createSlice({
   name: 'readiness',
   initialState,
-  reducers: {},
+  reducers: {
+    setMetaphorValidSite(state, { payload }) {
+      state.metaphorValidSites?.push(payload.url);
+    },
+  },
   extraReducers(builder) {
     builder.addCase(checkReadiness.fulfilled, (state, action) => {
-      const { success, url } = action.payload;
+      if (action.payload?.url) {
+        const { success, url } = action.payload;
 
-      if (success) {
-        state.metaphorValidSites?.push(url);
+        if (success) {
+          state.metaphorValidSites?.push(url);
+        }
       }
     });
   },
 });
+
+export const { setMetaphorValidSite } = readiness.actions;
 
 export default readiness.reducer;
