@@ -2,7 +2,7 @@ import React from 'react';
 import Document, { DocumentContext } from 'next/document';
 import { ServerStyleSheet } from 'styled-components';
 
-export default class MetaphorDocument extends Document {
+export default class ConsoleDocument extends Document {
   static async getInitialProps(ctx: DocumentContext) {
     const sheet = new ServerStyleSheet();
     const originalRenderPage = ctx.renderPage;
