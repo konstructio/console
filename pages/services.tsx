@@ -8,6 +8,7 @@ interface ServicesPageProps {
   atlantisUrl: string;
   domainName: string;
   githubOwner: string;
+  gitlabOwner: string;
   gitProvider: string;
   kubefirstVersion: string;
   useTelemetry: boolean;
@@ -28,9 +29,10 @@ export async function getServerSideProps() {
     ARGO_CD_URL = '',
     ARGO_WORKFLOWS_URL = '',
     ATLANTIS_URL = '',
-    GITHUB_OWNER = '',
-    GIT_PROVIDER = '',
     DOMAIN_NAME = '',
+    GIT_PROVIDER = '',
+    GITHUB_OWNER = '',
+    GITLAB_OWNER = '',
     KUBEFIRST_VERSION = '',
     METAPHOR_DEVELOPMENT_URL = '',
     METAPHOR_STAGING_URL = '',
@@ -46,6 +48,7 @@ export async function getServerSideProps() {
       atlantisUrl: ATLANTIS_URL,
       domainName: DOMAIN_NAME,
       githubOwner: GITHUB_OWNER,
+      gitlabOwner: GITLAB_OWNER,
       gitProvider: GIT_PROVIDER,
       kubefirstVersion: KUBEFIRST_VERSION,
       useTelemetry: USE_TELEMETRY === 'true',

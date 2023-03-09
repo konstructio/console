@@ -33,6 +33,7 @@ export interface ServicesProps {
   atlantisUrl: string;
   domainName: string;
   githubOwner: string;
+  gitlabOwner: string;
   gitProvider: string;
   kubefirstVersion: string;
   useTelemetry: boolean;
@@ -50,6 +51,7 @@ const Services: FunctionComponent<ServicesProps> = ({
   atlantisUrl,
   domainName,
   githubOwner,
+  gitlabOwner,
   gitProvider,
   kubefirstVersion,
   useTelemetry,
@@ -73,28 +75,30 @@ const Services: FunctionComponent<ServicesProps> = ({
   );
 
   const gitLinks = useMemo(
-    () =>
-      gitProvider === GIT_PROVIDERS.GITHUB
-        ? [
-            `https://github.com/${githubOwner}/gitops`,
-            `https://github.com/${githubOwner}/metaphor-frontend`,
-          ]
-        : [`https://gitlab.${domainName}`],
-    [gitProvider, githubOwner, domainName],
+    () => [
+      `https://${gitProvider}.com/${githubOwner || gitlabOwner}/gitops`,
+      `https://${gitProvider}.com/${githubOwner || gitlabOwner}/metaphor`,
+    ],
+    [gitProvider, githubOwner, gitlabOwner],
   );
 
   const services = useMemo(
     () => [
       {
+        name: gitTileProvider,
+        description: `The ${gitTileProvider} repository contains all the Infrastructure as Code and GitOps configurations.`,
+        links: gitLinks,
+      },
+      {
+        name: 'Vault',
+        description: `Kubefirst’s secrets manager and identity provider.`,
+        links: [vaultUrl],
+      },
+      {
         name: 'Argo CD',
         description: `A GitOps oriented continuous delivery tool for managing all of our applications across our
   kubernetes clusters.`,
         links: [argoUrl],
-      },
-      {
-        name: gitTileProvider,
-        description: `The ${gitTileProvider} repository contains all the Infrastructure as Code and GitOps configurations.`,
-        links: gitLinks,
       },
       {
         name: 'Argo Workflows',
@@ -105,11 +109,6 @@ const Services: FunctionComponent<ServicesProps> = ({
         name: 'Atlantis',
         description: `Kubefirst manages terraform workflows with atlantis automation.`,
         links: [atlantisUrl],
-      },
-      {
-        name: 'Vault',
-        description: `Kubefirst’s secrets manager and identity provider.`,
-        links: [vaultUrl],
       },
     ],
     [argoUrl, argoWorkflowsUrl, atlantisUrl, gitLinks, gitTileProvider, vaultUrl],
