@@ -50,20 +50,19 @@ function sendHeartbeat() {
     });
 
     if (isTelemetryEnabled) {
-      const userId = DOMAIN_NAME || CLUSTER_ID;
       analytics.identify({
-        userId,
+        userId: CLUSTER_ID,
       });
 
       analytics.track({
-        userId,
+        userId: CLUSTER_ID,
         event: 'kubefirst.console.healthz',
         properties: {
           cli_version: KUBEFIRST_VERSION,
           cloud_provider: CLOUD,
-          cluster_id: userId,
+          cluster_id: CLUSTER_ID,
           cluster_type: CLUSTER_TYPE,
-          domain: userId,
+          domain: DOMAIN_NAME,
           git_provider: GIT_PROVIDER,
           kubefirst_team: KUBEFIRST_TEAM,
         },
