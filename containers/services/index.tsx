@@ -119,9 +119,9 @@ const Services: FunctionComponent<ServicesProps> = ({
       name: 'Metaphor',
       description: `A multi-environment demonstration space for frontend application best practices that’s easy to apply to other projects.`,
       links: [
-        { url: metaphor?.development, color: '#E2E8F0' },
-        { url: metaphor?.staging, color: '#FCD34D' },
-        { url: metaphor?.production, color: '#BBF7D0' },
+        { url: metaphor?.development },
+        { url: metaphor?.staging },
+        { url: metaphor?.production },
       ],
     }),
     [metaphor?.development, metaphor?.production, metaphor?.staging],
@@ -177,8 +177,8 @@ const Services: FunctionComponent<ServicesProps> = ({
         >
           <MetaphorAppsContainer>
             <MetaphorColumn>
-              {metaphorTile.links.map(({ color, url }) => (
-                <AppIcon key={url} color={color}>
+              {metaphorTile.links.map(({ url }) => (
+                <AppIcon key={url} color={metaphorUrls.includes(url) ? '#BBF7D0' : '#E2E8F0'}>
                   <AppConnector />
                 </AppIcon>
               ))}
