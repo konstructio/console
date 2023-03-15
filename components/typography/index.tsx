@@ -1,5 +1,6 @@
 import React, { FunctionComponent } from 'react';
 import { Typography as TypographyMUI, TypographyProps } from '@mui/material';
+import styled from 'styled-components';
 
 export type Variant =
   | 'h1'
@@ -29,7 +30,7 @@ const Typography: FunctionComponent<TypographyProps> = ({ variant, ...props }) =
   return <TypographyMUI variant={variant as Variant} {...props} />;
 };
 
-export default Typography;
+export default styled(Typography)``;
 
 // Update the Typography's variant prop options
 declare module '@mui/material/Typography' {

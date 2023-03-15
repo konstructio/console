@@ -8,12 +8,20 @@ import HelpIcon from '@mui/icons-material/Help';
 import GridViewOutlinedIcon from '@mui/icons-material/GridViewOutlined';
 import { BsSlack } from 'react-icons/bs';
 import Link from 'next/link';
+import styled from 'styled-components';
+import { media } from 'theme/media/index';
 
 import Typography from '../typography/';
 import { useAppSelector } from '../../redux/store';
 import { selectKubefirstVersion } from '../../redux/selectors/config.selector';
 
-import { Container, FooterContainer, MenuContainer, MenuItem, Title } from './navigation.styled';
+import {
+  Container,
+  FooterContainer,
+  MenuContainer,
+  MenuItem as Item,
+  Title,
+} from './navigation.styled';
 
 const ROUTES = [
   // {
@@ -51,11 +59,7 @@ const FOOTER_ITEMS = [
   },
 ];
 
-export interface NavigationProps {
-  collapsible?: boolean;
-}
-
-const Navigation: FunctionComponent<NavigationProps> = ({ collapsible }) => {
+const Navigation: FunctionComponent = () => {
   const [domLoaded, setDomLoaded] = useState(false);
   const { asPath } = useRouter();
   const kubefirstVersion = useAppSelector(selectKubefirstVersion());
@@ -76,32 +80,25 @@ const Navigation: FunctionComponent<NavigationProps> = ({ collapsible }) => {
   }, []);
 
   return (
-    <Container collapsible={collapsible}>
+    <Container>
       <div>
-        <Title collapsible={collapsible}>
-          <Image
-            alt="k1-image"
-            src={collapsible ? '/static/ray.svg' : '/static/title.svg'}
-            height={40}
-            width={collapsible ? 48 : 160}
-          />
+        <KubeTitle>
+          <Image alt="k1-image" src={'/static/ray.svg'} height={40} width={48} id="ray" />
+          {/* Only visible above md breakpoint 👇 */}
+          <Image alt="k1-image" src={'/static/title.svg'} height={40} width={160} id="title" />
           {kubefirstVersion && (
-            <Typography
-              variant="labelSmall"
-              color="#ABADC6"
-              sx={{ position: 'absolute', left: 70, bottom: -10 }}
-            >
+            <Typography variant="labelSmall" color="#ABADC6">
               {`V${kubefirstVersion}`}
             </Typography>
           )}
-        </Title>
+        </KubeTitle>
         {domLoaded && (
           <MenuContainer>
             {ROUTES.map(({ icon, path, title }) => (
               <Link href={path} key={path}>
-                <MenuItem isActive={isActive(path)} collapsible={collapsible}>
+                <MenuItem isActive={isActive(path)}>
                   {icon}
-                  {!collapsible && <Typography variant="body1">{title}</Typography>}
+                  <Typography variant="body1">{title}</Typography>
                 </MenuItem>
               </Link>
             ))}
@@ -111,9 +108,9 @@ const Navigation: FunctionComponent<NavigationProps> = ({ collapsible }) => {
       <FooterContainer>
         {FOOTER_ITEMS.map(({ icon, path, title }) => (
           <Link href={path} key={path} target="_blank">
-            <MenuItem collapsible={collapsible}>
+            <MenuItem>
               {icon}
-              {!collapsible && <Typography variant="body1">{title}</Typography>}
+              <Typography variant="body1">{title}</Typography>
             </MenuItem>
           </Link>
         ))}
@@ -123,3 +120,41 @@ const Navigation: FunctionComponent<NavigationProps> = ({ collapsible }) => {
 };
 
 export default Navigation;
+
+const KubeTitle = styled(Title)`
+  #title {
+    display: none;
+  }
+
+  ${media.greaterThan('md')`
+    #ray {
+      display: none;
+    }
+    #title {
+      display: block;
+    } 
+  `}
+
+  ${media.greaterThan('md')`
+    ${Typography}{
+      margin-left: 55px;
+    } 
+  `}
+`;
+
+const MenuItem = styled(Item)`
+  justify-content: center;
+  transition: width 0.5s ease;
+
+  ${Typography} {
+    display: none;
+  }
+
+  ${media.greaterThan('md')`
+    justify-content: flex-start;
+
+    ${Typography}{
+      display: block;
+    } 
+  `}
+`;
