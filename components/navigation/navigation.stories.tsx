@@ -23,11 +23,4 @@ const DefaultTemplate: ComponentStory<typeof Navigation> = () => (
   </Wrapper>
 );
 
-const CollapsibleTemplate: ComponentStory<typeof Navigation> = () => (
-  <Wrapper>
-    <Navigation collapsible />
-  </Wrapper>
-);
-
 export const Default = DefaultTemplate.bind({});
-export const Collapsible = CollapsibleTemplate.bind({});

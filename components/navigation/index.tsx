@@ -9,11 +9,18 @@ import GridViewOutlinedIcon from '@mui/icons-material/GridViewOutlined';
 import { BsSlack } from 'react-icons/bs';
 import Link from 'next/link';
 
-import Typography from '../typography/';
 import { useAppSelector } from '../../redux/store';
 import { selectKubefirstVersion } from '../../redux/selectors/config.selector';
 
-import { Container, FooterContainer, MenuContainer, MenuItem, Title } from './navigation.styled';
+import {
+  Container,
+  FooterContainer,
+  MenuContainer,
+  KubefirstTitle,
+  KubefirstVersion,
+  MenuItem,
+  Title,
+} from './navigation.styled';
 
 const ROUTES = [
   // {
@@ -51,11 +58,7 @@ const FOOTER_ITEMS = [
   },
 ];
 
-export interface NavigationProps {
-  collapsible?: boolean;
-}
-
-const Navigation: FunctionComponent<NavigationProps> = ({ collapsible }) => {
+const Navigation: FunctionComponent = () => {
   const [domLoaded, setDomLoaded] = useState(false);
   const { asPath } = useRouter();
   const kubefirstVersion = useAppSelector(selectKubefirstVersion());
@@ -76,32 +79,25 @@ const Navigation: FunctionComponent<NavigationProps> = ({ collapsible }) => {
   }, []);
 
   return (
-    <Container collapsible={collapsible}>
+    <Container>
       <div>
-        <Title collapsible={collapsible}>
-          <Image
-            alt="k1-image"
-            src={collapsible ? '/static/ray.svg' : '/static/title.svg'}
-            height={40}
-            width={collapsible ? 48 : 160}
-          />
+        <KubefirstTitle>
+          <Image alt="k1-image" src={'/static/ray.svg'} height={40} width={48} id="ray" />
+          {/* Only visible above md breakpoint 👇 */}
+          <Image alt="k1-image" src={'/static/title.svg'} height={40} width={160} id="title" />
           {kubefirstVersion && (
-            <Typography
-              variant="labelSmall"
-              color="#ABADC6"
-              sx={{ position: 'absolute', left: 70, bottom: -10 }}
-            >
+            <KubefirstVersion variant="labelSmall" color="#ABADC6">
               {`V${kubefirstVersion}`}
-            </Typography>
+            </KubefirstVersion>
           )}
-        </Title>
+        </KubefirstTitle>
         {domLoaded && (
           <MenuContainer>
             {ROUTES.map(({ icon, path, title }) => (
               <Link href={path} key={path}>
-                <MenuItem isActive={isActive(path)} collapsible={collapsible}>
+                <MenuItem isActive={isActive(path)}>
                   {icon}
-                  {!collapsible && <Typography variant="body1">{title}</Typography>}
+                  <Title variant="body1">{title}</Title>
                 </MenuItem>
               </Link>
             ))}
@@ -111,9 +107,9 @@ const Navigation: FunctionComponent<NavigationProps> = ({ collapsible }) => {
       <FooterContainer>
         {FOOTER_ITEMS.map(({ icon, path, title }) => (
           <Link href={path} key={path} target="_blank">
-            <MenuItem collapsible={collapsible}>
+            <MenuItem>
               {icon}
-              {!collapsible && <Typography variant="body1">{title}</Typography>}
+              <Title variant="body1">{title}</Title>
             </MenuItem>
           </Link>
         ))}

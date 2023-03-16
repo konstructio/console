@@ -1,13 +1,20 @@
-import styled from 'styled-components';
+import Typography from 'components/typography/index';
+import styled, { css } from 'styled-components';
+import { media } from 'theme/media/index';
 
-export const Container = styled.nav<{ collapsible?: boolean }>`
+export const Container = styled.nav`
   background-color: ${({ theme }) => theme.colors.moonlessMystery};
   border-radius: 0px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   height: 100vh;
-  width: ${({ collapsible }) => (collapsible ? '72px' : '256px')};
+  width: 72px;
+  transition: width 0.5s ease;
+
+  ${media.greaterThan('md')`
+    width: 256px;
+  `}
 `;
 
 export const FooterContainer = styled.div`
@@ -32,8 +39,9 @@ export const MenuContainer = styled.div`
   }
 `;
 
-export const MenuItem = styled.div<{ isActive?: boolean; collapsible?: boolean }>`
+export const MenuItem = styled.div<{ isActive?: boolean }>`
   align-items: center;
+  justify-content: center;
   border-radius: 12px;
   color: #9ea2c6;
   cursor: pointer;
@@ -41,8 +49,9 @@ export const MenuItem = styled.div<{ isActive?: boolean; collapsible?: boolean }
   gap: 18px;
   height: 24px;
   margin: 0 8px;
-  padding: 12px 18px;
-  width: 204px;
+  padding: 10px;
+  width: 40px;
+  transition: width 0.5s ease;
 
   &:hover {
     background-color: #252a41;
@@ -55,33 +64,58 @@ export const MenuItem = styled.div<{ isActive?: boolean; collapsible?: boolean }
 
   ${({ isActive }) =>
     isActive &&
-    `
+    css`
       background-color: #252a41;
       color: white;
 
       svg {
         color: white;
       }
-  `}
+    `}
 
-  ${({ collapsible }) =>
-    collapsible &&
-    `
-    justify-content: center;
-    padding: 10px;
-    width: 40px;
+  ${media.greaterThan('md')`
+    padding: 12px 18px;
+    width: 204px;
+    justify-content: flex-start;
   `}
 `;
 
-export const Title = styled.div<{ collapsible?: boolean }>`
-  padding: 24px 16px 0;
-  position: relative;
-  margin-bottom: 32px;
+export const Title = styled(Typography)`
+  display: none;
 
-  ${({ collapsible }) =>
-    collapsible &&
-    `
-    margin-bottom: 8px;
-    padding: 12px;
+  ${media.greaterThan('md')`
+      display: block;
+  `}
+`;
+
+export const KubefirstVersion = styled(Typography)``;
+
+export const KubefirstTitle = styled.div`
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 8px;
+  padding: 12px;
+
+  #title {
+    display: none;
+  }
+
+  ${media.greaterThan('md')`
+    margin-bottom: 32px;
+    padding: 24px 16px 0;
+    align-items: flex-start;
+
+    ${KubefirstVersion}{
+      margin-left: 55px;
+    } 
+
+    #ray {
+      display: none;
+    }
+    #title {
+      display: block;
+    } 
   `}
 `;
