@@ -8,10 +8,7 @@ import HelpIcon from '@mui/icons-material/Help';
 import GridViewOutlinedIcon from '@mui/icons-material/GridViewOutlined';
 import { BsSlack } from 'react-icons/bs';
 import Link from 'next/link';
-import styled from 'styled-components';
-import { media } from 'theme/media/index';
 
-import Typography from '../typography/';
 import { useAppSelector } from '../../redux/store';
 import { selectKubefirstVersion } from '../../redux/selectors/config.selector';
 
@@ -19,7 +16,9 @@ import {
   Container,
   FooterContainer,
   MenuContainer,
-  MenuItem as Item,
+  KubefirstTitle,
+  KubefirstVersion,
+  MenuItem,
   Title,
 } from './navigation.styled';
 
@@ -87,9 +86,9 @@ const Navigation: FunctionComponent = () => {
           {/* Only visible above md breakpoint 👇 */}
           <Image alt="k1-image" src={'/static/title.svg'} height={40} width={160} id="title" />
           {kubefirstVersion && (
-            <Typography variant="labelSmall" color="#ABADC6">
+            <KubefirstVersion variant="labelSmall" color="#ABADC6">
               {`V${kubefirstVersion}`}
-            </Typography>
+            </KubefirstVersion>
           )}
         </KubefirstTitle>
         {domLoaded && (
@@ -98,7 +97,7 @@ const Navigation: FunctionComponent = () => {
               <Link href={path} key={path}>
                 <MenuItem isActive={isActive(path)}>
                   {icon}
-                  <Typography variant="body1">{title}</Typography>
+                  <Title variant="body1">{title}</Title>
                 </MenuItem>
               </Link>
             ))}
@@ -110,7 +109,7 @@ const Navigation: FunctionComponent = () => {
           <Link href={path} key={path} target="_blank">
             <MenuItem>
               {icon}
-              <Typography variant="body1">{title}</Typography>
+              <Title variant="body1">{title}</Title>
             </MenuItem>
           </Link>
         ))}
@@ -120,39 +119,3 @@ const Navigation: FunctionComponent = () => {
 };
 
 export default Navigation;
-
-const KubefirstTitle = styled(Title)`
-  #title {
-    display: none;
-  }
-
-  ${media.greaterThan('md')`
-    ${Typography}{
-      margin-left: 55px;
-    } 
-
-    #ray {
-      display: none;
-    }
-    #title {
-      display: block;
-    } 
-  `}
-`;
-
-const MenuItem = styled(Item)`
-  justify-content: center;
-  transition: width 0.5s ease;
-
-  ${Typography} {
-    display: none;
-  }
-
-  ${media.greaterThan('md')`
-    justify-content: flex-start;
-
-    ${Typography}{
-      display: block;
-    } 
-  `}
-`;

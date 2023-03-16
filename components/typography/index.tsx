@@ -30,7 +30,7 @@ const Typography: FunctionComponent<TypographyProps> = ({ variant, ...props }) =
   return <TypographyMUI variant={variant as Variant} {...props} />;
 };
 
-export default styled(Typography)``;
+export default Typography;
 
 // Update the Typography's variant prop options
 declare module '@mui/material/Typography' {

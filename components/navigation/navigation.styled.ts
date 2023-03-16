@@ -1,3 +1,4 @@
+import Typography from 'components/typography/index';
 import styled, { css } from 'styled-components';
 import { media } from 'theme/media/index';
 
@@ -40,6 +41,7 @@ export const MenuContainer = styled.div`
 
 export const MenuItem = styled.div<{ isActive?: boolean }>`
   align-items: center;
+  justify-content: center;
   border-radius: 12px;
   color: #9ea2c6;
   cursor: pointer;
@@ -49,6 +51,7 @@ export const MenuItem = styled.div<{ isActive?: boolean }>`
   margin: 0 8px;
   padding: 10px;
   width: 40px;
+  transition: width 0.5s ease;
 
   &:hover {
     background-color: #252a41;
@@ -77,7 +80,17 @@ export const MenuItem = styled.div<{ isActive?: boolean }>`
   `}
 `;
 
-export const Title = styled.div`
+export const Title = styled(Typography)`
+  display: none;
+
+  ${media.greaterThan('md')`
+      display: block;
+  `}
+`;
+
+export const KubefirstVersion = styled(Typography)``;
+
+export const KubefirstTitle = styled.div`
   position: relative;
   display: flex;
   flex-direction: column;
@@ -85,9 +98,24 @@ export const Title = styled.div`
   margin-bottom: 8px;
   padding: 12px;
 
+  #title {
+    display: none;
+  }
+
   ${media.greaterThan('md')`
     margin-bottom: 32px;
     padding: 24px 16px 0;
     align-items: flex-start;
+
+    ${KubefirstVersion}{
+      margin-left: 55px;
+    } 
+
+    #ray {
+      display: none;
+    }
+    #title {
+      display: block;
+    } 
   `}
 `;
