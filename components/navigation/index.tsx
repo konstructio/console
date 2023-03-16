@@ -82,7 +82,7 @@ const Navigation: FunctionComponent = () => {
   return (
     <Container>
       <div>
-        <KubeTitle>
+        <KubefirstTitle>
           <Image alt="k1-image" src={'/static/ray.svg'} height={40} width={48} id="ray" />
           {/* Only visible above md breakpoint 👇 */}
           <Image alt="k1-image" src={'/static/title.svg'} height={40} width={160} id="title" />
@@ -91,7 +91,7 @@ const Navigation: FunctionComponent = () => {
               {`V${kubefirstVersion}`}
             </Typography>
           )}
-        </KubeTitle>
+        </KubefirstTitle>
         {domLoaded && (
           <MenuContainer>
             {ROUTES.map(({ icon, path, title }) => (
@@ -121,23 +121,21 @@ const Navigation: FunctionComponent = () => {
 
 export default Navigation;
 
-const KubeTitle = styled(Title)`
+const KubefirstTitle = styled(Title)`
   #title {
     display: none;
   }
 
   ${media.greaterThan('md')`
+    ${Typography}{
+      margin-left: 55px;
+    } 
+
     #ray {
       display: none;
     }
     #title {
       display: block;
-    } 
-  `}
-
-  ${media.greaterThan('md')`
-    ${Typography}{
-      margin-left: 55px;
     } 
   `}
 `;

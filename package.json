@@ -1,6 +1,6 @@
 {
   "name": "k1-console",
-  "version": "2.1.5",
+  "version": "2.1.6",
   "private": true,
   "scripts": {
     "check-types": "tsc -p tsconfig.json",
@@ -98,5 +98,9 @@
   },
   "resolutions": {
     "styled-components": "^5"
+  },
+  "volta": {
+    "node": "16.19.1",
+    "yarn": "4.0.0-rc.40"
   }
 }
