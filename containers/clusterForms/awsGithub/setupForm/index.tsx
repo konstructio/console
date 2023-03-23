@@ -30,8 +30,8 @@ const SetupForm: FunctionComponent<FormProps> = ({ control }) => {
 
   const handleGitHubTokenOnBlur = (token: string) => {
     setHasTokenValue(!!token);
-    dispatch(getUser(token)).unwrap();
-    dispatch(getGitUserOrganizations(token)).unwrap();
+    dispatch(getUser(token));
+    dispatch(getGitUserOrganizations(token));
   };
 
   return (

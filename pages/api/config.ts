@@ -17,11 +17,11 @@ export default function handler(req: NextApiRequest, res: NextApiResponse<Config
     GITHUB_OWNER = '',
     GITLAB_OWNER = '',
     KUBEFIRST_VERSION = '',
-    VAULT_URL = '',
     METAPHOR_DEVELOPMENT_URL = '',
     METAPHOR_STAGING_URL = '',
     METAPHOR_PRODUCTION_URL = '',
     USE_TELEMETRY = '',
+    VAULT_URL = '',
   } = process.env;
 
   res.status(200).json({

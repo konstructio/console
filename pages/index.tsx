@@ -1,19 +1,52 @@
+import React, { FunctionComponent, useEffect, useState } from 'react';
+import { PostHog } from 'posthog-node';
+import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
-import { FunctionComponent, useEffect } from 'react';
+import useFeatureFlag from 'hooks/useFeatureFlag';
 
-// import Dashboard from '../containers/dashboard';
+import { useAppDispatch } from '../redux/store';
+import { setFeatureFlags } from '../redux/slices/featureFlags.slice';
+import Dashboard from '../containers/dashboard';
 
-const DashboardPage: FunctionComponent = () => {
+export interface DashboardPageProps {
+  flags: { [key: string]: boolean };
+}
+
+const DashboardPage: FunctionComponent<DashboardPageProps> = ({ flags }) => {
   const { replace } = useRouter();
+  const dispatch = useAppDispatch();
+  const { isEnabled: clusterManagementEnabled, flagsAreReady } =
+    useFeatureFlag('cluster-management');
 
   useEffect(() => {
-    // redirect fallback to services
-    replace('/services');
-  });
+    dispatch(setFeatureFlags(flags));
+  }, [dispatch, flags]);
 
-  return null;
+  useEffect(() => {
+    if (!flagsAreReady) {
+      return;
+    }
 
-  // return <Dashboard />;
+    if (!clusterManagementEnabled) {
+      replace('/services');
+    }
+  }, [clusterManagementEnabled, flagsAreReady, replace]);
+
+  return clusterManagementEnabled ? <Dashboard /> : null;
+};
+
+export const getServerSideProps: GetServerSideProps = async () => {
+  const { POSTHOG_KEY = '' } = process.env;
+
+  const client = new PostHog(POSTHOG_KEY);
+
+  const flags = await client.getAllFlags('');
+
+  return {
+    props: {
+      flags,
+    },
+  };
 };
 
 export default DashboardPage;

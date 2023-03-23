@@ -9,6 +9,7 @@ import configSlice from './slices/config.slice';
 import installationSlice from './slices/installation.slice';
 import githubSlice from './slices/github.slice';
 import readinesSlice from './slices/readiness.slice';
+import featureFlagsSlice from './slices/featureFlags.slice';
 
 export const makeStore = () =>
   configureStore({
@@ -18,6 +19,7 @@ export const makeStore = () =>
       installation: installationSlice,
       github: githubSlice,
       readiness: readinesSlice,
+      featureFlags: featureFlagsSlice,
     },
     middleware: (gDM) => gDM().concat(consoleApi.middleware),
   });

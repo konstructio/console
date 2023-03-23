@@ -5,6 +5,7 @@ import { Box } from '@mui/material';
 export const Form = styled(Box)`
   display: flex;
   flex-direction: column;
+  height: calc(100% - 64px);
   width: 100%;
 `;
 

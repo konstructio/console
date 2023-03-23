@@ -1,9 +1,8 @@
 import { createSelector } from '@reduxjs/toolkit';
 
-import { GithubState } from '../slices/github.slice';
 import { RootState } from '../store';
 
-const githubSelector = (state: RootState): GithubState => state.github;
+const githubSelector = (state: RootState) => state.github;
 
 export const selectGithubUser = () => createSelector(githubSelector, ({ user }) => user || {});
 

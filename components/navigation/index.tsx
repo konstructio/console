@@ -1,9 +1,8 @@
-import React, { FunctionComponent, useEffect, useState } from 'react';
+import React, { FunctionComponent, useEffect, useMemo, useState } from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import HelpIcon from '@mui/icons-material/Help';
-// import HomeIcon from '@mui/icons-material/Home';
-// import ScatterPlotIcon from '@mui/icons-material/ScatterPlot';
+import ScatterPlotIcon from '@mui/icons-material/ScatterPlot';
 // import PeopleOutlineSharpIcon from '@mui/icons-material/PeopleOutlineSharp';
 import GridViewOutlinedIcon from '@mui/icons-material/GridViewOutlined';
 import { BsSlack } from 'react-icons/bs';
@@ -11,6 +10,7 @@ import Link from 'next/link';
 
 import { useAppSelector } from '../../redux/store';
 import { selectKubefirstVersion } from '../../redux/selectors/config.selector';
+import useFeatureFlag from '../../hooks/useFeatureFlag';
 
 import {
   Container,
@@ -21,29 +21,6 @@ import {
   MenuItem,
   Title,
 } from './navigation.styled';
-
-const ROUTES = [
-  // {
-  //   icon: <HomeIcon />,
-  //   path: '/',
-  //   title: 'Home',
-  // },
-  // {
-  //   icon: <ScatterPlotIcon />,
-  //   path: '/',
-  //   title: 'Cluster Management',
-  // },
-  {
-    icon: <GridViewOutlinedIcon />,
-    path: '/services',
-    title: 'Services',
-  },
-  // {
-  //   icon: <PeopleOutlineSharpIcon />,
-  //   path: '/users',
-  //   title: 'Users',
-  // },
-];
 
 const FOOTER_ITEMS = [
   {
@@ -62,6 +39,26 @@ const Navigation: FunctionComponent = () => {
   const [domLoaded, setDomLoaded] = useState(false);
   const { asPath } = useRouter();
   const kubefirstVersion = useAppSelector(selectKubefirstVersion());
+  const { isEnabled, flagsAreReady } = useFeatureFlag('cluster-management');
+
+  const routes = useMemo(
+    () =>
+      [
+        {
+          icon: <ScatterPlotIcon />,
+          path: '/',
+          title: 'Cluster Management',
+          isEnabled: flagsAreReady && isEnabled,
+        },
+        {
+          icon: <GridViewOutlinedIcon />,
+          path: '/services',
+          title: 'Services',
+          isEnabled: true,
+        },
+      ].filter(({ isEnabled }) => isEnabled),
+    [flagsAreReady, isEnabled],
+  );
 
   const isActive = (route: string) => {
     if (typeof window !== 'undefined') {
@@ -93,7 +90,7 @@ const Navigation: FunctionComponent = () => {
         </KubefirstTitle>
         {domLoaded && (
           <MenuContainer>
-            {ROUTES.map(({ icon, path, title }) => (
+            {routes.map(({ icon, path, title }) => (
               <Link href={path} key={path}>
                 <MenuItem isActive={isActive(path)}>
                   {icon}
