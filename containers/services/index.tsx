@@ -31,6 +31,7 @@ export interface ServicesProps {
   argoUrl: string;
   argoWorkflowsUrl: string;
   atlantisUrl: string;
+  cloud: string;
   domainName: string;
   githubOwner: string;
   gitlabOwner: string;
@@ -49,6 +50,7 @@ const Services: FunctionComponent<ServicesProps> = ({
   argoUrl,
   argoWorkflowsUrl,
   atlantisUrl,
+  cloud,
   domainName,
   githubOwner,
   gitlabOwner,
@@ -82,6 +84,11 @@ const Services: FunctionComponent<ServicesProps> = ({
     [gitProvider, githubOwner, gitlabOwner],
   );
 
+  const ssoArgoUrl = useMemo(
+    () => `${argoUrl}/auth/login?return_url=${encodeURIComponent(`${argoUrl}/applications/`)}`,
+    [argoUrl],
+  );
+
   const services = useMemo(
     () => [
       {
@@ -98,7 +105,7 @@ const Services: FunctionComponent<ServicesProps> = ({
         name: 'Argo CD',
         description: `A GitOps oriented continuous delivery tool for managing all of our applications across our
   kubernetes clusters.`,
-        links: [argoUrl],
+        links: [cloud !== 'k3d' ? ssoArgoUrl : argoUrl],
       },
       {
         name: 'Argo Workflows',
@@ -111,7 +118,16 @@ const Services: FunctionComponent<ServicesProps> = ({
         links: [atlantisUrl],
       },
     ],
-    [argoUrl, argoWorkflowsUrl, atlantisUrl, gitLinks, gitTileProvider, vaultUrl],
+    [
+      argoUrl,
+      argoWorkflowsUrl,
+      atlantisUrl,
+      cloud,
+      gitLinks,
+      gitTileProvider,
+      ssoArgoUrl,
+      vaultUrl,
+    ],
   );
 
   const metaphorTile = useMemo(

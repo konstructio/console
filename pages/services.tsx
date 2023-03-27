@@ -6,6 +6,7 @@ interface ServicesPageProps {
   argoUrl: string;
   argoWorkflowsUrl: string;
   atlantisUrl: string;
+  cloud: string;
   domainName: string;
   githubOwner: string;
   gitlabOwner: string;
@@ -29,6 +30,7 @@ export async function getServerSideProps() {
     ARGO_CD_URL = '',
     ARGO_WORKFLOWS_URL = '',
     ATLANTIS_URL = '',
+    CLOUD = '',
     DOMAIN_NAME = '',
     GIT_PROVIDER = '',
     GITHUB_OWNER = '',
@@ -46,6 +48,7 @@ export async function getServerSideProps() {
       argoUrl: ARGO_CD_URL,
       argoWorkflowsUrl: ARGO_WORKFLOWS_URL,
       atlantisUrl: ATLANTIS_URL,
+      cloud: CLOUD,
       domainName: DOMAIN_NAME,
       githubOwner: GITHUB_OWNER,
       gitlabOwner: GITLAB_OWNER,
