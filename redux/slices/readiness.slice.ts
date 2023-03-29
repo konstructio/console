@@ -3,19 +3,19 @@ import { createSlice } from '@reduxjs/toolkit';
 import { checkReadiness } from '../actions/readiness.action';
 
 export interface ReadinessState {
-  metaphorValidSites?: Array<string>;
+  availableSites: Array<string>;
 }
 
 export const initialState: ReadinessState = {
-  metaphorValidSites: [],
+  availableSites: [],
 };
 
 const readiness = createSlice({
   name: 'readiness',
   initialState,
   reducers: {
-    setMetaphorValidSite(state, { payload }) {
-      state.metaphorValidSites?.push(payload.url);
+    setAvailableSite(state, { payload }) {
+      state.availableSites?.push(payload.url);
     },
   },
   extraReducers(builder) {
@@ -24,13 +24,13 @@ const readiness = createSlice({
         const { success, url } = action.payload;
 
         if (success) {
-          state.metaphorValidSites?.push(url);
+          state.availableSites?.push(url);
         }
       }
     });
   },
 });
 
-export const { setMetaphorValidSite } = readiness.actions;
+export const { setAvailableSite } = readiness.actions;
 
 export default readiness.reducer;
