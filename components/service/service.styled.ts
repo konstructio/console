@@ -5,6 +5,23 @@ import NextLink from 'next/link';
 import Typography from '../typography';
 import { textTruncate } from '../../theme/utils';
 
+export const AppConnector = styled.div`
+  height: 16px;
+  background-color: #e2e8f0;
+  top: 8px;
+  left: 3px;
+  position: absolute;
+  width: 2px;
+`;
+
+export const LiveAppIcon = styled.div`
+  border-radius: 50%;
+  background-color: ${({ color }) => color};
+  height: 8px;
+  position: relative;
+  width: 8px;
+`;
+
 export const Container = styled.div`
   background: ${({ theme }) => theme.colors.white};
   border: 1px solid #e2e8f0;
@@ -43,10 +60,11 @@ export const Link = styled(NextLink)<{ disabled?: boolean }>`
   color: ${({ theme }) => theme.colors.primary};
   display: flex;
   text-decoration: none;
+  gap: 8px;
 
   & > span {
     overflow: hidden;
-    max-width: 300px;
+    max-width: 400px;
     text-overflow: ellipsis;
 
     ${textTruncate(1)};
@@ -73,4 +91,9 @@ export const Links = styled.div`
   display: flex;
   flex-direction: column;
   margin-top: 24px;
+
+  & > span:last-child > a > div > div,
+  & > a:last-child > div > div {
+    display: none;
+  }
 `;
