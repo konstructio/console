@@ -56,33 +56,33 @@ const Service: FunctionComponent<ServiceProps> = ({
 
   const serviceLink = useCallback(
     (link: string, isAvailable?: boolean) => {
-      return (
-        link && (
-          <Link
-            key={link}
-            href={link}
-            onClick={(e) => {
-              if (isAvailable) {
-                onClickLink(link, name);
-              } else {
-                e.preventDefault();
-                e.stopPropagation();
-              }
-            }}
-            target="_blank"
-            disabled={!isAvailable}
-          >
-            <LiveAppIcon color={isAvailable ? '#BBF7D0' : '#E2E8F0'}>
-              {isMetaphor && <AppConnector />}
-            </LiveAppIcon>
-            <Typography variant="tooltip">{formatDomain(link, domainName)}</Typography>
-            {!isAvailable && (
-              <Box sx={{ display: 'flex', marginLeft: 2 }}>
-                <CircularProgress size={15} />
-              </Box>
-            )}
-          </Link>
-        )
+      return link ? (
+        <Link
+          key={link}
+          href={link}
+          onClick={(e) => {
+            if (isAvailable) {
+              onClickLink(link, name);
+            } else {
+              e.preventDefault();
+              e.stopPropagation();
+            }
+          }}
+          target="_blank"
+          disabled={!isAvailable}
+        >
+          <LiveAppIcon color={isAvailable ? '#BBF7D0' : '#E2E8F0'}>
+            {isMetaphor && <AppConnector />}
+          </LiveAppIcon>
+          <Typography variant="tooltip">{formatDomain(link, domainName)}</Typography>
+          {!isAvailable && (
+            <Box sx={{ display: 'flex', marginLeft: 2 }}>
+              <CircularProgress size={15} />
+            </Box>
+          )}
+        </Link>
+      ) : (
+        <div />
       );
     },
     [domainName, isMetaphor, name, onClickLink],

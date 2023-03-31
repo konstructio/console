@@ -89,7 +89,7 @@ const Services: FunctionComponent<ServicesProps> = ({
       {
         name: 'Argo Workflows',
         description: `The workflow engine for orchestrating parallel jobs on Kubernetes.`,
-        links: [argoWorkflowsUrl],
+        links: [`${argoWorkflowsUrl}/workflows`],
       },
       {
         name: 'Atlantis',
