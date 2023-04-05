@@ -1,8 +1,8 @@
 import Analytics from 'analytics-node';
 
-import { ANALYTICS_ID } from '../enums/telemetry';
+import { ANALYTICS_ID } from '../constants';
 
-type TelemetryProperties = {
+export type TelemetryProperties = {
   [key: string]: string;
 };
 

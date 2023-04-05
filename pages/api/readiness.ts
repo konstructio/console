@@ -20,7 +20,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
       res.status(200).json({ success: true, url });
     }
   } catch (error) {
-    // eslint-disable-next-line no-console
     res.status(200).json({ success: false, url });
   }
 }

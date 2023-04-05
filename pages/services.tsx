@@ -20,7 +20,7 @@ interface ServicesPageProps {
   };
 }
 
-const ServicesPage: FunctionComponent<ServicesPageProps> = ({ ...props }) => {
+const ServicesPage: FunctionComponent<ServicesPageProps> = (props) => {
   return <Services {...props} />;
 };
 
