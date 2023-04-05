@@ -1,35 +1,35 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import { createApi } from '@reduxjs/toolkit/dist/query/react';
-import { fetchBaseQuery } from '@reduxjs/toolkit/dist/query';
+import { createApi, fetchBaseQuery, FetchArgs } from '@reduxjs/toolkit/dist/query';
 import { HYDRATE } from 'next-redux-wrapper';
 
 export const consoleApi = createApi({
   baseQuery: fetchBaseQuery({
-    baseUrl: '',
+    baseUrl: '/api',
   }),
-  extractRehydrationInfo(action: any, { reducerPath }: any) {
+  extractRehydrationInfo(action, { reducerPath }) {
     if (action.type === HYDRATE) {
       return action.payload[reducerPath];
     }
   },
-  tagTypes: [],
-  endpoints: (builder: any) => ({
-    track: builder.mutation({
-      query: (body: unknown) => ({
-        url: '/api/telemetry',
+  endpoints: (builder) => ({
+    track: builder.mutation<unknown, FetchArgs['body']>({
+      query: (body) => ({
+        url: '/telemetry',
         method: 'POST',
         body,
       }),
     }),
-    readiness: builder.mutation({
-      query: (body: unknown) => ({
-        url: '/api/readiness',
+    readiness: builder.mutation<unknown, FetchArgs['body']>({
+      query: (body) => ({
+        url: '/readiness',
         method: 'POST',
         body,
       }),
-      invalidatesTags: [],
     }),
   }),
 });
 
-export const { useTrackMutation, useReadinessMutation, endpoints } = consoleApi;
+export const { endpoints } = consoleApi;
+
+// redux toolkit react is not properly generating typed hooks. exposing track/readiness events for now.
+export const sendTrackEvent = endpoints.track.initiate;
+export const sendReadinessEvent = endpoints.readiness.initiate;
