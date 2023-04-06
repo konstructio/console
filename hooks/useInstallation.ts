@@ -1,45 +1,74 @@
-import { useState } from 'react';
+import { InstallationType } from '../types/redux';
 
-import LocalForms from '../containers/clusterForms/local';
-import AwsGithubForms from '../containers/clusterForms/awsGithub';
-import AwsGitlabForms from '../containers/clusterForms/awsGitlab';
+export type InstallationInfo = {
+  title: string;
+  description: string | string[];
+  code?: string;
+  ctaDescription: string;
+  ctaLink?: string;
+};
 
-export enum InstallationTypes {
-  LOCAL = 1,
-  AWS_GITHUB = 2,
-  AWS_GITLAB = 3,
-}
-
-export const titleBySteps: { [key: number]: { [key: number]: string } } = {
-  [InstallationTypes.LOCAL]: {
+export const installationTitles: Record<InstallationType, { [key: number]: string }> = {
+  [InstallationType.LOCAL]: {
+    0: 'First, choose your Kubefirst adventure',
     1: `Let’s configure your local cluster`,
     2: `Grab a cup of tea or coffee while we set up your cluster...`,
     3: 'You’re all set!',
   },
-  [InstallationTypes.AWS_GITHUB]: {
+  [InstallationType.AWS_GITHUB]: {
+    0: 'First, choose your Kubefirst adventure',
     1: `Now, test your hosted zone name is accessible`,
     2: `Let’s configure your AWS - GitHub cluster`,
     3: `Grab a cup of tea or coffee while we set up your cluster...`,
     4: 'You’re all set!',
   },
-  [InstallationTypes.AWS_GITLAB]: {
+  [InstallationType.AWS_GITLAB]: {
+    0: 'First, choose your Kubefirst adventure',
     1: `Now, test your hosted zone name is accessible`,
     2: `Let’s configure your AWS - GitLab cluster`,
     3: `Grab a cup of tea or coffee while we set up your cluster...`,
     4: 'You’re all set!',
   },
+  [InstallationType.CIVO_GITHUB]: {
+    0: 'First, choose your Kubefirst adventure',
+    1: `Now, test your hosted domain name is accessible`,
+    2: `Let’s configure your Civo - GitHub cluster`,
+    3: `Grab a cup of tea or coffee while we set up your cluster...`,
+    4: 'You’re all set!',
+  },
+  [InstallationType.CIVO_GITLAB]: {
+    0: 'First, choose your Kubefirst adventure',
+    1: `Now, test your hosted domain name is accessible`,
+    2: `Let’s configure your Civo - Gitlab cluster`,
+    3: `Grab a cup of tea or coffee while we set up your cluster...`,
+    4: 'You’re all set!',
+  },
 };
 
-const InstallationSteps = {
-  [InstallationTypes.LOCAL]: ['Select platform', 'Set up cluster', 'Preparing', 'Ready'],
-  [InstallationTypes.AWS_GITHUB]: [
+const stepTitles: Record<InstallationType, string[]> = {
+  [InstallationType.LOCAL]: ['Select platform', 'Set up cluster', 'Preparing', 'Ready'],
+  [InstallationType.AWS_GITHUB]: [
     'Select platform',
     'Readiness check',
     'Set up cluster',
     'Preparing',
     'Ready',
   ],
-  [InstallationTypes.AWS_GITLAB]: [
+  [InstallationType.AWS_GITLAB]: [
+    'Select platform',
+    'Readiness check',
+    'Set up cluster',
+    'Preparing',
+    'Ready',
+  ],
+  [InstallationType.CIVO_GITHUB]: [
+    'Select platform',
+    'Readiness check',
+    'Set up cluster',
+    'Preparing',
+    'Ready',
+  ],
+  [InstallationType.CIVO_GITLAB]: [
     'Select platform',
     'Readiness check',
     'Set up cluster',
@@ -48,23 +77,15 @@ const InstallationSteps = {
   ],
 };
 
-const InstallationInfoByType: {
-  [key: string]: {
-    title: string;
-    description: string | Array<string>;
-    code?: string;
-    ctaDescription: string;
-    ctaLink: string;
-  };
-} = {
-  [InstallationTypes.LOCAL]: {
+const infoByInstallType: Record<InstallationType, InstallationInfo> = {
+  [InstallationType.LOCAL]: {
     title: 'Running Kubefirst locally',
     description: `Once you’re ready to start your Cloud version you can simply delete your local cluster by running the following command:`,
     code: 'kubefirst cluster destroy',
     ctaDescription: 'Learn more',
     ctaLink: '',
   },
-  [InstallationTypes.AWS_GITHUB]: {
+  [InstallationType.AWS_GITHUB]: {
     title: 'AWS Prerequisites',
     description: [
       'Create an AWS account with billing enabled.',
@@ -74,7 +95,7 @@ const InstallationInfoByType: {
     ctaDescription: 'Learn more',
     ctaLink: '',
   },
-  [InstallationTypes.AWS_GITLAB]: {
+  [InstallationType.AWS_GITLAB]: {
     title: 'AWS Prerequisites',
     description: [
       'Create an AWS account with billing enabled.',
@@ -84,29 +105,30 @@ const InstallationInfoByType: {
     ctaDescription: 'Learn more',
     ctaLink: '',
   },
+  [InstallationType.CIVO_GITHUB]: {
+    title: 'Civo Prerequisites',
+    description: [
+      'Create an Civo account in which you are an account owner.',
+      'Establish a publicly routable DNS.',
+    ],
+    ctaDescription: 'Learn more',
+    ctaLink: '',
+  },
+  [InstallationType.CIVO_GITLAB]: {
+    title: 'Civo Prerequisites',
+    description: [
+      'Create an Civo account in which you are an account owner.',
+      'Establish a publicly routable DNS.',
+    ],
+    ctaDescription: 'Learn more',
+    ctaLink: '',
+  },
 };
 
-export const FormFlowByType = {
-  [InstallationTypes.LOCAL]: LocalForms,
-  [InstallationTypes.AWS_GITHUB]: AwsGithubForms,
-  [InstallationTypes.AWS_GITLAB]: AwsGitlabForms,
-};
-
-export default function useInstallation(type: InstallationTypes = InstallationTypes.LOCAL) {
-  const [installationType, setInstallationType] = useState(type);
-  const [info, setInfo] = useState(InstallationInfoByType[type]);
-  const [steps, setSteps] = useState<Array<string>>(InstallationSteps[type]);
-
-  const onChangeInstallationType = (type: InstallationTypes) => {
-    setInstallationType(type);
-    setSteps(InstallationSteps[type]);
-    setInfo(InstallationInfoByType[type]);
-  };
-
+export function useInstallation(type: InstallationType) {
   return {
-    installationType,
-    onChangeInstallationType,
-    steps,
-    info,
+    stepTitles: stepTitles[type],
+    installTitles: installationTitles[type],
+    info: infoByInstallType[type],
   };
 }
