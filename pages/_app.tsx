@@ -10,25 +10,28 @@ import theme from '../theme';
 import { wrapper } from '../redux/store';
 import '../styles/globals.css';
 import Navigation from '../components/navigation';
+import Row from '../components/Row/Row';
+import Column from '../components/Column/Column';
 
-const Layout = styled.div`
+const Layout = styled(Row)`
   background-color: ${({ theme }) => theme.colors.washMe};
-  display: flex;
-  height: 100%;
+  height: 100vh;
+  width: 100vw;
 `;
 
-export const Header = styled.div`
+export const Header = styled(Row)`
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 1;
   background-color: ${({ theme }) => theme.colors.white};
-  height: 40px;
-  width: calc(100% - 50px);
-  border-radius: 0px;
-  padding: 12px 24px 12px 24px;
+  height: 46px;
+  width: 100%;
+  box-shadow: 0px 2px 4px rgba(31, 41, 55, 0.06);
 `;
 
-export const Content = styled.div`
-  display: flex;
-  flex-direction: column;
-  height: 100%;
+export const Content = styled(Column)`
+  padding-top: 46px;
   width: 100%;
 `;
 
@@ -44,7 +47,7 @@ export default function App({ Component, ...rest }: AppProps) {
       <Provider store={store}>
         <ThemeProviderMUI theme={themeMUI}>
           <ThemeProvider theme={theme}>
-            <Layout {...props.pageProps}>
+            <Layout>
               <Navigation />
               <Content>
                 <Header />
