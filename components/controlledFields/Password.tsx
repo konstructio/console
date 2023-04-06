@@ -1,12 +1,12 @@
-import React, { FunctionComponent, useState } from 'react';
-import { Control, Controller } from 'react-hook-form';
+import React, { useState } from 'react';
+import { Control, Controller, FieldValues, UseControllerProps } from 'react-hook-form';
 
-import Password from '../../components/password';
-export interface ControlledTextFieldProps {
+import Password from '../password/index';
+
+export interface ControlledTextFieldProps<T extends FieldValues> extends UseControllerProps<T> {
   label: string;
-  name: string;
   required?: boolean;
-  control: Control;
+  control: Control<T>;
   rules: {
     required: boolean;
     pattern?: RegExp;
@@ -17,7 +17,7 @@ export interface ControlledTextFieldProps {
   onBlur?: (value: string) => void;
 }
 
-const ControlledPassword: FunctionComponent<ControlledTextFieldProps> = ({
+function ControlledPassword<T extends FieldValues>({
   label,
   name,
   required,
@@ -27,8 +27,8 @@ const ControlledPassword: FunctionComponent<ControlledTextFieldProps> = ({
   onErrorText,
   onBlur,
   ...props
-}) => {
-  const [isBlur, setIsBlur] = useState<boolean>(false);
+}: ControlledTextFieldProps<T>) {
+  const [isBlur, setIsBlur] = useState(false);
 
   return (
     <Controller
@@ -55,6 +55,6 @@ const ControlledPassword: FunctionComponent<ControlledTextFieldProps> = ({
       )}
     />
   );
-};
+}
 
 export default ControlledPassword;

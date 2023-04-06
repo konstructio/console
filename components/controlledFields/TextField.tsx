@@ -1,37 +1,27 @@
-import React, { FunctionComponent, useState } from 'react';
-import { Control, Controller } from 'react-hook-form';
+import React, { useState } from 'react';
+import { Control, Controller, FieldValues, UseControllerProps } from 'react-hook-form';
 
-import TextFieldWithRef from '../../components/textField';
-export interface ControlledTextFieldProps {
+import TextFieldWithRef from '../textField/index';
+
+export interface ControlledTextFieldProps<T extends FieldValues> extends UseControllerProps<T> {
   label: string;
-  name: string;
   required?: boolean;
-  control: Control;
-  rules: Partial<{
-    required: boolean;
-    pattern: RegExp;
-    maxLength: number;
-    minLength: number;
-  }>;
+  control: Control<T>;
   helperText?: string;
   onErrorText?: string;
 }
 
-const ControlledTextField: FunctionComponent<ControlledTextFieldProps> = ({
+function ControlledTextField<T extends FieldValues>({
   label,
-  name,
   required,
-  rules,
   helperText,
   onErrorText,
   ...props
-}) => {
-  const [isBlur, setIsBlur] = useState<boolean>(false);
+}: ControlledTextFieldProps<T>) {
+  const [isBlur, setIsBlur] = useState(false);
 
   return (
     <Controller
-      name={name}
-      rules={rules}
       {...props}
       render={({ field, fieldState: { error } }) => (
         <TextFieldWithRef
@@ -50,6 +40,6 @@ const ControlledTextField: FunctionComponent<ControlledTextFieldProps> = ({
       )}
     />
   );
-};
+}
 
 export default ControlledTextField;

@@ -1,12 +1,12 @@
-import React, { ChangeEvent, FunctionComponent, useState } from 'react';
-import { Control, Controller } from 'react-hook-form';
+import React, { ChangeEvent, useState } from 'react';
+import { Control, Controller, FieldValues, UseControllerProps } from 'react-hook-form';
 
-import Autocomplete from '../../components/autocomplete';
-export interface ControlledTextFieldProps {
+import Autocomplete from '../autocomplete/index';
+
+export interface ControlledTextFieldProps<T extends FieldValues> extends UseControllerProps<T> {
   label: string;
-  name: string;
   required?: boolean;
-  control: Control;
+  control: Control<T>;
   rules: {
     required: boolean;
     pattern?: RegExp;
@@ -21,7 +21,7 @@ export interface ControlledTextFieldProps {
   options: Array<{ value: string; label: string }>;
 }
 
-const ControlledAutocomplete: FunctionComponent<ControlledTextFieldProps> = ({
+function ControlledAutocomplete<T extends FieldValues>({
   label,
   name,
   required,
@@ -33,8 +33,8 @@ const ControlledAutocomplete: FunctionComponent<ControlledTextFieldProps> = ({
   placeholder,
   loading,
   ...props
-}) => {
-  const [isBlur, setIsBlur] = useState<boolean>(false);
+}: ControlledTextFieldProps<T>) {
+  const [isBlur, setIsBlur] = useState(false);
 
   return (
     <Controller
@@ -61,6 +61,6 @@ const ControlledAutocomplete: FunctionComponent<ControlledTextFieldProps> = ({
       )}
     />
   );
-};
+}
 
 export default ControlledAutocomplete;

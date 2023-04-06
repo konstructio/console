@@ -1,27 +1,26 @@
 import { FormControlLabel, FormGroup } from '@mui/material';
-import React, { FunctionComponent } from 'react';
-import { Control, Controller } from 'react-hook-form';
+import React from 'react';
+import { Control, Controller, UseControllerProps, FieldValues } from 'react-hook-form';
 
-import Checkbox from '../../components/checkbox';
-import Typography from '../../components/typography';
+import Checkbox from '../checkbox/index';
+import Typography from '../typography/index';
 
-export interface ControlledTextFieldProps {
+export interface ControlledTextFieldProps<T extends FieldValues> extends UseControllerProps<T> {
   label: string;
-  name: string;
   required?: boolean;
-  control: Control;
+  control: Control<T>;
   rules: {
     required: boolean;
     pattern?: RegExp;
   };
 }
 
-const ControlledCheckbox: FunctionComponent<ControlledTextFieldProps> = ({
+function ControlledCheckbox<T extends FieldValues>({
   label,
   name,
   required,
   ...props
-}) => {
+}: ControlledTextFieldProps<T>) {
   return (
     <Controller
       {...props}
@@ -36,6 +35,6 @@ const ControlledCheckbox: FunctionComponent<ControlledTextFieldProps> = ({
       )}
     />
   );
-};
+}
 
 export default ControlledCheckbox;

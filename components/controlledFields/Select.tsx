@@ -1,13 +1,12 @@
-import React, { FunctionComponent } from 'react';
-import { Control, Controller } from 'react-hook-form';
+import React from 'react';
+import { Control, Controller, UseControllerProps, FieldValues } from 'react-hook-form';
 
-import Select from '../../components/select';
+import Select from '../select/index';
 
-export interface ControlledTextFieldProps {
+export interface ControlledTextFieldProps<T extends FieldValues> extends UseControllerProps<T> {
   label: string;
-  name: string;
   required?: boolean;
-  control: Control;
+  control: Control<T>;
   rules: {
     required: boolean;
     pattern?: RegExp;
@@ -15,19 +14,19 @@ export interface ControlledTextFieldProps {
   options: Array<{ value: string; label: string }>;
 }
 
-const ControlledSelect: FunctionComponent<ControlledTextFieldProps> = ({
+function ControlledSelect<T extends FieldValues>({
   label,
   name,
   required,
   rules,
   options,
-  ...props
-}) => {
+  ...rest
+}: ControlledTextFieldProps<T>) {
   return (
     <Controller
       name={name}
       rules={rules}
-      {...props}
+      {...rest}
       render={({ field, fieldState: { error } }) => (
         <Select
           {...field}
@@ -41,6 +40,6 @@ const ControlledSelect: FunctionComponent<ControlledTextFieldProps> = ({
       )}
     />
   );
-};
+}
 
 export default ControlledSelect;
