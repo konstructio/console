@@ -33,7 +33,11 @@ const validMetaphorSitesSlice = createSlice({
       })
       .addCase(checkReadiness.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.error.message ?? 'failed to check readiness';
+        if (action.payload) {
+          state.error = action.payload;
+        } else {
+          state.error = action.error.message ?? 'failed to check readiness';
+        }
       });
   },
 });
