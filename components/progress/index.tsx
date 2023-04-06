@@ -7,21 +7,50 @@ import {
   stepLabelClasses,
   StepLabel,
   Stepper,
-  styled,
+  styled as muiStyled,
 } from '@mui/material';
+import styled from 'styled-components';
 import CheckIcon from '@mui/icons-material/Check';
 
 import Typography from '../typography';
 import themeST from '../../theme';
-
-import { Container } from './progress.styled';
 
 export interface ProgressProps {
   activeStep: number;
   steps: Array<string>;
 }
 
-const Label = styled(StepLabel)(() => ({
+function ColorlibStepIcon(props: StepIconProps) {
+  const { active, completed, className } = props;
+
+  return completed ? (
+    <CompletedStep>
+      <CheckIcon color="primary" />
+    </CompletedStep>
+  ) : (
+    <ColorlibStepIconRoot ownerState={{ completed, active }} className={className}>
+      {props.icon}
+    </ColorlibStepIconRoot>
+  );
+}
+
+const Progress: FunctionComponent<ProgressProps> = ({ activeStep, steps, ...rest }) => (
+  <Container {...rest}>
+    <Stepper activeStep={activeStep} alternativeLabel connector={<ColorlibConnector />}>
+      {steps.map((label) => (
+        <Step key={label} sx={{ width: 130 }}>
+          <Label StepIconComponent={ColorlibStepIcon}>
+            <Typography variant="subtitle2">{label}</Typography>
+          </Label>
+        </Step>
+      ))}
+    </Stepper>
+  </Container>
+);
+
+export default styled(Progress)``;
+
+const Label = muiStyled(StepLabel)(() => ({
   [`& .${stepLabelClasses.label}`]: {
     color: '#334155',
   },
@@ -30,7 +59,7 @@ const Label = styled(StepLabel)(() => ({
   },
 }));
 
-const ColorlibConnector = styled(StepConnector)(({ theme }) => ({
+const ColorlibConnector = muiStyled(StepConnector)(({ theme }) => ({
   [`&.${stepConnectorClasses.alternativeLabel}`]: {
     left: 'calc(-50% + 26px)',
     right: 'calc(50% + 26px)',
@@ -54,7 +83,7 @@ const ColorlibConnector = styled(StepConnector)(({ theme }) => ({
   },
 }));
 
-const ColorlibStepIconRoot = styled('div')<{
+const ColorlibStepIconRoot = muiStyled('div')<{
   ownerState: { completed?: boolean; active?: boolean };
 }>(({ theme, ownerState }) => ({
   backgroundColor: 'transparent',
@@ -79,7 +108,7 @@ const ColorlibStepIconRoot = styled('div')<{
   }),
 }));
 
-const CompletedStep = styled('div')(({ theme }) => ({
+const CompletedStep = muiStyled('div')(({ theme }) => ({
   backgroundColor: 'transparent',
   border: `2px solid ${theme.palette.primary.main}`,
   zIndex: 1,
@@ -92,35 +121,11 @@ const CompletedStep = styled('div')(({ theme }) => ({
   alignItems: 'center',
 }));
 
-function ColorlibStepIcon(props: StepIconProps) {
-  const { active, completed, className } = props;
-
-  return completed ? (
-    <CompletedStep>
-      <CheckIcon color="primary" />
-    </CompletedStep>
-  ) : (
-    <ColorlibStepIconRoot ownerState={{ completed, active }} className={className}>
-      {props.icon}
-    </ColorlibStepIconRoot>
-  );
-}
-
-const Progress: FunctionComponent<ProgressProps> = ({ activeStep, steps }) => {
-  return (
-    <Container>
-      <Stepper activeStep={activeStep} alternativeLabel connector={<ColorlibConnector />}>
-        {steps &&
-          steps.map((label) => (
-            <Step key={label} sx={{ width: 130 }}>
-              <Label StepIconComponent={ColorlibStepIcon}>
-                <Typography variant="subtitle2">{label}</Typography>
-              </Label>
-            </Step>
-          ))}
-      </Stepper>
-    </Container>
-  );
-};
-
-export default Progress;
+const Container = styled.div`
+  align-items: center;
+  background-color: ${({ theme }) => theme.colors.childOfLight};
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  padding: 25px 0;
+`;

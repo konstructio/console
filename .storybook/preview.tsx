@@ -24,6 +24,7 @@ export const parameters = {
     query: {},
     push() {},
   },
+  layout: 'fullscreen',
 };
 
 const store = makeStore();
@@ -33,7 +34,11 @@ export const decorators = [
     <Provider store={store}>
       <ThemeProvider theme={theme}>
         <ThemeProviderMUI theme={themeMUI}>
-          <Story />
+          <div
+            style={{ display: 'flex', flexDirection: 'column', height: '100vh', width: '100vw' }}
+          >
+            <Story />
+          </div>
         </ThemeProviderMUI>
       </ThemeProvider>
     </Provider>

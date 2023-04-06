@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useEffect, useState } from 'react';
+import React, { FunctionComponent, useCallback, useEffect, useState } from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import HelpIcon from '@mui/icons-material/Help';
@@ -9,8 +9,8 @@ import GridViewOutlinedIcon from '@mui/icons-material/GridViewOutlined';
 import { BsSlack } from 'react-icons/bs';
 import Link from 'next/link';
 
+import { PASTEL_LIGHT_BABY_BLUE } from '../../constants/colors';
 import { useAppSelector } from '../../redux/store';
-import { selectKubefirstVersion } from '../../redux/selectors/config.selector';
 
 import {
   Container,
@@ -61,18 +61,22 @@ const FOOTER_ITEMS = [
 const Navigation: FunctionComponent = () => {
   const [domLoaded, setDomLoaded] = useState(false);
   const { asPath } = useRouter();
-  const kubefirstVersion = useAppSelector(selectKubefirstVersion());
+  const kubefirstVersion = useAppSelector(({ config }) => config.kubefirstVersion);
 
-  const isActive = (route: string) => {
-    if (typeof window !== 'undefined') {
-      const linkPathname = new URL(route as string, window?.location?.href).pathname;
+  const isActive = useCallback(
+    (route: string) => {
+      if (typeof window !== 'undefined') {
+        const linkPathname = new URL(route, window?.location?.href).pathname;
 
-      // Using URL().pathname to get rid of query and hash
-      const activePathname = new URL(asPath, window?.location?.href).pathname;
+        // Using URL().pathname to get rid of query and hash
+        const activePathname = new URL(asPath, window?.location?.href).pathname;
 
-      return linkPathname === activePathname;
-    }
-  };
+        return linkPathname === activePathname;
+      }
+      return false;
+    },
+    [asPath],
+  );
 
   useEffect(() => {
     setDomLoaded(true);
@@ -86,7 +90,7 @@ const Navigation: FunctionComponent = () => {
           {/* Only visible above md breakpoint 👇 */}
           <Image alt="k1-image" src={'/static/title.svg'} height={40} width={160} id="title" />
           {kubefirstVersion && (
-            <KubefirstVersion variant="labelSmall" color="#ABADC6">
+            <KubefirstVersion variant="labelSmall" color={PASTEL_LIGHT_BABY_BLUE}>
               {`V${kubefirstVersion}`}
             </KubefirstVersion>
           )}

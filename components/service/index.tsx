@@ -8,7 +8,7 @@ import VaultLogo from '../../assets/vault.svg';
 import AtlantisLogo from '../../assets/atlantis.svg';
 import MetaphorLogo from '../../assets/metaphor.svg';
 import Typography from '../typography';
-import { formatDomain } from '../../utils/url';
+import { formatDomain } from '../../utils/formatDomain';
 import Tooltip from '../tooltip';
 
 import { Container, Description, Header, Image, Link, Links, Title } from './service.styled';
