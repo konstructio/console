@@ -1,5 +1,6 @@
 import React, { FunctionComponent, useCallback, useMemo } from 'react';
 import { StaticImageData } from 'next/image';
+import { Box, CircularProgress } from '@mui/material';
 
 import ArgoCDLogo from '../../assets/argocd.svg';
 import GitLabLogo from '../../assets/gitlab.svg';
@@ -11,7 +12,17 @@ import Typography from '../typography';
 import { formatDomain } from '../../utils/formatDomain';
 import Tooltip from '../tooltip';
 
-import { Container, Description, Header, Image, Link, Links, Title } from './service.styled';
+import {
+  AppConnector,
+  Container,
+  Description,
+  Header,
+  Image,
+  Link,
+  Links,
+  LiveAppIcon,
+  Title,
+} from './service.styled';
 
 const CARD_IMAGES: { [key: string]: StaticImageData } = {
   ['Argo CD']: ArgoCDLogo,
@@ -25,49 +36,79 @@ const CARD_IMAGES: { [key: string]: StaticImageData } = {
 
 export interface ServiceProps {
   description?: string;
+  domainName: string;
   children?: React.ReactNode;
   name: string;
-  links?: Array<string>;
+  links?: { [url: string]: boolean };
   onClickLink: (link: string, name: string) => void;
 }
 
 const Service: FunctionComponent<ServiceProps> = ({
   description,
+  domainName,
   children,
   name,
   links,
   onClickLink,
 }) => {
   const serviceLogo = useMemo(() => CARD_IMAGES[name], [name]);
+  const isMetaphor = useMemo(() => name === 'Metaphor', [name]);
 
   const serviceLink = useCallback(
-    (link: string) => (
-      <Link key={link} href={link} onClick={() => onClickLink(link, name)} target="_blank">
-        <Typography variant="tooltip">{formatDomain(link)}</Typography>
-      </Link>
-    ),
-    [name, onClickLink],
+    (link: string, isAvailable?: boolean) => {
+      return link ? (
+        <Link
+          key={link}
+          href={link}
+          onClick={(e) => {
+            if (isAvailable) {
+              onClickLink(link, name);
+            } else {
+              e.preventDefault();
+              e.stopPropagation();
+            }
+          }}
+          target="_blank"
+          disabled={!isAvailable}
+        >
+          <LiveAppIcon color={isAvailable ? '#BBF7D0' : '#E2E8F0'}>
+            {isMetaphor && <AppConnector />}
+          </LiveAppIcon>
+          <Typography variant="tooltip">{formatDomain(link, domainName)}</Typography>
+          {!isAvailable && (
+            <Box sx={{ display: 'flex', marginLeft: 2 }}>
+              <CircularProgress size={15} />
+            </Box>
+          )}
+        </Link>
+      ) : (
+        <div />
+      );
+    },
+    [domainName, isMetaphor, name, onClickLink],
   );
 
   const linksComponent = useMemo(
     () => (
       <Links>
-        {links?.map((link) => {
-          const { origin, pathname } = (link?.includes('http') && new URL(link)) || {
-            origin: '',
-            pathname: '',
-          };
-          const shouldUseTooltip = pathname.length > 40 || origin.length > 40;
-          const linkComponent = serviceLink(link);
+        {links &&
+          Object.keys(links)?.map((url) => {
+            const isAvailable = links[url];
+            const { origin, pathname } = (url?.includes('http') && new URL(url)) || {
+              origin: '',
+              pathname: '',
+            };
+            const shouldUseTooltip = pathname.length > 40 || origin.length > 40;
+            const linkComponent = serviceLink(url, isAvailable);
 
-          return shouldUseTooltip ? (
-            <Tooltip title={link} placement="top">
-              {linkComponent}
-            </Tooltip>
-          ) : (
-            linkComponent
-          );
-        })}
+            return shouldUseTooltip ? (
+              <Tooltip title={url} placement="top" key={url}>
+                {linkComponent}
+              </Tooltip>
+            ) : (
+              linkComponent
+            );
+          })}
       </Links>
     ),
     [links, serviceLink],

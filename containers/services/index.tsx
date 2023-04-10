@@ -1,30 +1,14 @@
-import React, { FunctionComponent, useCallback, useEffect, useMemo } from 'react';
-import { Box, CircularProgress } from '@mui/material';
-import { useInterval } from 'hooks/useInterval';
+import React, { FunctionComponent, useEffect, useMemo, useCallback } from 'react';
 
 import { DOCS_LINK } from '../../constants';
-import { MINT_GREEN, PASTEL_LIGHT_BLUE } from '../../constants/colors';
 import { setConfigValues } from '../../redux/slices/config.slice';
 import { GIT_PROVIDERS } from '../../enums/utils';
 import { useAppDispatch, useAppSelector } from '../../redux/store';
-import Service from '../../components/service/index';
+import Service from '../service';
 import Typography from '../../components/typography';
-import { Link } from '../../components/service/service.styled';
-import { formatDomain } from '../../utils/formatDomain';
-import { checkReadiness } from '../../redux/thunks/readiness.thunk';
 import { sendTrackEvent } from '../../redux/api';
 
-import {
-  AppConnector,
-  AppIcon,
-  Container,
-  Header,
-  LearnMoreLink,
-  MetaphorColumn,
-  MetaphorAppsContainer,
-  ServicesContainer,
-  MetaphorColumnUrls,
-} from './services.styled';
+import { Container, Header, LearnMoreLink, ServicesContainer } from './services.styled';
 
 export interface ServicesProps {
   argoUrl: string;
@@ -34,6 +18,7 @@ export interface ServicesProps {
   githubOwner: string;
   gitlabOwner: string;
   gitProvider: string;
+  k3dDomain: string;
   kubefirstVersion: string;
   useTelemetry: boolean;
   vaultUrl: string;
@@ -52,21 +37,19 @@ const Services: FunctionComponent<ServicesProps> = ({
   githubOwner,
   gitlabOwner,
   gitProvider,
+  k3dDomain,
   kubefirstVersion,
   useTelemetry,
   vaultUrl,
   metaphor,
 }) => {
-  const { isTelemetryEnabled, metaphorUrls } = useAppSelector(({ config, validMetaphorSites }) => ({
-    isTelemetryEnabled: config.isTelemetryEnabled,
-    metaphorUrls: validMetaphorSites.sites,
-  }));
+  const isTelemetryEnabled = useAppSelector(({ config }) => config.isTelemetryEnabled);
 
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    dispatch(setConfigValues({ isTelemetryEnabled: useTelemetry, kubefirstVersion }));
-  }, [dispatch, useTelemetry, kubefirstVersion]);
+    dispatch(setConfigValues({ isTelemetryEnabled: useTelemetry, kubefirstVersion, k3dDomain }));
+  }, [dispatch, useTelemetry, kubefirstVersion, k3dDomain]);
 
   const gitTileProvider = useMemo(
     () => (gitProvider === GIT_PROVIDERS.GITHUB ? 'GitHub' : 'GitLab'),
@@ -75,8 +58,8 @@ const Services: FunctionComponent<ServicesProps> = ({
 
   const gitLinks = useMemo(
     () => [
-      `https://${gitProvider}.com/${githubOwner || gitlabOwner}/gitops`,
-      `https://${gitProvider}.com/${githubOwner || gitlabOwner}/metaphor`,
+      gitProvider && `https://${gitProvider}.com/${githubOwner || gitlabOwner}/gitops`,
+      gitProvider && `https://${gitProvider}.com/${githubOwner || gitlabOwner}/metaphor`,
     ],
     [gitProvider, githubOwner, gitlabOwner],
   );
@@ -102,28 +85,30 @@ const Services: FunctionComponent<ServicesProps> = ({
       {
         name: 'Argo Workflows',
         description: `The workflow engine for orchestrating parallel jobs on Kubernetes.`,
-        links: [argoWorkflowsUrl],
+        links: [`${argoWorkflowsUrl}/workflows`],
       },
       {
         name: 'Atlantis',
         description: `Kubefirst manages terraform workflows with atlantis automation.`,
         links: [atlantisUrl],
       },
+      {
+        name: 'Metaphor',
+        description: `A multi-environment demonstration space for frontend application best practices that’s easy to apply to other projects.`,
+        links: [metaphor?.development, metaphor?.staging, metaphor?.production],
+      },
     ],
-    [argoUrl, argoWorkflowsUrl, atlantisUrl, gitLinks, gitTileProvider, vaultUrl],
-  );
-
-  const metaphorTile = useMemo(
-    () => ({
-      name: 'Metaphor',
-      description: `A multi-environment demonstration space for frontend application best practices that’s easy to apply to other projects.`,
-      links: [
-        { url: metaphor.development },
-        { url: metaphor.staging },
-        { url: metaphor.production },
-      ],
-    }),
-    [metaphor.development, metaphor.production, metaphor.staging],
+    [
+      argoUrl,
+      argoWorkflowsUrl,
+      atlantisUrl,
+      gitLinks,
+      gitTileProvider,
+      metaphor?.development,
+      metaphor?.production,
+      metaphor?.staging,
+      vaultUrl,
+    ],
   );
 
   const onClickLink = useCallback(
@@ -135,20 +120,6 @@ const Services: FunctionComponent<ServicesProps> = ({
     },
     [isTelemetryEnabled],
   );
-
-  const formatMetaphorUrl = (link: string) => {
-    const formattedUrl = formatDomain(link);
-
-    return formattedUrl && formattedUrl.replace(`.${domainName}`, '');
-  };
-
-  const metaphorDnsResolution = ({ url }: { url: string }) => {
-    if (!metaphorUrls.includes(url)) {
-      dispatch(checkReadiness(url));
-    }
-  };
-
-  useInterval(() => metaphorTile.links.map(metaphorDnsResolution), 20000);
 
   return (
     <Container>
@@ -167,56 +138,14 @@ const Services: FunctionComponent<ServicesProps> = ({
       </Header>
       <ServicesContainer>
         {services.map(({ name, ...rest }) => (
-          <Service key={name} name={name} {...rest} onClickLink={onClickLink} />
+          <Service
+            key={name}
+            name={name}
+            {...rest}
+            onClickLink={onClickLink}
+            domainName={domainName}
+          />
         ))}
-        <Service
-          name={metaphorTile.name}
-          description={metaphorTile.description}
-          onClickLink={onClickLink}
-        >
-          <MetaphorAppsContainer>
-            <MetaphorColumn>
-              {metaphorTile.links.map(({ url }) => (
-                <AppIcon
-                  key={url}
-                  color={metaphorUrls.includes(url) ? MINT_GREEN : PASTEL_LIGHT_BLUE}
-                >
-                  <AppConnector />
-                </AppIcon>
-              ))}
-            </MetaphorColumn>
-            <MetaphorColumnUrls>
-              {metaphorTile.links.map(({ url }) => {
-                const disabled = !metaphorUrls.includes(url);
-                return (
-                  url && (
-                    <Link
-                      key={url}
-                      href={url}
-                      onClick={(e) => {
-                        if (!disabled) {
-                          onClickLink(url, 'metaphor');
-                        } else {
-                          e.preventDefault();
-                          e.stopPropagation();
-                        }
-                      }}
-                      disabled={disabled}
-                      target="_blank"
-                    >
-                      <Typography variant="tooltip">{formatMetaphorUrl(url)}</Typography>
-                      {disabled && (
-                        <Box sx={{ display: 'flex', marginLeft: 2 }}>
-                          <CircularProgress size={15} />
-                        </Box>
-                      )}
-                    </Link>
-                  )
-                );
-              })}
-            </MetaphorColumnUrls>
-          </MetaphorAppsContainer>
-        </Service>
       </ServicesContainer>
     </Container>
   );

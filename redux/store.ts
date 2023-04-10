@@ -7,7 +7,7 @@ import {
   githubUserReducer,
   configReducer,
   installationReducer,
-  validMetaphorSitesReducer,
+  availableSitesReducer,
 } from './slices';
 
 export const makeStore = () =>
@@ -17,7 +17,7 @@ export const makeStore = () =>
       config: configReducer,
       installation: installationReducer,
       githubUser: githubUserReducer,
-      validMetaphorSites: validMetaphorSitesReducer,
+      availableSites: availableSitesReducer,
     },
     middleware: (gDM) => gDM().concat(consoleApi.middleware),
   });

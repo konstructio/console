@@ -10,6 +10,7 @@ interface ServicesPageProps {
   githubOwner: string;
   gitlabOwner: string;
   gitProvider: string;
+  k3dDomain: string;
   kubefirstVersion: string;
   useTelemetry: boolean;
   vaultUrl: string;
@@ -33,6 +34,7 @@ export async function getServerSideProps() {
     GIT_PROVIDER = '',
     GITHUB_OWNER = '',
     GITLAB_OWNER = '',
+    K3D_DOMAIN = '',
     KUBEFIRST_VERSION = '',
     METAPHOR_DEVELOPMENT_URL = '',
     METAPHOR_STAGING_URL = '',
@@ -50,6 +52,7 @@ export async function getServerSideProps() {
       githubOwner: GITHUB_OWNER,
       gitlabOwner: GITLAB_OWNER,
       gitProvider: GIT_PROVIDER,
+      k3dDomain: K3D_DOMAIN,
       kubefirstVersion: KUBEFIRST_VERSION,
       useTelemetry: USE_TELEMETRY === 'true',
       vaultUrl: VAULT_URL,

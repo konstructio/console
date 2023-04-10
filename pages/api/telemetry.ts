@@ -2,11 +2,11 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { sendTelemetry } from 'services/telemetry';
 
-type Data = {
+export type TelemetryResponseData = {
   success: boolean;
 };
 
-export default function handler(req: NextApiRequest, res: NextApiResponse<Data>) {
+export default function handler(req: NextApiRequest, res: NextApiResponse<TelemetryResponseData>) {
   try {
     if (req.method === 'POST') {
       const { event, properties } = req.body;

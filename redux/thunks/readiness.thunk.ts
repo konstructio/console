@@ -1,21 +1,26 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
-import { getErrorMessage } from '../../utils/getErrorMessage';
+import { sendReadinessEvent } from '../api/';
+import { AppDispatch, RootState } from '../store';
 
-export const checkReadiness = createAsyncThunk<string, string, { rejectValue: string }>(
-  'valid-metaphor-sites/check',
-  async (url, { rejectWithValue }) => {
-    if (url.includes('localdev.me')) {
-      try {
-        const res = await fetch(url, { mode: 'no-cors' });
-        if (!res.ok) {
-          throw Error('unable to ping url');
-        }
-        return url;
-      } catch (error) {
-        throw Error(getErrorMessage(error, 'check readiness fail'));
-      }
+export const checkReadiness = createAsyncThunk<
+  { success: boolean; url: string },
+  { url: string },
+  {
+    dispatch: AppDispatch;
+    state: RootState;
+  }
+>('readiness/check', async (body, { dispatch, getState }) => {
+  const state = getState();
+
+  if (body.url.includes(state.config.k3dDomain || 'localdev.me')) {
+    await fetch(body.url, { mode: 'no-cors' });
+    return { success: true, url: body.url };
+  } else {
+    const res = await dispatch(sendReadinessEvent(body));
+    if ('error' in res) {
+      throw res.error;
     }
-    return rejectWithValue('url does not include localdev.me');
-  },
-);
+    return res.data;
+  }
+});

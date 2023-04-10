@@ -2,23 +2,23 @@ import { createSlice } from '@reduxjs/toolkit';
 
 import { checkReadiness } from '../thunks/readiness.thunk';
 
-export interface ValidMetaphorSitesState {
+export interface AvailableSitesState {
   sites: Array<string>;
   error: string | null;
   loading: boolean;
 }
 
-export const initialState: ValidMetaphorSitesState = {
+export const initialState: AvailableSitesState = {
   sites: [],
   error: null,
   loading: false,
 };
 
-const validMetaphorSitesSlice = createSlice({
-  name: 'valid-metaphor-sites',
+const availableSitesSlice = createSlice({
+  name: 'available-sites',
   initialState,
   reducers: {
-    clearValidMethaphorSitesError: (state) => {
+    clearAvailableSitesError: (state) => {
       state.error = null;
     },
   },
@@ -29,19 +29,15 @@ const validMetaphorSitesSlice = createSlice({
       })
       .addCase(checkReadiness.fulfilled, (state, action) => {
         state.loading = false;
-        state.sites.push(action.payload);
+        state.sites.push(action.payload.url);
       })
       .addCase(checkReadiness.rejected, (state, action) => {
         state.loading = false;
-        if (action.payload) {
-          state.error = action.payload;
-        } else {
-          state.error = action.error.message ?? 'failed to check readiness';
-        }
+        state.error = action.error.message ?? 'failed to check readiness';
       });
   },
 });
 
-export const { clearValidMethaphorSitesError } = validMetaphorSitesSlice.actions;
+export const { clearAvailableSitesError } = availableSitesSlice.actions;
 
-export const validMetaphorSitesReducer = validMetaphorSitesSlice.reducer;
+export const availableSitesReducer = availableSitesSlice.reducer;

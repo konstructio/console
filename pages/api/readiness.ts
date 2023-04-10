@@ -3,7 +3,7 @@ import https from 'https';
 import axios from 'axios';
 import type { NextApiRequest, NextApiResponse } from 'next';
 
-type Data = {
+export type ReadinessResponseData = {
   success: boolean;
   url: string;
 };
@@ -12,7 +12,10 @@ const httpsAgent = new https.Agent({
   rejectUnauthorized: false,
 });
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse<Data>) {
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse<ReadinessResponseData>,
+) {
   const { url } = req.body;
   try {
     if (req.method === 'POST') {

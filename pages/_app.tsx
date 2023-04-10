@@ -42,7 +42,7 @@ export default function App({ Component, ...rest }: AppProps) {
     <main id="app">
       <Head>
         <title>Kubefirst Console</title>
-        <link rel="shortcut icon" href="/static/k-ray.svg" />
+        <link rel="shortcut icon" href="/static/ray.svg" />
       </Head>
       <Provider store={store}>
         <ThemeProviderMUI theme={themeMUI}>
