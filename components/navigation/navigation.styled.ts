@@ -1,6 +1,7 @@
-import Typography from 'components/typography/index';
 import styled, { css } from 'styled-components';
-import { media } from 'theme/media/index';
+
+import Typography from '../typography';
+import { media } from '../../theme/media';
 
 export const Container = styled.nav`
   background-color: ${({ theme }) => theme.colors.moonlessMystery};

@@ -30,7 +30,7 @@ const FOOTER_ITEMS = [
   },
   {
     icon: <BsSlack size={20} />,
-    path: 'https://bit.ly/kubefirst-slack',
+    path: 'https://kubefirst.io/slack',
     title: 'Slack',
   },
 ];

@@ -1,6 +1,5 @@
 import React, { FunctionComponent } from 'react';
 import { Typography as TypographyMUI, TypographyProps } from '@mui/material';
-import styled from 'styled-components';
 
 export type Variant =
   | 'h1'
