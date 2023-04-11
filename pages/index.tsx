@@ -38,9 +38,15 @@ const DashboardPage: FunctionComponent<DashboardPageProps> = ({ flags }) => {
 export const getServerSideProps: GetServerSideProps = async () => {
   const { POSTHOG_KEY = '' } = process.env;
 
-  const client = new PostHog(POSTHOG_KEY);
-
-  const flags = await client.getAllFlags('');
+  let flags;
+  try {
+    const client = new PostHog(POSTHOG_KEY);
+    flags = await client.getAllFlags('');
+  } catch (error) {
+    // eslint-disable-next-line no-console
+    console.log('An error occurred while getting feature flags', error);
+    flags = [];
+  }
 
   return {
     props: {
