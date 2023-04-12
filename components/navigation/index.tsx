@@ -3,7 +3,7 @@ import Image from 'next/image';
 import { useRouter } from 'next/router';
 import HelpIcon from '@mui/icons-material/Help';
 import ScatterPlotIcon from '@mui/icons-material/ScatterPlot';
-// import PeopleOutlineSharpIcon from '@mui/icons-material/PeopleOutlineSharp';
+import PeopleIcon from '@mui/icons-material/People';
 import GridViewOutlinedIcon from '@mui/icons-material/GridViewOutlined';
 import { BsSlack } from 'react-icons/bs';
 import Link from 'next/link';
@@ -39,7 +39,9 @@ const Navigation: FunctionComponent = () => {
   const [domLoaded, setDomLoaded] = useState(false);
   const { asPath } = useRouter();
   const kubefirstVersion = useAppSelector(selectKubefirstVersion());
-  const { isEnabled, flagsAreReady } = useFeatureFlag('cluster-management');
+  const { isEnabled: isUserManagementEnabled } = useFeatureFlag('cluster-management');
+  const { isEnabled: isClusterManagementEnabled, flagsAreReady } =
+    useFeatureFlag('cluster-management');
 
   const routes = useMemo(
     () =>
@@ -48,7 +50,7 @@ const Navigation: FunctionComponent = () => {
           icon: <ScatterPlotIcon />,
           path: '/',
           title: 'Cluster Management',
-          isEnabled: flagsAreReady && isEnabled,
+          isEnabled: flagsAreReady && isClusterManagementEnabled,
         },
         {
           icon: <GridViewOutlinedIcon />,
@@ -56,8 +58,14 @@ const Navigation: FunctionComponent = () => {
           title: 'Services',
           isEnabled: true,
         },
+        {
+          icon: <PeopleIcon />,
+          path: '/users',
+          title: 'Users',
+          isEnabled: flagsAreReady && isUserManagementEnabled,
+        },
       ].filter(({ isEnabled }) => isEnabled),
-    [flagsAreReady, isEnabled],
+    [flagsAreReady, isClusterManagementEnabled, isUserManagementEnabled],
   );
 
   const isActive = (route: string) => {
