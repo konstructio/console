@@ -40,7 +40,8 @@ export const getServerSideProps: GetServerSideProps = async () => {
 
   let flags;
   try {
-    const client = new PostHog(POSTHOG_KEY);
+    // POSTHOG_KEY was created for testing purposes, the hardcoded key is the prod readonly key
+    const client = new PostHog(POSTHOG_KEY || 'phc_N4K5yJQsiIDBRK3X6rfrZlldK5uf2u1vgvlB82RADKn');
     flags = await client.getAllFlags('');
   } catch (error) {
     // eslint-disable-next-line no-console
