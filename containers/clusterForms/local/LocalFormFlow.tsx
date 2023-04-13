@@ -47,11 +47,11 @@ export const LocalFormFlow: FC = () => {
   const handleNextButtonClick = useCallback(() => {
     if (currentStep === LocalFormStep.SETUP && formRef.current) {
       formRef.current.requestSubmit();
-    }
-    if (lastStep) {
-      router.push('/installations');
-    } else {
+    } else if (!lastStep) {
       dispatch(setInstallationStep(currentStep + 1));
+    } else {
+      dispatch(setInstallationStep(0));
+      router.push('/installations');
     }
   }, [dispatch, lastStep, currentStep, router]);
 
@@ -89,5 +89,6 @@ export const LocalFormFlow: FC = () => {
 
 const ContentContainer = styled(Row)`
   flex: 1;
+  justify-content: center;
   padding: 0 80px;
 `;

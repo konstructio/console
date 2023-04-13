@@ -62,8 +62,9 @@ export const CivoGithubFormFlow: FC<CivoGithubFormFlowProps> = ({
   const handleFormSubmit = useCallback(
     (values: CivoInstallValues | CivoGithubClusterValues) => {
       dispatch(setCivoGithubInstallState(values));
+      dispatch(setInstallationStep(currentStep + 1));
     },
-    [dispatch],
+    [dispatch, currentStep],
   );
 
   const handleNextButtonClick = useCallback(() => {
@@ -72,12 +73,11 @@ export const CivoGithubFormFlow: FC<CivoGithubFormFlowProps> = ({
       formRef.current
     ) {
       formRef.current.requestSubmit();
-    }
-
-    if (lastStep) {
-      router.push('/installations');
-    } else {
+    } else if (!lastStep) {
       dispatch(setInstallationStep(currentStep + 1));
+    } else {
+      dispatch(setInstallationStep(0));
+      router.push('/installations');
     }
   }, [currentStep, lastStep, router, dispatch]);
 
@@ -133,6 +133,7 @@ export const CivoGithubFormFlow: FC<CivoGithubFormFlowProps> = ({
 };
 
 const ContentContainer = styled(Row)`
+  justify-content: center;
   flex: 1;
   padding: 0 80px;
 `;

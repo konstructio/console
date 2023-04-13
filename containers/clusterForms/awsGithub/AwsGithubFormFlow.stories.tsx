@@ -2,6 +2,8 @@ import React, { useCallback, useState, useEffect } from 'react';
 import { Story } from '@storybook/react';
 
 import { mockGithubUserOrganizations } from '../../../constants/mockGithubUserOrganizations';
+import { useAppDispatch } from '../../../redux/store';
+import { setInstallationStep } from '../../../redux/slices/installation.slice';
 
 import { AwsGithubFormFlow } from './AwsGithubFormFlow';
 
@@ -16,6 +18,8 @@ const DefaultTemplate: Story = () => {
   const [hostedZoneValid, setHostedZoneValid] = useState(false);
   const [githubToken, setGithubToken] = useState('');
   const [githubTokenValid, setGithubTokenValid] = useState(false);
+
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     if (isValidating) {
@@ -35,6 +39,11 @@ const DefaultTemplate: Story = () => {
     setShowMessage(true);
     setIsValidating(true);
   }, []);
+
+  useEffect(() => {
+    // advance to first step to simulate selection
+    dispatch(setInstallationStep(1));
+  }, [dispatch]);
 
   return (
     <AwsGithubFormFlow

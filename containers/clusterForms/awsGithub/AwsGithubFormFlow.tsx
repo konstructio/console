@@ -69,12 +69,11 @@ export const AwsGithubFormFlow: FC<AwsGithubFormFlowProps> = ({
       formRef.current
     ) {
       formRef.current.requestSubmit();
-    }
-
-    if (lastStep) {
-      router.push('/installations');
-    } else {
+    } else if (!lastStep) {
       dispatch(setInstallationStep(currentStep + 1));
+    } else {
+      dispatch(setInstallationStep(0));
+      router.push('/installations');
     }
   }, [dispatch, lastStep, currentStep, router]);
 
@@ -130,6 +129,7 @@ export const AwsGithubFormFlow: FC<AwsGithubFormFlowProps> = ({
 };
 
 const ContentContainer = styled(Row)`
+  justify-content: center;
   flex: 1;
   padding: 0 80px;
 `;
