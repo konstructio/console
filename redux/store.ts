@@ -3,12 +3,7 @@ import { Action, configureStore, ThunkAction } from '@reduxjs/toolkit';
 import { createWrapper } from 'next-redux-wrapper';
 
 import { consoleApi } from './api';
-import {
-  githubUserReducer,
-  configReducer,
-  installationReducer,
-  availableSitesReducer,
-} from './slices';
+import { gitReducer, configReducer, installationReducer, readinessReducer } from './slices';
 
 export const makeStore = () =>
   configureStore({
@@ -16,8 +11,8 @@ export const makeStore = () =>
       [consoleApi.reducerPath]: consoleApi.reducer,
       config: configReducer,
       installation: installationReducer,
-      githubUser: githubUserReducer,
-      availableSites: availableSitesReducer,
+      git: gitReducer,
+      readiness: readinessReducer,
     },
     middleware: (gDM) => gDM().concat(consoleApi.middleware),
   });

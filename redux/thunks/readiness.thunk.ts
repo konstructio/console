@@ -3,7 +3,7 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import { sendReadinessEvent } from '../api/';
 import { AppDispatch, RootState } from '../store';
 
-export const checkReadiness = createAsyncThunk<
+export const checkSiteReadiness = createAsyncThunk<
   { success: boolean; url: string },
   { url: string },
   {

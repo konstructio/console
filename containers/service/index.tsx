@@ -2,7 +2,7 @@ import React, { FunctionComponent, useCallback, useEffect, useState } from 'reac
 
 import ServiceComponent from '../../components/service';
 import { useAppDispatch, useAppSelector } from '../../redux/store';
-import { checkReadiness } from '../../redux/thunks/readiness.thunk';
+import { checkSiteReadiness } from '../../redux/thunks/readiness.thunk';
 
 export interface ServiceProps {
   description?: string;
@@ -25,7 +25,7 @@ const Service: FunctionComponent<ServiceProps> = ({ links: serviceLinks, ...prop
   );
 
   const dispatch = useAppDispatch();
-  const availableSites = useAppSelector(({ availableSites }) => availableSites.sites);
+  const availableSites = useAppSelector(({ readiness }) => readiness.availableSites);
 
   const isSiteAvailable = useCallback(
     (url: string) => {
@@ -39,7 +39,7 @@ const Service: FunctionComponent<ServiceProps> = ({ links: serviceLinks, ...prop
       const isAvailable = isSiteAvailable(url);
 
       if (!isAvailable) {
-        return dispatch(checkReadiness({ url }));
+        return dispatch(checkSiteReadiness({ url }));
       }
     },
     [dispatch, isSiteAvailable],

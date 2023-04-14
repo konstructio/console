@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useCallback } from 'react';
 
-import { getUser, getUserOrganizations } from '../../redux/thunks/github.thunk';
+import { getGithubUser, getGithubUserOrganizations } from '../../redux/thunks/git.thunk';
 import { useAppDispatch, useAppSelector } from '../../redux/store';
 import { CivoGithubFormFlow } from '../../containers/clusterForms/civoGithub/CivoGithubFormFlow';
 
 export default function CivoGithubInstallationPage() {
-  const { user, organizations, isLoading } = useAppSelector(({ githubUser }) => githubUser);
+  const { githubUser, githubUserOrganizations, isLoading } = useAppSelector(({ git }) => git);
 
   const dispatch = useAppDispatch();
 
@@ -27,8 +27,8 @@ export default function CivoGithubInstallationPage() {
     async (token: string) => {
       setGithubToken(token);
       try {
-        await dispatch(getUser(token)).unwrap();
-        await dispatch(getUserOrganizations(token)).unwrap();
+        await dispatch(getGithubUser(token)).unwrap();
+        await dispatch(getGithubUserOrganizations(token)).unwrap();
       } catch (error) {
         // error processed in redux state
       }
@@ -48,8 +48,8 @@ export default function CivoGithubInstallationPage() {
       onTestButtonClick={handleTestButtonClick}
       isHostedDomainValid={hostedDomainValid}
       hasTokenValue={!!githubToken}
-      githubTokenValid={!!user}
-      githubUserOrginizations={organizations}
+      githubTokenValid={!!githubUser}
+      githubUserOrginizations={githubUserOrganizations}
       onGithubTokenBlur={handleGithubTokenBlur}
       loading={isLoading}
     />

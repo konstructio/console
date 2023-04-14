@@ -1,6 +1,6 @@
 import { makeStore } from '../../store';
 import { mockFailedResponse, mockSuccessResponse } from '../../../utils/mock';
-import { getUser, getUserOrganizations } from '../github.thunk';
+import { getGithubUser, getGithubUserOrganizations } from '../git.thunk';
 import { mockGithubUser } from '../../../constants/mockGithubUser';
 import { mockGithubUserOrganizations } from '../../../constants/mockGithubUserOrganizations';
 
@@ -11,22 +11,22 @@ describe('redux/thunks - successful responses', () => {
 
   const reduxStore = makeStore();
 
-  test('getUser', async () => {
-    const { payload } = await reduxStore.dispatch(getUser('token'));
+  test('getGithubUser', async () => {
+    const { payload } = await reduxStore.dispatch(getGithubUser('token'));
 
-    const { user } = reduxStore.getState().githubUser;
+    const { githubUser } = reduxStore.getState().git;
 
     expect(payload).toStrictEqual(mockGithubUser);
-    expect(payload).toStrictEqual(user);
+    expect(payload).toStrictEqual(githubUser);
   });
 
-  test('getUserOrganizations', async () => {
-    const { payload } = await reduxStore.dispatch(getUserOrganizations('token'));
+  test('getGithubUserOrganizations', async () => {
+    const { payload } = await reduxStore.dispatch(getGithubUserOrganizations('token'));
 
-    const { organizations } = reduxStore.getState().githubUser;
+    const { githubUserOrganizations } = reduxStore.getState().git;
 
     expect(payload).toStrictEqual(mockGithubUserOrganizations);
-    expect(payload).toStrictEqual(organizations);
+    expect(payload).toStrictEqual(githubUserOrganizations);
   });
 });
 
@@ -37,22 +37,22 @@ describe('redux/thunks - failed responses', () => {
 
   const reduxStore = makeStore();
 
-  test('getUser', async () => {
-    const result = await reduxStore.dispatch(getUser('token'));
+  test('getGithubUser', async () => {
+    const result = await reduxStore.dispatch(getGithubUser('token'));
 
-    const { user, error } = reduxStore.getState().githubUser;
+    const { githubUser, error } = reduxStore.getState().git;
 
-    expect(user).toBe(null);
+    expect(githubUser).toBe(null);
     expect(result.error.message).toBe('Request failed with status code 403');
     expect(error).toStrictEqual('Request failed with status code 403');
   });
 
-  test('getUserOrganizations', async () => {
-    const result = await reduxStore.dispatch(getUserOrganizations('token'));
+  test('getGithubUserOrganizations', async () => {
+    const result = await reduxStore.dispatch(getGithubUserOrganizations('token'));
 
-    const { organizations, error } = reduxStore.getState().githubUser;
+    const { githubUserOrganizations, error } = reduxStore.getState().git;
 
-    expect(organizations).toStrictEqual([]);
+    expect(githubUserOrganizations).toStrictEqual([]);
     expect(result.error.message).toBe('Request failed with status code 403');
     expect(error).toStrictEqual('Request failed with status code 403');
   });
