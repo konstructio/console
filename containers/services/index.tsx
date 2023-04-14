@@ -6,7 +6,7 @@ import { GIT_PROVIDERS } from '../../enums/utils';
 import { useAppDispatch, useAppSelector } from '../../redux/store';
 import Service from '../service';
 import Typography from '../../components/typography';
-import { sendTrackEvent } from '../../redux/api';
+import { useTelemetryMutation } from '../../redux/api';
 
 import { Container, Header, LearnMoreLink, ServicesContainer } from './services.styled';
 
@@ -43,6 +43,8 @@ const Services: FunctionComponent<ServicesProps> = ({
   vaultUrl,
   metaphor,
 }) => {
+  const [sendTelemetryEvent] = useTelemetryMutation();
+
   const isTelemetryEnabled = useAppSelector(({ config }) => config.isTelemetryEnabled);
 
   const dispatch = useAppDispatch();
@@ -115,10 +117,10 @@ const Services: FunctionComponent<ServicesProps> = ({
     (url: string, name: string) => {
       if (isTelemetryEnabled) {
         const event = `console.${name.toLowerCase()}.link`.replace(/ /g, '');
-        sendTrackEvent({ event, properties: { url, type: 'link' } });
+        sendTelemetryEvent({ event, properties: { url, type: 'link' } });
       }
     },
-    [isTelemetryEnabled],
+    [isTelemetryEnabled, sendTelemetryEvent],
   );
 
   return (

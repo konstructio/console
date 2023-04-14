@@ -2,10 +2,11 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 
 import { sendReadinessEvent } from '../api/';
 import { AppDispatch, RootState } from '../store';
+import { ReadinessData } from '../../pages/api/readiness';
 
 export const checkSiteReadiness = createAsyncThunk<
-  { success: boolean; url: string },
-  { url: string },
+  ReadinessData,
+  Omit<ReadinessData, 'success'>,
   {
     dispatch: AppDispatch;
     state: RootState;

@@ -1,8 +1,9 @@
-import { createApi, fetchBaseQuery, FetchArgs } from '@reduxjs/toolkit/dist/query';
+import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/dist/query/react';
 import { HYDRATE } from 'next-redux-wrapper';
 
-import { ReadinessResponseData } from '../../pages/api/readiness';
+import { ReadinessData } from '../../pages/api/readiness';
 import { TelemetryResponseData } from '../../pages/api/telemetry';
+import { SendTelemetryArgs } from '../../services/telemetry';
 
 export const consoleApi = createApi({
   baseQuery: fetchBaseQuery({
@@ -14,14 +15,14 @@ export const consoleApi = createApi({
     }
   },
   endpoints: (builder) => ({
-    track: builder.mutation<TelemetryResponseData, FetchArgs['body']>({
+    telemetry: builder.mutation<TelemetryResponseData, SendTelemetryArgs>({
       query: (body) => ({
         url: '/telemetry',
         method: 'POST',
         body,
       }),
     }),
-    readiness: builder.mutation<ReadinessResponseData, FetchArgs['body']>({
+    readiness: builder.mutation<ReadinessData, Omit<ReadinessData, 'success'>>({
       query: (body) => ({
         url: '/readiness',
         method: 'POST',
@@ -31,8 +32,6 @@ export const consoleApi = createApi({
   }),
 });
 
-export const { endpoints } = consoleApi;
+export const { endpoints, useTelemetryMutation, useReadinessMutation } = consoleApi;
 
-// redux toolkit react is not properly generating typed hooks. exposing track/readiness events for now.
-export const sendTrackEvent = endpoints.track.initiate;
 export const sendReadinessEvent = endpoints.readiness.initiate;

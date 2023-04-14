@@ -7,14 +7,14 @@ export type TelemetryResponseData = {
 };
 
 export default function handler(req: NextApiRequest, res: NextApiResponse<TelemetryResponseData>) {
-  try {
-    if (req.method === 'POST') {
+  if (req.method === 'POST') {
+    try {
       const { event, properties } = req.body;
-      sendTelemetry(event, properties);
+      sendTelemetry({ event, properties });
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.log('error: sending segment event', error);
     }
-  } catch (error) {
-    // eslint-disable-next-line no-console
-    console.log('error: sending segment event', error);
   }
 
   res.status(200).json({ success: true });
