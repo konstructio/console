@@ -1,16 +1,16 @@
 import React, { FunctionComponent, useCallback } from 'react';
 import styled from 'styled-components';
-import InstallationInfoCard from 'components/InstallationInfoCard/InstallationInfoCard';
-import InstallationStepContainer from 'components/InstallationStepContainer/InstallationStepContainer';
+import InstallationInfoCard from 'components/installationInfoCard/InstallationInfoCard';
+import InstallationStepContainer from 'components/installationStepContainer/InstallationStepContainer';
 import { useRouter } from 'next/router';
 
 import { useAppDispatch, useAppSelector } from '../../redux/store';
 import { setInstallType, setInstallationStep } from '../../redux/slices/installation.slice';
-import InstallationCard from '../../components/InstallationCard/InstallationCard';
+import InstallationCard from '../../components/installationCard/InstallationCard';
 import { InstallationType } from '../../types/redux';
 import { useInstallation } from '../../hooks/useInstallation';
 import { INSTALLATION_CARD_OPTIONS } from '../../constants';
-import Column from '../../components/Column/Column';
+import Column from '../../components/column/Column';
 
 const InstallationsSelectionPage: FunctionComponent = () => {
   const router = useRouter();

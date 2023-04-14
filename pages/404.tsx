@@ -5,7 +5,7 @@ import styled from 'styled-components';
 
 import Typography from '../components/typography';
 import NotFoundIcon from '../assets/404.svg';
-import Button from '../components/Button/Button';
+import Button from '../components/button/Button';
 
 const Container = styled.div`
   align-items: center;

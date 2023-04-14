@@ -8,14 +8,12 @@ import {
   setAWSGithubInstallState,
   setInstallationStep,
 } from '../../../redux/slices/installation.slice';
-import InstallationStepContainer from '../../../components/InstallationStepContainer/InstallationStepContainer';
+import InstallationStepContainer from '../../../components/installationStepContainer/InstallationStepContainer';
 import { AwsGithubClusterValues, InstallationType } from '../../../types/redux';
-import ClusterRunningMessage from '../../../components/ClusterRunningMessage/ClusterRunningMessage';
+import ClusterRunningMessage from '../../../components/clusterRunningMessage/ClusterRunningMessage';
 import TerminalLogs from '../../terminalLogs';
-import AwsReadinessForm, {
-  AwsReadinessFormProps,
-} from '../../../components/AwsReadinessForm/AwsReadinessForm';
-import Row from '../../../components/Row/Row';
+import AwsReadinessForm, { AwsReadinessFormProps } from '../aws/AwsReadinessForm';
+import Row from '../../../components/row/Row';
 
 import AwsGithubSetupForm, {
   AwsGithubSetupFormProps,

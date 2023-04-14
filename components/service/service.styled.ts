@@ -4,6 +4,7 @@ import NextLink from 'next/link';
 
 import Typography from '../typography';
 import { textTruncate } from '../../utils/theme';
+import { PASTEL_LIGHT_BLUE } from '../../constants/colors';
 
 export const AppConnector = styled.div`
   height: 16px;
@@ -24,7 +25,7 @@ export const LiveAppIcon = styled.div`
 
 export const Container = styled.div`
   background: ${({ theme }) => theme.colors.white};
-  border: 1px solid #e2e8f0;
+  border: 1px solid ${PASTEL_LIGHT_BLUE};
   border-radius: 12px;
   height: 194px;
   padding: 24px;

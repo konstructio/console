@@ -27,7 +27,7 @@ const DefaultTemplate: Story = () => {
       onNextButtonClick={goToNext}
       onBackButtonClick={goToPrev}
     >
-      <h1>Current Step: {currentStep}</h1>
+      <h1 style={{ margin: '0 auto' }}>Current Step: {currentStep}</h1>
     </InstallationStepContainer>
   );
 };

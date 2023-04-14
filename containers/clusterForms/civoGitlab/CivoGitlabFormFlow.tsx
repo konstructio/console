@@ -2,16 +2,16 @@ import React, { FC, useRef, useCallback } from 'react';
 import { useRouter } from 'next/router';
 import styled from 'styled-components';
 
-import Row from '../../../components/Row/Row';
+import Row from '../../../components/row/Row';
 import { useAppDispatch, useAppSelector } from '../../../redux/store';
 import { useInstallation } from '../../../hooks/useInstallation';
 import {
   setCivoGithubInstallState,
   setInstallationStep,
 } from '../../../redux/slices/installation.slice';
-import InstallationStepContainer from '../../../components/InstallationStepContainer/InstallationStepContainer';
+import InstallationStepContainer from '../../../components/installationStepContainer/InstallationStepContainer';
 import { CivoClusterValues, CivoInstallValues, InstallationType } from '../../../types/redux/index';
-import ClusterRunningMessage from '../../../components/ClusterRunningMessage/ClusterRunningMessage';
+import ClusterRunningMessage from '../../../components/clusterRunningMessage/ClusterRunningMessage';
 import TerminalLogs from '../../terminalLogs/index';
 
 import CivoGitlabReadinessForm, {

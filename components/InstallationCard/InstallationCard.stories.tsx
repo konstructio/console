@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { Story } from '@storybook/react';
 
 import { INSTALLATION_CARD_OPTIONS } from '../../constants';
-import Column from '../Column/Column';
+import Column from '../column/Column';
 import { InstallationType } from '../../types/redux';
 
 import InstallationCard from './InstallationCard';

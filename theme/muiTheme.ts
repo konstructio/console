@@ -123,7 +123,7 @@ const palleteColors = {
   },
 };
 
-const theme = createTheme({
+export const muiTheme = createTheme({
   typography: { ...typographies },
   palette: palleteColors,
   components: {
@@ -147,5 +147,3 @@ const theme = createTheme({
     },
   },
 });
-
-export default theme;

@@ -1,8 +1,9 @@
 import React, { FC } from 'react';
 import styled from 'styled-components';
 
-import Row from '../Row/Row';
-import Button from '../Button/Button';
+import Button from '../button/Button';
+
+import { Container } from './InstallationButtons.styled';
 
 export interface InstallationButtonsProps {
   showBackButton?: boolean;
@@ -20,7 +21,7 @@ const InstallationButtons: FC<InstallationButtonsProps> = ({
   nextButtonDisabled,
   ...rest
 }) => (
-  <Row {...rest}>
+  <Container {...rest}>
     {showBackButton && (
       <Button variant="outlined" color="primary" onClick={onBackButtonClick}>
         Back
@@ -36,23 +37,7 @@ const InstallationButtons: FC<InstallationButtonsProps> = ({
     >
       {nextButtonText}
     </Button>
-  </Row>
+  </Container>
 );
 
-export default styled(InstallationButtons)`
-  width: 100%;
-  align-items: center;
-  background-color: ${({ theme }) => theme.colors.white};
-  gap: 16px;
-  justify-content: flex-end;
-  height: 64px;
-  border-top: ${({ theme }) => `1px solid ${theme.colors.lightGrey}`};
-
-  & button {
-    text-transform: capitalize;
-  }
-
-  #next {
-    margin-right: 80px;
-  }
-`;
+export default styled(InstallationButtons)``;

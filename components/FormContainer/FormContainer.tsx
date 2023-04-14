@@ -1,11 +1,9 @@
 import styled from 'styled-components';
 import { Box } from '@mui/material';
 
-export default styled(Box)<{ shouldShowBackground?: boolean }>`
+export default styled(Box)`
   display: flex;
   flex-direction: column;
-  height: fit-content;
-  width: 100%;
   padding: 30px 20px;
   background-color: ${({ theme }) => theme.colors.white};
   border-radius: 8px;

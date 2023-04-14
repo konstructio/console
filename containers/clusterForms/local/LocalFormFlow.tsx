@@ -8,11 +8,11 @@ import {
   setLocalInstallState,
   setInstallationStep,
 } from '../../../redux/slices/installation.slice';
-import ClusterRunningMessage from '../../../components/ClusterRunningMessage/ClusterRunningMessage';
+import ClusterRunningMessage from '../../../components/clusterRunningMessage/ClusterRunningMessage';
 import TerminalLogs from '../../terminalLogs';
-import InstallationStepContainer from '../../../components/InstallationStepContainer/InstallationStepContainer';
+import InstallationStepContainer from '../../../components/installationStepContainer/InstallationStepContainer';
 import { useAppDispatch, useAppSelector } from '../../../redux/store';
-import Row from '../../../components/Row/Row';
+import Row from '../../../components/row/Row';
 
 import { LocalSetupForm } from './LocalSetupForm/LocalSetupForm';
 

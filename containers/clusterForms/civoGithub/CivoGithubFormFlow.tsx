@@ -8,15 +8,15 @@ import {
   setCivoGithubInstallState,
   setInstallationStep,
 } from '../../../redux/slices/installation.slice';
-import InstallationStepContainer from '../../../components/InstallationStepContainer/InstallationStepContainer';
+import InstallationStepContainer from '../../../components/installationStepContainer/InstallationStepContainer';
 import {
   CivoGithubClusterValues,
   CivoInstallValues,
   InstallationType,
 } from '../../../types/redux/index';
-import ClusterRunningMessage from '../../../components/ClusterRunningMessage/ClusterRunningMessage';
+import ClusterRunningMessage from '../../../components/clusterRunningMessage/ClusterRunningMessage';
 import TerminalLogs from '../../terminalLogs/index';
-import Row from '../../../components/Row/Row';
+import Row from '../../../components/row/Row';
 
 import CivoGithubReadinessForm, {
   CivoGithubReadinessFormProps,

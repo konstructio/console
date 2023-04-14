@@ -2,7 +2,7 @@ import React, { forwardRef } from 'react';
 import { useForm } from 'react-hook-form';
 import styled from 'styled-components';
 
-import FormContainer from '../../../../components/FormContainer/FormContainer';
+import FormContainer from '../../../../components/formContainer/FormContainer';
 import { CivoGithubClusterValues } from '../../../../types/redux/index';
 import ControlledAutocomplete from '../../../../components/controlledFields/AutoComplete';
 import ControlledPassword from '../../../../components/controlledFields/Password';

@@ -4,13 +4,13 @@ import styled from 'styled-components';
 import { CircularProgress } from '@mui/material';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 
-import Button from '../../../../components/Button/Button';
+import Button from '../../../../components/button/Button';
 import Typography from '../../../../components/typography/index';
 import ControlledTextField from '../../../../components/controlledFields/TextField';
 import { DOMAIN_REGEX } from '../../../../constants/index';
 import { GRANNY_APPLE_GREEN } from '../../../../constants/colors';
 import { CivoInstallValues } from '../../../../types/redux/index';
-import FormContainer from '../../../../components/FormContainer/FormContainer';
+import FormContainer from '../../../../components/formContainer/FormContainer';
 
 export interface CivoGitlabReadinessFormProps {
   showMessage: boolean;

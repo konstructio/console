@@ -33,7 +33,7 @@ import {
   LIGHT_GREY,
 } from '../constants/colors';
 
-const theme: DefaultTheme = {
+export const theme: DefaultTheme = {
   colors: {
     americanBlue: AMERICAN_BLUE,
     americanGreen: AMERICAN_GREEN,
@@ -67,5 +67,3 @@ const theme: DefaultTheme = {
     lightGrey: LIGHT_GREY,
   },
 };
-
-export default theme;

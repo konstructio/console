@@ -5,13 +5,13 @@ import Head from 'next/head';
 import { ThemeProvider as ThemeProviderMUI } from '@mui/material';
 import styled, { ThemeProvider } from 'styled-components';
 
-import themeMUI from '../theme/muiTheme';
-import theme from '../theme';
+import { muiTheme } from '../theme/muiTheme';
+import { theme } from '../theme';
 import { wrapper } from '../redux/store';
 import '../styles/globals.css';
 import Navigation from '../components/navigation';
-import Row from '../components/Row/Row';
-import Column from '../components/Column/Column';
+import Row from '../components/row/Row';
+import Column from '../components/column/Column';
 
 const Layout = styled(Row)`
   background-color: ${({ theme }) => theme.colors.washMe};
@@ -45,7 +45,7 @@ export default function App({ Component, ...rest }: AppProps) {
         <link rel="shortcut icon" href="/static/ray.svg" />
       </Head>
       <Provider store={store}>
-        <ThemeProviderMUI theme={themeMUI}>
+        <ThemeProviderMUI theme={muiTheme}>
           <ThemeProvider theme={theme}>
             <Layout>
               <Navigation />

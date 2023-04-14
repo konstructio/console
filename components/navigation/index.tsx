@@ -9,7 +9,7 @@ import GridViewOutlinedIcon from '@mui/icons-material/GridViewOutlined';
 import { BsSlack } from 'react-icons/bs';
 import Link from 'next/link';
 
-import { PASTEL_LIGHT_BABY_BLUE } from '../../constants/colors';
+import { ECHO_BLUE } from '../../constants/colors';
 import { useAppSelector } from '../../redux/store';
 
 import {
@@ -90,7 +90,7 @@ const Navigation: FunctionComponent = () => {
           {/* Only visible above md breakpoint 👇 */}
           <Image alt="k1-image" src={'/static/title.svg'} height={40} width={160} id="title" />
           {kubefirstVersion && (
-            <KubefirstVersion variant="labelSmall" color={PASTEL_LIGHT_BABY_BLUE}>
+            <KubefirstVersion variant="labelSmall" color={ECHO_BLUE}>
               {`V${kubefirstVersion}`}
             </KubefirstVersion>
           )}

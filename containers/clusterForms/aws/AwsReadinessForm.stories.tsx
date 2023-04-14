@@ -2,9 +2,9 @@ import React, { useCallback, useRef, useState, useEffect } from 'react';
 import { Story } from '@storybook/react';
 import styled from 'styled-components';
 
-import Column from '../Column/Column';
-import Button from '../Button/Button';
-import { AwsInstallValues } from '../../types/redux';
+import Column from '../../../components/column/Column';
+import Button from '../../../components/button/Button';
+import { AwsInstallValues } from '../../../types/redux';
 
 import AwsReadinessForm from './AwsReadinessForm';
 

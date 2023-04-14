@@ -1,5 +1,7 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { InputAdornment } from '@mui/material';
+
+import { SPUN_PEARL } from '../../constants/colors';
 
 export const Container = styled.div<{ isDisabled?: boolean }>`
   width: 100%;
@@ -8,19 +10,18 @@ export const Container = styled.div<{ isDisabled?: boolean }>`
     margin-bottom: 8px;
   }
 
-  ${({ isDisabled }) =>
+  ${({ isDisabled, theme }) =>
     isDisabled &&
-    `
-
+    css`
       & > label {
-        color: #A1A1AA !important;
+        color: ${SPUN_PEARL} !important;
       }
 
       & > div > input {
-        border-color: #E4E4E7 !important;
+        border-color: ${theme.colors.lightGrey} !important;
         cursor: not-allowed;
       }
-  `}
+    `}
 `;
 
 export const Required = styled.div`

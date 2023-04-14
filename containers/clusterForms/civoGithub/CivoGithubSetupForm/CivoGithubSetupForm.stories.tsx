@@ -3,8 +3,8 @@ import { Story } from '@storybook/react';
 import styled from 'styled-components';
 
 import { setCivoGithubInstallState } from '../../../../redux/slices/installation.slice';
-import Column from '../../../../components/Column/Column';
-import Button from '../../../../components/Button/Button';
+import Column from '../../../../components/column/Column';
+import Button from '../../../../components/button/Button';
 import { CivoInstallValues } from '../../../../types/redux/index';
 import { useAppDispatch } from '../../../../redux/store';
 

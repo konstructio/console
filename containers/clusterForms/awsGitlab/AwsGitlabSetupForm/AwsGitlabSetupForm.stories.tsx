@@ -3,8 +3,8 @@ import { Story } from '@storybook/react';
 import styled from 'styled-components';
 
 import { setAWSGitlabInstallState } from '../../../../redux/slices/installation.slice';
-import Column from '../../../../components/Column/Column';
-import Button from '../../../../components/Button/Button';
+import Column from '../../../../components/column/Column';
+import Button from '../../../../components/button/Button';
 import { AwsClusterValues } from '../../../../types/redux';
 import { useAppDispatch } from '../../../../redux/store';
 

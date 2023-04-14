@@ -4,14 +4,14 @@ import styled from 'styled-components';
 import { CircularProgress } from '@mui/material';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 
-import ControlledSelect from '../controlledFields/Select';
-import Button from '../Button/Button';
-import Typography from '../typography/index';
-import ControlledTextField from '../controlledFields/TextField';
-import { DOMAIN_REGEX } from '../../constants/index';
-import { GRANNY_APPLE_GREEN } from '../../constants/colors';
-import { AwsInstallValues } from '../../types/redux/index';
-import FormContainer from '../FormContainer/FormContainer';
+import ControlledSelect from '../../../components/controlledFields/Select';
+import Button from '../../../components/button/Button';
+import Typography from '../../../components/typography/index';
+import ControlledTextField from '../../../components/controlledFields/TextField';
+import { DOMAIN_REGEX } from '../../../constants/index';
+import { GRANNY_APPLE_GREEN } from '../../../constants/colors';
+import { AwsInstallValues } from '../../../types/redux/index';
+import FormContainer from '../../../components/formContainer/FormContainer';
 
 export interface AwsReadinessFormProps {
   showMessage: boolean;

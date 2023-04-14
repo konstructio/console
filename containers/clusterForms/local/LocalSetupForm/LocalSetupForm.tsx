@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import ControlledTextField from '../../../../components/controlledFields/TextField';
 import ControlledPassword from '../../../../components/controlledFields/Password';
 import { LocalInstallValues } from '../../../../types/redux';
-import FormContainer from '../../../../components/FormContainer/FormContainer';
+import FormContainer from '../../../../components/formContainer/FormContainer';
 
 export interface LocalSetupFormProps {
   onFormSubmit: (values: LocalInstallValues) => void;

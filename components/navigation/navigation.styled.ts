@@ -2,6 +2,7 @@ import styled, { css } from 'styled-components';
 
 import Typography from '../../components/typography';
 import { media } from '../../utils/media';
+import { MIDNIGHT_EXPRESS } from '../../constants/colors';
 
 export const Container = styled.nav`
   background-color: ${({ theme }) => theme.colors.moonlessMystery};
@@ -55,7 +56,7 @@ export const MenuItem = styled.div<{ isActive?: boolean }>`
   transition: width 0.5s ease;
 
   &:hover {
-    background-color: #252a41;
+    background-color: ${MIDNIGHT_EXPRESS};
     color: white;
 
     svg {
@@ -66,7 +67,7 @@ export const MenuItem = styled.div<{ isActive?: boolean }>`
   ${({ isActive }) =>
     isActive &&
     css`
-      background-color: #252a41;
+      background-color: ${MIDNIGHT_EXPRESS};
       color: white;
 
       svg {

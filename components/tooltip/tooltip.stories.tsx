@@ -3,9 +3,9 @@ import styled from 'styled-components';
 import { ComponentStory, ComponentMeta } from '@storybook/react';
 
 import Typography from '../typography';
-import Button from '../Button/Button';
+import Button from '../button/Button';
 
-import TooltipComponent from './index';
+import TooltipComponent from './Tooltip';
 
 export default {
   title: 'Components/Tooltip',

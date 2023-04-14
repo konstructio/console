@@ -3,8 +3,8 @@ import { Story } from '@storybook/react';
 import styled from 'styled-components';
 
 import { setAWSGithubInstallState } from '../../../../redux/slices/installation.slice';
-import Column from '../../../../components/Column/Column';
-import Button from '../../../../components/Button/Button';
+import Column from '../../../../components/column/Column';
+import Button from '../../../../components/button/Button';
 import { AwsGithubClusterValues } from '../../../../types/redux';
 import { useAppDispatch } from '../../../../redux/store';
 import { mockGithubUserOrganizations } from '../../../../constants/mockGithubUserOrganizations';

@@ -1,14 +1,14 @@
 import React, { FC, PropsWithChildren } from 'react';
 import styled from 'styled-components';
 
-import Row from '../Row/Row';
-import Column from '../Column/Column';
-import Progress, { ProgressProps } from '../progress';
+import Progress, { ProgressProps } from '../progress/Progress';
 import Typography from '../typography';
 import { noop } from '../../utils/noop';
 import InstallationButtons, {
   InstallationButtonsProps,
-} from '../InstallationButtons/InstallationButtons';
+} from '../installationButtons/InstallationButtons';
+
+import { Container, Title, Content } from './InstallationStepContainer.styled';
 
 interface InstallationStepContainerProps
   extends PropsWithChildren,
@@ -29,7 +29,7 @@ const InstallationStepContainer: FC<InstallationStepContainerProps> = ({
   children,
   ...rest
 }) => (
-  <Column {...rest}>
+  <Container {...rest}>
     <Progress activeStep={activeStep} steps={steps} />
     <Title>
       <Typography variant="h6">{installationTitle}</Typography>
@@ -42,28 +42,7 @@ const InstallationStepContainer: FC<InstallationStepContainerProps> = ({
       nextButtonText={nextButtonText}
       nextButtonDisabled={nextButtonDisabled}
     />
-  </Column>
+  </Container>
 );
 
-export default styled(InstallationStepContainer)`
-  width: 100%;
-  height: 100%;
-  background-color: ${({ theme }) => theme.colors.washMe};
-
-  ${InstallationButtons} {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    z-index: 1;
-  }
-`;
-
-const Title = styled.div`
-  margin: 40px auto;
-`;
-
-const Content = styled(Row)`
-  height: 100%;
-  margin-bottom: 70px;
-  overflow-y: auto;
-`;
+export default styled(InstallationStepContainer)``;

@@ -1,8 +1,6 @@
 import React from 'react';
 import { Story } from '@storybook/react';
 
-import boxImageSrc from '../../public/static/box.svg';
-
 import ClusterRunningMessage from './ClusterRunningMessage';
 
 export default {
@@ -10,6 +8,6 @@ export default {
   component: ClusterRunningMessage,
 };
 
-const DefaultTemplate: Story = () => <ClusterRunningMessage imageSrc={boxImageSrc} />;
+const DefaultTemplate: Story = () => <ClusterRunningMessage />;
 
 export const Default = DefaultTemplate.bind({});

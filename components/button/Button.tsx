@@ -2,6 +2,8 @@ import Button from '@mui/material/Button';
 import { ButtonProps } from '@mui/material';
 import styled, { css } from 'styled-components';
 
+import { DOLPHIN, FIRE_BRICK, MAGNOLIA, ROYAL_PURPLE } from '../../constants/colors';
+
 export interface IButtonProps extends ButtonProps {
   color: 'primary' | 'secondary' | 'error';
   variant: Required<ButtonProps['variant']>;
@@ -20,25 +22,25 @@ export default styled(Button)<IButtonProps>`
   &:hover {
     background-color: ${({ color }) =>
       color === 'primary'
-        ? '#6f37ae'
+        ? `${ROYAL_PURPLE}`
         : color === 'secondary'
-        ? '#faf5ff'
+        ? `${MAGNOLIA}`
         : color === 'error'
-        ? '#b91c1c'
+        ? `${FIRE_BRICK}`
         : 'inherit'}};
   }
 
-  ${({ color, disabled }) => {
+  ${({ color, disabled, theme }) => {
     if (disabled && color === 'primary') {
       return css`
-        background-color: #e4e4e7 !important;
-        color: #71717a !important;
+        background-color: ${theme.colors.lightGrey} !important;
+        color: ${DOLPHIN} !important;
       `;
     }
     if (disabled && color === 'secondary') {
       return css`
-        border-color: #71717a !important;
-        color: #71717a !important;
+        border-color: ${DOLPHIN} !important;
+        color: ${DOLPHIN} !important;
       `;
     }
   }}
