@@ -1,8 +1,6 @@
 import React, { forwardRef } from 'react';
 import { useForm } from 'react-hook-form';
-import styled from 'styled-components';
 
-import FormContainer from '../../../../components/formContainer/FormContainer';
 import { AwsGithubClusterValues } from '../../../../types/redux';
 import ControlledAutocomplete from '../../../../components/controlledFields/AutoComplete';
 import ControlledPassword from '../../../../components/controlledFields/Password';
@@ -10,6 +8,8 @@ import ControlledCheckbox from '../../../../components/controlledFields/Checkbox
 import { AWS_REGIONS, EMAIL_REGEX } from '../../../../constants/index';
 import ControlledTextField from '../../../../components/controlledFields/TextField';
 import { GithubUserOrganization } from '../../../../types/github';
+
+import { Form } from './AwsGithubSetupForm.styled';
 
 export interface AwsGithubSetupFormProps {
   hasTokenValue: boolean;
@@ -20,7 +20,7 @@ export interface AwsGithubSetupFormProps {
   loading: boolean;
 }
 
-const AwsGithubSetupForm = forwardRef<HTMLFormElement, AwsGithubSetupFormProps>(
+export const AwsGithubSetupForm = forwardRef<HTMLFormElement, AwsGithubSetupFormProps>(
   function AwsGithubSetupForm(props, ref) {
     const { control, handleSubmit } = useForm<AwsGithubClusterValues>();
 
@@ -31,11 +31,10 @@ const AwsGithubSetupForm = forwardRef<HTMLFormElement, AwsGithubSetupFormProps>(
       loading,
       githubUserOrginizations,
       onFormSubmit,
-      ...rest
     } = props;
 
     return (
-      <FormContainer component="form" onSubmit={handleSubmit(onFormSubmit)} ref={ref} {...rest}>
+      <Form component="form" onSubmit={handleSubmit(onFormSubmit)} ref={ref}>
         <ControlledTextField
           control={control}
           name="adminEmail"
@@ -103,11 +102,7 @@ const AwsGithubSetupForm = forwardRef<HTMLFormElement, AwsGithubSetupFormProps>(
           rules={{ required: false }}
           label="AWS nodes spot"
         />
-      </FormContainer>
+      </Form>
     );
   },
 );
-
-export default styled(AwsGithubSetupForm)`
-  gap: 20px;
-`;

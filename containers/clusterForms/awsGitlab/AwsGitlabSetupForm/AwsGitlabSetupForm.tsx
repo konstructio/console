@@ -1,8 +1,6 @@
 import React, { forwardRef } from 'react';
 import { useForm } from 'react-hook-form';
-import styled from 'styled-components';
 
-import FormContainer from '../../../../components/formContainer/FormContainer';
 import ControlledAutocomplete from '../../../../components/controlledFields/AutoComplete';
 import ControlledPassword from '../../../../components/controlledFields/Password';
 import ControlledCheckbox from '../../../../components/controlledFields/Checkbox';
@@ -10,18 +8,20 @@ import { AWS_REGIONS, EMAIL_REGEX } from '../../../../constants/index';
 import ControlledTextField from '../../../../components/controlledFields/TextField';
 import { AwsClusterValues } from '../../../../types/redux';
 
+import { Form } from './AwsGitlabSetupForm.styled';
+
 export interface AwsGitlabSetupFormProps {
   onFormSubmit: (values: AwsClusterValues) => void;
 }
 
-const AwsGitlabSetupForm = forwardRef<HTMLFormElement, AwsGitlabSetupFormProps>(
+export const AwsGitlabSetupForm = forwardRef<HTMLFormElement, AwsGitlabSetupFormProps>(
   function AwsGitlabSetupForm(props, ref) {
     const { control, handleSubmit } = useForm<AwsClusterValues>();
 
-    const { onFormSubmit, ...rest } = props;
+    const { onFormSubmit } = props;
 
     return (
-      <FormContainer component="form" onSubmit={handleSubmit(onFormSubmit)} ref={ref} {...rest}>
+      <Form component="form" onSubmit={handleSubmit(onFormSubmit)} ref={ref}>
         <ControlledTextField
           control={control}
           name="adminEmail"
@@ -65,11 +65,7 @@ const AwsGitlabSetupForm = forwardRef<HTMLFormElement, AwsGitlabSetupFormProps>(
           rules={{ required: false }}
           label="AWS nodes spot"
         />
-      </FormContainer>
+      </Form>
     );
   },
 );
-
-export default styled(AwsGitlabSetupForm)`
-  gap: 20px;
-`;

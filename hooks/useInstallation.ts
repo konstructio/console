@@ -10,34 +10,29 @@ export type InstallationInfo = {
 
 export const installationTitles: Record<InstallationType, { [key: number]: string }> = {
   [InstallationType.LOCAL]: {
-    0: 'First, choose your Kubefirst adventure',
     1: `Let’s configure your local cluster`,
     2: `Grab a cup of tea or coffee while we set up your cluster...`,
     3: 'You’re all set!',
   },
   [InstallationType.AWS_GITHUB]: {
-    0: 'First, choose your Kubefirst adventure',
     1: `Now, test your hosted zone name is accessible`,
     2: `Let’s configure your AWS - GitHub cluster`,
     3: `Grab a cup of tea or coffee while we set up your cluster...`,
     4: 'You’re all set!',
   },
   [InstallationType.AWS_GITLAB]: {
-    0: 'First, choose your Kubefirst adventure',
     1: `Now, test your hosted zone name is accessible`,
     2: `Let’s configure your AWS - GitLab cluster`,
     3: `Grab a cup of tea or coffee while we set up your cluster...`,
     4: 'You’re all set!',
   },
   [InstallationType.CIVO_GITHUB]: {
-    0: 'First, choose your Kubefirst adventure',
     1: `Now, test your hosted domain name is accessible`,
     2: `Let’s configure your Civo - GitHub cluster`,
     3: `Grab a cup of tea or coffee while we set up your cluster...`,
     4: 'You’re all set!',
   },
   [InstallationType.CIVO_GITLAB]: {
-    0: 'First, choose your Kubefirst adventure',
     1: `Now, test your hosted domain name is accessible`,
     2: `Let’s configure your Civo - Gitlab cluster`,
     3: `Grab a cup of tea or coffee while we set up your cluster...`,

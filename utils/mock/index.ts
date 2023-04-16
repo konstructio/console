@@ -1,8 +1,8 @@
 import MockAdapter from 'axios-mock-adapter';
 
 import { githubApi } from '../../api';
-import { mockGithubUser } from '../../constants/mockGithubUser';
-import { mockGithubUserOrganizations } from '../../constants/mockGithubUserOrganizations';
+import { mockGithubUser } from '../../tests/mocks/mockGithubUser';
+import { mockGithubUserOrganizations } from '../../tests/mocks/mockGithubUserOrganizations';
 
 export function mockSuccessResponse() {
   const mock = new MockAdapter(githubApi);

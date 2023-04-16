@@ -1,14 +1,14 @@
 import React, { forwardRef } from 'react';
 import { useForm } from 'react-hook-form';
-import styled from 'styled-components';
 
-import FormContainer from '../../../../components/formContainer/FormContainer';
 import { CivoGithubClusterValues } from '../../../../types/redux/index';
 import ControlledAutocomplete from '../../../../components/controlledFields/AutoComplete';
 import ControlledPassword from '../../../../components/controlledFields/Password';
 import { AWS_REGIONS, EMAIL_REGEX } from '../../../../constants/index';
 import ControlledTextField from '../../../../components/controlledFields/TextField';
 import { GithubUserOrganization } from '../../../../types/github/index';
+
+import { Form } from './CivoGithubSetupForm.styled';
 
 export interface CivoGithubSetupFormProps {
   hasTokenValue: boolean;
@@ -19,7 +19,7 @@ export interface CivoGithubSetupFormProps {
   loading: boolean;
 }
 
-const CivoGithubSetupForm = forwardRef<HTMLFormElement, CivoGithubSetupFormProps>(
+export const CivoGithubSetupForm = forwardRef<HTMLFormElement, CivoGithubSetupFormProps>(
   function CivoGithubSetupForm(props, ref) {
     const { control, handleSubmit } = useForm<CivoGithubClusterValues>();
 
@@ -30,11 +30,10 @@ const CivoGithubSetupForm = forwardRef<HTMLFormElement, CivoGithubSetupFormProps
       loading,
       githubUserOrginizations,
       onFormSubmit,
-      ...rest
     } = props;
 
     return (
-      <FormContainer component="form" onSubmit={handleSubmit(onFormSubmit)} ref={ref} {...rest}>
+      <Form component="form" onSubmit={handleSubmit(onFormSubmit)} ref={ref}>
         <ControlledTextField
           control={control}
           name="adminEmail"
@@ -105,11 +104,7 @@ const CivoGithubSetupForm = forwardRef<HTMLFormElement, CivoGithubSetupFormProps
           label="Github organization"
           placeholder="Select"
         />
-      </FormContainer>
+      </Form>
     );
   },
 );
-
-export default styled(CivoGithubSetupForm)`
-  gap: 20px;
-`;

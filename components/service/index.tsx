@@ -9,7 +9,7 @@ import VaultLogo from '../../assets/vault.svg';
 import AtlantisLogo from '../../assets/atlantis.svg';
 import MetaphorLogo from '../../assets/metaphor.svg';
 import Typography from '../typography';
-import { formatDomain } from '../../utils/formatDomain';
+import { formatDomain } from '../../utils/url/formatDomain';
 import Tooltip from '../tooltip/Tooltip';
 import { MINT_GREEN, PASTEL_LIGHT_BLUE } from '../../constants/colors';
 

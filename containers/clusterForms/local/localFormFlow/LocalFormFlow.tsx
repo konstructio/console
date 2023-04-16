@@ -1,20 +1,19 @@
 import React, { FC, useCallback, useRef } from 'react';
 import { useRouter } from 'next/router';
-import styled from 'styled-components';
 
-import { InstallationType, LocalInstallValues } from '../../../types/redux';
-import { useInstallation } from '../../../hooks/useInstallation';
+import { InstallationType, LocalInstallValues } from '../../../../types/redux';
+import { useInstallation } from '../../../../hooks/useInstallation';
 import {
   setLocalInstallState,
   setInstallationStep,
-} from '../../../redux/slices/installation.slice';
-import ClusterRunningMessage from '../../../components/clusterRunningMessage/ClusterRunningMessage';
-import TerminalLogs from '../../terminalLogs';
-import InstallationStepContainer from '../../../components/installationStepContainer/InstallationStepContainer';
-import { useAppDispatch, useAppSelector } from '../../../redux/store';
-import Row from '../../../components/row/Row';
+} from '../../../../redux/slices/installation.slice';
+import ClusterRunningMessage from '../../../../components/clusterRunningMessage/ClusterRunningMessage';
+import TerminalLogs from '../../../terminalLogs';
+import InstallationStepContainer from '../../../../components/installationStepContainer/InstallationStepContainer';
+import { useAppDispatch, useAppSelector } from '../../../../redux/store';
+import { LocalSetupForm } from '../localSetupForm/LocalSetupForm';
 
-import { LocalSetupForm } from './LocalSetupForm/LocalSetupForm';
+import { ContentContainer } from './LocalFormFlow.styled';
 
 export enum LocalFormStep {
   SELECTION,
@@ -86,9 +85,3 @@ export const LocalFormFlow: FC = () => {
     </InstallationStepContainer>
   );
 };
-
-const ContentContainer = styled(Row)`
-  flex: 1;
-  justify-content: center;
-  padding: 0 80px;
-`;

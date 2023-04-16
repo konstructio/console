@@ -4,6 +4,8 @@ import { Box } from '@mui/material';
 export default styled(Box)`
   display: flex;
   flex-direction: column;
+  width: 100%;
+  height: fit-content;
   padding: 30px 20px;
   background-color: ${({ theme }) => theme.colors.white};
   border-radius: 8px;

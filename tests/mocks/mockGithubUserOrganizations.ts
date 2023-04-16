@@ -1,4 +1,4 @@
-import { GithubUserOrganization } from '../types/github';
+import { GithubUserOrganization } from '../../types/github';
 
 export const mockGithubUserOrganizations: GithubUserOrganization[] = [
   {

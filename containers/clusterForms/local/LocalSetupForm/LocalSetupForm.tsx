@@ -1,11 +1,11 @@
 import React, { forwardRef } from 'react';
 import { useForm } from 'react-hook-form';
-import styled from 'styled-components';
 
 import ControlledTextField from '../../../../components/controlledFields/TextField';
 import ControlledPassword from '../../../../components/controlledFields/Password';
 import { LocalInstallValues } from '../../../../types/redux';
-import FormContainer from '../../../../components/formContainer/FormContainer';
+
+import { Form } from './LocalSetupForm.styled';
 
 export interface LocalSetupFormProps {
   onFormSubmit: (values: LocalInstallValues) => void;
@@ -15,10 +15,10 @@ export const LocalSetupForm = forwardRef<HTMLFormElement, LocalSetupFormProps>(
   function LocalSetupForm(props, ref) {
     const { control, handleSubmit } = useForm<LocalInstallValues>();
 
-    const { onFormSubmit, ...rest } = props;
+    const { onFormSubmit } = props;
 
     return (
-      <Form component="form" onSubmit={handleSubmit(onFormSubmit)} ref={ref} {...rest}>
+      <Form component="form" onSubmit={handleSubmit(onFormSubmit)} ref={ref}>
         <ControlledPassword
           control={control}
           name="githubToken"
@@ -46,7 +46,3 @@ export const LocalSetupForm = forwardRef<HTMLFormElement, LocalSetupFormProps>(
     );
   },
 );
-
-const Form = styled(FormContainer)`
-  gap: 20px;
-`;

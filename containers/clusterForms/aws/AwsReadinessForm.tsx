@@ -1,6 +1,5 @@
 import React, { useEffect, useState, forwardRef } from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import styled from 'styled-components';
 import { CircularProgress } from '@mui/material';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 
@@ -11,7 +10,8 @@ import ControlledTextField from '../../../components/controlledFields/TextField'
 import { DOMAIN_REGEX } from '../../../constants/index';
 import { GRANNY_APPLE_GREEN } from '../../../constants/colors';
 import { AwsInstallValues } from '../../../types/redux/index';
-import FormContainer from '../../../components/formContainer/FormContainer';
+
+import { Form, Message } from './AwsReadinessForm.styled';
 
 export interface AwsReadinessFormProps {
   showMessage: boolean;
@@ -21,18 +21,11 @@ export interface AwsReadinessFormProps {
   onFormSubmit: (values: AwsInstallValues) => void;
 }
 
-const AwsReadinessForm = forwardRef<HTMLFormElement, AwsReadinessFormProps>(
+export const AwsReadinessForm = forwardRef<HTMLFormElement, AwsReadinessFormProps>(
   function AwsReadinessForm(props, ref) {
     const [formValid, setFormValid] = useState(false);
 
-    const {
-      showMessage,
-      isValidating,
-      isHostedZoneValid,
-      onTestButtonClick,
-      onFormSubmit,
-      ...rest
-    } = props;
+    const { showMessage, isValidating, isHostedZoneValid, onTestButtonClick, onFormSubmit } = props;
 
     const { control, watch, setValue, trigger, handleSubmit } = useForm<AwsInstallValues>();
 
@@ -54,7 +47,7 @@ const AwsReadinessForm = forwardRef<HTMLFormElement, AwsReadinessFormProps>(
     }, [isHostedZoneValid, setValue, trigger]);
 
     return (
-      <FormContainer component="form" onSubmit={handleSubmit(onFormSubmit)} ref={ref} {...rest}>
+      <Form component="form" onSubmit={handleSubmit(onFormSubmit)} ref={ref}>
         <ControlledSelect
           control={control}
           name="profile"
@@ -99,27 +92,7 @@ const AwsReadinessForm = forwardRef<HTMLFormElement, AwsReadinessFormProps>(
             </Typography>
           </Message>
         )}
-      </FormContainer>
+      </Form>
     );
   },
 );
-
-export default styled(AwsReadinessForm)`
-  gap: 20px;
-  padding: 30px 20px;
-
-  ${Button} {
-    margin-top: 20px;
-  }
-`;
-
-const Message = styled.div`
-  display: flex;
-  color: ${({ theme }) => theme.colors.volcanicSand};
-  gap: 8px;
-  margin-top: 24px;
-
-  & > span > svg {
-    color: #a1a1aa;
-  }
-`;

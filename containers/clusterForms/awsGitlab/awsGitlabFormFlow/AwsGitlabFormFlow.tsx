@@ -1,23 +1,20 @@
-import React, { FC, useRef, useCallback } from 'react';
+import React, { FC, useRef, useCallback, useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
-import styled from 'styled-components';
 
-import { useAppDispatch, useAppSelector } from '../../../redux/store';
-import { useInstallation } from '../../../hooks/useInstallation';
+import { useAppDispatch, useAppSelector } from '../../../../redux/store';
+import { useInstallation } from '../../../../hooks/useInstallation';
 import {
   setAWSGitlabInstallState,
   setInstallationStep,
-} from '../../../redux/slices/installation.slice';
-import InstallationStepContainer from '../../../components/installationStepContainer/InstallationStepContainer';
-import { AwsClusterValues, AwsInstallValues, InstallationType } from '../../../types/redux';
-import ClusterRunningMessage from '../../../components/clusterRunningMessage/ClusterRunningMessage';
-import TerminalLogs from '../../terminalLogs';
-import AwsReadinessForm, { AwsReadinessFormProps } from '../aws/AwsReadinessForm';
-import Row from '../../../components/row/Row';
+} from '../../../../redux/slices/installation.slice';
+import InstallationStepContainer from '../../../../components/installationStepContainer/InstallationStepContainer';
+import { AwsClusterValues, AwsInstallValues, InstallationType } from '../../../../types/redux';
+import ClusterRunningMessage from '../../../../components/clusterRunningMessage/ClusterRunningMessage';
+import TerminalLogs from '../../../terminalLogs';
+import { AwsReadinessForm } from '../../aws/AwsReadinessForm';
+import { AwsGitlabSetupForm } from '../awsGitlabSetupForm/AwsGitlabSetupForm';
 
-import AwsGitlabSetupForm, {
-  AwsGitlabSetupFormProps,
-} from './AwsGitlabSetupForm/AwsGitlabSetupForm';
+import { ContentContainer } from './AwsGitlabFormFlow.styled';
 
 export enum AwsGitlabFormStep {
   SELECTION,
@@ -27,16 +24,25 @@ export enum AwsGitlabFormStep {
   READY,
 }
 
-export interface AwsGitlabFormFlowProps
-  extends Omit<AwsReadinessFormProps, 'onFormSubmit'>,
-    Omit<AwsGitlabSetupFormProps, 'onFormSubmit'> {}
+export const AwsGitlabFormFlow: FC = () => {
+  const [showMessage, setShowMessage] = useState(false);
+  const [isValidating, setIsValidating] = useState(false);
+  const [hostedZoneValid, setHostedZoneValid] = useState(false);
 
-export const AwsGitlabFormFlow: FC<AwsGitlabFormFlowProps> = ({
-  showMessage,
-  isValidating,
-  onTestButtonClick,
-  isHostedZoneValid,
-}) => {
+  useEffect(() => {
+    if (isValidating) {
+      setTimeout(() => {
+        setIsValidating(false);
+        setHostedZoneValid(true);
+      }, 5000);
+    }
+  }, [isValidating]);
+
+  const handleTestButtonClick = useCallback(() => {
+    setShowMessage(true);
+    setIsValidating(true);
+  }, []);
+
   const currentStep = useAppSelector(({ installation }) => installation.installationStep);
   const dispatch = useAppDispatch();
   const router = useRouter();
@@ -90,15 +96,15 @@ export const AwsGitlabFormFlow: FC<AwsGitlabFormFlowProps> = ({
       onNextButtonClick={handleNextButtonClick}
       onBackButtonClick={handleBackButtonClick}
       nextButtonText={nextButtonText}
-      nextButtonDisabled={!isHostedZoneValid}
+      nextButtonDisabled={!hostedZoneValid}
     >
       <ContentContainer>
         {currentStep === AwsGitlabFormStep.READINESS && (
           <AwsReadinessForm
             showMessage={showMessage}
             isValidating={isValidating}
-            onTestButtonClick={onTestButtonClick}
-            isHostedZoneValid={isHostedZoneValid}
+            onTestButtonClick={handleTestButtonClick}
+            isHostedZoneValid={hostedZoneValid}
             onFormSubmit={handleFormSubmit}
             ref={formRef}
           />
@@ -112,9 +118,3 @@ export const AwsGitlabFormFlow: FC<AwsGitlabFormFlowProps> = ({
     </InstallationStepContainer>
   );
 };
-
-const ContentContainer = styled(Row)`
-  justify-content: center;
-  flex: 1;
-  padding: 0 80px;
-`;

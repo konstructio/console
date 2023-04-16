@@ -1,8 +1,8 @@
 import { makeStore } from '../../store';
 import { mockFailedResponse, mockSuccessResponse } from '../../../utils/mock';
 import { getGithubUser, getGithubUserOrganizations } from '../git.thunk';
-import { mockGithubUser } from '../../../constants/mockGithubUser';
-import { mockGithubUserOrganizations } from '../../../constants/mockGithubUserOrganizations';
+import { mockGithubUser } from '../../../tests/mocks/mockGithubUser';
+import { mockGithubUserOrganizations } from '../../../tests/mocks/mockGithubUserOrganizations';
 
 describe('redux/thunks - successful responses', () => {
   beforeAll(() => {

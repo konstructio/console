@@ -11,6 +11,7 @@ import { InstallationType } from '../../types/redux';
 import { useInstallation } from '../../hooks/useInstallation';
 import { INSTALLATION_CARD_OPTIONS } from '../../constants';
 import Column from '../../components/column/Column';
+import Row from '../../components/row/Row';
 
 const InstallationsSelectionPage: FunctionComponent = () => {
   const router = useRouter();
@@ -19,9 +20,7 @@ const InstallationsSelectionPage: FunctionComponent = () => {
 
   const dispatch = useAppDispatch();
 
-  const { info, stepTitles, installTitles } = useInstallation(installType);
-
-  const installTitle = installTitles[installationStep];
+  const { info, stepTitles } = useInstallation(installType);
 
   const handleInstallTypeChange = useCallback(
     (type: InstallationType) => {
@@ -39,28 +38,36 @@ const InstallationsSelectionPage: FunctionComponent = () => {
     <InstallationStepContainer
       activeStep={installationStep}
       steps={stepTitles}
-      installationTitle={installTitle}
+      installationTitle="First, choose your Kubefirst adventure"
       showBackButton={false}
       onNextButtonClick={handleNextButtonClick}
     >
-      <CardContainer>
-        {Object.entries(INSTALLATION_CARD_OPTIONS).map(([optionInstallType, info]) => (
-          <InstallationCard
-            key={optionInstallType}
-            info={info}
-            active={optionInstallType === installType}
-            onClick={() => handleInstallTypeChange(optionInstallType as InstallationType)}
-          />
-        ))}
-      </CardContainer>
-      <InfoContainer>
-        <InstallationInfoCard info={info} />
-      </InfoContainer>
+      <ContentContainer>
+        <CardContainer>
+          {Object.entries(INSTALLATION_CARD_OPTIONS).map(([optionInstallType, info]) => (
+            <InstallationCard
+              key={optionInstallType}
+              info={info}
+              active={optionInstallType === installType}
+              onClick={() => handleInstallTypeChange(optionInstallType as InstallationType)}
+            />
+          ))}
+        </CardContainer>
+        <InfoContainer>
+          <InstallationInfoCard info={info} />
+        </InfoContainer>
+      </ContentContainer>
     </InstallationStepContainer>
   );
 };
 
 export default InstallationsSelectionPage;
+
+const ContentContainer = styled(Row)`
+  justify-content: center;
+  flex: 1;
+  padding: 0 80px;
+`;
 
 const CardContainer = styled(Column)`
   gap: 16px;

@@ -1,25 +1,24 @@
-import React, { FC, useRef, useCallback } from 'react';
+import React, { FC, useRef, useCallback, useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
-import styled from 'styled-components';
 
-import Row from '../../../components/row/Row';
-import { useAppDispatch, useAppSelector } from '../../../redux/store';
-import { useInstallation } from '../../../hooks/useInstallation';
+import { useAppDispatch, useAppSelector } from '../../../../redux/store';
+import { useInstallation } from '../../../../hooks/useInstallation';
 import {
   setCivoGithubInstallState,
   setInstallationStep,
-} from '../../../redux/slices/installation.slice';
-import InstallationStepContainer from '../../../components/installationStepContainer/InstallationStepContainer';
-import { CivoClusterValues, CivoInstallValues, InstallationType } from '../../../types/redux/index';
-import ClusterRunningMessage from '../../../components/clusterRunningMessage/ClusterRunningMessage';
-import TerminalLogs from '../../terminalLogs/index';
+} from '../../../../redux/slices/installation.slice';
+import InstallationStepContainer from '../../../../components/installationStepContainer/InstallationStepContainer';
+import {
+  CivoClusterValues,
+  CivoInstallValues,
+  InstallationType,
+} from '../../../../types/redux/index';
+import ClusterRunningMessage from '../../../../components/clusterRunningMessage/ClusterRunningMessage';
+import TerminalLogs from '../../../terminalLogs/index';
+import { CivoGitlabReadinessForm } from '../civoGitlabReadinessForm/CivoGitlabReadinessForm';
+import { CivoGitlabSetupForm } from '../civoGitlabSetupForm/CivoGitlabSetupForm';
 
-import CivoGitlabReadinessForm, {
-  CivoGitlabReadinessFormProps,
-} from './CivoGitlabReadinessForm/CivoGitlabReadinessForm';
-import CivoGitlabSetupForm, {
-  CivoGitlabSetupFormProps,
-} from './CivoGitlabSetupForm/CivoGitlabSetupForm';
+import { ContentContainer } from './CivoGitlabFormFlow.styled';
 
 export enum CivoGithubFormStep {
   SELECTION,
@@ -29,20 +28,28 @@ export enum CivoGithubFormStep {
   READY,
 }
 
-export interface CivoGitlabFormFlowProps
-  extends Omit<CivoGitlabReadinessFormProps, 'onFormSubmit'>,
-    Omit<CivoGitlabSetupFormProps, 'onFormSubmit'> {}
+export const CivoGitlabFormFlow: FC = () => {
+  const [showMessage, setShowMessage] = useState(false);
+  const [isValidating, setIsValidating] = useState(false);
+  const [hostedDomainValid, setHostedDomainValid] = useState(false);
 
-export const CivoGitlabFormFlow: FC<CivoGitlabFormFlowProps> = ({
-  showMessage,
-  isValidating,
-  onTestButtonClick,
-  isHostedDomainValid,
-  loading,
-}) => {
   const currentStep = useAppSelector(({ installation }) => installation.installationStep);
   const dispatch = useAppDispatch();
   const router = useRouter();
+
+  useEffect(() => {
+    if (isValidating) {
+      setTimeout(() => {
+        setIsValidating(false);
+        setHostedDomainValid(true);
+      }, 5000);
+    }
+  }, [isValidating]);
+
+  const handleTestButtonClick = useCallback(() => {
+    setShowMessage(true);
+    setIsValidating(true);
+  }, []);
 
   const formRef = useRef<HTMLFormElement>(null);
 
@@ -94,21 +101,21 @@ export const CivoGitlabFormFlow: FC<CivoGitlabFormFlowProps> = ({
       onNextButtonClick={handleNextButtonClick}
       onBackButtonClick={handleBackButtonClick}
       nextButtonText={nextButtonText}
-      nextButtonDisabled={!isHostedDomainValid}
+      nextButtonDisabled={!hostedDomainValid}
     >
       <ContentContainer>
         {currentStep === CivoGithubFormStep.READINESS && (
           <CivoGitlabReadinessForm
             showMessage={showMessage}
             isValidating={isValidating}
-            onTestButtonClick={onTestButtonClick}
-            isHostedDomainValid={isHostedDomainValid}
+            onTestButtonClick={handleTestButtonClick}
+            isHostedDomainValid={hostedDomainValid}
             onFormSubmit={handleFormSubmit}
             ref={formRef}
           />
         )}
         {currentStep === CivoGithubFormStep.SETUP && (
-          <CivoGitlabSetupForm loading={loading} onFormSubmit={handleFormSubmit} ref={formRef} />
+          <CivoGitlabSetupForm onFormSubmit={handleFormSubmit} ref={formRef} />
         )}
         {currentStep === CivoGithubFormStep.PREPARING && <TerminalLogs />}
         {currentStep === CivoGithubFormStep.READY && <ClusterRunningMessage />}
@@ -116,9 +123,3 @@ export const CivoGitlabFormFlow: FC<CivoGitlabFormFlowProps> = ({
     </InstallationStepContainer>
   );
 };
-
-const ContentContainer = styled(Row)`
-  justify-content: center;
-  flex: 1;
-  padding: 0 80px;
-`;

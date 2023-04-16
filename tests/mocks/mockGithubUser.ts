@@ -1,4 +1,4 @@
-import { GithubUser } from '../types/github';
+import { GithubUser } from '../../types/github';
 
 export const mockGithubUser: GithubUser = {
   login: 'octocat',

@@ -1,6 +1,5 @@
 import React, { useEffect, useState, forwardRef } from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import styled from 'styled-components';
 import { CircularProgress } from '@mui/material';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 
@@ -10,7 +9,8 @@ import ControlledTextField from '../../../../components/controlledFields/TextFie
 import { DOMAIN_REGEX } from '../../../../constants/index';
 import { GRANNY_APPLE_GREEN } from '../../../../constants/colors';
 import { CivoInstallValues } from '../../../../types/redux/index';
-import FormContainer from '../../../../components/formContainer/FormContainer';
+
+import { Form, Message } from './CivoGithubReadinessForm.styled';
 
 export interface CivoGithubReadinessFormProps {
   showMessage: boolean;
@@ -20,18 +20,12 @@ export interface CivoGithubReadinessFormProps {
   onFormSubmit: (values: CivoInstallValues) => void;
 }
 
-const CivoGithubReadinessForm = forwardRef<HTMLFormElement, CivoGithubReadinessFormProps>(
+export const CivoGithubReadinessForm = forwardRef<HTMLFormElement, CivoGithubReadinessFormProps>(
   function CivoRadinessForm(props, ref) {
     const [formValid, setFormValid] = useState(false);
 
-    const {
-      showMessage,
-      isValidating,
-      isHostedDomainValid,
-      onTestButtonClick,
-      onFormSubmit,
-      ...rest
-    } = props;
+    const { showMessage, isValidating, isHostedDomainValid, onTestButtonClick, onFormSubmit } =
+      props;
 
     const { control, watch, setValue, trigger, handleSubmit } = useForm<CivoInstallValues>();
 
@@ -53,7 +47,7 @@ const CivoGithubReadinessForm = forwardRef<HTMLFormElement, CivoGithubReadinessF
     }, [isHostedDomainValid, setValue, trigger]);
 
     return (
-      <FormContainer component="form" onSubmit={handleSubmit(onFormSubmit)} ref={ref} {...rest}>
+      <Form component="form" onSubmit={handleSubmit(onFormSubmit)} ref={ref}>
         <ControlledTextField
           control={control}
           name="hostedDomainName"
@@ -90,27 +84,7 @@ const CivoGithubReadinessForm = forwardRef<HTMLFormElement, CivoGithubReadinessF
             </Typography>
           </Message>
         )}
-      </FormContainer>
+      </Form>
     );
   },
 );
-
-export default styled(CivoGithubReadinessForm)`
-  gap: 20px;
-  padding: 30px 20px;
-
-  ${Button} {
-    margin-top: 20px;
-  }
-`;
-
-const Message = styled.div`
-  display: flex;
-  color: ${({ theme }) => theme.colors.volcanicSand};
-  gap: 8px;
-  margin-top: 24px;
-
-  & > span > svg {
-    color: #a1a1aa;
-  }
-`;

@@ -1,23 +1,21 @@
-import React, { FC, useRef, useCallback } from 'react';
+import React, { FC, useRef, useCallback, useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
-import styled from 'styled-components';
 
-import { useAppDispatch, useAppSelector } from '../../../redux/store';
-import { useInstallation } from '../../../hooks/useInstallation';
+import { useAppDispatch, useAppSelector } from '../../../../redux/store';
+import { useInstallation } from '../../../../hooks/useInstallation';
 import {
   setAWSGithubInstallState,
   setInstallationStep,
-} from '../../../redux/slices/installation.slice';
-import InstallationStepContainer from '../../../components/installationStepContainer/InstallationStepContainer';
-import { AwsGithubClusterValues, InstallationType } from '../../../types/redux';
-import ClusterRunningMessage from '../../../components/clusterRunningMessage/ClusterRunningMessage';
-import TerminalLogs from '../../terminalLogs';
-import AwsReadinessForm, { AwsReadinessFormProps } from '../aws/AwsReadinessForm';
-import Row from '../../../components/row/Row';
+} from '../../../../redux/slices/installation.slice';
+import InstallationStepContainer from '../../../../components/installationStepContainer/InstallationStepContainer';
+import { AwsGithubClusterValues, InstallationType } from '../../../../types/redux';
+import ClusterRunningMessage from '../../../../components/clusterRunningMessage/ClusterRunningMessage';
+import TerminalLogs from '../../../terminalLogs';
+import { AwsReadinessForm } from '../../aws/AwsReadinessForm';
+import { getGithubUser, getGithubUserOrganizations } from '../../../../redux/thunks/git.thunk';
+import { AwsGithubSetupForm } from '../awsGithubSetupForm/AwsGithubSetupForm';
 
-import AwsGithubSetupForm, {
-  AwsGithubSetupFormProps,
-} from './AwsGithubSetupForm/AwsGithubSetupForm';
+import { ContentContainer } from './AwsGithubFormFlow.styled';
 
 export enum AwsGithubFormStep {
   SELECTION,
@@ -27,26 +25,51 @@ export enum AwsGithubFormStep {
   READY,
 }
 
-export interface AwsGithubFormFlowProps
-  extends Omit<AwsReadinessFormProps, 'onFormSubmit'>,
-    Omit<AwsGithubSetupFormProps, 'onFormSubmit'> {}
+export const AwsGithubFormFlow: FC = () => {
+  const [showMessage, setShowMessage] = useState(false);
+  const [isValidating, setIsValidating] = useState(false);
+  const [hostedZoneValid, setHostedZoneValid] = useState(false);
+  const [githubToken, setGithubToken] = useState('');
 
-export const AwsGithubFormFlow: FC<AwsGithubFormFlowProps> = ({
-  showMessage,
-  isValidating,
-  onTestButtonClick,
-  isHostedZoneValid,
-  hasTokenValue,
-  githubTokenValid,
-  githubUserOrginizations,
-  onGithubTokenBlur,
-  loading,
-}) => {
-  const currentStep = useAppSelector(({ installation }) => installation.installationStep);
+  const { currentStep, githubUser, githubUserOrganizations, gitStateLoading } = useAppSelector(
+    ({ installation, git }) => ({
+      currentStep: installation.installationStep,
+      gitStateLoading: git.isLoading,
+      ...git,
+    }),
+  );
+
   const dispatch = useAppDispatch();
   const router = useRouter();
 
   const formRef = useRef<HTMLFormElement>(null);
+
+  useEffect(() => {
+    if (isValidating) {
+      setTimeout(() => {
+        setIsValidating(false);
+        setHostedZoneValid(true);
+      }, 5000);
+    }
+  }, [isValidating]);
+
+  const handleGithubTokenBlur = useCallback(
+    async (token: string) => {
+      setGithubToken(token);
+      try {
+        await dispatch(getGithubUser(token)).unwrap();
+        await dispatch(getGithubUserOrganizations(token)).unwrap();
+      } catch (error) {
+        // error processed in redux state
+      }
+    },
+    [dispatch],
+  );
+
+  const handleTestButtonClick = useCallback(() => {
+    setShowMessage(true);
+    setIsValidating(true);
+  }, []);
 
   const { stepTitles, installTitles } = useInstallation(InstallationType.AWS_GITHUB);
   const installTitle = installTitles[currentStep];
@@ -95,26 +118,26 @@ export const AwsGithubFormFlow: FC<AwsGithubFormFlowProps> = ({
       onNextButtonClick={handleNextButtonClick}
       onBackButtonClick={handleBackButtonClick}
       nextButtonText={nextButtonText}
-      nextButtonDisabled={!isHostedZoneValid}
+      nextButtonDisabled={!hostedZoneValid}
     >
       <ContentContainer>
         {currentStep === AwsGithubFormStep.READINESS && (
           <AwsReadinessForm
             showMessage={showMessage}
             isValidating={isValidating}
-            onTestButtonClick={onTestButtonClick}
-            isHostedZoneValid={isHostedZoneValid}
+            onTestButtonClick={handleTestButtonClick}
+            isHostedZoneValid={hostedZoneValid}
             onFormSubmit={handleFormSubmit}
             ref={formRef}
           />
         )}
         {currentStep === AwsGithubFormStep.SETUP && (
           <AwsGithubSetupForm
-            hasTokenValue={hasTokenValue}
-            githubTokenValid={githubTokenValid}
-            githubUserOrginizations={githubUserOrginizations}
-            onGithubTokenBlur={onGithubTokenBlur}
-            loading={loading}
+            hasTokenValue={!!githubToken}
+            githubTokenValid={!!githubUser}
+            githubUserOrginizations={githubUserOrganizations}
+            onGithubTokenBlur={handleGithubTokenBlur}
+            loading={gitStateLoading}
             onFormSubmit={handleFormSubmit}
             ref={formRef}
           />
@@ -125,9 +148,3 @@ export const AwsGithubFormFlow: FC<AwsGithubFormFlowProps> = ({
     </InstallationStepContainer>
   );
 };
-
-const ContentContainer = styled(Row)`
-  justify-content: center;
-  flex: 1;
-  padding: 0 80px;
-`;

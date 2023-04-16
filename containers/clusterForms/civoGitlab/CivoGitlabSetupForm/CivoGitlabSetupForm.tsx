@@ -1,27 +1,26 @@
 import React, { forwardRef } from 'react';
 import { useForm } from 'react-hook-form';
-import styled from 'styled-components';
 
-import FormContainer from '../../../../components/formContainer/FormContainer';
 import { CivoClusterValues } from '../../../../types/redux';
 import ControlledAutocomplete from '../../../../components/controlledFields/AutoComplete';
 import ControlledPassword from '../../../../components/controlledFields/Password';
 import { AWS_REGIONS, EMAIL_REGEX } from '../../../../constants/index';
 import ControlledTextField from '../../../../components/controlledFields/TextField';
 
+import { Form } from './CivoGitlabSetupForm.styled';
+
 export interface CivoGitlabSetupFormProps {
   onFormSubmit: (values: CivoClusterValues) => void;
-  loading: boolean;
 }
 
-const CivoGitlabSetupForm = forwardRef<HTMLFormElement, CivoGitlabSetupFormProps>(
+export const CivoGitlabSetupForm = forwardRef<HTMLFormElement, CivoGitlabSetupFormProps>(
   function CivoGitlabSetupForm(props, ref) {
     const { control, handleSubmit } = useForm<CivoClusterValues>();
 
-    const { onFormSubmit, ...rest } = props;
+    const { onFormSubmit } = props;
 
     return (
-      <FormContainer component="form" onSubmit={handleSubmit(onFormSubmit)} ref={ref} {...rest}>
+      <Form component="form" onSubmit={handleSubmit(onFormSubmit)} ref={ref}>
         <ControlledTextField
           control={control}
           name="adminEmail"
@@ -68,11 +67,7 @@ const CivoGitlabSetupForm = forwardRef<HTMLFormElement, CivoGitlabSetupFormProps
           }}
           onErrorText="Maximum 25 characters."
         />
-      </FormContainer>
+      </Form>
     );
   },
 );
-
-export default styled(CivoGitlabSetupForm)`
-  gap: 20px;
-`;
