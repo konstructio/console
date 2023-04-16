@@ -70,7 +70,9 @@ export const AwsReadinessForm = forwardRef<HTMLFormElement, AwsReadinessFormProp
           control={control}
           name="hostedZoneValid"
           rules={{ required: true }}
-          render={({ field }) => <input {...field} type="hidden" />}
+          render={({ field: { value, ...rest } }) => (
+            <input {...rest} value={value?.toString()} type="hidden" />
+          )}
         />
         {formValid && (
           <Button color="primary" variant="outlined" onClick={onTestButtonClick}>

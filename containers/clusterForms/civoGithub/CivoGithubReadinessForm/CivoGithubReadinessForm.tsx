@@ -62,7 +62,9 @@ export const CivoGithubReadinessForm = forwardRef<HTMLFormElement, CivoGithubRea
           control={control}
           name="hostedDomainValid"
           rules={{ required: true }}
-          render={({ field }) => <input {...field} type="hidden" />}
+          render={({ field: { value, ...rest } }) => (
+            <input {...rest} value={value?.toString()} type="hidden" />
+          )}
         />
         {formValid && (
           <Button color="primary" variant="outlined" onClick={onTestButtonClick}>
