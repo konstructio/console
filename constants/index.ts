@@ -8,6 +8,12 @@ export const AWS_REGIONS = [
   { label: 'US West (Oregon) (us-west-2)', value: 'us-west-2' },
 ];
 
+export const CIVO_REGIONS = [
+  { label: 'New York', value: 'nyc1' },
+  { label: 'Phoenix', value: 'phx1' },
+  { label: 'France', value: 'fra1' },
+];
+
 export const DOCS_LINK = 'https://docs.kubefirst.io';
 
 export const ANALYTICS_ID = '0gAYkX5RV3vt7s4pqCOOsDb6WHPLT30M';

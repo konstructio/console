@@ -29,9 +29,8 @@ export type AwsClusterValues = AwsInstallValues & ClusterValues;
 export type AwsGithubClusterValues = AwsClusterValues & GithubValues;
 
 export interface CivoInstallValues {
-  hostedDomainName?: string;
-  hostedDomainValid?: boolean;
   civoToken?: string;
+  githubToken?: string;
 }
 export type CivoClusterValues = CivoInstallValues & ClusterValues;
 export type CivoGithubClusterValues = CivoClusterValues & GithubValues;

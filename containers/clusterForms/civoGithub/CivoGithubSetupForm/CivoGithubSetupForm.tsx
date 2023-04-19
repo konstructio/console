@@ -4,7 +4,7 @@ import { useForm } from 'react-hook-form';
 import { CivoGithubClusterValues } from '../../../../types/redux/index';
 import ControlledAutocomplete from '../../../../components/controlledFields/AutoComplete';
 import ControlledPassword from '../../../../components/controlledFields/Password';
-import { AWS_REGIONS, EMAIL_REGEX } from '../../../../constants/index';
+import { CIVO_REGIONS, EMAIL_REGEX } from '../../../../constants/index';
 import ControlledTextField from '../../../../components/controlledFields/TextField';
 import { GithubUserOrganization } from '../../../../types/github/index';
 
@@ -37,7 +37,7 @@ export const CivoGithubSetupForm = forwardRef<HTMLFormElement, CivoGithubSetupFo
         <ControlledTextField
           control={control}
           name="adminEmail"
-          label="Admin Email"
+          label="Admin email"
           onErrorText="Invalid email address."
           required
           rules={{
@@ -45,25 +45,18 @@ export const CivoGithubSetupForm = forwardRef<HTMLFormElement, CivoGithubSetupFo
             pattern: EMAIL_REGEX,
           }}
         />
-        <ControlledPassword
-          control={control}
-          name="kbotPassword"
-          rules={{ required: true }}
-          required
-          label="Create K-bot password"
-        />
         <ControlledAutocomplete
           control={control}
           name="region"
           label="Region"
           required
           rules={{ required: true }}
-          options={AWS_REGIONS}
+          options={CIVO_REGIONS}
         />
         <ControlledTextField
           control={control}
           name="civoToken"
-          label="CIVO token"
+          label="Registered domain"
           required
           rules={{
             required: true,
@@ -73,14 +66,14 @@ export const CivoGithubSetupForm = forwardRef<HTMLFormElement, CivoGithubSetupFo
           control={control}
           name="clusterName"
           label="Cluster name"
-          required
+          defaultValue='kubefirst'
           rules={{
             maxLength: 25,
             required: true,
           }}
           onErrorText="Maximum 25 characters."
         />
-        <ControlledPassword
+        {/* <ControlledPassword
           control={control}
           name="githubToken"
           label="GitHub token"
@@ -92,7 +85,7 @@ export const CivoGithubSetupForm = forwardRef<HTMLFormElement, CivoGithubSetupFo
           helperText="Note: this token will expire in 8 hours"
           error={!githubTokenValid && hasTokenValue}
           onErrorText="Invalid token."
-        />
+        /> */}
         <ControlledAutocomplete
           control={control}
           required

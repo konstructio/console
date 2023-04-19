@@ -4,8 +4,8 @@
     "source.fixAll.eslint": true
   },
   "workbench.colorCustomizations": {
-    "activityBar.background": "#3C356B",
-    "titleBar.activeBackground": "#3C356B",
+    "activityBar.background": "#299c9c",
+    "titleBar.activeBackground": "#299c9c",
     "titleBar.activeForeground": "#FFFFFF"
   },
   "[json]": {

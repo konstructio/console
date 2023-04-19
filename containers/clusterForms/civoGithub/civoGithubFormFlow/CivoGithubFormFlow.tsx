@@ -30,14 +30,12 @@ export enum CivoGithubFormStep {
 }
 
 export const CivoGithubFormFlow: FC = () => {
-  const [showMessage, setShowMessage] = useState(false);
-  const [isValidating, setIsValidating] = useState(false);
-  const [hostedDomainValid, setHostedDomainValid] = useState(false);
   const [githubToken, setGithubToken] = useState('');
 
-  const { currentStep, githubUser, githubUserOrganizations, gitStateLoading } = useAppSelector(
+  const { civoToken, currentStep, githubUser, githubUserOrganizations, gitStateLoading } = useAppSelector(
     ({ installation, git }) => ({
       currentStep: installation.installationStep,
+      civoToken: installation.civoGithub?.civoToken,
       gitStateLoading: git.isLoading,
       ...git,
     }),
@@ -53,15 +51,6 @@ export const CivoGithubFormFlow: FC = () => {
 
   const lastStep = currentStep === stepTitles.length - 1;
 
-  useEffect(() => {
-    if (isValidating) {
-      setTimeout(() => {
-        setIsValidating(false);
-        setHostedDomainValid(true);
-      }, 5000);
-    }
-  }, [isValidating]);
-
   const handleGithubTokenBlur = useCallback(
     async (token: string) => {
       setGithubToken(token);
@@ -75,15 +64,26 @@ export const CivoGithubFormFlow: FC = () => {
     [dispatch],
   );
 
-  const handleTestButtonClick = useCallback(() => {
-    setShowMessage(true);
-    setIsValidating(true);
-  }, []);
-
   const handleFormSubmit = useCallback(
-    (values: CivoInstallValues | CivoGithubClusterValues) => {
-      dispatch(setCivoGithubInstallState(values));
-      dispatch(setInstallationStep(currentStep + 1));
+    async (values: CivoInstallValues | CivoGithubClusterValues) => {
+      if(currentStep === CivoGithubFormStep.READINESS && values.civoToken){ 
+       try {
+        await dispatch(getGithubUserOrganizations(values.civoToken))
+        console.log('hello')
+        console.log('hello')
+        console.log('hello')
+        console.log('hello', values.civoToken)
+        dispatch(setInstallationStep(currentStep + 1));
+        dispatch(setCivoGithubInstallState(values));
+       } catch (error) {
+        console.log('there was an error', error)
+       }
+      }else{
+        dispatch(setInstallationStep(currentStep + 1));
+        dispatch(setCivoGithubInstallState(values));
+      }
+
+
     },
     [dispatch, currentStep],
   );
@@ -122,15 +122,10 @@ export const CivoGithubFormFlow: FC = () => {
       onNextButtonClick={handleNextButtonClick}
       onBackButtonClick={handleBackButtonClick}
       nextButtonText={nextButtonText}
-      nextButtonDisabled={!hostedDomainValid}
     >
       <ContentContainer>
         {currentStep === CivoGithubFormStep.READINESS && (
           <CivoGithubReadinessForm
-            showMessage={showMessage}
-            isValidating={isValidating}
-            onTestButtonClick={handleTestButtonClick}
-            isHostedDomainValid={hostedDomainValid}
             onFormSubmit={handleFormSubmit}
             ref={formRef}
           />

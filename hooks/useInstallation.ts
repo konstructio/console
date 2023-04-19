@@ -58,7 +58,7 @@ const stepTitles: Record<InstallationType, string[]> = {
   ],
   [InstallationType.CIVO_GITHUB]: [
     'Select platform',
-    'Readiness check',
+    'Authenticate',
     'Set up cluster',
     'Preparing',
     'Ready',

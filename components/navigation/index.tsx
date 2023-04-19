@@ -3,7 +3,7 @@ import Image from 'next/image';
 import { useRouter } from 'next/router';
 import HelpIcon from '@mui/icons-material/Help';
 // import HomeIcon from '@mui/icons-material/Home';
-// import ScatterPlotIcon from '@mui/icons-material/ScatterPlot';
+import ScatterPlotIcon from '@mui/icons-material/ScatterPlot';
 // import PeopleOutlineSharpIcon from '@mui/icons-material/PeopleOutlineSharp';
 import GridViewOutlinedIcon from '@mui/icons-material/GridViewOutlined';
 import { BsSlack } from 'react-icons/bs';
@@ -28,11 +28,11 @@ const ROUTES = [
   //   path: '/',
   //   title: 'Home',
   // },
-  // {
-  //   icon: <ScatterPlotIcon />,
-  //   path: '/',
-  //   title: 'Cluster Management',
-  // },
+  {
+    icon: <ScatterPlotIcon />,
+    path: '/installations',
+    title: 'Cluster Management',
+  },
   {
     icon: <GridViewOutlinedIcon />,
     path: '/services',
