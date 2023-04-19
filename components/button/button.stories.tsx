@@ -1,63 +1,45 @@
 import React from 'react';
-import styled from 'styled-components';
-import { ComponentStory, ComponentMeta } from '@storybook/react';
+import { Story } from '@storybook/react';
 
-import Button from './index';
+import Button, { IButtonProps } from './Button';
 
 export default {
   title: 'Form Elements/Button',
   component: Button,
-} as ComponentMeta<typeof Button>;
+};
 
-const Wrapper = styled.div`
-  background: rgb(255, 255, 255);
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-`;
+const Template: Story<IButtonProps> = (args) => <Button {...args} style={{ margin: 50 }} />;
 
-const PrimaryTemplate: ComponentStory<typeof Button> = () => (
-  <Wrapper>
-    <Button variant="contained" color="primary">
-      Primary
-    </Button>
-  </Wrapper>
-);
+export const Primary = Template.bind({});
+Primary.args = {
+  variant: 'contained',
+  color: 'primary',
+  children: 'Primary',
+};
 
-const SecondaryTemplate: ComponentStory<typeof Button> = () => (
-  <Wrapper>
-    <Button variant="outlined" color="secondary">
-      Secondary
-    </Button>
-  </Wrapper>
-);
-
-const DangerTemplate: ComponentStory<typeof Button> = () => (
-  <Wrapper>
-    <Button variant="contained" color="error">
-      Danger
-    </Button>
-  </Wrapper>
-);
-
-const DisabledTemplate: ComponentStory<typeof Button> = () => (
-  <Wrapper>
-    <Button variant="contained" color="primary" disabled>
-      Disabled
-    </Button>
-  </Wrapper>
-);
-
-const DisabledOutlineTemplate: ComponentStory<typeof Button> = () => (
-  <Wrapper>
-    <Button variant="outlined" color="secondary" disabled>
-      Disabled
-    </Button>
-  </Wrapper>
-);
-
-export const Primary = PrimaryTemplate.bind({});
-export const Secondary = SecondaryTemplate.bind({});
-export const Danger = DangerTemplate.bind({});
-export const Disabled = DisabledTemplate.bind({});
-export const DisabledSecondary = DisabledOutlineTemplate.bind({});
+export const Secondary = Template.bind({});
+Secondary.args = {
+  variant: 'outlined',
+  color: 'secondary',
+  children: 'Secondary',
+};
+export const Danger = Template.bind({});
+Danger.args = {
+  variant: 'contained',
+  color: 'error',
+  children: 'Danger',
+};
+export const Disabled = Template.bind({});
+Disabled.args = {
+  variant: 'contained',
+  color: 'primary',
+  disabled: true,
+  children: 'Disabled',
+};
+export const DisabledSecondary = Template.bind({});
+DisabledSecondary.args = {
+  variant: 'outlined',
+  color: 'secondary',
+  disabled: true,
+  children: 'Disabled',
+};

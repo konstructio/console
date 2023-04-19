@@ -1,16 +1,14 @@
-import React, { FunctionComponent, useEffect, useMemo } from 'react';
+import React, { FunctionComponent, useEffect, useMemo, useCallback } from 'react';
 
+import { DOCS_LINK } from '../../constants';
 import { setConfigValues } from '../../redux/slices/config.slice';
 import { GIT_PROVIDERS } from '../../enums/utils';
-import { useTrackMutation } from '../../redux/api';
-import { selectIsTelemetryEnabled } from '../../redux/selectors/config.selector';
 import { useAppDispatch, useAppSelector } from '../../redux/store';
 import Service from '../service';
 import Typography from '../../components/typography';
+import { useTelemetryMutation } from '../../redux/api';
 
 import { Container, Header, LearnMoreLink, ServicesContainer } from './services.styled';
-
-const DOCS_LINK = 'https://docs.kubefirst.io';
 
 export interface ServicesProps {
   argoUrl: string;
@@ -45,9 +43,9 @@ const Services: FunctionComponent<ServicesProps> = ({
   vaultUrl,
   metaphor,
 }) => {
-  const [sendTrackEvent] = useTrackMutation();
+  const [sendTelemetryEvent] = useTelemetryMutation();
 
-  const isTelemetryEnabled = useAppSelector(selectIsTelemetryEnabled());
+  const isTelemetryEnabled = useAppSelector(({ config }) => config.isTelemetryEnabled);
 
   const dispatch = useAppDispatch();
 
@@ -115,12 +113,15 @@ const Services: FunctionComponent<ServicesProps> = ({
     ],
   );
 
-  const onClickLink = (url: string, name: string) => {
-    if (isTelemetryEnabled) {
-      const event = `console.${name.toLowerCase()}.link`.replace(/ /g, '');
-      sendTrackEvent({ event, properties: { url, type: 'link' } });
-    }
-  };
+  const onClickLink = useCallback(
+    (url: string, name: string) => {
+      if (isTelemetryEnabled) {
+        const event = `console.${name.toLowerCase()}.link`.replace(/ /g, '');
+        sendTelemetryEvent({ event, properties: { url, type: 'link' } });
+      }
+    },
+    [isTelemetryEnabled, sendTelemetryEvent],
+  );
 
   return (
     <Container>

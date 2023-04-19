@@ -1,9 +1,10 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import NextImage from 'next/image';
 import NextLink from 'next/link';
 
 import Typography from '../typography';
-import { textTruncate } from '../../theme/utils';
+import { textTruncate } from '../../utils/theme';
+import { PASTEL_LIGHT_BLUE } from '../../constants/colors';
 
 export const AppConnector = styled.div`
   height: 16px;
@@ -24,7 +25,7 @@ export const LiveAppIcon = styled.div`
 
 export const Container = styled.div`
   background: ${({ theme }) => theme.colors.white};
-  border: 1px solid #e2e8f0;
+  border: 1px solid ${PASTEL_LIGHT_BLUE};
   border-radius: 12px;
   height: 194px;
   padding: 24px;
@@ -76,14 +77,14 @@ export const Link = styled(NextLink)<{ disabled?: boolean }>`
 
   ${({ disabled }) =>
     disabled &&
-    `
-      color: #A1A1AA;
+    css`
+      color: #a1a1aa;
       cursor: not-allowed;
 
       &:hover {
         text-decoration: none;
       }
-  `}
+    `}
 `;
 
 export const Links = styled.div`
