@@ -11,8 +11,14 @@ import awsLogo from '../../assets/aws_logo.svg';
 import civoLogo from '../../assets/civo_logo.svg';
 import digitalOceanLogo from '../../assets/digital_ocean_logo.svg';
 import vultrLogo from '../../assets/vultr_logo.svg';
+import Tag from '../tag/Tag';
 
-import { CardContainer, DetailsContainer, LinkContent } from './CloudProviderCard.styled';
+import {
+  CardContainer,
+  DetailsContainer,
+  LinkContent,
+  LabelContainer,
+} from './CloudProviderCard.styled';
 
 const PROVIDER_OPTIONS: Record<
   InstallationType,
@@ -23,6 +29,7 @@ const PROVIDER_OPTIONS: Record<
     height: number;
     width: number;
     learnMoreLink?: string;
+    beta?: boolean;
   }
 > = {
   [InstallationType.LOCAL]: {
@@ -56,6 +63,7 @@ const PROVIDER_OPTIONS: Record<
       'A powerful open source cloud native tool set for identity and infrastructure management, application delivery, and secrets managament.',
     height: 50,
     width: 50,
+    beta: true,
   },
   [InstallationType.VULTR]: {
     logoSrc: vultrLogo,
@@ -65,6 +73,7 @@ const PROVIDER_OPTIONS: Record<
     learnMoreLink: '#',
     height: 43,
     width: 50,
+    beta: true,
   },
 };
 
@@ -78,12 +87,16 @@ const CloudProviderCard: FC<CloudProviderCardProps> = ({
   withHoverEffect = true,
   ...rest
 }) => {
-  const { logoSrc, label, description, learnMoreLink, height, width } = PROVIDER_OPTIONS[option];
+  const { logoSrc, label, description, learnMoreLink, height, width, beta } =
+    PROVIDER_OPTIONS[option];
   return (
     <CardContainer {...rest} withHoverEffect={withHoverEffect}>
       <Image src={logoSrc} alt="logo" width={width} height={height} />
       <DetailsContainer>
-        <Typography variant="subtitle2">{label}</Typography>
+        <LabelContainer>
+          <Typography variant="subtitle2">{label}</Typography>
+          {beta && <Tag text="BETA" bgColor="light-orange" />}
+        </LabelContainer>
         <Typography variant="body2">
           {description}
           {learnMoreLink && (

@@ -2,6 +2,11 @@ import styled from 'styled-components';
 
 import Card from '../card/Card';
 
+export const LabelContainer = styled.div`
+  display: flex;
+  gap: 16px;
+`;
+
 export const DetailsContainer = styled.div`
   display: flex;
   flex-direction: column;
