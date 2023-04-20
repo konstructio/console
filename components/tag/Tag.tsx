@@ -1,4 +1,4 @@
-import React, { ComponentPropsWithoutRef, FC } from 'react';
+import React, { FC } from 'react';
 import styled from 'styled-components';
 
 import { TagContainer } from './Tag.styled';
@@ -17,11 +17,15 @@ export const TAG_COLOR_OPTIONS = [
 
 export type TagColor = (typeof TAG_COLOR_OPTIONS)[number];
 
-export interface TagProps extends ComponentPropsWithoutRef<'div'> {
+export interface TagProps {
   text: string;
   bgColor?: TagColor;
 }
 
-const Tag: FC<TagProps> = ({ text, ...rest }) => <TagContainer {...rest}>{text}</TagContainer>;
+const Tag: FC<TagProps> = ({ text, ...rest }) => (
+  <TagContainer {...rest} variant="body3">
+    {text}
+  </TagContainer>
+);
 
 export default styled(Tag)``;

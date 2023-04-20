@@ -1,14 +1,12 @@
 import styled, { css } from 'styled-components';
 
+import Typography, { ITypographyProps } from '../typography';
+
 import { TagColor } from './Tag';
 
-export const TagContainer = styled.div<{ bgColor?: TagColor }>`
+export const TagContainer = styled(Typography)<{ bgColor?: TagColor } & ITypographyProps>`
   border-radius: 4px;
   padding: 4px;
-  letter-spacing: 0.4px;
-  font-size: 12px;
-  width: fit-content;
-  height: fit-content;
 
   ${({ bgColor }) =>
     bgColor === 'neon-green'
