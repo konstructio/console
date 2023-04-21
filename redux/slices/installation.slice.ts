@@ -8,6 +8,7 @@ import {
   AwsClusterValues,
   CivoClusterValues,
 } from '../../types/redux';
+import { GitProvider } from '../../types';
 
 export interface InstallationState {
   local?: LocalInstallValues;
@@ -15,12 +16,12 @@ export interface InstallationState {
   awsGitlab?: AwsClusterValues;
   civoGithub?: CivoGithubClusterValues;
   civoGitlab?: CivoClusterValues;
-  installType: InstallationType;
+  gitProvider?: GitProvider;
+  installType?: InstallationType;
   installationStep: number;
 }
 
 export const initialState: InstallationState = {
-  installType: InstallationType.LOCAL,
   installationStep: 0,
 };
 
@@ -64,6 +65,9 @@ const installationSlice = createSlice({
     setInstallType: (state, action: PayloadAction<InstallationType>) => {
       state.installType = action.payload;
     },
+    setGitProvider: (state, action: PayloadAction<GitProvider>) => {
+      state.gitProvider = action.payload;
+    },
   },
 });
 
@@ -75,6 +79,7 @@ export const {
   setCivoGithubInstallState,
   setCivoGitlabInstallState,
   setInstallType,
+  setGitProvider,
 } = installationSlice.actions;
 
 export const installationReducer = installationSlice.reducer;

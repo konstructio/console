@@ -2,7 +2,7 @@ import React, { FunctionComponent, useEffect, useMemo, useCallback } from 'react
 
 import { DOCS_LINK } from '../../constants';
 import { setConfigValues } from '../../redux/slices/config.slice';
-import { GIT_PROVIDERS } from '../../enums/utils';
+import { GitProvider } from '../../types';
 import { useAppDispatch, useAppSelector } from '../../redux/store';
 import Service from '../service';
 import Typography from '../../components/typography';
@@ -54,7 +54,7 @@ const Services: FunctionComponent<ServicesProps> = ({
   }, [dispatch, useTelemetry, kubefirstVersion, k3dDomain]);
 
   const gitTileProvider = useMemo(
-    () => (gitProvider === GIT_PROVIDERS.GITHUB ? 'GitHub' : 'GitLab'),
+    () => (gitProvider === GitProvider.GITHUB ? 'GitHub' : 'GitLab'),
     [gitProvider],
   );
 
