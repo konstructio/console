@@ -4,6 +4,7 @@ import { INSTALLATION_TYPES, InstallationType } from 'types/redux';
 import { noop } from 'utils/noop';
 import GitProviderButton from 'components/gitProviderButton/GitProviderButton';
 import { media } from 'utils/media';
+import { useRouter } from 'next/router';
 
 import { GIT_PROVIDERS, GitProvider } from '../../types';
 import Typography from '../../components/typography';
@@ -18,6 +19,8 @@ const InstallationsSelectionPage: FunctionComponent = () => {
   const { installType, gitProvider, installationStep } = useAppSelector(
     ({ installation }) => installation,
   );
+
+  const router = useRouter();
 
   const dispatch = useAppDispatch();
 
@@ -35,13 +38,19 @@ const InstallationsSelectionPage: FunctionComponent = () => {
     [dispatch],
   );
 
+  const handleNextButtonClick = useCallback(() => {
+    if (installType === InstallationType.CIVO && gitProvider === GitProvider.GITHUB) {
+      router.push(`installations/${installType}`);
+    }
+  }, [router, installType, gitProvider]);
+
   return (
     <InstallationStepContainer
       activeStep={installationStep}
       steps={['Select Platform', 'Set up Cluster', 'Provisioning', 'Ready']}
       installationTitle="First, select your preferred Git provider"
       showBackButton={false}
-      onNextButtonClick={noop}
+      onNextButtonClick={handleNextButtonClick}
       nextButtonDisabled={!installType}
     >
       <ContentContainer>
