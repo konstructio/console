@@ -15,10 +15,10 @@ import {
   InstallationType,
 } from '../../../../types/redux/index';
 import ClusterRunningMessage from '../../../../components/clusterRunningMessage/ClusterRunningMessage';
-import TerminalLogs from '../../../terminalLogs/index';
 import { getGithubUser, getGithubUserOrganizations } from '../../../../redux/thunks/git.thunk';
 import { CivoGithubReadinessForm } from '../civoGithubReadinessForm/CivoGithubReadinessForm';
 import { CivoGithubSetupForm } from '../civoGithubSetupForm/CivoGithubSetupForm';
+import CivoWebsocketOutput from '../civoWebsocketOutput/CivoWebsocketOutput';
 
 import { ContentContainer } from './CivoGithubFormFlow.styled';
 
@@ -32,6 +32,15 @@ export enum CivoGithubFormStep {
 
 export const CivoGithubFormFlow: FC = () => {
   const [githubToken, setGithubToken] = useState('');
+  const [socket, setSocket] = useState<WebSocket | null>(null);
+
+  useEffect(() => {
+    const newSocket = new WebSocket('ws://localhost:8081/api/v1/stream');
+    setSocket(newSocket);
+    return () => {
+      newSocket.close();
+    };
+  }, []);
 
   const { civoToken, currentStep, githubUser, githubUserOrganizations, gitStateLoading } =
     useAppSelector(({ installation, git }) => ({
@@ -111,6 +120,10 @@ export const CivoGithubFormFlow: FC = () => {
 
   const nextButtonText = currentStep === CivoGithubFormStep.SETUP ? 'Create cluster' : 'Next';
 
+  useEffect(() => {
+    dispatch(setInstallationStep(3));
+  }, [dispatch]);
+
   return (
     <InstallationStepContainer
       activeStep={currentStep}
@@ -136,7 +149,9 @@ export const CivoGithubFormFlow: FC = () => {
             ref={formRef}
           />
         )}
-        {currentStep === CivoGithubFormStep.PREPARING && <TerminalLogs />}
+        {currentStep === CivoGithubFormStep.PREPARING && socket && (
+          <CivoWebsocketOutput socket={socket} />
+        )}
         {currentStep === CivoGithubFormStep.READY && <ClusterRunningMessage />}
       </ContentContainer>
     </InstallationStepContainer>
