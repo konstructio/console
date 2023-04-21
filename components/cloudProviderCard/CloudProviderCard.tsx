@@ -5,7 +5,7 @@ import Link from 'next/link';
 
 import { CardProps } from '../card/Card';
 import Typography from '../typography';
-import { InstallationType } from '../../types';
+import { InstallationType } from '../../types/redux';
 import k3dLogo from '../../assets/k3d_logo.svg';
 import awsLogo from '../../assets/aws_logo.svg';
 import civoLogo from '../../assets/civo_logo.svg';
@@ -23,6 +23,7 @@ import {
 const PROVIDER_OPTIONS: Record<
   InstallationType,
   {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     logoSrc: any;
     label: string;
     description: string;

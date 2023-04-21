@@ -1,26 +1,25 @@
 import React, { FunctionComponent, useCallback } from 'react';
 import styled from 'styled-components';
-import InstallationInfoCard from 'components/installationInfoCard/InstallationInfoCard';
-import InstallationStepContainer from 'components/installationStepContainer/InstallationStepContainer';
-import { useRouter } from 'next/router';
+import { INSTALLATION_TYPES, InstallationType } from 'types/redux';
+import { noop } from 'utils/noop';
+import GitProviderButton from 'components/gitProviderButton/GitProviderButton';
+import { media } from 'utils/media';
 
+import { GIT_PROVIDERS, GitProvider } from '../../types';
+import Typography from '../../components/typography';
+import InstallationStepContainer from '../../components/installationStepContainer/InstallationStepContainer';
 import { useAppDispatch, useAppSelector } from '../../redux/store';
-import { setInstallType, setInstallationStep } from '../../redux/slices/installation.slice';
-import InstallationCard from '../../components/installationCard/InstallationCard';
-import { InstallationType } from '../../types/redux';
-import { useInstallation } from '../../hooks/useInstallation';
-import { INSTALLATION_CARD_OPTIONS } from '../../constants';
+import { setGitProvider, setInstallType } from '../../redux/slices/installation.slice';
 import Column from '../../components/column/Column';
 import Row from '../../components/row/Row';
+import CloudProviderCard from '../../components/cloudProviderCard/CloudProviderCard';
 
 const InstallationsSelectionPage: FunctionComponent = () => {
-  const router = useRouter();
-
-  const { installType, installationStep } = useAppSelector(({ installation }) => installation);
+  const { installType, gitProvider, installationStep } = useAppSelector(
+    ({ installation }) => installation,
+  );
 
   const dispatch = useAppDispatch();
-
-  const { info, stepTitles } = useInstallation(installType);
 
   const handleInstallTypeChange = useCallback(
     (type: InstallationType) => {
@@ -29,33 +28,48 @@ const InstallationsSelectionPage: FunctionComponent = () => {
     [dispatch],
   );
 
-  const handleNextButtonClick = useCallback(() => {
-    dispatch(setInstallationStep(installationStep + 1));
-    router.push(`installations/${installType}`);
-  }, [dispatch, installationStep, router, installType]);
+  const handleGitProviderChange = useCallback(
+    (provider: GitProvider) => {
+      dispatch(setGitProvider(provider));
+    },
+    [dispatch],
+  );
 
   return (
     <InstallationStepContainer
       activeStep={installationStep}
-      steps={stepTitles}
-      installationTitle="First, choose your Kubefirst adventure"
+      steps={['Select Platform', 'Set up Cluster', 'Provisioning', 'Ready']}
+      installationTitle="First, select your preferred Git provider"
       showBackButton={false}
-      onNextButtonClick={handleNextButtonClick}
+      onNextButtonClick={noop}
+      nextButtonDisabled={!installType}
     >
       <ContentContainer>
-        <CardContainer>
-          {Object.entries(INSTALLATION_CARD_OPTIONS).map(([optionInstallType, info]) => (
-            <InstallationCard
-              key={optionInstallType}
-              info={info}
-              active={optionInstallType === installType}
-              onClick={() => handleInstallTypeChange(optionInstallType as InstallationType)}
+        <ButtonContainer>
+          {GIT_PROVIDERS.map((provider) => (
+            <GitProviderButton
+              key={provider}
+              option={provider}
+              active={provider === gitProvider}
+              onClick={() => handleGitProviderChange(provider)}
             />
           ))}
-        </CardContainer>
-        <InfoContainer>
-          <InstallationInfoCard info={info} />
-        </InfoContainer>
+        </ButtonContainer>
+        {gitProvider && (
+          <AdventureContent>
+            <Subtitle variant="subtitle2">Now Select your cloud adventure</Subtitle>
+            <CloudProviderContainer>
+              {INSTALLATION_TYPES.map((type) => (
+                <CloudProviderCard
+                  key={type}
+                  option={type}
+                  active={type === installType}
+                  onClick={() => handleInstallTypeChange(type)}
+                />
+              ))}
+            </CloudProviderContainer>
+          </AdventureContent>
+        )}
       </ContentContainer>
     </InstallationStepContainer>
   );
@@ -63,18 +77,33 @@ const InstallationsSelectionPage: FunctionComponent = () => {
 
 export default InstallationsSelectionPage;
 
-const ContentContainer = styled(Row)`
+const ContentContainer = styled(Column)`
+  align-items: center;
+  padding: 0 40px;
+  width: 100%;
+`;
+
+const ButtonContainer = styled(Row)`
   justify-content: center;
-  flex: 1;
-  padding: 0 80px;
+  gap: 24px;
 `;
 
-const CardContainer = styled(Column)`
-  gap: 16px;
-  margin: 0 20px 0 80px;
+const AdventureContent = styled(Column)`
+  align-items: center;
+  justify-content: center;
+  width: 100%;
 `;
 
-const InfoContainer = styled.div`
-  position: sticky;
-  top: 0;
+const Subtitle = styled(Typography)`
+  margin: 40px 0 24px 0;
+`;
+
+const CloudProviderContainer = styled.div`
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 24px;
+
+  ${media.greaterThan('lg')`
+    grid-template-columns: 1fr 1fr;
+  `}
 `;
