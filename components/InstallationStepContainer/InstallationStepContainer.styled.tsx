@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import Column from '../column/Column';
 import InstallationButtons from '../installationButtons/InstallationButtons';
 import Row from '../row/Row';
+import Typography from '../typography';
 
 export const Container = styled(Column)`
   width: 100%;
@@ -15,6 +16,10 @@ export const Container = styled(Column)`
     left: 0;
     z-index: 1;
   }
+`;
+
+export const InstallTitle = styled(Typography)`
+  margin: 40px auto 24px auto;
 `;
 
 export const Title = styled.div`

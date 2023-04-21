@@ -1,7 +1,7 @@
 import React from 'react';
 import { Story } from '@storybook/react';
 
-import { InstallationType } from '../../types';
+import { InstallationType } from '../../types/redux';
 
 import CloudProviderCard, { CloudProviderCardProps } from './CloudProviderCard';
 

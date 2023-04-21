@@ -1,6 +1,7 @@
 import React from 'react';
 import { Story } from '@storybook/react';
 
+import { GitProvider } from '../../types';
 import { useInstallation } from '../../hooks/useInstallation';
 import useStep from '../../hooks/useStep';
 import { InstallationType } from '../../types/redux';
@@ -13,7 +14,7 @@ export default {
 };
 
 const DefaultTemplate: Story = () => {
-  const { stepTitles, installTitles } = useInstallation(InstallationType.LOCAL);
+  const { stepTitles, installTitles } = useInstallation(InstallationType.LOCAL, GitProvider.GITHUB);
   const { currentStep, goToNext, goToPrev } = useStep(0);
 
   const installTitle = installTitles[currentStep];

@@ -11,6 +11,7 @@ import { Button } from './GitProviderButton.styled';
 
 const PROVIDER_OPTIONS: Record<
   GitProvider,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   { logoSrc: any; label: string; height: number; width: number }
 > = {
   [GitProvider.GITHUB]: { logoSrc: githubLogo, label: 'Github', height: 40, width: 40 },

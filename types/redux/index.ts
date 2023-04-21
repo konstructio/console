@@ -37,8 +37,10 @@ export type CivoGithubClusterValues = CivoClusterValues & GithubValues;
 
 export enum InstallationType {
   LOCAL = 'local',
-  AWS_GITHUB = 'aws-github',
-  AWS_GITLAB = 'aws-gitlab',
-  CIVO_GITHUB = 'civo-github',
-  CIVO_GITLAB = 'civo-gitlab',
+  AWS = 'aws',
+  CIVO = 'civo',
+  DIGITAL_OCEAN = 'digital-ocean',
+  VULTR = 'vultr',
 }
+
+export const INSTALLATION_TYPES = Object.values(InstallationType);

@@ -1,6 +1,7 @@
 import React, { FC, useRef, useCallback, useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 
+import { GitProvider } from '../../../../types';
 import { useAppDispatch, useAppSelector } from '../../../../redux/store';
 import { useInstallation } from '../../../../hooks/useInstallation';
 import {
@@ -49,7 +50,7 @@ export const AwsGitlabFormFlow: FC = () => {
 
   const formRef = useRef<HTMLFormElement>(null);
 
-  const { stepTitles, installTitles } = useInstallation(InstallationType.AWS_GITLAB);
+  const { stepTitles, installTitles } = useInstallation(InstallationType.AWS, GitProvider.GITLAB);
   const installTitle = installTitles[currentStep];
 
   const lastStep = currentStep === stepTitles.length - 1;

@@ -2,13 +2,12 @@ import React, { FC, PropsWithChildren } from 'react';
 import styled from 'styled-components';
 
 import Progress, { ProgressProps } from '../progress/Progress';
-import Typography from '../typography';
 import { noop } from '../../utils/noop';
 import InstallationButtons, {
   InstallationButtonsProps,
 } from '../installationButtons/InstallationButtons';
 
-import { Container, Title, Content } from './InstallationStepContainer.styled';
+import { Container, InstallTitle, Content } from './InstallationStepContainer.styled';
 
 interface InstallationStepContainerProps
   extends PropsWithChildren,
@@ -31,9 +30,7 @@ const InstallationStepContainer: FC<InstallationStepContainerProps> = ({
 }) => (
   <Container {...rest}>
     <Progress activeStep={activeStep} steps={steps} />
-    <Title>
-      <Typography variant="h6">{installationTitle}</Typography>
-    </Title>
+    <InstallTitle variant="subtitle2">{installationTitle}</InstallTitle>
     <Content>{children}</Content>
     <InstallationButtons
       onNextButtonClick={onNextButtonClick}

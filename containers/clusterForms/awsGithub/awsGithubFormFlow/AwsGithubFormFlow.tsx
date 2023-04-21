@@ -1,6 +1,7 @@
 import React, { FC, useRef, useCallback, useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 
+import { GitProvider } from '../../../../types';
 import { useAppDispatch, useAppSelector } from '../../../../redux/store';
 import { useInstallation } from '../../../../hooks/useInstallation';
 import {
@@ -71,7 +72,8 @@ export const AwsGithubFormFlow: FC = () => {
     setIsValidating(true);
   }, []);
 
-  const { stepTitles, installTitles } = useInstallation(InstallationType.AWS_GITHUB);
+  const { stepTitles, installTitles } = useInstallation(InstallationType.AWS, GitProvider.GITHUB);
+
   const installTitle = installTitles[currentStep];
 
   const lastStep = currentStep === stepTitles.length - 1;
