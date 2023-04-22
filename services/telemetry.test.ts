@@ -1,6 +1,6 @@
 import Analytics from 'analytics-node';
 
-import { ANALYTICS_ID } from '../enums/telemetry';
+import { ANALYTICS_ID } from '../constants';
 
 import { sendTelemetry } from './telemetry';
 

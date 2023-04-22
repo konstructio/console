@@ -1,72 +1,85 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-import { AWS_GIT_STEPS } from '../../enums/installation';
-
-type LocalInstallation = {
-  githubToken: string;
-  gitOpsBranch: string;
-  templateRepoUrl: string;
-};
-
-type AWSGitInstallation = {
-  step: number;
-  profile?: string;
-  hostedZoneName?: string;
-  adminEmail?: string;
-  kbotPassword?: string;
-  region?: string;
-  clusterName?: string;
-  bucketName?: string;
-  githubToken?: string;
-  githubOrganization?: string;
-  awsNodesSpot?: boolean;
-};
+import {
+  LocalInstallValues,
+  InstallationType,
+  CivoGithubClusterValues,
+  AwsGithubClusterValues,
+  AwsClusterValues,
+  CivoClusterValues,
+} from '../../types/redux';
+import { GitProvider } from '../../types';
 
 export interface InstallationState {
-  local?: LocalInstallation;
-  awsGit?: AWSGitInstallation;
+  local?: LocalInstallValues;
+  awsGithub?: AwsGithubClusterValues;
+  awsGitlab?: AwsClusterValues;
+  civoGithub?: CivoGithubClusterValues;
+  civoGitlab?: CivoClusterValues;
+  gitProvider?: GitProvider;
+  installType?: InstallationType;
+  installationStep: number;
 }
 
 export const initialState: InstallationState = {
-  local: undefined,
-  awsGit: undefined,
+  installationStep: 0,
 };
 
 const installationSlice = createSlice({
   name: 'installation',
   initialState,
   reducers: {
-    setLocalValues(state, { payload }) {
-      const { githubToken, gitOpsBranch, templateRepoUrl } = payload;
+    setInstallationStep: (state, action: PayloadAction<number>) => {
+      state.installationStep = action.payload;
+    },
+    setLocalInstallState: (state, action: PayloadAction<LocalInstallValues>) => {
       state.local = {
-        githubToken: githubToken,
-        gitOpsBranch: gitOpsBranch,
-        templateRepoUrl: templateRepoUrl,
+        ...state.local,
+        ...action.payload,
       };
     },
-    setAWSGitValues(state, { payload }) {
-      const { step } = payload;
-
-      if (step === AWS_GIT_STEPS.READINESS) {
-        const { profile, hostedZoneName } = payload;
-
-        state.awsGit = {
-          step,
-          profile,
-          hostedZoneName,
-          ...state.awsGit,
-        };
-      } else if (step === AWS_GIT_STEPS.SETUP) {
-        state.awsGit = {
-          ...payload,
-          ...state.awsGit,
-          step,
-        };
-      }
+    setAWSGithubInstallState: (state, action: PayloadAction<AwsGithubClusterValues>) => {
+      state.awsGithub = {
+        ...state.awsGithub,
+        ...action.payload,
+      };
+    },
+    setAWSGitlabInstallState: (state, action: PayloadAction<AwsClusterValues>) => {
+      state.awsGitlab = {
+        ...state.awsGitlab,
+        ...action.payload,
+      };
+    },
+    setCivoGithubInstallState: (state, action: PayloadAction<CivoGithubClusterValues>) => {
+      state.civoGithub = {
+        ...state.civoGithub,
+        ...action.payload,
+      };
+    },
+    setCivoGitlabInstallState: (state, action: PayloadAction<CivoClusterValues>) => {
+      state.civoGitlab = {
+        ...state.civoGitlab,
+        ...action.payload,
+      };
+    },
+    setInstallType: (state, action: PayloadAction<InstallationType>) => {
+      state.installType = action.payload;
+    },
+    setGitProvider: (state, action: PayloadAction<GitProvider>) => {
+      state.gitProvider = action.payload;
     },
   },
 });
 
-export const { setAWSGitValues, setLocalValues } = installationSlice.actions;
+export const {
+  setInstallationStep,
+  setLocalInstallState,
+  setAWSGithubInstallState,
+  setAWSGitlabInstallState,
+  setCivoGithubInstallState,
+  setCivoGitlabInstallState,
+  setInstallType,
+  setGitProvider,
+} = installationSlice.actions;
 
-export default installationSlice.reducer;
+export const installationReducer = installationSlice.reducer;
