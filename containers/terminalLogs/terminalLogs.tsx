@@ -17,12 +17,10 @@ import { Terminal as XTerminal } from 'xterm';
 import ConciseLogs from '../conciseLogs';
 
 import { Container, Search, TabContainer, TerminalView } from './terminalLogs.styled';
-import logs from './logs';
 
 import 'xterm/css/xterm.css';
 
 const SEARCH_OPTIONS = { caseSensitive: false };
-const DATE_REGEX = /(\d{4}-\d{2}-\d{2}T\d{2}:\d{2})/;
 
 enum TERMINAL_TABS {
   CONCISE = 0,
@@ -65,7 +63,11 @@ function TabPanel(props: TabPanelProps) {
   );
 }
 
-const TerminalLogs: FunctionComponent = () => {
+interface TerminalLogsProps {
+  socket?: WebSocket;
+}
+
+const TerminalLogs: FunctionComponent<TerminalLogsProps> = ({ socket }) => {
   const [activeTab, setActiveTab] = useState<number>(1);
   const [searchTerm, setSearchTerm] = useState<string>('');
   const terminalRef = useRef(null);
@@ -108,35 +110,33 @@ const TerminalLogs: FunctionComponent = () => {
   }, []);
 
   useEffect(() => {
-    const terminal = new XTerminal({
-      convertEol: true,
-      disableStdin: true,
-      logLevel: 'off',
-      scrollback: 5000,
-      cols: 100,
-      theme: {
-        background: '#0F172A',
-      },
-    });
-
-    if (terminalRef.current) {
-      terminal.open(terminalRef.current);
-      terminal.write('Hello \n');
-
-      let i = 0;
-      setInterval(() => {
-        if (i <= logs.length) {
-          terminal.write(`${logs[i]}\n`.replace(DATE_REGEX, '\x1b[0;37m$1\x1B[0m'));
-          i++;
-          // terminal.write(`${new Date().toISOString()}: INF: Hello Kubefirst \n`);
-        }
-      }, 1000);
+    if (terminalRef.current && socket) {
+      const terminal = new XTerminal({
+        convertEol: true,
+        disableStdin: true,
+        logLevel: 'off',
+        scrollback: 5000,
+        cols: 100,
+        theme: {
+          background: '#0F172A',
+        },
+      });
 
       loadAddons(terminal);
-    }
 
-    return () => terminal.dispose();
-  }, [loadAddons]);
+      socket.addEventListener('message', (event) => {
+        if (typeof event.data === 'string') {
+          terminal.write(`${event.data}\n\n`);
+        } else {
+          terminal.write(event.data);
+        }
+      });
+
+      terminal.open(terminalRef.current);
+
+      return () => terminal.dispose();
+    }
+  }, [loadAddons, socket]);
 
   return (
     <Container>
