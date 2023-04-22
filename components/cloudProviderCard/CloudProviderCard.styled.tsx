@@ -27,6 +27,7 @@ export const LinkContent = styled.a`
 export const CardContainer = styled(Card)`
   display: flex;
   align-items: center;
-  width: 540px;
+  max-width: 540px;
+  min-width: 365px;
   padding: 24px;
 `;
