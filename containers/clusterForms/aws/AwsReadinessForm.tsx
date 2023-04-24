@@ -4,7 +4,7 @@ import { CircularProgress } from '@mui/material';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 
 import ControlledSelect from '../../../components/controlledFields/Select';
-import Button from '../../../components/button/Button';
+import Button from '../../../components/button';
 import Typography from '../../../components/typography/index';
 import ControlledTextField from '../../../components/controlledFields/TextField';
 import { DOMAIN_REGEX } from '../../../constants/index';

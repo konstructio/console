@@ -1,4 +1,4 @@
-import React, { FC, useRef, useCallback, useState, useEffect } from 'react';
+import React, { FunctionComponent, useRef, useCallback, useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 
 import { GitProvider } from '../../../../types';
@@ -8,13 +8,13 @@ import {
   setAWSGithubInstallState,
   setInstallationStep,
 } from '../../../../redux/slices/installation.slice';
-import InstallationStepContainer from '../../../../components/installationStepContainer/InstallationStepContainer';
+import InstallationStepContainer from '../../../../components/installationStepContainer';
 import { AwsGithubClusterValues, InstallationType } from '../../../../types/redux';
-import ClusterRunningMessage from '../../../../components/clusterRunningMessage/ClusterRunningMessage';
+import ClusterRunningMessage from '../../../../components/clusterRunningMessage';
 import TerminalLogs from '../../../terminalLogs';
 import { AwsReadinessForm } from '../../aws/AwsReadinessForm';
 import { getGithubUser, getGithubUserOrganizations } from '../../../../redux/thunks/git.thunk';
-import { AwsGithubSetupForm } from '../awsGithubSetupForm/AwsGithubSetupForm';
+import { AwsGithubSetupForm } from '../AwsGithubSetupForm/AwsGithubSetupForm';
 
 import { ContentContainer } from './AwsGithubFormFlow.styled';
 
@@ -26,7 +26,7 @@ export enum AwsGithubFormStep {
   READY,
 }
 
-export const AwsGithubFormFlow: FC = () => {
+export const AwsGithubFormFlow: FunctionComponent = () => {
   const [showMessage, setShowMessage] = useState(false);
   const [isValidating, setIsValidating] = useState(false);
   const [hostedZoneValid, setHostedZoneValid] = useState(false);

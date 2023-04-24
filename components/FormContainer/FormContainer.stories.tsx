@@ -1,7 +1,7 @@
 import React from 'react';
 import { Story } from '@storybook/react';
 
-import FormContainer from './FormContainer';
+import FormContainer from '.';
 
 export default {
   title: 'Components/FormContainer',

@@ -1,4 +1,4 @@
-import React, { FC, useCallback, useRef } from 'react';
+import React, { FunctionComponent, useCallback, useRef } from 'react';
 import { useRouter } from 'next/router';
 
 import { InstallationType, LocalInstallValues } from '../../../../types/redux';
@@ -7,11 +7,12 @@ import {
   setLocalInstallState,
   setInstallationStep,
 } from '../../../../redux/slices/installation.slice';
-import ClusterRunningMessage from '../../../../components/clusterRunningMessage/ClusterRunningMessage';
+import ClusterRunningMessage from '../../../../components/clusterRunningMessage';
 import TerminalLogs from '../../../terminalLogs';
-import InstallationStepContainer from '../../../../components/installationStepContainer/InstallationStepContainer';
+import InstallationStepContainer from '../../../../components/installationStepContainer';
 import { useAppDispatch, useAppSelector } from '../../../../redux/store';
-import { LocalSetupForm } from '../localSetupForm/LocalSetupForm';
+import { LocalSetupForm } from '../LocalSetupForm/LocalSetupForm';
+import { GitProvider } from '../../../../types';
 
 import { ContentContainer } from './LocalFormFlow.styled';
 
@@ -22,14 +23,14 @@ export enum LocalFormStep {
   READY,
 }
 
-export const LocalFormFlow: FC = () => {
+export const LocalFormFlow: FunctionComponent = () => {
   const currentStep = useAppSelector(({ installation }) => installation.installationStep);
   const dispatch = useAppDispatch();
   const router = useRouter();
 
   const formRef = useRef<HTMLFormElement>(null);
 
-  const { stepTitles, installTitles } = useInstallation(InstallationType.LOCAL);
+  const { stepTitles, installTitles } = useInstallation(InstallationType.LOCAL, GitProvider.GITHUB);
 
   const installTitle = installTitles[currentStep];
 

@@ -33,5 +33,3 @@ export const consoleApi = createApi({
 });
 
 export const { endpoints, useTelemetryMutation, useReadinessMutation } = consoleApi;
-
-export const sendReadinessEvent = endpoints.readiness.initiate;

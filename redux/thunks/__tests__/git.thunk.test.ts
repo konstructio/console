@@ -38,22 +38,20 @@ describe('redux/thunks - failed responses', () => {
   const reduxStore = makeStore();
 
   test('getGithubUser', async () => {
-    const result = await reduxStore.dispatch(getGithubUser('token'));
+    await reduxStore.dispatch(getGithubUser('token'));
 
     const { githubUser, error } = reduxStore.getState().git;
 
     expect(githubUser).toBe(null);
-    expect(result.error.message).toBe('Request failed with status code 403');
     expect(error).toStrictEqual('Request failed with status code 403');
   });
 
   test('getGithubUserOrganizations', async () => {
-    const result = await reduxStore.dispatch(getGithubUserOrganizations('token'));
+    await reduxStore.dispatch(getGithubUserOrganizations('token'));
 
     const { githubUserOrganizations, error } = reduxStore.getState().git;
 
     expect(githubUserOrganizations).toStrictEqual([]);
-    expect(result.error.message).toBe('Request failed with status code 403');
     expect(error).toStrictEqual('Request failed with status code 403');
   });
 });

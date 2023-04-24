@@ -23,10 +23,10 @@ export const sendTelemetry = ({ event, properties }: SendTelemetryArgs) => {
     USE_TELEMETRY,
   } = process.env;
 
-  const telemetryEnabled = USE_TELEMETRY === 'true';
+  const isTelemetryEnabled = USE_TELEMETRY === 'true';
   const analytics = new Analytics(ANALYTICS_ID);
 
-  if (telemetryEnabled) {
+  if (isTelemetryEnabled) {
     try {
       if (!CLUSTER_ID) {
         throw new Error('missing env variable: CLUSTER_ID');

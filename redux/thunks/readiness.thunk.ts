@@ -1,6 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
-import { sendReadinessEvent } from '../api/';
+import { endpoints } from '../api/';
 import { AppDispatch, RootState } from '../store';
 import { ReadinessData } from '../../pages/api/readiness';
 
@@ -18,7 +18,7 @@ export const checkSiteReadiness = createAsyncThunk<
     await fetch(body.url, { mode: 'no-cors' });
     return { success: true, url: body.url };
   } else {
-    const res = await dispatch(sendReadinessEvent(body));
+    const res = await dispatch(endpoints.readiness.initiate(body));
     if ('error' in res) {
       throw res.error;
     }

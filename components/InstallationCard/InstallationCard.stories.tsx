@@ -1,33 +1,20 @@
-import React, { useState } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import { Story } from '@storybook/react';
 
-import { INSTALLATION_CARD_OPTIONS } from '../../constants';
-import Column from '../column/Column';
-import { InstallationType } from '../../types/redux';
+import Column from '../column';
 
-import InstallationCard from './InstallationCard';
+import InstallationCard, { InstallationCardProps } from '.';
 
 export default {
   title: 'Components/InstallationCard',
   component: InstallationCard,
 };
 
-const DefaultTemplate: Story = () => {
-  const [activeInstallType, setActiveInstallType] = useState<InstallationType>(
-    InstallationType.LOCAL,
-  );
-
+const DefaultTemplate: Story<InstallationCardProps> = (args) => {
   return (
     <Container>
-      {Object.entries(INSTALLATION_CARD_OPTIONS).map(([optionInstallType, info]) => (
-        <InstallationCard
-          key={optionInstallType}
-          info={info}
-          onClick={() => setActiveInstallType(optionInstallType as InstallationType)}
-          active={activeInstallType === optionInstallType}
-        />
-      ))}
+      <InstallationCard {...args} />
     </Container>
   );
 };
@@ -38,3 +25,10 @@ const Container = styled(Column)`
 `;
 
 export const Default = DefaultTemplate.bind({});
+Default.args = {
+  active: true,
+  info: {
+    description: 'test',
+    title: 'aws',
+  },
+};

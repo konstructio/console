@@ -1,4 +1,4 @@
-import React, { FC, useRef, useCallback, useState, useEffect } from 'react';
+import React, { FunctionComponent, useRef, useCallback, useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 
 import { GitProvider } from '../../../../types';
@@ -8,12 +8,12 @@ import {
   setAWSGitlabInstallState,
   setInstallationStep,
 } from '../../../../redux/slices/installation.slice';
-import InstallationStepContainer from '../../../../components/installationStepContainer/InstallationStepContainer';
+import InstallationStepContainer from '../../../../components/installationStepContainer';
 import { AwsClusterValues, AwsInstallValues, InstallationType } from '../../../../types/redux';
-import ClusterRunningMessage from '../../../../components/clusterRunningMessage/ClusterRunningMessage';
+import ClusterRunningMessage from '../../../../components/clusterRunningMessage';
 import TerminalLogs from '../../../terminalLogs';
 import { AwsReadinessForm } from '../../aws/AwsReadinessForm';
-import { AwsGitlabSetupForm } from '../awsGitlabSetupForm/AwsGitlabSetupForm';
+import { AwsGitlabSetupForm } from '../AwsGitlabSetupForm/AwsGitlabSetupForm';
 
 import { ContentContainer } from './AwsGitlabFormFlow.styled';
 
@@ -25,7 +25,7 @@ export enum AwsGitlabFormStep {
   READY,
 }
 
-export const AwsGitlabFormFlow: FC = () => {
+export const AwsGitlabFormFlow: FunctionComponent = () => {
   const [showMessage, setShowMessage] = useState(false);
   const [isValidating, setIsValidating] = useState(false);
   const [hostedZoneValid, setHostedZoneValid] = useState(false);

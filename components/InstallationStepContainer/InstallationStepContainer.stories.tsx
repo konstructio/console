@@ -6,7 +6,7 @@ import { useInstallation } from '../../hooks/useInstallation';
 import useStep from '../../hooks/useStep';
 import { InstallationType } from '../../types/redux';
 
-import InstallationStepContainer from './InstallationStepContainer';
+import InstallationStepContainer from '.';
 
 export default {
   title: 'Components/InstallationStepContainer',

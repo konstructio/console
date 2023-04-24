@@ -1,4 +1,4 @@
-import React, { FC, useRef, useCallback, useState, useEffect } from 'react';
+import React, { FunctionComponent, useRef, useCallback, useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { useWebSocket } from 'hooks/useWebSocket';
 
@@ -9,16 +9,16 @@ import {
   setCivoGithubInstallState,
   setInstallationStep,
 } from '../../../../redux/slices/installation.slice';
-import InstallationStepContainer from '../../../../components/installationStepContainer/InstallationStepContainer';
+import InstallationStepContainer from '../../../../components/installationStepContainer';
 import {
   CivoGithubClusterValues,
   CivoInstallValues,
   InstallationType,
 } from '../../../../types/redux/index';
-import ClusterRunningMessage from '../../../../components/clusterRunningMessage/ClusterRunningMessage';
+import ClusterRunningMessage from '../../../../components/clusterRunningMessage';
 import { getGithubUser, getGithubUserOrganizations } from '../../../../redux/thunks/git.thunk';
-import { CivoGithubReadinessForm } from '../civoGithubReadinessForm/CivoGithubReadinessForm';
-import { CivoGithubSetupForm } from '../civoGithubSetupForm/CivoGithubSetupForm';
+import { CivoGithubReadinessForm } from '../CivoGithubReadinessForm/CivoGithubReadinessForm';
+import { CivoGithubSetupForm } from '../CivoGithubSetupForm/CivoGithubSetupForm';
 import TerminalLogs from '../../../terminalLogs';
 
 import { ContentContainer } from './CivoGithubFormFlow.styled';
@@ -31,7 +31,7 @@ export enum CivoGithubFormStep {
   READY,
 }
 
-export const CivoGithubFormFlow: FC = () => {
+export const CivoGithubFormFlow: FunctionComponent = () => {
   const [githubToken, setGithubToken] = useState('');
   const socket = useWebSocket('ws://localhost:8081/api/v1/stream');
 

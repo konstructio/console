@@ -1,4 +1,4 @@
-import React, { FC, useRef, useCallback, useState, useEffect } from 'react';
+import React, { FunctionComponent, useRef, useCallback, useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 
 import { GitProvider } from '../../../../types';
@@ -8,16 +8,16 @@ import {
   setCivoGithubInstallState,
   setInstallationStep,
 } from '../../../../redux/slices/installation.slice';
-import InstallationStepContainer from '../../../../components/installationStepContainer/InstallationStepContainer';
+import InstallationStepContainer from '../../../../components/installationStepContainer';
 import {
   CivoClusterValues,
   CivoInstallValues,
   InstallationType,
 } from '../../../../types/redux/index';
-import ClusterRunningMessage from '../../../../components/clusterRunningMessage/ClusterRunningMessage';
+import ClusterRunningMessage from '../../../../components/clusterRunningMessage';
 import TerminalLogs from '../../../terminalLogs/index';
-import { CivoGitlabReadinessForm } from '../civoGitlabReadinessForm/CivoGitlabReadinessForm';
-import { CivoGitlabSetupForm } from '../civoGitlabSetupForm/CivoGitlabSetupForm';
+import { CivoGitlabReadinessForm } from '../CivoGitlabReadinessForm/CivoGitlabReadinessForm';
+import { CivoGitlabSetupForm } from '../CivoGitlabSetupForm/CivoGitlabSetupForm';
 
 import { ContentContainer } from './CivoGitlabFormFlow.styled';
 
@@ -29,7 +29,7 @@ export enum CivoGithubFormStep {
   READY,
 }
 
-export const CivoGitlabFormFlow: FC = () => {
+export const CivoGitlabFormFlow: FunctionComponent = () => {
   const [showMessage, setShowMessage] = useState(false);
   const [isValidating, setIsValidating] = useState(false);
   const [hostedDomainValid, setHostedDomainValid] = useState(false);
