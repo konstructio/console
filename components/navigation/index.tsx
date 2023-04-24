@@ -91,7 +91,7 @@ const Navigation: FunctionComponent = () => {
           <Image alt="k1-image" src={'/static/title.svg'} height={40} width={160} id="title" />
           {kubefirstVersion && (
             <KubefirstVersion variant="labelSmall" color={ECHO_BLUE}>
-              {`V${kubefirstVersion}`}
+              {`${kubefirstVersion}`}
             </KubefirstVersion>
           )}
         </KubefirstTitle>
