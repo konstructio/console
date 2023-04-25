@@ -31,6 +31,7 @@ import {
   WHITE,
   WHITE_SMOKE,
   LIGHT_GREY,
+  SPUN_PEARL,
 } from '../constants/colors';
 
 export const theme: DefaultTheme = {
@@ -57,6 +58,7 @@ export const theme: DefaultTheme = {
     purpleCabbage: PURPLE_CABBAGE,
     saltboxBlue: SALTBOX_BLUE,
     stomyShower: STORMY_SHOWER,
+    spunPearl: SPUN_PEARL,
     transparentBlue: TRANSPARENT_BLUE,
     ultimateGrey: ULTIMATE_GREY,
     yellowOrange: YELLOW_ORANGE,

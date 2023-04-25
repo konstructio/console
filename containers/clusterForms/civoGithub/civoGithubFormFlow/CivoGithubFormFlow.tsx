@@ -1,6 +1,5 @@
 import React, { FunctionComponent, useRef, useCallback, useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
-import { useWebSocket } from 'hooks/useWebSocket';
 
 import { GitProvider } from '../../../../types';
 import { useAppDispatch, useAppSelector } from '../../../../redux/store';
@@ -20,6 +19,7 @@ import { getGithubUser, getGithubUserOrganizations } from '../../../../redux/thu
 import { CivoGithubReadinessForm } from '../CivoGithubReadinessForm/CivoGithubReadinessForm';
 import { CivoGithubSetupForm } from '../CivoGithubSetupForm/CivoGithubSetupForm';
 import TerminalLogs from '../../../terminalLogs';
+import { createCluster } from '../../../../redux/thunks/cluster';
 
 import { ContentContainer } from './CivoGithubFormFlow.styled';
 
@@ -33,15 +33,14 @@ export enum CivoGithubFormStep {
 
 export const CivoGithubFormFlow: FunctionComponent = () => {
   const [githubToken, setGithubToken] = useState('');
-  const socket = useWebSocket('ws://localhost:8081/api/v1/stream');
 
-  const { currentStep, githubUser, githubUserOrganizations, gitStateLoading } = useAppSelector(
-    ({ installation, git }) => ({
+  const { currentStep, civoData, githubUser, githubUserOrganizations, gitStateLoading } =
+    useAppSelector(({ installation, git }) => ({
       currentStep: installation.installationStep,
+      civoData: installation.civoGithub,
       gitStateLoading: git.isLoading,
       ...git,
-    }),
-  );
+    }));
 
   const dispatch = useAppDispatch();
   const router = useRouter();
@@ -80,6 +79,24 @@ export const CivoGithubFormFlow: FunctionComponent = () => {
         dispatch(setInstallationStep(currentStep + 1));
         dispatch(setCivoGithubInstallState(values));
       }
+
+      if (currentStep === CivoGithubFormStep.SETUP) {
+        console.log('creating cluster', values);
+        console.log('civoData', civoData)
+
+        const params = {
+          clusterName: values.clusterName,
+          admin_email: values.alertsEmail,
+          cloud_provider: 'civo',
+          cloud_region: values.cloudRegion,
+          domain_name: values.domainName,
+          git_owner: civoData?.githubOrganization,
+          git_provider: 'github',
+          git_token: civoData?.githubToken,
+          type: 'mgmt',
+        };
+        await dispatch(createCluster(params)).unwrap();
+      }
     },
     [dispatch, currentStep],
   );
@@ -110,7 +127,7 @@ export const CivoGithubFormFlow: FunctionComponent = () => {
   const nextButtonText = currentStep === CivoGithubFormStep.SETUP ? 'Create cluster' : 'Next';
 
   useEffect(() => {
-    dispatch(setInstallationStep(3));
+    dispatch(setInstallationStep(2));
   }, [dispatch]);
 
   return (
@@ -125,7 +142,15 @@ export const CivoGithubFormFlow: FunctionComponent = () => {
     >
       <ContentContainer>
         {currentStep === CivoGithubFormStep.READINESS && (
-          <CivoGithubReadinessForm onFormSubmit={handleFormSubmit} ref={formRef} />
+          <CivoGithubReadinessForm
+            hasTokenValue={!!githubToken}
+            githubTokenValid={!!githubUser}
+            onFormSubmit={handleFormSubmit}
+            githubUserOrginizations={githubUserOrganizations}
+            onGithubTokenBlur={handleGithubTokenBlur}
+            loading={gitStateLoading}
+            ref={formRef}
+          />
         )}
         {currentStep === CivoGithubFormStep.SETUP && (
           <CivoGithubSetupForm
@@ -138,7 +163,7 @@ export const CivoGithubFormFlow: FunctionComponent = () => {
             ref={formRef}
           />
         )}
-        {currentStep === CivoGithubFormStep.PREPARING && socket && <TerminalLogs socket={socket} />}
+        {currentStep === CivoGithubFormStep.PREPARING && <TerminalLogs />}
         {currentStep === CivoGithubFormStep.READY && <ClusterRunningMessage />}
       </ContentContainer>
     </InstallationStepContainer>

@@ -11,9 +11,9 @@ export interface LocalInstallValues extends GithubValues {
 }
 
 export interface ClusterValues {
-  adminEmail?: string;
+  alertsEmail?: string;
   kbotPassword?: string;
-  region?: string;
+  cloudRegion?: string;
   clusterName?: string;
 }
 
@@ -28,11 +28,12 @@ export type AwsClusterValues = AwsInstallValues & ClusterValues;
 
 export type AwsGithubClusterValues = AwsClusterValues & GithubValues;
 
-export interface CivoInstallValues {
+export interface CivoInstallValues extends ClusterValues {
   civoToken?: string;
   githubToken?: string;
-  hostedDomainName?: string;
-  hostedDomainValid?: boolean;
+  userName?: string;
+  githubOrganization?: string;
+  domainName?: string;
 }
 export type CivoClusterValues = CivoInstallValues & ClusterValues;
 export type CivoGithubClusterValues = CivoClusterValues & GithubValues;
@@ -46,3 +47,11 @@ export enum InstallationType {
 }
 
 export const INSTALLATION_TYPES = Object.values(InstallationType);
+
+export type InstallationInfo = {
+  title: string;
+  description: string | string[];
+  code?: string;
+  ctaDescription: string;
+  ctaLink?: string;
+};

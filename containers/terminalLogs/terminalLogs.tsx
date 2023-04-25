@@ -13,6 +13,7 @@ import { OutlinedInput } from '@mui/material';
 import { SearchAddon } from 'xterm-addon-search';
 import { FitAddon } from 'xterm-addon-fit';
 import { Terminal as XTerminal } from 'xterm';
+import { createLogStream } from 'services/stream';
 
 import ConciseLogs from '../conciseLogs';
 
@@ -20,6 +21,7 @@ import { Container, Search, TabContainer, TerminalView } from './terminalLogs.st
 
 import 'xterm/css/xterm.css';
 
+const DATE_REGEX = /(\d{4}-\d{2}-\d{2}T\d{2}:\d{2})/;
 const SEARCH_OPTIONS = { caseSensitive: false };
 
 enum TERMINAL_TABS {
@@ -63,15 +65,30 @@ function TabPanel(props: TabPanelProps) {
   );
 }
 
-interface TerminalLogsProps {
-  socket?: WebSocket;
-}
-
-const TerminalLogs: FunctionComponent<TerminalLogsProps> = ({ socket }) => {
+const TerminalLogs: FunctionComponent = () => {
   const [activeTab, setActiveTab] = useState<number>(1);
   const [searchTerm, setSearchTerm] = useState<string>('');
   const terminalRef = useRef(null);
   const searchAddonRef = useRef<SearchAddon>();
+
+  const subscribe = () => {
+    // const emitter: any = createLogStream('http://localhost:8081/api/v1/stream');
+    const eventSource = new EventSource('http://localhost:8081/api/v1/stream');
+
+    console.log('starting');
+
+    eventSource.addEventListener('open', (e) => {
+      console.log('connection established');
+    });
+    eventSource.addEventListener('log', (e) => {
+      const logMessage = JSON.parse(e.data);
+      console.log('logMessage', logMessage);
+    });
+
+    eventSource.addEventListener('error', (e) => {
+      console.error('an error occurred', e);
+    });
+  };
 
   const handleSearch = (event: ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target;
@@ -110,7 +127,7 @@ const TerminalLogs: FunctionComponent<TerminalLogsProps> = ({ socket }) => {
   }, []);
 
   useEffect(() => {
-    if (terminalRef.current && socket) {
+    if (terminalRef.current) {
       const terminal = new XTerminal({
         convertEol: true,
         disableStdin: true,
@@ -124,19 +141,27 @@ const TerminalLogs: FunctionComponent<TerminalLogsProps> = ({ socket }) => {
 
       loadAddons(terminal);
 
-      socket.addEventListener('message', (event) => {
-        if (typeof event.data === 'string') {
-          terminal.write(`${event.data}\n\n`);
-        } else {
-          terminal.write(event.data);
-        }
-      });
-
       terminal.open(terminalRef.current);
 
-      return () => terminal.dispose();
+      const emitter: any = createLogStream('http://localhost:8081/api/v1/stream');
+      emitter.on('log', (log: any) => {
+        console.log('incoming log', log);
+        terminal.write(`${log.message.replace(DATE_REGEX, '\x1b[0;37m$1\x1B[0m')}\n\n`);
+      });
+
+      emitter.on('error', (error: any) => {
+        console.error(error);
+        emitter.stopLogStream();
+      });
+
+      emitter.startLogStream();
+
+      return () => {
+        terminal.dispose();
+        emitter.stopLogStream();
+      };
     }
-  }, [loadAddons, socket]);
+  }, [loadAddons]);
 
   return (
     <Container>

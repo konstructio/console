@@ -1,5 +1,6 @@
 import React, { FunctionComponent, useCallback, useRef } from 'react';
 import { useRouter } from 'next/router';
+import { createCluster } from 'redux/thunks/cluster';
 
 import { InstallationType, LocalInstallValues } from '../../../../types/redux';
 import { useInstallation } from '../../../../hooks/useInstallation';
@@ -11,7 +12,7 @@ import ClusterRunningMessage from '../../../../components/clusterRunningMessage'
 import TerminalLogs from '../../../terminalLogs';
 import InstallationStepContainer from '../../../../components/installationStepContainer';
 import { useAppDispatch, useAppSelector } from '../../../../redux/store';
-import { LocalSetupForm } from '../LocalSetupForm/LocalSetupForm';
+import { LocalSetupForm } from '../localSetupForm';
 import { GitProvider } from '../../../../types';
 
 import { ContentContainer } from './LocalFormFlow.styled';
@@ -24,22 +25,31 @@ export enum LocalFormStep {
 }
 
 export const LocalFormFlow: FunctionComponent = () => {
-  const currentStep = useAppSelector(({ installation }) => installation.installationStep);
+  const { installationStep: currentStep, gitProvider } = useAppSelector(
+    ({ installation }) => installation,
+  );
   const dispatch = useAppDispatch();
   const router = useRouter();
 
   const formRef = useRef<HTMLFormElement>(null);
 
-  const { stepTitles, installTitles } = useInstallation(InstallationType.LOCAL, GitProvider.GITHUB);
+  const { stepTitles, installTitles, info } = useInstallation(
+    InstallationType.LOCAL,
+    gitProvider as GitProvider,
+  );
 
   const installTitle = installTitles[currentStep];
 
   const lastStep = currentStep === stepTitles.length - 1;
 
   const handleFormSubmit = useCallback(
-    (values: LocalInstallValues) => {
+    async (values: LocalInstallValues) => {
       dispatch(setLocalInstallState(values));
       dispatch(setInstallationStep(currentStep + 1));
+
+      await dispatch(createCluster(values)).unwrap();
+
+      dispatch(createCluster(values));
     },
     [dispatch, currentStep],
   );
@@ -78,7 +88,7 @@ export const LocalFormFlow: FunctionComponent = () => {
     >
       <ContentContainer>
         {currentStep === LocalFormStep.SETUP && (
-          <LocalSetupForm ref={formRef} onFormSubmit={handleFormSubmit} />
+          <LocalSetupForm ref={formRef} onFormSubmit={handleFormSubmit} info={info} />
         )}
         {currentStep === LocalFormStep.PREPARING && <TerminalLogs />}
         {currentStep === LocalFormStep.READY && <ClusterRunningMessage />}

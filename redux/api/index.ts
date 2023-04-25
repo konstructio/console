@@ -7,7 +7,7 @@ import { SendTelemetryArgs } from '../../services/telemetry';
 
 export const consoleApi = createApi({
   baseQuery: fetchBaseQuery({
-    baseUrl: '/api',
+    baseUrl: '',
   }),
   extractRehydrationInfo(action, { reducerPath }) {
     if (action.type === HYDRATE) {
@@ -17,16 +17,26 @@ export const consoleApi = createApi({
   endpoints: (builder) => ({
     telemetry: builder.mutation<TelemetryResponseData, SendTelemetryArgs>({
       query: (body) => ({
-        url: '/telemetry',
+        url: '/api/telemetry',
         method: 'POST',
         body,
       }),
     }),
     readiness: builder.mutation<ReadinessData, Omit<ReadinessData, 'success'>>({
       query: (body) => ({
-        url: '/readiness',
+        url: '/api/readiness',
         method: 'POST',
         body,
+      }),
+    }),
+    provision: builder.mutation({
+      query: (body) => ({
+        url: `http://localhost:8081/api/v1/cluster/${body.clusterName || 'kubefirst'}`,
+        method: 'POST',
+        body,
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+        },
       }),
     }),
   }),
