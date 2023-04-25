@@ -3,7 +3,7 @@ import { Story } from '@storybook/react';
 
 import { noop } from '../../utils/noop';
 
-import InstallationButtons from './InstallationButtons';
+import InstallationButtons from '.';
 
 export default {
   title: 'Components/InstallationButtons',

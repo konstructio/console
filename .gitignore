@@ -36,5 +36,8 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
+# custom
 /dist
 storybook-static
+.vscode
+.yarnrc.yaml

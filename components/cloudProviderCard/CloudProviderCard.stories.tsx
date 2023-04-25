@@ -3,7 +3,7 @@ import { Story } from '@storybook/react';
 
 import { InstallationType } from '../../types/redux';
 
-import CloudProviderCard, { CloudProviderCardProps } from './CloudProviderCard';
+import CloudProviderCard, { CloudProviderCardProps } from '.';
 
 export default {
   title: 'Components/CloudProviderCard',

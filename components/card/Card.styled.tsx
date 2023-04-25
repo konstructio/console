@@ -1,6 +1,6 @@
 import styled, { css } from 'styled-components';
 
-import { CardProps } from './Card';
+import { CardProps } from '.';
 
 export const CardContainer = styled.div<CardProps>`
   border: 2px solid #e2e8f0;

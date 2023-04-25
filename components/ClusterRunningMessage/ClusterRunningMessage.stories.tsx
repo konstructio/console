@@ -1,7 +1,7 @@
 import React from 'react';
 import { Story } from '@storybook/react';
 
-import ClusterRunningMessage from './ClusterRunningMessage';
+import ClusterRunningMessage from '.';
 
 export default {
   title: 'Components/ClusterRunningMessage',

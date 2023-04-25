@@ -3,7 +3,6 @@ import { useForm } from 'react-hook-form';
 
 import { CivoGithubClusterValues } from '../../../../types/redux/index';
 import ControlledAutocomplete from '../../../../components/controlledFields/AutoComplete';
-import ControlledPassword from '../../../../components/controlledFields/Password';
 import { CIVO_REGIONS, EMAIL_REGEX } from '../../../../constants/index';
 import ControlledTextField from '../../../../components/controlledFields/TextField';
 import { GithubUserOrganization } from '../../../../types/github/index';
@@ -23,14 +22,7 @@ export const CivoGithubSetupForm = forwardRef<HTMLFormElement, CivoGithubSetupFo
   function CivoGithubSetupForm(props, ref) {
     const { control, handleSubmit } = useForm<CivoGithubClusterValues>();
 
-    const {
-      onGithubTokenBlur,
-      hasTokenValue,
-      githubTokenValid,
-      loading,
-      githubUserOrginizations,
-      onFormSubmit,
-    } = props;
+    const { loading, githubUserOrginizations, onFormSubmit } = props;
 
     return (
       <Form component="form" onSubmit={handleSubmit(onFormSubmit)} ref={ref}>
@@ -66,7 +58,7 @@ export const CivoGithubSetupForm = forwardRef<HTMLFormElement, CivoGithubSetupFo
           control={control}
           name="clusterName"
           label="Cluster name"
-          defaultValue='kubefirst'
+          defaultValue="kubefirst"
           rules={{
             maxLength: 25,
             required: true,

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Story } from '@storybook/react';
 
-import Button, { IButtonProps } from './Button';
+import Button, { IButtonProps } from '.';
 
 export default {
   title: 'Form Elements/Button',

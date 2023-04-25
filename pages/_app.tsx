@@ -10,8 +10,8 @@ import { theme } from '../theme';
 import { wrapper } from '../redux/store';
 import '../styles/globals.css';
 import Navigation from '../components/navigation';
-import Row from '../components/row/Row';
-import Column from '../components/column/Column';
+import Row from '../components/row';
+import Column from '../components/column';
 
 const Layout = styled(Row)`
   background-color: ${({ theme }) => theme.colors.washMe};

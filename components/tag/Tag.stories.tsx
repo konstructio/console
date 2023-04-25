@@ -1,7 +1,7 @@
 import React from 'react';
 import { Story } from '@storybook/react';
 
-import Tag, { TAG_COLOR_OPTIONS, TagProps } from './Tag';
+import Tag, { TAG_COLOR_OPTIONS, TagProps } from '.';
 
 export default {
   title: 'Components/Tag',

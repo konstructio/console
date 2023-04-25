@@ -2,7 +2,7 @@ import styled, { css } from 'styled-components';
 
 import Typography, { ITypographyProps } from '../typography';
 
-import { TagColor } from './Tag';
+import { TagColor } from '.';
 
 export const TagContainer = styled(Typography)<{ bgColor?: TagColor } & ITypographyProps>`
   border-radius: 4px;

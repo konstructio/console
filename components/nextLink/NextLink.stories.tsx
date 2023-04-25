@@ -2,7 +2,7 @@ import React from 'react';
 import { Story } from '@storybook/react';
 import styled from 'styled-components';
 
-import NextLink from './NextLink';
+import NextLink from '.';
 
 export default {
   title: 'Components/NextLink',

@@ -1,4 +1,4 @@
-import React, { FC, useMemo } from 'react';
+import React, { FunctionComponent, useMemo } from 'react';
 
 import { useAppSelector } from '../../redux/store';
 import { GitProvider } from '../../types';
@@ -8,7 +8,7 @@ import { CivoGithubFormFlow } from '../../containers/clusterForms/civoGithub/civ
 import { LocalFormFlow } from '../../containers/clusterForms/local/localFormFlow/LocalFormFlow';
 import { AwsGitlabFormFlow } from '../../containers/clusterForms/awsGitlab/awsGitlabFormFlow/AwsGitlabFormFlow';
 
-const INSTALLATION_MAP: Record<GitProvider, Record<InstallationType, FC | null>> = {
+const INSTALLATION_MAP: Record<GitProvider, Record<InstallationType, FunctionComponent | null>> = {
   [GitProvider.GITHUB]: {
     [InstallationType.AWS]: AwsGithubFormFlow,
     [InstallationType.CIVO]: CivoGithubFormFlow,

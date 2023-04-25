@@ -3,7 +3,7 @@ import { Story } from '@storybook/react';
 
 import { GitProvider } from '../../types';
 
-import GitProviderButton, { GitProviderButtonProps } from './GitProviderButton';
+import GitProviderButton, { GitProviderButtonProps } from '.';
 
 export default {
   title: 'Components/GitProviderButton',
