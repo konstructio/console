@@ -31,3 +31,9 @@ export const InstallTitle = styled(Typography)`
 export const Title = styled.div`
   margin: 40px auto;
 `;
+
+export const LearnMore = styled(Typography)`
+  color: ${({ theme }) => theme.colors.spunPearl};
+  display: flex;
+  gap: 4px;
+`;

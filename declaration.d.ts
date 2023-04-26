@@ -44,6 +44,7 @@ declare module 'styled-components' {
       naivePeach: string;
       purpleCabbage: string;
       stomyShower: string;
+      spunPearl: string;
       transparentBlue: string;
       ultimateGrey: string;
       yellowOrange: string;

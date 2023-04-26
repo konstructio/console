@@ -4,6 +4,7 @@ import { Control, Controller, FieldValues, UseControllerProps } from 'react-hook
 import TextFieldWithRef from '../textField/index';
 
 export interface ControlledTextFieldProps<T extends FieldValues> extends UseControllerProps<T> {
+  disabled?: boolean;
   label: string;
   required?: boolean;
   control: Control<T>;
@@ -12,6 +13,7 @@ export interface ControlledTextFieldProps<T extends FieldValues> extends UseCont
 }
 
 function ControlledTextField<T extends FieldValues>({
+  disabled,
   label,
   required,
   helperText,
@@ -30,6 +32,7 @@ function ControlledTextField<T extends FieldValues>({
             field.onBlur();
             setIsBlur(true);
           }}
+          disabled={disabled}
           inputRef={field.ref}
           fullWidth
           required={required}
