@@ -22,3 +22,21 @@ export const createCluster = createAsyncThunk<
   }
   return res.data;
 });
+
+export const deleteCluster = createAsyncThunk<
+  unknown,
+  unknown,
+  {
+    dispatch: AppDispatch;
+    state: RootState;
+  }
+>('cluster/delete', async (clusterName) => {
+  const res = await axios.delete(
+    `http://localhost:8081/api/v1/cluster/${clusterName || 'cris-cluster'}`,
+  );
+
+  if ('error' in res) {
+    throw res.error;
+  }
+  return res.data;
+});

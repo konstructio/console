@@ -12,6 +12,7 @@ import { Box, styled, Tab, tabClasses, Tabs } from '@mui/material';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import VideogameAssetIcon from '@mui/icons-material/VideogameAsset';
+import TwitterIcon from '@mui/icons-material/Twitter';
 import MusicNoteIcon from '@mui/icons-material/MusicNote';
 import { OutlinedInput } from '@mui/material';
 import { SearchAddon } from 'xterm-addon-search';
@@ -21,7 +22,14 @@ import ConciseLogs from '../conciseLogs';
 import useModal from '../../hooks/useModal';
 import Modal from '../../components/modal';
 
-import { Close, Container, Search, TabContainer, TerminalView } from './terminalLogs.styled';
+import {
+  Close,
+  Container,
+  Search,
+  ShareInTwitter,
+  TabContainer,
+  TerminalView,
+} from './terminalLogs.styled';
 
 import 'xterm/css/xterm.css';
 
@@ -202,6 +210,11 @@ const TerminalLogs: FunctionComponent = () => {
                 height: '950px',
                 width: '1050px',
               }}
+            />
+            <ShareInTwitter
+              color="secondary"
+              fontSize="large"
+              onClick={() => window.open('https://twitter.com/intent/tweet?url=test', '_blank')}
             />
             <Close onClick={closeModal} color="secondary" fontSize="large" />
           </>

@@ -19,7 +19,7 @@ import { getGithubUser, getGithubUserOrganizations } from '../../../../redux/thu
 import { CivoGithubReadinessForm } from '../CivoGithubReadinessForm/CivoGithubReadinessForm';
 import { CivoGithubSetupForm } from '../CivoGithubSetupForm/CivoGithubSetupForm';
 import TerminalLogs from '../../../terminalLogs';
-import { createCluster } from '../../../../redux/thunks/cluster';
+import { createCluster, deleteCluster } from '../../../../redux/thunks/cluster';
 
 import { ContentContainer } from './CivoGithubFormFlow.styled';
 
@@ -33,6 +33,9 @@ export enum CivoGithubFormStep {
 
 export const CivoGithubFormFlow: FunctionComponent = () => {
   const [githubToken, setGithubToken] = useState('');
+  const dispatch = useAppDispatch();
+  const router = useRouter();
+  const formRef = useRef<HTMLFormElement>(null);
 
   const { currentStep, civoData, githubUser, githubUserOrganizations, gitStateLoading } =
     useAppSelector(({ installation, git }) => ({
@@ -41,11 +44,6 @@ export const CivoGithubFormFlow: FunctionComponent = () => {
       gitStateLoading: git.isLoading,
       ...git,
     }));
-
-  const dispatch = useAppDispatch();
-  const router = useRouter();
-
-  const formRef = useRef<HTMLFormElement>(null);
 
   const { stepTitles } = useInstallation(InstallationType.CIVO, GitProvider.GITHUB);
   const stepTitle = stepTitles[currentStep];
@@ -92,7 +90,11 @@ export const CivoGithubFormFlow: FunctionComponent = () => {
           git_token: civoData?.githubToken,
           type: 'mgmt',
         };
-        await dispatch(createCluster(params)).unwrap();
+        await dispatch(createCluster(params))
+          .unwrap()
+          .then(() => {
+            setInstallationStep(currentStep + 1);
+          });
       }
     },
     [currentStep, dispatch, civoData?.githubOrganization, civoData?.githubToken],
@@ -121,11 +123,15 @@ export const CivoGithubFormFlow: FunctionComponent = () => {
     }
   }, [currentStep, router, dispatch]);
 
+  const handleDeleteCluster = () => {
+    dispatch(deleteCluster(civoData?.clusterName)).unwrap();
+  };
+
   const nextButtonText = currentStep === CivoGithubFormStep.SETUP ? 'Create cluster' : 'Next';
 
-  useEffect(() => {
-    dispatch(setInstallationStep(3));
-  }, [dispatch]);
+  // useEffect(() => {
+  //   dispatch(setInstallationStep(4));
+  // }, [dispatch]);
 
   return (
     <InstallationStepContainer
@@ -157,7 +163,13 @@ export const CivoGithubFormFlow: FunctionComponent = () => {
           />
         )}
         {currentStep === CivoGithubFormStep.PREPARING && <TerminalLogs />}
-        {currentStep === CivoGithubFormStep.READY && <ClusterRunningMessage />}
+        {currentStep === CivoGithubFormStep.READY && (
+          <ClusterRunningMessage
+            clusterName={civoData?.clusterName as string}
+            domainName={civoData?.domainName as string}
+            onDeleteCluster={handleDeleteCluster}
+          />
+        )}
       </ContentContainer>
     </InstallationStepContainer>
   );

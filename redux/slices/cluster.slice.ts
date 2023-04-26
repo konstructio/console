@@ -1,6 +1,7 @@
+import router from 'next/router';
 import { createSlice } from '@reduxjs/toolkit';
 
-import { createCluster } from '../thunks/cluster';
+import { createCluster, deleteCluster } from '../thunks/cluster';
 
 export interface apiState {
   loading: boolean;
@@ -30,6 +31,9 @@ const clusterSlice = createSlice({
       .addCase(createCluster.rejected, (state) => {
         state.loading = false;
         state.isSuccess = false;
+      })
+      .addCase(deleteCluster.fulfilled, () => {
+        router.push('/installations');
       });
   },
 });
