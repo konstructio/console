@@ -65,7 +65,7 @@ export const Content = styled.div`
   flex-direction: column;
   border-radius: 8px;
   width: 100%;
-  max-width: 448px;
+  max-width: fit-content;
   transition: all 300ms ease 0s;
   position: relative;
 `;

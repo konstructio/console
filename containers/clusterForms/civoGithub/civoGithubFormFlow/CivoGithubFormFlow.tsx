@@ -123,9 +123,9 @@ export const CivoGithubFormFlow: FunctionComponent = () => {
 
   const nextButtonText = currentStep === CivoGithubFormStep.SETUP ? 'Create cluster' : 'Next';
 
-  // useEffect(() => {
-  //   dispatch(setInstallationStep(2));
-  // }, [dispatch]);
+  useEffect(() => {
+    dispatch(setInstallationStep(3));
+  }, [dispatch]);
 
   return (
     <InstallationStepContainer
@@ -151,10 +151,6 @@ export const CivoGithubFormFlow: FunctionComponent = () => {
         )}
         {currentStep === CivoGithubFormStep.SETUP && (
           <CivoGithubSetupForm
-            hasTokenValue={!!githubToken}
-            githubTokenValid={!!githubUser}
-            githubUserOrginizations={githubUserOrganizations}
-            onGithubTokenBlur={handleGithubTokenBlur}
             loading={gitStateLoading}
             onFormSubmit={handleFormSubmit}
             ref={formRef}

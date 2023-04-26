@@ -9,7 +9,6 @@ import ControlledTextField from '../../../../components/controlledFields/TextFie
 import { Form } from './CivoGithubSetupForm.styled';
 
 export interface CivoGithubSetupFormProps {
-  onGithubTokenBlur: (token: string) => void;
   onFormSubmit: (values: CivoGithubClusterValues) => void;
   loading: boolean;
 }

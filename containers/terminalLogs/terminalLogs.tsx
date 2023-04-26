@@ -11,16 +11,17 @@ import { FitAddon } from 'xterm-addon-fit';
 import { Box, styled, Tab, tabClasses, Tabs } from '@mui/material';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import VideogameAssetIcon from '@mui/icons-material/VideogameAsset';
+import MusicNoteIcon from '@mui/icons-material/MusicNote';
 import { OutlinedInput } from '@mui/material';
 import { SearchAddon } from 'xterm-addon-search';
 
 import { createLogStream } from '../../services/stream';
 import ConciseLogs from '../conciseLogs';
 import useModal from '../../hooks/useModal';
-import Button from '../../components/button';
 import Modal from '../../components/modal';
 
-import { Container, Search, TabContainer, TerminalView } from './terminalLogs.styled';
+import { Close, Container, Search, TabContainer, TerminalView } from './terminalLogs.styled';
 
 import 'xterm/css/xterm.css';
 
@@ -74,6 +75,12 @@ const TerminalLogs: FunctionComponent = () => {
   const terminalRef = useRef(null);
   const searchAddonRef = useRef<SearchAddon>();
   const { isOpen, openModal, closeModal } = useModal();
+
+  const {
+    isOpen: isBarcodednbOpen,
+    openModal: openBarcodednbModal,
+    closeModal: closeBarcodednbModal,
+  } = useModal();
 
   const handleSearch = (event: ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target;
@@ -169,9 +176,8 @@ const TerminalLogs: FunctionComponent = () => {
 
       {activeTab === TERMINAL_TABS.VERBOSE && (
         <Search>
-          <Button variant="contained" color="primary" onClick={openModal}>
-            Play
-          </Button>
+          <VideogameAssetIcon color="secondary" onClick={openModal} />
+          <MusicNoteIcon color="secondary" onClick={openBarcodednbModal} />
           <OutlinedInput
             placeholder="Search"
             onChange={handleSearch}
@@ -185,16 +191,36 @@ const TerminalLogs: FunctionComponent = () => {
       )}
 
       {isOpen && (
-        <Modal isModalVisible onCloseModal={closeModal}>
-          <iframe
-            id="i-framed-you"
-            title="original-iframe-title"
-            src="https://pacman.kubefirst.tv"
-            style={{
-              width: '600px',
-              height: '800px',
-            }}
-          />
+        <Modal isModalVisible>
+          <>
+            <iframe
+              id="iframe-play"
+              title="original-iframe-title"
+              src="https://pacman.kubefirst.tv"
+              style={{
+                border: 0,
+                height: '950px',
+                width: '1050px',
+              }}
+            />
+            <Close onClick={closeModal} color="secondary" fontSize="large" />
+          </>
+        </Modal>
+      )}
+      {isBarcodednbOpen && (
+        <Modal isModalVisible>
+          <>
+            <iframe
+              width="560"
+              height="315"
+              src="https://www.youtube.com/embed/6lo_dUmr8bg"
+              title="YouTube video player"
+              frameBorder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              allowfullscreen
+            ></iframe>
+            <Close onClick={closeBarcodednbModal} color="secondary" fontSize="large" />
+          </>
         </Modal>
       )}
     </Container>

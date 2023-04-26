@@ -1,5 +1,6 @@
 import { Box } from '@mui/system';
 import styled from 'styled-components';
+import CloseIcon from '@mui/icons-material/Close';
 
 export const Container = styled.div`
   align-items: flex-start;
@@ -49,4 +50,11 @@ export const TerminalView = styled.div`
   & .xterm-helper-textarea {
     display: none;
   }
+`;
+
+export const Close = styled(CloseIcon)`
+  cursor: pointer;
+  position: fixed;
+  top: 10px;
+  right: 10px;
 `;
