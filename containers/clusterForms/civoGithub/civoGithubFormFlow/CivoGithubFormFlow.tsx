@@ -81,9 +81,6 @@ export const CivoGithubFormFlow: FunctionComponent = () => {
       }
 
       if (currentStep === CivoGithubFormStep.SETUP) {
-        console.log('creating cluster', values);
-        console.log('civoData', civoData)
-
         const params = {
           clusterName: values.clusterName,
           admin_email: values.alertsEmail,
@@ -98,7 +95,7 @@ export const CivoGithubFormFlow: FunctionComponent = () => {
         await dispatch(createCluster(params)).unwrap();
       }
     },
-    [dispatch, currentStep],
+    [currentStep, dispatch, civoData?.githubOrganization, civoData?.githubToken],
   );
 
   const handleNextButtonClick = useCallback(() => {
@@ -126,9 +123,9 @@ export const CivoGithubFormFlow: FunctionComponent = () => {
 
   const nextButtonText = currentStep === CivoGithubFormStep.SETUP ? 'Create cluster' : 'Next';
 
-  useEffect(() => {
-    dispatch(setInstallationStep(2));
-  }, [dispatch]);
+  // useEffect(() => {
+  //   dispatch(setInstallationStep(2));
+  // }, [dispatch]);
 
   return (
     <InstallationStepContainer

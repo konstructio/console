@@ -6,16 +6,19 @@ import React, {
   useRef,
   useState,
 } from 'react';
+import { Terminal as XTerminal } from 'xterm';
+import { FitAddon } from 'xterm-addon-fit';
 import { Box, styled, Tab, tabClasses, Tabs } from '@mui/material';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import { OutlinedInput } from '@mui/material';
 import { SearchAddon } from 'xterm-addon-search';
-import { FitAddon } from 'xterm-addon-fit';
-import { Terminal as XTerminal } from 'xterm';
-import { createLogStream } from 'services/stream';
 
+import { createLogStream } from '../../services/stream';
 import ConciseLogs from '../conciseLogs';
+import useModal from '../../hooks/useModal';
+import Button from '../../components/button';
+import Modal from '../../components/modal';
 
 import { Container, Search, TabContainer, TerminalView } from './terminalLogs.styled';
 
@@ -70,25 +73,7 @@ const TerminalLogs: FunctionComponent = () => {
   const [searchTerm, setSearchTerm] = useState<string>('');
   const terminalRef = useRef(null);
   const searchAddonRef = useRef<SearchAddon>();
-
-  const subscribe = () => {
-    // const emitter: any = createLogStream('http://localhost:8081/api/v1/stream');
-    const eventSource = new EventSource('http://localhost:8081/api/v1/stream');
-
-    console.log('starting');
-
-    eventSource.addEventListener('open', (e) => {
-      console.log('connection established');
-    });
-    eventSource.addEventListener('log', (e) => {
-      const logMessage = JSON.parse(e.data);
-      console.log('logMessage', logMessage);
-    });
-
-    eventSource.addEventListener('error', (e) => {
-      console.error('an error occurred', e);
-    });
-  };
+  const { isOpen, openModal, closeModal } = useModal();
 
   const handleSearch = (event: ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target;
@@ -145,12 +130,10 @@ const TerminalLogs: FunctionComponent = () => {
 
       const emitter: any = createLogStream('http://localhost:8081/api/v1/stream');
       emitter.on('log', (log: any) => {
-        console.log('incoming log', log);
-        terminal.write(`${log.message.replace(DATE_REGEX, '\x1b[0;37m$1\x1B[0m')}\n\n`);
+        terminal.write(`${log.message.replace(DATE_REGEX, '\x1b[0;37m$1\x1B[0m')}\n`);
       });
 
       emitter.on('error', (error: any) => {
-        console.error(error);
         emitter.stopLogStream();
       });
 
@@ -186,6 +169,9 @@ const TerminalLogs: FunctionComponent = () => {
 
       {activeTab === TERMINAL_TABS.VERBOSE && (
         <Search>
+          <Button variant="contained" color="primary" onClick={openModal}>
+            Play
+          </Button>
           <OutlinedInput
             placeholder="Search"
             onChange={handleSearch}
@@ -196,6 +182,20 @@ const TerminalLogs: FunctionComponent = () => {
           <KeyboardArrowDownIcon color="secondary" onClick={handleSearchNext} />
           <KeyboardArrowUpIcon color="secondary" onClick={handleSearchPrev} />
         </Search>
+      )}
+
+      {isOpen && (
+        <Modal isModalVisible onCloseModal={closeModal}>
+          <iframe
+            id="i-framed-you"
+            title="original-iframe-title"
+            src="https://pacman.kubefirst.tv"
+            style={{
+              width: '600px',
+              height: '800px',
+            }}
+          />
+        </Modal>
       )}
     </Container>
   );

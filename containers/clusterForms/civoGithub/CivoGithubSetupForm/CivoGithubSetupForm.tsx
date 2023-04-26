@@ -27,8 +27,9 @@ export const CivoGithubSetupForm = forwardRef<HTMLFormElement, CivoGithubSetupFo
           name="alertsEmail"
           label="Alerts email"
           onErrorText="Invalid email address."
+          required
           rules={{
-            required: false,
+            required: true,
             pattern: EMAIL_REGEX,
           }}
         />
@@ -36,15 +37,17 @@ export const CivoGithubSetupForm = forwardRef<HTMLFormElement, CivoGithubSetupFo
           control={control}
           name="cloudRegion"
           label="Cloud Region"
-          rules={{ required: false }}
+          required
+          rules={{ required: true }}
           options={CIVO_REGIONS}
         />
         <ControlledTextField
           control={control}
           name="domainName"
           label="Cluster domain name"
+          required
           rules={{
-            required: false,
+            required: true,
           }}
         />
         <ControlledTextField
@@ -54,6 +57,7 @@ export const CivoGithubSetupForm = forwardRef<HTMLFormElement, CivoGithubSetupFo
           defaultValue="kubefirst"
           rules={{
             maxLength: 25,
+            required: true,
           }}
           onErrorText="Maximum 25 characters."
         />
