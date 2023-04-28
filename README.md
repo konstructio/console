@@ -38,3 +38,4 @@ Note: You might need an AWS Managament Account
 ### Chart
 
 1. The console chart is stored in the [Charts repository](https://github.com/kubefirst/charts)
+
