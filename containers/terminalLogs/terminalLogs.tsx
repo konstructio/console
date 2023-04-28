@@ -11,6 +11,8 @@ import { FitAddon } from 'xterm-addon-fit';
 import { Box, styled, Tab, tabClasses, Tabs } from '@mui/material';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import LiveTvIcon from '@mui/icons-material/LiveTv';
+import SportsEsportsIcon from '@mui/icons-material/SportsEsports';
 import VideogameAssetIcon from '@mui/icons-material/VideogameAsset';
 import TwitterIcon from '@mui/icons-material/Twitter';
 import MusicNoteIcon from '@mui/icons-material/MusicNote';
@@ -85,9 +87,15 @@ const TerminalLogs: FunctionComponent = () => {
   const { isOpen, openModal, closeModal } = useModal();
 
   const {
-    isOpen: isBarcodednbOpen,
-    openModal: openBarcodednbModal,
-    closeModal: closeBarcodednbModal,
+    isOpen: isFlappyKrayOpen,
+    openModal: openFlappyKrayModal,
+    closeModal: closeFlappyKrayModal,
+  } = useModal();
+
+  const {
+    isOpen: isYouTubeOpen,
+    openModal: openYouTubeModal,
+    closeModal: closeYouTubeModal,
   } = useModal();
 
   const handleSearch = (event: ChangeEvent<HTMLInputElement>) => {
@@ -185,7 +193,8 @@ const TerminalLogs: FunctionComponent = () => {
       {activeTab === TERMINAL_TABS.VERBOSE && (
         <Search>
           <VideogameAssetIcon color="secondary" onClick={openModal} />
-          <MusicNoteIcon color="secondary" onClick={openBarcodednbModal} />
+          <SportsEsportsIcon color="secondary" onClick={openFlappyKrayModal} />
+          <LiveTvIcon color="secondary" onClick={openYouTubeModal} />
           <OutlinedInput
             placeholder="Search"
             onChange={handleSearch}
@@ -220,19 +229,28 @@ const TerminalLogs: FunctionComponent = () => {
           </>
         </Modal>
       )}
-      {isBarcodednbOpen && (
+      {isFlappyKrayOpen && (
         <Modal isModalVisible>
           <>
             <iframe
-              width="560"
-              height="315"
-              src="https://www.youtube.com/embed/6lo_dUmr8bg"
-              title="YouTube video player"
-              frameBorder="0"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-              allowfullscreen
-            ></iframe>
-            <Close onClick={closeBarcodednbModal} color="secondary" fontSize="large" />
+                id="iframe-play"
+                title="original-iframe-title"
+                src="https://kray.kubefirst.com"
+                style={{
+                  border: 0,
+                  height: '950px',
+                  width: '1050px',
+                }}
+              />
+            <Close onClick={closeFlappyKrayModal} color="secondary" fontSize="large" />
+          </>
+        </Modal>
+      )}
+      {isYouTubeOpen && (
+        <Modal isModalVisible>
+          <>
+            <iframe width="560" height="315" src="https://www.youtube.com/embed/moBZzQtr-AE" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+            <Close onClick={closeYouTubeModal} color="secondary" fontSize="large" />
           </>
         </Modal>
       )}
