@@ -1,7 +1,6 @@
 import React, { FunctionComponent, useCallback } from 'react';
 import { INSTALLATION_TYPES, InstallationType } from 'types/redux';
 import GitProviderButton from 'components/gitProviderButton';
-import { useRouter } from 'next/router';
 
 import { GIT_PROVIDERS, GitProvider } from '../../types';
 import InstallationStepContainer from '../../components/installationStepContainer';
@@ -21,14 +20,18 @@ import {
   CloudProviderContainer,
 } from './installationsSelection.styled';
 
-export const InstallationsSelection: FunctionComponent = () => {
+export interface InstallationsSelectionProps {
+  steps: Array<string>;
+}
+
+export const InstallationsSelection: FunctionComponent<InstallationsSelectionProps> = ({
+  steps,
+}) => {
+  const dispatch = useAppDispatch();
+
   const { installType, gitProvider, installationStep } = useAppSelector(
     ({ installation }) => installation,
   );
-
-  const { push } = useRouter();
-
-  const dispatch = useAppDispatch();
 
   const handleInstallTypeChange = useCallback(
     (type: InstallationType) => {
@@ -46,13 +49,12 @@ export const InstallationsSelection: FunctionComponent = () => {
 
   const handleNextButtonClick = useCallback(() => {
     dispatch(setInstallationStep(1));
-    push(`installations/${installType}-${gitProvider}`);
-  }, [dispatch, push, installType, gitProvider]);
+  }, [dispatch]);
 
   return (
     <InstallationStepContainer
       activeStep={installationStep}
-      steps={['Select Platform', 'Set up Cluster', 'Provisioning', 'Ready']}
+      steps={steps}
       installationTitle="First, select your preferred Git provider"
       showBackButton={false}
       onNextButtonClick={handleNextButtonClick}

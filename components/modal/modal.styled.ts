@@ -45,14 +45,14 @@ export const Backdrop = styled.div<{ isModalVisible: boolean }>`
   overscroll-behavior: none;
 `;
 
-export const Container = styled.div`
+export const Container = styled.div<{ isModalVisible: boolean }>`
   position: fixed;
   z-index: 1300;
   top: 0px;
   left: 0px;
   width: 100%;
   height: 100%;
-  display: flex;
+  display: ${({ isModalVisible }) => (isModalVisible ? 'flex' : 'none')};
   -webkit-box-align: center;
   align-items: center;
   -webkit-box-pack: center;

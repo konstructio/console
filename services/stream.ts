@@ -1,6 +1,11 @@
 import EventEmitter from 'events';
 
-export function createLogStream(url: string): EventEmitter | Error {
+export interface LogStreamResponse extends NodeJS.EventEmitter {
+  startLogStream: () => void;
+  stopLogStream: () => void;
+}
+
+export function createLogStream(url: string): LogStreamResponse {
   const logStream = new EventEmitter();
   let sse: EventSource | null = null;
 
@@ -8,9 +13,8 @@ export function createLogStream(url: string): EventEmitter | Error {
     const eventSource = new EventSource(url);
     sse = eventSource;
 
-    console.log('starting');
-
-    eventSource.addEventListener('open', (e) => {
+    eventSource.addEventListener('open', () => {
+      // eslint-disable-next-line no-console
       console.log('connection established');
     });
     eventSource.addEventListener('log', (e) => {
@@ -23,16 +27,15 @@ export function createLogStream(url: string): EventEmitter | Error {
     });
 
     eventSource.addEventListener('error', (e) => {
-      console.error('an error occurred', e);
       logStream.emit('error', e);
     });
   }
 
   function stopLogStream(): void {
     if (sse) {
-      sse.close(); // closes connection
+      sse.close();
     }
-    logStream.removeAllListeners(); // removes all event listeners
+    logStream.removeAllListeners();
   }
 
   return Object.assign(logStream, { startLogStream, stopLogStream });

@@ -4,6 +4,7 @@ import Column from '../column';
 import InstallationButtonsComp from '../installationButtons';
 import Row from '../row';
 import Typography from '../typography';
+import { media } from '../../utils/media';
 
 export const Container = styled(Column)`
   background-color: ${({ theme }) => theme.colors.washMe};
@@ -18,14 +19,27 @@ export const InstallationButtons = styled(InstallationButtonsComp)`
   z-index: 1;
 `;
 
-export const Content = styled(Row)`
+export const Content = styled(Row)<{ hasInfo: boolean }>`
+  gap: 24px;
   height: 100%;
-  margin-bottom: 70px;
+  margin: 0 auto;
   overflow-y: auto;
+
+  ${({ hasInfo }) =>
+    hasInfo &&
+    `
+      display: flex;
+      flex-direction: column;
+  `}
+
+  ${media.greaterThan('lg')`
+    flex-direction: ${({ hasInfo }) => hasInfo && 'row'};
+  `};
 `;
 
 export const InstallTitle = styled(Typography)`
   margin: 40px auto 24px auto;
+  text-align: center;
 `;
 
 export const Title = styled.div`

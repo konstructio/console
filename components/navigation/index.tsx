@@ -30,7 +30,7 @@ const ROUTES = [
   // },
   {
     icon: <ScatterPlotIcon />,
-    path: '/installations',
+    path: '/provision',
     title: 'Cluster Management',
   },
   {

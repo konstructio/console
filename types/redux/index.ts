@@ -22,6 +22,7 @@ export interface AwsInstallValues {
   awsNodesSpot?: boolean;
   hostedZoneValid?: boolean;
   hostedZoneName?: string;
+  isValid?: boolean;
 }
 
 export type AwsClusterValues = AwsInstallValues & ClusterValues;
@@ -38,11 +39,13 @@ export interface CivoInstallValues extends ClusterValues {
 export type CivoClusterValues = CivoInstallValues & ClusterValues;
 export type CivoGithubClusterValues = CivoClusterValues & GithubValues;
 
+export type InstallValues = AwsClusterValues & LocalInstallValues & CivoInstallValues;
+
 export enum InstallationType {
-  LOCAL = 'local',
+  LOCAL = 'k3d',
   AWS = 'aws',
   CIVO = 'civo',
-  DIGITAL_OCEAN = 'digital-ocean',
+  DIGITAL_OCEAN = 'digitalocean',
   VULTR = 'vultr',
 }
 
