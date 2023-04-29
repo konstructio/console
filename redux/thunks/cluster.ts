@@ -1,21 +1,35 @@
 import axios from 'axios';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
-import { endpoints } from '../api';
 import { AppDispatch, RootState } from '../store';
+import { InstallValues } from '../../types/redux';
+import { ClusterProps } from '../../types/provision';
 
 export const createCluster = createAsyncThunk<
-  unknown,
-  unknown,
+  { Status: string },
+  { apiUrl: string; values: InstallValues },
   {
     dispatch: AppDispatch;
     state: RootState;
   }
->('cluster/provisioning', async (body, { dispatch }) => {
-  const res = await axios.post(
-    `http://localhost:8081/api/v1/cluster/${body.clusterName || 'kubefirst'}`,
-    body,
-  );
+>('cluster/provisioning', async ({ apiUrl, values }) => {
+  const res = await axios.post(`${apiUrl}/cluster/${values.clusterName || 'kubefirst'}`, values);
+
+  if ('error' in res) {
+    throw res.error;
+  }
+  return res.data;
+});
+
+export const getCluster = createAsyncThunk<
+  { Status: string },
+  ClusterProps,
+  {
+    dispatch: AppDispatch;
+    state: RootState;
+  }
+>('cluster/get', async ({ apiUrl, clusterName }) => {
+  const res = await axios.get(`${apiUrl}/cluster/${clusterName || 'kubefirst'}`);
 
   if ('error' in res) {
     throw res.error;
@@ -24,16 +38,14 @@ export const createCluster = createAsyncThunk<
 });
 
 export const deleteCluster = createAsyncThunk<
-  unknown,
-  unknown,
+  { Status: string },
+  ClusterProps,
   {
     dispatch: AppDispatch;
     state: RootState;
   }
->('cluster/delete', async (clusterName) => {
-  const res = await axios.delete(
-    `http://localhost:8081/api/v1/cluster/${clusterName || 'cris-cluster'}`,
-  );
+>('cluster/delete', async ({ apiUrl, clusterName }) => {
+  const res = await axios.delete(`${apiUrl}/cluster/${clusterName || 'kubefirst'}`);
 
   if ('error' in res) {
     throw res.error;

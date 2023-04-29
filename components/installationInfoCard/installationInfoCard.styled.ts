@@ -8,7 +8,8 @@ export const Card = styled.div`
   border: 1px solid ${PASTEL_LIGHT_BLUE};
   border-radius: 12px;
   box-sizing: border-box;
-  height: 228px;
+  height: fit-content;
+  min-height: 228px;
   padding: 24px;
   width: 360px;
 `;

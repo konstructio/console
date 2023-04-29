@@ -44,7 +44,9 @@ const gitSlice = createSlice({
         state.error = action.error.message ?? 'Failed to get users organizations';
       })
       .addCase(getGithubUserOrganizations.fulfilled, (state, action) => {
-        state.githubUserOrganizations = action.payload;
+        state.githubUserOrganizations = action.payload.sort((a, b) =>
+          a.login.localeCompare(b.login),
+        );
         state.isLoading = false;
         state.isTokenValid = true;
       });

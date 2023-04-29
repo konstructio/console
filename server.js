@@ -74,6 +74,7 @@ function sendHeartbeat() {
   }
 }
 
+sendHeartbeat();
 setInterval(sendHeartbeat, (HEARTBEAT_PERIOD_MINUTES || 20) * 60 * 1000);
 
 server.listen(currentPort, (err) => {

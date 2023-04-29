@@ -22,7 +22,7 @@ export const AdventureContent = styled(Column)`
 `;
 
 export const Subtitle = styled(Typography)`
-  margin: 40px 0 24px 0;
+  margin: 40px 0 24px 0 !important;
 `;
 
 export const CloudProviderContainer = styled.div`

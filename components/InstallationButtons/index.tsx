@@ -5,14 +5,16 @@ import Button from '../button';
 import { Container } from './installationButtons.styled';
 
 export interface InstallationButtonsProps {
+  activeStep: number;
   showBackButton?: boolean;
   onBackButtonClick?: () => void;
-  onNextButtonClick?: () => void;
+  onNextButtonClick: () => void;
   nextButtonText?: string;
   nextButtonDisabled?: boolean;
 }
 
 const InstallationButtons: FunctionComponent<InstallationButtonsProps> = ({
+  activeStep,
   showBackButton,
   onBackButtonClick,
   onNextButtonClick,
@@ -28,10 +30,11 @@ const InstallationButtons: FunctionComponent<InstallationButtonsProps> = ({
     )}
 
     <Button
+      type="submit"
       variant="contained"
       color="primary"
-      onClick={onNextButtonClick}
       id="next"
+      onClick={() => activeStep === 0 && onNextButtonClick()}
       disabled={nextButtonDisabled}
     >
       {nextButtonText}

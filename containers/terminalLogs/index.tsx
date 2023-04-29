@@ -8,6 +8,6 @@ const DynamicComponentWithNoSSR = dynamic(
   },
 );
 
-const Terminal = (props: { socket?: WebSocket }) => <DynamicComponentWithNoSSR {...props} />;
+const Terminal = () => <DynamicComponentWithNoSSR />;
 
 export default Terminal;

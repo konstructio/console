@@ -18,12 +18,14 @@ interface InstallationStepContainerProps
   extends PropsWithChildren,
     ProgressProps,
     InstallationButtonsProps {
+  hasInfo?: boolean;
   installationTitle: string;
 }
 
 const InstallationStepContainer: FunctionComponent<InstallationStepContainerProps> = ({
   activeStep,
   steps,
+  hasInfo,
   installationTitle,
   showBackButton,
   onNextButtonClick,
@@ -36,7 +38,7 @@ const InstallationStepContainer: FunctionComponent<InstallationStepContainerProp
   <Container {...rest}>
     <Progress activeStep={activeStep} steps={steps} />
     <InstallTitle variant="subtitle2">{installationTitle}</InstallTitle>
-    <Content>
+    <Content hasInfo={hasInfo}>
       {children}
       {/* <Divider />
       <LearnMore variant="labelLarge">
@@ -44,6 +46,7 @@ const InstallationStepContainer: FunctionComponent<InstallationStepContainerProp
       </LearnMore> */}
     </Content>
     <InstallationButtons
+      activeStep={activeStep}
       onNextButtonClick={onNextButtonClick}
       onBackButtonClick={onBackButtonClick}
       showBackButton={showBackButton}

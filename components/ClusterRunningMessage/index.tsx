@@ -10,9 +10,9 @@ import { Container, Description, Link, Title } from './clusterRunningMessage.sty
 const boxImageSrc = process.env.STORYBOOK_MODE ? boxImgSrc : '/static/box.svg';
 
 export interface ClusterRunningMessageProps {
-  clusterName: string;
-  domainName: string;
-  onDeleteCluster: () => void;
+  clusterName?: string;
+  domainName?: string;
+  onDeleteCluster?: () => void;
 }
 
 const ClusterRunningMessage: FunctionComponent<ClusterRunningMessageProps> = ({

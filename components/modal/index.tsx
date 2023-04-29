@@ -19,14 +19,12 @@ export const Fragment: FunctionComponent<IFragmentProps> = ({ children }) => (
 const BaseModal: FunctionComponent<IModalProps> = ({ children, isModalVisible, onCloseModal }) => (
   <>
     <Backdrop isModalVisible={isModalVisible} />
-    {isModalVisible && (
-      <Container>
-        <Content>
-          {children}
-          {onCloseModal && <Close onClick={onCloseModal} />}
-        </Content>
-      </Container>
-    )}
+    <Container isModalVisible={isModalVisible}>
+      <Content>
+        {children}
+        {onCloseModal && <Close onClick={onCloseModal} />}
+      </Content>
+    </Container>
   </>
 );
 
