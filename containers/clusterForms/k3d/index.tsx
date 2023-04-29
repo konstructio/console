@@ -1,6 +1,6 @@
 import React, { FunctionComponent } from 'react';
 
-import ClusterRunningMessage from '../../../components/clusterRunningMessage';
+import ClusterRunningMessage from '../../../components/clusterReady';
 import TerminalLogs from '../../terminalLogs';
 import { LocalFormStep } from '../../../constants/installation';
 import { FormFlowProps } from '../../../types/provision';

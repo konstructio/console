@@ -1,7 +1,7 @@
 import React, { FunctionComponent } from 'react';
 import { FormFlowProps } from 'types/provision';
 
-import ClusterRunningMessage from '../../../components/clusterRunningMessage';
+import ClusterRunningMessage from '../../../components/clusterReady';
 import TerminalLogs from '../../terminalLogs';
 import { FormStep } from '../../../constants/installation';
 import { InstallValues } from '../../../types/redux';

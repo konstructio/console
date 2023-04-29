@@ -5,7 +5,7 @@ import Typography from '../typography';
 import boxImgSrc from '../../public/static/box.svg';
 import Button from '../button';
 
-import { Container, Description, Link, Title } from './clusterRunningMessage.styled';
+import { Container, Description, Link, Title } from './clusterReady.styled';
 
 const boxImageSrc = process.env.STORYBOOK_MODE ? boxImgSrc : '/static/box.svg';
 
@@ -15,7 +15,7 @@ export interface ClusterRunningMessageProps {
   onDeleteCluster?: () => void;
 }
 
-const ClusterRunningMessage: FunctionComponent<ClusterRunningMessageProps> = ({
+const ClusterReady: FunctionComponent<ClusterRunningMessageProps> = ({
   clusterName,
   domainName,
   onDeleteCluster,
@@ -41,4 +41,4 @@ const ClusterRunningMessage: FunctionComponent<ClusterRunningMessageProps> = ({
   </Container>
 );
 
-export default ClusterRunningMessage;
+export default ClusterReady;
