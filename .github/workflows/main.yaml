@@ -6,7 +6,6 @@ on:
   push:
     branches:
       - main
-      - fix_file_names
 jobs:
   publish:
     runs-on: self-hosted
