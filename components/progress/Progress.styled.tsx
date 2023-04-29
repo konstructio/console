@@ -86,6 +86,6 @@ export const Container = styled.div`
   background-color: ${({ theme }) => theme.colors.childOfLight};
   display: flex;
   justify-content: center;
-  width: 100%;
   padding: 25px 0;
+  width: 100%;
 `;

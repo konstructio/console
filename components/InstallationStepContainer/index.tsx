@@ -18,7 +18,7 @@ interface InstallationStepContainerProps
   extends PropsWithChildren,
     ProgressProps,
     InstallationButtonsProps {
-  hasInfo: boolean;
+  hasInfo?: boolean;
   installationTitle: string;
 }
 

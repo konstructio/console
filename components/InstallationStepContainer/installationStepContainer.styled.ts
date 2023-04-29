@@ -38,7 +38,7 @@ export const Content = styled(Row)<{ hasInfo: boolean }>`
 `;
 
 export const InstallTitle = styled(Typography)`
-  margin: 40px auto 24px auto;
+  margin: 40px 0 24px 0 !important;
   text-align: center;
 `;
 
