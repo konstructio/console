@@ -206,7 +206,6 @@ const TerminalLogs: FunctionComponent<TerminalLogsProps> = () => {
           </>
         </Modal>
       )}
-      <div id="flappy-kray"></div>
     </Container>
   );
 };
