@@ -1,26 +1,47 @@
-import React, { FunctionComponent } from 'react';
+import Button from '@mui/material/Button';
 import { ButtonProps } from '@mui/material';
+import styled, { css } from 'styled-components';
 
-import { Container, PrimaryButton, SecondaryButton, ErrorButton } from './button.styled';
-
-const BUTTONS_MAP = {
-  ['primary']: PrimaryButton,
-  ['secondary']: SecondaryButton,
-  ['error']: ErrorButton,
-};
+import { DOLPHIN, FIRE_BRICK, MAGNOLIA, ROYAL_PURPLE } from '../../constants/colors';
 
 export interface IButtonProps extends ButtonProps {
   color: 'primary' | 'secondary' | 'error';
+  variant: Required<ButtonProps['variant']>;
 }
 
-const Button: FunctionComponent<IButtonProps> = ({ variant, color, disabled, ...rest }) => {
-  const StyledButton = BUTTONS_MAP[color] || BUTTONS_MAP['primary'];
+export default styled(Button)<IButtonProps>`
+  box-shadow: none;
+  border: ${({ color }) => color === 'secondary' && `1px solid inherit !important`};
+  background-color: ${({ color, theme }) => color === 'error' && theme.colors.danger};
 
-  return (
-    <Container disabled={disabled}>
-      <StyledButton variant={variant} disabled={disabled} {...rest} />
-    </Container>
-  );
-};
+  &.Mui-disabled {
+    pointer-events: unset !important;
+    cursor: not-allowed !important;
+  }
 
-export default Button;
+  &:hover {
+    background-color: ${({ color }) =>
+      color === 'primary'
+        ? `${ROYAL_PURPLE}`
+        : color === 'secondary'
+        ? `${MAGNOLIA}`
+        : color === 'error'
+        ? `${FIRE_BRICK}`
+        : 'inherit'}};
+  }
+
+  ${({ color, disabled, theme }) => {
+    if (disabled && color === 'primary') {
+      return css`
+        background-color: ${theme.colors.lightGrey} !important;
+        color: ${DOLPHIN} !important;
+      `;
+    }
+    if (disabled && color === 'secondary') {
+      return css`
+        border-color: ${DOLPHIN} !important;
+        color: ${DOLPHIN} !important;
+      `;
+    }
+  }}
+`;

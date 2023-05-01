@@ -1,72 +1,71 @@
 import { DefaultTheme } from 'styled-components';
-export interface ITheme extends DefaultTheme {
-  colors: {
-    americanGreen: string;
-    athenaBlue: string;
-    beluga: string;
-    black: string;
-    bleachedSilk: string;
-    caribeanSea: string;
-    chineseOrange: string;
-    danger: string;
-    dawnDeparts: string;
-    ferntastic: string;
-    gravelFint: string;
-    gray: string;
-    greenJelly: string;
-    naivePeach: string;
-    purpleCabbage: string;
-    stomyShower: string;
-    transparentBlue: string;
-    ultimateGrey: string;
-    yellowOrange: string;
-    white: string;
 
-    // Kubefirst color palette
-    americanBlue: string;
-    childOfLight: string;
-    moonlessMystery: string;
-    jordyBlue: string;
-    primary: string;
-    saltboxBlue: string;
-    volcanicSand: string;
-    washMe: string;
-    whiteSmoke: string;
-  };
-}
+import {
+  AMERICAN_BLUE,
+  AMERICAN_GREEN,
+  ATHENA_BLUE,
+  BELUGA,
+  BLACK,
+  BLEACHED_SILK,
+  CARIBEAN_SEA,
+  CHILD_OF_LIGHT,
+  CHINESE_ORANGE,
+  DANGER,
+  DAWN_DEPARTS,
+  FERNTASTIC,
+  GRAVE_FLINT,
+  GRAY,
+  GREEN_JELLY,
+  JORDY_BLUE,
+  MOONLESS_MYTERY,
+  NAIVE_PEACH,
+  PRIMARY,
+  PURPLE_CABBAGE,
+  SALTBOX_BLUE,
+  STORMY_SHOWER,
+  TRANSPARENT_BLUE,
+  ULTIMATE_GREY,
+  YELLOW_ORANGE,
+  VOLCANIC_SAND,
+  WASH_ME,
+  WHITE,
+  WHITE_SMOKE,
+  LIGHT_GREY,
+  SPUN_PEARL,
+} from '../constants/colors';
 
-const theme: ITheme = {
+export const theme: DefaultTheme = {
   colors: {
-    americanBlue: '#3C356C',
-    americanGreen: '#3CB53A',
-    athenaBlue: '#61DAFB',
-    beluga: '#F1F1F1',
-    black: '#000000',
-    bleachedSilk: '#F2F2F2',
-    caribeanSea: '#007D9C',
-    childOfLight: '#F1F5F9',
-    chineseOrange: '#F06F3C',
-    danger: '#DC2626',
-    dawnDeparts: '#CCF8FE',
-    ferntastic: '#75AD64',
-    gravelFint: '#BBBBBB',
-    gray: 'gray',
-    greenJelly: '#2E9485',
-    jordyBlue: '#7AA5E2',
-    moonlessMystery: '#1E2235',
-    naivePeach: '#FDE5D2',
-    primary: '#8851C8',
-    purpleCabbage: '#3636A1',
-    saltboxBlue: '#64748B',
-    stomyShower: '#0487AF',
-    transparentBlue: '#DAD7FE',
-    ultimateGrey: '#A9A9A9',
-    yellowOrange: '#FAB203',
-    volcanicSand: '#3F3F46',
-    washMe: '#F8FAFC',
-    white: '#FFFFFF',
-    whiteSmoke: '#F5F5F5',
+    americanBlue: AMERICAN_BLUE,
+    americanGreen: AMERICAN_GREEN,
+    athenaBlue: ATHENA_BLUE,
+    beluga: BELUGA,
+    black: BLACK,
+    bleachedSilk: BLEACHED_SILK,
+    caribeanSea: CARIBEAN_SEA,
+    childOfLight: CHILD_OF_LIGHT,
+    chineseOrange: CHINESE_ORANGE,
+    danger: DANGER,
+    dawnDeparts: DAWN_DEPARTS,
+    ferntastic: FERNTASTIC,
+    gravelFint: GRAVE_FLINT,
+    gray: GRAY,
+    greenJelly: GREEN_JELLY,
+    jordyBlue: JORDY_BLUE,
+    moonlessMystery: MOONLESS_MYTERY,
+    naivePeach: NAIVE_PEACH,
+    primary: PRIMARY,
+    purpleCabbage: PURPLE_CABBAGE,
+    saltboxBlue: SALTBOX_BLUE,
+    stomyShower: STORMY_SHOWER,
+    spunPearl: SPUN_PEARL,
+    transparentBlue: TRANSPARENT_BLUE,
+    ultimateGrey: ULTIMATE_GREY,
+    yellowOrange: YELLOW_ORANGE,
+    volcanicSand: VOLCANIC_SAND,
+    washMe: WASH_ME,
+    white: WHITE,
+    whiteSmoke: WHITE_SMOKE,
+    lightGrey: LIGHT_GREY,
   },
 };
-
-export default theme;

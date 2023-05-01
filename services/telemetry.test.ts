@@ -1,6 +1,6 @@
 import Analytics from 'analytics-node';
 
-import { ANALYTICS_ID } from '../enums/telemetry';
+import { ANALYTICS_ID } from '../constants';
 
 import { sendTelemetry } from './telemetry';
 
@@ -16,7 +16,7 @@ describe('telemetry', () => {
   test('should not send telemetry call when USE_TELEMETRY is false', () => {
     process.env.USE_TELEMETRY = 'false';
 
-    sendTelemetry('event1');
+    sendTelemetry({ event: 'event1' });
 
     expect(mockAnalytics).toBeCalledWith(ANALYTICS_ID, { enable: false });
     expect(mockAnalytics.mock.instances[0].identify).not.toHaveBeenCalled();
@@ -27,7 +27,7 @@ describe('telemetry', () => {
   test('should send telemetry call when USE_TELEMETRY is true', () => {
     process.env.USE_TELEMETRY = 'true';
 
-    sendTelemetry('event1');
+    sendTelemetry({ event: 'event1' });
 
     expect(mockAnalytics).toBeCalledWith(ANALYTICS_ID, { enable: true });
     expect(mockAnalytics.mock.instances[1].identify).toHaveBeenCalled();

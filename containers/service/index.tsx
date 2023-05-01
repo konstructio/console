@@ -2,8 +2,7 @@ import React, { FunctionComponent, useCallback, useEffect, useState } from 'reac
 
 import ServiceComponent from '../../components/service';
 import { useAppDispatch, useAppSelector } from '../../redux/store';
-import { selectAvailableSites } from '../../redux/selectors/readiness.selector';
-import { checkReadiness } from '../../redux/actions/readiness.action';
+import { checkSiteReadiness } from '../../redux/thunks/readiness.thunk';
 
 export interface ServiceProps {
   description?: string;
@@ -18,6 +17,7 @@ const isGitLink = (url: string) => url.includes('github') || url.includes('gitla
 
 const Service: FunctionComponent<ServiceProps> = ({ links: serviceLinks, ...props }) => {
   const [firstLoad, setFirstLoad] = useState(false);
+
   const [links, setLinks] = useState<{ [url: string]: boolean } | undefined>(
     serviceLinks?.reduce((previous, current) => {
       return { ...previous, [current]: isGitLink(current) };
@@ -25,7 +25,7 @@ const Service: FunctionComponent<ServiceProps> = ({ links: serviceLinks, ...prop
   );
 
   const dispatch = useAppDispatch();
-  const availableSites = useAppSelector(selectAvailableSites());
+  const availableSites = useAppSelector(({ readiness }) => readiness.availableSites);
 
   const isSiteAvailable = useCallback(
     (url: string) => {
@@ -39,7 +39,7 @@ const Service: FunctionComponent<ServiceProps> = ({ links: serviceLinks, ...prop
       const isAvailable = isSiteAvailable(url);
 
       if (!isAvailable) {
-        return dispatch(checkReadiness({ url }));
+        return dispatch(checkSiteReadiness({ url }));
       }
     },
     [dispatch, isSiteAvailable],
@@ -63,7 +63,7 @@ const Service: FunctionComponent<ServiceProps> = ({ links: serviceLinks, ...prop
       () =>
         links &&
         Object.keys(links).map((url) => {
-          const isAvailable = links[url] as boolean;
+          const isAvailable = links[url];
           !isAvailable && checkSiteAvailability(url);
         }),
       20000,

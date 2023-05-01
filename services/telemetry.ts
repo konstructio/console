@@ -1,12 +1,17 @@
 import Analytics from 'analytics-node';
 
-import { ANALYTICS_ID } from '../enums/telemetry';
+import { ANALYTICS_ID } from '../constants';
 
-type TelemetryProperties = {
+export type TelemetryProperties = {
   [key: string]: string;
 };
 
-export const sendTelemetry = (event: string, properties?: TelemetryProperties) => {
+export interface SendTelemetryArgs {
+  event: string;
+  properties?: TelemetryProperties;
+}
+
+export const sendTelemetry = ({ event, properties }: SendTelemetryArgs) => {
   const {
     CLOUD,
     CLUSTER_ID,
@@ -18,11 +23,15 @@ export const sendTelemetry = (event: string, properties?: TelemetryProperties) =
     USE_TELEMETRY,
   } = process.env;
 
-  try {
-    const analytics = new Analytics(ANALYTICS_ID);
-    const isTelemetryEnabled = USE_TELEMETRY === 'true';
+  const isTelemetryEnabled = USE_TELEMETRY === 'true';
+  const analytics = new Analytics(ANALYTICS_ID);
 
-    if (isTelemetryEnabled) {
+  if (isTelemetryEnabled) {
+    try {
+      if (!CLUSTER_ID) {
+        throw new Error('missing env variable: CLUSTER_ID');
+      }
+
       analytics.identify({
         userId: CLUSTER_ID,
       });
@@ -41,9 +50,9 @@ export const sendTelemetry = (event: string, properties?: TelemetryProperties) =
           ...properties,
         },
       });
+    } catch (error) {
+      // supressing telemetry issues until we move the calls from the healthz
     }
-  } catch (error) {
-    // supressing telemetry issues until we move the calls from the healthz
   }
 };
 

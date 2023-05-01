@@ -5,7 +5,7 @@ import { ComponentStory, ComponentMeta } from '@storybook/react';
 import Typography from '../typography';
 import Button from '../button';
 
-import TooltipComponent from './index';
+import TooltipComponent from '.';
 
 export default {
   title: 'Components/Tooltip',

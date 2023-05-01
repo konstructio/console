@@ -11,6 +11,7 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 
 import Typography from '../typography';
 import { Required } from '../textField/textField.styled';
+import { DOLPHIN, LIGHT_GREY, LINK_WATER } from '../../constants/colors';
 
 import { Container } from './select.styled';
 
@@ -31,9 +32,9 @@ const MenuProps = {
     },
     style: {
       backgroundColor: 'white',
-      color: '#3F3F46',
+      color: `${DOLPHIN}`,
       marginTop: '4px',
-      border: '1px solid #E4E4E7',
+      border: `1px solid ${LIGHT_GREY}`,
       boxShadow: '0px 4px 12px rgba(0, 0, 0, 0.04)',
       borderRadius: '4px',
     },
@@ -43,7 +44,7 @@ const MenuProps = {
 export const Input = styled(InputBase)(({ theme, error }) => ({
   '& .MuiInputBase-input': {
     'borderRadius': 4,
-    'border': `1px solid ${error ? theme.palette.error.main : '#ced4da'}`,
+    'border': `1px solid ${error ? theme.palette.error.main : LINK_WATER}`,
     'fontSize': 14,
     'lineHeight': '20px',
     'letterSpacing': '0.25px',
@@ -61,44 +62,42 @@ const Select: FunctionComponent<ISelectProps> = ({
   placeholder,
   options,
   ...props
-}) => {
-  return (
-    <Container>
-      <InputLabel sx={{ marginBottom: '8px' }}>
-        <Typography variant="labelLarge" sx={{ display: 'flex', gap: '4px' }}>
-          {label} {required && <Required>*</Required>}
-        </Typography>
-      </InputLabel>
-      <SelectMUI
-        {...props}
-        IconComponent={KeyboardArrowDownIcon}
-        fullWidth
-        required={required}
-        input={<Input sx={{ height: '36px' }} />}
-        MenuProps={MenuProps}
-        displayEmpty
-        sx={{ mb: '24px', width: '100%' }}
-        renderValue={(selected: string) => {
-          if (!selected) {
-            return (
-              <Typography variant="body2" color="#71717A">
-                {placeholder || 'Select'}
-              </Typography>
-            );
-          }
+}) => (
+  <Container>
+    <InputLabel sx={{ marginBottom: '8px' }}>
+      <Typography variant="labelLarge" sx={{ display: 'flex', gap: '4px' }}>
+        {label} {required && <Required>*</Required>}
+      </Typography>
+    </InputLabel>
+    <SelectMUI
+      {...props}
+      IconComponent={KeyboardArrowDownIcon}
+      fullWidth
+      required={required}
+      input={<Input sx={{ height: '36px' }} />}
+      MenuProps={MenuProps}
+      displayEmpty
+      sx={{ mb: '24px', width: '100%' }}
+      renderValue={(selected: string) => {
+        if (!selected) {
+          return (
+            <Typography variant="body2" color={DOLPHIN}>
+              {placeholder || 'Select'}
+            </Typography>
+          );
+        }
 
-          return selected;
-        }}
-      >
-        {options.map(({ label, value }) => (
-          <MenuItem key={label} value={value} disableRipple>
-            <Typography variant="body2">{label}</Typography>
-          </MenuItem>
-        ))}
-      </SelectMUI>
-    </Container>
-  );
-};
+        return selected;
+      }}
+    >
+      {options.map(({ label, value }) => (
+        <MenuItem key={label} value={value} disableRipple>
+          <Typography variant="body2">{label}</Typography>
+        </MenuItem>
+      ))}
+    </SelectMUI>
+  </Container>
+);
 
 const SelectWithRef = React.forwardRef<unknown, ISelectProps>((props, ref) => {
   return <Select inputRef={ref} {...props} />;

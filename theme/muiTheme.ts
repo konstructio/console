@@ -1,5 +1,7 @@
 import { createTheme } from '@mui/material/styles';
 
+import { DANGER, PRIMARY, WHITE } from '../constants/colors';
+
 export const typographies: {
   [key: string]: {
     fontSize: number;
@@ -111,17 +113,17 @@ export const typographies: {
 const palleteColors = {
   type: 'light',
   primary: {
-    main: '#8851c8',
+    main: PRIMARY,
   },
   secondary: {
-    main: '#ffffff',
+    main: WHITE,
   },
   error: {
-    main: '#dc2626',
+    main: DANGER,
   },
 };
 
-const theme = createTheme({
+export const muiTheme = createTheme({
   typography: { ...typographies },
   palette: palleteColors,
   components: {
@@ -145,51 +147,3 @@ const theme = createTheme({
     },
   },
 });
-
-export default theme;
-
-/** MUI Overrides **/
-declare module '@mui/material/styles' {
-  interface TypographyVariants {
-    typography: React.CSSProperties;
-    h1: React.CSSProperties;
-    h2: React.CSSProperties;
-    h3: React.CSSProperties;
-    h4: React.CSSProperties;
-    h5: React.CSSProperties;
-    h6: React.CSSProperties;
-    subtitle1: React.CSSProperties;
-    subtitle2: React.CSSProperties;
-    subtitle3: React.CSSProperties;
-    labelLarge: React.CSSProperties;
-    labelMedium: React.CSSProperties;
-    labelSmall: React.CSSProperties;
-    buttonSmall: React.CSSProperties;
-    body1: React.CSSProperties;
-    body2: React.CSSProperties;
-    body3: React.CSSProperties;
-    tooltip: React.CSSProperties;
-  }
-
-  // allow configuration using `createTheme`
-  interface TypographyVariantsOptions {
-    typography?: React.CSSProperties;
-    h1?: React.CSSProperties;
-    h2?: React.CSSProperties;
-    h3?: React.CSSProperties;
-    h4?: React.CSSProperties;
-    h5?: React.CSSProperties;
-    h6?: React.CSSProperties;
-    subtitle1?: React.CSSProperties;
-    subtitle2?: React.CSSProperties;
-    subtitle3?: React.CSSProperties;
-    labelLarge?: React.CSSProperties;
-    labelMedium?: React.CSSProperties;
-    labelSmall?: React.CSSProperties;
-    buttonSmall?: React.CSSProperties;
-    body1?: React.CSSProperties;
-    body2?: React.CSSProperties;
-    body3?: React.CSSProperties;
-    tooltip?: React.CSSProperties;
-  }
-}

@@ -6,6 +6,7 @@ type Configs = {
 
 export default function handler(req: NextApiRequest, res: NextApiResponse<Configs>) {
   const {
+    API_URL = '',
     ARGO_CD_URL = '',
     ARGO_WORKFLOWS_URL = '',
     ATLANTIS_URL = '',
@@ -25,6 +26,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse<Config
   } = process.env;
 
   res.status(200).json({
+    API_URL,
     ARGO_CD_URL,
     ARGO_WORKFLOWS_URL,
     ATLANTIS_URL,

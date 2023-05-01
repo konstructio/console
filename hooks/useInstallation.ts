@@ -1,112 +1,141 @@
-import { useState } from 'react';
+import { FunctionComponent, useMemo } from 'react';
 
-import LocalForms from '../containers/clusterForms/local';
-import AwsGithubForms from '../containers/clusterForms/awsGithub';
-import AwsGitlabForms from '../containers/clusterForms/awsGitlab';
+import { FormStep, LocalFormStep } from '../constants/installation';
+import { GitProvider } from '../types';
+import { InstallValues, InstallationInfo, InstallationType } from '../types/redux';
+import { CivoFormFlow } from '../containers/clusterForms/civo';
+import { AwsFormFlow } from '../containers/clusterForms/aws';
+import { LocalFormFlow } from '../containers/clusterForms/k3d';
+import { DigitalOceanFormFlow } from '../containers/clusterForms/digitalocean';
+import { VultrFormFlow } from '../containers/clusterForms/vultr';
+import { FormFlowProps } from '../types/provision';
 
-export enum InstallationTypes {
-  LOCAL = 1,
-  AWS_GITHUB = 2,
-  AWS_GITLAB = 3,
-}
+export const FormFlowByType: Record<
+  InstallationType,
+  FunctionComponent<FormFlowProps<InstallValues>> | null
+> = {
+  [InstallationType.LOCAL]: LocalFormFlow,
+  [InstallationType.AWS]: AwsFormFlow,
+  [InstallationType.CIVO]: CivoFormFlow,
+  [InstallationType.DIGITAL_OCEAN]: DigitalOceanFormFlow,
+  [InstallationType.VULTR]: VultrFormFlow,
+};
 
-export const titleBySteps: { [key: number]: { [key: number]: string } } = {
-  [InstallationTypes.LOCAL]: {
-    1: `Let’s configure your local cluster`,
-    2: `Grab a cup of tea or coffee while we set up your cluster...`,
-    3: 'You’re all set!',
-  },
-  [InstallationTypes.AWS_GITHUB]: {
-    1: `Now, test your hosted zone name is accessible`,
-    2: `Let’s configure your AWS - GitHub cluster`,
+const getInstallationTitles = (
+  installType: InstallationType,
+  gitProvider: GitProvider,
+): Record<number, string> => {
+  if (installType === InstallationType.LOCAL) {
+    return {
+      1: `Let’s configure your local cluster`,
+      2: `Grab a cup of tea or coffee while we set up your cluster...`,
+      3: 'You’re all set!',
+    };
+  }
+  return {
+    1: `Now, let’s get you authenticated`,
+    2: `Let’s configure your ${installType} - ${gitProvider} cluster`,
     3: `Grab a cup of tea or coffee while we set up your cluster...`,
     4: 'You’re all set!',
-  },
-  [InstallationTypes.AWS_GITLAB]: {
-    1: `Now, test your hosted zone name is accessible`,
-    2: `Let’s configure your AWS - GitLab cluster`,
-    3: `Grab a cup of tea or coffee while we set up your cluster...`,
-    4: 'You’re all set!',
-  },
-};
-
-const InstallationSteps = {
-  [InstallationTypes.LOCAL]: ['Select platform', 'Set up cluster', 'Preparing', 'Ready'],
-  [InstallationTypes.AWS_GITHUB]: [
-    'Select platform',
-    'Readiness check',
-    'Set up cluster',
-    'Preparing',
-    'Ready',
-  ],
-  [InstallationTypes.AWS_GITLAB]: [
-    'Select platform',
-    'Readiness check',
-    'Set up cluster',
-    'Preparing',
-    'Ready',
-  ],
-};
-
-const InstallationInfoByType: {
-  [key: string]: {
-    title: string;
-    description: string | Array<string>;
-    code?: string;
-    ctaDescription: string;
-    ctaLink: string;
   };
-} = {
-  [InstallationTypes.LOCAL]: {
-    title: 'Running Kubefirst locally',
-    description: `Once you’re ready to start your Cloud version you can simply delete your local cluster by running the following command:`,
-    code: 'kubefirst cluster destroy',
-    ctaDescription: 'Learn more',
-    ctaLink: '',
-  },
-  [InstallationTypes.AWS_GITHUB]: {
-    title: 'AWS Prerequisites',
-    description: [
-      'Create an AWS account with billing enabled.',
-      'Establish a public hosted zone with dns routing established(docs).',
-      'Connect with AdministratorAccess IAM credentials to your AWS account (docs).',
-    ],
-    ctaDescription: 'Learn more',
-    ctaLink: '',
-  },
-  [InstallationTypes.AWS_GITLAB]: {
-    title: 'AWS Prerequisites',
-    description: [
-      'Create an AWS account with billing enabled.',
-      'Establish a public hosted zone with dns routing established(docs).',
-      'Connect with AdministratorAccess IAM credentials to your AWS account (docs).',
-    ],
-    ctaDescription: 'Learn more',
-    ctaLink: '',
-  },
 };
 
-export const FormFlowByType = {
-  [InstallationTypes.LOCAL]: LocalForms,
-  [InstallationTypes.AWS_GITHUB]: AwsGithubForms,
-  [InstallationTypes.AWS_GITLAB]: AwsGitlabForms,
-};
+const getInfoByType = (installType: InstallationType, step: number) => {
+  const infoByInstallType: Record<InstallationType, Record<number, InstallationInfo>> = {
+    [InstallationType.LOCAL]: {
+      [LocalFormStep.SETUP]: {
+        title: 'Tip',
+        description: `Once you’re ready to start your Cloud version you can delete your local cluster by running:`,
+        code: 'kubefirst k3d destroy',
+        ctaDescription: 'Learn more',
+        ctaLink: '',
+      },
+    },
+    [InstallationType.AWS]: {
+      [FormStep.AUTHENTICATION]: {
+        title: 'AWS Prerequisites',
+        description: [
+          'Create an AWS account with billing enabled.',
+          'Establish a public hosted zone with dns routing established(docs).',
+          'Connect with AdministratorAccess IAM credentials to your AWS account (docs).',
+        ],
+        ctaDescription: 'Learn more',
+        ctaLink: '',
+      },
+    },
+    [InstallationType.CIVO]: {
+      [FormStep.AUTHENTICATION]: {
+        title: 'Civo Prerequisites',
+        description: [
+          'Create a Civo account in which you are an account owner.',
+          'Establish a publicly routable DNS.',
+        ],
+        ctaDescription: 'Learn more',
+        ctaLink: '',
+      },
+    },
 
-export default function useInstallation(type: InstallationTypes = InstallationTypes.LOCAL) {
-  const [installationType, setInstallationType] = useState(type);
-  const [info, setInfo] = useState(InstallationInfoByType[type]);
-  const [steps, setSteps] = useState<Array<string>>(InstallationSteps[type]);
+    [InstallationType.DIGITAL_OCEAN]: {
+      [FormStep.AUTHENTICATION]: {
+        title: 'DigitalOcean Prerequisites',
+        description: ['TBD.', 'TBD.'],
+        ctaDescription: 'Learn more',
+        ctaLink: '',
+      },
+    },
 
-  const onChangeInstallationType = (type: InstallationTypes) => {
-    setInstallationType(type);
-    setSteps(InstallationSteps[type]);
-    setInfo(InstallationInfoByType[type]);
+    [InstallationType.VULTR]: {
+      [FormStep.AUTHENTICATION]: {
+        title: 'Vultr Prerequisites',
+        description: ['TBD.', 'TBD.'],
+        ctaDescription: 'Learn more',
+        ctaLink: '',
+      },
+    },
   };
+
+  const infoByCloud = infoByInstallType[installType];
+
+  return infoByCloud && infoByCloud[step];
+};
+
+const getStepTitles = (installType: InstallationType) => {
+  const defaultSteps = [
+    'Select platform',
+    'Authentication',
+    'Cluster details',
+    'Provisioning',
+    'Ready',
+  ];
+
+  const stepsByInstallType: Record<InstallationType, Array<string>> = {
+    [InstallationType.LOCAL]: ['Select platform', 'Cluster details', 'Provisioning', 'Ready'],
+    [InstallationType.AWS]: defaultSteps,
+    [InstallationType.CIVO]: defaultSteps,
+    [InstallationType.DIGITAL_OCEAN]: defaultSteps,
+    [InstallationType.VULTR]: defaultSteps,
+  };
+
+  return stepsByInstallType[installType] || defaultSteps;
+};
+
+const getIsProvisionStep = (type: InstallationType, step: FormStep | LocalFormStep) => {
+  const isLocalProvisionStep = type === InstallationType.LOCAL && step === LocalFormStep.SETUP;
+  const isProvisionStep = type !== InstallationType.LOCAL && step === FormStep.SETUP;
+
+  return isLocalProvisionStep || isProvisionStep;
+};
+
+export function useInstallation(type: InstallationType, gitProvider: GitProvider, step: number) {
+  const formByType = useMemo(() => {
+    return FormFlowByType[type];
+  }, [type]);
 
   return {
-    installationType,
-    onChangeInstallationType,
-    steps,
-    info,
+    stepTitles: getStepTitles(type),
+    installTitles: getInstallationTitles(type, gitProvider),
+    info: getInfoByType(type, step),
+    isProvisionStep: getIsProvisionStep(type, step),
+    formFlow: formByType as FunctionComponent<FormFlowProps<InstallValues>>,
   };
 }

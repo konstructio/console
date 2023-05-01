@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { ComponentStory, ComponentMeta } from '@storybook/react';
 
-import Progress from './';
+import Progress from '.';
 
 export default {
   title: 'Components/Progress',

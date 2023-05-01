@@ -5,7 +5,7 @@ import { Backdrop, Close, Container, Content, FragmentContainer } from './modal.
 export interface IModalProps {
   children: React.ReactElement;
   isModalVisible: boolean;
-  onCloseModal: () => void;
+  onCloseModal?: () => void;
 }
 
 export interface IFragmentProps {
@@ -19,14 +19,12 @@ export const Fragment: FunctionComponent<IFragmentProps> = ({ children }) => (
 const BaseModal: FunctionComponent<IModalProps> = ({ children, isModalVisible, onCloseModal }) => (
   <>
     <Backdrop isModalVisible={isModalVisible} />
-    {isModalVisible && (
-      <Container>
-        <Content>
-          {children}
-          <Close onClick={onCloseModal} />
-        </Content>
-      </Container>
-    )}
+    <Container isModalVisible={isModalVisible}>
+      <Content>
+        {children}
+        {onCloseModal && <Close onClick={onCloseModal} />}
+      </Content>
+    </Container>
   </>
 );
 

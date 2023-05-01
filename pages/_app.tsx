@@ -5,30 +5,33 @@ import Head from 'next/head';
 import { ThemeProvider as ThemeProviderMUI } from '@mui/material';
 import styled, { ThemeProvider } from 'styled-components';
 
-import themeMUI from '../theme/muiTheme';
-import theme from '../theme';
+import { muiTheme } from '../theme/muiTheme';
+import { theme } from '../theme';
 import { wrapper } from '../redux/store';
 import '../styles/globals.css';
 import Navigation from '../components/navigation';
+import Row from '../components/row';
+import Column from '../components/column';
 
-const Layout = styled.div`
+const Layout = styled(Row)`
   background-color: ${({ theme }) => theme.colors.washMe};
-  display: flex;
-  height: 100%;
+  height: 100vh;
+  width: 100vw;
 `;
 
-export const Header = styled.div`
+export const Header = styled(Row)`
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 1;
   background-color: ${({ theme }) => theme.colors.white};
-  height: 40px;
-  width: calc(100% - 50px);
-  border-radius: 0px;
-  padding: 12px 24px 12px 24px;
+  height: 46px;
+  width: 100%;
+  box-shadow: 0px 2px 4px rgba(31, 41, 55, 0.06);
 `;
 
-export const Content = styled.div`
-  display: flex;
-  flex-direction: column;
-  height: 100%;
+export const Content = styled(Column)`
+  padding-top: 46px;
   width: 100%;
 `;
 
@@ -42,9 +45,9 @@ export default function App({ Component, ...rest }: AppProps) {
         <link rel="shortcut icon" href="/static/ray.svg" />
       </Head>
       <Provider store={store}>
-        <ThemeProviderMUI theme={themeMUI}>
+        <ThemeProviderMUI theme={muiTheme}>
           <ThemeProvider theme={theme}>
-            <Layout {...props.pageProps}>
+            <Layout>
               <Navigation />
               <Content>
                 <Header />

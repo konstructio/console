@@ -61,10 +61,9 @@ const TextField: FunctionComponent<TextFieldProps> = ({
         disabled={disabled}
         size="small"
         endAdornment={error ? errorIcon : endAdornment}
-        sx={{ marginBottom: helperText ? 0 : 3 }}
       />
       {helperText && (
-        <FormHelperText disabled={disabled} error={error} sx={{ marginBottom: 3 }}>
+        <FormHelperText disabled={disabled} error={error}>
           {helperText}
         </FormHelperText>
       )}
