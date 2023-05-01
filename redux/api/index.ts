@@ -29,16 +29,6 @@ export const consoleApi = createApi({
         body,
       }),
     }),
-    provision: builder.mutation({
-      query: (body) => ({
-        url: `http://localhost:8081/api/v1/cluster/${body.clusterName || 'kubefirst'}`,
-        method: 'POST',
-        body,
-        headers: {
-          'Access-Control-Allow-Origin': '*',
-        },
-      }),
-    }),
   }),
 });
 

@@ -12,7 +12,6 @@ export interface FormFlowProps<T extends FieldValues> {
   clusterName: string;
   domainName: string;
   onFormSubmit?: (values: T) => void;
-  onDeleteCluster: () => void;
   setValue: UseFormSetValue<T>;
   step?: number;
   trigger: UseFormTrigger<T>;
@@ -20,8 +19,8 @@ export interface FormFlowProps<T extends FieldValues> {
 }
 
 export interface ClusterProps {
-  apiUrl: string;
-  clusterName: string;
+  apiUrl?: string;
+  clusterName?: string;
 }
 
 export enum ProvisionStatus {

@@ -32,6 +32,7 @@ import {
   WHITE_SMOKE,
   LIGHT_GREY,
   SPUN_PEARL,
+  LIBERTY_BLUE,
 } from '../constants/colors';
 
 export const theme: DefaultTheme = {
@@ -67,5 +68,6 @@ export const theme: DefaultTheme = {
     white: WHITE,
     whiteSmoke: WHITE_SMOKE,
     lightGrey: LIGHT_GREY,
+    libertyBlue: LIBERTY_BLUE,
   },
 };

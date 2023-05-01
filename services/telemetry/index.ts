@@ -1,6 +1,6 @@
 import Analytics from 'analytics-node';
 
-import { ANALYTICS_ID } from '../constants';
+import { ANALYTICS_ID } from '../../constants';
 
 export type TelemetryProperties = {
   [key: string]: string;
