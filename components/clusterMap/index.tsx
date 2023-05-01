@@ -9,6 +9,10 @@ export interface ClusterMapProps {
 }
 
 const ClusterMap: FunctionComponent<ClusterMapProps> = ({ clusters }) => {
+  if (!clusters) {
+    return null;
+  }
+
   const nodes = [
     {
       id: '1',

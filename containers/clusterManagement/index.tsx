@@ -147,26 +147,29 @@ const ClusterManagement: FunctionComponent<ClusterManagementProps> = ({ apiUrl, 
               menuOptions={MENU_OPTIONS}
               onClickMenu={handleMenuClick}
               cols={CLUSTER_MANAGEMENT_COLUMNS}
-              rows={clusters.map(
-                ({
-                  CloudProvider,
-                  ClusterName,
-                  CreationTimestamp,
-                  Status,
-                  GitProvider,
-                  GitUser,
-                }) => ({
-                  id: ClusterName,
-                  clusterName: ClusterName,
-                  Status,
-                  GitUser,
-                  GitProvider: <Image alt={GitProvider} src={GIT_PROVIDERS[GitProvider]} />,
-                  Cloud: <Image alt={GitProvider} src={CLOUDS[CloudProvider]} />,
-                  CreationTimestamp: moment(new Date(CreationTimestamp)).format(
-                    'YYYY MMM DD, h:mm:ss a',
-                  ),
-                }),
-              )}
+              rows={
+                clusters &&
+                clusters.map(
+                  ({
+                    CloudProvider,
+                    ClusterName,
+                    CreationTimestamp,
+                    Status,
+                    GitProvider,
+                    GitUser,
+                  }) => ({
+                    id: ClusterName,
+                    clusterName: ClusterName,
+                    Status,
+                    GitUser,
+                    GitProvider: <Image alt={GitProvider} src={GIT_PROVIDERS[GitProvider]} />,
+                    Cloud: <Image alt={GitProvider} src={CLOUDS[CloudProvider]} />,
+                    CreationTimestamp: moment(new Date(CreationTimestamp)).format(
+                      'YYYY MMM DD, h:mm:ss a',
+                    ),
+                  }),
+                )
+              }
             />
           </TabPanel>
           <TabPanel value={activeTab} index={1}>

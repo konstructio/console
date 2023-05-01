@@ -52,37 +52,38 @@ const Table: FunctionComponent<TableProps> = ({
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows.map((row, index) => {
-            const { id, ...rest } = row;
-            return (
-              <TableRow
-                key={index}
-                sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                onClick={() => {
-                  onClickRow && onClickRow(id);
-                }}
-              >
-                {Object.values(rest).map((rowData, index) => (
-                  <TableCell
-                    align={typeof rowData !== 'string' ? 'center' : 'left'}
-                    key={`${rowData}-${index}`}
-                    sx={{ width: typeof rowData !== 'string' ? '90px' : 'auto' }}
-                  >
-                    {rowData as never}
-                  </TableCell>
-                ))}
-                {hasActionMenu && (
-                  <TableCell>
-                    <Menu
-                      onClickMenu={(label) => onClickMenu(label, row)}
-                      label={<MoreHorizIcon />}
-                      options={menuOptions}
-                    />
-                  </TableCell>
-                )}
-              </TableRow>
-            );
-          })}
+          {rows &&
+            rows.map((row, index) => {
+              const { id, ...rest } = row;
+              return (
+                <TableRow
+                  key={index}
+                  sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                  onClick={() => {
+                    onClickRow && onClickRow(id);
+                  }}
+                >
+                  {Object.values(rest).map((rowData, index) => (
+                    <TableCell
+                      align={typeof rowData !== 'string' ? 'center' : 'left'}
+                      key={`${rowData}-${index}`}
+                      sx={{ width: typeof rowData !== 'string' ? '90px' : 'auto' }}
+                    >
+                      {rowData as never}
+                    </TableCell>
+                  ))}
+                  {hasActionMenu && (
+                    <TableCell>
+                      <Menu
+                        onClickMenu={(label) => onClickMenu(label, row)}
+                        label={<MoreHorizIcon />}
+                        options={menuOptions}
+                      />
+                    </TableCell>
+                  )}
+                </TableRow>
+              );
+            })}
         </TableBody>
       </MuiTable>
     </TableContainer>
