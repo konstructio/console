@@ -1,4 +1,3 @@
-import router from 'next/router';
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 
 import { createCluster, deleteCluster, getCluster, getClusters } from '../thunks/cluster';

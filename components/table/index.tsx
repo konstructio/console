@@ -1,4 +1,4 @@
-import React, { FunctionComponent, ReactNode, useMemo } from 'react';
+import React, { FunctionComponent, ReactNode } from 'react';
 import {
   Paper,
   Table as MuiTable,

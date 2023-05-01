@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useEffect } from 'react';
+import React, { FunctionComponent } from 'react';
 import ReactFlow, { Background, Controls } from 'reactflow';
 
 import 'reactflow/dist/style.css';
