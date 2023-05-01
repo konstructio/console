@@ -22,7 +22,7 @@ import useModal from '../../hooks/useModal';
 import Modal from '../../components/modal';
 import { useAppDispatch, useAppSelector } from '../../redux/store';
 import { getCluster } from '../../redux/thunks/cluster';
-import { ClusterProps, ProvisionStatus } from '../../types/provision';
+import { ClusterProps } from '../../types/provision';
 import { setInstallationStep } from '../../redux/slices/installation.slice';
 import TabPanel, { Tab, a11yProps } from '../../components/tab';
 import FlappyKray from '../../components/flappyKray';
@@ -39,11 +39,7 @@ enum TERMINAL_TABS {
   VERBOSE = 1,
 }
 
-export interface TerminalLogsProps {
-  clusterName: string;
-}
-
-const TerminalLogs: FunctionComponent<TerminalLogsProps> = () => {
+const TerminalLogs: FunctionComponent = () => {
   const [activeTab, setActiveTab] = useState<number>(1);
   const [searchTerm, setSearchTerm] = useState<string>('');
   const terminalRef = useRef(null);
@@ -52,7 +48,7 @@ const TerminalLogs: FunctionComponent<TerminalLogsProps> = () => {
   const dispatch = useAppDispatch();
   const {
     config: { apiUrl = '' },
-    cluster: { status, isSuccess },
+    cluster: { isProvisioned, isProvisioning },
     installation: { installationStep, values },
   } = useAppSelector(({ config, cluster, installation }) => ({
     installation,
@@ -104,18 +100,18 @@ const TerminalLogs: FunctionComponent<TerminalLogsProps> = () => {
 
   useEffect(() => {
     const clusterName = values?.clusterName as string;
-    if (!isSuccess && clusterName) {
+    if (isProvisioning && !isProvisioned && clusterName) {
       interval.current = getClusterInterval({ apiUrl, clusterName });
     }
 
-    if (status === ProvisionStatus.PROVISIONED) {
+    if (isProvisioned) {
       dispatch(setInstallationStep(installationStep + 1));
       clearInterval(interval.current);
     }
 
     return () => clearInterval(interval.current);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isSuccess, status]);
+  }, [isProvisioning, isProvisioned]);
 
   useEffect(() => {
     if (terminalRef.current) {

@@ -1,8 +1,8 @@
 import Analytics from 'analytics-node';
 
-import { ANALYTICS_ID } from '../constants';
+import { ANALYTICS_ID } from '../../constants';
 
-import { sendTelemetry } from './telemetry';
+import { sendTelemetry } from '.';
 
 jest.mock('analytics-node');
 const mockAnalytics = Analytics as jest.MockedClass<typeof Analytics>;

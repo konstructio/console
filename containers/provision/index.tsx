@@ -5,7 +5,11 @@ import { createCluster, deleteCluster } from '../../redux/thunks/cluster';
 import InstallationStepContainer from '../../components/installationStepContainer';
 import InstallationInfoCard from '../../components/installationInfoCard';
 import { InstallationsSelection } from '../installationsSelection';
-import { setInstallValues, setInstallationStep } from '../../redux/slices/installation.slice';
+import {
+  resetInstallState,
+  setInstallValues,
+  setInstallationStep,
+} from '../../redux/slices/installation.slice';
 import { useAppDispatch, useAppSelector } from '../../redux/store';
 import { useInstallation } from '../../hooks/useInstallation';
 import { InstallationType } from '../../types/redux';
@@ -66,10 +70,6 @@ const Provision: FunctionComponent<ProvisionProps> = ({ apiUrl, useTelemetry }) 
     dispatch(setInstallationStep(installationStep - 1));
   }, [dispatch, installationStep]);
 
-  const onDeleteCluster = () => {
-    dispatch(deleteCluster({ apiUrl, clusterName: values?.clusterName as string })).unwrap();
-  };
-
   const onSubmit = async (values: FieldValues) => {
     if (isValid) {
       dispatch(setInstallValues(values));
@@ -100,6 +100,10 @@ const Provision: FunctionComponent<ProvisionProps> = ({ apiUrl, useTelemetry }) 
 
   useEffect(() => {
     dispatch(setConfigValues({ isTelemetryEnabled: useTelemetry, apiUrl }));
+
+    return () => {
+      dispatch(resetInstallState());
+    };
   }, [dispatch, useTelemetry, apiUrl]);
 
   return installationStep === 0 ? (
@@ -121,7 +125,6 @@ const Provision: FunctionComponent<ProvisionProps> = ({ apiUrl, useTelemetry }) 
           <FormFlow
             control={control}
             currentStep={installationStep}
-            onDeleteCluster={onDeleteCluster}
             setValue={setValue}
             trigger={trigger}
             watch={watch}

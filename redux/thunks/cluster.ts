@@ -37,6 +37,22 @@ export const getCluster = createAsyncThunk<
   return res.data;
 });
 
+export const getClusters = createAsyncThunk<
+  Array<{ Status: string }>,
+  ClusterProps,
+  {
+    dispatch: AppDispatch;
+    state: RootState;
+  }
+>('cluster/getClusters', async ({ apiUrl }) => {
+  const res = await axios.get(`${apiUrl}/cluster`);
+
+  if ('error' in res) {
+    throw res.error;
+  }
+  return res.data;
+});
+
 export const deleteCluster = createAsyncThunk<
   { Status: string },
   ClusterProps,

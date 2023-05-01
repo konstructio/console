@@ -30,10 +30,21 @@ const installationSlice = createSlice({
     setGitProvider: (state, action: PayloadAction<GitProvider>) => {
       state.gitProvider = action.payload;
     },
+    resetInstallState: (state) => {
+      state.installationStep = 0;
+      state.gitProvider = undefined;
+      state.installType = undefined;
+      state.values = undefined;
+    },
   },
 });
 
-export const { setInstallationStep, setInstallValues, setInstallType, setGitProvider } =
-  installationSlice.actions;
+export const {
+  setInstallationStep,
+  setInstallValues,
+  setInstallType,
+  setGitProvider,
+  resetInstallState,
+} = installationSlice.actions;
 
 export const installationReducer = installationSlice.reducer;
