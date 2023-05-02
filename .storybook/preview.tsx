@@ -6,8 +6,8 @@ import * as NextImage from 'next/image';
 import { RouterContext } from 'next/dist/shared/lib/router-context';
 
 import { makeStore } from '../redux/store';
-import themeMUI from '../theme/muiTheme';
-import theme from '../theme';
+import { muiTheme } from '../theme/muiTheme';
+import { theme } from '../theme';
 
 export const parameters = {
   actions: { argTypesRegex: '^on[A-Z].*' },
@@ -24,6 +24,7 @@ export const parameters = {
     query: {},
     push() {},
   },
+  layout: 'fullscreen',
 };
 
 const store = makeStore();
@@ -32,8 +33,12 @@ export const decorators = [
   (Story) => (
     <Provider store={store}>
       <ThemeProvider theme={theme}>
-        <ThemeProviderMUI theme={themeMUI}>
-          <Story />
+        <ThemeProviderMUI theme={muiTheme}>
+          <div
+            style={{ display: 'flex', flexDirection: 'column', height: '100vh', width: '100vw' }}
+          >
+            <Story />
+          </div>
         </ThemeProviderMUI>
       </ThemeProvider>
     </Provider>

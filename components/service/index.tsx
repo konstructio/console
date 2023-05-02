@@ -9,8 +9,9 @@ import VaultLogo from '../../assets/vault.svg';
 import AtlantisLogo from '../../assets/atlantis.svg';
 import MetaphorLogo from '../../assets/metaphor.svg';
 import Typography from '../typography';
-import { formatDomain } from '../../utils/url';
+import { formatDomain } from '../../utils/url/formatDomain';
 import Tooltip from '../tooltip';
+import { MINT_GREEN, PASTEL_LIGHT_BLUE } from '../../constants/colors';
 
 import {
   AppConnector,
@@ -71,7 +72,7 @@ const Service: FunctionComponent<ServiceProps> = ({
           target="_blank"
           disabled={!isAvailable}
         >
-          <LiveAppIcon color={isAvailable ? '#BBF7D0' : '#E2E8F0'}>
+          <LiveAppIcon color={isAvailable ? MINT_GREEN : PASTEL_LIGHT_BLUE}>
             {isMetaphor && <AppConnector />}
           </LiveAppIcon>
           <Typography variant="tooltip">{formatDomain(link, domainName)}</Typography>

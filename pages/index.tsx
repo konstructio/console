@@ -6,14 +6,14 @@ import useFeatureFlag from 'hooks/useFeatureFlag';
 
 import { useAppDispatch } from '../redux/store';
 import { setFeatureFlags } from '../redux/slices/featureFlags.slice';
-import Dashboard from '../containers/dashboard';
 
-export interface DashboardPageProps {
+export interface MainPageProps {
   flags: { [key: string]: boolean };
 }
 
-const DashboardPage: FunctionComponent<DashboardPageProps> = ({ flags }) => {
-  const { replace } = useRouter();
+const MainPage: FunctionComponent<MainPageProps> = ({ flags }) => {
+  const { push } = useRouter();
+
   const dispatch = useAppDispatch();
   const { isEnabled: clusterManagementEnabled, flagsAreReady } =
     useFeatureFlag('cluster-management');
@@ -28,19 +28,22 @@ const DashboardPage: FunctionComponent<DashboardPageProps> = ({ flags }) => {
     }
 
     if (!clusterManagementEnabled) {
-      replace('/services');
+      push('/services');
     }
-  }, [clusterManagementEnabled, flagsAreReady, replace]);
 
-  return clusterManagementEnabled ? <Dashboard /> : null;
+    if (clusterManagementEnabled) {
+      push('/cluster-management');
+    }
+  }, [clusterManagementEnabled, flagsAreReady, push]);
+
+  return null;
 };
 
 export const getServerSideProps: GetServerSideProps = async () => {
-  const { POSTHOG_KEY = '' } = process.env;
+  const { API_URL = '', POSTHOG_KEY = '', USE_TELEMETRY = '' } = process.env;
 
   let flags;
   try {
-    // POSTHOG_KEY was created for testing purposes, the hardcoded key is the prod readonly key
     const client = new PostHog(POSTHOG_KEY || 'phc_N4K5yJQsiIDBRK3X6rfrZlldK5uf2u1vgvlB82RADKn');
     flags = await client.getAllFlags('');
   } catch (error) {
@@ -52,8 +55,10 @@ export const getServerSideProps: GetServerSideProps = async () => {
   return {
     props: {
       flags,
+      apiUrl: API_URL,
+      useTelemetry: USE_TELEMETRY === 'true',
     },
   };
 };
 
-export default DashboardPage;
+export default MainPage;

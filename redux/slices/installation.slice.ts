@@ -1,72 +1,50 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-import { AWS_GIT_STEPS } from '../../enums/installation';
-
-type LocalInstallation = {
-  githubToken: string;
-  gitOpsBranch: string;
-  templateRepoUrl: string;
-};
-
-type AWSGitInstallation = {
-  step: number;
-  profile?: string;
-  hostedZoneName?: string;
-  adminEmail?: string;
-  kbotPassword?: string;
-  region?: string;
-  clusterName?: string;
-  bucketName?: string;
-  githubToken?: string;
-  githubOrganization?: string;
-  awsNodesSpot?: boolean;
-};
+import { InstallationType, InstallValues } from '../../types/redux';
+import { GitProvider } from '../../types';
 
 export interface InstallationState {
-  local?: LocalInstallation;
-  awsGit?: AWSGitInstallation;
+  values?: InstallValues;
+  gitProvider?: GitProvider;
+  installType?: InstallationType;
+  installationStep: number;
 }
 
 export const initialState: InstallationState = {
-  local: undefined,
-  awsGit: undefined,
+  installationStep: 0,
 };
 
 const installationSlice = createSlice({
   name: 'installation',
   initialState,
   reducers: {
-    setLocalValues(state, { payload }) {
-      const { githubToken, gitOpsBranch, templateRepoUrl } = payload;
-      state.local = {
-        githubToken: githubToken,
-        gitOpsBranch: gitOpsBranch,
-        templateRepoUrl: templateRepoUrl,
-      };
+    setInstallationStep: (state, action: PayloadAction<number>) => {
+      state.installationStep = action.payload;
     },
-    setAWSGitValues(state, { payload }) {
-      const { step } = payload;
-
-      if (step === AWS_GIT_STEPS.READINESS) {
-        const { profile, hostedZoneName } = payload;
-
-        state.awsGit = {
-          step,
-          profile,
-          hostedZoneName,
-          ...state.awsGit,
-        };
-      } else if (step === AWS_GIT_STEPS.SETUP) {
-        state.awsGit = {
-          ...payload,
-          ...state.awsGit,
-          step,
-        };
-      }
+    setInstallValues: (state, action: PayloadAction<InstallValues>) => {
+      state.values = { ...state.values, ...action.payload };
+    },
+    setInstallType: (state, action: PayloadAction<InstallationType>) => {
+      state.installType = action.payload;
+    },
+    setGitProvider: (state, action: PayloadAction<GitProvider>) => {
+      state.gitProvider = action.payload;
+    },
+    resetInstallState: (state) => {
+      state.installationStep = 0;
+      state.gitProvider = undefined;
+      state.installType = undefined;
+      state.values = undefined;
     },
   },
 });
 
-export const { setAWSGitValues, setLocalValues } = installationSlice.actions;
+export const {
+  setInstallationStep,
+  setInstallValues,
+  setInstallType,
+  setGitProvider,
+  resetInstallState,
+} = installationSlice.actions;
 
-export default installationSlice.reducer;
+export const installationReducer = installationSlice.reducer;

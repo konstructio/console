@@ -45,14 +45,14 @@ export const Backdrop = styled.div<{ isModalVisible: boolean }>`
   overscroll-behavior: none;
 `;
 
-export const Container = styled.div`
+export const Container = styled.div<{ isModalVisible: boolean }>`
   position: fixed;
   z-index: 1300;
   top: 0px;
   left: 0px;
   width: 100%;
   height: 100%;
-  display: flex;
+  display: ${({ isModalVisible }) => (isModalVisible ? 'flex' : 'none')};
   -webkit-box-align: center;
   align-items: center;
   -webkit-box-pack: center;
@@ -65,7 +65,7 @@ export const Content = styled.div`
   flex-direction: column;
   border-radius: 8px;
   width: 100%;
-  max-width: 448px;
+  max-width: fit-content;
   transition: all 300ms ease 0s;
   position: relative;
 `;

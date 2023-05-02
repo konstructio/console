@@ -15,7 +15,7 @@
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",
     "test:coverage:watch": "jest --coverage --watch",
-    "storybook": "start-storybook -p 6006",
+    "storybook": "STORYBOOK_MODE=true start-storybook -p 6006",
     "storybook-production": "node .storybook/server.js",
     "build-storybook": "build-storybook -o storybook-static"
   },
@@ -26,25 +26,29 @@
     "@mui/material": "^5.11.4",
     "@mui/styles": "^5.11.2",
     "@next/font": "^13.0.2",
-    "@reduxjs/toolkit": "^1.8.4",
+    "@reduxjs/toolkit": "^1.9.3",
     "@types/node": "18.11.9",
     "@types/react-dom": "18.0.8",
     "analytics-node": "^6.2.0",
     "axios": "^1.3.3",
+    "axios-mock-adapter": "^1.21.4",
     "babel-preset-next": "^1.4.0",
     "lodash": "^4.17.21",
+    "moment": "^2.29.4",
     "next": "13.0.3",
     "next-redux-wrapper": "^8.0.0",
     "posthog-node": "^2.6.0",
     "react": "18.2.0",
     "react-copy-to-clipboard": "^5.1.0",
     "react-dom": "18.2.0",
-    "react-hook-form": "^7.41.5",
+    "react-hook-form": "^7.43.7",
     "react-icons": "^4.4.0",
-    "react-redux": "^8.0.2",
+    "react-redux": "^8.0.5",
+    "reactflow": "^11.7.0",
     "sharp": "^0.31.3",
     "styled-components": "^5.3.5",
     "styled-media-query": "^2.1.2",
+    "websocket": "^1.0.34",
     "xterm": "^5.1.0",
     "xterm-addon-fit": "^0.7.0",
     "xterm-addon-search": "^0.11.0"
@@ -70,6 +74,7 @@
     "@types/react": "^18.0.24",
     "@types/react-copy-to-clipboard": "^5.0.4",
     "@types/styled-components": "^5.1.26",
+    "@types/websocket": "^1.0.5",
     "@typescript-eslint/eslint-plugin": "^5.33.1",
     "@typescript-eslint/parser": "^5.42.0",
     "assert": "^2.0.0",
@@ -101,7 +106,7 @@
     "styled-components": "^5"
   },
   "volta": {
-    "node": "16.19.1",
+    "node": "16.15.1",
     "yarn": "4.0.0-rc.40"
   }
 }

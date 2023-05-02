@@ -3,23 +3,25 @@ import { Action, configureStore, ThunkAction } from '@reduxjs/toolkit';
 import { createWrapper } from 'next-redux-wrapper';
 
 import { consoleApi } from './api';
-// ToDo: we need to have just one api
-// import { githubApi } from './api/github';
-import configSlice from './slices/config.slice';
-import installationSlice from './slices/installation.slice';
-import githubSlice from './slices/github.slice';
-import readinesSlice from './slices/readiness.slice';
-import featureFlagsSlice from './slices/featureFlags.slice';
+import {
+  configReducer,
+  clusterReducer,
+  featureFlagsReducer,
+  gitReducer,
+  installationReducer,
+  readinessReducer,
+} from './slices';
 
 export const makeStore = () =>
   configureStore({
     reducer: {
       [consoleApi.reducerPath]: consoleApi.reducer,
-      config: configSlice,
-      installation: installationSlice,
-      github: githubSlice,
-      readiness: readinesSlice,
-      featureFlags: featureFlagsSlice,
+      config: configReducer,
+      installation: installationReducer,
+      git: gitReducer,
+      readiness: readinessReducer,
+      cluster: clusterReducer,
+      featureFlags: featureFlagsReducer,
     },
     middleware: (gDM) => gDM().concat(consoleApi.middleware),
   });

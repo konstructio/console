@@ -6,63 +6,37 @@ import React, {
   useRef,
   useState,
 } from 'react';
-import { Box, styled, Tab, tabClasses, Tabs } from '@mui/material';
+import { Terminal as XTerminal } from 'xterm';
+import { FitAddon } from 'xterm-addon-fit';
+import { Box, Tabs } from '@mui/material';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import SportsEsportsIcon from '@mui/icons-material/SportsEsports';
+import LiveTvIcon from '@mui/icons-material/LiveTv';
 import { OutlinedInput } from '@mui/material';
 import { SearchAddon } from 'xterm-addon-search';
-import { FitAddon } from 'xterm-addon-fit';
-import { Terminal as XTerminal } from 'xterm';
 
+import { createLogStream } from '../../services/stream';
 import ConciseLogs from '../conciseLogs';
+import useModal from '../../hooks/useModal';
+import Modal from '../../components/modal';
+import { useAppDispatch, useAppSelector } from '../../redux/store';
+import { getCluster } from '../../redux/thunks/cluster';
+import { ClusterProps } from '../../types/provision';
+import { setInstallationStep } from '../../redux/slices/installation.slice';
+import TabPanel, { Tab, a11yProps } from '../../components/tab';
+import FlappyKray from '../../components/flappyKray';
 
-import { Container, Search, TabContainer, TerminalView } from './terminalLogs.styled';
-import logs from './logs';
+import { Close, Container, Search, TerminalView } from './terminalLogs.styled';
 
 import 'xterm/css/xterm.css';
 
-const SEARCH_OPTIONS = { caseSensitive: false };
 const DATE_REGEX = /(\d{4}-\d{2}-\d{2}T\d{2}:\d{2})/;
+const SEARCH_OPTIONS = { caseSensitive: false };
 
 enum TERMINAL_TABS {
   CONCISE = 0,
   VERBOSE = 1,
-}
-
-interface TabPanelProps {
-  children?: React.ReactNode;
-  index: number;
-  value: number;
-}
-
-const StyledTab = styled((props: { label: string }) => <Tab disableRipple {...props} />)(
-  ({ theme }) => ({
-    ...theme.typography.labelMedium,
-    color: '#ABADC6',
-    padding: 0,
-    minWidth: 'auto',
-    marginRight: '12px',
-    [`&.${tabClasses.selected}`]: {
-      color: theme.palette.secondary.main,
-    },
-  }),
-);
-
-function TabPanel(props: TabPanelProps) {
-  const { children, value, index, ...other } = props;
-
-  return (
-    <TabContainer
-      role="tabpanel"
-      hidden={value !== index}
-      id={`simple-tabpanel-${index}`}
-      aria-labelledby={`simple-tab-${index}`}
-      sx={{ visibility: value === index ? 'visible' : 'hidden' }}
-      {...other}
-    >
-      {children}
-    </TabContainer>
-  );
 }
 
 const TerminalLogs: FunctionComponent = () => {
@@ -70,6 +44,24 @@ const TerminalLogs: FunctionComponent = () => {
   const [searchTerm, setSearchTerm] = useState<string>('');
   const terminalRef = useRef(null);
   const searchAddonRef = useRef<SearchAddon>();
+  const interval = useRef<NodeJS.Timer>();
+  const dispatch = useAppDispatch();
+  const {
+    config: { apiUrl = '' },
+    cluster: { isProvisioned, isProvisioning },
+    installation: { installationStep, values },
+  } = useAppSelector(({ config, cluster, installation }) => ({
+    installation,
+    config,
+    cluster,
+  }));
+
+  const { isOpen, openModal, closeModal } = useModal();
+  const {
+    isOpen: isYouTubeOpen,
+    openModal: openYouTubeModal,
+    closeModal: closeYouTubeModal,
+  } = useModal();
 
   const handleSearch = (event: ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target;
@@ -89,13 +81,6 @@ const TerminalLogs: FunctionComponent = () => {
     setActiveTab(newValue);
   };
 
-  function a11yProps(index: number) {
-    return {
-      'id': `simple-tab-${index}`,
-      'aria-controls': `simple-tabpanel-${index}`,
-    };
-  }
-
   const loadAddons = useCallback((terminal: XTerminal) => {
     if (terminal) {
       const searchAddon = new SearchAddon();
@@ -107,36 +92,61 @@ const TerminalLogs: FunctionComponent = () => {
     }
   }, []);
 
+  const getClusterInterval = (params: ClusterProps) => {
+    return setInterval(async () => {
+      dispatch(getCluster(params)).unwrap();
+    }, 10000);
+  };
+
   useEffect(() => {
-    const terminal = new XTerminal({
-      convertEol: true,
-      disableStdin: true,
-      logLevel: 'off',
-      scrollback: 5000,
-      cols: 100,
-      theme: {
-        background: '#0F172A',
-      },
-    });
-
-    if (terminalRef.current) {
-      terminal.open(terminalRef.current);
-      terminal.write('Hello \n');
-
-      let i = 0;
-      setInterval(() => {
-        if (i <= logs.length) {
-          terminal.write(`${logs[i]}\n`.replace(DATE_REGEX, '\x1b[0;37m$1\x1B[0m'));
-          i++;
-          // terminal.write(`${new Date().toISOString()}: INF: Hello Kubefirst \n`);
-        }
-      }, 1000);
-
-      loadAddons(terminal);
+    const clusterName = values?.clusterName as string;
+    if (isProvisioning && !isProvisioned && clusterName) {
+      interval.current = getClusterInterval({ apiUrl, clusterName });
     }
 
-    return () => terminal.dispose();
-  }, [loadAddons]);
+    if (isProvisioned) {
+      dispatch(setInstallationStep(installationStep + 1));
+      clearInterval(interval.current);
+    }
+
+    return () => clearInterval(interval.current);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isProvisioning, isProvisioned]);
+
+  useEffect(() => {
+    if (terminalRef.current) {
+      const terminal = new XTerminal({
+        convertEol: true,
+        disableStdin: true,
+        logLevel: 'off',
+        scrollback: 5000,
+        cols: 100,
+        theme: {
+          background: '#0F172A',
+        },
+      });
+
+      loadAddons(terminal);
+
+      terminal.open(terminalRef.current);
+
+      const emitter = createLogStream(`${apiUrl}/stream`);
+      emitter.on('log', (log) => {
+        terminal.write(`${log.message.replace(DATE_REGEX, '\x1b[0;37m$1\x1B[0m')}\n`);
+      });
+
+      emitter.on('error', () => {
+        emitter.stopLogStream();
+      });
+
+      emitter.startLogStream();
+
+      return () => {
+        terminal.dispose();
+        emitter.stopLogStream();
+      };
+    }
+  }, [apiUrl, loadAddons]);
 
   return (
     <Container>
@@ -148,8 +158,8 @@ const TerminalLogs: FunctionComponent = () => {
           indicatorColor="secondary"
           variant="fullWidth"
         >
-          <StyledTab label="Concise" {...a11yProps(TERMINAL_TABS.CONCISE)} />
-          <StyledTab label="Verbose" {...a11yProps(TERMINAL_TABS.VERBOSE)} />
+          <Tab label="Concise" {...a11yProps(TERMINAL_TABS.CONCISE)} />
+          <Tab label="Verbose" {...a11yProps(TERMINAL_TABS.VERBOSE)} />
         </Tabs>
       </Box>
       <TabPanel value={activeTab} index={TERMINAL_TABS.CONCISE}>
@@ -161,6 +171,8 @@ const TerminalLogs: FunctionComponent = () => {
 
       {activeTab === TERMINAL_TABS.VERBOSE && (
         <Search>
+          <SportsEsportsIcon color="secondary" onClick={openModal} />
+          <LiveTvIcon color="secondary" onClick={openYouTubeModal} />
           <OutlinedInput
             placeholder="Search"
             onChange={handleSearch}
@@ -171,6 +183,24 @@ const TerminalLogs: FunctionComponent = () => {
           <KeyboardArrowDownIcon color="secondary" onClick={handleSearchNext} />
           <KeyboardArrowUpIcon color="secondary" onClick={handleSearchPrev} />
         </Search>
+      )}
+      {isOpen && <FlappyKray isOpen={isOpen} closeModal={closeModal} />}
+      {isYouTubeOpen && (
+        <Modal isModalVisible>
+          <>
+            <iframe
+              src="https://www.youtube.com/embed/moBZzQtr-AE"
+              title="Kubefirst Channel"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              style={{
+                border: 0,
+                height: '600px',
+                width: '800px',
+              }}
+            />
+            <Close onClick={closeYouTubeModal} color="secondary" fontSize="large" />
+          </>
+        </Modal>
       )}
     </Container>
   );
