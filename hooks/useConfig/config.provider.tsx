@@ -2,7 +2,7 @@ import React, { useState, FunctionComponent, PropsWithChildren } from 'react';
 
 import ConfigContext from './config.context';
 
-const JobsListProvider: FunctionComponent<PropsWithChildren> = ({ children }) => {
+const ConfigProvider: FunctionComponent<PropsWithChildren> = ({ children }) => {
   const [configs, setConfigs] = useState({});
   const [flags, setFlags] = useState({});
 
@@ -12,4 +12,4 @@ const JobsListProvider: FunctionComponent<PropsWithChildren> = ({ children }) =>
     </ConfigContext.Provider>
   );
 };
-export default JobsListProvider;
+export default ConfigProvider;
