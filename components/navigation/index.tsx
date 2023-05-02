@@ -79,10 +79,6 @@ const Navigation: FunctionComponent = () => {
     setDomLoaded(true);
   }, []);
 
-  if (!flagsAreReady) {
-    return null;
-  }
-
   return (
     <Container>
       <div>
@@ -96,7 +92,7 @@ const Navigation: FunctionComponent = () => {
             </KubefirstVersion>
           )}
         </KubefirstTitle>
-        {domLoaded && (
+        {domLoaded && flagsAreReady && (
           <MenuContainer>
             {routes.map(({ icon, path, title }) => (
               <Link href={path} key={path}>
