@@ -1,5 +1,7 @@
-import React, { FunctionComponent } from 'react';
+import React, { FunctionComponent, useEffect } from 'react';
+import { useRouter } from 'next/router';
 
+import useFeatureFlag from '../hooks/useFeatureFlag';
 import Services from '../containers/services';
 
 interface ServicesPageProps {
@@ -22,6 +24,16 @@ interface ServicesPageProps {
 }
 
 const ServicesPage: FunctionComponent<ServicesPageProps> = (props) => {
+  const { push } = useRouter();
+
+  const { flagsAreReady } = useFeatureFlag('cluster-management');
+
+  useEffect(() => {
+    if (!flagsAreReady) {
+      push('/');
+    }
+  });
+
   return <Services {...props} />;
 };
 

@@ -1,8 +1,7 @@
-import React, { FunctionComponent, useCallback, useEffect, useState } from 'react';
+import React, { FunctionComponent, useCallback, useEffect, useMemo, useState } from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import HelpIcon from '@mui/icons-material/Help';
-// import HomeIcon from '@mui/icons-material/Home';
 import ScatterPlotIcon from '@mui/icons-material/ScatterPlot';
 // import PeopleOutlineSharpIcon from '@mui/icons-material/PeopleOutlineSharp';
 import GridViewOutlinedIcon from '@mui/icons-material/GridViewOutlined';
@@ -11,6 +10,7 @@ import Link from 'next/link';
 
 import { ECHO_BLUE } from '../../constants/colors';
 import { useAppSelector } from '../../redux/store';
+import useFeatureFlag from '../../hooks/useFeatureFlag';
 
 import {
   Container,
@@ -21,29 +21,6 @@ import {
   MenuItem,
   Title,
 } from './navigation.styled';
-
-const ROUTES = [
-  // {
-  //   icon: <HomeIcon />,
-  //   path: '/',
-  //   title: 'Home',
-  // },
-  {
-    icon: <ScatterPlotIcon />,
-    path: '/cluster-management',
-    title: 'Cluster Management',
-  },
-  {
-    icon: <GridViewOutlinedIcon />,
-    path: '/services',
-    title: 'Services',
-  },
-  // {
-  //   icon: <PeopleOutlineSharpIcon />,
-  //   path: '/users',
-  //   title: 'Users',
-  // },
-];
 
 const FOOTER_ITEMS = [
   {
@@ -61,7 +38,27 @@ const FOOTER_ITEMS = [
 const Navigation: FunctionComponent = () => {
   const [domLoaded, setDomLoaded] = useState(false);
   const { asPath } = useRouter();
-  const kubefirstVersion = useAppSelector(({ config }) => config.kubefirstVersion);
+  const { kubefirstVersion } = useAppSelector(({ config }) => config);
+  const { isEnabled, flagsAreReady } = useFeatureFlag('cluster-management');
+
+  const routes = useMemo(
+    () =>
+      [
+        {
+          icon: <ScatterPlotIcon />,
+          path: '/cluster-management',
+          title: 'Cluster Management',
+          isEnabled: flagsAreReady && isEnabled,
+        },
+        {
+          icon: <GridViewOutlinedIcon />,
+          path: '/services',
+          title: 'Services',
+          isEnabled: true,
+        },
+      ].filter(({ isEnabled }) => isEnabled),
+    [flagsAreReady, isEnabled],
+  );
 
   const isActive = useCallback(
     (route: string) => {
@@ -95,9 +92,9 @@ const Navigation: FunctionComponent = () => {
             </KubefirstVersion>
           )}
         </KubefirstTitle>
-        {domLoaded && (
+        {domLoaded && flagsAreReady && (
           <MenuContainer>
-            {ROUTES.map(({ icon, path, title }) => (
+            {routes.map(({ icon, path, title }) => (
               <Link href={path} key={path}>
                 <MenuItem isActive={isActive(path)}>
                   {icon}
