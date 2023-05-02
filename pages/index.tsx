@@ -23,16 +23,12 @@ const MainPage: FunctionComponent<MainPageProps> = ({ flags }) => {
   }, [dispatch, flags]);
 
   useEffect(() => {
-    if (!flagsAreReady) {
-      return;
-    }
-
-    if (!clusterManagementEnabled) {
-      push('/services');
-    }
-
-    if (clusterManagementEnabled) {
-      push('/cluster-management');
+    if (flagsAreReady) {
+      if (clusterManagementEnabled) {
+        push('/cluster-management');
+      } else {
+        push('/services');
+      }
     }
   }, [clusterManagementEnabled, flagsAreReady, push]);
 

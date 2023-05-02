@@ -10,7 +10,6 @@ import Link from 'next/link';
 
 import { ECHO_BLUE } from '../../constants/colors';
 import { useAppSelector } from '../../redux/store';
-import { selectKubefirstVersion } from '../../redux/selectors/config.selector';
 import useFeatureFlag from '../../hooks/useFeatureFlag';
 
 import {
@@ -39,7 +38,7 @@ const FOOTER_ITEMS = [
 const Navigation: FunctionComponent = () => {
   const [domLoaded, setDomLoaded] = useState(false);
   const { asPath } = useRouter();
-  const kubefirstVersion = useAppSelector(selectKubefirstVersion());
+  const { kubefirstVersion } = useAppSelector(({ config }) => config);
   const { isEnabled, flagsAreReady } = useFeatureFlag('cluster-management');
 
   const routes = useMemo(
@@ -47,7 +46,7 @@ const Navigation: FunctionComponent = () => {
       [
         {
           icon: <ScatterPlotIcon />,
-          path: '/',
+          path: '/cluster-management',
           title: 'Cluster Management',
           isEnabled: flagsAreReady && isEnabled,
         },
@@ -79,6 +78,10 @@ const Navigation: FunctionComponent = () => {
   useEffect(() => {
     setDomLoaded(true);
   }, []);
+
+  if (!flagsAreReady) {
+    return null;
+  }
 
   return (
     <Container>

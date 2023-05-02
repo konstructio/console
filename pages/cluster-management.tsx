@@ -1,10 +1,26 @@
-import React, { FunctionComponent } from 'react';
+import React, { FunctionComponent, useEffect } from 'react';
+import { useRouter } from 'next/router';
 
+import useFeatureFlag from '../hooks/useFeatureFlag';
 import ClusterManagement, { ClusterManagementProps } from '../containers/clusterManagement';
 
-const ClusterManagementPage: FunctionComponent<ClusterManagementProps> = (props) => (
-  <ClusterManagement {...props} />
-);
+const ClusterManagementPage: FunctionComponent<ClusterManagementProps> = (props) => {
+  const { push } = useRouter();
+
+  const { flagsAreReady } = useFeatureFlag('cluster-management');
+
+  useEffect(() => {
+    if (!flagsAreReady) {
+      push('/');
+    }
+  });
+
+  if (!flagsAreReady) {
+    return null;
+  }
+
+  return <ClusterManagement {...props} />;
+};
 
 export async function getServerSideProps() {
   const { API_URL = '', USE_TELEMETRY = '' } = process.env;

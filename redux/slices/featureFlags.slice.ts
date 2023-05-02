@@ -23,4 +23,4 @@ const featureFlagsSlice = createSlice({
 
 export const { setFeatureFlags } = featureFlagsSlice.actions;
 
-export default featureFlagsSlice.reducer;
+export const featureFlagsReducer = featureFlagsSlice.reducer;

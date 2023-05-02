@@ -3,3 +3,4 @@ export { gitReducer } from './git.slice';
 export { configReducer } from './config.slice';
 export { installationReducer } from './installation.slice';
 export { clusterReducer } from './cluster.slice';
+export { featureFlagsReducer } from './featureFlags.slice';

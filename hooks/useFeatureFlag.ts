@@ -1,11 +1,12 @@
 import { useCallback } from 'react';
 
-import { selectFlags, selectFlagsLoaded } from '../redux/selectors/featureFlags.selector';
 import { useAppSelector } from '../redux/store';
 
 const useFeatureFlag = (flagName = '') => {
-  const flag = useAppSelector(selectFlags(flagName));
-  const flagsAreReady = useAppSelector(selectFlagsLoaded());
+  const { flag, loaded: flagsAreReady } = useAppSelector(({ featureFlags }) => ({
+    flag: featureFlags.flags[flagName],
+    loaded: featureFlags.loaded,
+  }));
 
   const isFeatureEnabled = useCallback(() => {
     return flag;
