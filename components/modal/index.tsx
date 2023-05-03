@@ -1,10 +1,25 @@
 import React, { FunctionComponent } from 'react';
+import ModalMui from '@mui/material/Modal';
+import { Box } from '@mui/material';
 
-import { Backdrop, Close, Container, Content, FragmentContainer } from './modal.styled';
+import { FragmentContainer } from './modal.styled';
+
+const style = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 'auto',
+  bgcolor: 'background.paper',
+  borderRadius: '8px',
+  boxShadow: 24,
+  p: 4,
+  zIndex: 2000,
+};
 
 export interface IModalProps {
   children: React.ReactElement;
-  isModalVisible: boolean;
+  isOpen: boolean;
   onCloseModal?: () => void;
 }
 
@@ -16,29 +31,16 @@ export const Fragment: FunctionComponent<IFragmentProps> = ({ children }) => (
   <FragmentContainer>{children}</FragmentContainer>
 );
 
-const BaseModal: FunctionComponent<IModalProps> = ({ children, isModalVisible, onCloseModal }) => (
-  <>
-    <Backdrop isModalVisible={isModalVisible} />
-    <Container isModalVisible={isModalVisible}>
-      <Content>
-        {children}
-        {onCloseModal && <Close onClick={onCloseModal} />}
-      </Content>
-    </Container>
-  </>
+const Modal: FunctionComponent<IModalProps> = ({ children, isOpen, onCloseModal }) => (
+  <ModalMui
+    open={isOpen}
+    onClose={onCloseModal}
+    aria-labelledby="modal-title"
+    aria-describedby="modal-description"
+    sx={{ zIndex: 2000 }}
+  >
+    <Box sx={style}>{children}</Box>
+  </ModalMui>
 );
-
-type ModalCompoundComponents = {
-  Header: typeof Fragment;
-  Body: typeof Fragment;
-  Footer: typeof Fragment;
-};
-
-type ModalWithCompoundComponents = typeof BaseModal & ModalCompoundComponents;
-
-const Modal = BaseModal as ModalWithCompoundComponents;
-Modal.Header = Fragment;
-Modal.Body = Fragment;
-Modal.Footer = Fragment;
 
 export default Modal;

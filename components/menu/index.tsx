@@ -8,6 +8,7 @@ import Typography from '../typography';
 import { VOLCANIC_SAND } from '../../constants/colors';
 
 export interface MenuProps {
+  isDisabled: boolean;
   label: string | ReactNode;
   options?: Array<{
     label: string;
@@ -17,7 +18,7 @@ export interface MenuProps {
   onClickMenu: (label: string) => void;
 }
 
-const Menu: FunctionComponent<MenuProps> = ({ label, options, onClickMenu }) => {
+const Menu: FunctionComponent<MenuProps> = ({ isDisabled, label, options, onClickMenu }) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const handleClick = (event: MouseEvent<HTMLButtonElement>) => {
@@ -42,6 +43,7 @@ const Menu: FunctionComponent<MenuProps> = ({ label, options, onClickMenu }) => 
         aria-expanded={open ? 'true' : undefined}
         onClick={handleClick}
         disableRipple
+        disabled={isDisabled}
       >
         {label}
       </Button>

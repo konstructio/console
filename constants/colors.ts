@@ -45,3 +45,5 @@ export const MIDNIGHT_EXPRESS = '#252A41';
 export const PORT_GORE = '#424867';
 export const LINK_WATER = '#CED4DA';
 export const LIBERTY_BLUE = '#0f172a';
+export const EXCLUSIVE_PLUM = '#71717A';
+export const LAUGHING_ORANGE = '#F59E0B';

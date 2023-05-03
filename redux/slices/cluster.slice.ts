@@ -1,7 +1,7 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 
 import { createCluster, deleteCluster, getCluster, getClusters } from '../thunks/cluster';
-import { ProvisionStatus } from '../../types/provision';
+import { Cluster, ClusterStatus } from '../../types/provision';
 
 export interface apiState {
   loading: boolean;
@@ -9,11 +9,9 @@ export interface apiState {
   isProvisioned: boolean;
   isDeleted: boolean;
   isDeleting: boolean;
-  status?: ProvisionStatus;
+  status?: ClusterStatus;
   isError: boolean;
-  // ToDo: add cluster type
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  clusters: Array<any>;
+  clusters: Array<Cluster>;
 }
 
 export const initialState: apiState = {
@@ -36,9 +34,9 @@ const clusterSlice = createSlice({
       .addCase(createCluster.pending, (state) => {
         state.loading = true;
       })
-      .addCase(createCluster.fulfilled, (state, { payload }: PayloadAction<{ Status: string }>) => {
+      .addCase(createCluster.fulfilled, (state, { payload }: PayloadAction<Cluster>) => {
         state.loading = false;
-        state.status = payload.Status as ProvisionStatus;
+        state.status = payload.status as ClusterStatus;
         state.isProvisioning = true;
       })
       .addCase(createCluster.rejected, (state) => {
@@ -53,28 +51,25 @@ const clusterSlice = createSlice({
         state.isDeleting = false;
         state.isError = true;
       })
-      .addCase(getCluster.fulfilled, (state, { payload }: PayloadAction<{ Status: string }>) => {
+      .addCase(getCluster.fulfilled, (state, { payload }: PayloadAction<Cluster>) => {
         state.loading = false;
-        state.status = payload.Status as ProvisionStatus;
+        state.status = payload.status as ClusterStatus;
 
-        if (state.status === ProvisionStatus.DELETED) {
+        if (state.status === ClusterStatus.DELETED) {
           state.isDeleted = true;
           state.isDeleting = false;
           state.isError = false;
-        } else if (state.status === ProvisionStatus.PROVISIONED) {
+        } else if (state.status === ClusterStatus.PROVISIONED) {
           state.isProvisioned = true;
           state.isProvisioning = false;
           state.isError = false;
         }
       })
-      .addCase(
-        getClusters.fulfilled,
-        (state, { payload }: PayloadAction<Array<{ Status: string }>>) => {
-          state.loading = false;
-          state.isError = false;
-          state.clusters = payload;
-        },
-      );
+      .addCase(getClusters.fulfilled, (state, { payload }: PayloadAction<Array<Cluster>>) => {
+        state.loading = false;
+        state.isError = false;
+        state.clusters = payload;
+      });
   },
 });
 

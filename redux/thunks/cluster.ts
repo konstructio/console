@@ -3,10 +3,25 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 
 import { AppDispatch, RootState } from '../store';
 import { InstallValues } from '../../types/redux';
-import { ClusterProps } from '../../types/provision';
+import { Cluster, ClusterRequestProps, ClusterResponse } from '../../types/provision';
+
+const mapClusterFromRaw = (cluster: ClusterResponse): Cluster => ({
+  id: cluster.ID,
+  clusterName: cluster.ClusterName,
+  adminEmail: cluster.AlertsEmail,
+  cloudProvider: cluster.CloudProvider,
+  cloudRegion: cluster.CloudRegion,
+  domainName: cluster.DomainName,
+  gitOwner: cluster.GitOwner,
+  gitProvider: cluster.GitProvider,
+  gitUser: cluster.GitUser,
+  type: cluster.ClusterType,
+  creationDate: cluster.CreationTimestamp,
+  status: cluster.Status,
+});
 
 export const createCluster = createAsyncThunk<
-  { Status: string },
+  Cluster,
   { apiUrl: string; values: InstallValues },
   {
     dispatch: AppDispatch;
@@ -22,8 +37,8 @@ export const createCluster = createAsyncThunk<
 });
 
 export const getCluster = createAsyncThunk<
-  { Status: string },
-  ClusterProps,
+  Cluster,
+  ClusterRequestProps,
   {
     dispatch: AppDispatch;
     state: RootState;
@@ -34,12 +49,12 @@ export const getCluster = createAsyncThunk<
   if ('error' in res) {
     throw res.error;
   }
-  return res.data;
+  return mapClusterFromRaw(res.data);
 });
 
 export const getClusters = createAsyncThunk<
-  Array<{ Status: string }>,
-  ClusterProps,
+  Array<Cluster>,
+  ClusterRequestProps,
   {
     dispatch: AppDispatch;
     state: RootState;
@@ -50,12 +65,12 @@ export const getClusters = createAsyncThunk<
   if ('error' in res) {
     throw res.error;
   }
-  return res.data;
+  return res.data.map(mapClusterFromRaw);
 });
 
 export const deleteCluster = createAsyncThunk<
-  { Status: string },
-  ClusterProps,
+  Cluster,
+  ClusterRequestProps,
   {
     dispatch: AppDispatch;
     state: RootState;

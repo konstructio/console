@@ -1,3 +1,5 @@
+import { ReactNode } from 'react';
+
 export default interface IKeyValue<T> {
   [key: string]: T;
 }
@@ -13,3 +15,9 @@ export enum GitProvider {
 }
 
 export const GIT_PROVIDERS = Object.values(GitProvider);
+
+export interface Row {
+  [key: string]: unknown | ReactNode;
+  id: string;
+  selected?: boolean;
+}

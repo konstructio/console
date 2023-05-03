@@ -38,3 +38,9 @@ Note: You might need an AWS Managament Account
 ### Chart
 
 1. The console chart is stored in the [Charts repository](https://github.com/kubefirst/charts)
+
+
+### Cluster Management (Local mode)
+
+1. Add the following env variable in your `.env` file
+2. `API_URL=http://localhost:8081/api/v1`

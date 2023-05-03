@@ -20,3 +20,11 @@ body,
 .xterm-cursor {
   display: none !important;
 }
+
+.disableClusterRow {
+  color: #71717A;
+}
+
+.disableClusterRow > button {
+  color: #71717A;
+}

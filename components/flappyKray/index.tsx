@@ -24,7 +24,7 @@ const FlappyKray: FunctionComponent<FlappyKrayProps> = ({ closeModal, isOpen }) 
 
   flappyKRayRef.current?.contentWindow?.postMessage('');
   return (
-    <Modal isModalVisible={isOpen}>
+    <Modal isOpen={isOpen}>
       <>
         <iframe
           id="flappy-kray"
