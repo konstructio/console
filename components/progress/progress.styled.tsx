@@ -17,6 +17,9 @@ export const Label = muiStyled(StepLabel)(() => ({
   [`& .${stepLabelClasses.disabled}`]: {
     color: theme.colors.saltboxBlue,
   },
+  [`& .${stepLabelClasses.alternativeLabel}`]: {
+    marginTop: '4px !important',
+  },
 }));
 
 export const ColorlibConnector = muiStyled(StepConnector)(({ theme: muiTheme }) => ({
@@ -86,6 +89,6 @@ export const Container = styled.div`
   background-color: ${({ theme }) => theme.colors.childOfLight};
   display: flex;
   justify-content: center;
-  padding: 25px 0;
+  padding: 21px 0;
   width: 100%;
 `;

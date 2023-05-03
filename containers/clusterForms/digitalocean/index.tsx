@@ -5,12 +5,12 @@ import ClusterRunningMessage from '../../../components/clusterReady';
 import TerminalLogs from '../../terminalLogs';
 import { FormStep } from '../../../constants/installation';
 import { InstallValues } from '../../../types/redux';
+import AuthForm from '../shared/authForm';
 
-import DigitalOceanReadinessForm from './readinessForm';
 import DigitalOceanSetupForm from './setupForm';
 
 const DIGITAL_OCEAN_FORM_FLOW = {
-  [FormStep.AUTHENTICATION]: DigitalOceanReadinessForm,
+  [FormStep.AUTHENTICATION]: AuthForm,
   [FormStep.SETUP]: DigitalOceanSetupForm,
   [FormStep.PROVISIONING]: TerminalLogs,
   [FormStep.READY]: ClusterRunningMessage,

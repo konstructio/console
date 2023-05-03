@@ -56,18 +56,18 @@ const Menu: FunctionComponent<MenuProps> = ({ label, options, onClickMenu }) => 
         sx={{ '& .MuiMenu-paper': { backgroundColor: 'white' } }}
         anchorOrigin={{
           vertical: 'bottom',
-          horizontal: 'left',
+          horizontal: 'right',
         }}
         transformOrigin={{
           vertical: 'top',
-          horizontal: 'left',
+          horizontal: 'right',
         }}
       >
         {options &&
           options.map(({ label, icon, color }) => {
             return (
               <MenuItem key={label} onClick={() => handleClickMenu(label)}>
-                <ListItemIcon>{icon}</ListItemIcon>
+                {icon && <ListItemIcon>{icon}</ListItemIcon>}
                 <ListItemText>
                   <Typography variant="body2" color={color || VOLCANIC_SAND}>
                     {label}

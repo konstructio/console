@@ -5,7 +5,7 @@ export const Button = styled.button<{ active?: boolean }>`
   justify-content: center;
   align-items: center;
   width: 260px;
-  height: 88px;
+  height: 84px;
   border: 2px solid #e2e8f0;
   border-radius: 8px;
   background-color: white;

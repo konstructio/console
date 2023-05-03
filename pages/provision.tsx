@@ -1,8 +1,24 @@
-import React, { FunctionComponent } from 'react';
+import React, { FunctionComponent, useEffect } from 'react';
+import { useRouter } from 'next/router';
 
+import useFeatureFlag from '../hooks/useFeatureFlag';
 import Provision, { ProvisionProps } from '../containers/provision';
 
 const ProvisionPage: FunctionComponent<ProvisionProps> = ({ apiUrl, useTelemetry }) => {
+  const { push } = useRouter();
+
+  const { flagsAreReady } = useFeatureFlag('cluster-management');
+
+  useEffect(() => {
+    if (!flagsAreReady) {
+      push('/');
+    }
+  });
+
+  if (!flagsAreReady) {
+    return null;
+  }
+
   return <Provision apiUrl={apiUrl} useTelemetry={useTelemetry} />;
 };
 
