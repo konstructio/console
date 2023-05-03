@@ -1,24 +1,25 @@
 import React, { FunctionComponent, useCallback, useEffect, useRef, useState } from 'react';
-import { Box, Snackbar } from '@mui/material';
-import moment from 'moment';
+import { Snackbar } from '@mui/material';
 import { useRouter } from 'next/router';
 
+import ClusterDetails from '../../components/clusterDetails';
 import Button from '../../components/button';
 import Typography from '../../components/typography';
-import Table, { Row } from '../../components/table';
-import { FIRE_BRICK } from '../../constants/colors';
-import { CLUSTER_MANAGEMENT_COLUMNS } from '../../constants/cluster';
+import Table from '../../components/table';
+import { DELETE_OPTION, VIEW_DETAILS_OPTION } from '../../constants/cluster';
 import { useAppDispatch, useAppSelector } from '../../redux/store';
 import { deleteCluster, getCluster, getClusters } from '../../redux/thunks/cluster';
 import { resetInstallState } from '../../redux/slices/installation.slice';
 import { setConfigValues } from '../../redux/slices/config.slice';
-import { ClusterProps } from '../../types/provision';
+import { Cluster, ClusterRequestProps } from '../../types/provision';
+import useToggle from '../../hooks/useToggle';
+import Drawer from '../../components/drawer';
+import { Row } from '../../types';
+import useModal from '../../hooks/useModal';
+import DeleteCluster from '../deleteCluster';
 
 import { Container, Content, Description, Header, LearnMoreLink } from './clusterManagement.styled';
-
-const VIEW_DETAILS_OPTION = 'View details';
-const DELETE_OPTION = 'Delete cluster';
-const MENU_OPTIONS = [{ label: VIEW_DETAILS_OPTION }, { label: DELETE_OPTION, color: FIRE_BRICK }];
+import { getClusterManagementColumns, getClusterState } from './columnDefinition';
 
 export interface ClusterManagementProps {
   apiUrl: string;
@@ -26,7 +27,18 @@ export interface ClusterManagementProps {
 }
 
 const ClusterManagement: FunctionComponent<ClusterManagementProps> = ({ apiUrl, useTelemetry }) => {
-  const [selectedCluster, setSelectedCluster] = useState<string>('');
+  const [selectedCluster, setSelectedCluster] = useState<Cluster>();
+  const {
+    isOpen: isDetailsPanelOpen,
+    open: openDetailsPanel,
+    close: closeDetailsPanel,
+  } = useToggle();
+  const {
+    isOpen: isDeleteModalOpen,
+    openModal: openDeleteModal,
+    closeModal: closeDeleteModal,
+  } = useModal();
+
   const interval = useRef<NodeJS.Timer>();
   const { push } = useRouter();
 
@@ -35,14 +47,17 @@ const ClusterManagement: FunctionComponent<ClusterManagementProps> = ({ apiUrl, 
 
   const handleMenuClick = (option: string, rowItem: Row) => {
     const { clusterName } = rowItem;
+    setSelectedCluster(clusters.find((cluster) => cluster.clusterName === clusterName));
+
     if (option === DELETE_OPTION) {
-      handleDeleteCluster(clusterName as string);
-      setSelectedCluster(clusterName as string);
+      openDeleteModal();
+    } else if (option === VIEW_DETAILS_OPTION) {
+      openDetailsPanel();
     }
   };
 
-  const handleDeleteCluster = (clusterName: string) => {
-    dispatch(deleteCluster({ apiUrl, clusterName })).unwrap();
+  const handleDeleteCluster = () => {
+    dispatch(deleteCluster({ apiUrl, clusterName: selectedCluster?.clusterName })).unwrap();
     handleGetClusters();
   };
 
@@ -55,7 +70,7 @@ const ClusterManagement: FunctionComponent<ClusterManagementProps> = ({ apiUrl, 
     await dispatch(getClusters({ apiUrl }));
   }, [apiUrl, dispatch]);
 
-  const getClusterInterval = (params: ClusterProps) => {
+  const getClusterInterval = (params: ClusterRequestProps) => {
     return setInterval(async () => {
       dispatch(getCluster(params)).unwrap();
     }, 10000);
@@ -63,7 +78,10 @@ const ClusterManagement: FunctionComponent<ClusterManagementProps> = ({ apiUrl, 
 
   useEffect(() => {
     if (isDeleting && !isDeleted && selectedCluster) {
-      interval.current = getClusterInterval({ apiUrl, clusterName: selectedCluster });
+      interval.current = getClusterInterval({
+        apiUrl,
+        clusterName: selectedCluster?.clusterName as string,
+      });
       handleGetClusters();
     }
 
@@ -94,7 +112,7 @@ const ClusterManagement: FunctionComponent<ClusterManagementProps> = ({ apiUrl, 
         <div>
           <Typography variant="h6">Cluster Management</Typography>
           <Description variant="body2">
-            Manage and invite Kubefirst clusters in one place.{' '}
+            Add and manage your clusters.{' '}
             <LearnMoreLink href="https://docs.kubefirst.io" target="_blank">
               Learn more
             </LearnMoreLink>
@@ -105,26 +123,11 @@ const ClusterManagement: FunctionComponent<ClusterManagementProps> = ({ apiUrl, 
         </Button>
       </Header>
       <Content>
-        <Box sx={{ width: '100%' }}>
-          <Table
-            hasActionMenu
-            menuOptions={MENU_OPTIONS}
-            onClickMenu={handleMenuClick}
-            cols={CLUSTER_MANAGEMENT_COLUMNS}
-            rows={
-              clusters &&
-              clusters.map(({ ClusterName, CreationTimestamp, Status, GitUser }) => ({
-                id: ClusterName,
-                clusterName: ClusterName,
-                Status,
-                CreationTimestamp: moment(new Date(CreationTimestamp)).format(
-                  'YYYY MMM DD, h:mm:ss',
-                ),
-                GitUser,
-              }))
-            }
-          />
-        </Box>
+        <Table
+          columns={getClusterManagementColumns(handleMenuClick)}
+          rows={clusters}
+          getRowClassName={getClusterState}
+        />
       </Content>
       <Snackbar
         anchorOrigin={{
@@ -133,7 +136,25 @@ const ClusterManagement: FunctionComponent<ClusterManagementProps> = ({ apiUrl, 
         }}
         open={isDeleted}
         autoHideDuration={3000}
-        message={`Cluster ${selectedCluster} has been deleted`}
+        message={`Cluster ${selectedCluster?.clusterName} has been deleted`}
+      />
+      <Drawer
+        open={isDetailsPanelOpen}
+        anchor="right"
+        hideBackdrop
+        sx={{ top: '20px' }}
+        PaperProps={{ sx: { top: '46px', boxShadow: '0px 2px 4px rgba(100, 116, 139, 0.16)' } }}
+        onClose={closeDetailsPanel}
+      >
+        {selectedCluster && (
+          <ClusterDetails cluster={selectedCluster} onClose={closeDetailsPanel} />
+        )}
+      </Drawer>
+      <DeleteCluster
+        isOpen={isDeleteModalOpen}
+        onClose={closeDeleteModal}
+        onDelete={handleDeleteCluster}
+        clusterName={selectedCluster?.clusterName}
       />
     </Container>
   );

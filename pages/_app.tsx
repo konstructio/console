@@ -23,7 +23,7 @@ export const Header = styled(Row)`
   position: absolute;
   top: 0;
   right: 0;
-  z-index: 1;
+  z-index: 1500;
   background-color: ${({ theme }) => theme.colors.white};
   height: 46px;
   width: 100%;

@@ -7,6 +7,7 @@ import { TagColor } from '.';
 export const TagContainer = styled(Typography)<{ bgColor?: TagColor } & ITypographyProps>`
   border-radius: 4px;
   padding: 4px;
+  text-transform: capitalize;
 
   ${({ bgColor }) =>
     bgColor === 'neon-green'

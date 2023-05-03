@@ -57,6 +57,9 @@ declare module 'styled-components' {
       white: string;
       lightGrey: string;
       libertyBlue: string;
+      fireBrick: string;
+      magnolia: string;
+      royanPurple: string;
 
       // Kubefirst color palette
       americanBlue: string;

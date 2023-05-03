@@ -22,7 +22,7 @@ import useModal from '../../hooks/useModal';
 import Modal from '../../components/modal';
 import { useAppDispatch, useAppSelector } from '../../redux/store';
 import { getCluster } from '../../redux/thunks/cluster';
-import { ClusterProps } from '../../types/provision';
+import { ClusterRequestProps } from '../../types/provision';
 import { setInstallationStep } from '../../redux/slices/installation.slice';
 import TabPanel, { Tab, a11yProps } from '../../components/tab';
 import FlappyKray from '../../components/flappyKray';
@@ -92,7 +92,7 @@ const TerminalLogs: FunctionComponent = () => {
     }
   }, []);
 
-  const getClusterInterval = (params: ClusterProps) => {
+  const getClusterInterval = (params: ClusterRequestProps) => {
     return setInterval(async () => {
       dispatch(getCluster(params)).unwrap();
     }, 10000);
