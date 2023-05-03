@@ -1,11 +1,9 @@
-import { GithubUserOrganization } from '../github';
-
-export interface GithubValues {
-  githubToken?: string;
-  githubOrganization?: GithubUserOrganization['login'];
+export interface GitValues {
+  gitToken?: string;
+  gitOwner?: string;
 }
 
-export interface LocalInstallValues extends GithubValues {
+export interface LocalInstallValues extends GitValues {
   gitOpsBranch?: string;
   templateRepoUrl?: string;
 }
@@ -27,17 +25,15 @@ export interface AwsInstallValues {
 
 export type AwsClusterValues = AwsInstallValues & ClusterValues;
 
-export type AwsGithubClusterValues = AwsClusterValues & GithubValues;
+export type AwsGithubClusterValues = AwsClusterValues & GitValues;
 
 export interface CivoInstallValues extends ClusterValues {
   civoToken?: string;
-  githubToken?: string;
   userName?: string;
-  githubOrganization?: string;
   domainName?: string;
 }
 export type CivoClusterValues = CivoInstallValues & ClusterValues;
-export type CivoGithubClusterValues = CivoClusterValues & GithubValues;
+export type CivoGithubClusterValues = CivoClusterValues & GitValues;
 
 export type InstallValues = AwsClusterValues & LocalInstallValues & CivoInstallValues;
 

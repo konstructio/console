@@ -1,16 +1,18 @@
 import React, { FunctionComponent, useCallback } from 'react';
-import { INSTALLATION_TYPES, InstallationType } from 'types/redux';
-import GitProviderButton from 'components/gitProviderButton';
+import { UseFormReset } from 'react-hook-form';
 
-import { GIT_PROVIDERS, GitProvider } from '../../types';
 import InstallationStepContainer from '../../components/installationStepContainer';
-import { useAppDispatch, useAppSelector } from '../../redux/store';
 import {
   setGitProvider,
   setInstallType,
   setInstallationStep,
 } from '../../redux/slices/installation.slice';
+import GitProviderButton from '../../components/gitProviderButton';
 import CloudProviderCard from '../../components/cloudProviderCard';
+import { useAppDispatch, useAppSelector } from '../../redux/store';
+import { INSTALLATION_TYPES, InstallValues, InstallationType } from '../../types/redux';
+import { clearGitState } from '../../redux/slices/git.slice';
+import { GIT_PROVIDERS, GitProvider } from '../../types';
 
 import {
   ContentContainer,
@@ -22,10 +24,12 @@ import {
 
 export interface InstallationsSelectionProps {
   steps: Array<string>;
+  reset: UseFormReset<InstallValues>;
 }
 
 export const InstallationsSelection: FunctionComponent<InstallationsSelectionProps> = ({
   steps,
+  reset,
 }) => {
   const dispatch = useAppDispatch();
 
@@ -36,8 +40,10 @@ export const InstallationsSelection: FunctionComponent<InstallationsSelectionPro
   const handleInstallTypeChange = useCallback(
     (type: InstallationType) => {
       dispatch(setInstallType(type));
+      dispatch(clearGitState());
+      reset();
     },
-    [dispatch],
+    [dispatch, reset],
   );
 
   const handleGitProviderChange = useCallback(

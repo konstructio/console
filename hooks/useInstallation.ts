@@ -126,6 +126,30 @@ const getIsProvisionStep = (type: InstallationType, step: FormStep | LocalFormSt
   return isLocalProvisionStep || isProvisionStep;
 };
 
+const getApiKeyInfo = (type: InstallationType) => {
+  const apiKeyInfo: Record<InstallationType, { label: string; helperText?: string } | null> = {
+    [InstallationType.LOCAL]: null,
+    [InstallationType.AWS]: {
+      label: 'AWS API key',
+    },
+    [InstallationType.CIVO]: {
+      label: 'CIVO API key',
+      helperText: 'Retrieve your key at https://dashboard.civo.com/security',
+    },
+    [InstallationType.DIGITAL_OCEAN]: {
+      label: 'DigitalOcean authentication token',
+      helperText:
+        'Create your token by following the instructions at https://cloud.digitalocean.com/account/api',
+    },
+    [InstallationType.VULTR]: {
+      label: 'Vultr API key',
+      helperText: 'Retrieve your key at https://my.vultr.com/settings/#settingsapi',
+    },
+  };
+
+  return apiKeyInfo[type];
+};
+
 export function useInstallation(type: InstallationType, gitProvider: GitProvider, step: number) {
   const formByType = useMemo(() => {
     return FormFlowByType[type];
@@ -137,5 +161,6 @@ export function useInstallation(type: InstallationType, gitProvider: GitProvider
     info: getInfoByType(type, step),
     isProvisionStep: getIsProvisionStep(type, step),
     formFlow: formByType as FunctionComponent<FormFlowProps<InstallValues>>,
+    apiKeyInfo: getApiKeyInfo(type),
   };
 }

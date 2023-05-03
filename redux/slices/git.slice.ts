@@ -1,11 +1,19 @@
 import { createSlice } from '@reduxjs/toolkit';
+import { GitLabGroup, GitLabUser } from 'types/gitlab';
 
 import { GithubUser, GithubUserOrganization } from '../../types/github/index';
-import { getGithubUser, getGithubUserOrganizations } from '../thunks/git.thunk';
+import {
+  getGithubUser,
+  getGithubUserOrganizations,
+  getGitlabGroups,
+  getGitlabUser,
+} from '../thunks/git.thunk';
 
 export interface GitState {
   githubUser: GithubUser | null;
-  githubUserOrganizations: GithubUserOrganization[];
+  githubUserOrganizations: Array<GithubUserOrganization>;
+  gitlabUser: GitLabUser | null;
+  gitlabGroups: Array<GitLabGroup>;
   isLoading: boolean;
   isTokenValid: boolean;
   error: string | null;
@@ -14,6 +22,8 @@ export interface GitState {
 export const initialState: GitState = {
   githubUser: null,
   githubUserOrganizations: [],
+  gitlabUser: null,
+  gitlabGroups: [],
   isLoading: false,
   isTokenValid: false,
   error: null,
@@ -26,9 +36,19 @@ const gitSlice = createSlice({
     clearUserError: (state) => {
       state.error = null;
     },
+    clearGitState: (state) => {
+      state.githubUser = null;
+      state.githubUserOrganizations = [];
+      state.gitlabUser = null;
+      state.gitlabGroups = [];
+      state.isLoading = false;
+      state.isTokenValid = false;
+      state.error = null;
+    },
   },
   extraReducers: (builder) => {
     builder
+      /* GitHub */
       .addCase(getGithubUser.fulfilled, (state, action) => {
         state.githubUser = action.payload;
         state.isTokenValid = true;
@@ -49,10 +69,30 @@ const gitSlice = createSlice({
         );
         state.isLoading = false;
         state.isTokenValid = true;
+      })
+      /* GitLab */
+      .addCase(getGitlabUser.fulfilled, (state, action) => {
+        state.gitlabUser = action.payload;
+        state.isTokenValid = true;
+      })
+      .addCase(getGitlabUser.rejected, (state, action) => {
+        state.error = action.error.message ?? 'Failed to get user';
+      })
+      .addCase(getGitlabGroups.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(getGitlabGroups.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.error.message ?? 'Failed to get user groups';
+      })
+      .addCase(getGitlabGroups.fulfilled, (state, action) => {
+        state.gitlabGroups = action.payload.sort((a, b) => a.name.localeCompare(b.name));
+        state.isLoading = false;
+        state.isTokenValid = true;
       });
   },
 });
 
-export const { clearUserError } = gitSlice.actions;
+export const { clearGitState, clearUserError } = gitSlice.actions;
 
 export const gitReducer = gitSlice.reducer;

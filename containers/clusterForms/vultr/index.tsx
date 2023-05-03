@@ -5,12 +5,12 @@ import ClusterRunningMessage from '../../../components/clusterReady';
 import TerminalLogs from '../../terminalLogs';
 import { FormStep } from '../../../constants/installation';
 import { InstallValues } from '../../../types/redux';
+import AuthForm from '../shared/authForm';
 
-import AwsReadinessForm from './readinessForm';
 import AwsSetupForm from './setupForm';
 
 const VULTR_FORM_FLOW = {
-  [FormStep.AUTHENTICATION]: AwsReadinessForm,
+  [FormStep.AUTHENTICATION]: AuthForm,
   [FormStep.SETUP]: AwsSetupForm,
   [FormStep.PROVISIONING]: TerminalLogs,
   [FormStep.READY]: ClusterRunningMessage,

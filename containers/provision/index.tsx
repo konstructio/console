@@ -1,5 +1,5 @@
 import React, { FunctionComponent, useCallback, useEffect, useMemo } from 'react';
-import { FieldValues, useForm } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 
 import { createCluster } from '../../redux/thunks/cluster';
 import InstallationStepContainer from '../../components/installationStepContainer';
@@ -12,7 +12,7 @@ import {
 } from '../../redux/slices/installation.slice';
 import { useAppDispatch, useAppSelector } from '../../redux/store';
 import { useInstallation } from '../../hooks/useInstallation';
-import { InstallationType } from '../../types/redux';
+import { InstallValues, InstallationType } from '../../types/redux';
 import { GitProvider } from '../../types';
 import { setConfigValues } from '../../redux/slices/config.slice';
 
@@ -48,6 +48,7 @@ const Provision: FunctionComponent<ProvisionProps> = ({ apiUrl, useTelemetry }) 
     setValue,
     trigger,
     watch,
+    reset,
   } = useForm({ mode: 'onChange' });
 
   const installTitle = useMemo(
@@ -70,7 +71,7 @@ const Provision: FunctionComponent<ProvisionProps> = ({ apiUrl, useTelemetry }) 
     dispatch(setInstallationStep(installationStep - 1));
   }, [dispatch, installationStep]);
 
-  const onSubmit = async (values: FieldValues) => {
+  const onSubmit = async (values: InstallValues) => {
     if (isValid) {
       dispatch(setInstallValues(values));
 
@@ -81,9 +82,9 @@ const Provision: FunctionComponent<ProvisionProps> = ({ apiUrl, useTelemetry }) 
           cloud_provider: installType?.toString(),
           cloud_region: values.cloudRegion,
           domain_name: values.domainName,
-          git_owner: values?.githubOrganization,
+          git_owner: values?.gitOwner,
           git_provider: gitProvider,
-          git_token: values?.githubToken,
+          git_token: values?.gitToken,
           type: 'mgmt',
         };
 
@@ -107,7 +108,7 @@ const Provision: FunctionComponent<ProvisionProps> = ({ apiUrl, useTelemetry }) 
   }, [dispatch, useTelemetry, apiUrl]);
 
   return installationStep === 0 ? (
-    <InstallationsSelection steps={stepTitles} />
+    <InstallationsSelection steps={stepTitles} reset={reset} />
   ) : (
     <Form component="form" onSubmit={handleSubmit(onSubmit)}>
       <InstallationStepContainer

@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useEffect, useState } from 'react';
+import { FunctionComponent, useEffect } from 'react';
 import { PostHog } from 'posthog-node';
 import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';

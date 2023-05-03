@@ -8,6 +8,7 @@ export const CardContainer = styled(Card)`
   max-width: 540px;
   min-width: 365px;
   padding: 24px;
+  height: 84px;
 `;
 
 export const DetailsContainer = styled.div`

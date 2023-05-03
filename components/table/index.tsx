@@ -12,6 +12,7 @@ import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 
 import Typography from '../typography';
 import Menu from '../menu';
+import { CHILD_OF_LIGHT, SALTBOX_BLUE } from '../../constants/colors';
 
 export interface Row {
   [key: string]: unknown | ReactNode;
@@ -42,13 +43,13 @@ const Table: FunctionComponent<TableProps> = ({
         <TableHead>
           <TableRow>
             {cols.map((col) => (
-              <TableCell key={col} sx={{ backgroundColor: '#F1F5F9' }}>
-                <Typography variant="labelMedium" color="#64748B">
+              <TableCell key={col} sx={{ backgroundColor: CHILD_OF_LIGHT }}>
+                <Typography variant="labelMedium" color={SALTBOX_BLUE}>
                   {col?.toUpperCase()}
                 </Typography>
               </TableCell>
             ))}
-            {hasActionMenu && <TableCell sx={{ backgroundColor: '#F1F5F9' }}></TableCell>}
+            {hasActionMenu && <TableCell sx={{ backgroundColor: CHILD_OF_LIGHT }}></TableCell>}
           </TableRow>
         </TableHead>
         <TableBody>

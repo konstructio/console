@@ -1,6 +1,8 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
+import { GitLabGroup, GitLabUser } from 'types/gitlab';
 
-import { githubApi } from '../../api';
+import { githubApi } from '../../services/github';
+import { gitlabApi } from '../../services/gitlab';
 import { GithubUser, GithubUserOrganization } from '../../types/github';
 
 export const getGithubUser = createAsyncThunk<GithubUser, string>(
@@ -23,6 +25,30 @@ export const getGithubUserOrganizations = createAsyncThunk<GithubUserOrganizatio
           'Authorization': `Bearer ${token}`,
           'Accept': 'application/vnd.github+json',
           'X-GitHub-Api-Version': '2022-11-28',
+        },
+      })
+    ).data;
+  },
+);
+
+export const getGitlabUser = createAsyncThunk<GitLabUser, string>(
+  'git/getGitlabUser',
+  async (token) => {
+    return (
+      await gitlabApi.get<GitLabUser>('/user', {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+    ).data;
+  },
+);
+
+export const getGitlabGroups = createAsyncThunk<GitLabGroup[], string>(
+  'git/getGitlabGroups',
+  async (token) => {
+    return (
+      await gitlabApi.get<GitLabGroup[]>('/groups', {
+        headers: {
+          Authorization: `Bearer ${token}`,
         },
       })
     ).data;
