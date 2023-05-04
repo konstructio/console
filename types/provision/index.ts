@@ -34,7 +34,7 @@ export interface ClusterResponse {
   cloud_provider: string;
   cloud_region: string;
   domain_name: string;
-  cluster_iD: string;
+  cluster_id: string;
   cluster_type: string;
   alerts_email: string;
   git_provider: string;
