@@ -1,14 +1,14 @@
-import { FormStep } from 'constants/installation';
-
 import React, { FunctionComponent, useEffect, useMemo } from 'react';
-import { GitProvider } from 'types';
-import { useInstallation } from 'hooks/useInstallation';
+import LearnMore from 'components/learnMore';
 
+import { useInstallation } from '../../../../hooks/useInstallation';
+import { FormStep } from '../../../../constants/installation';
 import ControlledPassword from '../../../../components/controlledFields/Password';
 import ControlledTextField from '../../../../components/controlledFields/TextField';
 import ControlledAutocomplete from '../../../../components/controlledFields/AutoComplete';
-import { InstallValues, InstallationType } from '../../../../types/redux/index';
+import { GitProvider } from '../../../../types';
 import { FormFlowProps } from '../../../../types/provision';
+import { InstallValues, InstallationType } from '../../../../types/redux/index';
 import { useAppDispatch, useAppSelector } from '../../../../redux/store';
 import {
   getGithubUser,
@@ -128,6 +128,7 @@ const AuthForm: FunctionComponent<FormFlowProps<InstallValues>> = ({ control, se
         }}
         onErrorText="Invalid token."
       />
+      <LearnMore description="Learn more about" href="" linkTitle="authentication" />
     </>
   );
 };

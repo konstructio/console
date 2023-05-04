@@ -1,12 +1,13 @@
-import React, { FunctionComponent, ComponentPropsWithoutRef } from 'react';
+import React, { FunctionComponent, PropsWithChildren } from 'react';
 import Link, { LinkProps } from 'next/link';
 
 import { LinkContainer } from './nextLink.styled';
 
-type NextLinkProps = Omit<LinkProps, 'onClick' | 'onTouchStart' | 'onMouseEnter'> &
-  ComponentPropsWithoutRef<'div'>;
+interface NextLinkProps extends Omit<LinkProps, 'onClick' | 'onTouchStart' | 'onMouseEnter'> {
+  target?: string;
+}
 
-const NextLink: FunctionComponent<NextLinkProps> = ({
+const NextLink: FunctionComponent<PropsWithChildren<NextLinkProps>> = ({
   href,
   as,
   replace,
@@ -17,10 +18,24 @@ const NextLink: FunctionComponent<NextLinkProps> = ({
   locale,
   legacyBehavior,
   children,
+  target,
   ...rest
 }) => (
   <LinkContainer {...rest}>
-    <Link {...{ href, as, replace, scroll, shallow, passHref, prefetch, locale, legacyBehavior }}>
+    <Link
+      {...{
+        href,
+        as,
+        replace,
+        scroll,
+        shallow,
+        passHref,
+        prefetch,
+        locale,
+        legacyBehavior,
+        target,
+      }}
+    >
       {children}
     </Link>
   </LinkContainer>

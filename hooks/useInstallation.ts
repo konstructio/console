@@ -12,7 +12,7 @@ import { FormFlowProps } from '../types/provision';
 
 export const FormFlowByType: Record<
   InstallationType,
-  FunctionComponent<FormFlowProps<InstallValues>> | null
+  FunctionComponent<FormFlowProps<InstallValues>>
 > = {
   [InstallationType.LOCAL]: LocalFormFlow,
   [InstallationType.AWS]: AwsFormFlow,
@@ -27,12 +27,14 @@ const getInstallationTitles = (
 ): Record<number, string> => {
   if (installType === InstallationType.LOCAL) {
     return {
+      0: `First, select your preferred Git provider`,
       1: `Let’s configure your local cluster`,
       2: `Grab a cup of tea or coffee while we set up your cluster...`,
       3: 'You’re all set!',
     };
   }
   return {
+    0: `First, select your preferred Git provider`,
     1: `Now, let’s get you authenticated`,
     2: `Let’s configure your ${installType} - ${gitProvider} cluster`,
     3: `Grab a cup of tea or coffee while we set up your cluster...`,

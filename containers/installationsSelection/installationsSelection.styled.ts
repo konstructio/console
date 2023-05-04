@@ -8,7 +8,7 @@ import Typography from '../../components/typography';
 export const ContentContainer = styled(Column)`
   align-items: center;
   padding: 0 40px;
-  width: 100%;
+  width: calc(100% - 80px);
 `;
 
 export const ButtonContainer = styled(Row)`

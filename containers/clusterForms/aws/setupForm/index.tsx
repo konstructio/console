@@ -2,8 +2,9 @@ import React, { FunctionComponent } from 'react';
 
 import { InstallValues } from '../../../../types/redux';
 import ControlledAutocomplete from '../../../../components/controlledFields/AutoComplete';
-import { AWS_REGIONS, EMAIL_REGEX } from '../../../../constants/index';
 import ControlledTextField from '../../../../components/controlledFields/TextField';
+import LearnMore from '../../../../components/learnMore';
+import { AWS_REGIONS, EMAIL_REGEX } from '../../../../constants/index';
 import { FormFlowProps } from '../../../../types/provision';
 
 const AwsSetupForm: FunctionComponent<FormFlowProps<InstallValues>> = ({ control }) => {
@@ -48,6 +49,7 @@ const AwsSetupForm: FunctionComponent<FormFlowProps<InstallValues>> = ({ control
         onErrorText="Maximum 25 characters."
         required
       />
+      <LearnMore description="Learn more about" href="" linkTitle="configuring your cluster" />
     </>
   );
 };

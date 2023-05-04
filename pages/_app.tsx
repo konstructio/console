@@ -8,10 +8,11 @@ import styled, { ThemeProvider } from 'styled-components';
 import { muiTheme } from '../theme/muiTheme';
 import { theme } from '../theme';
 import { wrapper } from '../redux/store';
-import '../styles/globals.css';
 import Navigation from '../components/navigation';
 import Row from '../components/row';
 import Column from '../components/column';
+
+import '../styles/globals.css';
 
 const Layout = styled(Row)`
   background-color: ${({ theme }) => theme.colors.washMe};
@@ -20,18 +21,14 @@ const Layout = styled(Row)`
 `;
 
 export const Header = styled(Row)`
-  position: absolute;
-  top: 0;
-  right: 0;
-  z-index: 1500;
   background-color: ${({ theme }) => theme.colors.white};
+  box-shadow: 0px 2px 4px rgba(31, 41, 55, 0.06);
   height: 46px;
   width: 100%;
-  box-shadow: 0px 2px 4px rgba(31, 41, 55, 0.06);
+  z-index: 1500;
 `;
 
 export const Content = styled(Column)`
-  padding-top: 46px;
   width: 100%;
 `;
 

@@ -1,9 +1,7 @@
 import React, { FunctionComponent, PropsWithChildren } from 'react';
-import { Divider } from '@mui/material';
 
 import Progress, { ProgressProps } from '../progress';
 import { noop } from '../../utils/noop';
-import NextLink from '../nextLink';
 import { InstallationButtonsProps } from '../installationButtons';
 
 import {
@@ -11,7 +9,6 @@ import {
   InstallationButtons,
   InstallTitle,
   Content,
-  LearnMore,
 } from './installationStepContainer.styled';
 
 interface InstallationStepContainerProps
@@ -38,13 +35,7 @@ const InstallationStepContainer: FunctionComponent<InstallationStepContainerProp
   <Container {...rest}>
     <Progress activeStep={activeStep} steps={steps} />
     <InstallTitle variant="subtitle2">{installationTitle}</InstallTitle>
-    <Content hasInfo={hasInfo}>
-      {children}
-      {/* <Divider />
-      <LearnMore variant="labelLarge">
-        Learn more about <NextLink href="docs.kubefirst.io">configuring your cluster</NextLink>
-      </LearnMore> */}
-    </Content>
+    <Content hasInfo={hasInfo}>{children}</Content>
     <InstallationButtons
       activeStep={activeStep}
       onNextButtonClick={onNextButtonClick}

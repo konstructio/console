@@ -1,10 +1,11 @@
 import React, { FunctionComponent } from 'react';
-import { FormFlowProps } from 'types/provision';
 
-import { InstallValues } from '../../../../types/redux/index';
-import ControlledAutocomplete from '../../../../components/controlledFields/AutoComplete';
-import { CIVO_REGIONS, EMAIL_REGEX } from '../../../../constants/index';
+import LearnMore from '../../../../components/learnMore';
 import ControlledTextField from '../../../../components/controlledFields/TextField';
+import ControlledAutocomplete from '../../../../components/controlledFields/AutoComplete';
+import { InstallValues } from '../../../../types/redux';
+import { FormFlowProps } from '../../../../types/provision';
+import { CIVO_REGIONS, EMAIL_REGEX } from '../../../../constants';
 
 const CivoSetupForm: FunctionComponent<FormFlowProps<InstallValues>> = ({ control }) => {
   return (
@@ -47,6 +48,7 @@ const CivoSetupForm: FunctionComponent<FormFlowProps<InstallValues>> = ({ contro
         }}
         onErrorText="Maximum 25 characters."
       />
+      <LearnMore description="Learn more about" href="" linkTitle="configuring your cluster" />
     </>
   );
 };

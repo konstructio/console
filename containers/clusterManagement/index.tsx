@@ -59,6 +59,7 @@ const ClusterManagement: FunctionComponent<ClusterManagementProps> = ({ apiUrl, 
   const handleDeleteCluster = () => {
     dispatch(deleteCluster({ apiUrl, clusterName: selectedCluster?.clusterName })).unwrap();
     handleGetClusters();
+    closeDeleteModal();
   };
 
   const handleCreateCluster = async () => {

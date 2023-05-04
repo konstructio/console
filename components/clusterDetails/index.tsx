@@ -4,6 +4,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import moment from 'moment';
 
 import Typography from '../../components/typography';
+import NextLink from '../../components/nextLink';
 import { BISCAY, EXCLUSIVE_PLUM, SALTBOX_BLUE, VOLCANIC_SAND } from '../../constants/colors';
 import { Cluster } from '../../types/provision';
 
@@ -107,6 +108,14 @@ const ClusterDetails: FunctionComponent<ClusterDetailsProps> = ({ cluster, onClo
             <Typography variant="body2" color={VOLCANIC_SAND}>
               {adminEmail}
             </Typography>
+          </Column>
+          <Column>
+            <Typography variant="labelLarge" color={EXCLUSIVE_PLUM}>
+              Console url
+            </Typography>
+            <NextLink href={`https://kubefirst.${domainName}/services`} target="_blank">
+              <Typography variant="labelLarge">{`kubefirst.${domainName}`}</Typography>
+            </NextLink>
           </Column>
         </Row>
       </Content>

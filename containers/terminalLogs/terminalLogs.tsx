@@ -184,18 +184,18 @@ const TerminalLogs: FunctionComponent = () => {
           <KeyboardArrowUpIcon color="secondary" onClick={handleSearchPrev} />
         </Search>
       )}
-      {isOpen && <FlappyKray isOpen={isOpen} closeModal={closeModal} />}
+      {isOpen && <FlappyKray isOpen closeModal={closeModal} />}
       {isYouTubeOpen && (
-        <Modal isModalVisible>
+        <Modal isOpen backgroundColor="transparent" boxShadow={false}>
           <>
             <iframe
               src="https://www.youtube.com/embed/moBZzQtr-AE"
               title="Kubefirst Channel"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture;"
               style={{
                 border: 0,
                 height: '600px',
-                width: '800px',
+                width: '1000px',
               }}
             />
             <Close onClick={closeYouTubeModal} color="secondary" fontSize="large" />

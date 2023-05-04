@@ -1,10 +1,11 @@
 import React, { FunctionComponent } from 'react';
 import { FormFlowProps } from 'types/provision';
 
-import { InstallValues } from '../../../../types/redux/index';
+import LearnMore from '../../../../components/learnMore';
 import ControlledAutocomplete from '../../../../components/controlledFields/AutoComplete';
-import { CIVO_REGIONS, EMAIL_REGEX } from '../../../../constants/index';
 import ControlledTextField from '../../../../components/controlledFields/TextField';
+import { CIVO_REGIONS, EMAIL_REGEX } from '../../../../constants';
+import { InstallValues } from '../../../../types/redux';
 
 const DigitalOceanSetupForm: FunctionComponent<FormFlowProps<InstallValues>> = ({ control }) => {
   return (
@@ -46,7 +47,9 @@ const DigitalOceanSetupForm: FunctionComponent<FormFlowProps<InstallValues>> = (
           required: true,
         }}
         onErrorText="Maximum 25 characters."
+        required
       />
+      <LearnMore description="Learn more about" href="" linkTitle="configuring your cluster" />
     </>
   );
 };
