@@ -26,20 +26,20 @@ export interface ClusterRequestProps {
 }
 
 export interface ClusterResponse {
-  ID: string;
-  CreationTimestamp: string;
-  Status: string;
-  InProgress: boolean;
-  ClusterName: string;
-  CloudProvider: string;
-  CloudRegion: string;
-  DomainName: string;
-  ClusterID: string;
-  ClusterType: string;
-  AlertsEmail: string;
-  GitProvider: string;
-  GitOwner: string;
-  GitUser: string;
+  _id: string;
+  creation_timestamp: string;
+  status: string;
+  in_progress: boolean;
+  cluster_name: string;
+  cloud_provider: string;
+  cloud_region: string;
+  domain_name: string;
+  cluster_id: string;
+  cluster_type: string;
+  alerts_email: string;
+  git_provider: string;
+  git_owner: string;
+  git_user: string;
 }
 
 export enum ClusterStatus {

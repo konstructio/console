@@ -8,7 +8,7 @@ import Typography from '../../components/typography';
 import Table from '../../components/table';
 import { DELETE_OPTION, VIEW_DETAILS_OPTION } from '../../constants/cluster';
 import { useAppDispatch, useAppSelector } from '../../redux/store';
-import { deleteCluster, getCluster, getClusters } from '../../redux/thunks/cluster';
+import { deleteCluster, getCluster, getClusters } from '../../redux/thunks/cluster.thunk';
 import { resetInstallState } from '../../redux/slices/installation.slice';
 import { setConfigValues } from '../../redux/slices/config.slice';
 import { Cluster, ClusterRequestProps } from '../../types/provision';
