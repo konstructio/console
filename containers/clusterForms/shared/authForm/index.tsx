@@ -1,6 +1,6 @@
 import React, { FunctionComponent, useEffect, useMemo } from 'react';
-import LearnMore from 'components/learnMore';
 
+import LearnMore from '../../../../components/learnMore';
 import { useInstallation } from '../../../../hooks/useInstallation';
 import { FormStep } from '../../../../constants/installation';
 import ControlledPassword from '../../../../components/controlledFields/Password';
