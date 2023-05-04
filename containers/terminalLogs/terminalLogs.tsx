@@ -21,7 +21,7 @@ import ConciseLogs from '../conciseLogs';
 import useModal from '../../hooks/useModal';
 import Modal from '../../components/modal';
 import { useAppDispatch, useAppSelector } from '../../redux/store';
-import { getCluster } from '../../redux/thunks/cluster';
+import { getCluster } from '../../redux/thunks/cluster.thunk';
 import { ClusterRequestProps } from '../../types/provision';
 import { setInstallationStep } from '../../redux/slices/installation.slice';
 import TabPanel, { Tab, a11yProps } from '../../components/tab';

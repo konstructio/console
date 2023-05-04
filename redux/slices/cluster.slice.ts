@@ -1,6 +1,6 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 
-import { createCluster, deleteCluster, getCluster, getClusters } from '../thunks/cluster';
+import { createCluster, deleteCluster, getCluster, getClusters } from '../thunks/cluster.thunk';
 import { Cluster, ClusterStatus } from '../../types/provision';
 
 export interface apiState {

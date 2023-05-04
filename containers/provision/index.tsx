@@ -1,7 +1,7 @@
 import React, { FunctionComponent, useCallback, useEffect, useMemo } from 'react';
 import { useForm } from 'react-hook-form';
 
-import { createCluster } from '../../redux/thunks/cluster';
+import { createCluster } from '../../redux/thunks/cluster.thunk';
 import InstallationStepContainer from '../../components/installationStepContainer';
 import InstallationInfoCard from '../../components/installationInfoCard';
 import { InstallationsSelection } from '../installationsSelection';

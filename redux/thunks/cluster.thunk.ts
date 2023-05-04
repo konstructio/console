@@ -6,18 +6,18 @@ import { InstallValues } from '../../types/redux';
 import { Cluster, ClusterRequestProps, ClusterResponse } from '../../types/provision';
 
 const mapClusterFromRaw = (cluster: ClusterResponse): Cluster => ({
-  id: cluster.ID,
-  clusterName: cluster.ClusterName,
-  adminEmail: cluster.AlertsEmail,
-  cloudProvider: cluster.CloudProvider,
-  cloudRegion: cluster.CloudRegion,
-  domainName: cluster.DomainName,
-  gitOwner: cluster.GitOwner,
-  gitProvider: cluster.GitProvider,
-  gitUser: cluster.GitUser,
-  type: cluster.ClusterType,
-  creationDate: cluster.CreationTimestamp,
-  status: cluster.Status,
+  id: cluster._id,
+  clusterName: cluster.cluster_name,
+  adminEmail: cluster.alerts_email,
+  cloudProvider: cluster.cloud_provider,
+  cloudRegion: cluster.cloud_region,
+  domainName: cluster.domain_name,
+  gitOwner: cluster.git_owner,
+  gitProvider: cluster.git_provider,
+  gitUser: cluster.git_user,
+  type: cluster.cluster_type,
+  creationDate: cluster.creation_timestamp,
+  status: cluster.status,
 });
 
 export const createCluster = createAsyncThunk<
