@@ -24,7 +24,7 @@ const DeleteCluster: FunctionComponent<DeleteClusterProps> = ({
 }) => {
   return (
     <Modal isOpen={isOpen}>
-      <Box sx={{ width: '400px', height: '200px' }}>
+      <Box sx={{ width: '400px', height: '200px', backgroundColor: 'white' }}>
         <Header>
           <ErrorOutlineIcon htmlColor={LAUGHING_ORANGE} />
           <Typography variant="subtitle2">Delete {clusterName}</Typography>

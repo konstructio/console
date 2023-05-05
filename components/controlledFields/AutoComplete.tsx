@@ -52,8 +52,8 @@ function ControlledAutocomplete<T extends FieldValues>({
           placeholder={placeholder}
           disabled={disabled}
           required={required}
-          onChange={(event, { value }) => {
-            // console.log({ target: { value: event.target.innerText } }, event, test);
+          onChange={(event, optionValue) => {
+            const { value } = optionValue || {};
             field.onChange({ target: { value } });
           }}
           onChangeInput={onChangeInput}

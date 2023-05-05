@@ -2,7 +2,6 @@ import styled from 'styled-components';
 
 import Column from '../column';
 import InstallationButtonsComp from '../installationButtons';
-import Row from '../row';
 import Typography from '../typography';
 import { media } from '../../utils/media';
 
@@ -12,24 +11,22 @@ export const Container = styled(Column)`
   width: 100%;
 `;
 
-export const InstallationButtons = styled(InstallationButtonsComp)`
-  bottom: 0;
-  left: 0;
-  position: absolute;
-  z-index: 1;
-`;
+export const InstallationButtons = styled(InstallationButtonsComp)``;
 
-export const Content = styled(Row)<{ hasInfo: boolean }>`
+export const Content = styled(Column)<{ hasInfo?: boolean }>`
+  align-items: center;
   gap: 24px;
-  height: 100%;
+  height: calc(100% - 285px);
   margin: 0 auto;
   overflow-y: auto;
+  width: 100%;
 
   ${({ hasInfo }) =>
     hasInfo &&
     `
-      display: flex;
+      align-items: baseline;
       flex-direction: column;
+      justify-content: center;
   `}
 
   ${media.greaterThan('lg')`
@@ -44,10 +41,4 @@ export const InstallTitle = styled(Typography)`
 
 export const Title = styled.div`
   margin: 40px auto;
-`;
-
-export const LearnMore = styled(Typography)`
-  color: ${({ theme }) => theme.colors.spunPearl};
-  display: flex;
-  gap: 4px;
 `;

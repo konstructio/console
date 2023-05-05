@@ -9,6 +9,7 @@ export const CIVO_REGIONS = [
   { label: 'New York', value: 'nyc1' },
   { label: 'Phoenix', value: 'phx1' },
   { label: 'France', value: 'fra1' },
+  { label: 'London', value: 'lon1' },
 ];
 
 export const DOCS_LINK = 'https://docs.kubefirst.io';

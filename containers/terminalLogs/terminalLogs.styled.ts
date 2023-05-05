@@ -46,6 +46,6 @@ export const TerminalView = styled.div`
 export const Close = styled(CloseIcon)`
   cursor: pointer;
   position: fixed;
-  top: 10px;
-  right: 10px;
+  top: 0px;
+  right: 20px;
 `;
