@@ -86,20 +86,8 @@ const Provision: FunctionComponent<ProvisionProps> = ({ apiUrl, useTelemetry }) 
       dispatch(setInstallValues(values));
 
       if (isProvisionStep) {
-        const params = {
-          clusterName: values.clusterName,
-          admin_email: values.alertsEmail,
-          cloud_provider: installType?.toString(),
-          cloud_region: values.cloudRegion,
-          domain_name: values.domainName,
-          git_owner: values?.gitOwner,
-          git_provider: gitProvider,
-          git_token: values?.gitToken,
-          type: 'mgmt',
-        };
-
         try {
-          await dispatch(createCluster({ apiUrl, values: params })).unwrap();
+          await dispatch(createCluster({ apiUrl, values })).unwrap();
         } catch (error) {
           //todo: error handling to be defined
         }

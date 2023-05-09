@@ -117,17 +117,19 @@ const AuthForm: FunctionComponent<FormFlowProps<InstallValues>> = ({ control, se
           placeholder="Select"
         />
       )}
-      <ControlledPassword
-        control={control}
-        name="cloudToken"
-        label={apiKeyInfo?.label as string}
-        helperText={apiKeyInfo?.helperText}
-        required
-        rules={{
-          required: true,
-        }}
-        onErrorText="Invalid token."
-      />
+      {apiKeyInfo?.fieldKeys.map(({ label, name, helperText }) => (
+        <ControlledPassword
+          key={name}
+          control={control}
+          name={`${apiKeyInfo.authKey}.${name}`}
+          label={label}
+          helperText={helperText}
+          required
+          rules={{
+            required: true,
+          }}
+        />
+      ))}
       <LearnMore description="Learn more about" href="" linkTitle="authentication" />
     </>
   );

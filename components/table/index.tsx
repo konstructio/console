@@ -23,8 +23,9 @@ const Table: FunctionComponent<DataGridProps> = ({ ...props }) => {
         hideFooter
         disableColumnFilter
         disableColumnMenu
-        disableRowSelectionOnClick
         rowHeight={44}
+        columnHeaderHeight={44}
+        rowSelection
         sx={{
           [`.${gridClasses.columnHeaders}`]: {
             height: '44px',
@@ -34,6 +35,7 @@ const Table: FunctionComponent<DataGridProps> = ({ ...props }) => {
             background: CHILD_OF_LIGHT,
             color: SALTBOX_BLUE,
             textTransform: 'uppercase',
+            padding: '0 16px',
             ...typographies.labelMedium,
           },
           [`.${gridClasses.columnSeparator}`]: {
@@ -45,6 +47,21 @@ const Table: FunctionComponent<DataGridProps> = ({ ...props }) => {
           [`.${gridClasses.columnHeader}:focus-within`]: {
             outline: 'none !important',
           },
+          [`.${gridClasses.row}`]: {
+            background: 'white',
+          },
+          [`.${gridClasses.row}:hover`]: {
+            background: 'white',
+          },
+          [`.${gridClasses.cell}`]: {
+            padding: '0 16px',
+          },
+          [`.${gridClasses.main}`]: {
+            'background': 'white',
+            'border-radius': '4px',
+          },
+          'filter': 'drop-shadow(0px 4px 12px rgba(0, 0, 0, 0.04))',
+          'border': 0,
         }}
       />
     </Box>
