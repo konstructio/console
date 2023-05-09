@@ -70,7 +70,7 @@ const ClusterDetails: FunctionComponent<ClusterDetailsProps> = ({ cluster, onClo
               Created
             </Typography>
             <Typography variant="body2" color={VOLCANIC_SAND}>
-              {moment(new Date(creationDate as string)).format('YYYY MMM DD, HH:mm:ss')}
+              {moment(new Date(creationDate as string)).format('DD MMM YYYY, HH:mm:ss')}
             </Typography>
           </Column>
           <Column>

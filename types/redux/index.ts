@@ -8,32 +8,45 @@ export interface LocalInstallValues extends GitValues {
   templateRepoUrl?: string;
 }
 
-export interface ClusterValues {
+export interface AuthValues {
+  aws_auth?: {
+    access_key_id: string;
+    secret_access_key: string;
+    session_token: string;
+  };
+  civo_auth?: {
+    token: string;
+  };
+  digitalocean_auth?: {
+    token: string;
+    spaces_key: string;
+    spaces_secret: string;
+  };
+  vultr_auth?: {
+    token: string;
+  };
+}
+
+export interface ClusterValues extends AuthValues {
   alertsEmail?: string;
-  kbotPassword?: string;
   cloudRegion?: string;
+  domainName?: string;
   clusterName?: string;
 }
 
 export interface AwsInstallValues {
   profile?: string;
-  awsNodesSpot?: boolean;
-  hostedZoneValid?: boolean;
-  hostedZoneName?: string;
+  domainName?: string;
   isValid?: boolean;
 }
 
-export type AwsClusterValues = AwsInstallValues & ClusterValues;
-
-export type AwsGithubClusterValues = AwsClusterValues & GitValues;
+export type AwsClusterValues = AwsInstallValues & ClusterValues & GitValues;
 
 export interface CivoInstallValues extends ClusterValues {
   civoToken?: string;
   userName?: string;
-  domainName?: string;
 }
-export type CivoClusterValues = CivoInstallValues & ClusterValues;
-export type CivoGithubClusterValues = CivoClusterValues & GitValues;
+export type CivoClusterValues = CivoInstallValues & ClusterValues & GitValues;
 
 export type InstallValues = AwsClusterValues & LocalInstallValues & CivoInstallValues;
 
@@ -53,4 +66,13 @@ export type InstallationInfo = {
   code?: string;
   ctaDescription: string;
   ctaLink?: string;
+};
+
+export type AuthKeys = {
+  authKey: string;
+  fieldKeys: Array<{
+    name: string;
+    label: string;
+    helperText?: string;
+  }>;
 };

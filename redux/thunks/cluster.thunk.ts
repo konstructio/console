@@ -27,8 +27,35 @@ export const createCluster = createAsyncThunk<
     dispatch: AppDispatch;
     state: RootState;
   }
->('cluster/provisioning', async ({ apiUrl, values }) => {
-  const res = await axios.post(`${apiUrl}/cluster/${values.clusterName || 'kubefirst'}`, values);
+>('cluster/provisioning', async ({ apiUrl, values }, { getState }) => {
+  const {
+    installation: { installType, gitProvider },
+  } = getState();
+
+  const params = {
+    clusterName: values.clusterName,
+    admin_email: values.alertsEmail,
+    cloud_provider: installType?.toString(),
+    cloud_region: values.cloudRegion,
+    domain_name: values.domainName,
+    git_owner: values?.gitOwner,
+    git_provider: gitProvider,
+    git_token: values?.gitToken,
+    type: 'mgmt',
+    aws_auth: {
+      ...values.aws_auth,
+    },
+    civo_auth: {
+      ...values.civo_auth,
+    },
+    digitalocean_auth: {
+      ...values.digitalocean_auth,
+    },
+    vultr_auth: {
+      ...values.vultr_auth,
+    },
+  };
+  const res = await axios.post(`${apiUrl}/cluster/${values.clusterName || 'kubefirst'}`, params);
 
   if ('error' in res) {
     throw res.error;

@@ -2,7 +2,7 @@ import { FunctionComponent, useMemo } from 'react';
 
 import { FormStep, LocalFormStep } from '../constants/installation';
 import { GitProvider } from '../types';
-import { InstallValues, InstallationInfo, InstallationType } from '../types/redux';
+import { AuthKeys, InstallValues, InstallationInfo, InstallationType } from '../types/redux';
 import { CivoFormFlow } from '../containers/clusterForms/civo';
 import { AwsFormFlow } from '../containers/clusterForms/aws';
 import { LocalFormFlow } from '../containers/clusterForms/k3d';
@@ -129,23 +129,63 @@ const getIsProvisionStep = (type: InstallationType, step: FormStep | LocalFormSt
 };
 
 const getApiKeyInfo = (type: InstallationType) => {
-  const apiKeyInfo: Record<InstallationType, { label: string; helperText?: string } | null> = {
+  const apiKeyInfo: Record<InstallationType, AuthKeys | null> = {
     [InstallationType.LOCAL]: null,
     [InstallationType.AWS]: {
-      label: 'AWS API key',
+      authKey: 'aws_auth',
+      fieldKeys: [
+        {
+          name: 'access_key_id',
+          label: 'AWS access key id',
+        },
+        {
+          name: 'secret_access_key',
+          label: 'AWS Secret access key',
+        },
+        {
+          name: 'session_token',
+          label: 'AWS session token',
+        },
+      ],
     },
     [InstallationType.CIVO]: {
-      label: 'CIVO API key',
-      helperText: 'Retrieve your key at https://dashboard.civo.com/security',
+      authKey: 'civo_auth',
+      fieldKeys: [
+        {
+          name: 'token',
+          label: 'CIVO API key',
+          helperText: 'Retrieve your key at https://dashboard.civo.com/security',
+        },
+      ],
     },
     [InstallationType.DIGITAL_OCEAN]: {
-      label: 'DigitalOcean authentication token',
-      helperText:
-        'Create your token by following the instructions at https://cloud.digitalocean.com/account/api',
+      authKey: 'digitalocean_auth',
+      fieldKeys: [
+        {
+          name: 'token',
+          label: 'DigitalOcean authentication token',
+          helperText:
+            'Create your token by following the instructions at https://cloud.digitalocean.com/account/api',
+        },
+        {
+          name: 'spaces_key',
+          label: 'DigitalOcean spaces key',
+        },
+        {
+          name: 'spaces_secret',
+          label: 'DigitalOcean spaces secret',
+        },
+      ],
     },
     [InstallationType.VULTR]: {
-      label: 'Vultr API key',
-      helperText: 'Retrieve your key at https://my.vultr.com/settings/#settingsapi',
+      authKey: 'vultr_auth',
+      fieldKeys: [
+        {
+          name: 'token',
+          label: 'Vultr API key',
+          helperText: 'Retrieve your key at https://my.vultr.com/settings/#settingsapi',
+        },
+      ],
     },
   };
 
