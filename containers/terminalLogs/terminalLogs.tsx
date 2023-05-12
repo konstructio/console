@@ -23,9 +23,11 @@ import Modal from '../../components/modal';
 import { useAppDispatch, useAppSelector } from '../../redux/store';
 import { getCluster } from '../../redux/thunks/cluster.thunk';
 import { ClusterRequestProps } from '../../types/provision';
-import { setInstallationStep } from '../../redux/slices/installation.slice';
+import { clearError, setError } from '../../redux/slices/installation.slice';
+import { setCompletedSteps } from '../../redux/slices/cluster.slice';
 import TabPanel, { Tab, a11yProps } from '../../components/tab';
 import FlappyKray from '../../components/flappyKray';
+import { CLUSTER_CHECKS } from '../../constants/cluster';
 
 import { Close, Container, Search, TerminalView } from './terminalLogs.styled';
 
@@ -48,8 +50,15 @@ const TerminalLogs: FunctionComponent = () => {
   const dispatch = useAppDispatch();
   const {
     config: { apiUrl = '' },
-    cluster: { isProvisioned, isProvisioning },
-    installation: { installationStep, values },
+    cluster: {
+      isProvisioned,
+      isProvisioning,
+      isError,
+      lastErrorCondition,
+      selectedCluster,
+      completedSteps,
+    },
+    installation: { values },
   } = useAppSelector(({ config, cluster, installation }) => ({
     installation,
     config,
@@ -95,23 +104,30 @@ const TerminalLogs: FunctionComponent = () => {
   const getClusterInterval = (params: ClusterRequestProps) => {
     return setInterval(async () => {
       dispatch(getCluster(params)).unwrap();
-    }, 10000);
+    }, 5000);
   };
 
   useEffect(() => {
-    const clusterName = values?.clusterName as string;
+    const clusterName = values?.clusterName;
     if (isProvisioning && !isProvisioned && clusterName) {
       interval.current = getClusterInterval({ apiUrl, clusterName });
     }
 
     if (isProvisioned) {
-      dispatch(setInstallationStep(installationStep + 1));
       clearInterval(interval.current);
     }
 
-    return () => clearInterval(interval.current);
+    if (isError) {
+      dispatch(setError({ error: lastErrorCondition }));
+      clearInterval(interval.current);
+    }
+
+    return () => {
+      clearInterval(interval.current);
+      dispatch(clearError());
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isProvisioning, isProvisioned]);
+  }, [isProvisioning, isProvisioned, isError]);
 
   useEffect(() => {
     if (terminalRef.current) {
@@ -148,6 +164,18 @@ const TerminalLogs: FunctionComponent = () => {
     }
   }, [apiUrl, loadAddons]);
 
+  useEffect(() => {
+    Object.keys(CLUSTER_CHECKS).forEach((checkKey) => {
+      const step = CLUSTER_CHECKS[checkKey as string];
+      const isStepCompleted = selectedCluster?.checks[checkKey];
+      const isStepAdded = completedSteps.includes(step);
+
+      if (isStepCompleted && !isStepAdded) {
+        dispatch(setCompletedSteps([...completedSteps, step]));
+      }
+    });
+  }, [completedSteps, dispatch, selectedCluster?.checks]);
+
   return (
     <Container>
       <Box>
@@ -163,7 +191,7 @@ const TerminalLogs: FunctionComponent = () => {
         </Tabs>
       </Box>
       <TabPanel value={activeTab} index={TERMINAL_TABS.CONCISE}>
-        <ConciseLogs />
+        <ConciseLogs completedSteps={completedSteps} />
       </TabPanel>
       <TabPanel value={activeTab} index={TERMINAL_TABS.VERBOSE}>
         <TerminalView ref={terminalRef} />

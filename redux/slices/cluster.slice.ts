@@ -3,7 +3,7 @@ import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 import { createCluster, deleteCluster, getCluster, getClusters } from '../thunks/cluster.thunk';
 import { Cluster, ClusterStatus } from '../../types/provision';
 
-export interface apiState {
+export interface ApiState {
   loading: boolean;
   isProvisioning: boolean;
   isProvisioned: boolean;
@@ -11,24 +11,47 @@ export interface apiState {
   isDeleting: boolean;
   status?: ClusterStatus;
   isError: boolean;
+  lastErrorCondition?: string;
   clusters: Array<Cluster>;
+  selectedCluster?: Cluster;
+  completedSteps: Array<string>;
 }
 
-export const initialState: apiState = {
-  isProvisioning: false,
+export const initialState: ApiState = {
+  isProvisioning: true,
   isProvisioned: false,
   isError: false,
+  lastErrorCondition: undefined,
   isDeleting: false,
   isDeleted: false,
   status: undefined,
   loading: false,
   clusters: [],
+  selectedCluster: undefined,
+  completedSteps: [],
 };
 
 const clusterSlice = createSlice({
   name: 'cluster',
   initialState,
-  reducers: {},
+  reducers: {
+    setCompletedSteps: (state, action) => {
+      state.completedSteps = action.payload;
+    },
+    clearClusterState: (state) => {
+      state.isProvisioning = true;
+      state.isProvisioned = false;
+      state.isError = false;
+      state.lastErrorCondition = undefined;
+      state.isDeleting = false;
+      state.isDeleted = false;
+      state.status = undefined;
+      state.loading = false;
+      state.clusters = [];
+      state.selectedCluster = undefined;
+      state.completedSteps = [];
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(createCluster.pending, (state) => {
@@ -52,6 +75,7 @@ const clusterSlice = createSlice({
         state.isError = true;
       })
       .addCase(getCluster.fulfilled, (state, { payload }: PayloadAction<Cluster>) => {
+        state.selectedCluster = payload;
         state.loading = false;
         state.status = payload.status as ClusterStatus;
 
@@ -63,6 +87,9 @@ const clusterSlice = createSlice({
           state.isProvisioned = true;
           state.isProvisioning = false;
           state.isError = false;
+        } else if (state.status === ClusterStatus.ERROR) {
+          state.isError = true;
+          state.lastErrorCondition = payload.lastErrorCondition;
         }
       })
       .addCase(getClusters.fulfilled, (state, { payload }: PayloadAction<Array<Cluster>>) => {
@@ -72,5 +99,7 @@ const clusterSlice = createSlice({
       });
   },
 });
+
+export const { setCompletedSteps, clearClusterState } = clusterSlice.actions;
 
 export const clusterReducer = clusterSlice.reducer;

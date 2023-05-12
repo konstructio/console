@@ -13,7 +13,8 @@ export const Container = styled(Column)`
 
 export const InstallationButtons = styled(InstallationButtonsComp)``;
 
-export const Content = styled(Column)<{ hasInfo?: boolean }>`
+export const Content = styled(Column)<{ hasInfo?: boolean; isProvisionStep: boolean }>`
+  background-color: ${({ isProvisionStep, theme }) => isProvisionStep && theme.colors.white};
   align-items: center;
   gap: 24px;
   height: calc(100% - 285px);

@@ -1,7 +1,7 @@
 import React, { FunctionComponent, useCallback } from 'react';
 import { UseFormReset } from 'react-hook-form';
 
-import { setGitProvider, setInstallType } from '../../redux/slices/installation.slice';
+import { clearError, setGitProvider, setInstallType } from '../../redux/slices/installation.slice';
 import GitProviderButton from '../../components/gitProviderButton';
 import CloudProviderCard from '../../components/cloudProviderCard';
 import { useAppDispatch, useAppSelector } from '../../redux/store';
@@ -29,20 +29,26 @@ export const InstallationsSelection: FunctionComponent<InstallationsSelectionPro
 
   const { installType, gitProvider } = useAppSelector(({ installation }) => installation);
 
+  const clearState = useCallback(() => {
+    dispatch(clearGitState());
+    dispatch(clearError());
+    reset();
+  }, [dispatch, reset]);
+
   const handleInstallTypeChange = useCallback(
     (type: InstallationType) => {
       dispatch(setInstallType(type));
-      dispatch(clearGitState());
-      reset();
+      clearState();
     },
-    [dispatch, reset],
+    [clearState, dispatch],
   );
 
   const handleGitProviderChange = useCallback(
     (provider: GitProvider) => {
       dispatch(setGitProvider(provider));
+      clearState();
     },
-    [dispatch],
+    [clearState, dispatch],
   );
 
   return (

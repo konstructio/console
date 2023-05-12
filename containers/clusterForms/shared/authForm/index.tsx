@@ -1,23 +1,31 @@
-import React, { FunctionComponent, useEffect, useMemo } from 'react';
+import React, { ChangeEvent, FunctionComponent, useEffect, useMemo, useState } from 'react';
+import debounce from 'lodash/debounce';
 
-import LearnMore from '../../../../components/learnMore';
 import { useInstallation } from '../../../../hooks/useInstallation';
-import { FormStep } from '../../../../constants/installation';
+import LearnMore from '../../../../components/learnMore';
 import ControlledPassword from '../../../../components/controlledFields/Password';
 import ControlledTextField from '../../../../components/controlledFields/TextField';
 import ControlledAutocomplete from '../../../../components/controlledFields/AutoComplete';
+import { clearError, setError } from '../../../../redux/slices/installation.slice';
+import { useAppDispatch, useAppSelector } from '../../../../redux/store';
 import { GitProvider } from '../../../../types';
 import { FormFlowProps } from '../../../../types/provision';
 import { InstallValues, InstallationType } from '../../../../types/redux/index';
-import { useAppDispatch, useAppSelector } from '../../../../redux/store';
+import { FormStep } from '../../../../constants/installation';
 import {
+  getGitHubOrgRepositories,
+  getGitHubOrgTeams,
+  getGitLabProjects,
   getGithubUser,
   getGithubUserOrganizations,
   getGitlabGroups,
   getGitlabUser,
 } from '../../../../redux/thunks/git.thunk';
+import { clearGitValidationState, setToken } from '../../../../redux/slices/git.slice';
 
 const AuthForm: FunctionComponent<FormFlowProps<InstallValues>> = ({ control, setValue }) => {
+  const [isGitRequested, setIsGitRequested] = useState<boolean>();
+  const [selectedGitOwner, setSelectedGitOwner] = useState<string>();
   const dispatch = useAppDispatch();
 
   const {
@@ -28,6 +36,12 @@ const AuthForm: FunctionComponent<FormFlowProps<InstallValues>> = ({ control, se
     gitlabGroups,
     gitStateLoading,
     installationType,
+    isTokenValid,
+    token = '',
+    hasExistingRepos,
+    hasExistingTeams,
+    loadedRepositories,
+    loadedTeams,
   } = useAppSelector(({ installation, git }) => ({
     currentStep: installation.installationStep,
     installationType: installation.installType,
@@ -43,7 +57,25 @@ const AuthForm: FunctionComponent<FormFlowProps<InstallValues>> = ({ control, se
   );
   const isGitHub = useMemo(() => gitProvider === GitProvider.GITHUB, [gitProvider]);
 
+  const validateGitOwner = async (gitOwner: string) => {
+    setSelectedGitOwner(gitOwner);
+    await dispatch(clearError());
+    await dispatch(clearGitValidationState());
+    if (gitOwner) {
+      if (isGitHub) {
+        await dispatch(getGitHubOrgRepositories({ token, organization: gitOwner })).unwrap();
+        await dispatch(getGitHubOrgTeams({ token, organization: gitOwner })).unwrap();
+      } else {
+        await dispatch(getGitLabProjects({ token, group: gitOwner }));
+      }
+    }
+  };
+
   const handleGitTokenBlur = async (token: string) => {
+    await dispatch(clearGitValidationState());
+    await dispatch(clearError());
+    await dispatch(setToken(token));
+
     try {
       if (isGitHub) {
         await dispatch(getGithubUser(token)).unwrap();
@@ -55,6 +87,16 @@ const AuthForm: FunctionComponent<FormFlowProps<InstallValues>> = ({ control, se
     } catch (error) {
       // error processed in redux state
     }
+
+    setIsGitRequested(true);
+  };
+
+  const gitTokenDebounce = debounce((token) => handleGitTokenBlur(token), 1000);
+  const handleOnChangeToken = ({ target }: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { value } = target;
+    if (value) {
+      gitTokenDebounce(value);
+    }
   };
 
   const gitLabel = useMemo(() => (isGitHub ? 'GitHub' : 'GitLab'), [isGitHub]);
@@ -63,7 +105,50 @@ const AuthForm: FunctionComponent<FormFlowProps<InstallValues>> = ({ control, se
     if (githubUser?.login || gitlabUser?.name) {
       setValue('userName', githubUser?.login || gitlabUser?.name);
     }
-  }, [githubUser, gitlabUser, setValue]);
+  }, [dispatch, githubUser, gitlabUser, setValue]);
+
+  const gitErrorLabel = useMemo(
+    () => (isGitHub ? 'GitHub organization' : 'GitLab group'),
+    [isGitHub],
+  );
+
+  useEffect(() => {
+    if (loadedRepositories && loadedTeams && selectedGitOwner) {
+      if (hasExistingRepos) {
+        dispatch(
+          setError({
+            error: `<strong>Error </strong>${gitErrorLabel}<strong> ${selectedGitOwner} </strong>
+              already has a ${
+                isGitHub ? 'repository' : 'project'
+              } named <strong>gitops</strong> or <strong>metaphor</strong>. 
+              Please remove or rename them to continue.`,
+          }),
+        );
+      } else if (hasExistingTeams) {
+        dispatch(
+          setError({
+            error: `<strong>Error</strong>${gitErrorLabel} <strong> ${selectedGitOwner} </strong> 
+            already has a team named <strong>admins</strong> or <strong>developers</strong>. 
+            Please remove or rename them to continue.`,
+          }),
+        );
+      }
+    }
+
+    return () => {
+      dispatch(clearError());
+      // dispatch(clearGitValidationState());
+    };
+  }, [
+    dispatch,
+    gitErrorLabel,
+    hasExistingRepos,
+    hasExistingTeams,
+    isGitHub,
+    loadedRepositories,
+    loadedTeams,
+    selectedGitOwner,
+  ]);
 
   return (
     <>
@@ -75,7 +160,9 @@ const AuthForm: FunctionComponent<FormFlowProps<InstallValues>> = ({ control, se
         rules={{
           required: true,
         }}
+        error={isGitRequested && !isTokenValid}
         onBlur={handleGitTokenBlur}
+        onChange={handleOnChangeToken}
         onErrorText="Invalid token."
       />
       <ControlledTextField
@@ -93,7 +180,8 @@ const AuthForm: FunctionComponent<FormFlowProps<InstallValues>> = ({ control, se
           required
           name="gitOwner"
           rules={{ required: true }}
-          disabled={!githubUser}
+          disabled={!isTokenValid}
+          onChange={validateGitOwner}
           options={
             githubUserOrganizations &&
             githubUserOrganizations.map(({ login }) => ({ label: login, value: login }))
@@ -108,7 +196,8 @@ const AuthForm: FunctionComponent<FormFlowProps<InstallValues>> = ({ control, se
           required
           name="gitOwner"
           rules={{ required: true }}
-          disabled={!gitlabUser}
+          disabled={!isTokenValid}
+          onChange={validateGitOwner}
           options={
             gitlabGroups && gitlabGroups.map(({ name, path }) => ({ label: name, value: path }))
           }

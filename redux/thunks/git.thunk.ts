@@ -1,9 +1,14 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { GitLabGroup, GitLabUser } from 'types/gitlab';
+import { GitLabGroup, GitLabProject, GitLabUser } from 'types/gitlab';
 
 import { githubApi } from '../../services/github';
 import { gitlabApi } from '../../services/gitlab';
-import { GithubUser, GithubUserOrganization } from '../../types/github';
+import {
+  GithubOrganizationRepos,
+  GithubOrganizationTeams,
+  GithubUser,
+  GithubUserOrganization,
+} from '../../types/github';
 
 export const getGithubUser = createAsyncThunk<GithubUser, string>(
   'git/getGithubUser',
@@ -31,6 +36,36 @@ export const getGithubUserOrganizations = createAsyncThunk<GithubUserOrganizatio
   },
 );
 
+export const getGitHubOrgRepositories = createAsyncThunk<
+  GithubOrganizationRepos[],
+  { token: string; organization: string }
+>('git/getGitHubRepositories', async ({ token, organization }) => {
+  return (
+    await githubApi.get<GithubOrganizationRepos[]>(`/orgs/${organization}/repos`, {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Accept': 'application/vnd.github+json',
+        'X-GitHub-Api-Version': '2022-11-28',
+      },
+    })
+  ).data;
+});
+
+export const getGitHubOrgTeams = createAsyncThunk<
+  GithubOrganizationTeams[],
+  { token: string; organization: string }
+>('git/getGitHubOrgTeams', async ({ token, organization }) => {
+  return (
+    await githubApi.get<GithubOrganizationTeams[]>(`/orgs/${organization}/teams`, {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Accept': 'application/vnd.github+json',
+        'X-GitHub-Api-Version': '2022-11-28',
+      },
+    })
+  ).data;
+});
+
 export const getGitlabUser = createAsyncThunk<GitLabUser, string>(
   'git/getGitlabUser',
   async (token) => {
@@ -54,3 +89,16 @@ export const getGitlabGroups = createAsyncThunk<GitLabGroup[], string>(
     ).data;
   },
 );
+
+export const getGitLabProjects = createAsyncThunk<
+  GitLabProject[],
+  { token: string; group: string }
+>('git/getGitLabProjects', async ({ token, group }) => {
+  return (
+    await gitlabApi.get<GitLabProject[]>(`/groups/${group}/projects`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+  ).data;
+});

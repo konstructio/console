@@ -19,3 +19,6 @@ export const ANALYTICS_ID = '0gAYkX5RV3vt7s4pqCOOsDb6WHPLT30M';
 export const EMAIL_REGEX = /.+@.+\..+/;
 
 export const DOMAIN_REGEX = new RegExp(/[a-zA-Z0-9@:%._+~#=]{2,256}\.[a-z]{2,6}/);
+
+export const KUBEFIRST_REPOSITORIES = ['gitops', 'metaphor'];
+export const KUBEFIRST_TEAMS = ['admins', 'developers'];

@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useState } from 'react';
+import React, { useState } from 'react';
 import { Control, Controller, FieldValues, UseControllerProps } from 'react-hook-form';
 
 import Autocomplete from '../autocomplete/index';
@@ -17,7 +17,7 @@ export interface ControlledTextFieldProps<T extends FieldValues> extends UseCont
   placeholder?: string;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   filterOptions?: (options: any[]) => any[];
-  onChangeInput?: (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
+  onChange?: (value: string) => void;
   options: Array<{ value: string; label: string }>;
 }
 
@@ -25,7 +25,7 @@ function ControlledAutocomplete<T extends FieldValues>({
   label,
   name,
   required,
-  onChangeInput,
+  onChange,
   filterOptions,
   options,
   rules,
@@ -55,8 +55,8 @@ function ControlledAutocomplete<T extends FieldValues>({
           onChange={(event, optionValue) => {
             const { value } = optionValue || {};
             field.onChange({ target: { value } });
+            onChange && onChange(value);
           }}
-          onChangeInput={onChangeInput}
           filterOptions={filterOptions}
           options={options}
           label={label}

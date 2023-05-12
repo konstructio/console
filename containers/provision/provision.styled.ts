@@ -14,9 +14,13 @@ export const Form = styled(Box)`
   height: 100%;
 `;
 
-export const FormContent = styled(FormContainer)<{ hasInfo: boolean; isLastStep: boolean }>`
+export const FormContent = styled(FormContainer)<{
+  hasInfo: boolean;
+  isLastStep: boolean;
+  isProvisionStep: boolean;
+}>`
   background-color: ${({ isLastStep, theme }) => (isLastStep ? 'transparent' : theme.colors.white)};
-  box-shadow: ${({ isLastStep }) => isLastStep && 'none'};
+  box-shadow: ${({ isProvisionStep, isLastStep }) => (isLastStep || isProvisionStep) && 'none'};
   gap: 32px;
   width: 1024px;
 

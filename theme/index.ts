@@ -36,6 +36,7 @@ import {
   FIRE_BRICK,
   MAGNOLIA,
   ROYAL_PURPLE,
+  SEFID_WHITE,
 } from '../constants/colors';
 
 export const theme: DefaultTheme = {
@@ -75,5 +76,6 @@ export const theme: DefaultTheme = {
     fireBrick: FIRE_BRICK,
     magnolia: MAGNOLIA,
     royanPurple: ROYAL_PURPLE,
+    sefidWhite: SEFID_WHITE,
   },
 };

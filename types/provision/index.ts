@@ -40,6 +40,25 @@ export interface ClusterResponse {
   git_provider: string;
   git_owner: string;
   git_user: string;
+  last_condition: string;
+  install_tools_check: boolean;
+  domain_liveness_check: boolean;
+  state_store_creds_check: boolean;
+  state_store_create_check: boolean;
+  git_init_check: boolean;
+  kbot_setup_check: boolean;
+  gitops_ready_check: boolean;
+  git_terraform_apply_check: boolean;
+  gitops_pushed_check: boolean;
+  cloud_terraform_apply_check: boolean;
+  cluster_secrets_created_check: boolean;
+  argocd_install_check: boolean;
+  argocd_initialize_check: boolean;
+  argocd_create_registry_check: boolean;
+  argocd_delete_registry_check: boolean;
+  vault_initialized_check: boolean;
+  vault_terraform_apply_check: boolean;
+  users_terraform_apply_check: boolean;
 }
 
 export enum ClusterStatus {
@@ -63,4 +82,26 @@ export interface Cluster extends Row {
   type: string;
   creationDate?: string;
   status?: string;
+  lastErrorCondition: string;
+  checks: {
+    install_tools_check: boolean;
+    domain_liveness_check: boolean;
+    state_store_creds_check: boolean;
+    state_store_create_check: boolean;
+    git_init_check: boolean;
+    kbot_setup_check: boolean;
+    gitops_ready_check: boolean;
+    git_terraform_apply_check: boolean;
+    gitops_pushed_check: boolean;
+    cloud_terraform_apply_check: boolean;
+    cluster_secrets_created_check: boolean;
+    argocd_install_check: boolean;
+    argocd_initialize_check: boolean;
+    argocd_create_registry_check: boolean;
+    argocd_delete_registry_check: boolean;
+    vault_initialized_check: boolean;
+    vault_terraform_apply_check: boolean;
+    users_terraform_apply_check: boolean;
+    [key: string]: boolean;
+  };
 }
