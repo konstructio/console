@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { ChangeEvent, useState } from 'react';
 import { Control, Controller, FieldValues, UseControllerProps } from 'react-hook-form';
 
 import Password from '../password/index';
@@ -15,6 +15,7 @@ export interface ControlledTextFieldProps<T extends FieldValues> extends UseCont
   error?: boolean;
   onErrorText?: string;
   onBlur?: (value: string) => void;
+  onChange?: (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
 }
 
 function ControlledPassword<T extends FieldValues>({
@@ -26,6 +27,7 @@ function ControlledPassword<T extends FieldValues>({
   error,
   onErrorText,
   onBlur,
+  onChange,
   ...props
 }: ControlledTextFieldProps<T>) {
   const [isBlur, setIsBlur] = useState(false);
@@ -42,6 +44,10 @@ function ControlledPassword<T extends FieldValues>({
             field.onBlur();
             setIsBlur(true);
             onBlur && onBlur(field.value);
+          }}
+          onChange={(event) => {
+            field.onChange(event);
+            onChange && onChange(event);
           }}
           inputRef={field.ref}
           fullWidth

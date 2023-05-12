@@ -1,8 +1,11 @@
-import React, { FunctionComponent, PropsWithChildren } from 'react';
+import React, { FunctionComponent, PropsWithChildren, useMemo } from 'react';
 
 import Progress, { ProgressProps } from '../progress';
 import { noop } from '../../utils/noop';
 import { InstallationButtonsProps } from '../installationButtons';
+import LinearProgress from '../linearProgress';
+import { useAppSelector } from '../../redux/store';
+import { CLUSTER_CHECKS } from '../../constants/cluster';
 
 import {
   Container,
@@ -17,6 +20,7 @@ interface InstallationStepContainerProps
     InstallationButtonsProps {
   hasInfo?: boolean;
   installationTitle: string;
+  isProvisionStep: boolean;
 }
 
 const InstallationStepContainer: FunctionComponent<InstallationStepContainerProps> = ({
@@ -24,6 +28,7 @@ const InstallationStepContainer: FunctionComponent<InstallationStepContainerProp
   steps,
   hasInfo,
   installationTitle,
+  isProvisionStep,
   showBackButton,
   onNextButtonClick,
   onBackButtonClick = noop,
@@ -31,20 +36,36 @@ const InstallationStepContainer: FunctionComponent<InstallationStepContainerProp
   nextButtonDisabled,
   children,
   ...rest
-}) => (
-  <Container {...rest}>
-    <Progress activeStep={activeStep} steps={steps} />
-    <InstallTitle variant="subtitle2">{installationTitle}</InstallTitle>
-    <Content hasInfo={hasInfo}>{children}</Content>
-    <InstallationButtons
-      activeStep={activeStep}
-      onNextButtonClick={onNextButtonClick}
-      onBackButtonClick={onBackButtonClick}
-      showBackButton={showBackButton}
-      nextButtonText={nextButtonText}
-      nextButtonDisabled={nextButtonDisabled}
-    />
-  </Container>
-);
+}) => {
+  const { completedSteps } = useAppSelector(({ cluster }) => ({
+    ...cluster,
+  }));
+  const progress = useMemo(
+    () => Math.round((completedSteps.length / Object.keys(CLUSTER_CHECKS).length) * 100),
+    [completedSteps.length],
+  );
+
+  return (
+    <Container {...rest}>
+      <Progress activeStep={activeStep} steps={steps} />
+      {isProvisionStep ? (
+        <LinearProgress progress={progress} />
+      ) : (
+        <InstallTitle variant="subtitle2">{installationTitle}</InstallTitle>
+      )}
+      <Content hasInfo={hasInfo} isProvisionStep={isProvisionStep}>
+        {children}
+      </Content>
+      <InstallationButtons
+        activeStep={activeStep}
+        onNextButtonClick={onNextButtonClick}
+        onBackButtonClick={onBackButtonClick}
+        showBackButton={showBackButton}
+        nextButtonText={nextButtonText}
+        nextButtonDisabled={nextButtonDisabled}
+      />
+    </Container>
+  );
+};
 
 export default InstallationStepContainer;

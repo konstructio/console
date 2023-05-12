@@ -8,6 +8,8 @@ export interface InstallationState {
   gitProvider?: GitProvider;
   installType?: InstallationType;
   installationStep: number;
+  error?: string;
+  errorDetails?: string;
 }
 
 export const initialState: InstallationState = {
@@ -35,16 +37,29 @@ const installationSlice = createSlice({
       state.gitProvider = undefined;
       state.installType = undefined;
       state.values = undefined;
+      state.error = undefined;
+      state.errorDetails = undefined;
+    },
+    setError: (state, action: PayloadAction<{ error?: string; errorDetails?: string }>) => {
+      const { error, errorDetails } = action.payload;
+      state.error = error;
+      state.errorDetails = errorDetails;
+    },
+    clearError: (state) => {
+      state.error = undefined;
+      state.errorDetails = undefined;
     },
   },
 });
 
 export const {
+  clearError,
   setInstallationStep,
   setInstallValues,
   setInstallType,
   setGitProvider,
   resetInstallState,
+  setError,
 } = installationSlice.actions;
 
 export const installationReducer = installationSlice.reducer;

@@ -6,6 +6,7 @@ import InstallationStepContainer from '../../components/installationStepContaine
 import InstallationInfoCard from '../../components/installationInfoCard';
 import { InstallationsSelection } from '../installationsSelection';
 import {
+  clearError,
   resetInstallState,
   setInstallValues,
   setInstallationStep,
@@ -15,7 +16,9 @@ import { useInstallation } from '../../hooks/useInstallation';
 import { InstallValues, InstallationType } from '../../types/redux';
 import { GitProvider } from '../../types';
 import { setConfigValues } from '../../redux/slices/config.slice';
+import { clearClusterState } from '../../redux/slices/cluster.slice';
 import AdvancedOptions from '../clusterForms/shared/advancedOptions';
+import ErrorBanner from '../../components/errorBanner';
 
 import { AdvancedOptionsContainer, Form, FormContent } from './provision.styled';
 
@@ -26,7 +29,7 @@ export interface ProvisionProps {
 
 const Provision: FunctionComponent<ProvisionProps> = ({ apiUrl, useTelemetry }) => {
   const dispatch = useAppDispatch();
-  const { installType, gitProvider, installationStep, values } = useAppSelector(
+  const { installType, gitProvider, installationStep, values, error } = useAppSelector(
     ({ installation }) => installation,
   );
 
@@ -36,6 +39,7 @@ const Provision: FunctionComponent<ProvisionProps> = ({ apiUrl, useTelemetry }) 
     installTitles,
     info,
     isProvisionStep,
+    isSetupStep,
   } = useInstallation(
     installType as InstallationType,
     gitProvider as GitProvider,
@@ -68,32 +72,36 @@ const Provision: FunctionComponent<ProvisionProps> = ({ apiUrl, useTelemetry }) 
     if (installationStep === 0) {
       return !!gitProvider && !!installType;
     }
-    return isFormValid;
-  }, [gitProvider, installType, installationStep, isFormValid]);
+    return isFormValid && !error;
+  }, [error, gitProvider, installType, installationStep, isFormValid]);
 
   const handleNextButtonClick = useCallback(async () => {
     dispatch(setInstallationStep(installationStep + 1));
 
     setTimeout(trigger, 500);
+    dispatch(clearError());
+    dispatch(clearClusterState());
   }, [dispatch, installationStep, trigger]);
 
   const handleBackButtonClick = useCallback(() => {
     dispatch(setInstallationStep(installationStep - 1));
+    dispatch(clearError());
   }, [dispatch, installationStep]);
 
   const onSubmit = async (values: InstallValues) => {
     if (isValid) {
       dispatch(setInstallValues(values));
 
-      if (isProvisionStep) {
+      if (isSetupStep) {
         try {
           await dispatch(createCluster({ apiUrl, values })).unwrap();
+          handleNextButtonClick();
         } catch (error) {
           //todo: error handling to be defined
         }
+      } else {
+        handleNextButtonClick();
       }
-
-      handleNextButtonClick();
     }
   };
 
@@ -104,7 +112,8 @@ const Provision: FunctionComponent<ProvisionProps> = ({ apiUrl, useTelemetry }) 
 
     return (
       <>
-        <FormContent hasInfo={hasInfo} isLastStep={isLastStep}>
+        <FormContent hasInfo={hasInfo} isLastStep={isLastStep} isProvisionStep={isProvisionStep}>
+          {error && <ErrorBanner text={error} />}
           <FormFlow
             control={control}
             currentStep={installationStep}
@@ -115,7 +124,7 @@ const Provision: FunctionComponent<ProvisionProps> = ({ apiUrl, useTelemetry }) 
             domainName={values?.domainName as string}
           />
         </FormContent>
-        {isProvisionStep && (
+        {isSetupStep && (
           <AdvancedOptionsContainer>
             <AdvancedOptions
               control={control}
@@ -133,9 +142,11 @@ const Provision: FunctionComponent<ProvisionProps> = ({ apiUrl, useTelemetry }) 
   }, [
     FormFlow,
     control,
+    error,
     hasInfo,
     installationStep,
     isLastStep,
+    isSetupStep,
     isProvisionStep,
     reset,
     setValue,
@@ -163,9 +174,10 @@ const Provision: FunctionComponent<ProvisionProps> = ({ apiUrl, useTelemetry }) 
         showBackButton={installationStep > 0}
         onNextButtonClick={handleNextButtonClick}
         onBackButtonClick={handleBackButtonClick}
-        nextButtonText={isProvisionStep ? 'Create cluster' : 'Next'}
+        nextButtonText={isSetupStep ? 'Create cluster' : 'Next'}
         nextButtonDisabled={!isValid}
         hasInfo={hasInfo}
+        isProvisionStep={isProvisionStep}
       >
         {form}
         {info && <InstallationInfoCard info={info} />}

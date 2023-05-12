@@ -1,37 +1,61 @@
-import React, { FunctionComponent } from 'react';
+import React, { FunctionComponent, useMemo } from 'react';
+
+import { CLUSTER_CHECKS } from '../../constants/cluster';
+import { useAppSelector } from '../../redux/store';
 
 import { Container, Step, StepLabel, StepNumber, Success, SuccessText } from './conciseLogs.styled';
 
-const STEPS = [
-  'the first step has been completed ',
-  'something was installed ',
-  'something else was installed ',
-  'installed something',
-  'did something',
-  'fetched ',
-  'installed',
-  'set up ',
-  'completed ',
-  'done',
-  'installed ',
-  'still working away...',
-];
+export interface ConciseLogsProps {
+  completedSteps: Array<string>;
+}
 
-const ConciseLogs: FunctionComponent = () => {
+const ConciseLogs: FunctionComponent<ConciseLogsProps> = ({ completedSteps }) => {
+  const { isError, isProvisioned, lastErrorCondition } = useAppSelector(({ cluster }) => ({
+    cluster: cluster.selectedCluster,
+    isProvisioned: cluster.isProvisioned,
+    lastErrorCondition: cluster.lastErrorCondition,
+    isError: cluster.isError,
+  }));
+
+  const lastStep = useMemo(() => {
+    if (completedSteps.length < Object.keys(CLUSTER_CHECKS).length) {
+      const nextStep = Object.values(CLUSTER_CHECKS)[completedSteps.length + 1];
+      return nextStep;
+    }
+
+    return null;
+  }, [completedSteps.length]);
+
   return (
     <Container>
-      {STEPS.map((step, index) => (
+      {completedSteps.map((step, index) => (
         <Step key={index}>
           <>✅</>
-          <StepNumber>{`[${index + 1}/${STEPS.length - 1}]`}</StepNumber>
-          <StepLabel color="secondary">{step}</StepLabel>
+          <StepNumber>{`[${index + 1}/${Object.keys(CLUSTER_CHECKS).length - 1}]`}</StepNumber>
+          <StepLabel color="secondary">{step}</StepLabel>{' '}
         </Step>
       ))}
-
-      <Success>
-        <SuccessText color="#bef264">Success</SuccessText>
-        <SuccessText color="secondary">Cluster Provisioned</SuccessText>
-      </Success>
+      {!isError && lastStep && (
+        <Step>
+          <>💫</>
+          <StepNumber>{`[${completedSteps.length + 1}/${
+            Object.keys(CLUSTER_CHECKS).length - 1
+          }]`}</StepNumber>
+          <StepLabel color="secondary">{lastStep}</StepLabel>{' '}
+        </Step>
+      )}
+      {isError && (
+        <Step>
+          <>❌</>
+          <StepLabel color="secondary">Error: {lastErrorCondition}</StepLabel>
+        </Step>
+      )}
+      {isProvisioned && (
+        <Success>
+          <SuccessText color="#bef264">Success</SuccessText>
+          <SuccessText color="secondary">Cluster Provisioned</SuccessText>
+        </Success>
+      )}
     </Container>
   );
 };

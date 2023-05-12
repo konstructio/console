@@ -8,10 +8,13 @@ import {
 import styled from 'styled-components';
 
 import { theme } from '../../theme';
-import { BISCAY, PORT_GORE } from '../../constants/colors';
+import { BISCAY, PORT_GORE, SALTBOX_BLUE } from '../../constants/colors';
 
 export const Label = muiStyled(StepLabel)(() => ({
   [`& .${stepLabelClasses.label}`]: {
+    color: `${SALTBOX_BLUE}`,
+  },
+  [`& .${stepLabelClasses.active}`]: {
     color: `${BISCAY}`,
   },
   [`& .${stepLabelClasses.disabled}`]: {

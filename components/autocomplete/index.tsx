@@ -1,4 +1,4 @@
-import React, { ChangeEvent, ForwardedRef, FunctionComponent } from 'react';
+import React, { ForwardedRef, FunctionComponent } from 'react';
 import { Autocomplete as AutocompleteMUI, CircularProgress, SxProps } from '@mui/material';
 import { ControllerRenderProps, FieldValues } from 'react-hook-form';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
@@ -12,7 +12,6 @@ export interface IAutocompleteProps extends ControllerRenderProps<FieldValues> {
   inputRef?: ForwardedRef<unknown>;
   loading?: boolean;
   noOptionsText?: string;
-  onChangeInput?: (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
   options: Array<{ value: string; label: string }>;
   placeholder?: string;
   sx?: SxProps;
@@ -28,7 +27,6 @@ const AutocompleteComponent: FunctionComponent<IAutocompleteProps> = ({
   loading,
   noOptionsText,
   placeholder,
-  onChangeInput,
   options,
   required,
   error,
@@ -63,9 +61,6 @@ const AutocompleteComponent: FunctionComponent<IAutocompleteProps> = ({
               )}
             </InputAdornmentContainer>
           }
-          onChange={(event) => {
-            onChangeInput && onChangeInput(event);
-          }}
           {...params}
           label={label}
         />

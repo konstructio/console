@@ -60,6 +60,7 @@ declare module 'styled-components' {
       fireBrick: string;
       magnolia: string;
       royanPurple: string;
+      sefidWhite: string;
 
       // Kubefirst color palette
       americanBlue: string;
