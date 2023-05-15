@@ -65,7 +65,7 @@ export const InstallationsSelection: FunctionComponent<InstallationsSelectionPro
       </ButtonContainer>
       {gitProvider && (
         <AdventureContent>
-          <Subtitle variant="subtitle2">Now Select your cloud adventure</Subtitle>
+          <Subtitle variant="subtitle2">Now select your cloud adventure</Subtitle>
           <CloudProviderContainer>
             {INSTALLATION_TYPES.map((type) => (
               <CloudProviderCard

@@ -8,6 +8,10 @@ export const Container = styled.div`
   overflow: auto;
 `;
 
+export const EstimatedTime = styled.div`
+  margin-bottom: 16px;
+`;
+
 export const Step = styled.div`
   align-items: center;
   display: flex;
@@ -23,9 +27,10 @@ export const StepNumber = styled(Typography)`
 `;
 
 export const StepLabel = styled(Typography)`
-  font-style: normal;
-  font-weight: 400;
+  font-family: 'Roboto Mono';
   font-size: 14px;
+  font-style: normal;
+  font-weight: 700;
   line-height: 18px;
 `;
 

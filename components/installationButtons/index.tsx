@@ -24,7 +24,7 @@ const InstallationButtons: FunctionComponent<InstallationButtonsProps> = ({
 }) => (
   <Container {...rest}>
     {showBackButton && (
-      <Button variant="outlined" color="primary" onClick={onBackButtonClick}>
+      <Button variant="outlined" color="secondary" onClick={onBackButtonClick}>
         Back
       </Button>
     )}

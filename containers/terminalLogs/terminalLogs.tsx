@@ -33,7 +33,6 @@ import { Close, Container, Search, TerminalView } from './terminalLogs.styled';
 
 import 'xterm/css/xterm.css';
 
-const DATE_REGEX = /(\d{4}-\d{2}-\d{2}T\d{2}:\d{2})/;
 const SEARCH_OPTIONS = { caseSensitive: false };
 
 enum TERMINAL_TABS {
@@ -148,7 +147,14 @@ const TerminalLogs: FunctionComponent = () => {
 
       const emitter = createLogStream(`${apiUrl}/stream`);
       emitter.on('log', (log) => {
-        terminal.write(`${log.message.replace(DATE_REGEX, '\x1b[0;37m$1\x1B[0m')}\n`);
+        const [, time] = log.message.match(/time="([^"]*)"/);
+        const [, level] = log.message.match(/level=([^"]*)/);
+        const [, msg] = log.message.match(/msg="([^"]*)"/);
+
+        const logLevel = level.replace(' msg=', '').toUpperCase();
+        const logStyle = logLevel.includes('ERROR') ? '\x1b[1;31m' : '\x1b[0;34m';
+
+        terminal.write(`\x1b[0;37m${time} ${logStyle}${logLevel}:\x1b[1;37m ${msg} \n`);
       });
 
       emitter.on('error', () => {
@@ -168,9 +174,9 @@ const TerminalLogs: FunctionComponent = () => {
     Object.keys(CLUSTER_CHECKS).forEach((checkKey) => {
       const step = CLUSTER_CHECKS[checkKey as string];
       const isStepCompleted = selectedCluster?.checks[checkKey];
-      const isStepAdded = completedSteps.includes(step);
+      const isStepAdded = completedSteps.find(({ label }) => label === step.label);
 
-      if (isStepCompleted && !isStepAdded) {
+      if (isStepCompleted && !isStepAdded?.label) {
         dispatch(setCompletedSteps([...completedSteps, step]));
       }
     });

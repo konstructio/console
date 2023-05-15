@@ -2,7 +2,6 @@ import axios from 'axios';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
 import { AppDispatch, RootState } from '../store';
-import { InstallValues } from '../../types/redux';
 import { Cluster, ClusterRequestProps, ClusterResponse } from '../../types/provision';
 
 const mapClusterFromRaw = (cluster: ClusterResponse): Cluster => ({
@@ -43,40 +42,40 @@ const mapClusterFromRaw = (cluster: ClusterResponse): Cluster => ({
 
 export const createCluster = createAsyncThunk<
   Cluster,
-  { apiUrl: string; values: InstallValues },
+  { apiUrl: string },
   {
     dispatch: AppDispatch;
     state: RootState;
   }
->('cluster/provisioning', async ({ apiUrl, values }, { getState }) => {
+>('cluster/provisioning', async ({ apiUrl }, { getState }) => {
   const {
-    installation: { installType, gitProvider },
+    installation: { installType, gitProvider, values },
   } = getState();
 
   const params = {
-    clusterName: values.clusterName,
-    admin_email: values.alertsEmail,
+    clusterName: values?.clusterName,
+    admin_email: values?.alertsEmail,
     cloud_provider: installType?.toString(),
-    cloud_region: values.cloudRegion,
-    domain_name: values.domainName,
+    cloud_region: values?.cloudRegion,
+    domain_name: values?.domainName,
     git_owner: values?.gitOwner,
     git_provider: gitProvider,
     git_token: values?.gitToken,
     type: 'mgmt',
     aws_auth: {
-      ...values.aws_auth,
+      ...values?.aws_auth,
     },
     civo_auth: {
-      ...values.civo_auth,
+      ...values?.civo_auth,
     },
     digitalocean_auth: {
-      ...values.digitalocean_auth,
+      ...values?.digitalocean_auth,
     },
     vultr_auth: {
-      ...values.vultr_auth,
+      ...values?.vultr_auth,
     },
   };
-  const res = await axios.post(`${apiUrl}/cluster/${values.clusterName || 'kubefirst'}`, params);
+  const res = await axios.post(`${apiUrl}/cluster/${values?.clusterName || 'kubefirst'}`, params);
 
   if ('error' in res) {
     throw res.error;

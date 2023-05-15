@@ -14,7 +14,7 @@ export interface ApiState {
   lastErrorCondition?: string;
   clusters: Array<Cluster>;
   selectedCluster?: Cluster;
-  completedSteps: Array<string>;
+  completedSteps: Array<{ label: string; order: number }>;
 }
 
 export const initialState: ApiState = {

@@ -14,6 +14,12 @@ export const Form = styled(Box)`
   height: 100%;
 `;
 
+export const ErrorContainer = styled.div`
+  align-items: center;
+  display: flex;
+  gap: 24px;
+`;
+
 export const FormContent = styled(FormContainer)<{
   hasInfo: boolean;
   isLastStep: boolean;

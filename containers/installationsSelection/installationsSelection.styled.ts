@@ -22,6 +22,7 @@ export const AdventureContent = styled(Column)`
 `;
 
 export const Subtitle = styled(Typography)`
+  color: ${({ theme }) => theme.colors.volcanicSand};
   margin: 40px 0 24px 0 !important;
 `;
 

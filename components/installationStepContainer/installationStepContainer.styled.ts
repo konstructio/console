@@ -36,6 +36,7 @@ export const Content = styled(Column)<{ hasInfo?: boolean; isProvisionStep: bool
 `;
 
 export const InstallTitle = styled(Typography)`
+  color: ${({ theme }) => theme.colors.volcanicSand};
   margin: 40px 0 24px 0 !important;
   text-align: center;
 `;

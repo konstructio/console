@@ -3,11 +3,12 @@ import LinearProgressMui, { LinearProgressProps } from '@mui/material/LinearProg
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 
-import { LIGHT_GREY, PRIMARY, VOLCANIC_SAND } from '../../constants/colors';
+import { ASMANI_SKY, LIGHT_GREY, PRIMARY, VOLCANIC_SAND } from '../../constants/colors';
 
 import { Container } from './linearProgress.styled';
 
 const LinearProgressWithLabel = (props: LinearProgressProps & { value: number }) => {
+  const isCompleted = props.value === 100;
   return (
     <Box sx={{ width: '512px' }}>
       <Box
@@ -19,7 +20,7 @@ const LinearProgressWithLabel = (props: LinearProgressProps & { value: number })
         }}
       >
         <Typography variant="subtitle3" color={VOLCANIC_SAND}>
-          Provisioning cluster:
+          {isCompleted ? 'Completed!' : 'Provisioning cluster:'}
         </Typography>
         <Typography variant="subtitle3" color={VOLCANIC_SAND}>{`${Math.round(
           props.value,
@@ -35,7 +36,9 @@ const LinearProgressWithLabel = (props: LinearProgressProps & { value: number })
             'background': LIGHT_GREY,
             'height': '9px',
             '> span': {
-              background: `linear-gradient(270deg, ${PRIMARY} 0%, #81E2B4 100%)`,
+              background: isCompleted
+                ? ASMANI_SKY
+                : `linear-gradient(270deg, ${PRIMARY} 0%, ${ASMANI_SKY} 100%)`,
               borderRadius: '55px',
             },
           }}
