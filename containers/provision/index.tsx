@@ -19,8 +19,9 @@ import { setConfigValues } from '../../redux/slices/config.slice';
 import { clearClusterState } from '../../redux/slices/cluster.slice';
 import AdvancedOptions from '../clusterForms/shared/advancedOptions';
 import ErrorBanner from '../../components/errorBanner';
+import Button from '../../components/button';
 
-import { AdvancedOptionsContainer, Form, FormContent } from './provision.styled';
+import { AdvancedOptionsContainer, ErrorContainer, Form, FormContent } from './provision.styled';
 
 export interface ProvisionProps {
   apiUrl: string;
@@ -32,6 +33,8 @@ const Provision: FunctionComponent<ProvisionProps> = ({ apiUrl, useTelemetry }) 
   const { installType, gitProvider, installationStep, values, error } = useAppSelector(
     ({ installation }) => installation,
   );
+
+  const { isProvisioned } = useAppSelector(({ cluster }) => cluster);
 
   const {
     stepTitles,
@@ -71,9 +74,19 @@ const Provision: FunctionComponent<ProvisionProps> = ({ apiUrl, useTelemetry }) 
   const isValid = useMemo(() => {
     if (installationStep === 0) {
       return !!gitProvider && !!installType;
+    } else if (isProvisionStep) {
+      return isProvisioned;
     }
     return isFormValid && !error;
-  }, [error, gitProvider, installType, installationStep, isFormValid]);
+  }, [
+    error,
+    gitProvider,
+    installType,
+    installationStep,
+    isFormValid,
+    isProvisionStep,
+    isProvisioned,
+  ]);
 
   const handleNextButtonClick = useCallback(async () => {
     dispatch(setInstallationStep(installationStep + 1));
@@ -94,7 +107,7 @@ const Provision: FunctionComponent<ProvisionProps> = ({ apiUrl, useTelemetry }) 
 
       if (isSetupStep) {
         try {
-          await dispatch(createCluster({ apiUrl, values })).unwrap();
+          await provisionCluster();
           handleNextButtonClick();
         } catch (error) {
           //todo: error handling to be defined
@@ -105,6 +118,12 @@ const Provision: FunctionComponent<ProvisionProps> = ({ apiUrl, useTelemetry }) 
     }
   };
 
+  const provisionCluster = useCallback(async () => {
+    await dispatch(clearError());
+    await dispatch(clearClusterState());
+    await dispatch(createCluster({ apiUrl })).unwrap();
+  }, [apiUrl, dispatch]);
+
   const form = useMemo(() => {
     if (installationStep === 0) {
       return <InstallationsSelection steps={stepTitles} reset={reset} />;
@@ -113,7 +132,16 @@ const Provision: FunctionComponent<ProvisionProps> = ({ apiUrl, useTelemetry }) 
     return (
       <>
         <FormContent hasInfo={hasInfo} isLastStep={isLastStep} isProvisionStep={isProvisionStep}>
-          {error && <ErrorBanner text={error} />}
+          {error && (
+            <ErrorContainer>
+              <ErrorBanner text={error} />
+              {isProvisionStep && (
+                <Button variant="contained" color="primary" onClick={provisionCluster}>
+                  Retry
+                </Button>
+              )}
+            </ErrorContainer>
+          )}
           <FormFlow
             control={control}
             currentStep={installationStep}
@@ -124,7 +152,7 @@ const Provision: FunctionComponent<ProvisionProps> = ({ apiUrl, useTelemetry }) 
             domainName={values?.domainName as string}
           />
         </FormContent>
-        {isSetupStep && (
+        {isSetupStep && installType !== InstallationType.LOCAL && (
           <AdvancedOptionsContainer>
             <AdvancedOptions
               control={control}
@@ -140,21 +168,23 @@ const Provision: FunctionComponent<ProvisionProps> = ({ apiUrl, useTelemetry }) 
       </>
     );
   }, [
+    installationStep,
+    hasInfo,
+    isLastStep,
+    isProvisionStep,
+    error,
+    provisionCluster,
     FormFlow,
     control,
-    error,
-    hasInfo,
-    installationStep,
-    isLastStep,
-    isSetupStep,
-    isProvisionStep,
-    reset,
     setValue,
-    stepTitles,
     trigger,
+    watch,
     values?.clusterName,
     values?.domainName,
-    watch,
+    isSetupStep,
+    installType,
+    stepTitles,
+    reset,
   ]);
 
   useEffect(() => {
@@ -171,7 +201,7 @@ const Provision: FunctionComponent<ProvisionProps> = ({ apiUrl, useTelemetry }) 
         activeStep={installationStep}
         steps={stepTitles}
         installationTitle={installTitle}
-        showBackButton={installationStep > 0}
+        showBackButton={installationStep > 0 && !isProvisionStep}
         onNextButtonClick={handleNextButtonClick}
         onBackButtonClick={handleBackButtonClick}
         nextButtonText={isSetupStep ? 'Create cluster' : 'Next'}

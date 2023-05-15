@@ -37,13 +37,21 @@ const InstallationStepContainer: FunctionComponent<InstallationStepContainerProp
   children,
   ...rest
 }) => {
-  const { completedSteps } = useAppSelector(({ cluster }) => ({
+  const { completedSteps, isProvisioned } = useAppSelector(({ cluster }) => ({
     ...cluster,
   }));
-  const progress = useMemo(
-    () => Math.round((completedSteps.length / Object.keys(CLUSTER_CHECKS).length) * 100),
-    [completedSteps.length],
-  );
+  const progress = useMemo(() => {
+    const clusterChecks = Object.keys(CLUSTER_CHECKS);
+    const progress = Math.round((completedSteps.length / clusterChecks.length) * 100);
+
+    if (completedSteps.length === clusterChecks.length && !isProvisioned) {
+      return 98;
+    } else if (isProvisioned) {
+      return 100;
+    }
+
+    return progress;
+  }, [completedSteps.length, isProvisioned]);
 
   return (
     <Container {...rest}>

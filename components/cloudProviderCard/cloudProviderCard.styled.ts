@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import NextLink from 'next/link';
 
 import Card from '../card';
 
@@ -24,11 +25,16 @@ export const DetailsContainer = styled.div`
 `;
 
 export const LabelContainer = styled.div`
+  color: ${({ theme }) => theme.colors.volcanicSand};
   display: flex;
   gap: 16px;
 `;
 
-export const LinkContent = styled.a`
+export const Link = styled(NextLink)`
   color: ${({ theme }) => theme.colors.primary};
   text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
 `;

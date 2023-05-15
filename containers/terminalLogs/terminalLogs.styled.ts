@@ -11,7 +11,7 @@ export const Container = styled.div`
   padding: 0 16px;
   position: relative;
   height: 551px;
-  width: 988px;
+  width: calc(100% - 30px);
 `;
 
 export const Search = styled.div`

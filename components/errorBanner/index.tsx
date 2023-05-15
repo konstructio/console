@@ -11,7 +11,7 @@ export interface ErrorBannerProps {
   text: string;
 }
 
-const ErrorBanner: FunctionComponent<ErrorBannerProps> = ({ details, text }) => {
+const ErrorBanner: FunctionComponent<ErrorBannerProps> = ({ text }) => {
   return (
     <Container>
       <Header>

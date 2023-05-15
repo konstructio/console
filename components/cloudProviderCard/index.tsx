@@ -1,6 +1,5 @@
 import React, { FunctionComponent } from 'react';
 import Image from 'next/image';
-import Link from 'next/link';
 
 import { CardProps } from '../card';
 import Typography from '../typography';
@@ -12,12 +11,7 @@ import digitalOceanLogo from '../../assets/digital_ocean_logo.svg';
 import vultrLogo from '../../assets/vultr_logo.svg';
 import Tag from '../tag';
 
-import {
-  CardContainer,
-  DetailsContainer,
-  LinkContent,
-  LabelContainer,
-} from './cloudProviderCard.styled';
+import { CardContainer, DetailsContainer, Link, LabelContainer } from './cloudProviderCard.styled';
 
 const PROVIDER_OPTIONS: Record<
   InstallationType,
@@ -60,7 +54,9 @@ const PROVIDER_OPTIONS: Record<
     logoSrc: digitalOceanLogo,
     label: 'Digital Ocean',
     description:
-      'A powerful open source cloud native tool set for identity and infrastructure management, application delivery, and secrets managament.',
+      'A cloud platform that allows developers to build, deploy, and scale applications. Its simplicity, ease of use and affordable pricing make it a popular choice for small businesses and startups. ',
+    learnMoreLink: '#',
+
     height: 50,
     width: 50,
     beta: true,
@@ -69,7 +65,7 @@ const PROVIDER_OPTIONS: Record<
     logoSrc: vultrLogo,
     label: 'Vultr',
     description:
-      'A powerful open source cloud native tool set for identity and infrastructure management, application delivery, and secrets managament.',
+      'A cloud hosting provider that offers high-performance SSD-based cloud servers, block storage, object storage, and dedicated servers in multiple locations worldwide. ',
     learnMoreLink: '#',
     height: 43,
     width: 50,
@@ -100,8 +96,9 @@ const CloudProviderCard: FunctionComponent<CloudProviderCardProps> = ({
         <Typography variant="body2">
           {description}
           {learnMoreLink && (
-            <Link href={learnMoreLink}>
-              <LinkContent> Learn More</LinkContent>
+            <Link href={learnMoreLink} target="_blank">
+              {' '}
+              Learn More
             </Link>
           )}
         </Typography>
