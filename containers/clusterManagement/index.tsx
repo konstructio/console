@@ -8,7 +8,7 @@ import Typography from '../../components/typography';
 import Table from '../../components/table';
 import { DELETE_OPTION, VIEW_DETAILS_OPTION } from '../../constants/cluster';
 import { useAppDispatch, useAppSelector } from '../../redux/store';
-import { deleteCluster, getCluster, getClusters } from '../../redux/thunks/cluster.thunk';
+import { deleteCluster, getCluster, getClusters } from '../../redux/thunks/api.thunk';
 import { resetInstallState } from '../../redux/slices/installation.slice';
 import { setConfigValues } from '../../redux/slices/config.slice';
 import { Cluster, ClusterRequestProps } from '../../types/provision';
@@ -43,7 +43,7 @@ const ClusterManagement: FunctionComponent<ClusterManagementProps> = ({ apiUrl, 
   const { push } = useRouter();
 
   const dispatch = useAppDispatch();
-  const { isDeleted, isDeleting, isError, clusters } = useAppSelector(({ cluster }) => cluster);
+  const { isDeleted, isDeleting, isError, clusters } = useAppSelector(({ api }) => api);
 
   const handleMenuClick = (option: string, rowItem: Row) => {
     const { clusterName } = rowItem;

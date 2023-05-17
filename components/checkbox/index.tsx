@@ -10,7 +10,7 @@ const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(function Checkbox(p
     <CheckboxMUI
       {...props}
       inputRef={ref}
-      style={{ border: '1px' }}
+      style={{ border: '1px', padding: 0 }}
       icon={
         <CheckBoxOutlineBlankIcon
           sx={{ borderRadius: '4px', color: props.disabled ? `${QUARTZ}` : `${SPUN_PEARL}` }}

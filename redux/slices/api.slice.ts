@@ -1,7 +1,14 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 
-import { createCluster, deleteCluster, getCluster, getClusters } from '../thunks/cluster.thunk';
+import {
+  createCluster,
+  deleteCluster,
+  getCluster,
+  getClusters,
+  getMarketplaceApps,
+} from '../thunks/api.thunk';
 import { Cluster, ClusterStatus } from '../../types/provision';
+import { MarketplaceApp } from '../../types/marketplace';
 
 export interface ApiState {
   loading: boolean;
@@ -15,6 +22,7 @@ export interface ApiState {
   clusters: Array<Cluster>;
   selectedCluster?: Cluster;
   completedSteps: Array<{ label: string; order: number }>;
+  marketplaceApps: Array<MarketplaceApp>;
 }
 
 export const initialState: ApiState = {
@@ -29,10 +37,11 @@ export const initialState: ApiState = {
   clusters: [],
   selectedCluster: undefined,
   completedSteps: [],
+  marketplaceApps: [],
 };
 
-const clusterSlice = createSlice({
-  name: 'cluster',
+const apiSlice = createSlice({
+  name: 'api',
   initialState,
   reducers: {
     setCompletedSteps: (state, action) => {
@@ -96,10 +105,16 @@ const clusterSlice = createSlice({
         state.loading = false;
         state.isError = false;
         state.clusters = payload;
-      });
+      })
+      .addCase(
+        getMarketplaceApps.fulfilled,
+        (state, { payload }: PayloadAction<Array<MarketplaceApp>>) => {
+          state.marketplaceApps = payload;
+        },
+      );
   },
 });
 
-export const { setCompletedSteps, clearClusterState } = clusterSlice.actions;
+export const { setCompletedSteps, clearClusterState } = apiSlice.actions;
 
-export const clusterReducer = clusterSlice.reducer;
+export const apiReducer = apiSlice.reducer;

@@ -8,7 +8,7 @@ import { PASTEL_LIGHT_BLUE } from '../../constants/colors';
 
 export const AppConnector = styled.div`
   height: 16px;
-  background-color: #e2e8f0;
+  background-color: ${({ theme }) => theme.colors.pastelLightBlue};
   top: 8px;
   left: 3px;
   position: absolute;

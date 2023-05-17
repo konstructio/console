@@ -11,7 +11,7 @@ export interface TextFieldProps extends InputProps {
   helperText?: string;
 }
 
-export const Input = styled(InputBase)(({ theme, error }) => ({
+export const Input = styled(InputBase)(({ theme, error, type, endAdornment }) => ({
   '& .MuiInputBase-input': {
     'borderRadius': 4,
     'border': `1px solid ${error ? theme.palette.error.main : '#ced4da'}`,
@@ -19,7 +19,7 @@ export const Input = styled(InputBase)(({ theme, error }) => ({
     'height': 18,
     'lineHeight': 20,
     'letterSpacing': 0.25,
-    'padding': '8px 12px',
+    'padding': type === 'password' || !!endAdornment ? '8px 40px 8px 12px' : '8px 12px',
     'width': '100%',
     '&:focus': {
       border: `1px solid ${error ? theme.palette.error.main : theme.palette.primary.main}`,

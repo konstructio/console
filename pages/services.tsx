@@ -5,6 +5,7 @@ import useFeatureFlag from '../hooks/useFeatureFlag';
 import Services from '../containers/services';
 
 interface ServicesPageProps {
+  apiUrl: string;
   argoUrl: string;
   argoWorkflowsUrl: string;
   atlantisUrl: string;
@@ -39,6 +40,7 @@ const ServicesPage: FunctionComponent<ServicesPageProps> = (props) => {
 
 export async function getServerSideProps() {
   const {
+    API_URL = '',
     ARGO_CD_URL = '',
     ARGO_WORKFLOWS_URL = '',
     ATLANTIS_URL = '',
@@ -57,6 +59,7 @@ export async function getServerSideProps() {
 
   return {
     props: {
+      apiUrl: API_URL,
       argoUrl: ARGO_CD_URL,
       argoWorkflowsUrl: ARGO_WORKFLOWS_URL,
       atlantisUrl: ATLANTIS_URL,

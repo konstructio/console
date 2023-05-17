@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { createAsyncThunk } from '@reduxjs/toolkit';
+import { MarketplaceApp } from 'types/marketplace';
 
 import { AppDispatch, RootState } from '../store';
 import { Cluster, ClusterRequestProps, ClusterResponse } from '../../types/provision';
@@ -47,7 +48,7 @@ export const createCluster = createAsyncThunk<
     dispatch: AppDispatch;
     state: RootState;
   }
->('cluster/provisioning', async ({ apiUrl }, { getState }) => {
+>('api/cluster/provisioning', async ({ apiUrl }, { getState }) => {
   const {
     installation: { installType, gitProvider, values },
   } = getState();
@@ -75,7 +76,10 @@ export const createCluster = createAsyncThunk<
       ...values?.vultr_auth,
     },
   };
-  const res = await axios.post(`${apiUrl}/cluster/${values?.clusterName || 'kubefirst'}`, params);
+  const res = await axios.post(
+    `${apiUrl}/api/cluster/${values?.clusterName || 'kubefirst'}`,
+    params,
+  );
 
   if ('error' in res) {
     throw res.error;
@@ -90,7 +94,7 @@ export const getCluster = createAsyncThunk<
     dispatch: AppDispatch;
     state: RootState;
   }
->('cluster/get', async ({ apiUrl, clusterName }) => {
+>('api/cluster/get', async ({ apiUrl, clusterName }) => {
   const res = await axios.get(`${apiUrl}/cluster/${clusterName || 'kubefirst'}`);
 
   if ('error' in res) {
@@ -106,7 +110,7 @@ export const getClusters = createAsyncThunk<
     dispatch: AppDispatch;
     state: RootState;
   }
->('cluster/getClusters', async ({ apiUrl }) => {
+>('api/cluster/getClusters', async ({ apiUrl }) => {
   const res = await axios.get(`${apiUrl}/cluster`);
 
   if ('error' in res) {
@@ -122,11 +126,31 @@ export const deleteCluster = createAsyncThunk<
     dispatch: AppDispatch;
     state: RootState;
   }
->('cluster/delete', async ({ apiUrl, clusterName }) => {
+>('api/cluster/delete', async ({ apiUrl, clusterName }) => {
   const res = await axios.delete(`${apiUrl}/cluster/${clusterName || 'kubefirst'}`);
 
   if ('error' in res) {
     throw res.error;
   }
   return res.data;
+});
+
+export const getMarketplaceApps = createAsyncThunk<
+  Array<MarketplaceApp>,
+  void,
+  {
+    dispatch: AppDispatch;
+    state: RootState;
+  }
+>('api/getMarketplaceApps', async (_, { getState }) => {
+  const {
+    config: { apiUrl },
+  } = getState();
+
+  const res = await axios.get(`${apiUrl}/marketplace/apps`);
+
+  if ('error' in res) {
+    throw res.error;
+  }
+  return res.data.apps;
 });

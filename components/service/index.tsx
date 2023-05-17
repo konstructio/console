@@ -120,6 +120,12 @@ const Service: FunctionComponent<ServiceProps> = ({
       <Header>
         <Image src={serviceLogo} alt={name} width="24" />
         <Title variant="subtitle2">{name}</Title>
+        {/* <NextImage
+          src={`https://argocd.mgmt-20.kubefirst.com/api/badge?name=${name.toLowerCase()}`}
+          width={120}
+          height={20}
+          alt={name}
+        /> */}
       </Header>
       <Description variant="body2">{description}</Description>
       {links && !children ? linksComponent : children}

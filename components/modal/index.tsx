@@ -9,7 +9,6 @@ const style = {
   transform: 'translate(-50%, -50%)',
   width: 'auto',
   borderRadius: '8px',
-  p: 4,
   zIndex: 2000,
 };
 
@@ -19,6 +18,7 @@ export interface IModalProps {
   children: React.ReactElement;
   isOpen: boolean;
   onCloseModal?: () => void;
+  padding?: number;
 }
 
 const Modal: FunctionComponent<IModalProps> = ({
@@ -27,6 +27,7 @@ const Modal: FunctionComponent<IModalProps> = ({
   children,
   isOpen,
   onCloseModal,
+  padding = 4,
 }) => (
   <ModalMui
     open={isOpen}
@@ -35,7 +36,9 @@ const Modal: FunctionComponent<IModalProps> = ({
     aria-describedby="modal-description"
     sx={{ zIndex: 2000 }}
   >
-    <Box sx={{ ...style, backgroundColor, boxShadow: boxShadow && 24 }}>{children}</Box>
+    <Box sx={{ ...style, p: padding, backgroundColor, boxShadow: boxShadow ? 24 : 0 }}>
+      {children}
+    </Box>
   </ModalMui>
 );
 

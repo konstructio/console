@@ -6,7 +6,7 @@ export const Button = styled.button<{ active?: boolean }>`
   align-items: center;
   width: 260px;
   height: 84px;
-  border: 2px solid #e2e8f0;
+  border: 2px solid ${({ theme }) => theme.colors.pastelLightBlue};
   border-radius: 8px;
   background-color: white;
   cursor: pointer;

@@ -37,8 +37,8 @@ const InstallationStepContainer: FunctionComponent<InstallationStepContainerProp
   children,
   ...rest
 }) => {
-  const { completedSteps, isProvisioned } = useAppSelector(({ cluster }) => ({
-    ...cluster,
+  const { completedSteps, isProvisioned } = useAppSelector(({ api }) => ({
+    ...api,
   }));
   const progress = useMemo(() => {
     const clusterChecks = Object.keys(CLUSTER_CHECKS);

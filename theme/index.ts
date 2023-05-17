@@ -37,6 +37,7 @@ import {
   MAGNOLIA,
   ROYAL_PURPLE,
   SEFID_WHITE,
+  PASTEL_LIGHT_BLUE,
 } from '../constants/colors';
 
 export const theme: DefaultTheme = {
@@ -77,5 +78,6 @@ export const theme: DefaultTheme = {
     magnolia: MAGNOLIA,
     royanPurple: ROYAL_PURPLE,
     sefidWhite: SEFID_WHITE,
+    pastelLightBlue: PASTEL_LIGHT_BLUE,
   },
 };

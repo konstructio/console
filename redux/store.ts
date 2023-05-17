@@ -5,7 +5,7 @@ import { createWrapper } from 'next-redux-wrapper';
 import { consoleApi } from './api';
 import {
   configReducer,
-  clusterReducer,
+  apiReducer,
   featureFlagsReducer,
   gitReducer,
   installationReducer,
@@ -20,7 +20,7 @@ export const makeStore = () =>
       installation: installationReducer,
       git: gitReducer,
       readiness: readinessReducer,
-      cluster: clusterReducer,
+      api: apiReducer,
       featureFlags: featureFlagsReducer,
     },
     middleware: (gDM) => gDM().concat(consoleApi.middleware),

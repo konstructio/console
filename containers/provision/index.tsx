@@ -1,7 +1,7 @@
 import React, { FunctionComponent, useCallback, useEffect, useMemo } from 'react';
 import { useForm } from 'react-hook-form';
 
-import { createCluster } from '../../redux/thunks/cluster.thunk';
+import { createCluster } from '../../redux/thunks/api.thunk';
 import InstallationStepContainer from '../../components/installationStepContainer';
 import InstallationInfoCard from '../../components/installationInfoCard';
 import { InstallationsSelection } from '../installationsSelection';
@@ -16,7 +16,7 @@ import { useInstallation } from '../../hooks/useInstallation';
 import { InstallValues, InstallationType } from '../../types/redux';
 import { GitProvider } from '../../types';
 import { setConfigValues } from '../../redux/slices/config.slice';
-import { clearClusterState } from '../../redux/slices/cluster.slice';
+import { clearClusterState } from '../../redux/slices/api.slice';
 import AdvancedOptions from '../clusterForms/shared/advancedOptions';
 import ErrorBanner from '../../components/errorBanner';
 import Button from '../../components/button';
@@ -34,7 +34,7 @@ const Provision: FunctionComponent<ProvisionProps> = ({ apiUrl, useTelemetry }) 
     ({ installation }) => installation,
   );
 
-  const { isProvisioned } = useAppSelector(({ cluster }) => cluster);
+  const { isProvisioned } = useAppSelector(({ api }) => api);
 
   const {
     stepTitles,

@@ -1,4 +1,4 @@
-import React, { FunctionComponent } from 'react';
+import React, { FunctionComponent, ReactNode } from 'react';
 import { styled, Tab as MuiTab, tabClasses } from '@mui/material';
 
 import { ECHO_BLUE } from '../../constants/colors';
@@ -19,7 +19,7 @@ export const a11yProps = (index: number) => {
   };
 };
 
-export const Tab = styled((props: { color?: string; label: string }) => (
+export const Tab = styled((props: { color?: string; label: string | ReactNode }) => (
   <MuiTab disableRipple {...props} />
 ))(({ theme, color }) => ({
   ...theme.typography.labelMedium,

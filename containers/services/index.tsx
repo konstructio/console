@@ -1,16 +1,27 @@
-import React, { FunctionComponent, useEffect, useMemo, useCallback } from 'react';
+import React, { FunctionComponent, useEffect, useMemo, useCallback, useState } from 'react';
+import { Box, Tabs } from '@mui/material';
 
-import { DOCS_LINK } from '../../constants';
-import { setConfigValues } from '../../redux/slices/config.slice';
-import { GitProvider } from '../../types';
-import { useAppDispatch, useAppSelector } from '../../redux/store';
 import Service from '../service';
+import Marketplace from '../marketplace';
+import TabPanel, { Tab, a11yProps } from '../../components/tab';
 import Typography from '../../components/typography';
 import { useTelemetryMutation } from '../../redux/api';
+import { setConfigValues } from '../../redux/slices/config.slice';
+import { getMarketplaceApps } from '../../redux/thunks/api.thunk';
+import { useAppDispatch, useAppSelector } from '../../redux/store';
+import { GitProvider } from '../../types';
+import { DOCS_LINK } from '../../constants';
+import { BISCAY, SALTBOX_BLUE, VOLCANIC_SAND } from '../../constants/colors';
 
 import { Container, Header, LearnMoreLink, ServicesContainer } from './services.styled';
 
+enum SERVICES_TABS {
+  PROVISIONED = 0,
+  MARKETPLACE = 1,
+}
+
 export interface ServicesProps {
+  apiUrl: string;
   argoUrl: string;
   argoWorkflowsUrl: string;
   atlantisUrl: string;
@@ -30,6 +41,7 @@ export interface ServicesProps {
 }
 
 const Services: FunctionComponent<ServicesProps> = ({
+  apiUrl,
   argoUrl,
   argoWorkflowsUrl,
   atlantisUrl,
@@ -43,15 +55,12 @@ const Services: FunctionComponent<ServicesProps> = ({
   vaultUrl,
   metaphor,
 }) => {
+  const [activeTab, setActiveTab] = useState<number>(0);
   const [sendTelemetryEvent] = useTelemetryMutation();
 
   const isTelemetryEnabled = useAppSelector(({ config }) => config.isTelemetryEnabled);
 
   const dispatch = useAppDispatch();
-
-  useEffect(() => {
-    dispatch(setConfigValues({ isTelemetryEnabled: useTelemetry, kubefirstVersion, k3dDomain }));
-  }, [dispatch, useTelemetry, kubefirstVersion, k3dDomain]);
 
   const gitTileProvider = useMemo(
     () => (gitProvider === GitProvider.GITHUB ? 'GitHub' : 'GitLab'),
@@ -123,11 +132,40 @@ const Services: FunctionComponent<ServicesProps> = ({
     [isTelemetryEnabled, sendTelemetryEvent],
   );
 
+  const handleChange = (event: React.SyntheticEvent, newValue: number) => {
+    setActiveTab(newValue);
+  };
+
+  useEffect(() => {
+    dispatch(
+      setConfigValues({ isTelemetryEnabled: useTelemetry, kubefirstVersion, k3dDomain, apiUrl }),
+    );
+    dispatch(getMarketplaceApps());
+  }, [dispatch, useTelemetry, kubefirstVersion, k3dDomain, apiUrl]);
+
   return (
     <Container>
       <Header>
         <Typography variant="h6">Services Overview</Typography>
-        <Typography variant="body2">
+      </Header>
+      <Box sx={{ width: 'fit-content', mb: 4 }}>
+        <Tabs value={activeTab} onChange={handleChange} indicatorColor="primary">
+          <Tab
+            color={activeTab === SERVICES_TABS.PROVISIONED ? BISCAY : SALTBOX_BLUE}
+            label={<Typography variant="buttonSmall">Provisioned services</Typography>}
+            {...a11yProps(SERVICES_TABS.PROVISIONED)}
+            sx={{ textTransform: 'capitalize', mr: 3 }}
+          />
+          <Tab
+            color={activeTab === SERVICES_TABS.MARKETPLACE ? BISCAY : SALTBOX_BLUE}
+            label={<Typography variant="buttonSmall">Marketplace</Typography>}
+            {...a11yProps(SERVICES_TABS.MARKETPLACE)}
+            sx={{ textTransform: 'capitalize' }}
+          />
+        </Tabs>
+      </Box>
+      <TabPanel value={activeTab} index={SERVICES_TABS.PROVISIONED}>
+        <Typography variant="body2" sx={{ mb: 3 }} color={VOLCANIC_SAND}>
           Click on a link to access the service Kubefirst has provisioned for you.{' '}
           <LearnMoreLink
             href={DOCS_LINK}
@@ -137,18 +175,31 @@ const Services: FunctionComponent<ServicesProps> = ({
             Learn more
           </LearnMoreLink>
         </Typography>
-      </Header>
-      <ServicesContainer>
-        {services.map(({ name, ...rest }) => (
-          <Service
-            key={name}
-            name={name}
-            {...rest}
-            onClickLink={onClickLink}
-            domainName={domainName}
-          />
-        ))}
-      </ServicesContainer>
+        <ServicesContainer>
+          {services.map(({ name, ...rest }) => (
+            <Service
+              key={name}
+              name={name}
+              {...rest}
+              onClickLink={onClickLink}
+              domainName={domainName}
+            />
+          ))}
+        </ServicesContainer>
+      </TabPanel>
+      <TabPanel value={activeTab} index={SERVICES_TABS.MARKETPLACE}>
+        <Typography variant="body2" sx={{ mb: 3 }} color={VOLCANIC_SAND}>
+          Click on a link to access the service Kubefirst has provisioned for you.{' '}
+          <LearnMoreLink
+            href={DOCS_LINK}
+            target="_blank"
+            onClick={() => onClickLink(DOCS_LINK, 'docs')}
+          >
+            Learn more
+          </LearnMoreLink>
+        </Typography>
+        <Marketplace />
+      </TabPanel>
     </Container>
   );
 };
