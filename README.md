@@ -43,4 +43,4 @@ Note: You might need an AWS Managament Account
 ### Cluster Management (Local mode)
 
 1. Add the following env variable in your `.env` file
-2. `API_URL=http://localhost:8081/api/v1`
+2. `API_URL=http://localhost:8081/api/v1` 
