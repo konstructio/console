@@ -124,11 +124,13 @@ const ClusterManagement: FunctionComponent<ClusterManagementProps> = ({ apiUrl, 
         </Button>
       </Header>
       <Content>
-        <Table
-          columns={getClusterManagementColumns(handleMenuClick)}
-          rows={clusters}
-          getRowClassName={getClusterState}
-        />
+        {clusters && (
+          <Table
+            columns={getClusterManagementColumns(handleMenuClick)}
+            rows={clusters}
+            getRowClassName={getClusterState}
+          />
+        )}
       </Content>
       <Snackbar
         anchorOrigin={{

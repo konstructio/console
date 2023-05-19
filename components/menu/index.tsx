@@ -8,7 +8,7 @@ import Typography from '../typography';
 import { VOLCANIC_SAND } from '../../constants/colors';
 
 export interface MenuProps {
-  isDisabled: boolean;
+  isDisabled?: boolean;
   label: string | ReactNode;
   options?: Array<{
     label: string;

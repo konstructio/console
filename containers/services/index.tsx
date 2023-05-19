@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useEffect, useMemo, useCallback, useState } from 'react';
+import React, { FunctionComponent, useEffect, useCallback, useState } from 'react';
 import { Box, Tabs } from '@mui/material';
 
 import Service from '../service';
@@ -9,7 +9,6 @@ import { useTelemetryMutation } from '../../redux/api';
 import { setConfigValues } from '../../redux/slices/config.slice';
 import { getMarketplaceApps } from '../../redux/thunks/api.thunk';
 import { useAppDispatch, useAppSelector } from '../../redux/store';
-import { GitProvider } from '../../types';
 import { DOCS_LINK } from '../../constants';
 import { BISCAY, SALTBOX_BLUE, VOLCANIC_SAND } from '../../constants/colors';
 
@@ -22,105 +21,29 @@ enum SERVICES_TABS {
 
 export interface ServicesProps {
   apiUrl: string;
-  argoUrl: string;
-  argoWorkflowsUrl: string;
   atlantisUrl: string;
   domainName: string;
-  githubOwner: string;
-  gitlabOwner: string;
-  gitProvider: string;
   k3dDomain: string;
   kubefirstVersion: string;
   useTelemetry: boolean;
-  vaultUrl: string;
-  metaphor: {
-    development: string;
-    staging: string;
-    production: string;
-  };
 }
 
 const Services: FunctionComponent<ServicesProps> = ({
   apiUrl,
-  argoUrl,
-  argoWorkflowsUrl,
-  atlantisUrl,
   domainName,
-  githubOwner,
-  gitlabOwner,
-  gitProvider,
   k3dDomain,
   kubefirstVersion,
   useTelemetry,
-  vaultUrl,
-  metaphor,
 }) => {
   const [activeTab, setActiveTab] = useState<number>(0);
   const [sendTelemetryEvent] = useTelemetryMutation();
 
-  const isTelemetryEnabled = useAppSelector(({ config }) => config.isTelemetryEnabled);
+  const { isTelemetryEnabled, clusterServices } = useAppSelector(({ config, cluster }) => ({
+    isTelemetryEnabled: config.isTelemetryEnabled,
+    clusterServices: cluster.clusterServices,
+  }));
 
   const dispatch = useAppDispatch();
-
-  const gitTileProvider = useMemo(
-    () => (gitProvider === GitProvider.GITHUB ? 'GitHub' : 'GitLab'),
-    [gitProvider],
-  );
-
-  const gitLinks = useMemo(
-    () => [
-      gitProvider && `https://${gitProvider}.com/${githubOwner || gitlabOwner}/gitops`,
-      gitProvider && `https://${gitProvider}.com/${githubOwner || gitlabOwner}/metaphor`,
-    ],
-    [gitProvider, githubOwner, gitlabOwner],
-  );
-
-  const services = useMemo(
-    () => [
-      {
-        name: gitTileProvider,
-        description: `The ${gitTileProvider} repository contains all the Infrastructure as Code and GitOps configurations.`,
-        links: gitLinks,
-      },
-      {
-        name: 'Vault',
-        description: `Kubefirst’s secrets manager and identity provider.`,
-        links: [vaultUrl],
-      },
-      {
-        name: 'Argo CD',
-        description: `A GitOps oriented continuous delivery tool for managing all of our applications across our
-  kubernetes clusters.`,
-        links: [argoUrl],
-      },
-      {
-        name: 'Argo Workflows',
-        description: `The workflow engine for orchestrating parallel jobs on Kubernetes.`,
-        links: [`${argoWorkflowsUrl}/workflows`],
-      },
-      {
-        name: 'Atlantis',
-        description: `Kubefirst manages terraform workflows with atlantis automation.`,
-        links: [atlantisUrl],
-      },
-      {
-        name: 'Metaphor',
-        description: `A multi-environment demonstration space for frontend application best practices that’s easy to apply to other projects.`,
-        links: [metaphor?.development, metaphor?.staging, metaphor?.production],
-      },
-    ],
-    [
-      argoUrl,
-      argoWorkflowsUrl,
-      atlantisUrl,
-      gitLinks,
-      gitTileProvider,
-      metaphor?.development,
-      metaphor?.production,
-      metaphor?.staging,
-      vaultUrl,
-    ],
-  );
 
   const onClickLink = useCallback(
     (url: string, name: string) => {
@@ -176,7 +99,7 @@ const Services: FunctionComponent<ServicesProps> = ({
           </LearnMoreLink>
         </Typography>
         <ServicesContainer>
-          {services.map(({ name, ...rest }) => (
+          {clusterServices.map(({ name, ...rest }) => (
             <Service
               key={name}
               name={name}
@@ -189,7 +112,7 @@ const Services: FunctionComponent<ServicesProps> = ({
       </TabPanel>
       <TabPanel value={activeTab} index={SERVICES_TABS.MARKETPLACE}>
         <Typography variant="body2" sx={{ mb: 3 }} color={VOLCANIC_SAND}>
-          Click on a link to access the service Kubefirst has provisioned for you.{' '}
+          Add your favourite applications to your cluster.{' '}
           <LearnMoreLink
             href={DOCS_LINK}
             target="_blank"

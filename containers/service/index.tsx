@@ -8,6 +8,7 @@ export interface ServiceProps {
   description?: string;
   domainName: string;
   children?: React.ReactNode;
+  image: string;
   name: string;
   links?: Array<string>;
   onClickLink: (link: string, name: string) => void;

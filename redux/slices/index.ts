@@ -4,3 +4,4 @@ export { configReducer } from './config.slice';
 export { installationReducer } from './installation.slice';
 export { apiReducer } from './api.slice';
 export { featureFlagsReducer } from './featureFlags.slice';
+export { clusterReducer } from './cluster.slice';

@@ -5,3 +5,8 @@ export interface MarketplaceApp {
   description?: string;
   categories: Array<string>;
 }
+
+export interface MarketplaceProps {
+  app: MarketplaceApp;
+  clusterName: string;
+}

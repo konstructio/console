@@ -1,9 +1,14 @@
 import axios from 'axios';
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { MarketplaceApp } from 'types/marketplace';
 
 import { AppDispatch, RootState } from '../store';
-import { Cluster, ClusterRequestProps, ClusterResponse } from '../../types/provision';
+import {
+  Cluster,
+  ClusterRequestProps,
+  ClusterResponse,
+  ClusterServices,
+} from '../../types/provision';
+import { MarketplaceApp, MarketplaceProps } from '../../types/marketplace';
 
 const mapClusterFromRaw = (cluster: ClusterResponse): Cluster => ({
   id: cluster._id,
@@ -76,10 +81,7 @@ export const createCluster = createAsyncThunk<
       ...values?.vultr_auth,
     },
   };
-  const res = await axios.post(
-    `${apiUrl}/api/cluster/${values?.clusterName || 'kubefirst'}`,
-    params,
-  );
+  const res = await axios.post(`${apiUrl}/cluster/${values?.clusterName || 'kubefirst'}`, params);
 
   if ('error' in res) {
     throw res.error;
@@ -116,7 +118,8 @@ export const getClusters = createAsyncThunk<
   if ('error' in res) {
     throw res.error;
   }
-  return res.data.map(mapClusterFromRaw);
+
+  return (res.data && res.data.map(mapClusterFromRaw)) || [];
 });
 
 export const deleteCluster = createAsyncThunk<
@@ -133,6 +136,22 @@ export const deleteCluster = createAsyncThunk<
     throw res.error;
   }
   return res.data;
+});
+
+export const getClusterServices = createAsyncThunk<
+  Array<ClusterServices>,
+  ClusterRequestProps,
+  {
+    dispatch: AppDispatch;
+    state: RootState;
+  }
+>('api/cluster/getClusterServices', async ({ apiUrl, clusterName }) => {
+  const res = await axios.get(`${apiUrl}/services/${clusterName}`);
+
+  if ('error' in res) {
+    throw res.error;
+  }
+  return res.data?.services;
 });
 
 export const getMarketplaceApps = createAsyncThunk<
@@ -152,5 +171,25 @@ export const getMarketplaceApps = createAsyncThunk<
   if ('error' in res) {
     throw res.error;
   }
-  return res.data.apps;
+  return res.data?.apps;
+});
+
+export const installMarketplaceApp = createAsyncThunk<
+  MarketplaceApp,
+  MarketplaceProps,
+  {
+    dispatch: AppDispatch;
+    state: RootState;
+  }
+>('api/installMarketplaceApp', async ({ app, clusterName }, { getState }) => {
+  const {
+    config: { apiUrl },
+  } = getState();
+
+  const res = await axios.post(`${apiUrl}/services/${clusterName}/${app.name}`);
+
+  if ('error' in res) {
+    throw res.error;
+  }
+  return app;
 });

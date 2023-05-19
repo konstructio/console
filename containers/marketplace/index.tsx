@@ -17,8 +17,7 @@ import { CardsContainer, Container, Content, Filter } from './marketplace.styled
 const STATIC_HELP_CARD: MarketplaceApp = {
   categories: [],
   name: 'Can’t find what you need?',
-  image_url:
-    'https://raw.githubusercontent.com/kubefirst/kubefirst/main/images/kubefirst-light.svg',
+  image_url: 'https://assets.kubefirst.com/console/help.png',
 };
 
 const Marketplace: FunctionComponent = () => {
@@ -27,7 +26,7 @@ const Marketplace: FunctionComponent = () => {
 
   const { isOpen, openModal, closeModal } = useModal();
 
-  const marketplaceApps = useAppSelector(({ api }) => api.marketplaceApps);
+  const marketplaceApps = useAppSelector(({ cluster }) => cluster.marketplaceApps);
   const categories = useMemo(
     () =>
       marketplaceApps
@@ -75,6 +74,19 @@ const Marketplace: FunctionComponent = () => {
         <Typography variant="subtitle2" sx={{ mb: 3 }}>
           Category
         </Typography>
+        <FormGroup sx={{ mb: 2 }}>
+          <FormControlLabel
+            control={
+              <Checkbox sx={{ mr: 2 }} onClick={() => onClickCategory('all')} defaultChecked />
+            }
+            label={
+              <Typography variant="body2" color={VOLCANIC_SAND}>
+                All
+              </Typography>
+            }
+            sx={{ ml: 0 }}
+          />
+        </FormGroup>
         {categories &&
           categories.map((category) => (
             <FormGroup key={category} sx={{ mb: 2 }}>
@@ -91,7 +103,7 @@ const Marketplace: FunctionComponent = () => {
           ))}
       </Filter>
       <Content>
-        <Typography variant="subtitle2">Featured</Typography>
+        <Typography variant="subtitle2">All</Typography>
         <CardsContainer>
           {filteredApps.map((app) => (
             <MarketplaceCard key={app.name} {...app} onClick={() => handleSelectedApp(app)} />
