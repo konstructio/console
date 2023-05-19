@@ -5,7 +5,7 @@
 replicaCount: 1
 
 image:
-  repository: 555935582951.dkr.ecr.us-east-2.amazonaws.com
+  repository: public.ecr.aws/kubefirst/console
   pullPolicy: IfNotPresent
 
 imagePullSecrets: []
