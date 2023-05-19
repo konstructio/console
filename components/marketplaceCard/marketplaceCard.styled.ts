@@ -12,8 +12,9 @@ export const Card = styled.div`
 `;
 
 export const Description = styled(Typography)`
-  margin: 16px 0;
   color: ${({ theme }) => theme.colors.saltboxBlue};
+  height: 100px;
+  margin: 16px 0;
 
   & a {
     color: ${({ theme }) => theme.colors.primary};

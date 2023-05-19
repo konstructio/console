@@ -1,14 +1,16 @@
 import React, { FunctionComponent, useMemo, useState } from 'react';
 import { FormControlLabel, FormGroup } from '@mui/material';
 import intersection from 'lodash/intersection';
+import sortBy from 'lodash/sortBy';
 import NextLink from 'next/link';
+import { addMarketplaceApp } from 'redux/slices/cluster.slice';
 
 import Checkbox from '../../components/checkbox';
 import Typography from '../../components/typography';
 import MarketplaceCard from '../../components/marketplaceCard';
 import MarketplaceModal from '../../components/marketplaceModal';
 import useModal from '../../hooks/useModal';
-import { useAppSelector } from '../../redux/store';
+import { useAppDispatch, useAppSelector } from '../../redux/store';
 import { MarketplaceApp } from '../../types/marketplace';
 import { VOLCANIC_SAND } from '../../constants/colors';
 
@@ -20,13 +22,19 @@ const STATIC_HELP_CARD: MarketplaceApp = {
   image_url: 'https://assets.kubefirst.com/console/help.png',
 };
 
-const Marketplace: FunctionComponent = () => {
+const Marketplace: FunctionComponent<{ onSubmit: (name: string) => void }> = ({ onSubmit }) => {
   const [selectedCategories, setSelectedCategories] = useState<Array<string>>([]);
   const [selectedApp, setSelectedApp] = useState<MarketplaceApp>();
 
+  const dispatch = useAppDispatch();
+
   const { isOpen, openModal, closeModal } = useModal();
 
-  const marketplaceApps = useAppSelector(({ cluster }) => cluster.marketplaceApps);
+  const marketplaceApps = useAppSelector(({ cluster }) =>
+    cluster.marketplaceApps.filter(
+      (app) => !cluster.clusterServices.map((s) => s.name).includes(app.name),
+    ),
+  );
   const categories = useMemo(
     () =>
       marketplaceApps
@@ -51,8 +59,15 @@ const Marketplace: FunctionComponent = () => {
   };
 
   const handleSelectedApp = (app: MarketplaceApp) => {
-    setSelectedApp(app);
-    openModal();
+    if (app.secret_keys?.length) {
+      setSelectedApp(app);
+      openModal();
+    } else {
+      setTimeout(() => {
+        dispatch(addMarketplaceApp(app));
+        onSubmit(app.name);
+      }, 2000);
+    }
   };
 
   const filteredApps = useMemo(() => {
@@ -88,7 +103,7 @@ const Marketplace: FunctionComponent = () => {
           />
         </FormGroup>
         {categories &&
-          categories.map((category) => (
+          sortBy(categories).map((category) => (
             <FormGroup key={category} sx={{ mb: 2 }}>
               <FormControlLabel
                 control={<Checkbox sx={{ mr: 2 }} onClick={() => onClickCategory(category)} />}
@@ -131,7 +146,12 @@ const Marketplace: FunctionComponent = () => {
         </CardsContainer>
       </Content>
       {isOpen && selectedApp?.name && (
-        <MarketplaceModal closeModal={closeModal} isOpen={isOpen} {...selectedApp} />
+        <MarketplaceModal
+          closeModal={closeModal}
+          isOpen={isOpen}
+          onSubmit={onSubmit}
+          {...selectedApp}
+        />
       )}
     </Container>
   );

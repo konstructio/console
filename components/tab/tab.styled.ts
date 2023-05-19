@@ -4,6 +4,6 @@ import { Box } from '@mui/material';
 export const TabContainer = styled(Box)<{ backgroundColor?: string }>`
   background: ${({ backgroundColor }) => backgroundColor};
   border-radius: 4px;
-  height: calc(100% - 122px);
+  height: 100%;
   width: 100%;
 `;

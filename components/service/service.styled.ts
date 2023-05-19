@@ -54,6 +54,7 @@ export const Image = styled(NextImage)`
 export const Title = styled(Typography)`
   color: ${({ theme }) => theme.colors.volcanicSand};
   font-weight: 600;
+  text-transform: capitalize;
 `;
 
 export const Link = styled(NextLink)<{ disabled?: boolean }>`

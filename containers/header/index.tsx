@@ -5,6 +5,8 @@ import { setSelectedCluster } from 'redux/slices/cluster.slice';
 import { getClusters } from '../../redux/thunks/api.thunk';
 import Menu from '../../components/menu';
 import { useAppDispatch, useAppSelector } from '../../redux/store';
+import Typography from '../../components/typography';
+import { SALTBOX_BLUE } from '../../constants/colors';
 
 import { ClusterIndicator, ClusterMenu, Container } from './header.styled';
 
@@ -38,19 +40,21 @@ const Header: FunctionComponent = () => {
 
   return (
     <Container>
-      {clusters?.length ? (
+      {/* {clusters?.length ? (
         <Menu
           onClickMenu={(cluster) => handleSelectCluster(cluster)}
           label={
             <ClusterMenu>
               <ClusterIndicator />
-              {selectedCluster?.clusterName}
-              <KeyboardArrowDownIcon />
+              <Typography variant="body2" color={SALTBOX_BLUE}>
+                {selectedCluster?.clusterName}
+              </Typography>
+              <KeyboardArrowDownIcon htmlColor={SALTBOX_BLUE} />
             </ClusterMenu>
           }
           options={clusters && clusters.map(({ clusterName }) => ({ label: clusterName }))}
         />
-      ) : null}
+      ) : null} */}
     </Container>
   );
 };

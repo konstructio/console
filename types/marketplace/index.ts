@@ -1,6 +1,6 @@
 export interface MarketplaceApp {
   name: string;
-  secret_keys?: Array<string>;
+  secret_keys?: Array<{ name: string; label: string }>;
   image_url: string;
   description?: string;
   categories: Array<string>;

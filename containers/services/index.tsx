@@ -1,5 +1,5 @@
 import React, { FunctionComponent, useEffect, useCallback, useState } from 'react';
-import { Box, Tabs } from '@mui/material';
+import { Alert, Box, Snackbar, Tabs } from '@mui/material';
 
 import Service from '../service';
 import Marketplace from '../marketplace';
@@ -9,10 +9,11 @@ import { useTelemetryMutation } from '../../redux/api';
 import { setConfigValues } from '../../redux/slices/config.slice';
 import { getMarketplaceApps } from '../../redux/thunks/api.thunk';
 import { useAppDispatch, useAppSelector } from '../../redux/store';
+import useToggle from '../../hooks/useToggle';
 import { DOCS_LINK } from '../../constants';
 import { BISCAY, SALTBOX_BLUE, VOLCANIC_SAND } from '../../constants/colors';
 
-import { Container, Header, LearnMoreLink, ServicesContainer } from './services.styled';
+import { Container, Content, Header, LearnMoreLink, ServicesContainer } from './services.styled';
 
 enum SERVICES_TABS {
   PROVISIONED = 0,
@@ -35,7 +36,9 @@ const Services: FunctionComponent<ServicesProps> = ({
   kubefirstVersion,
   useTelemetry,
 }) => {
+  const [marketplaceApp, setMarketplaceApp] = useState<string>('');
   const [activeTab, setActiveTab] = useState<number>(0);
+  const { isOpen, open, close } = useToggle();
   const [sendTelemetryEvent] = useTelemetryMutation();
 
   const { isTelemetryEnabled, clusterServices } = useAppSelector(({ config, cluster }) => ({
@@ -87,42 +90,63 @@ const Services: FunctionComponent<ServicesProps> = ({
           />
         </Tabs>
       </Box>
-      <TabPanel value={activeTab} index={SERVICES_TABS.PROVISIONED}>
-        <Typography variant="body2" sx={{ mb: 3 }} color={VOLCANIC_SAND}>
-          Click on a link to access the service Kubefirst has provisioned for you.{' '}
-          <LearnMoreLink
-            href={DOCS_LINK}
-            target="_blank"
-            onClick={() => onClickLink(DOCS_LINK, 'docs')}
-          >
-            Learn more
-          </LearnMoreLink>
-        </Typography>
-        <ServicesContainer>
-          {clusterServices.map(({ name, ...rest }) => (
-            <Service
-              key={name}
-              name={name}
-              {...rest}
-              onClickLink={onClickLink}
-              domainName={domainName}
-            />
-          ))}
-        </ServicesContainer>
-      </TabPanel>
-      <TabPanel value={activeTab} index={SERVICES_TABS.MARKETPLACE}>
-        <Typography variant="body2" sx={{ mb: 3 }} color={VOLCANIC_SAND}>
-          Add your favourite applications to your cluster.{' '}
-          <LearnMoreLink
-            href={DOCS_LINK}
-            target="_blank"
-            onClick={() => onClickLink(DOCS_LINK, 'docs')}
-          >
-            Learn more
-          </LearnMoreLink>
-        </Typography>
-        <Marketplace />
-      </TabPanel>
+      <Content>
+        <TabPanel value={activeTab} index={SERVICES_TABS.PROVISIONED}>
+          <Typography variant="body2" sx={{ mb: 3 }} color={VOLCANIC_SAND}>
+            Click on a link to access the service Kubefirst has provisioned for you.{' '}
+            <LearnMoreLink
+              href={DOCS_LINK}
+              target="_blank"
+              onClick={() => onClickLink(DOCS_LINK, 'docs')}
+            >
+              Learn more
+            </LearnMoreLink>
+          </Typography>
+          <ServicesContainer>
+            {clusterServices.map(({ name, ...rest }) => (
+              <Service
+                key={name}
+                name={name}
+                {...rest}
+                onClickLink={onClickLink}
+                domainName={domainName}
+              />
+            ))}
+          </ServicesContainer>
+        </TabPanel>
+        <TabPanel value={activeTab} index={SERVICES_TABS.MARKETPLACE}>
+          <Typography variant="body2" sx={{ mb: 3 }} color={VOLCANIC_SAND}>
+            Add your favourite applications to your cluster.{' '}
+            <LearnMoreLink
+              href={DOCS_LINK}
+              target="_blank"
+              onClick={() => onClickLink(DOCS_LINK, 'docs')}
+            >
+              Learn more
+            </LearnMoreLink>
+          </Typography>
+          <Marketplace
+            onSubmit={(name: string) => {
+              setMarketplaceApp(name);
+              setActiveTab(SERVICES_TABS.PROVISIONED);
+              open();
+            }}
+          />
+        </TabPanel>
+      </Content>
+      <Snackbar
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'right',
+        }}
+        open={isOpen}
+        autoHideDuration={5000}
+        onClose={close}
+      >
+        <Alert onClose={close} severity="success" sx={{ width: '100%' }} variant="filled">
+          {`${marketplaceApp} successfully added to your cluster!`}
+        </Alert>
+      </Snackbar>
     </Container>
   );
 };

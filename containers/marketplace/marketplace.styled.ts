@@ -1,21 +1,22 @@
 import styled from 'styled-components';
 
-import Typography from '../../components/typography';
-
 export const CardsContainer = styled.div`
   display: flex;
   flex-wrap: wrap;
   gap: 16px;
   margin-top: 24px;
+  overflow: auto;
 `;
 
 export const Container = styled.div`
   display: flex;
-  height: calc(100% - 30px);
+  height: calc(100% - 80px);
   width: 100%;
 `;
 
 export const Content = styled.div`
+  height: calc(100% - 30px);
+  overflow: auto;
   padding: 24px;
   width: 100%;
 `;
@@ -26,6 +27,7 @@ export const Filter = styled.div`
   border-style: solid;
   border-color: ${({ theme }) => theme.colors.pastelLightBlue};
   border-radius: 8px;
-  padding: 24px;
+  height: 100%;
+  padding: 24px 24px 0 24px;
   width: 266px;
 `;

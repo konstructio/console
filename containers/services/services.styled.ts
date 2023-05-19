@@ -4,8 +4,12 @@ import styled from 'styled-components';
 export const Container = styled.div`
   height: calc(100vh - 80px);
   margin: 0 auto;
-  padding: 40px;
+  padding-top: 40px;
   width: 1192px;
+`;
+
+export const Content = styled.div`
+  height: calc(100% - 140px);
 `;
 
 export const Header = styled.div`
@@ -25,4 +29,6 @@ export const ServicesContainer = styled.div`
   display: flex;
   gap: 16px;
   flex-wrap: wrap;
+  max-height: calc(100% - 50px);
+  overflow: auto;
 `;
