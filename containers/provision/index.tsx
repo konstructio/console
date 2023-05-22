@@ -25,10 +25,15 @@ import { AdvancedOptionsContainer, ErrorContainer, Form, FormContent } from './p
 
 export interface ProvisionProps {
   apiUrl: string;
+  kubefirstVersion: string;
   useTelemetry: boolean;
 }
 
-const Provision: FunctionComponent<ProvisionProps> = ({ apiUrl, useTelemetry }) => {
+const Provision: FunctionComponent<ProvisionProps> = ({
+  apiUrl,
+  kubefirstVersion,
+  useTelemetry,
+}) => {
   const dispatch = useAppDispatch();
   const { installType, gitProvider, installationStep, values, error } = useAppSelector(
     ({ installation }) => installation,
@@ -188,12 +193,12 @@ const Provision: FunctionComponent<ProvisionProps> = ({ apiUrl, useTelemetry }) 
   ]);
 
   useEffect(() => {
-    dispatch(setConfigValues({ isTelemetryEnabled: useTelemetry, apiUrl }));
+    dispatch(setConfigValues({ isTelemetryEnabled: useTelemetry, apiUrl, kubefirstVersion }));
 
     return () => {
       dispatch(resetInstallState());
     };
-  }, [dispatch, useTelemetry, apiUrl]);
+  }, [dispatch, useTelemetry, apiUrl, kubefirstVersion]);
 
   return (
     <Form component="form" onSubmit={handleSubmit(onSubmit)}>

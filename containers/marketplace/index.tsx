@@ -1,16 +1,18 @@
 import React, { FunctionComponent, useMemo, useState } from 'react';
-import { FormControlLabel, FormGroup } from '@mui/material';
+import { useForm } from 'react-hook-form';
+import NextLink from 'next/link';
 import intersection from 'lodash/intersection';
 import sortBy from 'lodash/sortBy';
-import NextLink from 'next/link';
-import { addMarketplaceApp } from 'redux/slices/cluster.slice';
+import { Alert, FormControlLabel, FormGroup, Snackbar } from '@mui/material';
 
 import Checkbox from '../../components/checkbox';
 import Typography from '../../components/typography';
 import MarketplaceCard from '../../components/marketplaceCard';
 import MarketplaceModal from '../../components/marketplaceModal';
 import useModal from '../../hooks/useModal';
+import useToggle from '../../hooks/useToggle';
 import { useAppDispatch, useAppSelector } from '../../redux/store';
+import { installMarketplaceApp } from '../../redux/thunks/api.thunk';
 import { MarketplaceApp } from '../../types/marketplace';
 import { VOLCANIC_SAND } from '../../constants/colors';
 
@@ -22,19 +24,27 @@ const STATIC_HELP_CARD: MarketplaceApp = {
   image_url: 'https://assets.kubefirst.com/console/help.png',
 };
 
-const Marketplace: FunctionComponent<{ onSubmit: (name: string) => void }> = ({ onSubmit }) => {
+const Marketplace: FunctionComponent<{ onSubmit: () => void }> = ({ onSubmit }) => {
   const [selectedCategories, setSelectedCategories] = useState<Array<string>>([]);
   const [selectedApp, setSelectedApp] = useState<MarketplaceApp>();
 
   const dispatch = useAppDispatch();
+  const selectedCluster = useAppSelector(({ cluster }) => cluster.selectedCluster);
 
   const { isOpen, openModal, closeModal } = useModal();
+  const { isOpen: isNotificationOpen, open, close } = useToggle();
+
+  const {
+    control,
+    formState: { isValid },
+  } = useForm();
 
   const marketplaceApps = useAppSelector(({ cluster }) =>
     cluster.marketplaceApps.filter(
       (app) => !cluster.clusterServices.map((s) => s.name).includes(app.name),
     ),
   );
+
   const categories = useMemo(
     () =>
       marketplaceApps
@@ -58,15 +68,24 @@ const Marketplace: FunctionComponent<{ onSubmit: (name: string) => void }> = ({ 
     }
   };
 
+  const handleAddMarketplaceApp = async (app: MarketplaceApp) => {
+    try {
+      await dispatch(
+        installMarketplaceApp({ app, clusterName: selectedCluster?.clusterName as string }),
+      );
+      open();
+      onSubmit();
+    } catch (error) {
+      //todo: handle error
+    }
+  };
+
   const handleSelectedApp = (app: MarketplaceApp) => {
     if (app.secret_keys?.length) {
       setSelectedApp(app);
       openModal();
     } else {
-      setTimeout(() => {
-        dispatch(addMarketplaceApp(app));
-        onSubmit(app.name);
-      }, 2000);
+      handleAddMarketplaceApp(app);
     }
   };
 
@@ -89,19 +108,6 @@ const Marketplace: FunctionComponent<{ onSubmit: (name: string) => void }> = ({ 
         <Typography variant="subtitle2" sx={{ mb: 3 }}>
           Category
         </Typography>
-        <FormGroup sx={{ mb: 2 }}>
-          <FormControlLabel
-            control={
-              <Checkbox sx={{ mr: 2 }} onClick={() => onClickCategory('all')} defaultChecked />
-            }
-            label={
-              <Typography variant="body2" color={VOLCANIC_SAND}>
-                All
-              </Typography>
-            }
-            sx={{ ml: 0 }}
-          />
-        </FormGroup>
         {categories &&
           sortBy(categories).map((category) => (
             <FormGroup key={category} sx={{ mb: 2 }}>
@@ -147,12 +153,27 @@ const Marketplace: FunctionComponent<{ onSubmit: (name: string) => void }> = ({ 
       </Content>
       {isOpen && selectedApp?.name && (
         <MarketplaceModal
+          control={control}
+          isValid={isValid}
           closeModal={closeModal}
           isOpen={isOpen}
-          onSubmit={onSubmit}
+          onSubmit={handleAddMarketplaceApp}
           {...selectedApp}
         />
       )}
+      <Snackbar
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'right',
+        }}
+        open={isNotificationOpen}
+        autoHideDuration={5000}
+        onClose={close}
+      >
+        <Alert onClose={close} severity="success" sx={{ width: '100%' }} variant="filled">
+          {`${selectedApp?.name} successfully added to your cluster!`}
+        </Alert>
+      </Snackbar>
     </Container>
   );
 };

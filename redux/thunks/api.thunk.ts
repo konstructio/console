@@ -145,7 +145,11 @@ export const getClusterServices = createAsyncThunk<
     dispatch: AppDispatch;
     state: RootState;
   }
->('api/cluster/getClusterServices', async ({ apiUrl, clusterName }) => {
+>('api/cluster/getClusterServices', async ({ clusterName }, { getState }) => {
+  const {
+    config: { apiUrl },
+  } = getState();
+
   const res = await axios.get(`${apiUrl}/services/${clusterName}`);
 
   if ('error' in res) {

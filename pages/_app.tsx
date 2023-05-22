@@ -9,7 +9,7 @@ import { muiTheme } from '../theme/muiTheme';
 import { theme } from '../theme';
 import { wrapper } from '../redux/store';
 import Header from '../containers/header';
-import Navigation from '../components/navigation';
+import Navigation from '../containers/navigation';
 import Row from '../components/row';
 import Column from '../components/column';
 

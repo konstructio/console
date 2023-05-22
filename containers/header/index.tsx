@@ -40,7 +40,7 @@ const Header: FunctionComponent = () => {
 
   return (
     <Container>
-      {/* {clusters?.length ? (
+      {clusters?.length ? (
         <Menu
           onClickMenu={(cluster) => handleSelectCluster(cluster)}
           label={
@@ -52,9 +52,11 @@ const Header: FunctionComponent = () => {
               <KeyboardArrowDownIcon htmlColor={SALTBOX_BLUE} />
             </ClusterMenu>
           }
-          options={clusters && clusters.map(({ clusterName }) => ({ label: clusterName }))}
+          options={
+            clusters && clusters.map(({ clusterName }) => ({ label: clusterName.toUpperCase() }))
+          }
         />
-      ) : null} */}
+      ) : null}
     </Container>
   );
 };

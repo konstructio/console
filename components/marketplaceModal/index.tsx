@@ -1,7 +1,7 @@
 import React, { FunctionComponent } from 'react';
 import { Box, Divider } from '@mui/material';
 import Image from 'next/image';
-import { useForm } from 'react-hook-form';
+import { Control } from 'react-hook-form';
 
 import Modal from '../modal';
 import Button from '../button';
@@ -9,38 +9,30 @@ import Typography from '../typography';
 import ControlledPassword from '../controlledFields/Password';
 import { MarketplaceApp } from '../../types/marketplace';
 import { BISCAY, SALTBOX_BLUE } from '../../constants/colors';
-import { useAppDispatch } from '../../redux/store';
-import { addMarketplaceApp } from '../../redux/slices/cluster.slice';
 
 import { Content, Close, Footer, Header } from './marketplaceModal.styled';
 
 export interface MarketplaceModalProps extends MarketplaceApp {
+  control: Control;
   isOpen: boolean;
+  isValid: boolean;
   closeModal: () => void;
-  onSubmit: (name: string) => void;
+  onSubmit: (app: MarketplaceApp) => void;
 }
 
 const MarketplaceModal: FunctionComponent<MarketplaceModalProps> = ({
+  control,
   closeModal,
   isOpen,
+  isValid,
   name,
   image_url,
   secret_keys,
   onSubmit,
   ...rest
 }) => {
-  const dispatch = useAppDispatch();
-  const {
-    control,
-    formState: { isValid },
-  } = useForm();
-
   const handleSubmit = () => {
-    setTimeout(() => {
-      dispatch(addMarketplaceApp({ name, image_url, secret_keys, ...rest }));
-      closeModal();
-      onSubmit(name);
-    }, 3000);
+    onSubmit({ name, image_url, secret_keys, ...rest });
   };
 
   return (

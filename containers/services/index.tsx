@@ -1,15 +1,16 @@
 import React, { FunctionComponent, useEffect, useCallback, useState } from 'react';
-import { Alert, Box, Snackbar, Tabs } from '@mui/material';
+import { Box, Tabs } from '@mui/material';
+import { useRouter } from 'next/router';
 
 import Service from '../service';
 import Marketplace from '../marketplace';
 import TabPanel, { Tab, a11yProps } from '../../components/tab';
 import Typography from '../../components/typography';
+import useFeatureFlag from '../../hooks/useFeatureFlag';
 import { useTelemetryMutation } from '../../redux/api';
 import { setConfigValues } from '../../redux/slices/config.slice';
-import { getMarketplaceApps } from '../../redux/thunks/api.thunk';
+import { getClusterServices, getMarketplaceApps } from '../../redux/thunks/api.thunk';
 import { useAppDispatch, useAppSelector } from '../../redux/store';
-import useToggle from '../../hooks/useToggle';
 import { DOCS_LINK } from '../../constants';
 import { BISCAY, SALTBOX_BLUE, VOLCANIC_SAND } from '../../constants/colors';
 
@@ -22,7 +23,6 @@ enum SERVICES_TABS {
 
 export interface ServicesProps {
   apiUrl: string;
-  atlantisUrl: string;
   domainName: string;
   k3dDomain: string;
   kubefirstVersion: string;
@@ -36,17 +36,20 @@ const Services: FunctionComponent<ServicesProps> = ({
   kubefirstVersion,
   useTelemetry,
 }) => {
-  const [marketplaceApp, setMarketplaceApp] = useState<string>('');
   const [activeTab, setActiveTab] = useState<number>(0);
-  const { isOpen, open, close } = useToggle();
   const [sendTelemetryEvent] = useTelemetryMutation();
+  const router = useRouter();
 
-  const { isTelemetryEnabled, clusterServices } = useAppSelector(({ config, cluster }) => ({
-    isTelemetryEnabled: config.isTelemetryEnabled,
-    clusterServices: cluster.clusterServices,
-  }));
+  const { isEnabled: isMarketplaceEnabled, flagsAreReady } = useFeatureFlag('marketplace');
 
   const dispatch = useAppDispatch();
+  const { clusterServices, isTelemetryEnabled, selectedCluster } = useAppSelector(
+    ({ config, cluster }) => ({
+      isTelemetryEnabled: config.isTelemetryEnabled,
+      clusterServices: cluster.clusterServices,
+      selectedCluster: cluster.selectedCluster,
+    }),
+  );
 
   const onClickLink = useCallback(
     (url: string, name: string) => {
@@ -69,6 +72,16 @@ const Services: FunctionComponent<ServicesProps> = ({
     dispatch(getMarketplaceApps());
   }, [dispatch, useTelemetry, kubefirstVersion, k3dDomain, apiUrl]);
 
+  useEffect(() => {
+    if (!selectedCluster?.clusterName) {
+      router.push('/');
+    } else {
+      dispatch(() => {
+        dispatch(getClusterServices({ clusterName: selectedCluster?.clusterName }));
+      });
+    }
+  }, [dispatch, router, selectedCluster]);
+
   return (
     <Container>
       <Header>
@@ -82,12 +95,14 @@ const Services: FunctionComponent<ServicesProps> = ({
             {...a11yProps(SERVICES_TABS.PROVISIONED)}
             sx={{ textTransform: 'capitalize', mr: 3 }}
           />
-          <Tab
-            color={activeTab === SERVICES_TABS.MARKETPLACE ? BISCAY : SALTBOX_BLUE}
-            label={<Typography variant="buttonSmall">Marketplace</Typography>}
-            {...a11yProps(SERVICES_TABS.MARKETPLACE)}
-            sx={{ textTransform: 'capitalize' }}
-          />
+          {isMarketplaceEnabled && flagsAreReady && (
+            <Tab
+              color={activeTab === SERVICES_TABS.MARKETPLACE ? BISCAY : SALTBOX_BLUE}
+              label={<Typography variant="buttonSmall">Marketplace</Typography>}
+              {...a11yProps(SERVICES_TABS.MARKETPLACE)}
+              sx={{ textTransform: 'capitalize' }}
+            />
+          )}
         </Tabs>
       </Box>
       <Content>
@@ -126,27 +141,12 @@ const Services: FunctionComponent<ServicesProps> = ({
             </LearnMoreLink>
           </Typography>
           <Marketplace
-            onSubmit={(name: string) => {
-              setMarketplaceApp(name);
+            onSubmit={() => {
               setActiveTab(SERVICES_TABS.PROVISIONED);
-              open();
             }}
           />
         </TabPanel>
       </Content>
-      <Snackbar
-        anchorOrigin={{
-          vertical: 'bottom',
-          horizontal: 'right',
-        }}
-        open={isOpen}
-        autoHideDuration={5000}
-        onClose={close}
-      >
-        <Alert onClose={close} severity="success" sx={{ width: '100%' }} variant="filled">
-          {`${marketplaceApp} successfully added to your cluster!`}
-        </Alert>
-      </Snackbar>
     </Container>
   );
 };

@@ -1,16 +1,10 @@
-import React, { FunctionComponent, useCallback, useEffect, useMemo, useState } from 'react';
+import React, { FunctionComponent, ReactNode } from 'react';
 import Image from 'next/image';
-import { useRouter } from 'next/router';
 import HelpIcon from '@mui/icons-material/Help';
-import ScatterPlotIcon from '@mui/icons-material/ScatterPlot';
-// import PeopleOutlineSharpIcon from '@mui/icons-material/PeopleOutlineSharp';
-import GridViewOutlinedIcon from '@mui/icons-material/GridViewOutlined';
 import { BsSlack } from 'react-icons/bs';
 import Link from 'next/link';
 
 import { ECHO_BLUE } from '../../constants/colors';
-import { useAppSelector } from '../../redux/store';
-import useFeatureFlag from '../../hooks/useFeatureFlag';
 
 import {
   Container,
@@ -35,50 +29,24 @@ const FOOTER_ITEMS = [
   },
 ];
 
-const Navigation: FunctionComponent = () => {
-  const [domLoaded, setDomLoaded] = useState(false);
-  const { asPath } = useRouter();
-  const { kubefirstVersion } = useAppSelector(({ config }) => config);
-  const { isEnabled, flagsAreReady } = useFeatureFlag('cluster-management');
+export interface NavigationProps {
+  domLoaded: boolean;
+  handleIsActiveItem: (path: string) => void;
+  kubefirstVersion?: string;
+  routes: Array<{
+    icon: ReactNode;
+    path: string;
+    title: string;
+    isEnabled: boolean;
+  }>;
+}
 
-  const routes = useMemo(
-    () =>
-      [
-        {
-          icon: <ScatterPlotIcon />,
-          path: '/cluster-management',
-          title: 'Cluster Management',
-          isEnabled: flagsAreReady && isEnabled,
-        },
-        {
-          icon: <GridViewOutlinedIcon />,
-          path: '/services',
-          title: 'Services',
-          isEnabled: true,
-        },
-      ].filter(({ isEnabled }) => isEnabled),
-    [flagsAreReady, isEnabled],
-  );
-
-  const isActive = useCallback(
-    (route: string) => {
-      if (typeof window !== 'undefined') {
-        const linkPathname = new URL(route, window?.location?.href).pathname;
-
-        // Using URL().pathname to get rid of query and hash
-        const activePathname = new URL(asPath, window?.location?.href).pathname;
-
-        return linkPathname === activePathname;
-      }
-      return false;
-    },
-    [asPath],
-  );
-
-  useEffect(() => {
-    setDomLoaded(true);
-  }, []);
-
+const Navigation: FunctionComponent<NavigationProps> = ({
+  domLoaded,
+  handleIsActiveItem,
+  kubefirstVersion,
+  routes,
+}) => {
   return (
     <Container>
       <div>
@@ -92,11 +60,11 @@ const Navigation: FunctionComponent = () => {
             </KubefirstVersion>
           )}
         </KubefirstTitle>
-        {domLoaded && flagsAreReady && (
+        {domLoaded && (
           <MenuContainer>
             {routes.map(({ icon, path, title }) => (
               <Link href={path} key={path}>
-                <MenuItem isActive={isActive(path)}>
+                <MenuItem isActive={handleIsActiveItem(path)}>
                   {icon}
                   <Title variant="body1">{title}</Title>
                 </MenuItem>

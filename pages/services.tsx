@@ -1,42 +1,16 @@
-import React, { FunctionComponent, useEffect } from 'react';
-import { useRouter } from 'next/router';
+import React, { FunctionComponent } from 'react';
 
-import useFeatureFlag from '../hooks/useFeatureFlag';
 import Services from '../containers/services';
 
 interface ServicesPageProps {
   apiUrl: string;
-  argoUrl: string;
-  argoWorkflowsUrl: string;
-  atlantisUrl: string;
   domainName: string;
-  githubOwner: string;
-  gitlabOwner: string;
-  gitProvider: string;
   k3dDomain: string;
   kubefirstVersion: string;
   useTelemetry: boolean;
-  vaultUrl: string;
-  metaphor: {
-    development: string;
-    staging: string;
-    production: string;
-  };
 }
 
-const ServicesPage: FunctionComponent<ServicesPageProps> = (props) => {
-  const { push } = useRouter();
-
-  const { flagsAreReady } = useFeatureFlag('cluster-management');
-
-  useEffect(() => {
-    if (!flagsAreReady) {
-      push('/');
-    }
-  });
-
-  return <Services {...props} />;
-};
+const ServicesPage: FunctionComponent<ServicesPageProps> = (props) => <Services {...props} />;
 
 export async function getServerSideProps() {
   const {
@@ -45,7 +19,6 @@ export async function getServerSideProps() {
     K3D_DOMAIN = '',
     KUBEFIRST_VERSION = '',
     USE_TELEMETRY = '',
-    VAULT_URL = '',
   } = process.env;
 
   return {
@@ -55,7 +28,6 @@ export async function getServerSideProps() {
       k3dDomain: K3D_DOMAIN,
       kubefirstVersion: KUBEFIRST_VERSION,
       useTelemetry: USE_TELEMETRY === 'true',
-      vaultUrl: VAULT_URL,
     },
   };
 }

@@ -57,8 +57,8 @@ const Table: FunctionComponent<DataGridProps> = ({ ...props }) => {
             padding: '0 16px',
           },
           [`.${gridClasses.main}`]: {
-            'background': 'white',
-            'border-radius': '4px',
+            background: 'white',
+            borderRadius: '4px',
           },
           'filter': 'drop-shadow(0px 4px 12px rgba(0, 0, 0, 0.04))',
           'border': 0,

@@ -4,10 +4,10 @@ import { useRouter } from 'next/router';
 import useFeatureFlag from '../hooks/useFeatureFlag';
 import Provision, { ProvisionProps } from '../containers/provision';
 
-const ProvisionPage: FunctionComponent<ProvisionProps> = ({ apiUrl, useTelemetry }) => {
+const ProvisionPage: FunctionComponent<ProvisionProps> = (props) => {
   const { push } = useRouter();
 
-  const { flagsAreReady } = useFeatureFlag('cluster-management');
+  const { flagsAreReady } = useFeatureFlag('cluster-provisioning');
 
   useEffect(() => {
     if (!flagsAreReady) {
@@ -19,15 +19,16 @@ const ProvisionPage: FunctionComponent<ProvisionProps> = ({ apiUrl, useTelemetry
     return null;
   }
 
-  return <Provision apiUrl={apiUrl} useTelemetry={useTelemetry} />;
+  return <Provision {...props} />;
 };
 
 export async function getServerSideProps() {
-  const { API_URL = '', USE_TELEMETRY = '' } = process.env;
+  const { API_URL = '', KUBEFIRST_VERSION = '', USE_TELEMETRY = '' } = process.env;
 
   return {
     props: {
       apiUrl: API_URL,
+      kubefirstVersion: KUBEFIRST_VERSION,
       useTelemetry: USE_TELEMETRY === 'true',
     },
   };

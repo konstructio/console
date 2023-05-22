@@ -28,6 +28,7 @@ export const Filter = styled.div`
   border-color: ${({ theme }) => theme.colors.pastelLightBlue};
   border-radius: 8px;
   height: 100%;
+  overflow: auto;
   padding: 24px 24px 0 24px;
   width: 266px;
 `;

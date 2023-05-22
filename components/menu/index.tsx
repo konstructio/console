@@ -44,6 +44,7 @@ const Menu: FunctionComponent<MenuProps> = ({ isDisabled, label, options, onClic
         onClick={handleClick}
         disableRipple
         disabled={isDisabled}
+        sx={{ padding: 0 }}
       >
         {label}
       </Button>

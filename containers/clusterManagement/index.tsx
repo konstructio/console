@@ -24,9 +24,14 @@ import { getClusterManagementColumns, getClusterState } from './columnDefinition
 export interface ClusterManagementProps {
   apiUrl: string;
   useTelemetry: boolean;
+  kubefirstVersion: string;
 }
 
-const ClusterManagement: FunctionComponent<ClusterManagementProps> = ({ apiUrl, useTelemetry }) => {
+const ClusterManagement: FunctionComponent<ClusterManagementProps> = ({
+  apiUrl,
+  kubefirstVersion,
+  useTelemetry,
+}) => {
   const [selectedCluster, setSelectedCluster] = useState<Cluster>();
   const {
     isOpen: isDetailsPanelOpen,
@@ -104,8 +109,8 @@ const ClusterManagement: FunctionComponent<ClusterManagementProps> = ({ apiUrl, 
   }, [apiUrl, dispatch, handleGetClusters]);
 
   useEffect(() => {
-    dispatch(setConfigValues({ isTelemetryEnabled: useTelemetry, apiUrl }));
-  }, [dispatch, useTelemetry, apiUrl]);
+    dispatch(setConfigValues({ isTelemetryEnabled: useTelemetry, apiUrl, kubefirstVersion }));
+  }, [dispatch, useTelemetry, apiUrl, kubefirstVersion]);
 
   return (
     <Container>
