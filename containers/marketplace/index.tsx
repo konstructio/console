@@ -1,5 +1,5 @@
 import React, { FunctionComponent, useMemo, useState } from 'react';
-import { useForm } from 'react-hook-form';
+import { useForm, FieldValues } from 'react-hook-form';
 import NextLink from 'next/link';
 import intersection from 'lodash/intersection';
 import sortBy from 'lodash/sortBy';
@@ -24,7 +24,7 @@ const STATIC_HELP_CARD: MarketplaceApp = {
   image_url: 'https://assets.kubefirst.com/console/help.png',
 };
 
-const Marketplace: FunctionComponent<{ onSubmit: () => void }> = ({ onSubmit }) => {
+const Marketplace: FunctionComponent = () => {
   const [selectedCategories, setSelectedCategories] = useState<Array<string>>([]);
   const [selectedApp, setSelectedApp] = useState<MarketplaceApp>();
 
@@ -37,6 +37,8 @@ const Marketplace: FunctionComponent<{ onSubmit: () => void }> = ({ onSubmit }) 
   const {
     control,
     formState: { isValid },
+    getValues,
+    reset,
   } = useForm();
 
   const marketplaceApps = useAppSelector(({ cluster }) =>
@@ -70,13 +72,15 @@ const Marketplace: FunctionComponent<{ onSubmit: () => void }> = ({ onSubmit }) 
 
   const handleAddMarketplaceApp = async (app: MarketplaceApp) => {
     try {
+      const values = getValues();
       await dispatch(
-        installMarketplaceApp({ app, clusterName: selectedCluster?.clusterName as string }),
+        installMarketplaceApp({ app, clusterName: selectedCluster?.clusterName as string, values }),
       );
+      reset();
       open();
-      onSubmit();
     } catch (error) {
       //todo: handle error
+      console.log(error);
     }
   };
 

@@ -147,14 +147,20 @@ const TerminalLogs: FunctionComponent = () => {
 
       const emitter = createLogStream(`${apiUrl}/stream`);
       emitter.on('log', (log) => {
-        const [, time] = log.message.match(/time="([^"]*)"/);
-        const [, level] = log.message.match(/level=([^"]*)/);
-        const [, msg] = log.message.match(/msg="([^"]*)"/);
+        if (
+          log.message.includes('time=') &&
+          log.message.includes('level=') &&
+          log.message.includes('msg=')
+        ) {
+          const [, time] = log.message.match(/time="([^"]*)"/);
+          const [, level] = log.message.match(/level=([^"]*)/);
+          const [, msg] = log.message.match(/msg="([^"]*)"/);
 
-        const logLevel = level.replace(' msg=', '').toUpperCase();
-        const logStyle = logLevel.includes('ERROR') ? '\x1b[1;31m' : '\x1b[0;34m';
+          const logLevel = level.replace(' msg=', '').toUpperCase();
+          const logStyle = logLevel.includes('ERROR') ? '\x1b[1;31m' : '\x1b[0;34m';
 
-        terminal.write(`\x1b[0;37m${time} ${logStyle}${logLevel}:\x1b[1;37m ${msg} \n`);
+          terminal.write(`\x1b[0;37m${time} ${logStyle}${logLevel}:\x1b[1;37m ${msg} \n`);
+        }
       });
 
       emitter.on('error', () => {

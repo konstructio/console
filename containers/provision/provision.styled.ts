@@ -28,6 +28,8 @@ export const FormContent = styled(FormContainer)<{
   background-color: ${({ isLastStep, theme }) => (isLastStep ? 'transparent' : theme.colors.white)};
   box-shadow: ${({ isProvisionStep, isLastStep }) => (isLastStep || isProvisionStep) && 'none'};
   gap: 32px;
+  height: 500px;
+  overflow: auto;
   width: 1024px;
 
   ${({ hasInfo }) =>

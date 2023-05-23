@@ -2,7 +2,7 @@ import Link from 'next/link';
 import styled from 'styled-components';
 
 export const Container = styled.div`
-  height: calc(100vh - 80px);
+  height: calc(100vh - 104px);
   margin: 0 auto;
   padding-top: 40px;
   width: 1192px;

@@ -19,7 +19,9 @@ const Header: FunctionComponent = () => {
   }));
 
   const handleSelectCluster = (selectedClusterName: string) => {
-    const selectedCluster = clusters.find(({ clusterName }) => clusterName === selectedClusterName);
+    const selectedCluster = clusters.find(
+      ({ clusterName }) => clusterName.toLowerCase() === selectedClusterName.toLowerCase(),
+    );
 
     if (selectedCluster) {
       dispatch(setSelectedCluster(selectedCluster));

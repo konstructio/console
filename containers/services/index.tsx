@@ -140,11 +140,7 @@ const Services: FunctionComponent<ServicesProps> = ({
               Learn more
             </LearnMoreLink>
           </Typography>
-          <Marketplace
-            onSubmit={() => {
-              setActiveTab(SERVICES_TABS.PROVISIONED);
-            }}
-          />
+          <Marketplace />
         </TabPanel>
       </Content>
     </Container>

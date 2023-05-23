@@ -35,8 +35,15 @@ const Provision: FunctionComponent<ProvisionProps> = ({
   useTelemetry,
 }) => {
   const dispatch = useAppDispatch();
-  const { installType, gitProvider, installationStep, values, error } = useAppSelector(
-    ({ installation }) => installation,
+  const { installType, gitProvider, installationStep, values, error, authErrors } = useAppSelector(
+    ({ git, installation }) => ({
+      installType: installation.installType,
+      gitProvider: installation.gitProvider,
+      installationStep: installation.installationStep,
+      values: installation.values,
+      error: installation.error,
+      authErrors: git.errors,
+    }),
   );
 
   const { isProvisioned } = useAppSelector(({ api }) => api);
@@ -137,16 +144,16 @@ const Provision: FunctionComponent<ProvisionProps> = ({
     return (
       <>
         <FormContent hasInfo={hasInfo} isLastStep={isLastStep} isProvisionStep={isProvisionStep}>
-          {error && (
+          {error || authErrors.length ? (
             <ErrorContainer>
-              <ErrorBanner text={error} />
+              <ErrorBanner error={error || authErrors} />
               {isProvisionStep && (
                 <Button variant="contained" color="primary" onClick={provisionCluster}>
                   Retry
                 </Button>
               )}
             </ErrorContainer>
-          )}
+          ) : null}
           <FormFlow
             control={control}
             currentStep={installationStep}
@@ -178,6 +185,7 @@ const Provision: FunctionComponent<ProvisionProps> = ({
     isLastStep,
     isProvisionStep,
     error,
+    authErrors,
     provisionCluster,
     FormFlow,
     control,

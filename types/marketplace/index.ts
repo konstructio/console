@@ -1,3 +1,5 @@
+import { FieldValues } from 'react-hook-form';
+
 export interface MarketplaceApp {
   name: string;
   secret_keys?: Array<{ name: string; label: string }>;
@@ -9,4 +11,5 @@ export interface MarketplaceApp {
 export interface MarketplaceProps {
   app: MarketplaceApp;
   clusterName: string;
+  values?: FieldValues;
 }

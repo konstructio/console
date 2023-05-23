@@ -46,41 +46,41 @@ const Service: FunctionComponent<ServiceProps> = ({ links: serviceLinks, ...prop
     [dispatch, isSiteAvailable],
   );
 
-  // useEffect(() => {
-  //   if (availableSites.length) {
-  //     setLinks(
-  //       links &&
-  //         Object.keys(links).reduce(
-  //           (previous, current) => ({ ...previous, [current]: isSiteAvailable(current) }),
-  //           {},
-  //         ),
-  //     );
-  //   }
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [availableSites]);
+  useEffect(() => {
+    if (availableSites.length) {
+      setLinks(
+        links &&
+          Object.keys(links).reduce(
+            (previous, current) => ({ ...previous, [current]: isSiteAvailable(current) }),
+            {},
+          ),
+      );
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [availableSites]);
 
-  // useEffect(() => {
-  //   const interval = setInterval(
-  //     () =>
-  //       links &&
-  //       Object.keys(links).map((url) => {
-  //         const isAvailable = links[url];
-  //         !isAvailable && checkSiteAvailability(url);
-  //       }),
-  //     20000,
-  //   );
-  //   return () => clearInterval(interval);
-  // });
+  useEffect(() => {
+    const interval = setInterval(
+      () =>
+        links &&
+        Object.keys(links).map((url) => {
+          const isAvailable = links[url];
+          !isAvailable && checkSiteAvailability(url);
+        }),
+      20000,
+    );
+    return () => clearInterval(interval);
+  });
 
-  // useEffect(() => {
-  //   if (!firstLoad) {
-  //     setFirstLoad(true);
-  //     links &&
-  //       Object.keys(links).map(async (url) => {
-  //         await checkSiteAvailability(url);
-  //       });
-  //   }
-  // }, [checkSiteAvailability, dispatch, firstLoad, links]);
+  useEffect(() => {
+    if (!firstLoad) {
+      setFirstLoad(true);
+      links &&
+        Object.keys(links).map(async (url) => {
+          await checkSiteAvailability(url);
+        });
+    }
+  }, [checkSiteAvailability, dispatch, firstLoad, links]);
 
   return <ServiceComponent {...props} links={links} />;
 };

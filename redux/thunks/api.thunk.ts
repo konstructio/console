@@ -9,6 +9,7 @@ import {
   ClusterServices,
 } from '../../types/provision';
 import { MarketplaceApp, MarketplaceProps } from '../../types/marketplace';
+import { FieldValues } from 'react-hook-form';
 
 const mapClusterFromRaw = (cluster: ClusterResponse): Cluster => ({
   id: cluster._id,
@@ -74,8 +75,8 @@ export const createCluster = createAsyncThunk<
     civo_auth: {
       ...values?.civo_auth,
     },
-    digitalocean_auth: {
-      ...values?.digitalocean_auth,
+    do_auth: {
+      ...values?.do_auth,
     },
     vultr_auth: {
       ...values?.vultr_auth,
@@ -185,12 +186,21 @@ export const installMarketplaceApp = createAsyncThunk<
     dispatch: AppDispatch;
     state: RootState;
   }
->('api/installMarketplaceApp', async ({ app, clusterName }, { getState }) => {
+>('api/installMarketplaceApp', async ({ app, clusterName, values }, { getState }) => {
   const {
     config: { apiUrl },
   } = getState();
 
-  const res = await axios.post(`${apiUrl}/services/${clusterName}/${app.name}`);
+  const secret_keys =
+    values &&
+    Object.keys(values as FieldValues).map((key) => ({
+      name: key,
+      value: (values as FieldValues)[key],
+    }));
+
+  const res = await axios.post(`${apiUrl}/services/${clusterName}/${app.name}`, {
+    secret_keys,
+  });
 
   if ('error' in res) {
     throw res.error;

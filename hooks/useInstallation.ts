@@ -167,7 +167,7 @@ const getApiKeyInfo = (type: InstallationType) => {
       ],
     },
     [InstallationType.DIGITAL_OCEAN]: {
-      authKey: 'digitalocean_auth',
+      authKey: 'do_auth',
       fieldKeys: [
         {
           name: 'token',
