@@ -12,12 +12,14 @@ export interface ConfigState {
   selectedCluster?: Cluster;
   clusterServices: Array<ClusterServices>;
   marketplaceApps: Array<MarketplaceApp>;
+  isMarketplaceNotificationOpen: boolean;
 }
 
 export const initialState: ConfigState = {
   selectedCluster: undefined,
   clusterServices: [],
   marketplaceApps: [],
+  isMarketplaceNotificationOpen: false,
 };
 
 const clusterSlice = createSlice({
@@ -26,6 +28,9 @@ const clusterSlice = createSlice({
   reducers: {
     setSelectedCluster: (state, { payload: cluster }: PayloadAction<Cluster>) => {
       state.selectedCluster = cluster;
+    },
+    setIsMarketplaceNotificationOpen: (state, { payload }: PayloadAction<boolean>) => {
+      state.isMarketplaceNotificationOpen = payload;
     },
   },
   extraReducers: (builder) => {
@@ -52,6 +57,6 @@ const clusterSlice = createSlice({
   },
 });
 
-export const { setSelectedCluster } = clusterSlice.actions;
+export const { setSelectedCluster, setIsMarketplaceNotificationOpen } = clusterSlice.actions;
 
 export const clusterReducer = clusterSlice.reducer;

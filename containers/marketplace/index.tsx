@@ -1,5 +1,5 @@
 import React, { FunctionComponent, useMemo, useState } from 'react';
-import { useForm, FieldValues } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import NextLink from 'next/link';
 import intersection from 'lodash/intersection';
 import sortBy from 'lodash/sortBy';
@@ -10,9 +10,9 @@ import Typography from '../../components/typography';
 import MarketplaceCard from '../../components/marketplaceCard';
 import MarketplaceModal from '../../components/marketplaceModal';
 import useModal from '../../hooks/useModal';
-import useToggle from '../../hooks/useToggle';
 import { useAppDispatch, useAppSelector } from '../../redux/store';
 import { installMarketplaceApp } from '../../redux/thunks/api.thunk';
+import { setIsMarketplaceNotificationOpen } from '../../redux/slices/cluster.slice';
 import { MarketplaceApp } from '../../types/marketplace';
 import { VOLCANIC_SAND } from '../../constants/colors';
 
@@ -29,11 +29,12 @@ const Marketplace: FunctionComponent = () => {
   const [selectedApp, setSelectedApp] = useState<MarketplaceApp>();
 
   const dispatch = useAppDispatch();
-  const selectedCluster = useAppSelector(({ cluster }) => cluster.selectedCluster);
+  const { isMarketplaceNotificationOpen, selectedCluster } = useAppSelector(({ cluster }) => ({
+    selectedCluster: cluster.selectedCluster,
+    isMarketplaceNotificationOpen: cluster.isMarketplaceNotificationOpen,
+  }));
 
   const { isOpen, openModal, closeModal } = useModal();
-  const { isOpen: isNotificationOpen, open, close } = useToggle();
-
   const {
     control,
     formState: { isValid },
@@ -77,16 +78,14 @@ const Marketplace: FunctionComponent = () => {
         installMarketplaceApp({ app, clusterName: selectedCluster?.clusterName as string, values }),
       );
       reset();
-      open();
     } catch (error) {
       //todo: handle error
-      console.log(error);
     }
   };
 
   const handleSelectedApp = (app: MarketplaceApp) => {
+    setSelectedApp(app);
     if (app.secret_keys?.length) {
-      setSelectedApp(app);
       openModal();
     } else {
       handleAddMarketplaceApp(app);
@@ -170,9 +169,9 @@ const Marketplace: FunctionComponent = () => {
           vertical: 'bottom',
           horizontal: 'right',
         }}
-        open={isNotificationOpen}
+        open={isMarketplaceNotificationOpen}
         autoHideDuration={5000}
-        onClose={close}
+        onClose={() => dispatch(setIsMarketplaceNotificationOpen(false))}
       >
         <Alert onClose={close} severity="success" sx={{ width: '100%' }} variant="filled">
           {`${selectedApp?.name} successfully added to your cluster!`}
