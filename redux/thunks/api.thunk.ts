@@ -2,7 +2,14 @@ import axios from 'axios';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
 import { AppDispatch, RootState } from '../store';
-import { Cluster, ClusterRequestProps, ClusterResponse } from '../../types/provision';
+import {
+  Cluster,
+  ClusterRequestProps,
+  ClusterResponse,
+  ClusterServices,
+} from '../../types/provision';
+import { MarketplaceApp, MarketplaceProps } from '../../types/marketplace';
+import { FieldValues } from 'react-hook-form';
 
 const mapClusterFromRaw = (cluster: ClusterResponse): Cluster => ({
   id: cluster._id,
@@ -47,7 +54,7 @@ export const createCluster = createAsyncThunk<
     dispatch: AppDispatch;
     state: RootState;
   }
->('cluster/provisioning', async ({ apiUrl }, { getState }) => {
+>('api/cluster/provisioning', async ({ apiUrl }, { getState }) => {
   const {
     installation: { installType, gitProvider, values },
   } = getState();
@@ -68,8 +75,8 @@ export const createCluster = createAsyncThunk<
     civo_auth: {
       ...values?.civo_auth,
     },
-    digitalocean_auth: {
-      ...values?.digitalocean_auth,
+    do_auth: {
+      ...values?.do_auth,
     },
     vultr_auth: {
       ...values?.vultr_auth,
@@ -90,7 +97,7 @@ export const getCluster = createAsyncThunk<
     dispatch: AppDispatch;
     state: RootState;
   }
->('cluster/get', async ({ apiUrl, clusterName }) => {
+>('api/cluster/get', async ({ apiUrl, clusterName }) => {
   const res = await axios.get(`${apiUrl}/cluster/${clusterName || 'kubefirst'}`);
 
   if ('error' in res) {
@@ -106,13 +113,14 @@ export const getClusters = createAsyncThunk<
     dispatch: AppDispatch;
     state: RootState;
   }
->('cluster/getClusters', async ({ apiUrl }) => {
+>('api/cluster/getClusters', async ({ apiUrl }) => {
   const res = await axios.get(`${apiUrl}/cluster`);
 
   if ('error' in res) {
     throw res.error;
   }
-  return res.data.map(mapClusterFromRaw);
+
+  return (res.data && res.data.map(mapClusterFromRaw)) || [];
 });
 
 export const deleteCluster = createAsyncThunk<
@@ -122,11 +130,80 @@ export const deleteCluster = createAsyncThunk<
     dispatch: AppDispatch;
     state: RootState;
   }
->('cluster/delete', async ({ apiUrl, clusterName }) => {
+>('api/cluster/delete', async ({ apiUrl, clusterName }) => {
   const res = await axios.delete(`${apiUrl}/cluster/${clusterName || 'kubefirst'}`);
 
   if ('error' in res) {
     throw res.error;
   }
   return res.data;
+});
+
+export const getClusterServices = createAsyncThunk<
+  Array<ClusterServices>,
+  ClusterRequestProps,
+  {
+    dispatch: AppDispatch;
+    state: RootState;
+  }
+>('api/cluster/getClusterServices', async ({ clusterName }, { getState }) => {
+  const {
+    config: { apiUrl },
+  } = getState();
+
+  const res = await axios.get(`${apiUrl}/services/${clusterName}`);
+
+  if ('error' in res) {
+    throw res.error;
+  }
+  return res.data?.services;
+});
+
+export const getMarketplaceApps = createAsyncThunk<
+  Array<MarketplaceApp>,
+  void,
+  {
+    dispatch: AppDispatch;
+    state: RootState;
+  }
+>('api/getMarketplaceApps', async (_, { getState }) => {
+  const {
+    config: { apiUrl },
+  } = getState();
+
+  const res = await axios.get(`${apiUrl}/marketplace/apps`);
+
+  if ('error' in res) {
+    throw res.error;
+  }
+  return res.data?.apps;
+});
+
+export const installMarketplaceApp = createAsyncThunk<
+  MarketplaceApp,
+  MarketplaceProps,
+  {
+    dispatch: AppDispatch;
+    state: RootState;
+  }
+>('api/installMarketplaceApp', async ({ app, clusterName, values }, { getState }) => {
+  const {
+    config: { apiUrl },
+  } = getState();
+
+  const secret_keys =
+    values &&
+    Object.keys(values as FieldValues).map((key) => ({
+      name: key,
+      value: (values as FieldValues)[key],
+    }));
+
+  const res = await axios.post(`${apiUrl}/services/${clusterName}/${app.name}`, {
+    secret_keys,
+  });
+
+  if ('error' in res) {
+    throw res.error;
+  }
+  return app;
 });

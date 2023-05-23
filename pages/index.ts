@@ -15,8 +15,8 @@ const MainPage: FunctionComponent<MainPageProps> = ({ flags }) => {
   const { push } = useRouter();
 
   const dispatch = useAppDispatch();
-  const { isEnabled: clusterManagementEnabled, flagsAreReady } =
-    useFeatureFlag('cluster-management');
+  const { isEnabled: clusterProvisioningEnabled, flagsAreReady } =
+    useFeatureFlag('cluster-provisioning');
 
   useEffect(() => {
     dispatch(setFeatureFlags(flags));
@@ -24,13 +24,11 @@ const MainPage: FunctionComponent<MainPageProps> = ({ flags }) => {
 
   useEffect(() => {
     if (flagsAreReady) {
-      if (clusterManagementEnabled) {
-        push('/cluster-management');
-      } else {
-        push('/services');
+      if (clusterProvisioningEnabled) {
+        push('/provision');
       }
     }
-  }, [clusterManagementEnabled, flagsAreReady, push]);
+  }, [clusterProvisioningEnabled, flagsAreReady, push]);
 
   return null;
 };

@@ -9,7 +9,18 @@ export const Container = styled.div`
   width: calc(100% - 32px);
 `;
 
+export const ErrorContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
 export const Header = styled.div`
   display: flex;
   gap: 8px;
 `;
+
+export const List = styled.ul`
+  padding-left: 28px;
+`;
+
+export const ListItem = styled.li``;

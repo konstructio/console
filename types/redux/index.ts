@@ -17,7 +17,7 @@ export interface AuthValues {
   civo_auth?: {
     token: string;
   };
-  digitalocean_auth?: {
+  do_auth?: {
     token: string;
     spaces_key: string;
     spaces_secret: string;

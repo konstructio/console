@@ -1,7 +1,7 @@
 import React, { FunctionComponent, useCallback, useEffect, useMemo } from 'react';
 import { useForm } from 'react-hook-form';
 
-import { createCluster } from '../../redux/thunks/cluster.thunk';
+import { createCluster } from '../../redux/thunks/api.thunk';
 import InstallationStepContainer from '../../components/installationStepContainer';
 import InstallationInfoCard from '../../components/installationInfoCard';
 import { InstallationsSelection } from '../installationsSelection';
@@ -16,7 +16,7 @@ import { useInstallation } from '../../hooks/useInstallation';
 import { InstallValues, InstallationType } from '../../types/redux';
 import { GitProvider } from '../../types';
 import { setConfigValues } from '../../redux/slices/config.slice';
-import { clearClusterState } from '../../redux/slices/cluster.slice';
+import { clearClusterState } from '../../redux/slices/api.slice';
 import AdvancedOptions from '../clusterForms/shared/advancedOptions';
 import ErrorBanner from '../../components/errorBanner';
 import Button from '../../components/button';
@@ -25,16 +25,28 @@ import { AdvancedOptionsContainer, ErrorContainer, Form, FormContent } from './p
 
 export interface ProvisionProps {
   apiUrl: string;
+  kubefirstVersion: string;
   useTelemetry: boolean;
 }
 
-const Provision: FunctionComponent<ProvisionProps> = ({ apiUrl, useTelemetry }) => {
+const Provision: FunctionComponent<ProvisionProps> = ({
+  apiUrl,
+  kubefirstVersion,
+  useTelemetry,
+}) => {
   const dispatch = useAppDispatch();
-  const { installType, gitProvider, installationStep, values, error } = useAppSelector(
-    ({ installation }) => installation,
+  const { installType, gitProvider, installationStep, values, error, authErrors } = useAppSelector(
+    ({ git, installation }) => ({
+      installType: installation.installType,
+      gitProvider: installation.gitProvider,
+      installationStep: installation.installationStep,
+      values: installation.values,
+      error: installation.error,
+      authErrors: git.errors,
+    }),
   );
 
-  const { isProvisioned } = useAppSelector(({ cluster }) => cluster);
+  const { isProvisioned } = useAppSelector(({ api }) => api);
 
   const {
     stepTitles,
@@ -132,16 +144,16 @@ const Provision: FunctionComponent<ProvisionProps> = ({ apiUrl, useTelemetry }) 
     return (
       <>
         <FormContent hasInfo={hasInfo} isLastStep={isLastStep} isProvisionStep={isProvisionStep}>
-          {error && (
+          {error || authErrors.length ? (
             <ErrorContainer>
-              <ErrorBanner text={error} />
+              <ErrorBanner error={error || authErrors} />
               {isProvisionStep && (
                 <Button variant="contained" color="primary" onClick={provisionCluster}>
                   Retry
                 </Button>
               )}
             </ErrorContainer>
-          )}
+          ) : null}
           <FormFlow
             control={control}
             currentStep={installationStep}
@@ -173,6 +185,7 @@ const Provision: FunctionComponent<ProvisionProps> = ({ apiUrl, useTelemetry }) 
     isLastStep,
     isProvisionStep,
     error,
+    authErrors,
     provisionCluster,
     FormFlow,
     control,
@@ -188,12 +201,12 @@ const Provision: FunctionComponent<ProvisionProps> = ({ apiUrl, useTelemetry }) 
   ]);
 
   useEffect(() => {
-    dispatch(setConfigValues({ isTelemetryEnabled: useTelemetry, apiUrl }));
+    dispatch(setConfigValues({ isTelemetryEnabled: useTelemetry, apiUrl, kubefirstVersion }));
 
     return () => {
       dispatch(resetInstallState());
     };
-  }, [dispatch, useTelemetry, apiUrl]);
+  }, [dispatch, useTelemetry, apiUrl, kubefirstVersion]);
 
   return (
     <Form component="form" onSubmit={handleSubmit(onSubmit)}>

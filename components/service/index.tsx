@@ -1,13 +1,6 @@
 import React, { FunctionComponent, useCallback, useMemo } from 'react';
-import { StaticImageData } from 'next/image';
 import { Box, CircularProgress } from '@mui/material';
 
-import ArgoCDLogo from '../../assets/argocd.svg';
-import GitLabLogo from '../../assets/gitlab.svg';
-import GitHubLogo from '../../assets/github.svg';
-import VaultLogo from '../../assets/vault.svg';
-import AtlantisLogo from '../../assets/atlantis.svg';
-import MetaphorLogo from '../../assets/metaphor.svg';
 import Typography from '../typography';
 import { formatDomain } from '../../utils/url/formatDomain';
 import Tooltip from '../tooltip';
@@ -25,20 +18,11 @@ import {
   Title,
 } from './service.styled';
 
-const CARD_IMAGES: { [key: string]: StaticImageData } = {
-  ['Argo CD']: ArgoCDLogo,
-  ['Argo Workflows']: ArgoCDLogo,
-  ['GitLab']: GitLabLogo,
-  ['GitHub']: GitHubLogo,
-  ['Vault']: VaultLogo,
-  ['Atlantis']: AtlantisLogo,
-  ['Metaphor']: MetaphorLogo,
-};
-
 export interface ServiceProps {
   description?: string;
   domainName: string;
   children?: React.ReactNode;
+  image: string;
   name: string;
   links?: { [url: string]: boolean };
   onClickLink: (link: string, name: string) => void;
@@ -48,11 +32,11 @@ const Service: FunctionComponent<ServiceProps> = ({
   description,
   domainName,
   children,
+  image,
   name,
   links,
   onClickLink,
 }) => {
-  const serviceLogo = useMemo(() => CARD_IMAGES[name], [name]);
   const isMetaphor = useMemo(() => name === 'Metaphor', [name]);
 
   const serviceLink = useCallback(
@@ -118,8 +102,14 @@ const Service: FunctionComponent<ServiceProps> = ({
   return (
     <Container>
       <Header>
-        <Image src={serviceLogo} alt={name} width="24" />
+        <Image src={image} alt={name} width="24" height="24" />
         <Title variant="subtitle2">{name}</Title>
+        {/* <NextImage
+          src={`https://argocd.mgmt-20.kubefirst.com/api/badge?name=${name.toLowerCase()}`}
+          width={120}
+          height={20}
+          alt={name}
+        /> */}
       </Header>
       <Description variant="body2">{description}</Description>
       {links && !children ? linksComponent : children}

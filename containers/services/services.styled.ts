@@ -2,11 +2,14 @@ import Link from 'next/link';
 import styled from 'styled-components';
 
 export const Container = styled.div`
-  height: calc(100vh - 80px);
-  overflow: auto;
+  height: calc(100vh - 104px);
   margin: 0 auto;
-  padding: 40px;
-  max-width: 1192px;
+  padding-top: 40px;
+  width: 1192px;
+`;
+
+export const Content = styled.div`
+  height: calc(100% - 140px);
 `;
 
 export const Header = styled.div`
@@ -14,7 +17,7 @@ export const Header = styled.div`
   display: flex;
   flex-direction: column;
   gap: 8px;
-  margin-bottom: 40px;
+  margin-bottom: 24px;
 `;
 
 export const LearnMoreLink = styled(Link)`
@@ -26,4 +29,6 @@ export const ServicesContainer = styled.div`
   display: flex;
   gap: 16px;
   flex-wrap: wrap;
+  max-height: calc(100% - 50px);
+  overflow: auto;
 `;

@@ -1,105 +1,62 @@
-import { PayloadAction, createSlice } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-import { createCluster, deleteCluster, getCluster, getClusters } from '../thunks/cluster.thunk';
-import { Cluster, ClusterStatus } from '../../types/provision';
+import {
+  getClusterServices,
+  getMarketplaceApps,
+  installMarketplaceApp,
+} from '../../redux/thunks/api.thunk';
+import { Cluster, ClusterServices } from '../../types/provision';
+import { MarketplaceApp } from '../../types/marketplace';
 
-export interface ApiState {
-  loading: boolean;
-  isProvisioning: boolean;
-  isProvisioned: boolean;
-  isDeleted: boolean;
-  isDeleting: boolean;
-  status?: ClusterStatus;
-  isError: boolean;
-  lastErrorCondition?: string;
-  clusters: Array<Cluster>;
+export interface ConfigState {
   selectedCluster?: Cluster;
-  completedSteps: Array<{ label: string; order: number }>;
+  clusterServices: Array<ClusterServices>;
+  marketplaceApps: Array<MarketplaceApp>;
+  isMarketplaceNotificationOpen: boolean;
 }
 
-export const initialState: ApiState = {
-  isProvisioning: true,
-  isProvisioned: false,
-  isError: false,
-  lastErrorCondition: undefined,
-  isDeleting: false,
-  isDeleted: false,
-  status: undefined,
-  loading: false,
-  clusters: [],
+export const initialState: ConfigState = {
   selectedCluster: undefined,
-  completedSteps: [],
+  clusterServices: [],
+  marketplaceApps: [],
+  isMarketplaceNotificationOpen: false,
 };
 
 const clusterSlice = createSlice({
   name: 'cluster',
   initialState,
   reducers: {
-    setCompletedSteps: (state, action) => {
-      state.completedSteps = action.payload;
+    setSelectedCluster: (state, { payload: cluster }: PayloadAction<Cluster>) => {
+      state.selectedCluster = cluster;
     },
-    clearClusterState: (state) => {
-      state.isProvisioning = true;
-      state.isProvisioned = false;
-      state.isError = false;
-      state.lastErrorCondition = undefined;
-      state.isDeleting = false;
-      state.isDeleted = false;
-      state.status = undefined;
-      state.loading = false;
-      state.clusters = [];
-      state.selectedCluster = undefined;
-      state.completedSteps = [];
+    setIsMarketplaceNotificationOpen: (state, { payload }: PayloadAction<boolean>) => {
+      state.isMarketplaceNotificationOpen = payload;
     },
   },
   extraReducers: (builder) => {
     builder
-      .addCase(createCluster.pending, (state) => {
-        state.loading = true;
+      .addCase(getClusterServices.fulfilled, (state, { payload }) => {
+        state.clusterServices = payload;
       })
-      .addCase(createCluster.fulfilled, (state, { payload }: PayloadAction<Cluster>) => {
-        state.loading = false;
-        state.status = payload.status as ClusterStatus;
-        state.isProvisioning = true;
+      .addCase(installMarketplaceApp.fulfilled, (state, { payload }) => {
+        const { name, description, image_url } = payload;
+        state.clusterServices.push({
+          default: false,
+          description: description as string,
+          name,
+          image: image_url,
+          links: [],
+        });
       })
-      .addCase(createCluster.rejected, (state) => {
-        state.loading = false;
-        state.isError = true;
-        state.isProvisioning = false;
-      })
-      .addCase(deleteCluster.pending, (state) => {
-        state.isDeleting = true;
-      })
-      .addCase(deleteCluster.rejected, (state) => {
-        state.isDeleting = false;
-        state.isError = true;
-      })
-      .addCase(getCluster.fulfilled, (state, { payload }: PayloadAction<Cluster>) => {
-        state.selectedCluster = payload;
-        state.loading = false;
-        state.status = payload.status as ClusterStatus;
-
-        if (state.status === ClusterStatus.DELETED) {
-          state.isDeleted = true;
-          state.isDeleting = false;
-          state.isError = false;
-        } else if (state.status === ClusterStatus.PROVISIONED) {
-          state.isProvisioned = true;
-          state.isProvisioning = false;
-          state.isError = false;
-        } else if (state.status === ClusterStatus.ERROR) {
-          state.isError = true;
-          state.lastErrorCondition = payload.lastErrorCondition;
-        }
-      })
-      .addCase(getClusters.fulfilled, (state, { payload }: PayloadAction<Array<Cluster>>) => {
-        state.loading = false;
-        state.isError = false;
-        state.clusters = payload;
-      });
+      .addCase(
+        getMarketplaceApps.fulfilled,
+        (state, { payload }: PayloadAction<Array<MarketplaceApp>>) => {
+          state.marketplaceApps = payload;
+        },
+      );
   },
 });
 
-export const { setCompletedSteps, clearClusterState } = clusterSlice.actions;
+export const { setSelectedCluster, setIsMarketplaceNotificationOpen } = clusterSlice.actions;
 
 export const clusterReducer = clusterSlice.reducer;

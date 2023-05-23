@@ -105,3 +105,12 @@ export interface Cluster extends Row {
     [key: string]: boolean;
   };
 }
+
+export interface ClusterServices {
+  name: string;
+  default: boolean;
+  description: string;
+  image: string;
+  links: Array<string>;
+  status?: string;
+}

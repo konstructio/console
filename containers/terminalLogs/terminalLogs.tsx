@@ -21,10 +21,10 @@ import ConciseLogs from '../conciseLogs';
 import useModal from '../../hooks/useModal';
 import Modal from '../../components/modal';
 import { useAppDispatch, useAppSelector } from '../../redux/store';
-import { getCluster } from '../../redux/thunks/cluster.thunk';
+import { getCluster } from '../../redux/thunks/api.thunk';
 import { ClusterRequestProps } from '../../types/provision';
 import { clearError, setError } from '../../redux/slices/installation.slice';
-import { setCompletedSteps } from '../../redux/slices/cluster.slice';
+import { setCompletedSteps } from '../../redux/slices/api.slice';
 import TabPanel, { Tab, a11yProps } from '../../components/tab';
 import FlappyKray from '../../components/flappyKray';
 import { CLUSTER_CHECKS } from '../../constants/cluster';
@@ -49,7 +49,7 @@ const TerminalLogs: FunctionComponent = () => {
   const dispatch = useAppDispatch();
   const {
     config: { apiUrl = '' },
-    cluster: {
+    api: {
       isProvisioned,
       isProvisioning,
       isError,
@@ -58,10 +58,10 @@ const TerminalLogs: FunctionComponent = () => {
       completedSteps,
     },
     installation: { values },
-  } = useAppSelector(({ config, cluster, installation }) => ({
+  } = useAppSelector(({ config, api, installation }) => ({
     installation,
     config,
-    cluster,
+    api,
   }));
 
   const { isOpen, openModal, closeModal } = useModal();
@@ -147,14 +147,20 @@ const TerminalLogs: FunctionComponent = () => {
 
       const emitter = createLogStream(`${apiUrl}/stream`);
       emitter.on('log', (log) => {
-        const [, time] = log.message.match(/time="([^"]*)"/);
-        const [, level] = log.message.match(/level=([^"]*)/);
-        const [, msg] = log.message.match(/msg="([^"]*)"/);
+        if (
+          log.message.includes('time=') &&
+          log.message.includes('level=') &&
+          log.message.includes('msg=')
+        ) {
+          const [, time] = log.message.match(/time="([^"]*)"/);
+          const [, level] = log.message.match(/level=([^"]*)/);
+          const [, msg] = log.message.match(/msg="([^"]*)"/);
 
-        const logLevel = level.replace(' msg=', '').toUpperCase();
-        const logStyle = logLevel.includes('ERROR') ? '\x1b[1;31m' : '\x1b[0;34m';
+          const logLevel = level.replace(' msg=', '').toUpperCase();
+          const logStyle = logLevel.includes('ERROR') ? '\x1b[1;31m' : '\x1b[0;34m';
 
-        terminal.write(`\x1b[0;37m${time} ${logStyle}${logLevel}:\x1b[1;37m ${msg} \n`);
+          terminal.write(`\x1b[0;37m${time} ${logStyle}${logLevel}:\x1b[1;37m ${msg} \n`);
+        }
       });
 
       emitter.on('error', () => {

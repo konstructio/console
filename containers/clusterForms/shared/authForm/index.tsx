@@ -6,7 +6,6 @@ import LearnMore from '../../../../components/learnMore';
 import ControlledPassword from '../../../../components/controlledFields/Password';
 import ControlledTextField from '../../../../components/controlledFields/TextField';
 import ControlledAutocomplete from '../../../../components/controlledFields/AutoComplete';
-import { clearError, setError } from '../../../../redux/slices/installation.slice';
 import { useAppDispatch, useAppSelector } from '../../../../redux/store';
 import { GitProvider } from '../../../../types';
 import { FormFlowProps } from '../../../../types/provision';
@@ -21,11 +20,10 @@ import {
   getGitlabGroups,
   getGitlabUser,
 } from '../../../../redux/thunks/git.thunk';
-import { clearGitValidationState, setToken } from '../../../../redux/slices/git.slice';
+import { setToken, clearUserError, setGitOwner } from '../../../../redux/slices/git.slice';
 
 const AuthForm: FunctionComponent<FormFlowProps<InstallValues>> = ({ control, setValue }) => {
   const [isGitRequested, setIsGitRequested] = useState<boolean>();
-  const [selectedGitOwner, setSelectedGitOwner] = useState<string>();
   const dispatch = useAppDispatch();
 
   const {
@@ -38,10 +36,6 @@ const AuthForm: FunctionComponent<FormFlowProps<InstallValues>> = ({ control, se
     installationType,
     isTokenValid,
     token = '',
-    hasExistingRepos,
-    hasExistingTeams,
-    loadedRepositories,
-    loadedTeams,
   } = useAppSelector(({ installation, git }) => ({
     currentStep: installation.installationStep,
     installationType: installation.installType,
@@ -58,9 +52,8 @@ const AuthForm: FunctionComponent<FormFlowProps<InstallValues>> = ({ control, se
   const isGitHub = useMemo(() => gitProvider === GitProvider.GITHUB, [gitProvider]);
 
   const validateGitOwner = async (gitOwner: string) => {
-    setSelectedGitOwner(gitOwner);
-    await dispatch(clearError());
-    await dispatch(clearGitValidationState());
+    dispatch(setGitOwner(gitOwner));
+    await dispatch(clearUserError());
     if (gitOwner) {
       if (isGitHub) {
         await dispatch(getGitHubOrgRepositories({ token, organization: gitOwner })).unwrap();
@@ -72,8 +65,7 @@ const AuthForm: FunctionComponent<FormFlowProps<InstallValues>> = ({ control, se
   };
 
   const handleGitTokenBlur = async (token: string) => {
-    await dispatch(clearGitValidationState());
-    await dispatch(clearError());
+    await dispatch(clearUserError());
     await dispatch(setToken(token));
 
     try {
@@ -113,42 +105,10 @@ const AuthForm: FunctionComponent<FormFlowProps<InstallValues>> = ({ control, se
   );
 
   useEffect(() => {
-    if (loadedRepositories && loadedTeams && selectedGitOwner) {
-      if (hasExistingRepos) {
-        dispatch(
-          setError({
-            error: `<strong>Error </strong>${gitErrorLabel}<strong> ${selectedGitOwner} </strong>
-              already has a ${
-                isGitHub ? 'repository' : 'project'
-              } named <strong>gitops</strong> or <strong>metaphor</strong>. 
-              Please remove or rename them to continue.`,
-          }),
-        );
-      } else if (hasExistingTeams) {
-        dispatch(
-          setError({
-            error: `<strong>Error</strong>${gitErrorLabel} <strong> ${selectedGitOwner} </strong> 
-            already has a team named <strong>admins</strong> or <strong>developers</strong>. 
-            Please remove or rename them to continue.`,
-          }),
-        );
-      }
-    }
-
     return () => {
-      dispatch(clearError());
-      // dispatch(clearGitValidationState());
+      dispatch(clearUserError());
     };
-  }, [
-    dispatch,
-    gitErrorLabel,
-    hasExistingRepos,
-    hasExistingTeams,
-    isGitHub,
-    loadedRepositories,
-    loadedTeams,
-    selectedGitOwner,
-  ]);
+  }, [dispatch, gitErrorLabel, isGitHub]);
 
   return (
     <>

@@ -6,6 +6,7 @@ import { TelemetryResponseData } from '../../pages/api/telemetry';
 import { SendTelemetryArgs } from '../../services/telemetry';
 
 export const consoleApi = createApi({
+  reducerPath: 'internalApi',
   baseQuery: fetchBaseQuery({
     baseUrl: '',
   }),

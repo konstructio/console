@@ -8,7 +8,7 @@ import Typography from '../typography';
 import { VOLCANIC_SAND } from '../../constants/colors';
 
 export interface MenuProps {
-  isDisabled: boolean;
+  isDisabled?: boolean;
   label: string | ReactNode;
   options?: Array<{
     label: string;
@@ -44,6 +44,7 @@ const Menu: FunctionComponent<MenuProps> = ({ isDisabled, label, options, onClic
         onClick={handleClick}
         disableRipple
         disabled={isDisabled}
+        sx={{ padding: 0 }}
       >
         {label}
       </Button>

@@ -20,11 +20,7 @@ export interface GitState {
   gitlabGroups: Array<GitLabGroup>;
   isLoading: boolean;
   isTokenValid: boolean;
-  error: string | null;
-  loadedRepositories?: boolean;
-  loadedTeams?: boolean;
-  hasExistingTeams?: boolean;
-  hasExistingRepos?: boolean;
+  errors: Array<string>;
   token?: string;
   gitOwner?: string;
 }
@@ -36,7 +32,7 @@ export const initialState: GitState = {
   gitlabGroups: [],
   isLoading: false,
   isTokenValid: false,
-  error: null,
+  errors: [],
 };
 
 const gitSlice = createSlice({
@@ -45,13 +41,12 @@ const gitSlice = createSlice({
   reducers: {
     setToken: (state, action) => {
       state.token = action.payload;
-      state.loadedRepositories = false;
-      state.loadedTeams = false;
-      state.hasExistingTeams = false;
-      state.hasExistingRepos = false;
+    },
+    setGitOwner: (state, action) => {
+      state.gitOwner = action.payload;
     },
     clearUserError: (state) => {
-      state.error = null;
+      state.errors = [];
     },
     clearGitState: (state) => {
       state.githubUser = null;
@@ -60,18 +55,8 @@ const gitSlice = createSlice({
       state.gitlabGroups = [];
       state.isLoading = false;
       state.isTokenValid = false;
-      state.error = null;
+      state.errors = [];
       state.token = undefined;
-      state.loadedRepositories = undefined;
-      state.loadedTeams = undefined;
-      state.hasExistingTeams = undefined;
-      state.hasExistingRepos = undefined;
-    },
-    clearGitValidationState: (state) => {
-      state.loadedRepositories = undefined;
-      state.loadedTeams = undefined;
-      state.hasExistingTeams = undefined;
-      state.hasExistingRepos = undefined;
     },
   },
   extraReducers: (builder) => {
@@ -81,15 +66,15 @@ const gitSlice = createSlice({
         state.githubUser = action.payload;
         state.isTokenValid = true;
       })
-      .addCase(getGithubUser.rejected, (state, action) => {
-        state.error = action.error.message ?? 'Failed to get user';
-      })
       .addCase(getGithubUserOrganizations.pending, (state) => {
         state.isLoading = true;
       })
       .addCase(getGithubUserOrganizations.rejected, (state, action) => {
         state.isLoading = false;
-        state.error = action.error.message ?? 'Failed to get users organizations';
+
+        if (action.error.message) {
+          state.errors.push('Failed to get users organizations');
+        }
       })
       .addCase(getGithubUserOrganizations.fulfilled, (state, action) => {
         state.githubUserOrganizations = action.payload.sort((a, b) =>
@@ -102,15 +87,23 @@ const gitSlice = createSlice({
         const kubefirstRepos = organizationRepos.filter(({ name }) =>
           KUBEFIRST_REPOSITORIES.includes(name),
         );
-        state.loadedRepositories = true;
-        state.hasExistingRepos = kubefirstRepos.length > 0;
+        if (kubefirstRepos.length) {
+          state.errors
+            .push(`GitHub organization <strong>${state.gitOwner}</strong> already has repositories named
+             either <strong>gitops</strong> and <strong>metaphor</strong>.
+             Please remove or rename to continue.`);
+        }
       })
       .addCase(getGitHubOrgTeams.fulfilled, (state, { payload: organizationTeams }) => {
         const kubefirstTeams = organizationTeams.filter(({ name }) =>
           KUBEFIRST_TEAMS.includes(name),
         );
-        state.loadedTeams = true;
-        state.hasExistingTeams = kubefirstTeams.length > 0;
+
+        if (kubefirstTeams.length) {
+          state.errors.push(`GitHub organization <strong> ${state.gitOwner} </strong> 
+            already has teams named <strong>admins</strong> or <strong>developers</strong>. 
+            Please remove or rename them to continue.`);
+        }
       })
       /* GitLab */
       .addCase(getGitlabUser.fulfilled, (state, action) => {
@@ -118,14 +111,18 @@ const gitSlice = createSlice({
         state.isTokenValid = true;
       })
       .addCase(getGitlabUser.rejected, (state, action) => {
-        state.error = action.error.message ?? 'Failed to get user';
+        if (action.error.message) {
+          state.errors.push('Failed to get user');
+        }
       })
       .addCase(getGitlabGroups.pending, (state) => {
         state.isLoading = true;
       })
       .addCase(getGitlabGroups.rejected, (state, action) => {
         state.isLoading = false;
-        state.error = action.error.message ?? 'Failed to get user groups';
+        if (action.error.message) {
+          state.errors.push('Failed to get user groups');
+        }
       })
       .addCase(getGitlabGroups.fulfilled, (state, action) => {
         state.gitlabGroups = action.payload.sort((a, b) => a.name.localeCompare(b.name));
@@ -141,15 +138,23 @@ const gitSlice = createSlice({
           KUBEFIRST_TEAMS.includes(name),
         );
 
-        state.loadedRepositories = true;
-        state.loadedTeams = true;
-        state.hasExistingRepos = kubefirstRepos.length > 0;
-        state.hasExistingTeams = kubefirstTeams.length > 0;
+        if (kubefirstTeams.length) {
+          state.errors
+            .push(`GitLab organization <strong>${state.gitOwner}</strong> already has teams named
+            <strong>admins</strong> or <strong>developers</strong>. 
+            Please remove or rename them to continue.`);
+        }
+
+        if (kubefirstRepos.length) {
+          state.errors
+            .push(`GitLab organization <strong>${state.gitOwner}</strong> already has repositories named
+          either <strong>gitops</strong> and <strong>metaphor</strong>.
+          Please remove or rename to continue.`);
+        }
       });
   },
 });
 
-export const { clearGitValidationState, clearGitState, clearUserError, setToken } =
-  gitSlice.actions;
+export const { clearGitState, clearUserError, setGitOwner, setToken } = gitSlice.actions;
 
 export const gitReducer = gitSlice.reducer;
