@@ -12,7 +12,7 @@ import { BISCAY, PORT_GORE } from '../../constants/colors';
 
 export const Label = muiStyled(StepLabel)(() => ({
   [`& .${stepLabelClasses.completed}`]: {
-    color: theme.colors.saltboxBlue,
+    color: `${theme.colors.saltboxBlue} !important`,
   },
   [`& .${stepLabelClasses.active}`]: {
     color: BISCAY,
@@ -29,7 +29,7 @@ export const ColorlibConnector = muiStyled(StepConnector)(({ theme: muiTheme }) 
   [`&.${stepConnectorClasses.alternativeLabel}`]: {
     left: 'calc(-50% + 26px)',
     right: 'calc(50% + 26px)',
-    top: 25,
+    top: 32,
   },
   [`&.${stepConnectorClasses.active}`]: {
     [`& .${stepConnectorClasses.line}`]: {

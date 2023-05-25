@@ -12,6 +12,7 @@ export const AdvancedOptionsContainer = styled(FormContainer)`
 
 export const Form = styled(Box)`
   height: 100%;
+  overflow: auto;
 `;
 
 export const ErrorContainer = styled.div`
@@ -28,8 +29,6 @@ export const FormContent = styled(FormContainer)<{
   background-color: ${({ isLastStep, theme }) => (isLastStep ? 'transparent' : theme.colors.white)};
   box-shadow: ${({ isProvisionStep, isLastStep }) => (isLastStep || isProvisionStep) && 'none'};
   gap: 32px;
-  height: 500px;
-  overflow: auto;
   width: 1024px;
 
   ${({ hasInfo }) =>

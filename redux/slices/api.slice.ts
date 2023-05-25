@@ -1,6 +1,13 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 
-import { createCluster, deleteCluster, getCluster, getClusters } from '../thunks/api.thunk';
+import {
+  createCluster,
+  deleteCluster,
+  getCloudDomains,
+  getCloudRegions,
+  getCluster,
+  getClusters,
+} from '../thunks/api.thunk';
 import { Cluster, ClusterStatus } from '../../types/provision';
 
 export interface ApiState {
@@ -15,6 +22,8 @@ export interface ApiState {
   clusters: Array<Cluster>;
   selectedCluster?: Cluster;
   completedSteps: Array<{ label: string; order: number }>;
+  cloudDomains: Array<string>;
+  cloudRegions: Array<string>;
 }
 
 export const initialState: ApiState = {
@@ -29,6 +38,8 @@ export const initialState: ApiState = {
   clusters: [],
   selectedCluster: undefined,
   completedSteps: [],
+  cloudDomains: [],
+  cloudRegions: [],
 };
 
 const apiSlice = createSlice({
@@ -50,6 +61,7 @@ const apiSlice = createSlice({
       state.clusters = [];
       state.selectedCluster = undefined;
       state.completedSteps = [];
+      state.cloudDomains = [];
     },
   },
   extraReducers: (builder) => {
@@ -96,6 +108,12 @@ const apiSlice = createSlice({
         state.loading = false;
         state.isError = false;
         state.clusters = payload;
+      })
+      .addCase(getCloudDomains.fulfilled, (state, { payload }: PayloadAction<Array<string>>) => {
+        state.cloudDomains = payload;
+      })
+      .addCase(getCloudRegions.fulfilled, (state, { payload }: PayloadAction<Array<string>>) => {
+        state.cloudRegions = payload;
       });
   },
 });

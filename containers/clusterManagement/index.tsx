@@ -151,7 +151,7 @@ const ClusterManagement: FunctionComponent<ClusterManagementProps> = ({
         anchor="right"
         hideBackdrop
         sx={{ top: '20px' }}
-        PaperProps={{ sx: { top: '46px', boxShadow: '0px 2px 4px rgba(100, 116, 139, 0.16)' } }}
+        PaperProps={{ sx: { top: '65px', boxShadow: '0px 2px 4px rgba(100, 116, 139, 0.16)' } }}
         onClose={closeDetailsPanel}
       >
         {selectedCluster && (

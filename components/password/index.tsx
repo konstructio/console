@@ -36,7 +36,7 @@ const Password: FunctionComponent<PasswordProps> = ({ label, helperText, ...prop
             edge="end"
             disableRipple
           >
-            {showPassword ? <VisibilityOffOutlinedIcon /> : <VisibilityOutlinedIcon />}
+            {showPassword ? <VisibilityOutlinedIcon /> : <VisibilityOffOutlinedIcon />}
           </IconButton>
         </InputAdornmentContainer>
       }

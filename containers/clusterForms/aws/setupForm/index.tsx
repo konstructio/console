@@ -1,13 +1,38 @@
-import React, { FunctionComponent } from 'react';
+import React, { FunctionComponent, useEffect } from 'react';
 
-import { InstallValues } from '../../../../types/redux';
 import ControlledAutocomplete from '../../../../components/controlledFields/AutoComplete';
 import ControlledTextField from '../../../../components/controlledFields/TextField';
 import LearnMore from '../../../../components/learnMore';
-import { AWS_REGIONS, EMAIL_REGEX } from '../../../../constants/index';
+import { useAppDispatch, useAppSelector } from '../../../../redux/store';
+import { getCloudDomains, getCloudRegions } from '../../../../redux/thunks/api.thunk';
+import { InstallValues } from '../../../../types/redux';
 import { FormFlowProps } from '../../../../types/provision';
+import { EMAIL_REGEX } from '../../../../constants/index';
 
 const AwsSetupForm: FunctionComponent<FormFlowProps<InstallValues>> = ({ control }) => {
+  const dispatch = useAppDispatch();
+  const { cloudDomains, cloudRegions } = useAppSelector(({ api }) => ({
+    cloudDomains: api.cloudDomains,
+    cloudRegions: api.cloudRegions,
+  }));
+
+  const handleRegionOnSelect = async (region: string) => {
+    dispatch(getCloudDomains(region));
+  };
+
+  const formatDomains = (domains: Array<string>) => {
+    return domains.map((domain) => {
+      const formattedDomain = domain[domain.length - 1].includes('.')
+        ? domain.substring(0, domain.length - 1)
+        : domain;
+      return { label: formattedDomain, value: formattedDomain };
+    });
+  };
+
+  useEffect(() => {
+    dispatch(getCloudRegions());
+  }, [dispatch]);
+
   return (
     <>
       <ControlledTextField
@@ -27,16 +52,16 @@ const AwsSetupForm: FunctionComponent<FormFlowProps<InstallValues>> = ({ control
         label="Cloud region"
         required
         rules={{ required: true }}
-        options={AWS_REGIONS}
+        options={cloudRegions && cloudRegions.map((region) => ({ label: region, value: region }))}
+        onChange={handleRegionOnSelect}
       />
-      <ControlledTextField
+      <ControlledAutocomplete
         control={control}
         name="domainName"
         label="Cluster domain name"
         required
-        rules={{
-          required: true,
-        }}
+        rules={{ required: true }}
+        options={cloudDomains && formatDomains(cloudDomains)}
       />
       <ControlledTextField
         control={control}

@@ -90,7 +90,7 @@ const gitSlice = createSlice({
         if (kubefirstRepos.length) {
           state.errors
             .push(`GitHub organization <strong>${state.gitOwner}</strong> already has repositories named
-             either <strong>gitops</strong> and <strong>metaphor</strong>.
+             either <strong>gitops</strong> and/or <strong>metaphor</strong>.
              Please remove or rename to continue.`);
         }
       })
@@ -101,7 +101,7 @@ const gitSlice = createSlice({
 
         if (kubefirstTeams.length) {
           state.errors.push(`GitHub organization <strong> ${state.gitOwner} </strong> 
-            already has teams named <strong>admins</strong> or <strong>developers</strong>. 
+            already has teams named <strong>admins</strong> and/or <strong>developers</strong>. 
             Please remove or rename them to continue.`);
         }
       })

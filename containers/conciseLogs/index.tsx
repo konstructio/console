@@ -86,6 +86,7 @@ const ConciseLogs: FunctionComponent<ConciseLogsProps> = ({ completedSteps }) =>
       )}
       {isProvisioned && (
         <Success>
+          <>🎉</>
           <SuccessText color="#bef264">Success</SuccessText>
           <SuccessText color="secondary">Cluster Provisioned</SuccessText>
         </Success>

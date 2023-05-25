@@ -28,6 +28,7 @@ export const consoleApi = createApi({
         url: '/api/readiness',
         method: 'POST',
         body,
+        timeout: 3000,
       }),
     }),
   }),

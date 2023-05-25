@@ -3,13 +3,14 @@ import Image from 'next/image';
 
 import { CardProps } from '../card';
 import Typography from '../typography';
+import Tag from '../tag';
 import { InstallationType } from '../../types/redux';
 import k3dLogo from '../../assets/k3d_logo.svg';
 import awsLogo from '../../assets/aws_logo.svg';
 import civoLogo from '../../assets/civo_logo.svg';
 import digitalOceanLogo from '../../assets/digital_ocean_logo.svg';
 import vultrLogo from '../../assets/vultr_logo.svg';
-import Tag from '../tag';
+import { BISCAY } from '../../constants/colors';
 
 import { CardContainer, DetailsContainer, Link, LabelContainer } from './cloudProviderCard.styled';
 
@@ -90,7 +91,9 @@ const CloudProviderCard: FunctionComponent<CloudProviderCardProps> = ({
       <Image src={logoSrc} alt="logo" width={width} height={height} />
       <DetailsContainer>
         <LabelContainer>
-          <Typography variant="subtitle2">{label}</Typography>
+          <Typography variant="subtitle2" color={BISCAY}>
+            {label}
+          </Typography>
           {beta && <Tag text="BETA" bgColor="light-orange" />}
         </LabelContainer>
         <Typography variant="body2">

@@ -1,7 +1,7 @@
 import React, { FunctionComponent, useCallback, useEffect, useMemo } from 'react';
 import { useForm } from 'react-hook-form';
 
-import { createCluster } from '../../redux/thunks/api.thunk';
+import { createCluster, getCloudRegions, resetClusterProgress } from '../../redux/thunks/api.thunk';
 import InstallationStepContainer from '../../components/installationStepContainer';
 import InstallationInfoCard from '../../components/installationInfoCard';
 import { InstallationsSelection } from '../installationsSelection';
@@ -131,10 +131,14 @@ const Provision: FunctionComponent<ProvisionProps> = ({
   };
 
   const provisionCluster = useCallback(async () => {
+    if (error) {
+      dispatch(resetClusterProgress());
+    }
+
     await dispatch(clearError());
     await dispatch(clearClusterState());
     await dispatch(createCluster({ apiUrl })).unwrap();
-  }, [apiUrl, dispatch]);
+  }, [apiUrl, dispatch, error]);
 
   const form = useMemo(() => {
     if (installationStep === 0) {
@@ -208,19 +212,28 @@ const Provision: FunctionComponent<ProvisionProps> = ({
     };
   }, [dispatch, useTelemetry, apiUrl, kubefirstVersion]);
 
+  useEffect(() => {
+    if (isSetupStep) {
+      dispatch(getCloudRegions());
+    }
+  }, [dispatch, isSetupStep]);
+
   return (
     <Form component="form" onSubmit={handleSubmit(onSubmit)}>
       <InstallationStepContainer
         activeStep={installationStep}
         steps={stepTitles}
         installationTitle={installTitle}
-        showBackButton={installationStep > 0 && !isProvisionStep}
+        showBackButton={
+          installationStep <= stepTitles.length - 1 && installationStep > 0 && !isProvisionStep
+        }
         onNextButtonClick={handleNextButtonClick}
         onBackButtonClick={handleBackButtonClick}
         nextButtonText={isSetupStep ? 'Create cluster' : 'Next'}
         nextButtonDisabled={!isValid}
         hasInfo={hasInfo}
         isProvisionStep={isProvisionStep}
+        showNextButton={installationStep < stepTitles.length - 1}
       >
         {form}
         {info && <InstallationInfoCard info={info} />}
