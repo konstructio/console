@@ -6,7 +6,6 @@ import Typography from '../typography';
 import { media } from '../../utils/media';
 
 export const Container = styled(Column)`
-  background-color: ${({ theme }) => theme.colors.washMe};
   height: 100%;
   width: 100%;
 `;
@@ -19,7 +18,6 @@ export const Content = styled(Column)<{ hasInfo?: boolean; isProvisionStep: bool
   gap: 24px;
   height: calc(100% - 285px);
   margin: 0 auto;
-  overflow-y: auto;
   width: 100%;
 
   ${({ hasInfo }) =>
@@ -43,4 +41,10 @@ export const InstallTitle = styled(Typography)`
 
 export const Title = styled.div`
   margin: 40px auto;
+`;
+
+export const FormContent = styled.div`
+  height: calc(100% - 198px);
+  margin-bottom: 40px;
+  overflow: auto;
 `;

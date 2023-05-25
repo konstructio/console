@@ -173,7 +173,12 @@ const Marketplace: FunctionComponent = () => {
         autoHideDuration={5000}
         onClose={() => dispatch(setIsMarketplaceNotificationOpen(false))}
       >
-        <Alert onClose={close} severity="success" sx={{ width: '100%' }} variant="filled">
+        <Alert
+          onClose={() => dispatch(setIsMarketplaceNotificationOpen(false))}
+          severity="success"
+          sx={{ width: '100%' }}
+          variant="filled"
+        >
           {`${selectedApp?.name} successfully added to your cluster!`}
         </Alert>
       </Snackbar>

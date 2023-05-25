@@ -80,7 +80,8 @@ const Service: FunctionComponent<ServiceProps> = ({ links: serviceLinks, ...prop
           await checkSiteAvailability(url);
         });
     }
-  }, [checkSiteAvailability, dispatch, firstLoad, links]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return <ServiceComponent {...props} links={links} />;
 };

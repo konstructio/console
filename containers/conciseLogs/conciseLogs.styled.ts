@@ -5,7 +5,6 @@ import Typography from '../../components/typography';
 export const Container = styled.div`
   font-family: 'Roboto Mono';
   max-height: 450px;
-  overflow: auto;
 `;
 
 export const EstimatedTime = styled.div`

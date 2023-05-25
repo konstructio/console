@@ -9,6 +9,7 @@ export interface InstallationButtonsProps {
   showBackButton?: boolean;
   onBackButtonClick?: () => void;
   onNextButtonClick: () => void;
+  showNextButton: boolean;
   nextButtonText?: string;
   nextButtonDisabled?: boolean;
 }
@@ -18,6 +19,7 @@ const InstallationButtons: FunctionComponent<InstallationButtonsProps> = ({
   showBackButton,
   onBackButtonClick,
   onNextButtonClick,
+  showNextButton,
   nextButtonText = 'Next',
   nextButtonDisabled,
   ...rest
@@ -29,16 +31,18 @@ const InstallationButtons: FunctionComponent<InstallationButtonsProps> = ({
       </Button>
     )}
 
-    <Button
-      type="submit"
-      variant="contained"
-      color="primary"
-      id="next"
-      onClick={() => activeStep === 0 && onNextButtonClick()}
-      disabled={nextButtonDisabled}
-    >
-      {nextButtonText}
-    </Button>
+    {showNextButton && (
+      <Button
+        type="submit"
+        variant="contained"
+        color="primary"
+        id="next"
+        onClick={() => activeStep === 0 && onNextButtonClick()}
+        disabled={nextButtonDisabled}
+      >
+        {nextButtonText}
+      </Button>
+    )}
   </Container>
 );
 

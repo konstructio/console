@@ -12,6 +12,7 @@ import {
   InstallationButtons,
   InstallTitle,
   Content,
+  FormContent,
 } from './installationStepContainer.styled';
 
 interface InstallationStepContainerProps
@@ -34,6 +35,7 @@ const InstallationStepContainer: FunctionComponent<InstallationStepContainerProp
   onBackButtonClick = noop,
   nextButtonText,
   nextButtonDisabled,
+  showNextButton,
   children,
   ...rest
 }) => {
@@ -56,14 +58,16 @@ const InstallationStepContainer: FunctionComponent<InstallationStepContainerProp
   return (
     <Container {...rest}>
       <Progress activeStep={activeStep} steps={steps} />
-      {isProvisionStep ? (
-        <LinearProgress progress={progress} />
-      ) : (
-        <InstallTitle variant="subtitle2">{installationTitle}</InstallTitle>
-      )}
-      <Content hasInfo={hasInfo} isProvisionStep={isProvisionStep}>
-        {children}
-      </Content>
+      <FormContent>
+        {isProvisionStep ? (
+          <LinearProgress progress={progress} />
+        ) : (
+          <InstallTitle variant="subtitle2">{installationTitle}</InstallTitle>
+        )}
+        <Content hasInfo={hasInfo} isProvisionStep={isProvisionStep}>
+          {children}
+        </Content>
+      </FormContent>
       <InstallationButtons
         activeStep={activeStep}
         onNextButtonClick={onNextButtonClick}
@@ -71,6 +75,7 @@ const InstallationStepContainer: FunctionComponent<InstallationStepContainerProp
         showBackButton={showBackButton}
         nextButtonText={nextButtonText}
         nextButtonDisabled={nextButtonDisabled}
+        showNextButton={showNextButton}
       />
     </Container>
   );

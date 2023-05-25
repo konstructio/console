@@ -1,5 +1,7 @@
 import axios from 'axios';
 import { createAsyncThunk } from '@reduxjs/toolkit';
+import { FieldValues } from 'react-hook-form';
+import sortBy from 'lodash/sortBy';
 
 import { AppDispatch, RootState } from '../store';
 import {
@@ -9,7 +11,6 @@ import {
   ClusterServices,
 } from '../../types/provision';
 import { MarketplaceApp, MarketplaceProps } from '../../types/marketplace';
-import { FieldValues } from 'react-hook-form';
 
 const mapClusterFromRaw = (cluster: ClusterResponse): Cluster => ({
   id: cluster._id,
@@ -206,4 +207,74 @@ export const installMarketplaceApp = createAsyncThunk<
     throw res.error;
   }
   return app;
+});
+
+export const getCloudRegions = createAsyncThunk<
+  Array<string>,
+  void,
+  {
+    dispatch: AppDispatch;
+    state: RootState;
+  }
+>('api/getCloudRegions', async (_, { getState }) => {
+  const {
+    config: { apiUrl },
+    installation: { values, installType },
+  } = getState();
+
+  const res = await axios.post<{ regions: Array<string> }>(
+    `${apiUrl}/region/${installType}`,
+    values,
+  );
+
+  if ('error' in res) {
+    throw res.error;
+  }
+  return sortBy(res.data.regions);
+});
+
+export const getCloudDomains = createAsyncThunk<
+  Array<string>,
+  string,
+  {
+    dispatch: AppDispatch;
+    state: RootState;
+  }
+>('api/getCloudDomains', async (cloudRegion, { getState }) => {
+  const {
+    config: { apiUrl },
+    installation: { values, installType },
+  } = getState();
+
+  const res = await axios.post<{ domains: Array<string> }>(`${apiUrl}/domain/${installType}`, {
+    ...values,
+    cloud_region: cloudRegion,
+  });
+
+  if ('error' in res) {
+    throw res.error;
+  }
+  return sortBy(res.data.domains);
+});
+
+export const resetClusterProgress = createAsyncThunk<
+  void,
+  void,
+  {
+    dispatch: AppDispatch;
+    state: RootState;
+  }
+>('api/resetClusterProgress', async (_, { getState }) => {
+  const {
+    config: { apiUrl },
+    installation: { values },
+  } = getState();
+
+  const res = await axios.post<{ regions: Array<string> }>(
+    `${apiUrl}/cluster/${values?.clusterName}/reset_progress`,
+  );
+
+  if ('error' in res) {
+    throw res.error;
+  }
 });

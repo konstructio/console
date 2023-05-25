@@ -67,7 +67,7 @@ export const InstallationsSelection: FunctionComponent<InstallationsSelectionPro
         <AdventureContent>
           <Subtitle variant="subtitle2">Now select your cloud adventure</Subtitle>
           <CloudProviderContainer>
-            {INSTALLATION_TYPES.map((type) => (
+            {INSTALLATION_TYPES.filter((type) => type !== InstallationType.LOCAL).map((type) => (
               <CloudProviderCard
                 key={type}
                 option={type}

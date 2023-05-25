@@ -93,16 +93,16 @@ const AuthForm: FunctionComponent<FormFlowProps<InstallValues>> = ({ control, se
 
   const gitLabel = useMemo(() => (isGitHub ? 'GitHub' : 'GitLab'), [isGitHub]);
 
+  const gitErrorLabel = useMemo(
+    () => (isGitHub ? 'GitHub organization' : 'GitLab group'),
+    [isGitHub],
+  );
+
   useEffect(() => {
     if (githubUser?.login || gitlabUser?.name) {
       setValue('userName', githubUser?.login || gitlabUser?.name);
     }
   }, [dispatch, githubUser, gitlabUser, setValue]);
-
-  const gitErrorLabel = useMemo(
-    () => (isGitHub ? 'GitHub organization' : 'GitLab group'),
-    [isGitHub],
-  );
 
   useEffect(() => {
     return () => {
@@ -140,7 +140,6 @@ const AuthForm: FunctionComponent<FormFlowProps<InstallValues>> = ({ control, se
           required
           name="gitOwner"
           rules={{ required: true }}
-          disabled={!isTokenValid}
           onChange={validateGitOwner}
           options={
             githubUserOrganizations &&
@@ -156,7 +155,6 @@ const AuthForm: FunctionComponent<FormFlowProps<InstallValues>> = ({ control, se
           required
           name="gitOwner"
           rules={{ required: true }}
-          disabled={!isTokenValid}
           onChange={validateGitOwner}
           options={
             gitlabGroups && gitlabGroups.map(({ name, path }) => ({ label: name, value: path }))

@@ -6,6 +6,7 @@ import { getClusters } from '../../redux/thunks/api.thunk';
 import Menu from '../../components/menu';
 import { useAppDispatch, useAppSelector } from '../../redux/store';
 import Typography from '../../components/typography';
+import useFeatureFlag from '../../hooks/useFeatureFlag';
 import { SALTBOX_BLUE } from '../../constants/colors';
 
 import { ClusterIndicator, ClusterMenu, Container } from './header.styled';
@@ -17,6 +18,8 @@ const Header: FunctionComponent = () => {
     apiUrl: config.apiUrl,
     selectedCluster: cluster.selectedCluster,
   }));
+
+  const { isEnabled, flagsAreReady } = useFeatureFlag('cluster-management');
 
   const handleSelectCluster = (selectedClusterName: string) => {
     const selectedCluster = clusters.find(
@@ -42,7 +45,7 @@ const Header: FunctionComponent = () => {
 
   return (
     <Container>
-      {clusters?.length ? (
+      {clusters?.length && isEnabled && flagsAreReady ? (
         <Menu
           onClickMenu={(cluster) => handleSelectCluster(cluster)}
           label={

@@ -5,7 +5,6 @@ export const CardsContainer = styled.div`
   flex-wrap: wrap;
   gap: 16px;
   margin-top: 24px;
-  overflow: auto;
 `;
 
 export const Container = styled.div`
@@ -16,7 +15,6 @@ export const Container = styled.div`
 
 export const Content = styled.div`
   height: calc(100% - 30px);
-  overflow: auto;
   padding: 24px;
   width: 100%;
 `;
@@ -27,7 +25,7 @@ export const Filter = styled.div`
   border-style: solid;
   border-color: ${({ theme }) => theme.colors.pastelLightBlue};
   border-radius: 8px;
-  height: 100%;
+  height: 100vh;
   overflow: auto;
   padding: 24px 24px 0 24px;
   width: 266px;
