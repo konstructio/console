@@ -8,28 +8,26 @@ import React, {
 } from 'react';
 import { Terminal as XTerminal } from 'xterm';
 import { FitAddon } from 'xterm-addon-fit';
-import { Box, Tabs } from '@mui/material';
-import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
-import SportsEsportsIcon from '@mui/icons-material/SportsEsports';
-import LiveTvIcon from '@mui/icons-material/LiveTv';
-import { OutlinedInput } from '@mui/material';
 import { SearchAddon } from 'xterm-addon-search';
+import { Box, Tabs, tabsClasses } from '@mui/material';
+import CopyToClipboard from 'react-copy-to-clipboard';
+import SearchIcon from '@mui/icons-material/Search';
+import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
+import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 
-import { createLogStream } from '../../services/stream';
+import Tooltip from '../../components/tooltip';
+import TabPanel, { Tab, a11yProps } from '../../components/tab';
 import ConciseLogs from '../conciseLogs';
-import useModal from '../../hooks/useModal';
-import Modal from '../../components/modal';
-import { useAppDispatch, useAppSelector } from '../../redux/store';
+import { createLogStream } from '../../services/stream';
 import { getCluster } from '../../redux/thunks/api.thunk';
-import { ClusterRequestProps } from '../../types/provision';
 import { clearError, setError } from '../../redux/slices/installation.slice';
 import { setCompletedSteps } from '../../redux/slices/api.slice';
-import TabPanel, { Tab, a11yProps } from '../../components/tab';
-import FlappyKray from '../../components/flappyKray';
+import { useAppDispatch, useAppSelector } from '../../redux/store';
+import { ClusterRequestProps } from '../../types/provision';
 import { CLUSTER_CHECKS } from '../../constants/cluster';
+import { ECHO_BLUE, LIBERTY_BLUE } from '../../constants/colors';
 
-import { Close, Container, Search, TerminalView } from './terminalLogs.styled';
+import { Container, Search, SearchTextField, TerminalView, Tools } from './terminalLogs.styled';
 
 import 'xterm/css/xterm.css';
 
@@ -43,6 +41,8 @@ enum TERMINAL_TABS {
 const TerminalLogs: FunctionComponent = () => {
   const [activeTab, setActiveTab] = useState<number>(1);
   const [searchTerm, setSearchTerm] = useState<string>('');
+  const [logs, setLogs] = useState<Array<string>>([]);
+
   const terminalRef = useRef(null);
   const searchAddonRef = useRef<SearchAddon>();
   const interval = useRef<NodeJS.Timer>();
@@ -64,25 +64,10 @@ const TerminalLogs: FunctionComponent = () => {
     api,
   }));
 
-  const { isOpen, openModal, closeModal } = useModal();
-  const {
-    isOpen: isYouTubeOpen,
-    openModal: openYouTubeModal,
-    closeModal: closeYouTubeModal,
-  } = useModal();
-
   const handleSearch = (event: ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target;
     searchAddonRef.current?.findPrevious(value, SEARCH_OPTIONS);
     setSearchTerm(value);
-  };
-
-  const handleSearchNext = () => {
-    searchAddonRef.current?.findNext(searchTerm, SEARCH_OPTIONS);
-  };
-
-  const handleSearchPrev = () => {
-    searchAddonRef.current?.findPrevious(searchTerm, SEARCH_OPTIONS);
   };
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
@@ -132,12 +117,12 @@ const TerminalLogs: FunctionComponent = () => {
     if (terminalRef.current) {
       const terminal = new XTerminal({
         convertEol: true,
+        cols: 110,
         disableStdin: true,
         logLevel: 'off',
         scrollback: 5000,
-        cols: 100,
         theme: {
-          background: '#0F172A',
+          background: LIBERTY_BLUE,
         },
       });
 
@@ -160,6 +145,8 @@ const TerminalLogs: FunctionComponent = () => {
           const logStyle = logLevel.includes('ERROR') ? '\x1b[1;31m' : '\x1b[0;34m';
 
           terminal.write(`\x1b[0;37m${time} ${logStyle}${logLevel}:\x1b[1;37m ${msg} \n`);
+
+          setLogs((logs) => [...logs, `${time} ${logLevel} ${msg} \n`]);
         }
       });
 
@@ -168,6 +155,13 @@ const TerminalLogs: FunctionComponent = () => {
       });
 
       emitter.startLogStream();
+
+      // const tempLogs = [];
+      // setInterval(() => {
+      //   tempLogs.push(`\x1b[0;37m 2023-05-05 \x1b[0;34m INFO:\x1b[1;37m Hey Kubefirst \n`);
+      //   setLogs(tempLogs);
+      //   terminal.write(`\x1b[0;37m 2023-05-05 \x1b[0;34m INFO:\x1b[1;37m Hey Kubefirst \n`);
+      // }, 5000);
 
       return () => {
         terminal.dispose();
@@ -197,6 +191,11 @@ const TerminalLogs: FunctionComponent = () => {
           textColor="secondary"
           indicatorColor="secondary"
           variant="fullWidth"
+          sx={{
+            [`.${tabsClasses.scroller}`]: {
+              height: 30,
+            },
+          }}
         >
           <Tab label="Concise" {...a11yProps(TERMINAL_TABS.CONCISE)} />
           <Tab label="Verbose" {...a11yProps(TERMINAL_TABS.VERBOSE)} />
@@ -209,39 +208,32 @@ const TerminalLogs: FunctionComponent = () => {
         <TerminalView ref={terminalRef} />
       </TabPanel>
 
-      {activeTab === TERMINAL_TABS.VERBOSE && (
+      <Tools>
         <Search>
-          <SportsEsportsIcon color="secondary" onClick={openModal} />
-          <LiveTvIcon color="secondary" onClick={openYouTubeModal} />
-          <OutlinedInput
+          <SearchIcon htmlColor={ECHO_BLUE} />
+          <SearchTextField
             placeholder="Search"
             onChange={handleSearch}
             size="small"
-            sx={{ color: 'white' }}
-            inputProps={{ color: 'white' }}
+            fullWidth
+            value={searchTerm}
+            onKeyDown={(e) => {
+              if (e.keyCode === 13) {
+                searchAddonRef.current?.findNext(searchTerm, SEARCH_OPTIONS);
+              }
+            }}
           />
-          <KeyboardArrowDownIcon color="secondary" onClick={handleSearchNext} />
-          <KeyboardArrowUpIcon color="secondary" onClick={handleSearchPrev} />
         </Search>
-      )}
-      {isOpen && <FlappyKray isOpen closeModal={closeModal} />}
-      {isYouTubeOpen && (
-        <Modal isOpen backgroundColor="transparent" boxShadow={false}>
-          <>
-            <iframe
-              src="https://www.youtube.com/embed/moBZzQtr-AE"
-              title="Kubefirst Channel"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture;"
-              style={{
-                border: 0,
-                height: '600px',
-                width: '1000px',
-              }}
-            />
-            <Close onClick={closeYouTubeModal} color="secondary" fontSize="large" />
-          </>
-        </Modal>
-      )}
+        <Tooltip title="Help documentation" placement="top">
+          <HelpOutlineIcon htmlColor={ECHO_BLUE} />
+        </Tooltip>
+        <CopyToClipboard text={logs.join('\n')}>
+          <Tooltip title="Copy" placement="top">
+            <ContentCopyIcon htmlColor={ECHO_BLUE} />
+          </Tooltip>
+        </CopyToClipboard>
+        {/* <OpenInFullIcon htmlColor={ECHO_BLUE} /> */}
+      </Tools>
     </Container>
   );
 };
