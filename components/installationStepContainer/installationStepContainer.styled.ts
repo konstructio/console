@@ -6,6 +6,7 @@ import Typography from '../typography';
 import { media } from '../../utils/media';
 
 export const Container = styled(Column)`
+  align-items: center;
   height: 100%;
   width: 100%;
 `;
@@ -28,7 +29,13 @@ export const Content = styled(Column)<{ hasInfo?: boolean; isProvisionStep: bool
       justify-content: center;
   `}
 
-  ${media.greaterThan('lg')`
+  ${({ isProvisionStep }) =>
+    isProvisionStep &&
+    `
+    height: 100%;
+  `}
+
+  ${media.greaterThan<{ hasInfo: boolean }>('lg')`
     flex-direction: ${({ hasInfo }) => hasInfo && 'row'};
   `};
 `;
@@ -43,8 +50,14 @@ export const Title = styled.div`
   margin: 40px auto;
 `;
 
-export const FormContent = styled.div`
+export const FormContent = styled.div<{ isProvisionStep: boolean }>`
   height: calc(100% - 198px);
   margin-bottom: 40px;
   overflow: auto;
+
+  ${({ isProvisionStep }) =>
+    isProvisionStep &&
+    `
+      margin-bottom: 0;
+  `}
 `;

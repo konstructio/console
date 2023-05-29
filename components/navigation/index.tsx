@@ -31,7 +31,7 @@ const FOOTER_ITEMS = [
 
 export interface NavigationProps {
   domLoaded: boolean;
-  handleIsActiveItem: (path: string) => void;
+  handleIsActiveItem: (path: string) => boolean;
   kubefirstVersion?: string;
   routes: Array<{
     icon: ReactNode;

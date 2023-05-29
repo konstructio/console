@@ -58,7 +58,7 @@ const InstallationStepContainer: FunctionComponent<InstallationStepContainerProp
   return (
     <Container {...rest}>
       <Progress activeStep={activeStep} steps={steps} />
-      <FormContent>
+      <FormContent isProvisionStep={isProvisionStep}>
         {isProvisionStep ? (
           <LinearProgress progress={progress} />
         ) : (

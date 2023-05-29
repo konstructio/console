@@ -14,8 +14,18 @@ const Navigation: FunctionComponent = () => {
     kubefirstVersion: config.kubefirstVersion,
     selectedCluster: cluster.selectedCluster,
   }));
-  const { isEnabled, flagsAreReady } = useFeatureFlag('cluster-management');
+
+  const { isEnabled: isClusterManagementEnabled, flagsAreReady } =
+    useFeatureFlag('cluster-management');
   const { isEnabled: isClusterProvisioningEnabled } = useFeatureFlag('cluster-provisioning');
+
+  const isProvisionEnabled = useMemo(() => {
+    if (!isClusterManagementEnabled) {
+      return !selectedCluster?.clusterName;
+    }
+
+    return true;
+  }, [isClusterManagementEnabled, selectedCluster?.clusterName]);
 
   const routes = useMemo(
     () =>
@@ -24,13 +34,13 @@ const Navigation: FunctionComponent = () => {
           icon: <ScatterPlotIcon />,
           path: '/cluster-management',
           title: 'Cluster Management',
-          isEnabled: flagsAreReady && isEnabled,
+          isEnabled: flagsAreReady && isClusterManagementEnabled,
         },
         {
           icon: <ScatterPlotIcon />,
           path: '/provision',
           title: 'Cluster Provisioning',
-          isEnabled: flagsAreReady && isClusterProvisioningEnabled,
+          isEnabled: flagsAreReady && isClusterProvisioningEnabled && isProvisionEnabled,
         },
         {
           icon: <GridViewOutlinedIcon />,
@@ -39,7 +49,13 @@ const Navigation: FunctionComponent = () => {
           isEnabled: !!selectedCluster?.clusterName,
         },
       ].filter(({ isEnabled }) => isEnabled),
-    [flagsAreReady, isClusterProvisioningEnabled, isEnabled, selectedCluster?.clusterName],
+    [
+      flagsAreReady,
+      isClusterManagementEnabled,
+      isClusterProvisioningEnabled,
+      isProvisionEnabled,
+      selectedCluster?.clusterName,
+    ],
   );
 
   const handleIsActiveItem = useCallback(

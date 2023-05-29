@@ -3,8 +3,12 @@ import styled from 'styled-components';
 import Typography from '../../components/typography';
 
 export const Container = styled.div`
+  background-color: ${({ theme }) => theme.colors.libertyBlue};
+  border-radius: 4px;
   font-family: 'Roboto Mono';
+  height: 448px;
   max-height: 450px;
+  padding: 24px;
 `;
 
 export const EstimatedTime = styled.div`
@@ -18,19 +22,19 @@ export const Step = styled.div`
 `;
 
 export const StepNumber = styled(Typography)`
-  font-style: normal;
-  font-weight: 700;
-  font-size: 14px;
-  line-height: 18px;
-  color: #94a3b8;
+  font-style: normal !important;
+  font-weight: 700 !important;
+  font-size: 14px !important;
+  line-height: 18px !important;
+  color: #94a3b8 !important;
 `;
 
 export const StepLabel = styled(Typography)`
-  font-family: 'Roboto Mono';
-  font-size: 14px;
-  font-style: normal;
-  font-weight: 700;
-  line-height: 18px;
+  font-family: 'Roboto Mono' !important;
+  font-size: 14px !important;
+  font-style: normal !important;
+  font-weight: 700 !important;
+  line-height: 18px !important;
 `;
 
 export const Success = styled.div`
