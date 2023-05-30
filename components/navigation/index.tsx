@@ -4,6 +4,7 @@ import HelpIcon from '@mui/icons-material/Help';
 import { BsSlack } from 'react-icons/bs';
 import Link from 'next/link';
 
+import Typography from '../typography';
 import { ECHO_BLUE } from '../../constants/colors';
 
 import {
@@ -14,6 +15,8 @@ import {
   KubefirstVersion,
   MenuItem,
   Title,
+  FlappyCard,
+  DocsCard,
 } from './navigation.styled';
 
 const FOOTER_ITEMS = [
@@ -32,6 +35,9 @@ const FOOTER_ITEMS = [
 export interface NavigationProps {
   domLoaded: boolean;
   handleIsActiveItem: (path: string) => boolean;
+  handleOpenContent: () => void;
+  handleOpenGame: () => void;
+  isProvisionStep: boolean;
   kubefirstVersion?: string;
   routes: Array<{
     icon: ReactNode;
@@ -44,6 +50,9 @@ export interface NavigationProps {
 const Navigation: FunctionComponent<NavigationProps> = ({
   domLoaded,
   handleIsActiveItem,
+  handleOpenContent,
+  handleOpenGame,
+  isProvisionStep,
   kubefirstVersion,
   routes,
 }) => {
@@ -74,6 +83,22 @@ const Navigation: FunctionComponent<NavigationProps> = ({
         )}
       </div>
       <FooterContainer>
+        {isProvisionStep && (
+          <>
+            <DocsCard onClick={handleOpenContent}>
+              <Image alt="controller-img" src="/static/learn.png" height={80} width={80} />
+              <Typography variant="subtitle2" color="secondary">
+                Got time? Sit back & learn...
+              </Typography>
+            </DocsCard>
+            <FlappyCard onClick={handleOpenGame}>
+              <Typography variant="subtitle2" color="secondary">
+                Bored? Play flappy K-ray and win stuff!
+              </Typography>
+              <Image alt="controller-img" src="/static/controller.png" height={80} width={80} />
+            </FlappyCard>
+          </>
+        )}
         {FOOTER_ITEMS.map(({ icon, path, title }) => (
           <Link href={path} key={path} target="_blank">
             <MenuItem>

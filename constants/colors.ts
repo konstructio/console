@@ -49,3 +49,4 @@ export const EXCLUSIVE_PLUM = '#71717A';
 export const LAUGHING_ORANGE = '#F59E0B';
 export const SEFID_WHITE = '#FEF2F2';
 export const ASMANI_SKY = '#81E2B4';
+export const METRO = '#808191';

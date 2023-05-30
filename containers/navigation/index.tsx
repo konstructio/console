@@ -2,18 +2,33 @@ import React, { FunctionComponent, useCallback, useEffect, useMemo, useState } f
 import { useRouter } from 'next/router';
 import ScatterPlotIcon from '@mui/icons-material/ScatterPlot';
 import GridViewOutlinedIcon from '@mui/icons-material/GridViewOutlined';
+import { useInstallation } from 'hooks/useInstallation';
 
+import KubefirstContent from '../kubefirstContent';
 import NavigationComponent from '../../components/navigation';
+import FlappyKray from '../../components/flappyKray';
 import useFeatureFlag from '../../hooks/useFeatureFlag';
+import useModal from '../../hooks/useModal';
 import { useAppSelector } from '../../redux/store';
+import { InstallationType } from '../../types/redux';
+import { GitProvider } from '../../types';
 
 const Navigation: FunctionComponent = () => {
   const [domLoaded, setDomLoaded] = useState<boolean>(false);
+  const { isOpen, openModal, closeModal } = useModal();
+  const {
+    isOpen: isModalContentOpen,
+    openModal: openModalContent,
+    closeModal: closeModalContent,
+  } = useModal();
+
   const { asPath } = useRouter();
-  const { kubefirstVersion, selectedCluster } = useAppSelector(({ config, cluster }) => ({
-    kubefirstVersion: config.kubefirstVersion,
-    selectedCluster: cluster.selectedCluster,
-  }));
+  const { kubefirstVersion, selectedCluster, installationStep, installType, gitProvider } =
+    useAppSelector(({ config, cluster, installation }) => ({
+      kubefirstVersion: config.kubefirstVersion,
+      selectedCluster: cluster.selectedCluster,
+      ...installation,
+    }));
 
   const { isEnabled: isClusterManagementEnabled, flagsAreReady } =
     useFeatureFlag('cluster-management');
@@ -26,6 +41,12 @@ const Navigation: FunctionComponent = () => {
 
     return true;
   }, [isClusterManagementEnabled, selectedCluster?.clusterName]);
+
+  const { isProvisionStep } = useInstallation(
+    installType as InstallationType,
+    gitProvider as GitProvider,
+    installationStep,
+  );
 
   const routes = useMemo(
     () =>
@@ -79,12 +100,21 @@ const Navigation: FunctionComponent = () => {
   }, []);
 
   return (
-    <NavigationComponent
-      domLoaded={domLoaded}
-      kubefirstVersion={kubefirstVersion}
-      routes={routes}
-      handleIsActiveItem={handleIsActiveItem}
-    />
+    <>
+      <NavigationComponent
+        domLoaded={domLoaded}
+        kubefirstVersion={kubefirstVersion}
+        routes={routes}
+        handleIsActiveItem={handleIsActiveItem}
+        handleOpenGame={openModal}
+        handleOpenContent={openModalContent}
+        isProvisionStep={isProvisionStep}
+      />
+      {isOpen && <FlappyKray isOpen closeModal={closeModal} />}
+      {isModalContentOpen && (
+        <KubefirstContent isOpen={isModalContentOpen} closeModal={closeModalContent} />
+      )}
+    </>
   );
 };
 

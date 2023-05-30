@@ -9,12 +9,9 @@ export const Container = styled(Column)`
   width: 100%;
 `;
 
-export const Description = styled.div`
-  width: 378px;
-`;
-
 export const Link = styled(NextLink)`
-  color: ${({ theme }) => theme.colors.primary};
+  color: ${({ theme }) => theme.colors.white};
+  text-transform: none;
   text-decoration: none;
 `;
 

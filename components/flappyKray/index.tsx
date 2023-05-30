@@ -1,8 +1,9 @@
 import React, { FunctionComponent, useRef } from 'react';
 
-import Modal from '../../components/modal';
+import Modal, { Close } from '../../components/modal';
+import { FLAPPY_TWEET } from '../../constants';
 
-import { Close, ShareInTwitter } from './flappyKray.styled';
+import { ShareInTwitter } from './flappyKray.styled';
 
 export interface FlappyKrayProps {
   closeModal: () => void;
@@ -12,17 +13,6 @@ export interface FlappyKrayProps {
 const FlappyKray: FunctionComponent<FlappyKrayProps> = ({ closeModal, isOpen }) => {
   const flappyKRayRef = useRef<HTMLIFrameElement>(null);
 
-  // const handleOnKeyPress = ({ keyCode }: KeyboardEvent) => {
-  //   console.log(flappyKRayRef.current?.contentWindow)
-  //   flappyKRayRef.current?.contentWindow?.fly(keyCode, '*');
-  // };
-
-  // useEffect(() => {
-  //   window.addEventListener('keydown', handleOnKeyPress);
-  //   return () => window.removeEventListener('keydown', handleOnKeyPress);
-  // }, []);
-
-  flappyKRayRef.current?.contentWindow?.postMessage('');
   return (
     <Modal isOpen={isOpen} backgroundColor="transparent" boxShadow={false}>
       <>
@@ -41,10 +31,7 @@ const FlappyKray: FunctionComponent<FlappyKrayProps> = ({ closeModal, isOpen }) 
           color="secondary"
           fontSize="large"
           onClick={() =>
-            window.open(
-              `https://twitter.com/intent/tweet?url=I'm trying @kubefirst \n&hashtags=kubefirst,gitops,kubernetes`,
-              '_blank',
-            )
+            window.open(`https://twitter.com/intent/tweet?url=${encodeURI(FLAPPY_TWEET)}`, '_blank')
           }
         />
         <Close onClick={closeModal} color="secondary" fontSize="large" />
