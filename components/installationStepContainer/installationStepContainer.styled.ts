@@ -32,7 +32,8 @@ export const Content = styled(Column)<{ hasInfo?: boolean; isProvisionStep: bool
   ${({ isProvisionStep }) =>
     isProvisionStep &&
     `
-    height: 100%;
+      background-color: transparent;
+      height: 100%;
   `}
 
   ${media.greaterThan<{ hasInfo: boolean }>('lg')`

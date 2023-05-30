@@ -11,6 +11,7 @@ import {
   ClusterServices,
 } from '../../types/provision';
 import { MarketplaceApp, MarketplaceProps } from '../../types/marketplace';
+import { InstallationType } from '../../types/redux';
 
 const mapClusterFromRaw = (cluster: ClusterResponse): Cluster => ({
   id: cluster._id,
@@ -224,7 +225,7 @@ export const getCloudRegions = createAsyncThunk<
 
   const res = await axios.post<{ regions: Array<string> }>(
     `${apiUrl}/region/${installType}`,
-    values,
+    installType === InstallationType.AWS ? { ...values, cloud_region: 'us-east-1' } : values,
   );
 
   if ('error' in res) {

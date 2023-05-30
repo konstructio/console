@@ -2,6 +2,8 @@ import React, { FunctionComponent } from 'react';
 import ModalMui from '@mui/material/Modal';
 import { Box } from '@mui/material';
 
+export { Close } from './modal.styled';
+
 const style = {
   position: 'absolute',
   top: '50%',
@@ -9,6 +11,7 @@ const style = {
   transform: 'translate(-50%, -50%)',
   width: 'auto',
   borderRadius: '8px',
+  outline: 'none',
   zIndex: 2000,
 };
 

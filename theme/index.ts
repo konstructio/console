@@ -38,6 +38,7 @@ import {
   ROYAL_PURPLE,
   SEFID_WHITE,
   PASTEL_LIGHT_BLUE,
+  METRO,
 } from '../constants/colors';
 
 export const theme: DefaultTheme = {
@@ -79,5 +80,6 @@ export const theme: DefaultTheme = {
     royanPurple: ROYAL_PURPLE,
     sefidWhite: SEFID_WHITE,
     pastelLightBlue: PASTEL_LIGHT_BLUE,
+    metro: METRO,
   },
 };

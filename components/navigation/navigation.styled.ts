@@ -121,3 +121,33 @@ export const KubefirstTitle = styled.div`
     } 
   `}
 `;
+
+export const RouterCard = styled.div`
+  align-items: center;
+  border-radius: 16px;
+  cursor: pointer;
+  display: none;
+  height: 135px;
+  padding: 0 16px;
+  width: 176px;
+
+  ${media.greaterThan('md')`
+    display: flex;
+  `}
+`;
+
+export const DocsCard = styled(RouterCard)`
+  border: 2px solid;
+  border-image-slice: 1;
+  border-image-source: linear-gradient(90deg, #7aa5e2 0%, #d0bae9 50%, #8851c8 100%);
+  border-width: 2px;
+  gap: 10px;
+  margin: 24px 24px 0 24px;
+`;
+
+export const FlappyCard = styled(RouterCard)`
+  background: linear-gradient(180deg, rgba(136, 81, 200, 0.6) 0%, rgba(129, 226, 180, 0.6) 100%);
+  margin: 24px 24px 40px 24px;
+`;
+
+export const ContentCard = styled.div``;

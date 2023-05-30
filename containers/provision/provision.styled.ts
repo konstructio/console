@@ -36,4 +36,10 @@ export const FormContent = styled(FormContainer)<{
     `
       width: 680px;
   `}
+
+  ${({ isProvisionStep }) =>
+    isProvisionStep &&
+    `
+      background-color: transparent;
+  `}
 `;
