@@ -17,10 +17,6 @@ export function createLogStream(url: string): LogStreamResponse {
       // eslint-disable-next-line no-console
       console.log('connection established');
     });
-    eventSource.addEventListener('log', (e) => {
-      const logMessage = JSON.parse(e.data);
-      logStream.emit('log', logMessage);
-    });
     eventSource.addEventListener('message', (e) => {
       const logMessage = JSON.parse(e.data);
       logStream.emit('log', logMessage);

@@ -22,7 +22,6 @@ enum SERVICES_TABS {
 }
 
 export interface ServicesProps {
-  apiUrl: string;
   domainName: string;
   k3dDomain: string;
   kubefirstVersion: string;
@@ -30,7 +29,6 @@ export interface ServicesProps {
 }
 
 const Services: FunctionComponent<ServicesProps> = ({
-  apiUrl,
   domainName,
   k3dDomain,
   kubefirstVersion,
@@ -66,11 +64,9 @@ const Services: FunctionComponent<ServicesProps> = ({
   };
 
   useEffect(() => {
-    dispatch(
-      setConfigValues({ isTelemetryEnabled: useTelemetry, kubefirstVersion, k3dDomain, apiUrl }),
-    );
+    dispatch(setConfigValues({ isTelemetryEnabled: useTelemetry, kubefirstVersion, k3dDomain }));
     dispatch(getMarketplaceApps());
-  }, [dispatch, useTelemetry, kubefirstVersion, k3dDomain, apiUrl]);
+  }, [dispatch, useTelemetry, kubefirstVersion, k3dDomain]);
 
   useEffect(() => {
     if (!selectedCluster?.clusterName) {

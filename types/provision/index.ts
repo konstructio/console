@@ -21,7 +21,6 @@ export interface FormFlowProps<T extends FieldValues> {
 }
 
 export interface ClusterRequestProps {
-  apiUrl?: string;
   clusterName?: string;
 }
 

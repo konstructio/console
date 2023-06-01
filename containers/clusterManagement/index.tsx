@@ -22,13 +22,11 @@ import { Container, Content, Description, Header, LearnMoreLink } from './cluste
 import { getClusterManagementColumns, getClusterState } from './columnDefinition';
 
 export interface ClusterManagementProps {
-  apiUrl: string;
   useTelemetry: boolean;
   kubefirstVersion: string;
 }
 
 const ClusterManagement: FunctionComponent<ClusterManagementProps> = ({
-  apiUrl,
   kubefirstVersion,
   useTelemetry,
 }) => {
@@ -62,7 +60,7 @@ const ClusterManagement: FunctionComponent<ClusterManagementProps> = ({
   };
 
   const handleDeleteCluster = () => {
-    dispatch(deleteCluster({ apiUrl, clusterName: selectedCluster?.clusterName })).unwrap();
+    dispatch(deleteCluster({ clusterName: selectedCluster?.clusterName })).unwrap();
     handleGetClusters();
     closeDeleteModal();
   };
@@ -73,8 +71,8 @@ const ClusterManagement: FunctionComponent<ClusterManagementProps> = ({
   };
 
   const handleGetClusters = useCallback(async (): Promise<void> => {
-    await dispatch(getClusters({ apiUrl }));
-  }, [apiUrl, dispatch]);
+    await dispatch(getClusters());
+  }, [dispatch]);
 
   const getClusterInterval = (params: ClusterRequestProps) => {
     return setInterval(async () => {
@@ -85,7 +83,6 @@ const ClusterManagement: FunctionComponent<ClusterManagementProps> = ({
   useEffect(() => {
     if (isDeleting && !isDeleted && selectedCluster) {
       interval.current = getClusterInterval({
-        apiUrl,
         clusterName: selectedCluster?.clusterName as string,
       });
       handleGetClusters();
@@ -106,11 +103,11 @@ const ClusterManagement: FunctionComponent<ClusterManagementProps> = ({
 
   useEffect(() => {
     handleGetClusters();
-  }, [apiUrl, dispatch, handleGetClusters]);
+  }, [dispatch, handleGetClusters]);
 
   useEffect(() => {
-    dispatch(setConfigValues({ isTelemetryEnabled: useTelemetry, apiUrl, kubefirstVersion }));
-  }, [dispatch, useTelemetry, apiUrl, kubefirstVersion]);
+    dispatch(setConfigValues({ isTelemetryEnabled: useTelemetry, kubefirstVersion }));
+  }, [dispatch, useTelemetry, kubefirstVersion]);
 
   return (
     <Container>

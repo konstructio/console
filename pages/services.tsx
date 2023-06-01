@@ -3,7 +3,6 @@ import React, { FunctionComponent } from 'react';
 import Services from '../containers/services';
 
 interface ServicesPageProps {
-  apiUrl: string;
   domainName: string;
   k3dDomain: string;
   kubefirstVersion: string;
@@ -14,7 +13,6 @@ const ServicesPage: FunctionComponent<ServicesPageProps> = (props) => <Services 
 
 export async function getServerSideProps() {
   const {
-    API_URL = '',
     DOMAIN_NAME = '',
     K3D_DOMAIN = '',
     KUBEFIRST_VERSION = '',
@@ -23,7 +21,6 @@ export async function getServerSideProps() {
 
   return {
     props: {
-      apiUrl: API_URL,
       domainName: DOMAIN_NAME,
       k3dDomain: K3D_DOMAIN,
       kubefirstVersion: KUBEFIRST_VERSION,

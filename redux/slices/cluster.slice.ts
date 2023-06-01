@@ -53,7 +53,10 @@ const clusterSlice = createSlice({
         (state, { payload }: PayloadAction<Array<MarketplaceApp>>) => {
           state.marketplaceApps = payload;
         },
-      );
+      )
+      .addCase(getMarketplaceApps.rejected, (state) => {
+        state.marketplaceApps = [];
+      });
   },
 });
 

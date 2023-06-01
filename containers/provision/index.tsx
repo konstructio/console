@@ -24,16 +24,11 @@ import Button from '../../components/button';
 import { AdvancedOptionsContainer, ErrorContainer, Form, FormContent } from './provision.styled';
 
 export interface ProvisionProps {
-  apiUrl: string;
   kubefirstVersion: string;
   useTelemetry: boolean;
 }
 
-const Provision: FunctionComponent<ProvisionProps> = ({
-  apiUrl,
-  kubefirstVersion,
-  useTelemetry,
-}) => {
+const Provision: FunctionComponent<ProvisionProps> = ({ kubefirstVersion, useTelemetry }) => {
   const dispatch = useAppDispatch();
   const { installType, gitProvider, installationStep, values, error, authErrors } = useAppSelector(
     ({ git, installation }) => ({
@@ -137,8 +132,8 @@ const Provision: FunctionComponent<ProvisionProps> = ({
 
     await dispatch(clearError());
     await dispatch(clearClusterState());
-    await dispatch(createCluster({ apiUrl })).unwrap();
-  }, [apiUrl, dispatch, error]);
+    await dispatch(createCluster()).unwrap();
+  }, [dispatch, error]);
 
   const form = useMemo(() => {
     if (installationStep === 0) {
@@ -205,12 +200,12 @@ const Provision: FunctionComponent<ProvisionProps> = ({
   ]);
 
   useEffect(() => {
-    dispatch(setConfigValues({ isTelemetryEnabled: useTelemetry, apiUrl, kubefirstVersion }));
+    dispatch(setConfigValues({ isTelemetryEnabled: useTelemetry, kubefirstVersion }));
 
     return () => {
       dispatch(resetInstallState());
     };
-  }, [dispatch, useTelemetry, apiUrl, kubefirstVersion]);
+  }, [dispatch, useTelemetry, kubefirstVersion]);
 
   useEffect(() => {
     if (isSetupStep) {
