@@ -11,6 +11,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     'Content-Type': 'text/event-stream',
   });
   res.flushHeaders();
+  res.write('\n');
 
   const eventSource = new EventSource(`${API_URL}/api/v1/stream`);
 
