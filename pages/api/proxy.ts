@@ -10,7 +10,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     return res.status(200).json('API_URL not provided');
   }
 
-  const kubefirstEndpointUrl = `${API_URL}${queryUrl || url}`;
+  const kubefirstEndpointUrl = `${API_URL}/api/v1${queryUrl || url}`;
 
   // eslint-disable-next-line no-console
   console.log(`METHOD: ${req.method} URL: ${kubefirstEndpointUrl}`);
