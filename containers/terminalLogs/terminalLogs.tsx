@@ -39,7 +39,7 @@ enum TERMINAL_TABS {
 }
 
 const TerminalLogs: FunctionComponent = () => {
-  const [activeTab, setActiveTab] = useState<number>(1);
+  const [activeTab, setActiveTab] = useState<number>(0);
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [logs, setLogs] = useState<Array<string>>([]);
 
@@ -129,8 +129,14 @@ const TerminalLogs: FunctionComponent = () => {
 
       terminal.open(terminalRef.current);
 
-      const emitter = createLogStream(`api/stream`);
-      emitter.on('log', (log) => {
+      const eventSource = new EventSource('/api/stream');
+      eventSource.addEventListener('open', () => {
+        // eslint-disable-next-line no-console
+        console.log('connection established');
+      });
+      eventSource.addEventListener('message', (e) => {
+        const log = JSON.parse(e.data);
+
         if (
           log.message.includes('time=') &&
           log.message.includes('level=') &&
@@ -149,15 +155,15 @@ const TerminalLogs: FunctionComponent = () => {
         }
       });
 
-      emitter.on('error', () => {
-        emitter.stopLogStream();
+      eventSource.addEventListener('error', (e) => {
+        // eslint-disable-next-line   no-console
+        console.log('An error ocurred in the stream logs ', e);
+        eventSource.close();
       });
-
-      emitter.startLogStream();
 
       return () => {
         terminal.dispose();
-        emitter.stopLogStream();
+        eventSource.close();
       };
     }
   }, [loadAddons]);
