@@ -13,9 +13,8 @@ import { ClusterIndicator, ClusterMenu, Container } from './header.styled';
 
 const Header: FunctionComponent = () => {
   const dispatch = useAppDispatch();
-  const { apiUrl, clusters, selectedCluster } = useAppSelector(({ api, cluster, config }) => ({
+  const { clusters, selectedCluster } = useAppSelector(({ api, cluster }) => ({
     clusters: api.clusters,
-    apiUrl: config.apiUrl,
     selectedCluster: cluster.selectedCluster,
   }));
 
@@ -32,10 +31,8 @@ const Header: FunctionComponent = () => {
   };
 
   useEffect(() => {
-    if (apiUrl) {
-      dispatch(getClusters({ apiUrl }));
-    }
-  }, [apiUrl, dispatch]);
+    dispatch(getClusters());
+  }, [dispatch]);
 
   useEffect(() => {
     if (clusters.length && !selectedCluster) {

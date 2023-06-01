@@ -23,11 +23,10 @@ const ClusterManagementPage: FunctionComponent<ClusterManagementProps> = (props)
 };
 
 export async function getServerSideProps() {
-  const { API_URL = '', KUBEFIRST_VERSION = '', USE_TELEMETRY = '' } = process.env;
+  const { KUBEFIRST_VERSION = '', USE_TELEMETRY = '' } = process.env;
 
   return {
     props: {
-      apiUrl: API_URL,
       kubefirstVersion: KUBEFIRST_VERSION,
       useTelemetry: USE_TELEMETRY === 'true',
     },

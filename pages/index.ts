@@ -34,7 +34,7 @@ const MainPage: FunctionComponent<MainPageProps> = ({ flags }) => {
 };
 
 export const getServerSideProps: GetServerSideProps = async () => {
-  const { API_URL = '', POSTHOG_KEY = '', USE_TELEMETRY = '' } = process.env;
+  const { POSTHOG_KEY = '', USE_TELEMETRY = '' } = process.env;
 
   let flags;
   try {
@@ -49,7 +49,6 @@ export const getServerSideProps: GetServerSideProps = async () => {
   return {
     props: {
       flags,
-      apiUrl: API_URL,
       useTelemetry: USE_TELEMETRY === 'true',
     },
   };

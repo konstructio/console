@@ -2,6 +2,7 @@ import axios from 'axios';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { FieldValues } from 'react-hook-form';
 import sortBy from 'lodash/sortBy';
+import queryString from 'query-string';
 
 import { AppDispatch, RootState } from '../store';
 import {
@@ -51,12 +52,12 @@ const mapClusterFromRaw = (cluster: ClusterResponse): Cluster => ({
 
 export const createCluster = createAsyncThunk<
   Cluster,
-  { apiUrl: string },
+  void,
   {
     dispatch: AppDispatch;
     state: RootState;
   }
->('api/cluster/provisioning', async ({ apiUrl }, { getState }) => {
+>('api/cluster/provisioning', async (_, { getState }) => {
   const {
     installation: { installType, gitProvider, values },
   } = getState();
@@ -84,7 +85,10 @@ export const createCluster = createAsyncThunk<
       ...values?.vultr_auth,
     },
   };
-  const res = await axios.post(`${apiUrl}/cluster/${values?.clusterName || 'kubefirst'}`, params);
+  const res = await axios.post('/api/proxy', {
+    url: `/cluster/${values?.clusterName || 'kubefirst'}`,
+    body: params,
+  });
 
   if ('error' in res) {
     throw res.error;
@@ -99,8 +103,10 @@ export const getCluster = createAsyncThunk<
     dispatch: AppDispatch;
     state: RootState;
   }
->('api/cluster/get', async ({ apiUrl, clusterName }) => {
-  const res = await axios.get(`${apiUrl}/cluster/${clusterName || 'kubefirst'}`);
+>('api/cluster/get', async ({ clusterName }) => {
+  const res = await axios.get(
+    `/api/proxy?${queryString.stringify({ url: `/cluster/${clusterName || 'kubefirst'}` })}`,
+  );
 
   if ('error' in res) {
     throw res.error;
@@ -110,13 +116,13 @@ export const getCluster = createAsyncThunk<
 
 export const getClusters = createAsyncThunk<
   Array<Cluster>,
-  ClusterRequestProps,
+  void,
   {
     dispatch: AppDispatch;
     state: RootState;
   }
->('api/cluster/getClusters', async ({ apiUrl }) => {
-  const res = await axios.get(`${apiUrl}/cluster`);
+>('api/cluster/getClusters', async () => {
+  const res = await axios.get(`/api/proxy?${queryString.stringify({ url: `/cluster` })}`);
 
   if ('error' in res) {
     throw res.error;
@@ -132,8 +138,10 @@ export const deleteCluster = createAsyncThunk<
     dispatch: AppDispatch;
     state: RootState;
   }
->('api/cluster/delete', async ({ apiUrl, clusterName }) => {
-  const res = await axios.delete(`${apiUrl}/cluster/${clusterName || 'kubefirst'}`);
+>('api/cluster/delete', async ({ clusterName }) => {
+  const res = await axios.delete(
+    `/api/proxy?${queryString.stringify({ url: `/cluster/${clusterName || 'kubefirst'}` })}`,
+  );
 
   if ('error' in res) {
     throw res.error;
@@ -148,12 +156,10 @@ export const getClusterServices = createAsyncThunk<
     dispatch: AppDispatch;
     state: RootState;
   }
->('api/cluster/getClusterServices', async ({ clusterName }, { getState }) => {
-  const {
-    config: { apiUrl },
-  } = getState();
-
-  const res = await axios.get(`${apiUrl}/services/${clusterName}`);
+>('api/cluster/getClusterServices', async ({ clusterName }) => {
+  const res = await axios.get(
+    `/api/proxy?${queryString.stringify({ url: `/services/${clusterName}` })}`,
+  );
 
   if ('error' in res) {
     throw res.error;
@@ -168,12 +174,8 @@ export const getMarketplaceApps = createAsyncThunk<
     dispatch: AppDispatch;
     state: RootState;
   }
->('api/getMarketplaceApps', async (_, { getState }) => {
-  const {
-    config: { apiUrl },
-  } = getState();
-
-  const res = await axios.get(`${apiUrl}/marketplace/apps`);
+>('api/getMarketplaceApps', async () => {
+  const res = await axios.get(`/api/proxy?${queryString.stringify({ url: `/marketplace/apps` })}`);
 
   if ('error' in res) {
     throw res.error;
@@ -188,11 +190,7 @@ export const installMarketplaceApp = createAsyncThunk<
     dispatch: AppDispatch;
     state: RootState;
   }
->('api/installMarketplaceApp', async ({ app, clusterName, values }, { getState }) => {
-  const {
-    config: { apiUrl },
-  } = getState();
-
+>('api/installMarketplaceApp', async ({ app, clusterName, values }) => {
   const secret_keys =
     values &&
     Object.keys(values as FieldValues).map((key) => ({
@@ -200,8 +198,11 @@ export const installMarketplaceApp = createAsyncThunk<
       value: (values as FieldValues)[key],
     }));
 
-  const res = await axios.post(`${apiUrl}/services/${clusterName}/${app.name}`, {
-    secret_keys,
+  const res = await axios.post('/api/proxy', {
+    url: `/services/${clusterName}/${app.name}`,
+    body: {
+      secret_keys,
+    },
   });
 
   if ('error' in res) {
@@ -219,14 +220,13 @@ export const getCloudRegions = createAsyncThunk<
   }
 >('api/getCloudRegions', async (_, { getState }) => {
   const {
-    config: { apiUrl },
     installation: { values, installType },
   } = getState();
 
-  const res = await axios.post<{ regions: Array<string> }>(
-    `${apiUrl}/region/${installType}`,
-    installType === InstallationType.AWS ? { ...values, cloud_region: 'us-east-1' } : values,
-  );
+  const res = await axios.post<{ regions: Array<string> }>('/api/proxy', {
+    url: `/region/${installType}`,
+    body: installType === InstallationType.AWS ? { ...values, cloud_region: 'us-east-1' } : values,
+  });
 
   if ('error' in res) {
     throw res.error;
@@ -243,13 +243,15 @@ export const getCloudDomains = createAsyncThunk<
   }
 >('api/getCloudDomains', async (cloudRegion, { getState }) => {
   const {
-    config: { apiUrl },
     installation: { values, installType },
   } = getState();
 
-  const res = await axios.post<{ domains: Array<string> }>(`${apiUrl}/domain/${installType}`, {
-    ...values,
-    cloud_region: cloudRegion,
+  const res = await axios.post<{ domains: Array<string> }>('/api/proxy', {
+    url: `/domain/${installType}`,
+    body: {
+      ...values,
+      cloud_region: cloudRegion,
+    },
   });
 
   if ('error' in res) {
@@ -267,13 +269,12 @@ export const resetClusterProgress = createAsyncThunk<
   }
 >('api/resetClusterProgress', async (_, { getState }) => {
   const {
-    config: { apiUrl },
     installation: { values },
   } = getState();
 
-  const res = await axios.post<{ regions: Array<string> }>(
-    `${apiUrl}/cluster/${values?.clusterName}/reset_progress`,
-  );
+  const res = await axios.post<{ regions: Array<string> }>('/api/proxy', {
+    url: `/cluster/${values?.clusterName}/reset_progress`,
+  });
 
   if ('error' in res) {
     throw res.error;

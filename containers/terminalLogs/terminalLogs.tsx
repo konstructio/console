@@ -48,7 +48,6 @@ const TerminalLogs: FunctionComponent = () => {
   const interval = useRef<NodeJS.Timer>();
   const dispatch = useAppDispatch();
   const {
-    config: { apiUrl = '' },
     api: {
       isProvisioned,
       isProvisioning,
@@ -94,7 +93,7 @@ const TerminalLogs: FunctionComponent = () => {
   useEffect(() => {
     const clusterName = values?.clusterName;
     if (isProvisioning && !isProvisioned && clusterName) {
-      interval.current = getClusterInterval({ apiUrl, clusterName });
+      interval.current = getClusterInterval({ clusterName });
     }
 
     if (isProvisioned) {
@@ -130,7 +129,7 @@ const TerminalLogs: FunctionComponent = () => {
 
       terminal.open(terminalRef.current);
 
-      const emitter = createLogStream(`${apiUrl}/stream`);
+      const emitter = createLogStream(`api/stream`);
       emitter.on('log', (log) => {
         if (
           log.message.includes('time=') &&
@@ -156,19 +155,12 @@ const TerminalLogs: FunctionComponent = () => {
 
       emitter.startLogStream();
 
-      // const tempLogs = [];
-      // setInterval(() => {
-      //   tempLogs.push(`\x1b[0;37m 2023-05-05 \x1b[0;34m INFO:\x1b[1;37m Hey Kubefirst \n`);
-      //   setLogs(tempLogs);
-      //   terminal.write(`\x1b[0;37m 2023-05-05 \x1b[0;34m INFO:\x1b[1;37m Hey Kubefirst \n`);
-      // }, 5000);
-
       return () => {
         terminal.dispose();
         emitter.stopLogStream();
       };
     }
-  }, [apiUrl, loadAddons]);
+  }, [loadAddons]);
 
   useEffect(() => {
     Object.keys(CLUSTER_CHECKS).forEach((checkKey) => {
