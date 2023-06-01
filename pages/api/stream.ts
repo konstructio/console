@@ -12,7 +12,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   });
   res.flushHeaders();
 
-  const eventSource = new EventSource(`${API_URL}/stream`);
+  const eventSource = new EventSource(`${API_URL}/api/v1/stream`);
 
   eventSource.addEventListener('open', () => {
     // eslint-disable-next-line no-console
