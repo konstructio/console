@@ -1,0 +1,19 @@
+{{- if .Values.ingress.createTraefikRoute -}}
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: {{ include "console.fullname" . }}
+  labels:
+    {{- include "console.labels" . | nindent 4 }}
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - kind: Rule
+      match: Host(`console.kubefirst.dev`)
+      services:
+        - name: {{ include "console.fullname" . }}
+          port: {{ .Values.service.port }}
+  tls:
+    secretName: name: {{ include "console.fullname" . }}-tls
+{{- end }}
