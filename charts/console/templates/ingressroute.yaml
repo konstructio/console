@@ -15,5 +15,5 @@ spec:
         - name: {{ include "console.fullname" . }}
           port: {{ .Values.service.port }}
   tls:
-    secretName: name: {{ include "console.fullname" . }}-tls
+    secretName: {{ include "console.fullname" . }}-tls
 {{- end }}
