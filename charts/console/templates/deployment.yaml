@@ -1,3 +1,4 @@
+{{- $clusterId := randAlphaNum 6 | quote -}}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -39,7 +40,7 @@ spec:
             - name: KUBEFIRST_VERSION
               value: {{ .Values.chartVersion | default .Chart.Version }}
             - name: CLUSTER_ID
-              value: {{ .Values.clusterId | default randAlphaNum 6 | quote }} 
+              value: {{ .Values.clusterId | default $clusterId }} 
             - name: CLUSTER_TYPE
               value: {{ .Values.clusterType | default "bootstrap" | quote }}
             - name: DISABLE_TELEMETRY
