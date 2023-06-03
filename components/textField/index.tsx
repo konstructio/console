@@ -1,10 +1,10 @@
 import React, { FunctionComponent, useMemo } from 'react';
-import { FormHelperText, InputLabel, InputProps, InputBase, styled } from '@mui/material';
+import { InputLabel, InputProps, InputBase, styled } from '@mui/material';
 import ErrorIcon from '@mui/icons-material/Error';
 
 import Typography from '../typography';
 
-import { Container, InputAdornmentError, Required } from './textField.styled';
+import { Container, FormHelperText, InputAdornmentError, Required } from './textField.styled';
 
 export interface TextFieldProps extends InputProps {
   label: string;
@@ -64,7 +64,7 @@ const TextField: FunctionComponent<TextFieldProps> = ({
       />
       {helperText && (
         <FormHelperText disabled={disabled} error={error}>
-          {helperText}
+          <div dangerouslySetInnerHTML={{ __html: helperText }}></div>
         </FormHelperText>
       )}
     </Container>

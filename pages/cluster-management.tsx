@@ -1,36 +1,23 @@
 import React, { FunctionComponent, useEffect } from 'react';
 import { useRouter } from 'next/router';
 
+import withConfig from '../hoc/withConfig';
 import useFeatureFlag from '../hooks/useFeatureFlag';
-import ClusterManagement, { ClusterManagementProps } from '../containers/clusterManagement';
+import ClusterManagement from '../containers/clusterManagement';
+export { getServerSideProps } from '../hoc/withConfig';
 
-const ClusterManagementPage: FunctionComponent<ClusterManagementProps> = (props) => {
+const ClusterManagementPage: FunctionComponent = () => {
   const { push } = useRouter();
 
-  const { flagsAreReady } = useFeatureFlag('cluster-management');
+  const { isEnabled: isClusterManagementEnabled } = useFeatureFlag('cluster-management');
 
   useEffect(() => {
-    if (!flagsAreReady) {
+    if (!isClusterManagementEnabled) {
       push('/');
     }
   });
 
-  if (!flagsAreReady) {
-    return null;
-  }
-
-  return <ClusterManagement {...props} />;
+  return isClusterManagementEnabled ? <ClusterManagement /> : null;
 };
 
-export async function getServerSideProps() {
-  const { KUBEFIRST_VERSION = '', USE_TELEMETRY = '' } = process.env;
-
-  return {
-    props: {
-      kubefirstVersion: KUBEFIRST_VERSION,
-      useTelemetry: USE_TELEMETRY === 'true',
-    },
-  };
-}
-
-export default ClusterManagementPage;
+export default withConfig(ClusterManagementPage);

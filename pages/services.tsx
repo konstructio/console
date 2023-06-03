@@ -1,32 +1,28 @@
-import React, { FunctionComponent } from 'react';
+import React, { FunctionComponent, useMemo } from 'react';
+import { useRouter } from 'next/router';
 
+import withConfig from '../hoc/withConfig';
 import Services from '../containers/services';
+import { useAppSelector } from '../redux/store';
+export { getServerSideProps } from '../hoc/withConfig';
 
-interface ServicesPageProps {
-  domainName: string;
-  k3dDomain: string;
-  kubefirstVersion: string;
-  useTelemetry: boolean;
-}
+const ServicesPage: FunctionComponent = ({ isClusterZero }) => {
+  const { push } = useRouter();
 
-const ServicesPage: FunctionComponent<ServicesPageProps> = (props) => <Services {...props} />;
+  const { selectedCluster, clusters } = useAppSelector(({ cluster, api }) => ({
+    selectedCluster: cluster.selectedCluster,
+    clusters: api.clusters,
+  }));
 
-export async function getServerSideProps() {
-  const {
-    DOMAIN_NAME = '',
-    K3D_DOMAIN = '',
-    KUBEFIRST_VERSION = '',
-    USE_TELEMETRY = '',
-  } = process.env;
+  const hasExistingCluster = useMemo(
+    () => !isClusterZero || (selectedCluster?.clusterName && clusters.length),
+    [clusters.length, isClusterZero, selectedCluster?.clusterName],
+  );
 
-  return {
-    props: {
-      domainName: DOMAIN_NAME,
-      k3dDomain: K3D_DOMAIN,
-      kubefirstVersion: KUBEFIRST_VERSION,
-      useTelemetry: USE_TELEMETRY === 'true',
-    },
-  };
-}
+  if (!hasExistingCluster) {
+    push('/');
+  }
 
-export default ServicesPage;
+  return hasExistingCluster ? <Services /> : null;
+};
+export default withConfig(ServicesPage);

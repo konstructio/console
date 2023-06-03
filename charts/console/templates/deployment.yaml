@@ -36,6 +36,16 @@ spec:
             {{- end }}
             - name: API_URL
               value: {{ .Values.apiURL | default (printf "http://%s-kubefirst-api.%s.svc.cluster.local" (.Release.Name ) (.Release.Namespace ))  }}
+            - name: KUBEFIRST_VERSION
+              value: {{ .Values.chartVersion | default .Chart.Version }}
+            - name: CLUSTER_ID
+              value: {{ .Values.clusterId | default randAlphaNum 6 | quote }} 
+            - name: CLUSTER_TYPE
+              value: {{ .Values.clusterType | default "bootstrap" | quote }}
+            - name: DISABLE_TELEMETRY
+              value: {{ .Values.disableTelemetry | default "false" | quote }} 
+            - name: IS_CLUSTER_ZERO
+              value: {{ .Values.isClusterZero | default "true" | quote }}
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"

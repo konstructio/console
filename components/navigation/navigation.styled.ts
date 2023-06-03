@@ -93,21 +93,22 @@ export const Title = styled(Typography)`
 export const KubefirstVersion = styled(Typography)``;
 
 export const KubefirstTitle = styled.div`
-  position: relative;
+  align-items: center;
+  cursor: pointer;
   display: flex;
   flex-direction: column;
-  align-items: center;
   margin-bottom: 8px;
   padding: 12px;
+  position: relative;
 
   #title {
     display: none;
   }
 
   ${media.greaterThan('md')`
+    align-items: flex-start;
     margin-bottom: 32px;
     padding: 24px 16px 0;
-    align-items: flex-start;
 
     ${KubefirstVersion}{
       margin-left: 55px;

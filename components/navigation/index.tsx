@@ -3,6 +3,7 @@ import Image from 'next/image';
 import HelpIcon from '@mui/icons-material/Help';
 import { BsSlack } from 'react-icons/bs';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 
 import Typography from '../typography';
 import { ECHO_BLUE } from '../../constants/colors';
@@ -56,10 +57,11 @@ const Navigation: FunctionComponent<NavigationProps> = ({
   kubefirstVersion,
   routes,
 }) => {
+  const { push } = useRouter();
   return (
     <Container>
       <div>
-        <KubefirstTitle>
+        <KubefirstTitle onClick={() => push('/')}>
           <Image alt="k1-image" src={'/static/ray.svg'} height={40} width={48} id="ray" />
           {/* Only visible above md breakpoint 👇 */}
           <Image alt="k1-image" src={'/static/title.svg'} height={40} width={160} id="title" />

@@ -13,8 +13,8 @@ describe('telemetry', () => {
     jest.resetAllMocks();
   });
 
-  test('should not send telemetry call when USE_TELEMETRY is false', () => {
-    process.env.USE_TELEMETRY = 'false';
+  test('should not send telemetry call when DISABLE_TELEMETRY is false', () => {
+    process.env.DISABLE_TELEMETRY = 'false';
 
     sendTelemetry({ event: 'event1' });
 
@@ -24,8 +24,8 @@ describe('telemetry', () => {
     expect(mockAnalytics.mock.instances[0].track).not.toHaveBeenCalled();
   });
 
-  test('should send telemetry call when USE_TELEMETRY is true', () => {
-    process.env.USE_TELEMETRY = 'true';
+  test('should send telemetry call when DISABLE_TELEMETRY is true', () => {
+    process.env.DISABLE_TELEMETRY = 'true';
 
     sendTelemetry({ event: 'event1' });
 

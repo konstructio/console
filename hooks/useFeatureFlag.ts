@@ -3,7 +3,7 @@ import { useCallback } from 'react';
 import { useAppSelector } from '../redux/store';
 
 const useFeatureFlag = (flagName = '') => {
-  const { flag, loaded: flagsAreReady } = useAppSelector(({ featureFlags }) => ({
+  const { flag } = useAppSelector(({ featureFlags }) => ({
     flag: featureFlags.flags[flagName],
     loaded: featureFlags.loaded,
   }));
@@ -12,7 +12,7 @@ const useFeatureFlag = (flagName = '') => {
     return flag;
   }, [flag]);
 
-  return { isEnabled: isFeatureEnabled(), flagsAreReady };
+  return { isEnabled: isFeatureEnabled() };
 };
 
 export default useFeatureFlag;

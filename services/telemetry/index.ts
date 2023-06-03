@@ -12,21 +12,12 @@ export interface SendTelemetryArgs {
 }
 
 export const sendTelemetry = ({ event, properties }: SendTelemetryArgs) => {
-  const {
-    CLOUD,
-    CLUSTER_ID,
-    CLUSTER_TYPE,
-    DOMAIN_NAME,
-    GIT_PROVIDER,
-    KUBEFIRST_VERSION,
-    KUBEFIRST_TEAM,
-    USE_TELEMETRY,
-  } = process.env;
+  const { CLUSTER_ID, CLUSTER_TYPE, DISABLE_TELEMETRY, KUBEFIRST_VERSION } = process.env;
 
-  const isTelemetryEnabled = USE_TELEMETRY === 'true';
+  const isTelemetryDisabled = DISABLE_TELEMETRY === 'true';
   const analytics = new Analytics(ANALYTICS_ID);
 
-  if (isTelemetryEnabled) {
+  if (!isTelemetryDisabled) {
     try {
       if (!CLUSTER_ID) {
         throw new Error('missing env variable: CLUSTER_ID');
@@ -41,12 +32,8 @@ export const sendTelemetry = ({ event, properties }: SendTelemetryArgs) => {
         event,
         properties: {
           cli_version: KUBEFIRST_VERSION,
-          cloud_provider: CLOUD,
           cluster_id: CLUSTER_ID,
           cluster_type: CLUSTER_TYPE,
-          domain: DOMAIN_NAME,
-          git_provider: GIT_PROVIDER,
-          kubefirst_team: KUBEFIRST_TEAM,
           ...properties,
         },
       });
