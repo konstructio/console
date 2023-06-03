@@ -12,6 +12,10 @@ export const Container = styled.div`
 export const ErrorContainer = styled.div`
   display: flex;
   flex-direction: column;
+
+  & a {
+    color: #3f3f3f;
+  }
 `;
 
 export const Header = styled.div`

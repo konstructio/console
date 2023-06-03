@@ -1,43 +1,28 @@
-import React, { FunctionComponent, useEffect } from 'react';
+import React, { FunctionComponent, useMemo } from 'react';
 import { useRouter } from 'next/router';
-import { useAppSelector } from 'redux/store';
 
+import { useAppSelector } from '../redux/store';
 import useFeatureFlag from '../hooks/useFeatureFlag';
-import Provision, { ProvisionProps } from '../containers/provision';
+import Provision from '../containers/provision';
+import withConfig from '../hoc/withConfig';
+export { getServerSideProps } from '../hoc/withConfig';
 
-const ProvisionPage: FunctionComponent<ProvisionProps> = (props) => {
+const ProvisionPage: FunctionComponent = () => {
   const { push } = useRouter();
   const selectedCluster = useAppSelector(({ cluster }) => cluster.selectedCluster);
 
-  const { flagsAreReady } = useFeatureFlag('cluster-provisioning');
   const { isEnabled: isClusterManagementEnabled } = useFeatureFlag('cluster-management');
 
-  useEffect(() => {
-    if (!flagsAreReady) {
-      push('/');
-    }
-  });
+  const isEnabled = useMemo(
+    () => isClusterManagementEnabled || !selectedCluster?.clusterName,
+    [isClusterManagementEnabled, selectedCluster?.clusterName],
+  );
 
-  if (!isClusterManagementEnabled && !!selectedCluster?.clusterName) {
+  if (!isEnabled) {
     push('/services');
   }
 
-  if (!flagsAreReady) {
-    return null;
-  }
-
-  return <Provision {...props} />;
+  return isEnabled ? <Provision /> : null;
 };
 
-export async function getServerSideProps() {
-  const { KUBEFIRST_VERSION = '', USE_TELEMETRY = '' } = process.env;
-
-  return {
-    props: {
-      kubefirstVersion: KUBEFIRST_VERSION,
-      useTelemetry: USE_TELEMETRY === 'true',
-    },
-  };
-}
-
-export default ProvisionPage;
+export default withConfig(ProvisionPage);

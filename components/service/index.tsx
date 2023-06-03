@@ -20,7 +20,6 @@ import {
 
 export interface ServiceProps {
   description?: string;
-  domainName: string;
   children?: React.ReactNode;
   image: string;
   name: string;
@@ -30,7 +29,6 @@ export interface ServiceProps {
 
 const Service: FunctionComponent<ServiceProps> = ({
   description,
-  domainName,
   children,
   image,
   name,
@@ -59,7 +57,9 @@ const Service: FunctionComponent<ServiceProps> = ({
           <LiveAppIcon color={isAvailable ? MINT_GREEN : PASTEL_LIGHT_BLUE}>
             {isMetaphor && <AppConnector />}
           </LiveAppIcon>
-          <Typography variant="tooltip">{formatDomain(link, domainName)}</Typography>
+          <Typography variant="tooltip">
+            {formatDomain(link, 'toDo: domain name for metaphor')}
+          </Typography>
           {!isAvailable && (
             <Box sx={{ display: 'flex', marginLeft: 2 }}>
               <CircularProgress size={15} />
@@ -70,7 +70,7 @@ const Service: FunctionComponent<ServiceProps> = ({
         <div />
       );
     },
-    [domainName, isMetaphor, name, onClickLink],
+    [isMetaphor, name, onClickLink],
   );
 
   const linksComponent = useMemo(

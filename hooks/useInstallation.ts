@@ -58,22 +58,20 @@ const getInfoByType = (installType: InstallationType, step: number) => {
         title: 'AWS Prerequisites',
         description: [
           'Create an AWS account with billing enabled.',
-          'Establish a public hosted zone with dns routing established(docs).',
+          'Establish a public hosted zone with dns routing established(<a href="https://docs.aws.amazon.com/route53/" target="_blank">docs</a>).',
           'Connect with AdministratorAccess IAM credentials to your AWS account (docs).',
         ],
         ctaDescription: 'Learn more',
-        ctaLink: '',
+        ctaLink: 'https://docs.aws.amazon.com',
       },
     },
     [InstallationType.CIVO]: {
       [FormStep.AUTHENTICATION]: {
         title: 'Civo Prerequisites',
         description: [
-          'Create a Civo account in which you are an account owner.',
-          'Establish a publicly routable DNS.',
+          '<a href="https://dashboard.civo.com/signup" target="_blank">Create a Civo account</a> in which you are an account owner.',
+          'Establish a publicly routable DNS. <a href="https://www.civo.com/learn/configure-dns#adding-a-domain-name" target="_blank">Learn more</a>',
         ],
-        ctaDescription: 'Learn more',
-        ctaLink: '',
       },
     },
 
@@ -145,14 +143,19 @@ const getApiKeyInfo = (type: InstallationType) => {
         {
           name: 'access_key_id',
           label: 'AWS access key id',
+          helperText:
+            'Create an access key ID by navigating to Users on the AWS console and opening the Security credentials tab.',
         },
         {
           name: 'secret_access_key',
           label: 'AWS Secret access key',
+          helperText:
+            'Create a secret access key by navigating to Users on the AWS console and opening the Security credentials tab.',
         },
         {
           name: 'session_token',
           label: 'AWS session token',
+          helperText: 'Use the AWS CLI tool and the command “aws sts get-session-token”.',
         },
       ],
     },
@@ -162,7 +165,8 @@ const getApiKeyInfo = (type: InstallationType) => {
         {
           name: 'token',
           label: 'CIVO API key',
-          helperText: 'Retrieve your key at https://dashboard.civo.com/security',
+          helperText:
+            'Retrieve your key at <a href="https://dashboard.civo.com/security" target="_blank">https://dashboard.civo.com/security</a>',
         },
       ],
     },
@@ -173,15 +177,19 @@ const getApiKeyInfo = (type: InstallationType) => {
           name: 'token',
           label: 'DigitalOcean authentication token',
           helperText:
-            'Create your token by following the instructions at https://cloud.digitalocean.com/account/api',
+            'Create your token by following the instructions at <a href="https://cloud.digitalocean.com/account/api" target="_blank">https://cloud.digitalocean.com/account/api</a>',
         },
         {
           name: 'spaces_key',
           label: 'DigitalOcean spaces key',
+          helperText:
+            'From the DigitalOcean control panel, click API. Navigate to the Spaces Keys tab, select Generate New Key.',
         },
         {
           name: 'spaces_secret',
           label: 'DigitalOcean spaces secret',
+          helperText:
+            'Click API on the control panel and retrieve the spaces secret from the Spaces Key tab.',
         },
       ],
     },
@@ -191,7 +199,8 @@ const getApiKeyInfo = (type: InstallationType) => {
         {
           name: 'token',
           label: 'Vultr API key',
-          helperText: 'Retrieve your key at https://my.vultr.com/settings/#settingsapi',
+          helperText:
+            'Retrieve your key at <a href="https://my.vultr.com/settings/#settingsapi" target="_blank">https://my.vultr.com/settings/#settingsapi</a>',
         },
       ],
     },

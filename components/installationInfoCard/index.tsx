@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FunctionComponent } from 'react';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import ContentCopyOutlinedIcon from '@mui/icons-material/ContentCopyOutlined';
 import LaunchOutlinedIcon from '@mui/icons-material/LaunchOutlined';
@@ -7,7 +7,7 @@ import CopyToClipboard from 'react-copy-to-clipboard';
 
 import useToggle from '../../hooks/useToggle';
 import Typography from '../typography/index';
-import { TRUE_BLUE } from '../../constants/colors';
+import { TRUE_BLUE, VOLCANIC_SAND } from '../../constants/colors';
 import { InstallationInfo } from '../../types/redux';
 
 import {
@@ -17,13 +17,14 @@ import {
   Code,
   Link,
   LinkContent,
+  DescriptionItem,
 } from './installationInfoCard.styled';
 
 interface InstallationInfoCardProps {
   info: InstallationInfo;
 }
 
-const InstallationInfoCard: FC<InstallationInfoCardProps> = ({ info, ...rest }) => {
+const InstallationInfoCard: FunctionComponent<InstallationInfoCardProps> = ({ info, ...rest }) => {
   const { isOpen, open, close } = useToggle(false);
   const { title, description, code, ctaLink, ctaDescription } = info;
 
@@ -31,17 +32,26 @@ const InstallationInfoCard: FC<InstallationInfoCardProps> = ({ info, ...rest }) 
     <Card {...rest}>
       <CardInfoHeader>
         <InfoOutlinedIcon htmlColor={TRUE_BLUE} />
-        <Typography variant="subtitle3">{title}</Typography>
+        <Typography variant="subtitle3" color={VOLCANIC_SAND}>
+          {title}
+        </Typography>
       </CardInfoHeader>
       <CardDescription>
         {Array.isArray(description) ? (
-          <ol type="1">
-            {description.map((item, index) => (
-              <li key={index}>{item}</li>
-            ))}
-          </ol>
+          description.map((item, index) => (
+            <DescriptionItem key={index}>
+              <Typography variant="body2" color={VOLCANIC_SAND}>
+                {index + 1}.
+              </Typography>
+              <Typography variant="body2" color={VOLCANIC_SAND}>
+                <div dangerouslySetInnerHTML={{ __html: item }}></div>
+              </Typography>
+            </DescriptionItem>
+          ))
         ) : (
-          <Typography variant="labelLarge">{description}</Typography>
+          <Typography variant="labelLarge" color={VOLCANIC_SAND}>
+            {description}
+          </Typography>
         )}
       </CardDescription>
       {code && (
@@ -62,16 +72,19 @@ const InstallationInfoCard: FC<InstallationInfoCardProps> = ({ info, ...rest }) 
           />
         </Code>
       )}
-      <Link
-        href={{
-          pathname: ctaLink,
-        }}
-      >
-        <LinkContent>
-          <Typography variant="tooltip">{ctaDescription}</Typography>
-          <LaunchOutlinedIcon fontSize="small" />
-        </LinkContent>
-      </Link>
+      {ctaLink && (
+        <Link
+          href={{
+            pathname: ctaLink,
+          }}
+          target="_blank"
+        >
+          <LinkContent>
+            <Typography variant="tooltip">{ctaDescription}</Typography>
+            <LaunchOutlinedIcon fontSize="small" />
+          </LinkContent>
+        </Link>
+      )}
     </Card>
   );
 };

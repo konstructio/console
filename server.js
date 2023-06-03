@@ -11,7 +11,7 @@ process.chdir(__dirname);
 
 const nextConfig = require('./next.config');
 
-const { GIT_PROVIDER, HEARTBEAT_PERIOD_MINUTES } = process.env;
+const { HEARTBEAT_PERIOD_MINUTES } = process.env;
 
 process.on('SIGTERM', () => process.exit(0));
 process.on('SIGINT', () => process.exit(0));
@@ -33,23 +33,15 @@ const currentPort = parseInt(process.env.PORT, 10) || 3000;
 const ANALYTICS_ID = '0gAYkX5RV3vt7s4pqCOOsDb6WHPLT30M';
 
 function sendHeartbeat() {
-  const {
-    CLOUD,
-    CLUSTER_ID,
-    CLUSTER_TYPE,
-    DOMAIN_NAME,
-    KUBEFIRST_TEAM,
-    KUBEFIRST_VERSION,
-    USE_TELEMETRY,
-  } = process.env;
+  const { CLUSTER_ID, CLUSTER_TYPE, DISABLE_TELEMETRY, KUBEFIRST_VERSION } = process.env;
 
   try {
-    const isTelemetryEnabled = USE_TELEMETRY === 'true';
+    const isTelemetryDisabled = DISABLE_TELEMETRY === 'true';
     const analytics = new Analytics(ANALYTICS_ID, {
-      enable: isTelemetryEnabled,
+      enable: !isTelemetryDisabled,
     });
 
-    if (isTelemetryEnabled) {
+    if (!isTelemetryDisabled) {
       analytics.identify({
         userId: CLUSTER_ID,
       });
@@ -59,12 +51,8 @@ function sendHeartbeat() {
         event: 'kubefirst.console.healthz',
         properties: {
           cli_version: KUBEFIRST_VERSION,
-          cloud_provider: CLOUD,
           cluster_id: CLUSTER_ID,
           cluster_type: CLUSTER_TYPE,
-          domain: DOMAIN_NAME,
-          git_provider: GIT_PROVIDER,
-          kubefirst_team: KUBEFIRST_TEAM,
         },
       });
     }

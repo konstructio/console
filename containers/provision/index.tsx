@@ -1,5 +1,6 @@
 import React, { FunctionComponent, useCallback, useEffect, useMemo } from 'react';
 import { useForm } from 'react-hook-form';
+import { useRouter } from 'next/router';
 
 import { createCluster, getCloudRegions, resetClusterProgress } from '../../redux/thunks/api.thunk';
 import InstallationStepContainer from '../../components/installationStepContainer';
@@ -15,7 +16,6 @@ import { useAppDispatch, useAppSelector } from '../../redux/store';
 import { useInstallation } from '../../hooks/useInstallation';
 import { InstallValues, InstallationType } from '../../types/redux';
 import { GitProvider } from '../../types';
-import { setConfigValues } from '../../redux/slices/config.slice';
 import { clearClusterState } from '../../redux/slices/api.slice';
 import AdvancedOptions from '../clusterForms/shared/advancedOptions';
 import ErrorBanner from '../../components/errorBanner';
@@ -23,23 +23,20 @@ import Button from '../../components/button';
 
 import { AdvancedOptionsContainer, ErrorContainer, Form, FormContent } from './provision.styled';
 
-export interface ProvisionProps {
-  kubefirstVersion: string;
-  useTelemetry: boolean;
-}
-
-const Provision: FunctionComponent<ProvisionProps> = ({ kubefirstVersion, useTelemetry }) => {
+const Provision: FunctionComponent = () => {
   const dispatch = useAppDispatch();
-  const { installType, gitProvider, installationStep, values, error, authErrors } = useAppSelector(
-    ({ git, installation }) => ({
+  const { push } = useRouter();
+
+  const { authErrors, error, installType, isClusterZero, installationStep, gitProvider, values } =
+    useAppSelector(({ config, git, installation }) => ({
       installType: installation.installType,
       gitProvider: installation.gitProvider,
       installationStep: installation.installationStep,
       values: installation.values,
       error: installation.error,
       authErrors: git.errors,
-    }),
-  );
+      isClusterZero: config.isClusterZero,
+    }));
 
   const { isProvisioned } = useAppSelector(({ api }) => api);
 
@@ -200,18 +197,22 @@ const Provision: FunctionComponent<ProvisionProps> = ({ kubefirstVersion, useTel
   ]);
 
   useEffect(() => {
-    dispatch(setConfigValues({ isTelemetryEnabled: useTelemetry, kubefirstVersion }));
-
     return () => {
       dispatch(resetInstallState());
     };
-  }, [dispatch, useTelemetry, kubefirstVersion]);
+  }, [dispatch]);
 
   useEffect(() => {
     if (isSetupStep) {
       dispatch(getCloudRegions());
     }
   }, [dispatch, isSetupStep]);
+
+  useEffect(() => {
+    if (!isClusterZero) {
+      push('/services');
+    }
+  }, [isClusterZero, push]);
 
   return (
     <Form component="form" onSubmit={handleSubmit(onSubmit)}>
@@ -220,7 +221,7 @@ const Provision: FunctionComponent<ProvisionProps> = ({ kubefirstVersion, useTel
         steps={stepTitles}
         installationTitle={installTitle}
         showBackButton={
-          installationStep <= stepTitles.length - 1 && installationStep > 0 && !isProvisionStep
+          installationStep < stepTitles.length - 1 && installationStep > 0 && !isProvisionStep
         }
         onNextButtonClick={handleNextButtonClick}
         onBackButtonClick={handleBackButtonClick}

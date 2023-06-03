@@ -54,7 +54,8 @@ export const Title = styled.div`
 export const FormContent = styled.div<{ isProvisionStep: boolean }>`
   height: calc(100% - 198px);
   margin-bottom: 40px;
-  overflow: auto;
+  overflow-y: auto;
+  width: 100%;
 
   ${({ isProvisionStep }) =>
     isProvisionStep &&

@@ -41,11 +41,11 @@ export const Success = styled.div`
   align-items: center;
   display: flex;
   gap: 8px;
+  margin-top: 24px;
 `;
 
-export const SuccessText = styled(Typography)`
+export const SuccessText = styled(StepLabel)`
   align-items: center;
   display: flex;
   gap: 8px;
-  margin-top: 24px;
 `;

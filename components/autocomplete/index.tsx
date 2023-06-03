@@ -45,6 +45,11 @@ const AutocompleteComponent: FunctionComponent<IAutocompleteProps> = ({
       filterOptions={filterOptions}
       sx={sx}
       disabled={disabled}
+      ListboxProps={{
+        style: {
+          maxHeight: '210px',
+        },
+      }}
       {...pros}
       renderInput={(params) => (
         <TextField

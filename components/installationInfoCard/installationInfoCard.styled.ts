@@ -9,7 +9,7 @@ export const Card = styled.div`
   border-radius: 12px;
   box-sizing: border-box;
   height: fit-content;
-  min-height: 228px;
+  min-height: fit-content;
   padding: 24px;
   width: 360px;
 `;
@@ -22,13 +22,20 @@ export const CardInfoHeader = styled(Row)`
 
 export const CardDescription = styled.div<{ isActive?: boolean }>`
   color: ${({ theme }) => theme.colors.volcanicSand};
-  max-width: 394px;
   letter-spacing: 0.25 !important;
+  max-width: 394px;
+  padding-left: 4px;
+
   ${({ isActive, theme }) =>
     isActive &&
     css`
       color: ${theme.colors.volcanicSand};
     `}
+
+  & a {
+    color: ${({ theme }) => theme.colors.primary};
+    text-decoration: none;
+  }
 `;
 
 export const Link = styled(NextLink)`
@@ -59,4 +66,9 @@ export const Code = styled(Row)`
   & svg {
     color: ${ROCK_BLUE};
   }
+`;
+
+export const DescriptionItem = styled.div`
+  display: flex;
+  gap: 4px;
 `;

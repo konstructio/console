@@ -39,6 +39,7 @@ import {
   SEFID_WHITE,
   PASTEL_LIGHT_BLUE,
   METRO,
+  EXCLUSIVE_PLUM,
 } from '../constants/colors';
 
 export const theme: DefaultTheme = {
@@ -81,5 +82,6 @@ export const theme: DefaultTheme = {
     sefidWhite: SEFID_WHITE,
     pastelLightBlue: PASTEL_LIGHT_BLUE,
     metro: METRO,
+    exclusivePlum: EXCLUSIVE_PLUM,
   },
 };

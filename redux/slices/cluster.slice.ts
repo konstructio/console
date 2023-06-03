@@ -38,6 +38,9 @@ const clusterSlice = createSlice({
       .addCase(getClusterServices.fulfilled, (state, { payload }) => {
         state.clusterServices = payload;
       })
+      .addCase(getClusterServices.rejected, (state) => {
+        state.clusterServices = [];
+      })
       .addCase(installMarketplaceApp.fulfilled, (state, { payload }) => {
         const { name, description, image_url } = payload;
         state.clusterServices.push({

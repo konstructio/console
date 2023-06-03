@@ -1,4 +1,5 @@
-import React, { FunctionComponent, useEffect } from 'react';
+import React, { FunctionComponent, useEffect, useMemo } from 'react';
+import { useRouter } from 'next/router';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import { setSelectedCluster } from 'redux/slices/cluster.slice';
 
@@ -13,12 +14,17 @@ import { ClusterIndicator, ClusterMenu, Container } from './header.styled';
 
 const Header: FunctionComponent = () => {
   const dispatch = useAppDispatch();
+  const { pathname } = useRouter();
+  const { isEnabled } = useFeatureFlag('cluster-management');
   const { clusters, selectedCluster } = useAppSelector(({ api, cluster }) => ({
     clusters: api.clusters,
     selectedCluster: cluster.selectedCluster,
   }));
 
-  const { isEnabled, flagsAreReady } = useFeatureFlag('cluster-management');
+  const isClusterSelectorEnabled = useMemo(
+    () => pathname.includes('/services') && clusters?.length && isEnabled,
+    [clusters?.length, isEnabled, pathname],
+  );
 
   const handleSelectCluster = (selectedClusterName: string) => {
     const selectedCluster = clusters.find(
@@ -42,7 +48,7 @@ const Header: FunctionComponent = () => {
 
   return (
     <Container>
-      {clusters?.length && isEnabled && flagsAreReady ? (
+      {isClusterSelectorEnabled ? (
         <Menu
           onClickMenu={(cluster) => handleSelectCluster(cluster)}
           label={

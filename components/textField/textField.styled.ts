@@ -1,5 +1,5 @@
 import styled, { css } from 'styled-components';
-import { InputAdornment } from '@mui/material';
+import { FormHelperText as FormHelperTextMui, InputAdornment } from '@mui/material';
 
 import { SPUN_PEARL } from '../../constants/colors';
 
@@ -31,4 +31,15 @@ export const Required = styled.div`
 export const InputAdornmentError = styled(InputAdornment)`
   position: absolute;
   right: 15px;
+`;
+
+export const FormHelperText = styled(FormHelperTextMui)`
+  & a {
+    color: ${({ theme }) => theme.colors.exclusivePlum};
+    text-decoration: none;
+  }
+
+  & a:hover {
+    text-decoration: underline;
+  }
 `;

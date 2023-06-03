@@ -23,24 +23,21 @@ const Navigation: FunctionComponent = () => {
   } = useModal();
 
   const { asPath } = useRouter();
-  const { kubefirstVersion, selectedCluster, installationStep, installType, gitProvider } =
-    useAppSelector(({ config, cluster, installation }) => ({
-      kubefirstVersion: config.kubefirstVersion,
-      selectedCluster: cluster.selectedCluster,
-      ...installation,
-    }));
+  const {
+    gitProvider,
+    installationStep,
+    installType,
+    isClusterZero,
+    kubefirstVersion,
+    selectedCluster,
+  } = useAppSelector(({ config, cluster, installation }) => ({
+    kubefirstVersion: config.kubefirstVersion,
+    isClusterZero: config.isClusterZero,
+    selectedCluster: cluster.selectedCluster,
+    ...installation,
+  }));
 
-  const { isEnabled: isClusterManagementEnabled, flagsAreReady } =
-    useFeatureFlag('cluster-management');
-  const { isEnabled: isClusterProvisioningEnabled } = useFeatureFlag('cluster-provisioning');
-
-  const isProvisionEnabled = useMemo(() => {
-    if (!isClusterManagementEnabled) {
-      return !selectedCluster?.clusterName;
-    }
-
-    return true;
-  }, [isClusterManagementEnabled, selectedCluster?.clusterName]);
+  const { isEnabled: isClusterManagementEnabled } = useFeatureFlag('cluster-management');
 
   const { isProvisionStep } = useInstallation(
     installType as InstallationType,
@@ -55,28 +52,16 @@ const Navigation: FunctionComponent = () => {
           icon: <ScatterPlotIcon />,
           path: '/cluster-management',
           title: 'Cluster Management',
-          isEnabled: flagsAreReady && isClusterManagementEnabled,
-        },
-        {
-          icon: <ScatterPlotIcon />,
-          path: '/provision',
-          title: 'Cluster Provisioning',
-          isEnabled: flagsAreReady && isClusterProvisioningEnabled && isProvisionEnabled,
+          isEnabled: isClusterManagementEnabled,
         },
         {
           icon: <GridViewOutlinedIcon />,
           path: '/services',
           title: 'Services',
-          isEnabled: !!selectedCluster?.clusterName,
+          isEnabled: !isClusterZero || !!selectedCluster?.clusterName,
         },
       ].filter(({ isEnabled }) => isEnabled),
-    [
-      flagsAreReady,
-      isClusterManagementEnabled,
-      isClusterProvisioningEnabled,
-      isProvisionEnabled,
-      selectedCluster?.clusterName,
-    ],
+    [isClusterManagementEnabled, isClusterZero, selectedCluster?.clusterName],
   );
 
   const handleIsActiveItem = useCallback(

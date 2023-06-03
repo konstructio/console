@@ -1,5 +1,6 @@
 import React, { FunctionComponent, useMemo } from 'react';
 import sortBy from 'lodash/sortBy';
+import { Box, CircularProgress } from '@mui/material';
 
 import { CLUSTER_CHECKS } from '../../constants/cluster';
 import { useAppSelector } from '../../redux/store';
@@ -65,7 +66,9 @@ const ConciseLogs: FunctionComponent<ConciseLogsProps> = ({ completedSteps }) =>
       ))}
       {!isError && lastStep && (
         <Step>
-          <>💫</>
+          <Box sx={{ display: 'flex' }}>
+            <CircularProgress size={15} sx={{ color: '#FFD700' }} />
+          </Box>
           <StepNumber>{`[${completedSteps.length + 1}/${
             Object.keys(CLUSTER_CHECKS).length
           }]`}</StepNumber>
@@ -74,8 +77,13 @@ const ConciseLogs: FunctionComponent<ConciseLogsProps> = ({ completedSteps }) =>
       )}
       {!isProvisioned && !lastStep && !isError && (
         <Step>
-          <>💫</>
-          <StepLabel color="secondary">Wrapping up</StepLabel>{' '}
+          <Box sx={{ display: 'flex' }}>
+            <CircularProgress size={15} sx={{ color: '#FFD700' }} />
+          </Box>
+          <StepNumber>{`[${completedSteps.length + 1}/${
+            Object.keys(CLUSTER_CHECKS).length + 1
+          }]`}</StepNumber>
+          <StepLabel color="secondary">Preparing kubefirst console</StepLabel>{' '}
         </Step>
       )}
       {isError && (

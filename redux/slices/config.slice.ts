@@ -1,13 +1,14 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 export interface ConfigState {
-  isTelemetryEnabled: boolean;
+  isTelemetryDisabled: boolean;
+  isClusterZero: boolean;
   kubefirstVersion?: string;
-  k3dDomain?: string;
 }
 
 export const initialState: ConfigState = {
-  isTelemetryEnabled: false,
+  isTelemetryDisabled: false,
+  isClusterZero: false,
 };
 
 const configSlice = createSlice({
@@ -15,10 +16,10 @@ const configSlice = createSlice({
   initialState,
   reducers: {
     setConfigValues: (state, action: PayloadAction<ConfigState>) => {
-      const { isTelemetryEnabled, kubefirstVersion, k3dDomain } = action.payload;
-      state.isTelemetryEnabled = isTelemetryEnabled;
+      const { isTelemetryDisabled, kubefirstVersion, isClusterZero } = action.payload;
+      state.isTelemetryDisabled = isTelemetryDisabled;
       state.kubefirstVersion = kubefirstVersion;
-      state.k3dDomain = k3dDomain;
+      state.isClusterZero = isClusterZero;
     },
   },
 });

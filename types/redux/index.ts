@@ -64,7 +64,7 @@ export type InstallationInfo = {
   title: string;
   description: string | string[];
   code?: string;
-  ctaDescription: string;
+  ctaDescription?: string;
   ctaLink?: string;
 };
 

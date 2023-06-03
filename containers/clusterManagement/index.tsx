@@ -10,7 +10,6 @@ import { DELETE_OPTION, VIEW_DETAILS_OPTION } from '../../constants/cluster';
 import { useAppDispatch, useAppSelector } from '../../redux/store';
 import { deleteCluster, getCluster, getClusters } from '../../redux/thunks/api.thunk';
 import { resetInstallState } from '../../redux/slices/installation.slice';
-import { setConfigValues } from '../../redux/slices/config.slice';
 import { Cluster, ClusterRequestProps } from '../../types/provision';
 import useToggle from '../../hooks/useToggle';
 import Drawer from '../../components/drawer';
@@ -21,15 +20,7 @@ import DeleteCluster from '../deleteCluster';
 import { Container, Content, Description, Header, LearnMoreLink } from './clusterManagement.styled';
 import { getClusterManagementColumns, getClusterState } from './columnDefinition';
 
-export interface ClusterManagementProps {
-  useTelemetry: boolean;
-  kubefirstVersion: string;
-}
-
-const ClusterManagement: FunctionComponent<ClusterManagementProps> = ({
-  kubefirstVersion,
-  useTelemetry,
-}) => {
+const ClusterManagement: FunctionComponent = () => {
   const [selectedCluster, setSelectedCluster] = useState<Cluster>();
   const {
     isOpen: isDetailsPanelOpen,
@@ -46,6 +37,7 @@ const ClusterManagement: FunctionComponent<ClusterManagementProps> = ({
   const { push } = useRouter();
 
   const dispatch = useAppDispatch();
+  const isClusterZero = useAppSelector(({ config }) => config.isClusterZero);
   const { isDeleted, isDeleting, isError, clusters } = useAppSelector(({ api }) => api);
 
   const handleMenuClick = (option: string, rowItem: Row) => {
@@ -105,10 +97,6 @@ const ClusterManagement: FunctionComponent<ClusterManagementProps> = ({
     handleGetClusters();
   }, [dispatch, handleGetClusters]);
 
-  useEffect(() => {
-    dispatch(setConfigValues({ isTelemetryEnabled: useTelemetry, kubefirstVersion }));
-  }, [dispatch, useTelemetry, kubefirstVersion]);
-
   return (
     <Container>
       <Header>
@@ -121,9 +109,11 @@ const ClusterManagement: FunctionComponent<ClusterManagementProps> = ({
             </LearnMoreLink>
           </Description>
         </div>
-        <Button variant="contained" color="primary" onClick={handleCreateCluster}>
-          Add cluster
-        </Button>
+        {isClusterZero && (
+          <Button variant="contained" color="primary" onClick={handleCreateCluster}>
+            Add cluster
+          </Button>
+        )}
       </Header>
       <Content>
         {clusters && (

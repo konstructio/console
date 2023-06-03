@@ -63,6 +63,7 @@ declare module 'styled-components' {
       sefidWhite: string;
       pastelLightBlue: string;
       metro: string;
+      exclusivePlum: string;
 
       // Kubefirst color palette
       americanBlue: string;

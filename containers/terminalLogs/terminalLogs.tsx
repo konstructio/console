@@ -18,7 +18,6 @@ import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import Tooltip from '../../components/tooltip';
 import TabPanel, { Tab, a11yProps } from '../../components/tab';
 import ConciseLogs from '../conciseLogs';
-import { createLogStream } from '../../services/stream';
 import { getCluster } from '../../redux/thunks/api.thunk';
 import { clearError, setError } from '../../redux/slices/installation.slice';
 import { setCompletedSteps } from '../../redux/slices/api.slice';
@@ -62,6 +61,10 @@ const TerminalLogs: FunctionComponent = () => {
     config,
     api,
   }));
+
+  window.onbeforeunload = function () {
+    return '';
+  };
 
   const handleSearch = (event: ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target;
