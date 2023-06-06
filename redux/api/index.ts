@@ -2,8 +2,6 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/dist/query/react';
 import { HYDRATE } from 'next-redux-wrapper';
 
 import { ReadinessData } from '../../pages/api/readiness';
-import { TelemetryResponseData } from '../../pages/api/telemetry';
-import { SendTelemetryArgs } from '../../services/telemetry';
 
 export const consoleApi = createApi({
   reducerPath: 'internalApi',
@@ -16,13 +14,6 @@ export const consoleApi = createApi({
     }
   },
   endpoints: (builder) => ({
-    telemetry: builder.mutation<TelemetryResponseData, SendTelemetryArgs>({
-      query: (body) => ({
-        url: '/api/telemetry',
-        method: 'POST',
-        body,
-      }),
-    }),
     readiness: builder.mutation<ReadinessData, Omit<ReadinessData, 'success'>>({
       query: (body) => ({
         url: '/api/readiness',
@@ -34,4 +25,4 @@ export const consoleApi = createApi({
   }),
 });
 
-export const { endpoints, useTelemetryMutation, useReadinessMutation } = consoleApi;
+export const { endpoints, useReadinessMutation } = consoleApi;

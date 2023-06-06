@@ -43,13 +43,14 @@ const Marketplace: FunctionComponent = () => {
   } = useForm();
 
   const marketplaceApps = useAppSelector(({ cluster }) =>
-    cluster.marketplaceApps.filter(
+    cluster.marketplaceApps?.filter(
       (app) => !cluster.clusterServices.map((s) => s.name).includes(app.name),
     ),
   );
 
   const categories = useMemo(
     () =>
+      marketplaceApps &&
       marketplaceApps
         .map(({ categories }) => categories)
         .reduce((previous, current) => {
@@ -129,9 +130,10 @@ const Marketplace: FunctionComponent = () => {
       <Content>
         <Typography variant="subtitle2">All</Typography>
         <CardsContainer>
-          {filteredApps.map((app) => (
-            <MarketplaceCard key={app.name} {...app} onClick={() => handleSelectedApp(app)} />
-          ))}
+          {filteredApps &&
+            filteredApps.map((app) => (
+              <MarketplaceCard key={app.name} {...app} onClick={() => handleSelectedApp(app)} />
+            ))}
           <MarketplaceCard {...STATIC_HELP_CARD} showSubmitButton={false}>
             <>
               To suggest an open source app that installs to your cluster, discuss your idea via an{' '}

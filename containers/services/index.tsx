@@ -7,8 +7,11 @@ import Marketplace from '../marketplace';
 import TabPanel, { Tab, a11yProps } from '../../components/tab';
 import Typography from '../../components/typography';
 import useFeatureFlag from '../../hooks/useFeatureFlag';
-import { useTelemetryMutation } from '../../redux/api';
-import { getClusterServices, getMarketplaceApps } from '../../redux/thunks/api.thunk';
+import {
+  getClusterServices,
+  getMarketplaceApps,
+  sendTelemetryEvent,
+} from '../../redux/thunks/api.thunk';
 import { useAppDispatch, useAppSelector } from '../../redux/store';
 import { DOCS_LINK } from '../../constants';
 import { BISCAY, SALTBOX_BLUE, VOLCANIC_SAND } from '../../constants/colors';
@@ -22,7 +25,6 @@ enum SERVICES_TABS {
 
 const Services: FunctionComponent = () => {
   const [activeTab, setActiveTab] = useState<number>(0);
-  const [sendTelemetryEvent] = useTelemetryMutation();
   const router = useRouter();
 
   const { isEnabled: isMarketplaceEnabled } = useFeatureFlag('marketplace');
@@ -40,10 +42,10 @@ const Services: FunctionComponent = () => {
     (url: string, name: string) => {
       if (!isTelemetryDisabled) {
         const event = `console.${name.toLowerCase()}.link`.replace(/ /g, '');
-        sendTelemetryEvent({ event, properties: { url, type: 'link' } });
+        dispatch(sendTelemetryEvent({ event }));
       }
     },
-    [isTelemetryDisabled, sendTelemetryEvent],
+    [dispatch, isTelemetryDisabled],
   );
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {

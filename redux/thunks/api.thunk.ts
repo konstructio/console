@@ -13,6 +13,7 @@ import {
 } from '../../types/provision';
 import { MarketplaceApp, MarketplaceProps } from '../../types/marketplace';
 import { InstallationType } from '../../types/redux';
+import { TelemetryClickEvent } from '../../types/telemetry';
 
 const mapClusterFromRaw = (cluster: ClusterResponse): Cluster => ({
   id: cluster._id,
@@ -274,6 +275,27 @@ export const resetClusterProgress = createAsyncThunk<
 
   const res = await axios.post<{ regions: Array<string> }>('/api/proxy', {
     url: `/cluster/${values?.clusterName}/reset_progress`,
+  });
+
+  if ('error' in res) {
+    throw res.error;
+  }
+});
+
+export const sendTelemetryEvent = createAsyncThunk<
+  void,
+  TelemetryClickEvent,
+  {
+    dispatch: AppDispatch;
+    state: RootState;
+  }
+>('api/sendTelemetryEvent', async (body, { getState }) => {
+  const {
+    cluster: { selectedCluster },
+  } = getState();
+  const res = await axios.post('/api/proxy', {
+    url: `/telemetry/${selectedCluster?.clusterName}`,
+    body,
   });
 
   if ('error' in res) {
