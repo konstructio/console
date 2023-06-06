@@ -39,12 +39,6 @@ spec:
               value: {{ .Values.apiURL | default (printf "http://%s-kubefirst-api.%s.svc.cluster.local" (.Release.Name ) (.Release.Namespace ))  }}
             - name: KUBEFIRST_VERSION
               value: {{ .Values.chartVersion | default .Chart.Version }}
-            - name: CLUSTER_ID
-              value: {{ .Values.global.clusterId | default $clusterId }} 
-            - name: CLUSTER_TYPE
-              value: {{ .Values.clusterType | default "bootstrap" | quote }}
-            - name: DISABLE_TELEMETRY
-              value: {{ .Values.disableTelemetry | default "false" | quote }} 
             - name: IS_CLUSTER_ZERO
               value: {{ .Values.isClusterZero | default "true" | quote }}
           securityContext:
@@ -64,9 +58,8 @@ spec:
             failureThreshold: 1
             timeoutSeconds: 30
           readinessProbe:
-            httpGet:
-              path: /api/healthz
-              port: http
+            tcpSocket:
+              port: 8080
             initialDelaySeconds: 10
             periodSeconds: 5
             successThreshold: 1
