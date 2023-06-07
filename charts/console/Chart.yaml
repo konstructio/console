@@ -3,4 +3,4 @@ appVersion: 2.1.7
 description: A Helm chart for the Kubefirst Console
 name: console
 type: application
-version: 2.21.0
+version: 2.22.0
