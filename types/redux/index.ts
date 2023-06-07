@@ -1,6 +1,8 @@
 export interface GitValues {
   gitToken?: string;
   gitOwner?: string;
+  gitopsTemplateRepo: string;
+  gitopsTemplateBranch: string;
 }
 
 export interface LocalInstallValues extends GitValues {

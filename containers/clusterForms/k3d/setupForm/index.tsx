@@ -21,13 +21,13 @@ export const LocalSetupForm: FunctionComponent<FormFlowProps<InstallValues>> = (
       />
       <ControlledTextField
         control={control}
-        name="gitOpsBranch"
+        name="gitopsTemplateBranch"
         rules={{ required: false }}
         label="GitOps template override"
       />
       <ControlledTextField
         control={control}
-        name="templateRepoUrl"
+        name="gitopsTemplateRepo"
         rules={{ required: false }}
         label="GitOps template branch"
       />

@@ -64,6 +64,10 @@ export const TerminalView = styled.div`
   & .xterm .xterm-viewport {
     border-radius: 4px;
   }
+
+  & span:not([class]) {
+    color: white;
+  }
 `;
 
 export const Tools = styled.div`
