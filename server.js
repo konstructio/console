@@ -56,7 +56,7 @@ function sendHeartbeat() {
 
       analytics.track({
         userId: CLUSTER_ID,
-        event: 'kubefirst.console.healthz',
+        event: 'kubefirst.heartbeat',
         properties: {
           cli_version: KUBEFIRST_VERSION,
           cloud_provider: CLOUD,
