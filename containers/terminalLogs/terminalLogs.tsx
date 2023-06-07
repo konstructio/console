@@ -6,6 +6,7 @@ import React, {
   useRef,
   useState,
 } from 'react';
+import moment from 'moment';
 import { Terminal as XTerminal } from 'xterm';
 import { FitAddon } from 'xterm-addon-fit';
 import { SearchAddon } from 'xterm-addon-search';
@@ -24,7 +25,7 @@ import { setCompletedSteps } from '../../redux/slices/api.slice';
 import { useAppDispatch, useAppSelector } from '../../redux/store';
 import { ClusterRequestProps } from '../../types/provision';
 import { CLUSTER_CHECKS } from '../../constants/cluster';
-import { ECHO_BLUE, LIBERTY_BLUE } from '../../constants/colors';
+import { ANSI_COLORS, ECHO_BLUE, LIBERTY_BLUE } from '../../constants/colors';
 
 import { Container, Search, SearchTextField, TerminalView, Tools } from './terminalLogs.styled';
 
@@ -32,6 +33,8 @@ import 'xterm/css/xterm.css';
 
 const UNSCAPE_STRING_REGEX = /\\x([0-9A-Fa-f]{2})/g;
 const SEARCH_OPTIONS = { caseSensitive: false };
+
+const { brightRed, darkBlue, gray, brightWhite } = ANSI_COLORS;
 
 enum TERMINAL_TABS {
   CONCISE = 0,
@@ -125,6 +128,7 @@ const TerminalLogs: FunctionComponent = () => {
         logLevel: 'off',
         scrollback: 5000,
         theme: {
+          foreground: 'white',
           background: LIBERTY_BLUE,
         },
       });
@@ -151,17 +155,25 @@ const TerminalLogs: FunctionComponent = () => {
           const [, msg] = log.message.match(/msg="([^"]*)"/);
 
           const logLevel = level.replace(' msg=', '').toUpperCase();
-          const logStyle = logLevel.includes('ERROR') ? '\x1b[1;31m' : '\x1b[0;34m';
+          const logStyle = logLevel.includes('ERROR') ? brightRed : darkBlue;
 
-          const decodedMessage = msg.replace(UNSCAPE_STRING_REGEX, (match: string, hex: string) =>
-            String.fromCharCode(parseInt(hex, 16)),
-          );
+          const decodedMessage = msg
+            .replace(UNSCAPE_STRING_REGEX, (match: string, hex: string) =>
+              String.fromCharCode(parseInt(hex, 16)),
+            )
+            .replaceAll('\x1B[1m', brightWhite);
+
+          let localTime = time;
+          if (moment(time).isValid()) {
+            const uctDate = moment.utc(time).toDate();
+            localTime = moment(uctDate).local().format('YYYY-MM-DD HH:mm:ss');
+          }
 
           terminal.write(
-            `\x1b[0;37m${time} ${logStyle}${logLevel}:\x1b[1;37m ${decodedMessage} \n`,
+            `${gray}${localTime} ${logStyle}${logLevel}:${brightWhite} ${decodedMessage} \n`,
           );
 
-          setLogs((logs) => [...logs, `${time} ${logLevel} ${decodedMessage} \n`]);
+          setLogs((logs) => [...logs, `${localTime} ${logLevel} ${decodedMessage} \n`]);
         }
       });
 

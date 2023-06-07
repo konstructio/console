@@ -50,3 +50,24 @@ export const LAUGHING_ORANGE = '#F59E0B';
 export const SEFID_WHITE = '#FEF2F2';
 export const ASMANI_SKY = '#81E2B4';
 export const METRO = '#808191';
+
+export const ANSI_COLORS = {
+  black: '\x1b[30m',
+  red: '\x1b[31m',
+  green: '\x1b[32m',
+  yellow: '\x1b[33m',
+  blue: '\x1b[34m',
+  darkBlue: '\x1b[0;34m',
+  magenta: '\x1b[35m',
+  cyan: '\x1b[36m',
+  white: '\x1b[37m',
+  gray: '\x1b[0;37m',
+  brightBlack: '\x1b[1;30m',
+  brightRed: '\x1b[1;31m',
+  brightGreen: '\x1b[1;32m',
+  brightYellow: '\x1b[1;33m',
+  brightBlue: '\x1b[1;34m',
+  brightMagenta: '\x1b[1;35m',
+  brightCyan: '\x1b[1;36m',
+  brightWhite: '\x1b[1;37m',
+};
