@@ -30,6 +30,7 @@ import { Container, Search, SearchTextField, TerminalView, Tools } from './termi
 
 import 'xterm/css/xterm.css';
 
+const UNSCAPE_STRING_REGEX = /\\x([0-9A-Fa-f]{2})/g;
 const SEARCH_OPTIONS = { caseSensitive: false };
 
 enum TERMINAL_TABS {
@@ -119,7 +120,7 @@ const TerminalLogs: FunctionComponent = () => {
     if (terminalRef.current) {
       const terminal = new XTerminal({
         convertEol: true,
-        cols: 110,
+        cols: 105,
         disableStdin: true,
         logLevel: 'off',
         scrollback: 5000,
@@ -152,9 +153,15 @@ const TerminalLogs: FunctionComponent = () => {
           const logLevel = level.replace(' msg=', '').toUpperCase();
           const logStyle = logLevel.includes('ERROR') ? '\x1b[1;31m' : '\x1b[0;34m';
 
-          terminal.write(`\x1b[0;37m${time} ${logStyle}${logLevel}:\x1b[1;37m ${msg} \n`);
+          const decodedMessage = msg.replace(UNSCAPE_STRING_REGEX, (match: string, hex: string) =>
+            String.fromCharCode(parseInt(hex, 16)),
+          );
 
-          setLogs((logs) => [...logs, `${time} ${logLevel} ${msg} \n`]);
+          terminal.write(
+            `\x1b[0;37m${time} ${logStyle}${logLevel}:\x1b[1;37m ${decodedMessage} \n`,
+          );
+
+          setLogs((logs) => [...logs, `${time} ${logLevel} ${decodedMessage} \n`]);
         }
       });
 

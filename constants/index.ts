@@ -23,6 +23,6 @@ export const DOMAIN_REGEX = new RegExp(/[a-zA-Z0-9@:%._+~#=]{2,256}\.[a-z]{2,6}/
 export const KUBEFIRST_REPOSITORIES = ['gitops', 'metaphor'];
 export const KUBEFIRST_TEAMS = ['admins', 'developers'];
 
-export const FLAPPY_TWEET = `The @kubefirst team is making kubernetes platform provisioning so much fun! Check out this Flappy K-Ray game that they let you play while your cluster provisions! https://kray.kubefirst.com
+export const FLAPPY_TWEET = `The @kubefirst team is making kubernetes platform provisioning so much fun! Check out this Flappy K-Ray game that they let you play while your cluster provisions! https://kray.kubefirst.io
 
 <note: add a screenshot of your high score for a chance to win a monthly prize!>`;
