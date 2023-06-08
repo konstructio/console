@@ -2,7 +2,7 @@ import React, { ChangeEvent, FunctionComponent, useEffect, useMemo, useState } f
 import debounce from 'lodash/debounce';
 
 import { useInstallation } from '../../../../hooks/useInstallation';
-import LearnMore from '../../../../components/learnMore';
+// import LearnMore from '../../../../components/learnMore';
 import ControlledPassword from '../../../../components/controlledFields/Password';
 import ControlledTextField from '../../../../components/controlledFields/TextField';
 import ControlledAutocomplete from '../../../../components/controlledFields/AutoComplete';
@@ -177,7 +177,7 @@ const AuthForm: FunctionComponent<FormFlowProps<InstallValues>> = ({ control, se
           }}
         />
       ))}
-      <LearnMore description="Learn more about" href="" linkTitle="authentication" />
+      {/* <LearnMore description="Learn more about" href="" linkTitle="authentication" /> */}
     </>
   );
 };

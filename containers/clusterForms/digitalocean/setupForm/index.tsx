@@ -1,13 +1,13 @@
 import React, { FunctionComponent } from 'react';
-import { FormFlowProps } from 'types/provision';
 
-import LearnMore from '../../../../components/learnMore';
+// import LearnMore from '../../../../components/learnMore';
 import ControlledAutocomplete from '../../../../components/controlledFields/AutoComplete';
 import ControlledTextField from '../../../../components/controlledFields/TextField';
 import { useAppDispatch, useAppSelector } from '../../../../redux/store';
 import { getCloudDomains } from '../../../../redux/thunks/api.thunk';
 import { EMAIL_REGEX } from '../../../../constants';
 import { InstallValues } from '../../../../types/redux';
+import { FormFlowProps } from '../../../../types/provision';
 
 const DigitalOceanSetupForm: FunctionComponent<FormFlowProps<InstallValues>> = ({ control }) => {
   const dispatch = useAppDispatch();
@@ -61,7 +61,7 @@ const DigitalOceanSetupForm: FunctionComponent<FormFlowProps<InstallValues>> = (
         onErrorText="Maximum 25 characters."
         required
       />
-      <LearnMore description="Learn more about" href="" linkTitle="configuring your cluster" />
+      {/* <LearnMore description="Learn more about" href="" linkTitle="configuring your cluster" /> */}
     </>
   );
 };

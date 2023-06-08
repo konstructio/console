@@ -78,18 +78,22 @@ const getInfoByType = (installType: InstallationType, step: number) => {
     [InstallationType.DIGITAL_OCEAN]: {
       [FormStep.AUTHENTICATION]: {
         title: 'DigitalOcean Prerequisites',
-        description: ['TBD.', 'TBD.'],
-        ctaDescription: 'Learn more',
-        ctaLink: '',
+        description: [
+          'Create a <a href="https://cloud.digitalocean.com/registrations/new" target="_blank">DigitalOcean account</a>.',
+          'Add your <a href="https://docs.digitalocean.com/products/networking/dns/how-to/add-domains/" target="_blank">domain name</a>.',
+          'Create a personal <a href="https://docs.digitalocean.com/reference/api/create-personal-access-token" target="_blank">access token</a>.',
+        ],
       },
     },
 
     [InstallationType.VULTR]: {
       [FormStep.AUTHENTICATION]: {
         title: 'Vultr Prerequisites',
-        description: ['TBD.', 'TBD.'],
-        ctaDescription: 'Learn more',
-        ctaLink: '',
+        description: [
+          'Create a <a href="https://www.vultr.com/register/" target="_blank">Vultr account</a>.',
+          'Add your <a href="https://my.vultr.com/dns/" target="_blank">domain name</a>.',
+          'Get your personal <a href="https://my.vultr.com/settings/#settingsapi" target="_blank">access token</a>.',
+        ],
       },
     },
   };

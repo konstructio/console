@@ -56,7 +56,7 @@ const PROVIDER_OPTIONS: Record<
     label: 'Digital Ocean',
     description:
       'A cloud platform that allows developers to build, deploy, and scale applications. Its simplicity, ease of use and affordable pricing make it a popular choice for small businesses and startups. ',
-    learnMoreLink: '#',
+    learnMoreLink: 'https://www.digitalocean.com/',
 
     height: 50,
     width: 50,
@@ -67,7 +67,7 @@ const PROVIDER_OPTIONS: Record<
     label: 'Vultr',
     description:
       'A cloud hosting provider that offers high-performance SSD-based cloud servers, block storage, object storage, and dedicated servers in multiple locations worldwide. ',
-    learnMoreLink: '#',
+    learnMoreLink: 'https://www.vultr.com/',
     height: 43,
     width: 50,
     beta: true,

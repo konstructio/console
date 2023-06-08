@@ -2,7 +2,7 @@ import React, { FunctionComponent, useEffect } from 'react';
 
 import ControlledAutocomplete from '../../../../components/controlledFields/AutoComplete';
 import ControlledTextField from '../../../../components/controlledFields/TextField';
-import LearnMore from '../../../../components/learnMore';
+// import LearnMore from '../../../../components/learnMore';
 import { useAppDispatch, useAppSelector } from '../../../../redux/store';
 import { getCloudDomains, getCloudRegions } from '../../../../redux/thunks/api.thunk';
 import { InstallValues } from '../../../../types/redux';
@@ -74,7 +74,7 @@ const AwsSetupForm: FunctionComponent<FormFlowProps<InstallValues>> = ({ control
         onErrorText="Maximum 25 characters."
         required
       />
-      <LearnMore description="Learn more about" href="" linkTitle="configuring your cluster" />
+      {/* <LearnMore description="Learn more about" href="" linkTitle="configuring your cluster" /> */}
     </>
   );
 };
