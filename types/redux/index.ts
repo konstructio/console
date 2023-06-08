@@ -1,7 +1,7 @@
 export interface GitValues {
   gitToken?: string;
   gitOwner?: string;
-  gitopsTemplateRepo: string;
+  gitopsTemplateUrl: string;
   gitopsTemplateBranch: string;
 }
 

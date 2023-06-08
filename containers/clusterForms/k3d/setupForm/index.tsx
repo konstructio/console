@@ -27,7 +27,7 @@ export const LocalSetupForm: FunctionComponent<FormFlowProps<InstallValues>> = (
       />
       <ControlledTextField
         control={control}
-        name="gitopsTemplateRepo"
+        name="gitopsTemplateUrl"
         rules={{ required: false }}
         label="GitOps template branch"
       />
