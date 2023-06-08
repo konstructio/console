@@ -13,7 +13,7 @@ const PROVIDER_OPTIONS: Record<
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   { logoSrc: any; label: string; height: number; width: number }
 > = {
-  [GitProvider.GITHUB]: { logoSrc: githubLogo, label: 'Github', height: 40, width: 40 },
+  [GitProvider.GITHUB]: { logoSrc: githubLogo, label: 'GitHub', height: 40, width: 40 },
   [GitProvider.GITLAB]: { logoSrc: gitlabLogo, label: 'GitLab', height: 40, width: 42 },
 };
 

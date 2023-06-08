@@ -43,5 +43,5 @@ export const Title = styled(Typography)`
   overflow: hidden;
   text-overflow: ellipsis;
 
-  ${textTruncate(2)};
+  ${textTruncate(3)};
 `;

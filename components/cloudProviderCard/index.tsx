@@ -45,7 +45,7 @@ const PROVIDER_OPTIONS: Record<
   },
   [InstallationType.CIVO]: {
     logoSrc: civoLogo,
-    label: 'CIVO',
+    label: 'Civo',
     description:
       'A powerful open source cloud native tool set for identity and infrastructure management, application delivery, and secrets managament.',
     height: 17,
@@ -53,7 +53,7 @@ const PROVIDER_OPTIONS: Record<
   },
   [InstallationType.DIGITAL_OCEAN]: {
     logoSrc: digitalOceanLogo,
-    label: 'Digital Ocean',
+    label: 'DigitalOcean',
     description:
       'A cloud platform that allows developers to build, deploy, and scale applications. Its simplicity, ease of use and affordable pricing make it a popular choice for small businesses and startups. ',
     learnMoreLink: 'https://www.digitalocean.com/',
