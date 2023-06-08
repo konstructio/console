@@ -31,7 +31,7 @@ const AdvancedOptions: FunctionComponent<FormFlowProps<InstallValues>> = ({ cont
         <>
           <ControlledTextField
             control={control}
-            name="gitopsTemplateRepo"
+            name="gitopsTemplateUrl"
             label="GitOps template override"
             rules={{
               required: false,
