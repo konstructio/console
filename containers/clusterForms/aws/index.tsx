@@ -26,12 +26,5 @@ export const AwsFormFlow: FunctionComponent<FormFlowProps<InstallValues>> = ({
     return null;
   }
 
-  return (
-    <ActiveFormStep
-      {...rest}
-      currentStep={currentStep}
-      clusterName="kubefirst"
-      domainName="kubefirst.dev"
-    />
-  );
+  return <ActiveFormStep {...rest} currentStep={currentStep} />;
 };

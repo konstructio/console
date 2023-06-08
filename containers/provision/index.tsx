@@ -61,7 +61,7 @@ const Provision: FunctionComponent = () => {
     trigger,
     watch,
     reset,
-  } = useForm({ mode: 'onChange' });
+  } = useForm<InstallValues>({ mode: 'onChange' });
 
   const installTitle = useMemo(
     () => installTitles[installationStep],
@@ -81,8 +81,9 @@ const Provision: FunctionComponent = () => {
     } else if (isProvisionStep) {
       return isProvisioned;
     }
-    return isFormValid && !error;
+    return isFormValid && !error && !authErrors.length;
   }, [
+    authErrors.length,
     error,
     gitProvider,
     installType,

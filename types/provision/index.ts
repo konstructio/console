@@ -7,10 +7,11 @@ import {
 } from 'react-hook-form';
 
 import { Row } from '../';
+import { InstallValues } from '../redux';
 
 export interface FormFlowProps<T extends FieldValues> {
   currentStep: number;
-  control: Control;
+  control: Control<InstallValues>;
   clusterName: string;
   domainName: string;
   onFormSubmit?: (values: T) => void;

@@ -17,6 +17,7 @@ export const Link = styled(NextLink)`
 
 export const Title = styled.div`
   margin: 40px 0 16px 0;
+  text-align: center;
   width: 382px;
 
   strong {

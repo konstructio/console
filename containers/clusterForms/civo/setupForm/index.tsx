@@ -3,7 +3,7 @@ import { FormFlowProps } from 'types/provision';
 
 import ControlledAutocomplete from '../../../../components/controlledFields/AutoComplete';
 import ControlledTextField from '../../../../components/controlledFields/TextField';
-import LearnMore from '../../../../components/learnMore';
+// import LearnMore from '../../../../components/learnMore';
 import { useAppDispatch, useAppSelector } from '../../../../redux/store';
 import { getCloudDomains } from '../../../../redux/thunks/api.thunk';
 import { InstallValues } from '../../../../types/redux';
@@ -61,7 +61,7 @@ const CivoSetupForm: FunctionComponent<FormFlowProps<InstallValues>> = ({ contro
         onErrorText="Maximum 25 characters."
         required
       />
-      <LearnMore description="Learn more about" href="" linkTitle="configuring your cluster" />
+      {/* <LearnMore description="Learn more about" href="" linkTitle="configuring your cluster" /> */}
     </>
   );
 };
