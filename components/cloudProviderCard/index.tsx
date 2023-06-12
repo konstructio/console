@@ -47,7 +47,8 @@ const PROVIDER_OPTIONS: Record<
     logoSrc: civoLogo,
     label: 'Civo',
     description:
-      'A powerful open source cloud native tool set for identity and infrastructure management, application delivery, and secrets managament.',
+      'The cloud native service provider, specializing in managed Kubernetes. A faster, simpler and more cost-effective cloud platform.',
+    learnMoreLink: 'https://www.civo.com/?utm_source=partner&utm_medium=kubefirstdeploy&utm_campaign=kubefirstdeploy',
     height: 17,
     width: 50,
   },
