@@ -11,7 +11,7 @@ import {
   ClusterResponse,
   ClusterServices,
 } from '../../types/provision';
-import { MarketplaceApp, MarketplaceProps } from '../../types/marketplace';
+import { GitOpsCatalogApp, GitOpsCatalogProps } from '../../types/gitOpsCatalog';
 import { InstallationType } from '../../types/redux';
 import { TelemetryClickEvent } from '../../types/telemetry';
 
@@ -170,15 +170,17 @@ export const getClusterServices = createAsyncThunk<
   return res.data?.services;
 });
 
-export const getMarketplaceApps = createAsyncThunk<
-  Array<MarketplaceApp>,
+export const getGitOpsCatalogApps = createAsyncThunk<
+  Array<GitOpsCatalogApp>,
   void,
   {
     dispatch: AppDispatch;
     state: RootState;
   }
->('api/getMarketplaceApps', async () => {
-  const res = await axios.get(`/api/proxy?${queryString.stringify({ url: `/marketplace/apps` })}`);
+>('api/getGitOpsCatalogApps', async () => {
+  const res = await axios.get(
+    `/api/proxy?${queryString.stringify({ url: `/gitops-catalog/apps` })}`,
+  );
 
   if ('error' in res) {
     throw res.error;
@@ -186,14 +188,14 @@ export const getMarketplaceApps = createAsyncThunk<
   return res.data?.apps;
 });
 
-export const installMarketplaceApp = createAsyncThunk<
-  MarketplaceApp,
-  MarketplaceProps,
+export const installGitOpsApp = createAsyncThunk<
+  GitOpsCatalogApp,
+  GitOpsCatalogProps,
   {
     dispatch: AppDispatch;
     state: RootState;
   }
->('api/installMarketplaceApp', async ({ app, clusterName, values }) => {
+>('api/installGitOpsApp', async ({ app, clusterName, values }) => {
   const secret_keys =
     values &&
     Object.keys(values as FieldValues).map((key) => ({

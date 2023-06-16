@@ -15,7 +15,8 @@ export const Container = styled.nav`
   transition: width 0.5s ease;
 
   ${media.greaterThan('md')`
-    width: 256px;
+    overflow-y: auto;
+    width: 304px;
   `}
 `;
 

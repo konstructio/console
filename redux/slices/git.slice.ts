@@ -49,6 +49,7 @@ const gitSlice = createSlice({
       state.errors = [];
     },
     clearGitState: (state) => {
+      state.gitOwner = undefined;
       state.githubUser = null;
       state.githubUserOrganizations = [];
       state.gitlabUser = null;

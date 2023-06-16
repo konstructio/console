@@ -1,6 +1,7 @@
 import {
   Control,
   FieldValues,
+  UseFormReset,
   UseFormSetValue,
   UseFormTrigger,
   UseFormWatch,
@@ -16,6 +17,7 @@ export interface FormFlowProps<T extends FieldValues> {
   domainName: string;
   onFormSubmit?: (values: T) => void;
   setValue: UseFormSetValue<T>;
+  reset?: UseFormReset<T>;
   step?: number;
   trigger: UseFormTrigger<T>;
   watch: UseFormWatch<T>;

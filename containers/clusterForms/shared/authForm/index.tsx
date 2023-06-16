@@ -20,9 +20,18 @@ import {
   getGitlabGroups,
   getGitlabUser,
 } from '../../../../redux/thunks/git.thunk';
-import { setToken, clearUserError, setGitOwner } from '../../../../redux/slices/git.slice';
+import {
+  setToken,
+  clearUserError,
+  setGitOwner,
+  clearGitState,
+} from '../../../../redux/slices/git.slice';
 
-const AuthForm: FunctionComponent<FormFlowProps<InstallValues>> = ({ control, setValue }) => {
+const AuthForm: FunctionComponent<FormFlowProps<InstallValues>> = ({
+  control,
+  reset,
+  setValue,
+}) => {
   const [isGitRequested, setIsGitRequested] = useState<boolean>();
   const dispatch = useAppDispatch();
 
@@ -54,6 +63,7 @@ const AuthForm: FunctionComponent<FormFlowProps<InstallValues>> = ({ control, se
   const validateGitOwner = async (gitOwner: string) => {
     dispatch(setGitOwner(gitOwner));
     await dispatch(clearUserError());
+
     if (gitOwner) {
       if (isGitHub) {
         await dispatch(getGitHubOrgRepositories({ token, organization: gitOwner })).unwrap();
@@ -84,8 +94,16 @@ const AuthForm: FunctionComponent<FormFlowProps<InstallValues>> = ({ control, se
   };
 
   const gitTokenDebounce = debounce((token) => handleGitTokenBlur(token), 1000);
-  const handleOnChangeToken = ({ target }: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleOnChangeToken = async ({
+    target,
+  }: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { value } = target;
+
+    if (isTokenValid) {
+      reset && reset({ userName: '' });
+      await dispatch(clearGitState());
+    }
+
     if (value) {
       gitTokenDebounce(value);
     }

@@ -150,9 +150,9 @@ const TerminalLogs: FunctionComponent = () => {
           log.message.includes('level=') &&
           log.message.includes('msg=')
         ) {
-          const [, time] = log.message.match(/time="([^"]*)"/);
-          const [, level] = log.message.match(/level=([^"]*)/);
-          const [, msg] = log.message.match(/msg="([^"]*)"/);
+          const [, time] = log.message.match(/time="([^"]*)"/) || [null, ''];
+          const [, level] = log.message.match(/level=([^"]*)/) || [null, ''];
+          const [, msg] = log.message.match(/msg="([^"]*)"/) || [null, ''];
 
           const logLevel = level.replace(' msg=', '').toUpperCase();
           const logStyle = logLevel.includes('ERROR') ? brightRed : darkBlue;
@@ -217,8 +217,16 @@ const TerminalLogs: FunctionComponent = () => {
             },
           }}
         >
-          <Tab label="Concise" {...a11yProps(TERMINAL_TABS.CONCISE)} />
-          <Tab label="Verbose" {...a11yProps(TERMINAL_TABS.VERBOSE)} />
+          <Tab
+            label="Concise"
+            {...a11yProps(TERMINAL_TABS.CONCISE)}
+            sx={{ minHeight: 'auto !important' }}
+          />
+          <Tab
+            label="Verbose"
+            {...a11yProps(TERMINAL_TABS.VERBOSE)}
+            sx={{ minHeight: 'auto !important' }}
+          />
         </Tabs>
       </Box>
       <TabPanel value={activeTab} index={TERMINAL_TABS.CONCISE}>

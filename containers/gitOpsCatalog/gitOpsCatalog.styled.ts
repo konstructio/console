@@ -30,3 +30,9 @@ export const Filter = styled.div`
   padding: 24px 24px 0 24px;
   width: 266px;
 `;
+
+export const CardsByCategory = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+`;

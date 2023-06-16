@@ -1,4 +1,4 @@
-export const formatDomain = (link: string, domainName: string) => {
+export const formatDomain = (link: string, isMetaphor: boolean) => {
   if (!link) {
     return link;
   }
@@ -13,8 +13,14 @@ export const formatDomain = (link: string, domainName: string) => {
 
   const domainOrPath = `${isGitLink ? url.pathname.substring(1) : url.hostname}`;
 
-  if (domainOrPath.includes('metaphor-')) {
-    return domainOrPath && domainOrPath.replace(`.${domainName}`, '');
+  if (isMetaphor) {
+    const { hostname } = url;
+    const hostnameList = hostname.split('.');
+    const domain = `${hostnameList[hostnameList.length - 2]}.${
+      hostnameList[hostnameList.length - 1]
+    }`;
+
+    return domainOrPath && domainOrPath.replace(`.${domain}`, '');
   }
 
   return domainOrPath;

@@ -39,7 +39,8 @@ const PROVIDER_OPTIONS: Record<
     logoSrc: awsLogo,
     label: 'AWS',
     description:
-      'Our AWS cloud platform can accommodate all of the needs of your enterprise and leverages the free Github system at github.com.',
+      'Our AWS cloud platform can accommodate all of the needs of your enterprise and leverages the free GitHub system at github.com ',
+    learnMoreLink: 'https://aws.amazon.com/console',
     height: 30,
     width: 50,
   },
@@ -47,8 +48,9 @@ const PROVIDER_OPTIONS: Record<
     logoSrc: civoLogo,
     label: 'Civo',
     description:
-      'The cloud native service provider, specializing in managed Kubernetes. A faster, simpler and more cost-effective cloud platform.',
-    learnMoreLink: 'https://www.civo.com/?utm_source=partner&utm_medium=kubefirstdeploy&utm_campaign=kubefirstdeploy',
+      'The cloud native service provider, specializing in managed Kubernetes. A faster, simpler and more cost-effective cloud platform. ',
+    learnMoreLink:
+      'https://www.civo.com/?utm_source=partner&utm_medium=kubefirstdeploy&utm_campaign=kubefirstdeploy',
     height: 17,
     width: 50,
   },
@@ -102,7 +104,7 @@ const CloudProviderCard: FunctionComponent<CloudProviderCardProps> = ({
           {learnMoreLink && (
             <Link href={learnMoreLink} target="_blank">
               {' '}
-              Learn More
+              Learn more
             </Link>
           )}
         </Typography>

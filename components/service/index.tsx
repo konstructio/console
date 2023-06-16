@@ -57,9 +57,7 @@ const Service: FunctionComponent<ServiceProps> = ({
           <LiveAppIcon color={isAvailable ? MINT_GREEN : PASTEL_LIGHT_BLUE}>
             {isMetaphor && <AppConnector />}
           </LiveAppIcon>
-          <Typography variant="tooltip">
-            {formatDomain(link, 'toDo: domain name for metaphor')}
-          </Typography>
+          <Typography variant="tooltip">{formatDomain(link, isMetaphor)}</Typography>
           {!isAvailable && (
             <Box sx={{ display: 'flex', marginLeft: 2 }}>
               <CircularProgress size={15} />

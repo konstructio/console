@@ -17,7 +17,7 @@ export interface TableProps {
 
 const Table: FunctionComponent<DataGridProps> = ({ ...props }) => {
   return (
-    <Box sx={{ width: '100%' }}>
+    <Box sx={{ maxHeight: '400px', width: '100%' }}>
       <DataGrid
         {...props}
         hideFooter
@@ -62,6 +62,7 @@ const Table: FunctionComponent<DataGridProps> = ({ ...props }) => {
           },
           'filter': 'drop-shadow(0px 4px 12px rgba(0, 0, 0, 0.04))',
           'border': 0,
+          'max-height': '600px',
         }}
       />
     </Box>

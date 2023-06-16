@@ -41,7 +41,7 @@ export const Header = styled.div`
   align-items: center;
   display: flex;
   flex-direction: row;
-  gap: 14px;
+  gap: 16px;
   height: 35px;
   margin-bottom: 10px;
 `;

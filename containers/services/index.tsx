@@ -3,13 +3,13 @@ import { Box, Tabs } from '@mui/material';
 import { useRouter } from 'next/router';
 
 import Service from '../service';
-import Marketplace from '../marketplace';
+import GitOpsCatalog from '../gitOpsCatalog';
 import TabPanel, { Tab, a11yProps } from '../../components/tab';
 import Typography from '../../components/typography';
 import useFeatureFlag from '../../hooks/useFeatureFlag';
 import {
   getClusterServices,
-  getMarketplaceApps,
+  getGitOpsCatalogApps,
   sendTelemetryEvent,
 } from '../../redux/thunks/api.thunk';
 import { useAppDispatch, useAppSelector } from '../../redux/store';
@@ -20,14 +20,14 @@ import { Container, Content, Header, LearnMoreLink, ServicesContainer } from './
 
 enum SERVICES_TABS {
   PROVISIONED = 0,
-  MARKETPLACE = 1,
+  GITOPS_CATALOG = 1,
 }
 
 const Services: FunctionComponent = () => {
   const [activeTab, setActiveTab] = useState<number>(0);
   const router = useRouter();
 
-  const { isEnabled: isMarketplaceEnabled } = useFeatureFlag('marketplace');
+  const { isEnabled: isGitOpsCatalogEnabled } = useFeatureFlag('gitops-catalog');
 
   const dispatch = useAppDispatch();
   const { clusterServices, isTelemetryDisabled, selectedCluster } = useAppSelector(
@@ -53,7 +53,7 @@ const Services: FunctionComponent = () => {
   };
 
   useEffect(() => {
-    dispatch(getMarketplaceApps());
+    dispatch(getGitOpsCatalogApps());
   }, [dispatch]);
 
   useEffect(() => {
@@ -92,7 +92,7 @@ const Services: FunctionComponent = () => {
       <Header>
         <Typography variant="h6">Services Overview</Typography>
       </Header>
-      {isMarketplaceEnabled ? (
+      {isGitOpsCatalogEnabled ? (
         <>
           <Box sx={{ width: 'fit-content', mb: 4 }}>
             <Tabs value={activeTab} onChange={handleChange} indicatorColor="primary">
@@ -100,14 +100,14 @@ const Services: FunctionComponent = () => {
                 color={activeTab === SERVICES_TABS.PROVISIONED ? BISCAY : SALTBOX_BLUE}
                 label={<Typography variant="buttonSmall">Provisioned services</Typography>}
                 {...a11yProps(SERVICES_TABS.PROVISIONED)}
-                sx={{ textTransform: 'capitalize', mr: 3 }}
+                sx={{ textTransform: 'initial', mr: 3 }}
               />
 
               <Tab
-                color={activeTab === SERVICES_TABS.MARKETPLACE ? BISCAY : SALTBOX_BLUE}
-                label={<Typography variant="buttonSmall">Marketplace</Typography>}
-                {...a11yProps(SERVICES_TABS.MARKETPLACE)}
-                sx={{ textTransform: 'capitalize' }}
+                color={activeTab === SERVICES_TABS.GITOPS_CATALOG ? BISCAY : SALTBOX_BLUE}
+                label={<Typography variant="buttonSmall">GitOps catalog</Typography>}
+                {...a11yProps(SERVICES_TABS.GITOPS_CATALOG)}
+                sx={{ textTransform: 'initial' }}
               />
             </Tabs>
           </Box>
@@ -115,9 +115,9 @@ const Services: FunctionComponent = () => {
             <TabPanel value={activeTab} index={SERVICES_TABS.PROVISIONED}>
               {services}
             </TabPanel>
-            <TabPanel value={activeTab} index={SERVICES_TABS.MARKETPLACE}>
+            <TabPanel value={activeTab} index={SERVICES_TABS.GITOPS_CATALOG}>
               <Typography variant="body2" sx={{ mb: 3 }} color={VOLCANIC_SAND}>
-                Add your favourite applications to your cluster.{' '}
+                Add the latest version of your favourite application to your cluster.{' '}
                 <LearnMoreLink
                   href={DOCS_LINK}
                   target="_blank"
@@ -126,7 +126,7 @@ const Services: FunctionComponent = () => {
                   Learn more
                 </LearnMoreLink>
               </Typography>
-              <Marketplace />
+              <GitOpsCatalog />
             </TabPanel>
           </Content>
         </>
