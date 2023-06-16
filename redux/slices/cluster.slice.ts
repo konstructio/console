@@ -19,7 +19,7 @@ export const initialState: ConfigState = {
   selectedCluster: undefined,
   clusterServices: [],
   gitOpsCatalogApps: [],
-  isGitOpsCatalogNotificationOpen: true,
+  isGitOpsCatalogNotificationOpen: false,
 };
 
 const clusterSlice = createSlice({
