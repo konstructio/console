@@ -3,6 +3,7 @@ export interface GitValues {
   gitOwner?: string;
   gitopsTemplateUrl: string;
   gitopsTemplateBranch: string;
+  useHttps: boolean;
 }
 
 export interface LocalInstallValues extends GitValues {

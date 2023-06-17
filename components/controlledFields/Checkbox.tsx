@@ -29,7 +29,12 @@ function ControlledCheckbox<T extends FieldValues>({
         <FormGroup>
           <FormControlLabel
             control={<Checkbox {...field} required={required} inputRef={field.ref} />}
-            label={<Typography variant="body2">{label}</Typography>}
+            label={
+              <Typography variant="body2" sx={{ ml: 2 }}>
+                {label}
+              </Typography>
+            }
+            sx={{ ml: '-2px' }}
           />
         </FormGroup>
       )}

@@ -5,8 +5,10 @@ import ControlledSwitch from '../../../../components/controlledFields/Switch';
 import { FormFlowProps } from '../../../../types/provision';
 import { InstallValues } from '../../../../types/redux';
 import Typography from '../../../../components/typography';
+import Checkbox from '../../../../components/controlledFields/Checkbox';
+import { EXCLUSIVE_PLUM } from '../../../../constants/colors';
 
-import { Switch } from './advancedOptions.styled';
+import { CheckboxContainer, Switch } from './advancedOptions.styled';
 
 const AdvancedOptions: FunctionComponent<FormFlowProps<InstallValues>> = ({ control }) => {
   const [isAdvancedOptionsEnabled, setIsAdvancedOptionsEnabled] = useState<boolean>(false);
@@ -45,6 +47,20 @@ const AdvancedOptions: FunctionComponent<FormFlowProps<InstallValues>> = ({ cont
               required: false,
             }}
           />
+          <CheckboxContainer>
+            <Typography variant="labelLarge" color={EXCLUSIVE_PLUM}>
+              By default kubefirst uses ssh to create your cluster check the below to use https
+              instead{' '}
+            </Typography>
+            <Checkbox
+              control={control}
+              name="useHttps"
+              label="Use https"
+              rules={{
+                required: false,
+              }}
+            />
+          </CheckboxContainer>
         </>
       )}
     </>
