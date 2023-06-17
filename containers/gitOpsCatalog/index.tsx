@@ -3,35 +3,43 @@ import { useForm } from 'react-hook-form';
 import NextLink from 'next/link';
 import intersection from 'lodash/intersection';
 import sortBy from 'lodash/sortBy';
-import { Alert, FormControlLabel, FormGroup, Snackbar } from '@mui/material';
+import { Alert, FormControlLabel, FormGroup, Snackbar, alertClasses } from '@mui/material';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 
 import Checkbox from '../../components/checkbox';
 import Typography from '../../components/typography';
-import MarketplaceCard from '../../components/marketplaceCard';
-import MarketplaceModal from '../../components/marketplaceModal';
+import GitOpsCatalogCard from '../../components/gitOpsCatalogCard';
+import GitopsAppModal from '../../components/gitopsAppModal';
 import useModal from '../../hooks/useModal';
 import { useAppDispatch, useAppSelector } from '../../redux/store';
-import { installMarketplaceApp } from '../../redux/thunks/api.thunk';
-import { setIsMarketplaceNotificationOpen } from '../../redux/slices/cluster.slice';
-import { MarketplaceApp } from '../../types/marketplace';
-import { VOLCANIC_SAND } from '../../constants/colors';
+import { installGitOpsApp } from '../../redux/thunks/api.thunk';
+import { setIsGitOpsCatalogNotificationOpen } from '../../redux/slices/cluster.slice';
+import { GitOpsCatalogApp } from '../../types/gitOpsCatalog';
+import { IVY_LEAGUE, VOLCANIC_SAND } from '../../constants/colors';
 
-import { CardsContainer, Container, Content, Filter } from './marketplace.styled';
+import {
+  CardsByCategory,
+  CardsContainer,
+  Container,
+  Content,
+  Filter,
+} from './gitOpsCatalog.styled';
 
-const STATIC_HELP_CARD: MarketplaceApp = {
+const STATIC_HELP_CARD: GitOpsCatalogApp = {
+  name: '',
   categories: [],
-  name: 'Can’t find what you need?',
+  display_name: 'Can’t find what you need?',
   image_url: 'https://assets.kubefirst.com/console/help.png',
 };
 
-const Marketplace: FunctionComponent = () => {
+const gitOpsCatalog: FunctionComponent = () => {
   const [selectedCategories, setSelectedCategories] = useState<Array<string>>([]);
-  const [selectedApp, setSelectedApp] = useState<MarketplaceApp>();
+  const [selectedApp, setSelectedApp] = useState<GitOpsCatalogApp>();
 
   const dispatch = useAppDispatch();
-  const { isMarketplaceNotificationOpen, selectedCluster } = useAppSelector(({ cluster }) => ({
+  const { isGitOpsCatalogNotificationOpen, selectedCluster } = useAppSelector(({ cluster }) => ({
     selectedCluster: cluster.selectedCluster,
-    isMarketplaceNotificationOpen: cluster.isMarketplaceNotificationOpen,
+    isGitOpsCatalogNotificationOpen: cluster.isGitOpsCatalogNotificationOpen,
   }));
 
   const { isOpen, openModal, closeModal } = useModal();
@@ -42,22 +50,22 @@ const Marketplace: FunctionComponent = () => {
     reset,
   } = useForm();
 
-  const marketplaceApps = useAppSelector(({ cluster }) =>
-    cluster.marketplaceApps?.filter(
+  const gitOpsCatalogApps = useAppSelector(({ cluster }) =>
+    cluster.gitOpsCatalogApps?.filter(
       (app) => !cluster.clusterServices.map((s) => s.name).includes(app.name),
     ),
   );
 
   const categories = useMemo(
     () =>
-      marketplaceApps &&
-      marketplaceApps
+      gitOpsCatalogApps &&
+      gitOpsCatalogApps
         .map(({ categories }) => categories)
         .reduce((previous, current) => {
           const values = current.filter((category) => !previous.includes(category));
           return [...previous, ...values];
         }, []),
-    [marketplaceApps],
+    [gitOpsCatalogApps],
   );
 
   const onClickCategory = (category: string) => {
@@ -72,11 +80,11 @@ const Marketplace: FunctionComponent = () => {
     }
   };
 
-  const handleAddMarketplaceApp = async (app: MarketplaceApp) => {
+  const handleAddApp = async (app: GitOpsCatalogApp) => {
     try {
       const values = getValues();
       await dispatch(
-        installMarketplaceApp({ app, clusterName: selectedCluster?.clusterName as string, values }),
+        installGitOpsApp({ app, clusterName: selectedCluster?.clusterName as string, values }),
       );
       reset();
     } catch (error) {
@@ -84,27 +92,35 @@ const Marketplace: FunctionComponent = () => {
     }
   };
 
-  const handleSelectedApp = (app: MarketplaceApp) => {
+  const handleSelectedApp = (app: GitOpsCatalogApp) => {
     setSelectedApp(app);
     if (app.secret_keys?.length) {
       openModal();
     } else {
-      handleAddMarketplaceApp(app);
+      handleAddApp(app);
     }
+  };
+
+  const handleCloseNotification = (event?: React.SyntheticEvent | Event, reason?: string) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    dispatch(setIsGitOpsCatalogNotificationOpen(false));
   };
 
   const filteredApps = useMemo(() => {
     if (!selectedCategories.length) {
-      return marketplaceApps;
+      return gitOpsCatalogApps;
     }
 
     return (
-      marketplaceApps &&
-      marketplaceApps.filter(
+      gitOpsCatalogApps &&
+      gitOpsCatalogApps.filter(
         ({ categories }) => intersection(categories, selectedCategories).length > 0,
       )
     );
-  }, [marketplaceApps, selectedCategories]);
+  }, [gitOpsCatalogApps, selectedCategories]);
 
   return (
     <Container>
@@ -128,20 +144,39 @@ const Marketplace: FunctionComponent = () => {
           ))}
       </Filter>
       <Content>
-        <Typography variant="subtitle2">All</Typography>
+        {!selectedCategories.length && <Typography variant="subtitle2">All</Typography>}
+        <CardsByCategory>
+          {sortBy(selectedCategories).map((category) => (
+            <div key={category}>
+              <Typography variant="subtitle2">{category}</Typography>
+              <CardsContainer>
+                {filteredApps
+                  .filter((app) => app.categories.includes(category))
+                  .map((app) => (
+                    <GitOpsCatalogCard
+                      key={app.name}
+                      {...app}
+                      onClick={() => handleSelectedApp(app)}
+                    />
+                  ))}
+              </CardsContainer>
+            </div>
+          ))}
+        </CardsByCategory>
         <CardsContainer>
-          {filteredApps &&
+          {!selectedCategories.length &&
+            filteredApps &&
             filteredApps.map((app) => (
-              <MarketplaceCard key={app.name} {...app} onClick={() => handleSelectedApp(app)} />
+              <GitOpsCatalogCard key={app.name} {...app} onClick={() => handleSelectedApp(app)} />
             ))}
-          <MarketplaceCard {...STATIC_HELP_CARD} showSubmitButton={false}>
+          <GitOpsCatalogCard {...STATIC_HELP_CARD} showSubmitButton={false}>
             <>
               To suggest an open source app that installs to your cluster, discuss your idea via an{' '}
               <NextLink href="https://github.com/kubefirst/kubefirst/issues" target="_blank">
                 issue
               </NextLink>
               . Learn how you can do this on our{' '}
-              <NextLink href="https://github.com/kubefirst/marketplace" target="_blank">
+              <NextLink href="https://github.com/kubefirst/gitops-catalog" target="_blank">
                 Contributing file
               </NextLink>
               .
@@ -153,16 +188,16 @@ const Marketplace: FunctionComponent = () => {
               </NextLink>{' '}
               in the #helping-hands or #contributors channels.
             </>
-          </MarketplaceCard>
+          </GitOpsCatalogCard>
         </CardsContainer>
       </Content>
       {isOpen && selectedApp?.name && (
-        <MarketplaceModal
+        <GitopsAppModal
           control={control}
           isValid={isValid}
           closeModal={closeModal}
           isOpen={isOpen}
-          onSubmit={handleAddMarketplaceApp}
+          onSubmit={handleAddApp}
           {...selectedApp}
         />
       )}
@@ -171,21 +206,27 @@ const Marketplace: FunctionComponent = () => {
           vertical: 'bottom',
           horizontal: 'right',
         }}
-        open={isMarketplaceNotificationOpen}
-        autoHideDuration={5000}
-        onClose={() => dispatch(setIsMarketplaceNotificationOpen(false))}
+        open={isGitOpsCatalogNotificationOpen}
+        autoHideDuration={3000}
+        onClose={handleCloseNotification}
+        sx={{
+          [`.${alertClasses.root}`]: {
+            backgroundColor: IVY_LEAGUE,
+          },
+        }}
       >
         <Alert
-          onClose={() => dispatch(setIsMarketplaceNotificationOpen(false))}
+          onClose={handleCloseNotification}
           severity="success"
           sx={{ width: '100%' }}
           variant="filled"
+          icon={<CheckCircleIcon />}
         >
-          {`${selectedApp?.name} successfully added to your cluster!`}
+          <Typography variant="subtitle2">{`${selectedApp?.name} successfully added to your cluster!`}</Typography>
         </Alert>
       </Snackbar>
     </Container>
   );
 };
 
-export default Marketplace;
+export default gitOpsCatalog;

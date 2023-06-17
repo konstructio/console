@@ -2,24 +2,24 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 import {
   getClusterServices,
-  getMarketplaceApps,
-  installMarketplaceApp,
+  getGitOpsCatalogApps,
+  installGitOpsApp,
 } from '../../redux/thunks/api.thunk';
 import { Cluster, ClusterServices } from '../../types/provision';
-import { MarketplaceApp } from '../../types/marketplace';
+import { GitOpsCatalogApp } from '../../types/gitOpsCatalog';
 
 export interface ConfigState {
   selectedCluster?: Cluster;
   clusterServices: Array<ClusterServices>;
-  marketplaceApps: Array<MarketplaceApp>;
-  isMarketplaceNotificationOpen: boolean;
+  gitOpsCatalogApps: Array<GitOpsCatalogApp>;
+  isGitOpsCatalogNotificationOpen: boolean;
 }
 
 export const initialState: ConfigState = {
   selectedCluster: undefined,
   clusterServices: [],
-  marketplaceApps: [],
-  isMarketplaceNotificationOpen: false,
+  gitOpsCatalogApps: [],
+  isGitOpsCatalogNotificationOpen: false,
 };
 
 const clusterSlice = createSlice({
@@ -29,8 +29,8 @@ const clusterSlice = createSlice({
     setSelectedCluster: (state, { payload: cluster }: PayloadAction<Cluster>) => {
       state.selectedCluster = cluster;
     },
-    setIsMarketplaceNotificationOpen: (state, { payload }: PayloadAction<boolean>) => {
-      state.isMarketplaceNotificationOpen = payload;
+    setIsGitOpsCatalogNotificationOpen: (state, { payload }: PayloadAction<boolean>) => {
+      state.isGitOpsCatalogNotificationOpen = payload;
     },
   },
   extraReducers: (builder) => {
@@ -41,7 +41,7 @@ const clusterSlice = createSlice({
       .addCase(getClusterServices.rejected, (state) => {
         state.clusterServices = [];
       })
-      .addCase(installMarketplaceApp.fulfilled, (state, { payload }) => {
+      .addCase(installGitOpsApp.fulfilled, (state, { payload }) => {
         const { name, description, image_url } = payload;
         state.clusterServices.push({
           default: false,
@@ -50,19 +50,20 @@ const clusterSlice = createSlice({
           image: image_url,
           links: [],
         });
+        state.isGitOpsCatalogNotificationOpen = true;
       })
       .addCase(
-        getMarketplaceApps.fulfilled,
-        (state, { payload }: PayloadAction<Array<MarketplaceApp>>) => {
-          state.marketplaceApps = payload;
+        getGitOpsCatalogApps.fulfilled,
+        (state, { payload }: PayloadAction<Array<GitOpsCatalogApp>>) => {
+          state.gitOpsCatalogApps = payload;
         },
       )
-      .addCase(getMarketplaceApps.rejected, (state) => {
-        state.marketplaceApps = [];
+      .addCase(getGitOpsCatalogApps.rejected, (state) => {
+        state.gitOpsCatalogApps = [];
       });
   },
 });
 
-export const { setSelectedCluster, setIsMarketplaceNotificationOpen } = clusterSlice.actions;
+export const { setSelectedCluster, setIsGitOpsCatalogNotificationOpen } = clusterSlice.actions;
 
 export const clusterReducer = clusterSlice.reducer;

@@ -28,5 +28,5 @@ export const ServicesContainer = styled.div`
   display: flex;
   gap: 16px;
   flex-wrap: wrap;
-  max-height: calc(100% - 50px);
+  margin-bottom: 16px;
 `;

@@ -2,12 +2,17 @@ import { Box } from '@mui/material';
 import styled from 'styled-components';
 
 import FormContainer from '../../components/formContainer';
+import { media } from '../../utils/media';
 
 export const AdvancedOptionsContainer = styled(FormContainer)`
   background-color: ${({ theme }) => theme.colors.white};
   gap: 32px;
   margin: 16px 0;
-  width: 1024px;
+  width: calc(100% - 80px);
+
+  ${media.greaterThan<{ hasInfo: boolean }>('lg')`
+    width: 1024px;
+  `};
 `;
 
 export const Form = styled(Box)`
@@ -29,7 +34,7 @@ export const FormContent = styled(FormContainer)<{
   background-color: ${({ isLastStep, theme }) => (isLastStep ? 'transparent' : theme.colors.white)};
   box-shadow: ${({ isProvisionStep, isLastStep }) => (isLastStep || isProvisionStep) && 'none'};
   gap: 32px;
-  width: 1024px;
+  width: calc(100% - 80px);
 
   ${({ hasInfo }) =>
     hasInfo &&
@@ -42,4 +47,14 @@ export const FormContent = styled(FormContainer)<{
     `
       background-color: transparent;
   `}
+
+  ${media.greaterThan<{ hasInfo: boolean }>('lg')`
+    width: 1024px;
+
+    ${({ hasInfo }) =>
+      hasInfo &&
+      `
+        width: 680px;
+    `}
+  `};
 `;

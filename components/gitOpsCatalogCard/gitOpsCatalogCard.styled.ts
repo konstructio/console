@@ -1,6 +1,13 @@
 import styled from 'styled-components';
 
-import Typography from '../../components/typography';
+import Typography from '../typography';
+import { textTruncate } from '../../utils/theme';
+
+export const App = styled.div`
+  align-items: center;
+  display: flex;
+  gap: 16px;
+`;
 
 export const Card = styled.div`
   background-color: ${({ theme }) => theme.colors.white};
@@ -11,10 +18,18 @@ export const Card = styled.div`
   width: 372px;
 `;
 
+export const Categories = styled.div`
+  display: flex;
+  gap: 8px;
+`;
+
 export const Description = styled(Typography)`
   color: ${({ theme }) => theme.colors.saltboxBlue};
-  height: 100px;
-  margin: 16px 0;
+  min-height: 100px;
+  margin-top: 8px !important;
+  margin-bottom: 16px !important;
+
+  ${textTruncate(3)};
 
   & a {
     color: ${({ theme }) => theme.colors.primary};
@@ -29,5 +44,6 @@ export const Description = styled(Typography)`
 export const Header = styled.div`
   align-items: center;
   display: flex;
+  justify-content: space-between;
   gap: 16px;
 `;

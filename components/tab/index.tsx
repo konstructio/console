@@ -26,7 +26,6 @@ export const Tab = styled((props: { color?: string; label: string | ReactNode })
   color: color || ECHO_BLUE,
   padding: 0,
   minWidth: 'auto',
-  minHeight: 'auto',
   marginRight: '12px',
   [`&.${tabClasses.selected}`]: {
     color: color || theme.palette.secondary.main,

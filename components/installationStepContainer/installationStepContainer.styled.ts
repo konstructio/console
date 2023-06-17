@@ -14,20 +14,19 @@ export const Container = styled(Column)`
 export const InstallationButtons = styled(InstallationButtonsComp)``;
 
 export const Content = styled(Column)<{ hasInfo?: boolean; isProvisionStep: boolean }>`
-  background-color: ${({ isProvisionStep, theme }) => isProvisionStep && theme.colors.white};
   align-items: center;
+  background-color: ${({ isProvisionStep, theme }) => isProvisionStep && theme.colors.white};
   gap: 24px;
-  height: calc(100% - 285px);
+  height: 100%;
   margin: 0 auto;
   width: 100%;
 
   ${({ hasInfo }) =>
     hasInfo &&
     `
-      align-items: baseline;
       flex-direction: column;
       justify-content: center;
-  `}
+    `}
 
   ${({ isProvisionStep }) =>
     isProvisionStep &&
@@ -38,6 +37,16 @@ export const Content = styled(Column)<{ hasInfo?: boolean; isProvisionStep: bool
 
   ${media.greaterThan<{ hasInfo: boolean }>('lg')`
     flex-direction: ${({ hasInfo }) => hasInfo && 'row'};
+    height: calc(100% - 285px);
+
+
+    ${({ hasInfo }) =>
+      hasInfo &&
+      `
+        align-items: baseline;
+        flex-direction: row;
+        justify-content: center;
+    `}
   `};
 `;
 
@@ -52,8 +61,7 @@ export const Title = styled.div`
 `;
 
 export const FormContent = styled.div<{ isProvisionStep: boolean }>`
-  height: calc(100% - 198px);
-  margin-bottom: 40px;
+  height: calc(100% - 218px);
   overflow-y: auto;
   width: 100%;
 
@@ -62,4 +70,8 @@ export const FormContent = styled.div<{ isProvisionStep: boolean }>`
     `
       margin-bottom: 0;
   `}
+
+  ${media.greaterThan('lg')`
+    height: calc(100% - 218px);
+  `};
 `;

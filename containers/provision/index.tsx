@@ -157,6 +157,7 @@ const Provision: FunctionComponent = () => {
             setValue={setValue}
             trigger={trigger}
             watch={watch}
+            reset={reset}
             clusterName={values?.clusterName as string}
             domainName={values?.domainName as string}
           />

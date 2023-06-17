@@ -7,20 +7,20 @@ import Modal from '../modal';
 import Button from '../button';
 import Typography from '../typography';
 import ControlledPassword from '../controlledFields/Password';
-import { MarketplaceApp } from '../../types/marketplace';
+import { GitOpsCatalogApp } from '../../types/gitOpsCatalog';
 import { BISCAY, SALTBOX_BLUE } from '../../constants/colors';
 
-import { Content, Close, Footer, Header } from './marketplaceModal.styled';
+import { Content, Close, Footer, Header } from './gitopsAppModal.styled';
 
-export interface MarketplaceModalProps extends MarketplaceApp {
+export interface gitopsAppModalProps extends GitOpsCatalogApp {
   control: Control;
   isOpen: boolean;
   isValid: boolean;
   closeModal: () => void;
-  onSubmit: (app: MarketplaceApp) => void;
+  onSubmit: (app: GitOpsCatalogApp) => void;
 }
 
-const MarketplaceModal: FunctionComponent<MarketplaceModalProps> = ({
+const gitopsAppModal: FunctionComponent<gitopsAppModalProps> = ({
   control,
   closeModal,
   isOpen,
@@ -83,4 +83,4 @@ const MarketplaceModal: FunctionComponent<MarketplaceModalProps> = ({
   );
 };
 
-export default MarketplaceModal;
+export default gitopsAppModal;
