@@ -11,9 +11,10 @@ import { EMAIL_REGEX } from '../../../../constants/index';
 
 const AwsSetupForm: FunctionComponent<FormFlowProps<InstallValues>> = ({ control }) => {
   const dispatch = useAppDispatch();
-  const { cloudDomains, cloudRegions } = useAppSelector(({ api }) => ({
+  const { cloudDomains, cloudRegions, values } = useAppSelector(({ api, installation }) => ({
     cloudDomains: api.cloudDomains,
     cloudRegions: api.cloudRegions,
+    values: installation.values,
   }));
 
   const handleRegionOnSelect = async (region: string) => {
@@ -40,6 +41,7 @@ const AwsSetupForm: FunctionComponent<FormFlowProps<InstallValues>> = ({ control
         name="alertsEmail"
         label="Alerts Email"
         onErrorText="Invalid email address."
+        defaultValue={values?.alertsEmail}
         required
         rules={{
           required: true,
@@ -50,6 +52,7 @@ const AwsSetupForm: FunctionComponent<FormFlowProps<InstallValues>> = ({ control
         control={control}
         name="cloudRegion"
         label="Cloud region"
+        defaultValue={values?.cloudRegion}
         required
         rules={{ required: true }}
         options={cloudRegions && cloudRegions.map((region) => ({ label: region, value: region }))}
@@ -59,6 +62,7 @@ const AwsSetupForm: FunctionComponent<FormFlowProps<InstallValues>> = ({ control
         control={control}
         name="domainName"
         label="Cluster domain name"
+        defaultValue={values?.domainName}
         required
         rules={{ required: true }}
         options={cloudDomains && formatDomains(cloudDomains)}
@@ -66,6 +70,7 @@ const AwsSetupForm: FunctionComponent<FormFlowProps<InstallValues>> = ({ control
       <ControlledTextField
         control={control}
         name="clusterName"
+        defaultValue={values?.clusterName}
         label="Cluster name"
         rules={{
           maxLength: 25,

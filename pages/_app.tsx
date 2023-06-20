@@ -4,10 +4,11 @@ import type { AppProps } from 'next/app';
 import Head from 'next/head';
 import { ThemeProvider as ThemeProviderMUI } from '@mui/material';
 import styled, { ThemeProvider } from 'styled-components';
+import { PersistGate } from 'redux-persist/integration/react';
 
 import { muiTheme } from '../theme/muiTheme';
 import { theme } from '../theme';
-import { wrapper } from '../redux/store';
+import { persistor, wrapper } from '../redux/store';
 import Header from '../containers/header';
 import Navigation from '../containers/navigation';
 import Row from '../components/row';
@@ -36,17 +37,19 @@ export default function App({ Component, ...rest }: AppProps) {
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       </Head>
       <Provider store={store}>
-        <ThemeProviderMUI theme={muiTheme}>
-          <ThemeProvider theme={theme}>
-            <Layout>
-              <Navigation />
-              <Content>
-                <Header />
-                <Component {...props.pageProps} />
-              </Content>
-            </Layout>
-          </ThemeProvider>
-        </ThemeProviderMUI>
+        <PersistGate loading={null} persistor={persistor}>
+          <ThemeProviderMUI theme={muiTheme}>
+            <ThemeProvider theme={theme}>
+              <Layout>
+                <Navigation />
+                <Content>
+                  <Header />
+                  <Component {...props.pageProps} />
+                </Content>
+              </Layout>
+            </ThemeProvider>
+          </ThemeProviderMUI>
+        </PersistGate>
       </Provider>
     </main>
   );

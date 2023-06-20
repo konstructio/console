@@ -13,6 +13,7 @@ export interface ConfigState {
   clusterServices: Array<ClusterServices>;
   gitOpsCatalogApps: Array<GitOpsCatalogApp>;
   isGitOpsCatalogNotificationOpen: boolean;
+  appsQueue: Array<string>;
 }
 
 export const initialState: ConfigState = {
@@ -20,6 +21,7 @@ export const initialState: ConfigState = {
   clusterServices: [],
   gitOpsCatalogApps: [],
   isGitOpsCatalogNotificationOpen: false,
+  appsQueue: [],
 };
 
 const clusterSlice = createSlice({
@@ -32,6 +34,15 @@ const clusterSlice = createSlice({
     setIsGitOpsCatalogNotificationOpen: (state, { payload }: PayloadAction<boolean>) => {
       state.isGitOpsCatalogNotificationOpen = payload;
     },
+    addAppToQueue: (state, { payload }: PayloadAction<GitOpsCatalogApp>) => {
+      state.appsQueue.push(payload.name);
+    },
+    removeAppFromQueue: (state, { payload }: PayloadAction<GitOpsCatalogApp>) => {
+      state.appsQueue = state.appsQueue.filter((name) => name !== payload.name);
+    },
+    resetClusterServices: (state) => {
+      state.clusterServices = [];
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -42,6 +53,8 @@ const clusterSlice = createSlice({
         state.clusterServices = [];
       })
       .addCase(installGitOpsApp.fulfilled, (state, { payload }) => {
+        state.appsQueue = state.appsQueue.filter((name) => name !== payload.name);
+
         const { name, description, image_url } = payload;
         state.clusterServices.push({
           default: false,
@@ -51,6 +64,11 @@ const clusterSlice = createSlice({
           links: [],
         });
         state.isGitOpsCatalogNotificationOpen = true;
+      })
+      .addCase(installGitOpsApp.rejected, (state) => {
+        const queue = Object.assign(state.appsQueue, []);
+        queue.pop();
+        state.appsQueue = queue;
       })
       .addCase(
         getGitOpsCatalogApps.fulfilled,
@@ -64,6 +82,12 @@ const clusterSlice = createSlice({
   },
 });
 
-export const { setSelectedCluster, setIsGitOpsCatalogNotificationOpen } = clusterSlice.actions;
+export const {
+  addAppToQueue,
+  removeAppFromQueue,
+  resetClusterServices,
+  setSelectedCluster,
+  setIsGitOpsCatalogNotificationOpen,
+} = clusterSlice.actions;
 
 export const clusterReducer = clusterSlice.reducer;

@@ -17,7 +17,6 @@ export const Content = styled(Column)<{ hasInfo?: boolean; isProvisionStep: bool
   align-items: center;
   background-color: ${({ isProvisionStep, theme }) => isProvisionStep && theme.colors.white};
   gap: 24px;
-  height: 100%;
   margin: 0 auto;
   width: 100%;
 

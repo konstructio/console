@@ -123,6 +123,10 @@ const getStepTitles = (installType: InstallationType) => {
   return stepsByInstallType[installType] || defaultSteps;
 };
 
+const getIsAuthStep = (type: InstallationType, step: FormStep | LocalFormStep) => {
+  return type !== InstallationType.LOCAL && step === FormStep.AUTHENTICATION;
+};
+
 const getIsSetupStep = (type: InstallationType, step: FormStep | LocalFormStep) => {
   const isLocalSetupStep = type === InstallationType.LOCAL && step === LocalFormStep.SETUP;
   const isSetupStep = type !== InstallationType.LOCAL && step === FormStep.SETUP;
@@ -222,6 +226,7 @@ export function useInstallation(type: InstallationType, gitProvider: GitProvider
     stepTitles: getStepTitles(type),
     installTitles: getInstallationTitles(type, gitProvider),
     info: getInfoByType(type, step),
+    isAuthStep: getIsAuthStep(type, step),
     isSetupStep: getIsSetupStep(type, step),
     isProvisionStep: getIsProvisionStep(type, step),
     formFlow: formByType as FunctionComponent<FormFlowProps<InstallValues>>,
