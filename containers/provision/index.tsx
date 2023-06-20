@@ -2,13 +2,14 @@ import React, { FunctionComponent, useCallback, useEffect, useMemo } from 'react
 import { useForm } from 'react-hook-form';
 import { useRouter } from 'next/router';
 
+import { AUTHENTICATION_ERROR_MSG } from '../../constants';
 import { createCluster, getCloudRegions, resetClusterProgress } from '../../redux/thunks/api.thunk';
 import InstallationStepContainer from '../../components/installationStepContainer';
 import InstallationInfoCard from '../../components/installationInfoCard';
 import { InstallationsSelection } from '../installationsSelection';
 import {
   clearError,
-  resetInstallState,
+  setError,
   setInstallValues,
   setInstallationStep,
 } from '../../redux/slices/installation.slice';
@@ -16,7 +17,7 @@ import { useAppDispatch, useAppSelector } from '../../redux/store';
 import { useInstallation } from '../../hooks/useInstallation';
 import { InstallValues, InstallationType } from '../../types/redux';
 import { GitProvider } from '../../types';
-import { clearClusterState } from '../../redux/slices/api.slice';
+import { clearClusterState, clearValidation } from '../../redux/slices/api.slice';
 import AdvancedOptions from '../clusterForms/shared/advancedOptions';
 import ErrorBanner from '../../components/errorBanner';
 import Button from '../../components/button';
@@ -27,16 +28,25 @@ const Provision: FunctionComponent = () => {
   const dispatch = useAppDispatch();
   const { push } = useRouter();
 
-  const { authErrors, error, installType, isClusterZero, installationStep, gitProvider, values } =
-    useAppSelector(({ config, git, installation }) => ({
-      installType: installation.installType,
-      gitProvider: installation.gitProvider,
-      installationStep: installation.installationStep,
-      values: installation.values,
-      error: installation.error,
-      authErrors: git.errors,
-      isClusterZero: config.isClusterZero,
-    }));
+  const {
+    authErrors,
+    error,
+    installType,
+    isAuthenticationValid,
+    isClusterZero,
+    installationStep,
+    gitProvider,
+    values,
+  } = useAppSelector(({ api, config, git, installation }) => ({
+    installType: installation.installType,
+    gitProvider: installation.gitProvider,
+    installationStep: installation.installationStep,
+    values: installation.values,
+    error: installation.error,
+    authErrors: git.errors,
+    isAuthenticationValid: api.isAuthenticationValid,
+    isClusterZero: config.isClusterZero,
+  }));
 
   const { isProvisioned } = useAppSelector(({ api }) => api);
 
@@ -45,6 +55,7 @@ const Provision: FunctionComponent = () => {
     formFlow: FormFlow,
     installTitles,
     info,
+    isAuthStep,
     isProvisionStep,
     isSetupStep,
   } = useInstallation(
@@ -80,7 +91,10 @@ const Provision: FunctionComponent = () => {
       return !!gitProvider && !!installType;
     } else if (isProvisionStep) {
       return isProvisioned;
+    } else if (isAuthStep && isAuthenticationValid === false) {
+      return true;
     }
+
     return isFormValid && !error && !authErrors.length;
   }, [
     authErrors.length,
@@ -88,12 +102,14 @@ const Provision: FunctionComponent = () => {
     gitProvider,
     installType,
     installationStep,
+    isAuthStep,
+    isAuthenticationValid,
     isFormValid,
     isProvisionStep,
     isProvisioned,
   ]);
 
-  const handleNextButtonClick = useCallback(async () => {
+  const handleGoNext = useCallback(() => {
     dispatch(setInstallationStep(installationStep + 1));
 
     setTimeout(trigger, 500);
@@ -101,9 +117,18 @@ const Provision: FunctionComponent = () => {
     dispatch(clearClusterState());
   }, [dispatch, installationStep, trigger]);
 
+  const handleNextButtonClick = useCallback(async () => {
+    if (isAuthStep) {
+      await dispatch(getCloudRegions());
+    } else {
+      handleGoNext();
+    }
+  }, [dispatch, handleGoNext, isAuthStep]);
+
   const handleBackButtonClick = useCallback(() => {
-    dispatch(setInstallationStep(installationStep - 1));
+    dispatch(clearValidation());
     dispatch(clearError());
+    dispatch(setInstallationStep(installationStep - 1));
   }, [dispatch, installationStep]);
 
   const onSubmit = async (values: InstallValues) => {
@@ -199,16 +224,12 @@ const Provision: FunctionComponent = () => {
   ]);
 
   useEffect(() => {
-    return () => {
-      dispatch(resetInstallState());
-    };
-  }, [dispatch]);
-
-  useEffect(() => {
-    if (isSetupStep) {
-      dispatch(getCloudRegions());
+    if (isAuthStep && isAuthenticationValid === false) {
+      dispatch(setError({ error: AUTHENTICATION_ERROR_MSG }));
+    } else if (isAuthStep && isAuthenticationValid) {
+      handleGoNext();
     }
-  }, [dispatch, isSetupStep]);
+  }, [dispatch, handleGoNext, isAuthStep, isAuthenticationValid]);
 
   useEffect(() => {
     if (!isClusterZero) {

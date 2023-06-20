@@ -24,6 +24,7 @@ export interface ApiState {
   completedSteps: Array<{ label: string; order: number }>;
   cloudDomains: Array<string>;
   cloudRegions: Array<string>;
+  isAuthenticationValid?: boolean;
 }
 
 export const initialState: ApiState = {
@@ -40,6 +41,7 @@ export const initialState: ApiState = {
   completedSteps: [],
   cloudDomains: [],
   cloudRegions: [],
+  isAuthenticationValid: undefined,
 };
 
 const apiSlice = createSlice({
@@ -62,6 +64,10 @@ const apiSlice = createSlice({
       state.selectedCluster = undefined;
       state.completedSteps = [];
       state.cloudDomains = [];
+      state.isAuthenticationValid = undefined;
+    },
+    clearValidation: (state) => {
+      state.isAuthenticationValid = undefined;
     },
   },
   extraReducers: (builder) => {
@@ -114,10 +120,14 @@ const apiSlice = createSlice({
       })
       .addCase(getCloudRegions.fulfilled, (state, { payload }: PayloadAction<Array<string>>) => {
         state.cloudRegions = payload;
+        state.isAuthenticationValid = true;
+      })
+      .addCase(getCloudRegions.rejected, (state) => {
+        state.isAuthenticationValid = false;
       });
   },
 });
 
-export const { setCompletedSteps, clearClusterState } = apiSlice.actions;
+export const { clearValidation, setCompletedSteps, clearClusterState } = apiSlice.actions;
 
 export const apiReducer = apiSlice.reducer;

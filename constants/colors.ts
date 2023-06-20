@@ -51,6 +51,8 @@ export const SEFID_WHITE = '#FEF2F2';
 export const ASMANI_SKY = '#81E2B4';
 export const METRO = '#808191';
 export const IVY_LEAGUE = '#047857';
+export const DR_WHITE = '#F9FAFB';
+export const CHEFS_HAT = '#F3F4F6';
 
 export const ANSI_COLORS = {
   black: '\x1b[30m',
