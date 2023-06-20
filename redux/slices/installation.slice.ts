@@ -11,7 +11,6 @@ export interface InstallationState {
   error?: string;
   errorDetails?: string;
 }
-
 export const initialState: InstallationState = {
   installationStep: 0,
 };

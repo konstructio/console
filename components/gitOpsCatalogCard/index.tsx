@@ -1,5 +1,6 @@
 import React, { FunctionComponent, PropsWithChildren } from 'react';
 import Image from 'next/image';
+import { Box, CircularProgress } from '@mui/material';
 
 import Tag from '../tag';
 import { GitOpsCatalogApp } from '../../types/gitOpsCatalog';
@@ -7,18 +8,28 @@ import Button from '../button';
 import Typography from '../typography';
 import { VOLCANIC_SAND } from '../../constants/colors';
 
-import { App, Card, Categories, Description, Header } from './gitOpsCatalogCard.styled';
+import {
+  App,
+  Body,
+  Card,
+  Categories,
+  Description,
+  Header,
+  Installing,
+} from './gitOpsCatalogCard.styled';
 
-export interface gitOpsCatalogCardProps extends GitOpsCatalogApp {
+export interface GitOpsCatalogCardProps extends GitOpsCatalogApp {
+  isInstalling?: boolean;
   onClick?: () => void;
   showSubmitButton?: boolean;
 }
 
-const gitOpsCatalogCard: FunctionComponent<PropsWithChildren<gitOpsCatalogCardProps>> = ({
+const GitOpsCatalogCard: FunctionComponent<PropsWithChildren<GitOpsCatalogCardProps>> = ({
   display_name,
   categories,
   image_url,
   description,
+  isInstalling,
   onClick,
   showSubmitButton = true,
   children,
@@ -47,14 +58,26 @@ const gitOpsCatalogCard: FunctionComponent<PropsWithChildren<gitOpsCatalogCardPr
             categories.map((category) => <Tag key={category} text={category} bgColor="purple" />)}
         </Categories>
       </Header>
-      <Description variant="body2">{description || children}</Description>
-      {showSubmitButton && (
-        <Button variant="outlined" color="secondary" onClick={onClick}>
-          Install
-        </Button>
-      )}
+      <Body>
+        <Description variant="body2">{description || children}</Description>
+        {showSubmitButton && !isInstalling && (
+          <Button variant="outlined" color="secondary" onClick={onClick}>
+            Install
+          </Button>
+        )}
+        {isInstalling && (
+          <Installing>
+            <Box sx={{ display: 'flex' }}>
+              <CircularProgress size={20} />
+            </Box>
+            <Typography variant="body2" color={VOLCANIC_SAND}>
+              Please wait a few moments while we finish installing your app.
+            </Typography>
+          </Installing>
+        )}
+      </Body>
     </Card>
   );
 };
 
-export default gitOpsCatalogCard;
+export default GitOpsCatalogCard;

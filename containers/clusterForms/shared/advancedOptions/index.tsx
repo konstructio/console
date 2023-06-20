@@ -2,6 +2,7 @@ import React, { ChangeEvent, FunctionComponent, useState } from 'react';
 
 import ControlledTextField from '../../../../components/controlledFields/TextField';
 import ControlledSwitch from '../../../../components/controlledFields/Switch';
+import { useAppSelector } from '../../../../redux/store';
 import { FormFlowProps } from '../../../../types/provision';
 import { InstallValues } from '../../../../types/redux';
 import Typography from '../../../../components/typography';
@@ -15,6 +16,10 @@ const AdvancedOptions: FunctionComponent<FormFlowProps<InstallValues>> = ({ cont
   const handleOnChangeSwitch = ({ target }: ChangeEvent<HTMLInputElement>) => {
     setIsAdvancedOptionsEnabled(target.checked);
   };
+
+  const { values } = useAppSelector(({ installation }) => ({
+    values: installation.values,
+  }));
 
   return (
     <>
@@ -35,6 +40,7 @@ const AdvancedOptions: FunctionComponent<FormFlowProps<InstallValues>> = ({ cont
             control={control}
             name="gitopsTemplateUrl"
             label="GitOps template override"
+            defaultValue={values?.gitopsTemplateUrl}
             rules={{
               required: false,
             }}
@@ -43,6 +49,7 @@ const AdvancedOptions: FunctionComponent<FormFlowProps<InstallValues>> = ({ cont
             control={control}
             name="gitopsTemplateBranch"
             label="GitOps template branch"
+            defaultValue={values?.gitopsTemplateBranch}
             rules={{
               required: false,
             }}

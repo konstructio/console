@@ -33,7 +33,7 @@ const AutocompleteComponent: FunctionComponent<IAutocompleteProps> = ({
   sx,
   filterOptions,
   disabled,
-  ...pros
+  ...props
 }) => {
   return (
     <AutocompleteMUI
@@ -50,7 +50,7 @@ const AutocompleteComponent: FunctionComponent<IAutocompleteProps> = ({
           maxHeight: '210px',
         },
       }}
-      {...pros}
+      {...props}
       renderInput={(params) => (
         <TextField
           ref={params.InputProps.ref}

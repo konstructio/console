@@ -203,11 +203,13 @@ export const installGitOpsApp = createAsyncThunk<
       value: (values as FieldValues)[key],
     }));
 
+  const params = {
+    secret_keys,
+  };
+
   const res = await axios.post('/api/proxy', {
     url: `/services/${clusterName}/${app.name}`,
-    body: {
-      secret_keys,
-    },
+    body: secret_keys?.length ? params : undefined,
   });
 
   if ('error' in res) {

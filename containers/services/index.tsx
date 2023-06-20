@@ -62,7 +62,7 @@ const Services: FunctionComponent = () => {
         dispatch(getClusterServices({ clusterName: selectedCluster?.clusterName }));
       });
     }
-  }, [dispatch, router, selectedCluster]);
+  }, [dispatch, router, selectedCluster?.clusterName]);
 
   const services = useMemo(
     () => (

@@ -26,3 +26,7 @@ export const KUBEFIRST_TEAMS = ['admins', 'developers'];
 export const FLAPPY_TWEET = `The @kubefirst team is making kubernetes platform provisioning so much fun! Check out this Flappy K-Ray game that they let you play while your cluster provisions! https://kray.kubefirst.io
 
 <note: add a screenshot of your high score for a chance to win a monthly prize!>`;
+
+export const AUTHENTICATION_ERROR_MSG = `
+  Please check that your cloud provider authentication inputs are correct, then click Next to retry. If the issue persists please <a href="https://kubefirst.io/slack" target="_blank">contact the kubefirst team via Slack</a>.
+`;
