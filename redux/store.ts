@@ -2,8 +2,8 @@ import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
 import { Action, combineReducers, configureStore, ThunkAction } from '@reduxjs/toolkit';
 import { createWrapper } from 'next-redux-wrapper';
 import {
-  persistStore,
-  persistReducer,
+  // persistStore,
+  // persistReducer,
   FLUSH,
   REHYDRATE,
   PAUSE,
@@ -59,7 +59,7 @@ const config = getPersistConfig({
 export const makeStore = () =>
   configureStore({
     devTools: process.env.NODE_ENV === 'development',
-    reducer: persistReducer(config, rootReducer),
+    reducer: rootReducer,
     middleware: (getDefaultMiddleware) =>
       getDefaultMiddleware({
         serializableCheck: {
@@ -87,4 +87,4 @@ const store = makeStore() as AppStore;
 
 export const wrapper = createWrapper<AppStore>(() => store);
 
-export const persistor = persistStore(store);
+// export const persistor = persistStore(store);

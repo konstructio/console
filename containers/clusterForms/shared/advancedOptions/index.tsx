@@ -1,4 +1,5 @@
 import React, { ChangeEvent, FunctionComponent, useState } from 'react';
+import LearnMore from 'components/learnMore';
 
 import ControlledTextField from '../../../../components/controlledFields/TextField';
 import ControlledSwitch from '../../../../components/controlledFields/Switch';
@@ -68,6 +69,11 @@ const AdvancedOptions: FunctionComponent<FormFlowProps<InstallValues>> = ({ cont
               }}
             />
           </CheckboxContainer>
+          <LearnMore
+            description="Learn more about"
+            href=""
+            linkTitle="customizing the GitOps template"
+          />
         </>
       )}
     </>
