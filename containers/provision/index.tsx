@@ -10,6 +10,7 @@ import { InstallationsSelection } from '../installationsSelection';
 import {
   clearError,
   setError,
+  setInstallType,
   setInstallValues,
   setInstallationStep,
 } from '../../redux/slices/installation.slice';
@@ -34,6 +35,7 @@ const Provision: FunctionComponent = () => {
     installType,
     isAuthenticationValid,
     isClusterZero,
+    installMethod,
     installationStep,
     gitProvider,
     values,
@@ -46,6 +48,7 @@ const Provision: FunctionComponent = () => {
     authErrors: git.errors,
     isAuthenticationValid: api.isAuthenticationValid,
     isClusterZero: config.isClusterZero,
+    installMethod: config.installMethod,
   }));
 
   const { isProvisioned } = useAppSelector(({ api }) => api);
@@ -87,7 +90,7 @@ const Provision: FunctionComponent = () => {
   );
 
   const isValid = useMemo(() => {
-    if (installationStep === 0) {
+    if (installationStep === 0 && installType !== InstallationType.CIVO_MARKETPLACE) {
       return !!gitProvider && !!installType;
     } else if (isProvisionStep) {
       return isProvisioned;
@@ -115,7 +118,8 @@ const Provision: FunctionComponent = () => {
     setTimeout(trigger, 500);
     dispatch(clearError());
     dispatch(clearClusterState());
-  }, [dispatch, installationStep, trigger]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const handleNextButtonClick = useCallback(async () => {
     if (isAuthStep) {
@@ -129,11 +133,12 @@ const Provision: FunctionComponent = () => {
     dispatch(clearValidation());
     dispatch(clearError());
     dispatch(setInstallationStep(installationStep - 1));
-  }, [dispatch, installationStep]);
+    trigger();
+  }, [dispatch, installationStep, trigger]);
 
   const onSubmit = async (values: InstallValues) => {
     if (isValid) {
-      dispatch(setInstallValues(values));
+      await dispatch(setInstallValues(values));
 
       if (isSetupStep) {
         try {
@@ -159,7 +164,7 @@ const Provision: FunctionComponent = () => {
   }, [dispatch, error]);
 
   const form = useMemo(() => {
-    if (installationStep === 0) {
+    if (installationStep === 0 && installMethod !== InstallationType.CIVO_MARKETPLACE) {
       return <InstallationsSelection steps={stepTitles} reset={reset} />;
     }
 
@@ -204,6 +209,7 @@ const Provision: FunctionComponent = () => {
     );
   }, [
     installationStep,
+    installMethod,
     hasInfo,
     isLastStep,
     isProvisionStep,
@@ -215,12 +221,12 @@ const Provision: FunctionComponent = () => {
     setValue,
     trigger,
     watch,
+    reset,
     values?.clusterName,
     values?.domainName,
     isSetupStep,
     installType,
     stepTitles,
-    reset,
   ]);
 
   useEffect(() => {
@@ -236,6 +242,12 @@ const Provision: FunctionComponent = () => {
       push('/services');
     }
   }, [isClusterZero, push]);
+
+  useEffect(() => {
+    if (installMethod === InstallationType.CIVO_MARKETPLACE) {
+      dispatch(setInstallType(InstallationType.CIVO_MARKETPLACE));
+    }
+  }, [dispatch, installMethod]);
 
   return (
     <Form component="form" onSubmit={handleSubmit(onSubmit)}>
