@@ -5,11 +5,25 @@ type Configs = {
 };
 
 export default function handler(req: NextApiRequest, res: NextApiResponse<Configs>) {
-  const { API_URL = '', KUBEFIRST_VERSION = '', DISABLE_TELEMETRY = '' } = process.env;
+  const {
+    API_URL = '',
+    CLUSTER_ID = '',
+    CLUSTER_TYPE = '',
+    DISABLE_TELEMETRY = '',
+    INSTALL_METHOD = '',
+    IS_CLUSTER_ZERO = '',
+    KUBEFIRST_VERSION = '',
+    POSTHOG_KEY = '',
+  } = process.env;
 
   res.status(200).json({
     API_URL,
-    KUBEFIRST_VERSION,
+    CLUSTER_ID,
+    CLUSTER_TYPE,
     DISABLE_TELEMETRY,
+    INSTALL_METHOD,
+    IS_CLUSTER_ZERO,
+    KUBEFIRST_VERSION,
+    POSTHOG_KEY,
   });
 }

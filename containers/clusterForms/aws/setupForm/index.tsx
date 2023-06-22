@@ -1,10 +1,10 @@
-import React, { FunctionComponent, useEffect } from 'react';
+import React, { FunctionComponent } from 'react';
 
 import ControlledAutocomplete from '../../../../components/controlledFields/AutoComplete';
 import ControlledTextField from '../../../../components/controlledFields/TextField';
 // import LearnMore from '../../../../components/learnMore';
 import { useAppDispatch, useAppSelector } from '../../../../redux/store';
-import { getCloudDomains, getCloudRegions } from '../../../../redux/thunks/api.thunk';
+import { getCloudDomains } from '../../../../redux/thunks/api.thunk';
 import { InstallValues } from '../../../../types/redux';
 import { FormFlowProps } from '../../../../types/provision';
 import { EMAIL_REGEX } from '../../../../constants/index';
@@ -29,10 +29,6 @@ const AwsSetupForm: FunctionComponent<FormFlowProps<InstallValues>> = ({ control
       return { label: formattedDomain, value: formattedDomain };
     });
   };
-
-  useEffect(() => {
-    dispatch(getCloudRegions());
-  }, [dispatch]);
 
   return (
     <>

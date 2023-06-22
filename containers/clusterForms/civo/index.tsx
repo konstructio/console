@@ -7,11 +7,11 @@ import { FormStep } from '../../../constants/installation';
 import { InstallValues } from '../../../types/redux';
 import AuthForm from '../shared/authForm';
 
-import AwsSetupForm from './setupForm';
+import SetupForm from './setupForm';
 
 const CIVO_FORM_FLOW = {
   [FormStep.AUTHENTICATION]: AuthForm,
-  [FormStep.SETUP]: AwsSetupForm,
+  [FormStep.SETUP]: SetupForm,
   [FormStep.PROVISIONING]: TerminalLogs,
   [FormStep.READY]: ClusterRunningMessage,
 };

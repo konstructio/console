@@ -15,6 +15,12 @@ import { GitOpsCatalogApp, GitOpsCatalogProps } from '../../types/gitOpsCatalog'
 import { InstallationType } from '../../types/redux';
 import { TelemetryClickEvent } from '../../types/telemetry';
 
+const formatCloudProvider = (cloudProvider?: string) => {
+  return (
+    cloudProvider && cloudProvider.replace(InstallationType.CIVO_MARKETPLACE, InstallationType.CIVO)
+  );
+};
+
 const mapClusterFromRaw = (cluster: ClusterResponse): Cluster => ({
   id: cluster._id,
   clusterName: cluster.cluster_name,
@@ -66,7 +72,7 @@ export const createCluster = createAsyncThunk<
   const params = {
     clusterName: values?.clusterName,
     admin_email: values?.alertsEmail,
-    cloud_provider: installType?.toString(),
+    cloud_provider: formatCloudProvider(installType?.toString()),
     cloud_region: values?.cloudRegion,
     domain_name: values?.domainName,
     git_owner: values?.gitOwner,
@@ -231,7 +237,7 @@ export const getCloudRegions = createAsyncThunk<
   } = getState();
 
   const res = await axios.post<{ regions: Array<string> }>('/api/proxy', {
-    url: `/region/${installType}`,
+    url: `/region/${formatCloudProvider(installType)}`,
     body: installType === InstallationType.AWS ? { ...values, cloud_region: 'us-east-1' } : values,
   });
 
@@ -254,7 +260,7 @@ export const getCloudDomains = createAsyncThunk<
   } = getState();
 
   const res = await axios.post<{ domains: Array<string> }>('/api/proxy', {
-    url: `/domain/${installType}`,
+    url: `/domain/${formatCloudProvider(installType)}`,
     body: {
       ...values,
       cloud_region: cloudRegion,

@@ -56,6 +56,7 @@ export enum InstallationType {
   LOCAL = 'k3d',
   AWS = 'aws',
   CIVO = 'civo',
+  CIVO_MARKETPLACE = 'civo-marketplace',
   DIGITAL_OCEAN = 'digitalocean',
   VULTR = 'vultr',
 }

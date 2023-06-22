@@ -4,6 +4,7 @@ export interface ConfigState {
   isTelemetryDisabled: boolean;
   isClusterZero: boolean;
   kubefirstVersion?: string;
+  installMethod?: string;
 }
 
 export const initialState: ConfigState = {
@@ -16,10 +17,12 @@ const configSlice = createSlice({
   initialState,
   reducers: {
     setConfigValues: (state, action: PayloadAction<ConfigState>) => {
-      const { isTelemetryDisabled, kubefirstVersion, isClusterZero } = action.payload;
+      const { isClusterZero, installMethod, isTelemetryDisabled, kubefirstVersion } =
+        action.payload;
       state.isTelemetryDisabled = isTelemetryDisabled;
       state.kubefirstVersion = kubefirstVersion;
       state.isClusterZero = isClusterZero;
+      state.installMethod = installMethod;
     },
   },
 });
