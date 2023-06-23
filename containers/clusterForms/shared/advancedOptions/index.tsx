@@ -16,9 +16,7 @@ const AdvancedOptions: FunctionComponent<FormFlowProps<InstallValues>> = ({ cont
     setIsAdvancedOptionsEnabled(target.checked);
   };
 
-  const { values } = useAppSelector(({ installation }) => ({
-    values: installation.values,
-  }));
+  const { values, installType } = useAppSelector(({ installation }) => installation);
 
   return (
     <>
@@ -54,6 +52,7 @@ const AdvancedOptions: FunctionComponent<FormFlowProps<InstallValues>> = ({ cont
             }}
           />
           <LearnMore
+            installType={installType}
             description="Learn more about"
             href=""
             linkTitle="customizing the GitOps template"
