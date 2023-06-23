@@ -60,7 +60,7 @@ export const Title = styled.div`
 `;
 
 export const FormContent = styled.div<{ isProvisionStep: boolean }>`
-  height: calc(100% - 218px);
+  height: calc(100% - 200px);
   overflow-y: auto;
   width: 100%;
 
@@ -71,6 +71,6 @@ export const FormContent = styled.div<{ isProvisionStep: boolean }>`
   `}
 
   ${media.greaterThan('lg')`
-    height: calc(100% - 218px);
+    height: calc(100% - 200px);
   `};
 `;
