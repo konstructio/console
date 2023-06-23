@@ -70,6 +70,7 @@ const Provision: FunctionComponent = () => {
   const {
     control,
     formState: { isValid: isFormValid },
+    getValues,
     handleSubmit,
     setValue,
     trigger,
@@ -114,20 +115,17 @@ const Provision: FunctionComponent = () => {
 
   const handleGoNext = useCallback(() => {
     dispatch(setInstallationStep(installationStep + 1));
-
-    setTimeout(trigger, 500);
     dispatch(clearError());
     dispatch(clearClusterState());
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [dispatch, installationStep]);
 
-  const handleNextButtonClick = useCallback(async () => {
+  const handleNextButtonClick = async () => {
     if (isAuthStep) {
-      await dispatch(getCloudRegions());
+      await dispatch(getCloudRegions(getValues()));
     } else {
       handleGoNext();
     }
-  }, [dispatch, handleGoNext, isAuthStep]);
+  };
 
   const handleBackButtonClick = useCallback(() => {
     dispatch(clearValidation());
@@ -137,6 +135,10 @@ const Provision: FunctionComponent = () => {
   }, [dispatch, installationStep, trigger]);
 
   const onSubmit = async (values: InstallValues) => {
+    if (installationStep === 0 && installType !== InstallationType.CIVO_MARKETPLACE) {
+      return handleNextButtonClick();
+    }
+
     if (isValid) {
       await dispatch(setInstallValues(values));
 
@@ -258,7 +260,6 @@ const Provision: FunctionComponent = () => {
         showBackButton={
           installationStep < stepTitles.length - 1 && installationStep > 0 && !isProvisionStep
         }
-        onNextButtonClick={handleNextButtonClick}
         onBackButtonClick={handleBackButtonClick}
         nextButtonText={isSetupStep ? 'Create cluster' : 'Next'}
         nextButtonDisabled={!isValid}

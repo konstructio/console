@@ -31,7 +31,6 @@ const InstallationStepContainer: FunctionComponent<InstallationStepContainerProp
   installationTitle,
   isProvisionStep,
   showBackButton,
-  onNextButtonClick,
   onBackButtonClick = noop,
   nextButtonText,
   nextButtonDisabled,
@@ -69,8 +68,6 @@ const InstallationStepContainer: FunctionComponent<InstallationStepContainerProp
         </Content>
       </FormContent>
       <InstallationButtons
-        activeStep={activeStep}
-        onNextButtonClick={onNextButtonClick}
         onBackButtonClick={onBackButtonClick}
         showBackButton={showBackButton}
         nextButtonText={nextButtonText}

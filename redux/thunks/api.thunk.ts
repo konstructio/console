@@ -4,6 +4,7 @@ import { FieldValues } from 'react-hook-form';
 import sortBy from 'lodash/sortBy';
 import queryString from 'query-string';
 
+import { formatCloudProvider } from '../../utils';
 import { AppDispatch, RootState } from '../store';
 import {
   Cluster,
@@ -12,14 +13,8 @@ import {
   ClusterServices,
 } from '../../types/provision';
 import { GitOpsCatalogApp, GitOpsCatalogProps } from '../../types/gitOpsCatalog';
-import { InstallationType } from '../../types/redux';
+import { InstallValues, InstallationType } from '../../types/redux';
 import { TelemetryClickEvent } from '../../types/telemetry';
-
-const formatCloudProvider = (cloudProvider?: string) => {
-  return (
-    cloudProvider && cloudProvider.replace(InstallationType.CIVO_MARKETPLACE, InstallationType.CIVO)
-  );
-};
 
 const mapClusterFromRaw = (cluster: ClusterResponse): Cluster => ({
   id: cluster._id,
@@ -226,14 +221,14 @@ export const installGitOpsApp = createAsyncThunk<
 
 export const getCloudRegions = createAsyncThunk<
   Array<string>,
-  void,
+  InstallValues,
   {
     dispatch: AppDispatch;
     state: RootState;
   }
->('api/getCloudRegions', async (_, { getState }) => {
+>('api/getCloudRegions', async (values, { getState }) => {
   const {
-    installation: { values, installType },
+    installation: { installType },
   } = getState();
 
   const res = await axios.post<{ regions: Array<string> }>('/api/proxy', {
