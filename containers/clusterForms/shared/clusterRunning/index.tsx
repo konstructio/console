@@ -5,7 +5,12 @@ import { useRouter } from 'next/router';
 import { useAppDispatch } from '../../../../redux/store';
 import ClusterReady from '../../../../components/clusterReady';
 
-const ClusterRunning: FunctionComponent = () => {
+export interface ClusterRunning {
+  clusterName?: string;
+  domainName?: string;
+}
+
+const ClusterRunning: FunctionComponent<ClusterRunning> = (props) => {
   const dispatch = useAppDispatch();
   const { push } = useRouter();
 
@@ -14,7 +19,7 @@ const ClusterRunning: FunctionComponent = () => {
     push('/services');
   };
 
-  return <ClusterReady onOpenConsole={onOpenConsole} />;
+  return <ClusterReady onOpenConsole={onOpenConsole} {...props} />;
 };
 
 export default ClusterRunning;
