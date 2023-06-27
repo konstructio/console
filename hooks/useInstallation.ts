@@ -85,7 +85,7 @@ const getInfoByType = (installType: InstallationType, step: number) => {
     },
     [InstallationType.CIVO_MARKETPLACE]: {
       [CivoMarketpalceFormStep.AUTHENTICATION]: {
-        title: 'Civo Prerequisites',
+        title: 'Prerequisites',
         description: [
           'Have an object store bucket available.',
           'Establish a publicly routable DNS. <a href="https://www.civo.com/learn/configure-dns#adding-a-domain-name" target="_blank">Learn more</a>',

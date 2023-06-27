@@ -100,7 +100,7 @@ const Service: FunctionComponent<ServiceProps> = ({
   return (
     <Container>
       <Header>
-        <Image src={image} alt={name} width="24" height="24" />
+        <Image src={image} alt={name} width="32" height="32" />
         <Title variant="subtitle2">{name}</Title>
         {/* <NextImage
           src={`https://argocd.mgmt-20.kubefirst.com/api/badge?name=${name.toLowerCase()}`}

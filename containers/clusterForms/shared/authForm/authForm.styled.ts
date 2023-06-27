@@ -31,3 +31,14 @@ export const FormContainer = styled.div<{ isVisible?: boolean }>`
   flex-direction: column;
   gap: 32px;
 `;
+
+export const GitUserField = styled.div``;
+
+export const GitUserFieldInput = styled.div`
+  background-color: #fafafa;
+  border-radius: 4px;
+  color: ${({ theme }) => theme.colors.volcanicSand};
+  height: 20px;
+  margin-top: 8px;
+  padding: 8px 12px;
+`;

@@ -237,7 +237,7 @@ const gitOpsCatalog: FunctionComponent = () => {
           variant="filled"
           icon={<CheckCircleIcon />}
         >
-          <Typography variant="subtitle2">{`${selectedApp?.name} successfully added to provisioned services in cluster ${selectedCluster?.name}!`}</Typography>
+          <Typography variant="subtitle2">{`${selectedApp?.display_name} successfully added to provisioned services in cluster ${selectedCluster?.clusterName}!`}</Typography>
         </Alert>
       </Snackbar>
     </Container>

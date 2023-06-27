@@ -1,11 +1,11 @@
 import React, { FunctionComponent } from 'react';
 import { FormFlowProps } from 'types/provision';
 
-import ClusterRunningMessage from '../../../components/clusterReady';
 import TerminalLogs from '../../terminalLogs';
 import { FormStep } from '../../../constants/installation';
 import { InstallValues } from '../../../types/redux';
 import AuthForm from '../shared/authForm';
+import ClusterRunning from '../shared/clusterRunning';
 
 import AwsSetupForm from './setupForm';
 
@@ -13,7 +13,7 @@ const AWS_FORM_FLOW = {
   [FormStep.AUTHENTICATION]: AuthForm,
   [FormStep.SETUP]: AwsSetupForm,
   [FormStep.PROVISIONING]: TerminalLogs,
-  [FormStep.READY]: ClusterRunningMessage,
+  [FormStep.READY]: ClusterRunning,
 };
 
 export const AwsFormFlow: FunctionComponent<FormFlowProps<InstallValues>> = ({
