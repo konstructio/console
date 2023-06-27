@@ -1,3 +1,4 @@
+import NextImage from 'next/image';
 import styled, { css } from 'styled-components';
 
 import Row from '../row';
@@ -71,4 +72,8 @@ export const Code = styled(Row)`
 export const DescriptionItem = styled.div`
   display: flex;
   gap: 4px;
+`;
+
+export const Image = styled(NextImage)`
+  margin-bottom: 16px;
 `;

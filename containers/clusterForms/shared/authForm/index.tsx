@@ -33,7 +33,7 @@ import {
 } from '../../../../redux/slices/git.slice';
 import { setGitProvider } from '../../../../redux/slices/installation.slice';
 
-import { FormContainer, GitContainer } from './authForm.styled';
+import { FormContainer, GitContainer, GitUserField, GitUserFieldInput } from './authForm.styled';
 
 const AuthForm: FunctionComponent<FormFlowProps<InstallValues>> = ({
   control,
@@ -41,6 +41,7 @@ const AuthForm: FunctionComponent<FormFlowProps<InstallValues>> = ({
   setValue,
 }) => {
   const [isGitRequested, setIsGitRequested] = useState<boolean>();
+  const [gitUserName, setGitUserName] = useState<string>();
 
   const dispatch = useAppDispatch();
 
@@ -112,7 +113,7 @@ const AuthForm: FunctionComponent<FormFlowProps<InstallValues>> = ({
     const { value } = target;
 
     if (isTokenValid) {
-      reset && reset({ userName: '' });
+      setGitUserName('');
       await dispatch(clearGitState());
     }
 
@@ -129,7 +130,8 @@ const AuthForm: FunctionComponent<FormFlowProps<InstallValues>> = ({
   );
 
   const handleGitProviderChange = (provider: GitProvider) => {
-    reset && reset({ gitToken: '', gitOwner: '', userName: '' });
+    setGitUserName('');
+    reset && reset({ gitToken: '', gitOwner: '' });
     dispatch(clearGitState());
     dispatch(setIsGitSelected(true));
     dispatch(setGitProvider(provider));
@@ -137,7 +139,7 @@ const AuthForm: FunctionComponent<FormFlowProps<InstallValues>> = ({
 
   useEffect(() => {
     if (githubUser?.login || gitlabUser?.name) {
-      setValue('userName', githubUser?.login || gitlabUser?.name);
+      setGitUserName(githubUser?.login || gitlabUser?.name);
     }
   }, [dispatch, githubUser, gitlabUser, setValue]);
 
@@ -189,15 +191,14 @@ const AuthForm: FunctionComponent<FormFlowProps<InstallValues>> = ({
           onChange={handleOnChangeToken}
           onErrorText="Invalid token."
         />
-        <ControlledTextField
-          control={control}
-          name="userName"
-          label={`Username associated with ${gitLabel} token`}
-          disabled
-          rules={{
-            required: false,
-          }}
-        />
+        <GitUserField>
+          <Typography
+            variant="labelLarge"
+            sx={{ display: 'flex', gap: '4px' }}
+            color={EXCLUSIVE_PLUM}
+          >{`Username associated with ${gitLabel} token`}</Typography>
+          <GitUserFieldInput>{gitUserName}</GitUserFieldInput>
+        </GitUserField>
         {isGitHub ? (
           <ControlledAutocomplete
             control={control}
@@ -211,7 +212,6 @@ const AuthForm: FunctionComponent<FormFlowProps<InstallValues>> = ({
             }
             loading={gitStateLoading}
             label="GitHub organization name"
-            placeholder="Select"
           />
         ) : (
           <ControlledAutocomplete
@@ -225,7 +225,6 @@ const AuthForm: FunctionComponent<FormFlowProps<InstallValues>> = ({
             }
             loading={gitStateLoading}
             label="GitLab group name"
-            placeholder="Select"
           />
         )}
         {apiKeyInfo?.fieldKeys.map(({ label, name, helperText }) => (
