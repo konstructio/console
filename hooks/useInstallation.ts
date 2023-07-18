@@ -161,7 +161,9 @@ const getIsSetupStep = (
   step: FormStep | LocalFormStep | CivoMarketpalceFormStep,
 ) => {
   const isLocalSetupStep = type === InstallationType.LOCAL && step === LocalFormStep.SETUP;
-  const isSetupStep = type !== InstallationType.LOCAL && step === FormStep.SETUP;
+  const isSetupStep =
+    ![InstallationType.LOCAL, InstallationType.CIVO_MARKETPLACE].includes(type) &&
+    step === FormStep.SETUP;
   const isCivoMarketplaceSetup =
     type === InstallationType.CIVO_MARKETPLACE && step === CivoMarketpalceFormStep.SETUP;
 

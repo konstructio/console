@@ -124,3 +124,11 @@ declare module '@mui/material/styles' {
     tooltip?: React.CSSProperties;
   }
 }
+
+declare global {
+  namespace Cypress {
+    interface Chainable {
+      openConsole(): Chainable<void>;
+    }
+  }
+}

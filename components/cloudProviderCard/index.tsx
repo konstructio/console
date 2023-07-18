@@ -89,9 +89,9 @@ const CloudProviderCard: FunctionComponent<CloudProviderCardProps> = ({
   ...rest
 }) => {
   const { logoSrc, label, description, learnMoreLink, height, width, beta } =
-    PROVIDER_OPTIONS[option];
+    PROVIDER_OPTIONS[option] || {};
   return (
-    <CardContainer {...rest} withHoverEffect={withHoverEffect}>
+    <CardContainer {...rest} withHoverEffect={withHoverEffect} data-test-id={`${option}-button`}>
       <Image src={logoSrc} alt="logo" width={width} height={height} />
       <DetailsContainer>
         <LabelContainer>

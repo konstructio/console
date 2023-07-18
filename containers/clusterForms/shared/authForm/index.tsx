@@ -191,7 +191,7 @@ const AuthForm: FunctionComponent<FormFlowProps<InstallValues>> = ({
           onChange={handleOnChangeToken}
           onErrorText="Invalid token."
         />
-        <GitUserField>
+        <GitUserField data-test-id="gitUser">
           <Typography
             variant="labelLarge"
             sx={{ display: 'flex', gap: '4px' }}

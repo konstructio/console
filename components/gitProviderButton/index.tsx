@@ -29,7 +29,7 @@ const GitProviderButton: FunctionComponent<GitProviderButtonProps> = ({
 }) => {
   const { logoSrc, label, height, width } = PROVIDER_OPTIONS[option];
   return (
-    <Button {...rest} type={type}>
+    <Button {...rest} type={type} data-test-id={`${option}-button`}>
       <Image src={logoSrc} alt="logo" width={width} height={height} />
       <Typography variant="subtitle2">{label}</Typography>
     </Button>
