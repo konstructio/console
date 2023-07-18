@@ -38,7 +38,7 @@ spec:
             - name: API_URL
               value: {{ .Values.apiURL | default (printf "http://%s-kubefirst-api.%s.svc.cluster.local" (.Release.Name ) (.Release.Namespace ))  }}
             - name: KUBEFIRST_VERSION
-              value: {{ .Values.global.kubefirstVersion | default .Chart.Version }}
+              value: {{ .Values.global.kubefirstVersion }}
             - name: IS_CLUSTER_ZERO
               value: {{ .Values.isClusterZero | default "true" | quote }}
             - name: INSTALL_METHOD
