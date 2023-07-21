@@ -1,19 +1,19 @@
 import React, { FunctionComponent } from 'react';
 import { FormFlowProps } from 'types/provision';
 
-import ClusterRunningMessage from '../../../components/clusterReady';
 import TerminalLogs from '../../terminalLogs';
 import { FormStep } from '../../../constants/installation';
 import { InstallValues } from '../../../types/redux';
 import AuthForm from '../shared/authForm';
+import ClusterRunning from '../shared/clusterRunning';
 
-import AwsSetupForm from './setupForm';
+import SetupForm from './setupForm';
 
 const CIVO_FORM_FLOW = {
   [FormStep.AUTHENTICATION]: AuthForm,
-  [FormStep.SETUP]: AwsSetupForm,
+  [FormStep.SETUP]: SetupForm,
   [FormStep.PROVISIONING]: TerminalLogs,
-  [FormStep.READY]: ClusterRunningMessage,
+  [FormStep.READY]: ClusterRunning,
 };
 
 export const CivoFormFlow: FunctionComponent<FormFlowProps<InstallValues>> = ({

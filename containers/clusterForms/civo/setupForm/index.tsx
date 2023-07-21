@@ -11,9 +11,10 @@ import { EMAIL_REGEX } from '../../../../constants';
 
 const CivoSetupForm: FunctionComponent<FormFlowProps<InstallValues>> = ({ control }) => {
   const dispatch = useAppDispatch();
-  const { cloudDomains, cloudRegions } = useAppSelector(({ api }) => ({
+  const { cloudDomains, cloudRegions, values } = useAppSelector(({ api, installation }) => ({
     cloudDomains: api.cloudDomains,
     cloudRegions: api.cloudRegions,
+    values: installation.values,
   }));
 
   const handleRegionOnSelect = async (region: string) => {
@@ -27,6 +28,7 @@ const CivoSetupForm: FunctionComponent<FormFlowProps<InstallValues>> = ({ contro
         name="alertsEmail"
         label="Alerts email"
         onErrorText="Invalid email address."
+        defaultValue={values?.alertsEmail}
         required
         rules={{
           required: true,
@@ -37,6 +39,7 @@ const CivoSetupForm: FunctionComponent<FormFlowProps<InstallValues>> = ({ contro
         control={control}
         name="cloudRegion"
         label="Cloud Region"
+        defaultValue={values?.cloudRegion}
         required
         rules={{ required: true }}
         options={cloudRegions && cloudRegions.map((region) => ({ label: region, value: region }))}
@@ -46,6 +49,7 @@ const CivoSetupForm: FunctionComponent<FormFlowProps<InstallValues>> = ({ contro
         control={control}
         name="domainName"
         label="Cluster domain name"
+        defaultValue={values?.domainName}
         required
         rules={{ required: true }}
         options={cloudDomains && cloudDomains.map((domain) => ({ label: domain, value: domain }))}
@@ -54,6 +58,7 @@ const CivoSetupForm: FunctionComponent<FormFlowProps<InstallValues>> = ({ contro
         control={control}
         name="clusterName"
         label="Cluster name"
+        defaultValue={values?.clusterName}
         rules={{
           maxLength: 25,
           required: true,

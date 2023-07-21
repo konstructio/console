@@ -12,11 +12,13 @@ const boxImageSrc = process.env.STORYBOOK_MODE ? boxImgSrc : '/static/box.svg';
 export interface ClusterRunningMessageProps {
   clusterName?: string;
   domainName?: string;
+  onOpenConsole: () => void;
 }
 
 const ClusterReady: FunctionComponent<ClusterRunningMessageProps> = ({
   clusterName,
   domainName,
+  onOpenConsole,
 }) => (
   <Container>
     <Image alt="box" src={boxImageSrc} width={170} height={160} />
@@ -26,7 +28,11 @@ const ClusterReady: FunctionComponent<ClusterRunningMessageProps> = ({
       </Typography>
     </Title>
     <Button variant="contained" color="primary">
-      <Link href={`https://kubefirst.${domainName}/services`} target="_blank">
+      <Link
+        href={`https://kubefirst.${domainName}/services`}
+        target="_blank"
+        onClick={onOpenConsole}
+      >
         Open kubefirst console
       </Link>
     </Button>

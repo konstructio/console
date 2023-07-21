@@ -13,7 +13,11 @@ import GitopsAppModal from '../../components/gitopsAppModal';
 import useModal from '../../hooks/useModal';
 import { useAppDispatch, useAppSelector } from '../../redux/store';
 import { installGitOpsApp } from '../../redux/thunks/api.thunk';
-import { setIsGitOpsCatalogNotificationOpen } from '../../redux/slices/cluster.slice';
+import {
+  addAppToQueue,
+  removeAppFromQueue,
+  setIsGitOpsCatalogNotificationOpen,
+} from '../../redux/slices/cluster.slice';
 import { GitOpsCatalogApp } from '../../types/gitOpsCatalog';
 import { IVY_LEAGUE, VOLCANIC_SAND } from '../../constants/colors';
 
@@ -37,10 +41,13 @@ const gitOpsCatalog: FunctionComponent = () => {
   const [selectedApp, setSelectedApp] = useState<GitOpsCatalogApp>();
 
   const dispatch = useAppDispatch();
-  const { isGitOpsCatalogNotificationOpen, selectedCluster } = useAppSelector(({ cluster }) => ({
-    selectedCluster: cluster.selectedCluster,
-    isGitOpsCatalogNotificationOpen: cluster.isGitOpsCatalogNotificationOpen,
-  }));
+  const { appsQueue, isGitOpsCatalogNotificationOpen, selectedCluster } = useAppSelector(
+    ({ cluster }) => ({
+      selectedCluster: cluster.selectedCluster,
+      isGitOpsCatalogNotificationOpen: cluster.isGitOpsCatalogNotificationOpen,
+      appsQueue: cluster.appsQueue,
+    }),
+  );
 
   const { isOpen, openModal, closeModal } = useModal();
   const {
@@ -83,12 +90,14 @@ const gitOpsCatalog: FunctionComponent = () => {
   const handleAddApp = async (app: GitOpsCatalogApp) => {
     try {
       const values = getValues();
+      await dispatch(addAppToQueue(app));
       await dispatch(
         installGitOpsApp({ app, clusterName: selectedCluster?.clusterName as string, values }),
       );
       reset();
     } catch (error) {
       //todo: handle error
+      dispatch(removeAppFromQueue(app));
     }
   };
 
@@ -157,6 +166,7 @@ const gitOpsCatalog: FunctionComponent = () => {
                       key={app.name}
                       {...app}
                       onClick={() => handleSelectedApp(app)}
+                      isInstalling={appsQueue.includes(app.name)}
                     />
                   ))}
               </CardsContainer>
@@ -167,7 +177,12 @@ const gitOpsCatalog: FunctionComponent = () => {
           {!selectedCategories.length &&
             filteredApps &&
             filteredApps.map((app) => (
-              <GitOpsCatalogCard key={app.name} {...app} onClick={() => handleSelectedApp(app)} />
+              <GitOpsCatalogCard
+                key={app.name}
+                {...app}
+                onClick={() => handleSelectedApp(app)}
+                isInstalling={appsQueue.includes(app.name)}
+              />
             ))}
           <GitOpsCatalogCard {...STATIC_HELP_CARD} showSubmitButton={false}>
             <>
@@ -222,7 +237,7 @@ const gitOpsCatalog: FunctionComponent = () => {
           variant="filled"
           icon={<CheckCircleIcon />}
         >
-          <Typography variant="subtitle2">{`${selectedApp?.name} successfully added to your cluster!`}</Typography>
+          <Typography variant="subtitle2">{`${selectedApp?.display_name} successfully added to provisioned services in cluster ${selectedCluster?.clusterName}!`}</Typography>
         </Alert>
       </Snackbar>
     </Container>

@@ -14,12 +14,23 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   res.write('\n');
 
   const eventSource = new EventSource(`${API_URL}/api/v1/stream`);
+  try {
+    eventSource.addEventListener('open', () => {
+      // eslint-disable-next-line no-console
+      console.log('connection established from console api');
+    });
+    eventSource.addEventListener('message', (e) => {
+      res.write(`data: ${e.data}\n\n`);
+    });
 
-  eventSource.addEventListener('open', () => {
-    // eslint-disable-next-line no-console
-    console.log('connection established from console api');
-  });
-  eventSource.addEventListener('message', (e) => {
-    res.write(`data: ${e.data}\n\n`);
-  });
+    eventSource.addEventListener('error', (e) => {
+      // eslint-disable-next-line no-console
+      console.log('An error ocurred in the stream logs ', e);
+      eventSource.close();
+      res.status(500).send('An error ocurred in the stream logs');
+    });
+  } catch (error) {
+    res.status(500).send('An error ocurred in the stream logs');
+    eventSource.close();
+  }
 }

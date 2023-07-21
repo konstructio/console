@@ -38,9 +38,11 @@ spec:
             - name: API_URL
               value: {{ .Values.apiURL | default (printf "http://%s-kubefirst-api.%s.svc.cluster.local" (.Release.Name ) (.Release.Namespace ))  }}
             - name: KUBEFIRST_VERSION
-              value: {{ .Values.chartVersion | default .Chart.Version }}
+              value: {{ .Values.global.kubefirstVersion }}
             - name: IS_CLUSTER_ZERO
               value: {{ .Values.isClusterZero | default "true" | quote }}
+            - name: INSTALL_METHOD
+              value: {{ .Values.installMethod | default "helm" }}
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"

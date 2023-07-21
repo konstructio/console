@@ -4,6 +4,7 @@ import { FieldValues } from 'react-hook-form';
 import sortBy from 'lodash/sortBy';
 import queryString from 'query-string';
 
+import { formatCloudProvider } from '../../utils';
 import { AppDispatch, RootState } from '../store';
 import {
   Cluster,
@@ -12,7 +13,7 @@ import {
   ClusterServices,
 } from '../../types/provision';
 import { GitOpsCatalogApp, GitOpsCatalogProps } from '../../types/gitOpsCatalog';
-import { InstallationType } from '../../types/redux';
+import { InstallValues, InstallationType } from '../../types/redux';
 import { TelemetryClickEvent } from '../../types/telemetry';
 
 const mapClusterFromRaw = (cluster: ClusterResponse): Cluster => ({
@@ -66,7 +67,7 @@ export const createCluster = createAsyncThunk<
   const params = {
     clusterName: values?.clusterName,
     admin_email: values?.alertsEmail,
-    cloud_provider: installType?.toString(),
+    cloud_provider: formatCloudProvider(installType?.toString()),
     cloud_region: values?.cloudRegion,
     domain_name: values?.domainName,
     git_owner: values?.gitOwner,
@@ -203,11 +204,13 @@ export const installGitOpsApp = createAsyncThunk<
       value: (values as FieldValues)[key],
     }));
 
+  const params = {
+    secret_keys,
+  };
+
   const res = await axios.post('/api/proxy', {
     url: `/services/${clusterName}/${app.name}`,
-    body: {
-      secret_keys,
-    },
+    body: secret_keys?.length ? params : undefined,
   });
 
   if ('error' in res) {
@@ -218,18 +221,18 @@ export const installGitOpsApp = createAsyncThunk<
 
 export const getCloudRegions = createAsyncThunk<
   Array<string>,
-  void,
+  InstallValues,
   {
     dispatch: AppDispatch;
     state: RootState;
   }
->('api/getCloudRegions', async (_, { getState }) => {
+>('api/getCloudRegions', async (values, { getState }) => {
   const {
-    installation: { values, installType },
+    installation: { installType },
   } = getState();
 
   const res = await axios.post<{ regions: Array<string> }>('/api/proxy', {
-    url: `/region/${installType}`,
+    url: `/region/${formatCloudProvider(installType)}`,
     body: installType === InstallationType.AWS ? { ...values, cloud_region: 'us-east-1' } : values,
   });
 
@@ -252,7 +255,7 @@ export const getCloudDomains = createAsyncThunk<
   } = getState();
 
   const res = await axios.post<{ domains: Array<string> }>('/api/proxy', {
-    url: `/domain/${installType}`,
+    url: `/domain/${formatCloudProvider(installType)}`,
     body: {
       ...values,
       cloud_region: cloudRegion,

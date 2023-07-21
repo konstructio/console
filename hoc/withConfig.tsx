@@ -10,6 +10,7 @@ export interface PageProps {
   flags?: { [key: string]: boolean };
   isClusterZero: boolean;
   kubefirstVersion?: string;
+  installMethod?: string;
 }
 
 export async function getServerSideProps() {
@@ -18,6 +19,7 @@ export async function getServerSideProps() {
     IS_CLUSTER_ZERO = '',
     KUBEFIRST_VERSION = '',
     POSTHOG_KEY = '',
+    INSTALL_METHOD = '',
   } = process.env;
 
   let flags;
@@ -36,12 +38,19 @@ export async function getServerSideProps() {
       disableTelemetry: DISABLE_TELEMETRY === 'true',
       isClusterZero: IS_CLUSTER_ZERO === 'true',
       kubefirstVersion: KUBEFIRST_VERSION,
+      installMethod: INSTALL_METHOD,
     },
   };
 }
 
 export default function withConfig(WrappedComponent: FunctionComponent<PageProps>) {
-  const Component = ({ disableTelemetry, flags, isClusterZero, kubefirstVersion }: PageProps) => {
+  const Component = ({
+    disableTelemetry,
+    flags,
+    installMethod,
+    isClusterZero,
+    kubefirstVersion,
+  }: PageProps) => {
     const dispatch = useAppDispatch();
     const flagsHaveLoaded = useAppSelector(({ featureFlags }) => featureFlags.loaded);
 
@@ -49,12 +58,13 @@ export default function withConfig(WrappedComponent: FunctionComponent<PageProps
       dispatch(setFeatureFlags(flags));
       dispatch(
         setConfigValues({
+          isClusterZero,
+          installMethod,
           isTelemetryDisabled: !!disableTelemetry,
           kubefirstVersion,
-          isClusterZero,
         }),
       );
-    }, [dispatch, disableTelemetry, kubefirstVersion, flags, isClusterZero]);
+    }, [dispatch, disableTelemetry, kubefirstVersion, flags, isClusterZero, installMethod]);
 
     return flagsHaveLoaded ? <WrappedComponent isClusterZero={isClusterZero} /> : null;
   };

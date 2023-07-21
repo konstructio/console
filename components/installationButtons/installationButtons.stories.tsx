@@ -17,7 +17,7 @@ export default {
 };
 
 const DefaultTemplate: Story = (args) => {
-  return <InstallationButtons onNextButtonClick={noop} onBackButtonClick={noop} {...args} />;
+  return <InstallationButtons onBackButtonClick={noop} {...args} />;
 };
 
 export const Default = DefaultTemplate.bind({});

@@ -12,7 +12,7 @@ import { BISCAY, SALTBOX_BLUE } from '../../constants/colors';
 
 import { Content, Close, Footer, Header } from './gitopsAppModal.styled';
 
-export interface gitopsAppModalProps extends GitOpsCatalogApp {
+export interface GitopsAppModalProps extends GitOpsCatalogApp {
   control: Control;
   isOpen: boolean;
   isValid: boolean;
@@ -20,7 +20,7 @@ export interface gitopsAppModalProps extends GitOpsCatalogApp {
   onSubmit: (app: GitOpsCatalogApp) => void;
 }
 
-const gitopsAppModal: FunctionComponent<gitopsAppModalProps> = ({
+const GitopsAppModal: FunctionComponent<GitopsAppModalProps> = ({
   control,
   closeModal,
   isOpen,
@@ -83,4 +83,4 @@ const gitopsAppModal: FunctionComponent<gitopsAppModalProps> = ({
   );
 };
 
-export default gitopsAppModal;
+export default GitopsAppModal;

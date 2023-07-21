@@ -19,9 +19,8 @@ This is the Kubefirst Frontend project that shows all the Kubefirst installed se
 
 ### Build the Docker image
 
-`docker build --tag public.ecr.aws/kubefirst/console:{version} .`}
-
-- Test the docker image `docker run -p 8001:8080 -t public.ecr.aws/kubefirst/console:{version}`
+- Build the Docker image with `docker build --tag public.ecr.aws/kubefirst/console:{version} .`
+- Test the image with `docker run -p 8001:8080 -t public.ecr.aws/kubefirst/console:{version}`
 - Go to `http://localhost:8001` to see if the docker image is working
 
 ### Push Docker Image to ECR

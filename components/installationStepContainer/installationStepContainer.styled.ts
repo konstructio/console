@@ -17,7 +17,6 @@ export const Content = styled(Column)<{ hasInfo?: boolean; isProvisionStep: bool
   align-items: center;
   background-color: ${({ isProvisionStep, theme }) => isProvisionStep && theme.colors.white};
   gap: 24px;
-  height: 100%;
   margin: 0 auto;
   width: 100%;
 
@@ -61,7 +60,7 @@ export const Title = styled.div`
 `;
 
 export const FormContent = styled.div<{ isProvisionStep: boolean }>`
-  height: calc(100% - 218px);
+  height: calc(100% - 200px);
   overflow-y: auto;
   width: 100%;
 
@@ -72,6 +71,6 @@ export const FormContent = styled.div<{ isProvisionStep: boolean }>`
   `}
 
   ${media.greaterThan('lg')`
-    height: calc(100% - 218px);
+    height: calc(100% - 200px);
   `};
 `;

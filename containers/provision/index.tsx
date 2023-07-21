@@ -2,13 +2,15 @@ import React, { FunctionComponent, useCallback, useEffect, useMemo } from 'react
 import { useForm } from 'react-hook-form';
 import { useRouter } from 'next/router';
 
+import { AUTHENTICATION_ERROR_MSG } from '../../constants';
 import { createCluster, getCloudRegions, resetClusterProgress } from '../../redux/thunks/api.thunk';
 import InstallationStepContainer from '../../components/installationStepContainer';
 import InstallationInfoCard from '../../components/installationInfoCard';
 import { InstallationsSelection } from '../installationsSelection';
 import {
   clearError,
-  resetInstallState,
+  setError,
+  setInstallType,
   setInstallValues,
   setInstallationStep,
 } from '../../redux/slices/installation.slice';
@@ -16,7 +18,7 @@ import { useAppDispatch, useAppSelector } from '../../redux/store';
 import { useInstallation } from '../../hooks/useInstallation';
 import { InstallValues, InstallationType } from '../../types/redux';
 import { GitProvider } from '../../types';
-import { clearClusterState } from '../../redux/slices/api.slice';
+import { clearClusterState, clearValidation } from '../../redux/slices/api.slice';
 import AdvancedOptions from '../clusterForms/shared/advancedOptions';
 import ErrorBanner from '../../components/errorBanner';
 import Button from '../../components/button';
@@ -27,16 +29,27 @@ const Provision: FunctionComponent = () => {
   const dispatch = useAppDispatch();
   const { push } = useRouter();
 
-  const { authErrors, error, installType, isClusterZero, installationStep, gitProvider, values } =
-    useAppSelector(({ config, git, installation }) => ({
-      installType: installation.installType,
-      gitProvider: installation.gitProvider,
-      installationStep: installation.installationStep,
-      values: installation.values,
-      error: installation.error,
-      authErrors: git.errors,
-      isClusterZero: config.isClusterZero,
-    }));
+  const {
+    authErrors,
+    error,
+    installType,
+    isAuthenticationValid,
+    isClusterZero,
+    installMethod,
+    installationStep,
+    gitProvider,
+    values,
+  } = useAppSelector(({ api, config, git, installation }) => ({
+    installType: installation.installType,
+    gitProvider: installation.gitProvider,
+    installationStep: installation.installationStep,
+    values: installation.values,
+    error: installation.error,
+    authErrors: git.errors,
+    isAuthenticationValid: api.isAuthenticationValid,
+    isClusterZero: config.isClusterZero,
+    installMethod: config.installMethod,
+  }));
 
   const { isProvisioned } = useAppSelector(({ api }) => api);
 
@@ -45,6 +58,7 @@ const Provision: FunctionComponent = () => {
     formFlow: FormFlow,
     installTitles,
     info,
+    isAuthStep,
     isProvisionStep,
     isSetupStep,
   } = useInstallation(
@@ -56,6 +70,7 @@ const Provision: FunctionComponent = () => {
   const {
     control,
     formState: { isValid: isFormValid },
+    getValues,
     handleSubmit,
     setValue,
     trigger,
@@ -76,11 +91,14 @@ const Provision: FunctionComponent = () => {
   );
 
   const isValid = useMemo(() => {
-    if (installationStep === 0) {
+    if (installationStep === 0 && installType !== InstallationType.CIVO_MARKETPLACE) {
       return !!gitProvider && !!installType;
     } else if (isProvisionStep) {
       return isProvisioned;
+    } else if (isAuthStep && isAuthenticationValid === false) {
+      return true;
     }
+
     return isFormValid && !error && !authErrors.length;
   }, [
     authErrors.length,
@@ -88,27 +106,41 @@ const Provision: FunctionComponent = () => {
     gitProvider,
     installType,
     installationStep,
+    isAuthStep,
+    isAuthenticationValid,
     isFormValid,
     isProvisionStep,
     isProvisioned,
   ]);
 
-  const handleNextButtonClick = useCallback(async () => {
+  const handleGoNext = useCallback(() => {
     dispatch(setInstallationStep(installationStep + 1));
-
-    setTimeout(trigger, 500);
     dispatch(clearError());
     dispatch(clearClusterState());
-  }, [dispatch, installationStep, trigger]);
-
-  const handleBackButtonClick = useCallback(() => {
-    dispatch(setInstallationStep(installationStep - 1));
-    dispatch(clearError());
   }, [dispatch, installationStep]);
 
+  const handleNextButtonClick = async () => {
+    if (isAuthStep) {
+      await dispatch(getCloudRegions(getValues()));
+    } else {
+      handleGoNext();
+    }
+  };
+
+  const handleBackButtonClick = useCallback(() => {
+    dispatch(clearValidation());
+    dispatch(clearError());
+    dispatch(setInstallationStep(installationStep - 1));
+    trigger();
+  }, [dispatch, installationStep, trigger]);
+
   const onSubmit = async (values: InstallValues) => {
+    if (installationStep === 0 && installType !== InstallationType.CIVO_MARKETPLACE) {
+      return handleNextButtonClick();
+    }
+
     if (isValid) {
-      dispatch(setInstallValues(values));
+      await dispatch(setInstallValues(values));
 
       if (isSetupStep) {
         try {
@@ -134,7 +166,7 @@ const Provision: FunctionComponent = () => {
   }, [dispatch, error]);
 
   const form = useMemo(() => {
-    if (installationStep === 0) {
+    if (installationStep === 0 && installMethod !== InstallationType.CIVO_MARKETPLACE) {
       return <InstallationsSelection steps={stepTitles} reset={reset} />;
     }
 
@@ -162,23 +194,26 @@ const Provision: FunctionComponent = () => {
             domainName={values?.domainName as string}
           />
         </FormContent>
-        {isSetupStep && installType !== InstallationType.LOCAL && (
-          <AdvancedOptionsContainer>
-            <AdvancedOptions
-              control={control}
-              currentStep={installationStep}
-              setValue={setValue}
-              trigger={trigger}
-              watch={watch}
-              clusterName={values?.clusterName as string}
-              domainName={values?.domainName as string}
-            />
-          </AdvancedOptionsContainer>
-        )}
+        {isSetupStep &&
+          installType &&
+          ![InstallationType.LOCAL, InstallationType.CIVO_MARKETPLACE].includes(installType) && (
+            <AdvancedOptionsContainer>
+              <AdvancedOptions
+                control={control}
+                currentStep={installationStep}
+                setValue={setValue}
+                trigger={trigger}
+                watch={watch}
+                clusterName={values?.clusterName as string}
+                domainName={values?.domainName as string}
+              />
+            </AdvancedOptionsContainer>
+          )}
       </>
     );
   }, [
     installationStep,
+    installMethod,
     hasInfo,
     isLastStep,
     isProvisionStep,
@@ -190,31 +225,33 @@ const Provision: FunctionComponent = () => {
     setValue,
     trigger,
     watch,
+    reset,
     values?.clusterName,
     values?.domainName,
     isSetupStep,
     installType,
     stepTitles,
-    reset,
   ]);
 
   useEffect(() => {
-    return () => {
-      dispatch(resetInstallState());
-    };
-  }, [dispatch]);
-
-  useEffect(() => {
-    if (isSetupStep) {
-      dispatch(getCloudRegions());
+    if (isAuthStep && isAuthenticationValid === false) {
+      dispatch(setError({ error: AUTHENTICATION_ERROR_MSG }));
+    } else if (isAuthStep && isAuthenticationValid) {
+      handleGoNext();
     }
-  }, [dispatch, isSetupStep]);
+  }, [dispatch, handleGoNext, isAuthStep, isAuthenticationValid]);
 
   useEffect(() => {
     if (!isClusterZero) {
       push('/services');
     }
   }, [isClusterZero, push]);
+
+  useEffect(() => {
+    if (installMethod === InstallationType.CIVO_MARKETPLACE) {
+      dispatch(setInstallType(InstallationType.CIVO_MARKETPLACE));
+    }
+  }, [dispatch, installMethod]);
 
   return (
     <Form component="form" onSubmit={handleSubmit(onSubmit)}>
@@ -225,7 +262,6 @@ const Provision: FunctionComponent = () => {
         showBackButton={
           installationStep < stepTitles.length - 1 && installationStep > 0 && !isProvisionStep
         }
-        onNextButtonClick={handleNextButtonClick}
         onBackButtonClick={handleBackButtonClick}
         nextButtonText={isSetupStep ? 'Create cluster' : 'Next'}
         nextButtonDisabled={!isValid}
@@ -234,7 +270,12 @@ const Provision: FunctionComponent = () => {
         showNextButton={installationStep < stepTitles.length - 1}
       >
         {form}
-        {info && <InstallationInfoCard info={info} />}
+        {info && (
+          <InstallationInfoCard
+            info={info}
+            isCivoMarketplace={installType === InstallationType.CIVO_MARKETPLACE}
+          />
+        )}
       </InstallationStepContainer>
     </Form>
   );

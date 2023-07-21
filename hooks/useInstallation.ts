@@ -1,9 +1,10 @@
 import { FunctionComponent, useMemo } from 'react';
 
-import { FormStep, LocalFormStep } from '../constants/installation';
+import { CivoMarketpalceFormStep, FormStep, LocalFormStep } from '../constants/installation';
 import { GitProvider } from '../types';
 import { AuthKeys, InstallValues, InstallationInfo, InstallationType } from '../types/redux';
 import { CivoFormFlow } from '../containers/clusterForms/civo';
+import { CivoMarketplaceFormFlow } from '../containers/clusterForms/civo/marketplace';
 import { AwsFormFlow } from '../containers/clusterForms/aws';
 import { LocalFormFlow } from '../containers/clusterForms/k3d';
 import { DigitalOceanFormFlow } from '../containers/clusterForms/digitalocean';
@@ -17,6 +18,7 @@ export const FormFlowByType: Record<
   [InstallationType.LOCAL]: LocalFormFlow,
   [InstallationType.AWS]: AwsFormFlow,
   [InstallationType.CIVO]: CivoFormFlow,
+  [InstallationType.CIVO_MARKETPLACE]: CivoMarketplaceFormFlow,
   [InstallationType.DIGITAL_OCEAN]: DigitalOceanFormFlow,
   [InstallationType.VULTR]: VultrFormFlow,
 };
@@ -29,6 +31,13 @@ const getInstallationTitles = (
     return {
       0: `First, select your preferred Git provider`,
       1: `Let’s configure your local cluster`,
+      2: `Grab a cup of tea or coffee while we set up your cluster...`,
+      3: 'You’re all set!',
+    };
+  } else if (installType === InstallationType.CIVO_MARKETPLACE) {
+    return {
+      0: `Now, let’s get you authenticated`,
+      1: `Let’s configure your ${installType} - ${gitProvider} cluster`,
       2: `Grab a cup of tea or coffee while we set up your cluster...`,
       3: 'You’re all set!',
     };
@@ -74,7 +83,15 @@ const getInfoByType = (installType: InstallationType, step: number) => {
         ],
       },
     },
-
+    [InstallationType.CIVO_MARKETPLACE]: {
+      [CivoMarketpalceFormStep.AUTHENTICATION]: {
+        title: 'Prerequisites',
+        description: [
+          'Have an object store bucket available.',
+          'Establish a publicly routable DNS. <a href="https://www.civo.com/learn/configure-dns#adding-a-domain-name" target="_blank">Learn more</a>',
+        ],
+      },
+    },
     [InstallationType.DIGITAL_OCEAN]: {
       [FormStep.AUTHENTICATION]: {
         title: 'DigitalOcean Prerequisites',
@@ -116,6 +133,12 @@ const getStepTitles = (installType: InstallationType) => {
     [InstallationType.LOCAL]: ['Select platform', 'Cluster details', 'Provisioning', 'Ready'],
     [InstallationType.AWS]: defaultSteps,
     [InstallationType.CIVO]: defaultSteps,
+    [InstallationType.CIVO_MARKETPLACE]: [
+      'Authentication',
+      'Cluster details',
+      'Provisioning',
+      'Ready',
+    ],
     [InstallationType.DIGITAL_OCEAN]: defaultSteps,
     [InstallationType.VULTR]: defaultSteps,
   };
@@ -123,19 +146,38 @@ const getStepTitles = (installType: InstallationType) => {
   return stepsByInstallType[installType] || defaultSteps;
 };
 
-const getIsSetupStep = (type: InstallationType, step: FormStep | LocalFormStep) => {
-  const isLocalSetupStep = type === InstallationType.LOCAL && step === LocalFormStep.SETUP;
-  const isSetupStep = type !== InstallationType.LOCAL && step === FormStep.SETUP;
-
-  return isLocalSetupStep || isSetupStep;
+const getIsAuthStep = (
+  type: InstallationType,
+  step: FormStep | LocalFormStep | CivoMarketpalceFormStep,
+) => {
+  return (
+    (type !== InstallationType.LOCAL && step === FormStep.AUTHENTICATION) ||
+    (type === InstallationType.CIVO_MARKETPLACE && step === CivoMarketpalceFormStep.AUTHENTICATION)
+  );
 };
 
-const getIsProvisionStep = (type: InstallationType, step: FormStep | LocalFormStep) => {
+const getIsSetupStep = (
+  type: InstallationType,
+  step: FormStep | LocalFormStep | CivoMarketpalceFormStep,
+) => {
+  const isLocalSetupStep = type === InstallationType.LOCAL && step === LocalFormStep.SETUP;
+  const isSetupStep = type !== InstallationType.LOCAL && step === FormStep.SETUP;
+  const isCivoMarketplaceSetup =
+    type === InstallationType.CIVO_MARKETPLACE && step === CivoMarketpalceFormStep.SETUP;
+
+  return isLocalSetupStep || isSetupStep || isCivoMarketplaceSetup;
+};
+
+const getIsProvisionStep = (
+  type: InstallationType,
+  step: FormStep | LocalFormStep | CivoMarketpalceFormStep,
+) => {
   const isLocalProvisionStep =
     type === InstallationType.LOCAL && step === LocalFormStep.PROVISIONING;
   const isProvisionStep = type !== InstallationType.LOCAL && step === FormStep.PROVISIONING;
-
-  return isLocalProvisionStep || isProvisionStep;
+  const isCivoMarketplaceProvisionStep =
+    type === InstallationType.CIVO_MARKETPLACE && step === CivoMarketpalceFormStep.PROVISIONING;
+  return isLocalProvisionStep || isProvisionStep || isCivoMarketplaceProvisionStep;
 };
 
 const getApiKeyInfo = (type: InstallationType) => {
@@ -164,6 +206,17 @@ const getApiKeyInfo = (type: InstallationType) => {
       ],
     },
     [InstallationType.CIVO]: {
+      authKey: 'civo_auth',
+      fieldKeys: [
+        {
+          name: 'token',
+          label: 'CIVO API key',
+          helperText:
+            'Retrieve your key at <a href="https://dashboard.civo.com/security" target="_blank">https://dashboard.civo.com/security</a>',
+        },
+      ],
+    },
+    [InstallationType.CIVO_MARKETPLACE]: {
       authKey: 'civo_auth',
       fieldKeys: [
         {
@@ -215,13 +268,14 @@ const getApiKeyInfo = (type: InstallationType) => {
 
 export function useInstallation(type: InstallationType, gitProvider: GitProvider, step: number) {
   const formByType = useMemo(() => {
-    return FormFlowByType[type];
+    return FormFlowByType[type] || FormFlowByType['civo-marketplace'];
   }, [type]);
 
   return {
     stepTitles: getStepTitles(type),
     installTitles: getInstallationTitles(type, gitProvider),
     info: getInfoByType(type, step),
+    isAuthStep: getIsAuthStep(type, step),
     isSetupStep: getIsSetupStep(type, step),
     isProvisionStep: getIsProvisionStep(type, step),
     formFlow: formByType as FunctionComponent<FormFlowProps<InstallValues>>,

@@ -4,6 +4,7 @@ import type { AppProps } from 'next/app';
 import Head from 'next/head';
 import { ThemeProvider as ThemeProviderMUI } from '@mui/material';
 import styled, { ThemeProvider } from 'styled-components';
+// import { PersistGate } from 'redux-persist/integration/react';
 
 import { muiTheme } from '../theme/muiTheme';
 import { theme } from '../theme';

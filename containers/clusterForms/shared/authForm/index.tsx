@@ -1,16 +1,20 @@
 import React, { ChangeEvent, FunctionComponent, useEffect, useMemo, useState } from 'react';
 import debounce from 'lodash/debounce';
+import { Required } from 'components/textField/textField.styled';
+import GitProviderButton from 'components/gitProviderButton';
 
+import Typography from '../../../../components/typography';
 import { useInstallation } from '../../../../hooks/useInstallation';
 // import LearnMore from '../../../../components/learnMore';
 import ControlledPassword from '../../../../components/controlledFields/Password';
 import ControlledTextField from '../../../../components/controlledFields/TextField';
 import ControlledAutocomplete from '../../../../components/controlledFields/AutoComplete';
 import { useAppDispatch, useAppSelector } from '../../../../redux/store';
-import { GitProvider } from '../../../../types';
+import { GIT_PROVIDERS, GitProvider } from '../../../../types';
 import { FormFlowProps } from '../../../../types/provision';
 import { InstallValues, InstallationType } from '../../../../types/redux/index';
 import { FormStep } from '../../../../constants/installation';
+import { EXCLUSIVE_PLUM } from '../../../../constants/colors';
 import {
   getGitHubOrgRepositories,
   getGitHubOrgTeams,
@@ -25,7 +29,11 @@ import {
   clearUserError,
   setGitOwner,
   clearGitState,
+  setIsGitSelected,
 } from '../../../../redux/slices/git.slice';
+import { setGitProvider } from '../../../../redux/slices/installation.slice';
+
+import { FormContainer, GitContainer, GitUserField, GitUserFieldInput } from './authForm.styled';
 
 const AuthForm: FunctionComponent<FormFlowProps<InstallValues>> = ({
   control,
@@ -33,6 +41,8 @@ const AuthForm: FunctionComponent<FormFlowProps<InstallValues>> = ({
   setValue,
 }) => {
   const [isGitRequested, setIsGitRequested] = useState<boolean>();
+  const [gitUserName, setGitUserName] = useState<string>();
+
   const dispatch = useAppDispatch();
 
   const {
@@ -43,13 +53,16 @@ const AuthForm: FunctionComponent<FormFlowProps<InstallValues>> = ({
     gitlabGroups,
     gitStateLoading,
     installationType,
+    isGitSelected,
     isTokenValid,
     token = '',
-  } = useAppSelector(({ installation, git }) => ({
+  } = useAppSelector(({ config, installation, git }) => ({
     currentStep: installation.installationStep,
     installationType: installation.installType,
     gitProvider: installation.gitProvider,
+    isGitSelected: git.isGitSelected,
     gitStateLoading: git.isLoading,
+    installMethod: config.installMethod,
     ...git,
   }));
 
@@ -100,7 +113,7 @@ const AuthForm: FunctionComponent<FormFlowProps<InstallValues>> = ({
     const { value } = target;
 
     if (isTokenValid) {
-      reset && reset({ userName: '' });
+      setGitUserName('');
       await dispatch(clearGitState());
     }
 
@@ -116,9 +129,17 @@ const AuthForm: FunctionComponent<FormFlowProps<InstallValues>> = ({
     [isGitHub],
   );
 
+  const handleGitProviderChange = (provider: GitProvider) => {
+    setGitUserName('');
+    reset && reset({ gitToken: '', gitOwner: '' });
+    dispatch(clearGitState());
+    dispatch(setIsGitSelected(true));
+    dispatch(setGitProvider(provider));
+  };
+
   useEffect(() => {
     if (githubUser?.login || gitlabUser?.name) {
-      setValue('userName', githubUser?.login || gitlabUser?.name);
+      setGitUserName(githubUser?.login || gitlabUser?.name);
     }
   }, [dispatch, githubUser, gitlabUser, setValue]);
 
@@ -130,71 +151,96 @@ const AuthForm: FunctionComponent<FormFlowProps<InstallValues>> = ({
 
   return (
     <>
-      <ControlledPassword
-        control={control}
-        name="gitToken"
-        label={`${gitLabel} personal access token`}
-        required
-        rules={{
-          required: true,
-        }}
-        error={isGitRequested && !isTokenValid}
-        onBlur={handleGitTokenBlur}
-        onChange={handleOnChangeToken}
-        onErrorText="Invalid token."
-      />
-      <ControlledTextField
-        control={control}
-        name="userName"
-        label={`Username associated with ${gitLabel} token`}
-        disabled
-        rules={{
-          required: false,
-        }}
-      />
-      {isGitHub ? (
-        <ControlledAutocomplete
-          control={control}
-          required
-          name="gitOwner"
-          rules={{ required: true }}
-          onChange={validateGitOwner}
-          options={
-            githubUserOrganizations &&
-            githubUserOrganizations.map(({ login }) => ({ label: login, value: login }))
-          }
-          loading={gitStateLoading}
-          label="GitHub organization name"
-          placeholder="Select"
-        />
-      ) : (
-        <ControlledAutocomplete
-          control={control}
-          required
-          name="gitOwner"
-          rules={{ required: true }}
-          onChange={validateGitOwner}
-          options={
-            gitlabGroups && gitlabGroups.map(({ name, path }) => ({ label: name, value: path }))
-          }
-          loading={gitStateLoading}
-          label="GitLab group name"
-          placeholder="Select"
-        />
+      {installationType === InstallationType.CIVO_MARKETPLACE && (
+        <div>
+          <Typography
+            variant="labelLarge"
+            color={EXCLUSIVE_PLUM}
+            sx={{ display: 'flex', gap: '6px' }}
+          >
+            Select your preferred GIT provider <Required>*</Required>
+          </Typography>
+          <GitContainer>
+            {GIT_PROVIDERS.map((provider) => (
+              <GitProviderButton
+                key={provider}
+                option={provider}
+                active={provider === gitProvider && isGitSelected}
+                onClick={() => handleGitProviderChange(provider)}
+              />
+            ))}
+          </GitContainer>
+        </div>
       )}
-      {apiKeyInfo?.fieldKeys.map(({ label, name, helperText }) => (
+      <FormContainer
+        isVisible={
+          installationType !== InstallationType.CIVO_MARKETPLACE ||
+          (installationType === InstallationType.CIVO_MARKETPLACE && isGitSelected)
+        }
+      >
         <ControlledPassword
-          key={name}
           control={control}
-          name={`${apiKeyInfo.authKey}.${name}`}
-          label={label}
-          helperText={helperText}
+          name="gitToken"
+          label={`${gitLabel} personal access token`}
           required
           rules={{
             required: true,
           }}
+          error={isGitRequested && !isTokenValid}
+          onBlur={handleGitTokenBlur}
+          onChange={handleOnChangeToken}
+          onErrorText="Invalid token."
         />
-      ))}
+        <GitUserField>
+          <Typography
+            variant="labelLarge"
+            sx={{ display: 'flex', gap: '4px' }}
+            color={EXCLUSIVE_PLUM}
+          >{`Username associated with ${gitLabel} token`}</Typography>
+          <GitUserFieldInput>{gitUserName}</GitUserFieldInput>
+        </GitUserField>
+        {isGitHub ? (
+          <ControlledAutocomplete
+            control={control}
+            required
+            name="gitOwner"
+            rules={{ required: true }}
+            onChange={validateGitOwner}
+            options={
+              githubUserOrganizations &&
+              githubUserOrganizations.map(({ login }) => ({ label: login, value: login }))
+            }
+            loading={gitStateLoading}
+            label="GitHub organization name"
+          />
+        ) : (
+          <ControlledAutocomplete
+            control={control}
+            required
+            name="gitOwner"
+            rules={{ required: true }}
+            onChange={validateGitOwner}
+            options={
+              gitlabGroups && gitlabGroups.map(({ name, path }) => ({ label: name, value: path }))
+            }
+            loading={gitStateLoading}
+            label="GitLab group name"
+          />
+        )}
+        {apiKeyInfo?.fieldKeys.map(({ label, name, helperText }) => (
+          <ControlledPassword
+            key={name}
+            control={control}
+            name={`${apiKeyInfo.authKey}.${name}`}
+            label={label}
+            helperText={helperText}
+            required
+            rules={{
+              required: true,
+            }}
+          />
+        ))}
+      </FormContainer>
       {/* <LearnMore description="Learn more about" href="" linkTitle="authentication" /> */}
     </>
   );

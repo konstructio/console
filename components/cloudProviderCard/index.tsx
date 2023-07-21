@@ -25,7 +25,7 @@ const PROVIDER_OPTIONS: Record<
     width: number;
     learnMoreLink?: string;
     beta?: boolean;
-  }
+  } | null
 > = {
   [InstallationType.LOCAL]: {
     logoSrc: k3dLogo,
@@ -54,6 +54,7 @@ const PROVIDER_OPTIONS: Record<
     height: 17,
     width: 50,
   },
+  [InstallationType.CIVO_MARKETPLACE]: null,
   [InstallationType.DIGITAL_OCEAN]: {
     logoSrc: digitalOceanLogo,
     label: 'DigitalOcean',

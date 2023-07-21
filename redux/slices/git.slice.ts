@@ -23,6 +23,7 @@ export interface GitState {
   errors: Array<string>;
   token?: string;
   gitOwner?: string;
+  isGitSelected?: boolean;
 }
 
 export const initialState: GitState = {
@@ -58,6 +59,9 @@ const gitSlice = createSlice({
       state.isTokenValid = false;
       state.errors = [];
       state.token = undefined;
+    },
+    setIsGitSelected: (state, action) => {
+      state.isGitSelected = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -157,6 +161,7 @@ const gitSlice = createSlice({
   },
 });
 
-export const { clearGitState, clearUserError, setGitOwner, setToken } = gitSlice.actions;
+export const { clearGitState, clearUserError, setIsGitSelected, setGitOwner, setToken } =
+  gitSlice.actions;
 
 export const gitReducer = gitSlice.reducer;
