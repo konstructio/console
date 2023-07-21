@@ -75,6 +75,9 @@ export const createCluster = createAsyncThunk<
     git_token: values?.gitToken,
     gitops_template_url: values?.gitopsTemplateUrl,
     gitops_template_branch: values?.gitopsTemplateBranch,
+    git_protocol: values?.useHttps ? 'https' : 'ssh',
+    dns_provider: values?.dnsProvider,
+    cloudflare_api_token: values?.cloudflareToken,
     type: 'mgmt',
     aws_auth: {
       ...values?.aws_auth,
