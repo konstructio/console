@@ -1,5 +1,6 @@
-import { GIT_PROVIDERS } from '../enums/utils';
-import theme from '../theme';
+import { GitProvider } from 'types';
+
+import { theme } from '../theme';
 
 const {
   colors: { bleachedSilk, caribeanSea, ferntastic, greenJelly, white },
@@ -79,7 +80,7 @@ export const buildCardsContent = ({
       : `${argoUrl}/auth/login?return_url=${encodeURIComponent(`${argoUrl}/applications/`)}`;
 
   const gitTile =
-    gitProvider === GIT_PROVIDERS.GITHUB
+    gitProvider === GitProvider.GITHUB
       ? {
           appName: 'GitHub',
           tags: [

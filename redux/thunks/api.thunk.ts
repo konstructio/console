@@ -2,10 +2,10 @@ import axios from 'axios';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { FieldValues } from 'react-hook-form';
 import sortBy from 'lodash/sortBy';
-import queryString from 'query-string';
 
-import { formatCloudProvider } from '../../utils';
 import { AppDispatch, RootState } from '../store';
+import { formatCloudProvider } from '../../utils';
+import { createQueryString } from '../../utils/url/formatDomain';
 import {
   Cluster,
   ClusterRequestProps,
@@ -112,7 +112,7 @@ export const getCluster = createAsyncThunk<
   }
 >('api/cluster/get', async ({ clusterName }) => {
   const res = await axios.get(
-    `/api/proxy?${queryString.stringify({ url: `/cluster/${clusterName || 'kubefirst'}` })}`,
+    `/api/proxy?${createQueryString('url', `/cluster/${clusterName || 'kubefirst'}`)}`,
   );
 
   if ('error' in res) {
@@ -129,7 +129,7 @@ export const getClusters = createAsyncThunk<
     state: RootState;
   }
 >('api/cluster/getClusters', async () => {
-  const res = await axios.get(`/api/proxy?${queryString.stringify({ url: `/cluster` })}`);
+  const res = await axios.get(`/api/proxy?${createQueryString('url', `/cluster`)}`);
 
   if ('error' in res) {
     throw res.error;
@@ -147,7 +147,7 @@ export const deleteCluster = createAsyncThunk<
   }
 >('api/cluster/delete', async ({ clusterName }) => {
   const res = await axios.delete(
-    `/api/proxy?${queryString.stringify({ url: `/cluster/${clusterName || 'kubefirst'}` })}`,
+    `/api/proxy?${createQueryString('url', `/cluster/${clusterName || 'kubefirst'}`)}`,
   );
 
   if ('error' in res) {
@@ -164,9 +164,7 @@ export const getClusterServices = createAsyncThunk<
     state: RootState;
   }
 >('api/cluster/getClusterServices', async ({ clusterName }) => {
-  const res = await axios.get(
-    `/api/proxy?${queryString.stringify({ url: `/services/${clusterName}` })}`,
-  );
+  const res = await axios.get(`/api/proxy?${createQueryString('url', `/services/${clusterName}`)}`);
 
   if ('error' in res) {
     throw res.error;
@@ -182,9 +180,7 @@ export const getGitOpsCatalogApps = createAsyncThunk<
     state: RootState;
   }
 >('api/getGitOpsCatalogApps', async () => {
-  const res = await axios.get(
-    `/api/proxy?${queryString.stringify({ url: `/gitops-catalog/apps` })}`,
-  );
+  const res = await axios.get(`/api/proxy?${createQueryString('url', `/gitops-catalog/apps`)}`);
 
   if ('error' in res) {
     throw res.error;

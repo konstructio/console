@@ -73,14 +73,15 @@ const Navigation: FunctionComponent<NavigationProps> = ({
         </KubefirstTitle>
         {domLoaded && (
           <MenuContainer>
-            {routes.map(({ icon, path, title }) => (
-              <Link href={path} key={path}>
-                <MenuItem isActive={handleIsActiveItem(path)}>
-                  {icon}
-                  <Title variant="body1">{title}</Title>
-                </MenuItem>
-              </Link>
-            ))}
+            {routes &&
+              routes.map(({ icon, path, title }) => (
+                <Link href={path} key={path}>
+                  <MenuItem isActive={handleIsActiveItem(path)}>
+                    {icon}
+                    <Title variant="body1">{title}</Title>
+                  </MenuItem>
+                </Link>
+              ))}
           </MenuContainer>
         )}
       </div>

@@ -1,8 +1,8 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { FunctionComponent, useEffect, useMemo, useState } from 'react';
 import { Slider as SliderMui, styled } from '@mui/material';
 import moment from 'moment';
-import { useConnector } from 'react-instantsearch-hooks-web';
-import connectRange from 'instantsearch.js/es/connectors/range/connectRange';
+import { RangeInputProps, useRange } from 'react-instantsearch-hooks-web';
+import { RangeBoundaries } from 'instantsearch.js/es/connectors/range/connectRange';
 
 import { PORT_GORE, PRIMARY, SALTBOX_BLUE } from '../../constants/colors';
 
@@ -30,17 +30,15 @@ const Slider = styled(SliderMui)(({ theme }) => ({
   },
 }));
 
-export function useRangeSlider(props) {
-  return useConnector(connectRange, props);
-}
+const RangeSlider: FunctionComponent<RangeInputProps> = (props: RangeInputProps) => {
+  const { range, refine } = useRange(props);
+  const { min, max } = range;
 
-export function RangeSlider(props) {
-  const { range, refine } = useRangeSlider(props);
-  const [value, setValue] = React.useState<number[]>([range.min, range.max]);
+  const [value, setValue] = useState([min as number, max as number]);
 
   const handleChange = (event: Event, newValue: number | number[]) => {
     setValue(newValue as number[]);
-    refine(value);
+    refine(value as RangeBoundaries);
   };
 
   const start = useMemo(() => Math.floor(moment.duration(value[0]).asMinutes()), [value]);
@@ -65,4 +63,6 @@ export function RangeSlider(props) {
       />
     </SliderContainer>
   );
-}
+};
+
+export default RangeSlider;
