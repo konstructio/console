@@ -1,6 +1,6 @@
 import MockAdapter from 'axios-mock-adapter';
 
-import { githubApi } from '../../api';
+import { githubApi } from '../../services/github';
 import { mockGithubUser } from '../../tests/mocks/mockGithubUser';
 import { mockGithubUserOrganizations } from '../../tests/mocks/mockGithubUserOrganizations';
 

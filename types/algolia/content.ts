@@ -1,4 +1,6 @@
-export interface Content {
+import { BaseHit } from 'instantsearch.js';
+
+export interface Content extends BaseHit {
   categories: Array<string>;
   duration: number;
   id: string;

@@ -12,7 +12,7 @@ import { BISCAY, SALTBOX_BLUE } from '../../constants/colors';
 import { Body, Container, Filter, Header } from './kubefirstContent.styled';
 import Hits from './hits';
 import RefinementList from './refinementList';
-import { RangeSlider } from './slider';
+import RangeSlider from './slider';
 
 export interface KubefirstContentProps {
   closeModal: () => void;

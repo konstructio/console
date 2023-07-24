@@ -6,7 +6,11 @@ import Services from '../containers/services';
 import { useAppSelector } from '../redux/store';
 export { getServerSideProps } from '../hoc/withConfig';
 
-const ServicesPage: FunctionComponent = ({ isClusterZero }) => {
+export interface ServicesPageProps {
+  isClusterZero: boolean;
+}
+
+const ServicesPage: FunctionComponent<ServicesPageProps> = ({ isClusterZero }) => {
   const { push } = useRouter();
 
   const { selectedCluster, clusters } = useAppSelector(({ cluster, api }) => ({

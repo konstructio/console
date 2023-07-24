@@ -3732,6 +3732,14 @@
     expect "^29.0.0"
     pretty-format "^29.0.0"
 
+"@types/jest@^29.5.3":
+  version "29.5.3"
+  resolved "https://registry.yarnpkg.com/@types/jest/-/jest-29.5.3.tgz#7a35dc0044ffb8b56325c6802a4781a626b05777"
+  integrity sha512-1Nq7YrO/vJE/FYnqYyw0FS8LdrjExSgIiHyKg7xPpn+yi8Q4huZryKnkJatN1ZRH89Kw2v33/8ZMB7DuZeSLlA==
+  dependencies:
+    expect "^29.0.0"
+    pretty-format "^29.0.0"
+
 "@types/jsdom@^20.0.0":
   version "20.0.1"
   resolved "https://registry.yarnpkg.com/@types/jsdom/-/jsdom-20.0.1.tgz#07c14bc19bd2f918c1929541cdaacae894744808"
@@ -4490,6 +4498,13 @@ ajv@^6.1.0, ajv@^6.10.0, ajv@^6.10.2, ajv@^6.12.2, ajv@^6.12.4, ajv@^6.12.5:
     fast-json-stable-stringify "^2.0.0"
     json-schema-traverse "^0.4.1"
     uri-js "^4.2.2"
+
+algoliasearch-helper@3.13.5:
+  version "3.13.5"
+  resolved "https://registry.yarnpkg.com/algoliasearch-helper/-/algoliasearch-helper-3.13.5.tgz#0e20f6af3b2cb918e0b8bcb6f7f233bdbb53be1d"
+  integrity sha512-UsiDw8/RN3S/46EEJ6s5fX/vCNPlMNPQrB0TL/105Umyc+UdgbErCTaSf46pcVDIctAFN+9HF7txEg1eMHUvww==
+  dependencies:
+    "@algolia/events" "^4.0.1"
 
 algoliasearch-helper@^3.13.0:
   version "3.13.0"
@@ -6346,11 +6361,6 @@ decode-uri-component@^0.2.0:
   resolved "https://registry.yarnpkg.com/decode-uri-component/-/decode-uri-component-0.2.2.tgz#e69dbe25d37941171dd540e024c444cd5188e1e9"
   integrity sha512-FqUYQ+8o158GyGTrMFJms9qh3CqTKvAqgqsTnkLI8sKu0028orqBhxNMFkFen0zGyg6epACD32pjVk58ngIErQ==
 
-decode-uri-component@^0.4.1:
-  version "0.4.1"
-  resolved "https://registry.yarnpkg.com/decode-uri-component/-/decode-uri-component-0.4.1.tgz#2ac4859663c704be22bf7db760a1494a49ab2cc5"
-  integrity sha512-+8VxcR21HhTy8nOt6jf20w0c9CADrw1O8d+VZ/YzzCt4bJ3uBjw+D1q2osAB8RnpwwaeYBxy0HyKQxD5JBMuuQ==
-
 decompress-response@^6.0.0:
   version "6.0.0"
   resolved "https://registry.yarnpkg.com/decompress-response/-/decompress-response-6.0.0.tgz#ca387612ddb7e104bd16d85aab00d5ecf09c66fc"
@@ -7583,11 +7593,6 @@ fill-range@^7.0.1:
   dependencies:
     to-regex-range "^5.0.1"
 
-filter-obj@^5.1.0:
-  version "5.1.0"
-  resolved "https://registry.yarnpkg.com/filter-obj/-/filter-obj-5.1.0.tgz#5bd89676000a713d7db2e197f660274428e524ed"
-  integrity sha512-qWeTREPoT7I0bifpPUXtxkZJ1XJzxWtfoWWkdVGqa+eCr3SHW/Ocp89o8vLvbUuQnadybJpjOKu4V+RwO6sGng==
-
 finalhandler@1.2.0:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/finalhandler/-/finalhandler-1.2.0.tgz#7d23fe5731b207b4640e4fcd00aec1f9207a7b32"
@@ -8594,6 +8599,25 @@ instantsearch.js@4.56.0:
     "@types/hogan.js" "^3.0.0"
     "@types/qs" "^6.5.3"
     algoliasearch-helper "^3.13.0"
+    hogan.js "^3.0.2"
+    htm "^3.0.0"
+    preact "^10.10.0"
+    qs "^6.5.1 < 6.10"
+    search-insights "^2.6.0"
+
+instantsearch.js@^4.56.7:
+  version "4.56.7"
+  resolved "https://registry.yarnpkg.com/instantsearch.js/-/instantsearch.js-4.56.7.tgz#3eb4f2cbcf48c89805b835d91ccd840b2b50c84c"
+  integrity sha512-3zDC7qmRKz3w6UEsO95maeuJ6rVL7AyTJIDZ3ET9nYYGUuSk5zJozrBR9ag/aazLW2oXyLrrdwhF0qlmuCRDVA==
+  dependencies:
+    "@algolia/events" "^4.0.1"
+    "@algolia/ui-components-highlight-vdom" "^1.2.1"
+    "@algolia/ui-components-shared" "^1.2.1"
+    "@types/dom-speech-recognition" "^0.0.1"
+    "@types/google.maps" "^3.45.3"
+    "@types/hogan.js" "^3.0.0"
+    "@types/qs" "^6.5.3"
+    algoliasearch-helper "3.13.5"
     hogan.js "^3.0.2"
     htm "^3.0.0"
     preact "^10.10.0"
@@ -12079,15 +12103,6 @@ qs@^6.10.0:
   resolved "https://registry.yarnpkg.com/qs/-/qs-6.9.7.tgz#4610846871485e1e048f44ae3b94033f0e675afe"
   integrity sha512-IhMFgUmuNpyRfxA90umL7ByLlgRXu6tIfKPpF5TmcfRLlLCckfP/g3IQmju6jjpu+Hh8rA+2p6A27ZSPOOHdKw==
 
-query-string@^8.1.0:
-  version "8.1.0"
-  resolved "https://registry.yarnpkg.com/query-string/-/query-string-8.1.0.tgz#e7f95367737219544cd360a11a4f4ca03836e115"
-  integrity sha512-BFQeWxJOZxZGix7y+SByG3F36dA0AbTy9o6pSmKFcFz7DAj0re9Frkty3saBn3nHo3D0oZJ/+rx3r8H8r8Jbpw==
-  dependencies:
-    decode-uri-component "^0.4.1"
-    filter-obj "^5.1.0"
-    split-on-first "^3.0.0"
-
 querystring-es3@^0.2.0:
   version "0.2.1"
   resolved "https://registry.yarnpkg.com/querystring-es3/-/querystring-es3-0.2.1.tgz#9ec61f79049875707d69414596fd907a4d711e73"
@@ -13198,11 +13213,6 @@ spdx-license-ids@^3.0.0:
   version "3.0.13"
   resolved "https://registry.yarnpkg.com/spdx-license-ids/-/spdx-license-ids-3.0.13.tgz#7189a474c46f8d47c7b0da4b987bb45e908bd2d5"
   integrity sha512-XkD+zwiqXHikFZm4AX/7JSCXA98U5Db4AFd5XUg/+9UNtnH75+Z9KxtpYiJZx36mUDVOwH83pl7yvCer6ewM3w==
-
-split-on-first@^3.0.0:
-  version "3.0.0"
-  resolved "https://registry.yarnpkg.com/split-on-first/-/split-on-first-3.0.0.tgz#f04959c9ea8101b9b0bbf35a61b9ebea784a23e7"
-  integrity sha512-qxQJTx2ryR0Dw0ITYyekNQWpz6f8dGd7vffGNflQQ3Iqj9NJ6qiZ7ELpZsJ/QBhIVAiDfXdag3+Gp8RvWa62AA==
 
 split-string@^3.0.1, split-string@^3.0.2:
   version "3.1.0"

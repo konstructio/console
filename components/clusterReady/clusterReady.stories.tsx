@@ -1,13 +1,17 @@
 import React from 'react';
-import { Story } from '@storybook/react';
+import { noop } from 'lodash';
+import { ComponentStory } from '@storybook/react';
 
-import ClusterRunningMessage from '.';
+import ClusterReady from '.';
 
 export default {
-  title: 'Components/ClusterRunningMessage',
-  component: ClusterRunningMessage,
+  title: 'Components/ClusterReady',
+  component: ClusterReady,
 };
 
-const DefaultTemplate: Story = () => <ClusterRunningMessage />;
+const DefaultTemplate: ComponentStory<typeof ClusterReady> = (args) => <ClusterReady {...args} />;
 
 export const Default = DefaultTemplate.bind({});
+Default.args = {
+  onOpenConsole: noop,
+};

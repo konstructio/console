@@ -3,11 +3,8 @@ import Image from 'next/image';
 
 import Typography from '../typography';
 import Button from '../../components/button';
-import boxImgSrc from '../../public/static/box.svg';
 
 import { Container, Link, Title } from './clusterReady.styled';
-
-const boxImageSrc = process.env.STORYBOOK_MODE ? boxImgSrc : '/static/box.svg';
 
 export interface ClusterRunningMessageProps {
   clusterName?: string;
@@ -21,7 +18,7 @@ const ClusterReady: FunctionComponent<ClusterRunningMessageProps> = ({
   onOpenConsole,
 }) => (
   <Container>
-    <Image alt="box" src={boxImageSrc} width={170} height={160} />
+    <Image alt="box" src="/static/box.svg" width={170} height={160} />
     <Title>
       <Typography variant="body1">
         Cluster <strong>{clusterName || '<cluster identifier>'}</strong> is now up and running.

@@ -1,7 +1,7 @@
 import React, { FunctionComponent } from 'react';
-import { getClusters } from 'redux/thunks/api.thunk';
 import { useRouter } from 'next/router';
 
+import { getClusters } from '../../../../redux/thunks/api.thunk';
 import { useAppDispatch } from '../../../../redux/store';
 import ClusterReady from '../../../../components/clusterReady';
 

@@ -71,6 +71,13 @@ const gitSlice = createSlice({
         state.githubUser = action.payload;
         state.isTokenValid = true;
       })
+      .addCase(getGithubUser.rejected, (state, action) => {
+        state.isTokenValid = false;
+
+        if (action.error.message) {
+          state.errors.push('Failed to get user');
+        }
+      })
       .addCase(getGithubUserOrganizations.pending, (state) => {
         state.isLoading = true;
       })

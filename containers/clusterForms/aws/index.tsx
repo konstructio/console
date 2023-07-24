@@ -1,9 +1,9 @@
 import React, { FunctionComponent } from 'react';
-import { FormFlowProps } from 'types/provision';
 
 import TerminalLogs from '../../terminalLogs';
 import { FormStep } from '../../../constants/installation';
 import { InstallValues } from '../../../types/redux';
+import { FormFlowProps } from '../../../types/provision';
 import AuthForm from '../shared/authForm';
 import ClusterRunning from '../shared/clusterRunning';
 

@@ -10,7 +10,7 @@ import { VOLCANIC_SAND } from '../../constants/colors';
 import { RefinementContainer } from './kubefirstContent.styled';
 
 const RefinementList: FunctionComponent = () => {
-  const { items, refine } = useRefinementList<Array<string>>({ attribute: 'categories' });
+  const { items, refine } = useRefinementList({ attribute: 'categories' });
 
   return (
     <RefinementContainer>
