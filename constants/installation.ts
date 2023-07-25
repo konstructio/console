@@ -1,5 +1,12 @@
 import { AuthKeys, InstallationInfo, InstallationType } from '../types/redux';
 
+export enum MarketplaceFormStep {
+  AUTHENTICATION = 0,
+  SETUP = 1,
+  PROVISIONING = 2,
+  READY = 3,
+}
+
 export enum LocalFormStep {
   SETUP = 1,
   PROVISIONING = 2,
@@ -11,13 +18,6 @@ export enum FormStep {
   SETUP = 2,
   PROVISIONING = 3,
   READY = 4,
-}
-
-export enum CivoMarketpalceFormStep {
-  AUTHENTICATION = 0,
-  SETUP = 1,
-  PROVISIONING = 2,
-  READY = 3,
 }
 
 export const INFO_INSTALLATION_TYPES: Record<InstallationType, Record<number, InstallationInfo>> = {
@@ -47,15 +47,6 @@ export const INFO_INSTALLATION_TYPES: Record<InstallationType, Record<number, In
       title: 'Civo Prerequisites',
       description: [
         '<a href="https://dashboard.civo.com/signup" target="_blank">Create a Civo account</a> in which you are an account owner.',
-        'Establish a publicly routable DNS. <a href="https://www.civo.com/learn/configure-dns#adding-a-domain-name" target="_blank">Learn more</a>',
-      ],
-    },
-  },
-  [InstallationType.CIVO_MARKETPLACE]: {
-    [CivoMarketpalceFormStep.AUTHENTICATION]: {
-      title: 'Prerequisites',
-      description: [
-        'Have an object store bucket available.',
         'Establish a publicly routable DNS. <a href="https://www.civo.com/learn/configure-dns#adding-a-domain-name" target="_blank">Learn more</a>',
       ],
     },
@@ -118,17 +109,6 @@ export const INSTALLATION_TYPE_API_KEYS: Record<InstallationType, AuthKeys | nul
       },
     ],
   },
-  [InstallationType.CIVO_MARKETPLACE]: {
-    authKey: 'civo_auth',
-    fieldKeys: [
-      {
-        name: 'token',
-        label: 'CIVO API key',
-        helperText:
-          'Retrieve your key at <a href="https://dashboard.civo.com/security" target="_blank">https://dashboard.civo.com/security</a>',
-      },
-    ],
-  },
   [InstallationType.DIGITAL_OCEAN]: {
     authKey: 'do_auth',
     fieldKeys: [
@@ -173,16 +153,12 @@ export const DEFAULT_STEPS = [
   'Ready',
 ];
 
+export const MARKETPLACE_STEPS = ['Authentication', 'Cluster details', 'Provisioning', 'Ready'];
+
 export const INSTALL_TYPE_STEPS: Record<InstallationType, Array<string>> = {
   [InstallationType.LOCAL]: ['Select platform', 'Cluster details', 'Provisioning', 'Ready'],
   [InstallationType.AWS]: DEFAULT_STEPS,
   [InstallationType.CIVO]: DEFAULT_STEPS,
-  [InstallationType.CIVO_MARKETPLACE]: [
-    'Authentication',
-    'Cluster details',
-    'Provisioning',
-    'Ready',
-  ],
   [InstallationType.DIGITAL_OCEAN]: DEFAULT_STEPS,
   [InstallationType.VULTR]: DEFAULT_STEPS,
 };

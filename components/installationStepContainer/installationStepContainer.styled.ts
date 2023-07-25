@@ -42,7 +42,7 @@ export const Content = styled(Column)<{ hasInfo?: boolean; isProvisionStep: bool
     ${({ hasInfo }) =>
       hasInfo &&
       `
-        align-items: baseline;
+        align-items: flex-start;
         flex-direction: row;
         justify-content: center;
     `}

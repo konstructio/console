@@ -1,7 +1,6 @@
 import { FunctionComponent, useMemo } from 'react';
 
 import {
-  CivoMarketpalceFormStep,
   DEFAULT_STEPS,
   FormStep,
   INFO_INSTALLATION_TYPES,
@@ -9,11 +8,12 @@ import {
   INSTALL_TYPE_STEPS,
   LOCAL_INSTALL_TITLES,
   LocalFormStep,
+  MARKETPLACE_STEPS,
+  MarketplaceFormStep,
 } from '../constants/installation';
 import { GitProvider } from '../types';
 import { InstallValues, InstallationType } from '../types/redux';
 import { CivoFormFlow } from '../containers/clusterForms/civo';
-import { CivoMarketplaceFormFlow } from '../containers/clusterForms/civo/marketplace';
 import { AwsFormFlow } from '../containers/clusterForms/aws';
 import { LocalFormFlow } from '../containers/clusterForms/k3d';
 import { DigitalOceanFormFlow } from '../containers/clusterForms/digitalocean';
@@ -27,7 +27,6 @@ export const FormFlowByType: Record<
   [InstallationType.LOCAL]: LocalFormFlow,
   [InstallationType.AWS]: AwsFormFlow,
   [InstallationType.CIVO]: CivoFormFlow,
-  [InstallationType.CIVO_MARKETPLACE]: CivoMarketplaceFormFlow,
   [InstallationType.DIGITAL_OCEAN]: DigitalOceanFormFlow,
   [InstallationType.VULTR]: VultrFormFlow,
 };
@@ -35,10 +34,13 @@ export const FormFlowByType: Record<
 const getInstallationTitles = (
   installType: InstallationType,
   gitProvider: GitProvider,
+  isMarketplace: boolean,
 ): Record<number, string> => {
   if (installType === InstallationType.LOCAL) {
     return LOCAL_INSTALL_TITLES;
-  } else if (installType === InstallationType.CIVO_MARKETPLACE) {
+  }
+
+  if (isMarketplace) {
     return {
       0: `Now, let’s get you authenticated`,
       1: `Let’s configure your ${installType} - ${gitProvider} cluster`,
@@ -46,6 +48,7 @@ const getInstallationTitles = (
       3: 'You’re all set!',
     };
   }
+
   return {
     0: `First, select your preferred Git provider`,
     1: `Now, let’s get you authenticated`,
@@ -55,72 +58,82 @@ const getInstallationTitles = (
   };
 };
 
-const getInfoByType = (installType: InstallationType, step: number) => {
+const getInfoByType = (installType: InstallationType, step: number, isMarketplace: boolean) => {
   const infoByCloud = INFO_INSTALLATION_TYPES[installType];
 
-  return infoByCloud && infoByCloud[step];
+  return infoByCloud && infoByCloud[isMarketplace ? step + 1 : step];
 };
 
-const getStepTitles = (installType: InstallationType) => {
+const getStepTitles = (installType: InstallationType, isMarketplace: boolean) => {
+  if (isMarketplace) {
+    return MARKETPLACE_STEPS;
+  }
   return INSTALL_TYPE_STEPS[installType] || DEFAULT_STEPS;
 };
 
 const getIsAuthStep = (
   type: InstallationType,
-  step: FormStep | LocalFormStep | CivoMarketpalceFormStep,
+  step: FormStep | LocalFormStep | MarketplaceFormStep,
+  isMarketplace: boolean,
 ) => {
-  return (
-    (![InstallationType.LOCAL, InstallationType.CIVO_MARKETPLACE].includes(type) &&
-      step === FormStep.AUTHENTICATION) ||
-    (type === InstallationType.CIVO_MARKETPLACE && step === CivoMarketpalceFormStep.AUTHENTICATION)
-  );
+  if (isMarketplace) {
+    return ![InstallationType.LOCAL].includes(type) && step === MarketplaceFormStep.AUTHENTICATION;
+  }
+
+  return ![InstallationType.LOCAL].includes(type) && step === FormStep.AUTHENTICATION;
 };
 
 const getIsSetupStep = (
   type: InstallationType,
-  step: FormStep | LocalFormStep | CivoMarketpalceFormStep,
+  step: FormStep | LocalFormStep | MarketplaceFormStep,
+  isMarketplace: boolean,
 ) => {
+  if (isMarketplace) {
+    return ![InstallationType.LOCAL].includes(type) && step === MarketplaceFormStep.SETUP;
+  }
+
   const isLocalSetupStep = type === InstallationType.LOCAL && step === LocalFormStep.SETUP;
 
-  const isSetupStep =
-    ![InstallationType.LOCAL, InstallationType.CIVO_MARKETPLACE].includes(type) &&
-    step === FormStep.SETUP;
+  const isSetupStep = ![InstallationType.LOCAL].includes(type) && step === FormStep.SETUP;
 
-  const isCivoMarketplaceSetup =
-    type === InstallationType.CIVO_MARKETPLACE && step === CivoMarketpalceFormStep.SETUP;
-
-  return isLocalSetupStep || isSetupStep || isCivoMarketplaceSetup;
+  return isLocalSetupStep || isSetupStep;
 };
 
 const getIsProvisionStep = (
   type: InstallationType,
-  step: FormStep | LocalFormStep | CivoMarketpalceFormStep,
+  step: FormStep | LocalFormStep | MarketplaceFormStep,
+  isMarketplace: boolean,
 ) => {
+  if (isMarketplace) {
+    return ![InstallationType.LOCAL].includes(type) && step === MarketplaceFormStep.PROVISIONING;
+  }
+
   const isLocalProvisionStep =
     type === InstallationType.LOCAL && step === LocalFormStep.PROVISIONING;
 
   const isProvisionStep =
-    ![InstallationType.CIVO_MARKETPLACE, InstallationType.LOCAL].includes(type) &&
-    step === FormStep.PROVISIONING;
+    ![InstallationType.LOCAL].includes(type) && step === FormStep.PROVISIONING;
 
-  const isCivoMarketplaceProvisionStep =
-    type === InstallationType.CIVO_MARKETPLACE && step === CivoMarketpalceFormStep.PROVISIONING;
-
-  return isLocalProvisionStep || isProvisionStep || isCivoMarketplaceProvisionStep;
+  return isLocalProvisionStep || isProvisionStep;
 };
 
-export function useInstallation(type: InstallationType, gitProvider: GitProvider, step: number) {
+export function useInstallation(
+  type: InstallationType,
+  gitProvider: GitProvider,
+  step: number,
+  isMarketplace = false,
+) {
   const formByType = useMemo(() => {
     return FormFlowByType[type] || FormFlowByType.aws;
   }, [type]);
 
   return {
-    stepTitles: getStepTitles(type),
-    installTitles: getInstallationTitles(type, gitProvider),
-    info: getInfoByType(type, step),
-    isAuthStep: getIsAuthStep(type, step),
-    isSetupStep: getIsSetupStep(type, step),
-    isProvisionStep: getIsProvisionStep(type, step),
+    stepTitles: getStepTitles(type, isMarketplace),
+    installTitles: getInstallationTitles(type, gitProvider, isMarketplace),
+    info: getInfoByType(type, step, isMarketplace),
+    isAuthStep: getIsAuthStep(type, step, isMarketplace),
+    isSetupStep: getIsSetupStep(type, step, isMarketplace),
+    isProvisionStep: getIsProvisionStep(type, step, isMarketplace),
     formFlow: formByType as FunctionComponent<FormFlowProps<InstallValues>>,
     apiKeyInfo: INSTALLATION_TYPE_API_KEYS[type],
   };

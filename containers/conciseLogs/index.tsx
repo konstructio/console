@@ -20,7 +20,6 @@ const ESTIMATED_TIMES_BY_CLOUD: Record<InstallationType, number> = {
   [InstallationType.LOCAL]: 5,
   [InstallationType.AWS]: 35,
   [InstallationType.CIVO]: 10,
-  [InstallationType.CIVO_MARKETPLACE]: 10,
   [InstallationType.DIGITAL_OCEAN]: 7,
   [InstallationType.VULTR]: 10,
 };

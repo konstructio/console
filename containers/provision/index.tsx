@@ -52,6 +52,7 @@ const Provision: FunctionComponent = () => {
   }));
 
   const { isProvisioned } = useAppSelector(({ api }) => api);
+  const isMarketplace = useMemo(() => installMethod?.includes('marketplace'), [installMethod]);
 
   const {
     stepTitles,
@@ -65,6 +66,7 @@ const Provision: FunctionComponent = () => {
     installType as InstallationType,
     gitProvider as GitProvider,
     installationStep,
+    !!isMarketplace,
   );
 
   const {
@@ -91,7 +93,7 @@ const Provision: FunctionComponent = () => {
   );
 
   const isValid = useMemo(() => {
-    if (installationStep === 0 && installType !== InstallationType.CIVO_MARKETPLACE) {
+    if (installationStep === 0 && !isMarketplace) {
       return !!gitProvider && !!installType;
     } else if (isProvisionStep) {
       return isProvisioned;
@@ -109,6 +111,7 @@ const Provision: FunctionComponent = () => {
     isAuthStep,
     isAuthenticationValid,
     isFormValid,
+    isMarketplace,
     isProvisionStep,
     isProvisioned,
   ]);
@@ -135,7 +138,7 @@ const Provision: FunctionComponent = () => {
   }, [dispatch, installationStep, trigger]);
 
   const onSubmit = async (values: InstallValues) => {
-    if (installationStep === 0 && installType !== InstallationType.CIVO_MARKETPLACE) {
+    if (installationStep === 0 && !isMarketplace) {
       return handleNextButtonClick();
     }
 
@@ -166,7 +169,7 @@ const Provision: FunctionComponent = () => {
   }, [dispatch, error]);
 
   const form = useMemo(() => {
-    if (installationStep === 0 && installMethod !== InstallationType.CIVO_MARKETPLACE) {
+    if (installationStep === 0 && !isMarketplace) {
       return <InstallationsSelection steps={stepTitles} reset={reset} />;
     }
 
@@ -185,7 +188,7 @@ const Provision: FunctionComponent = () => {
           ) : null}
           <FormFlow
             control={control}
-            currentStep={installationStep}
+            currentStep={isMarketplace ? installationStep + 1 : installationStep}
             setValue={setValue}
             trigger={trigger}
             watch={watch}
@@ -211,7 +214,7 @@ const Provision: FunctionComponent = () => {
     );
   }, [
     installationStep,
-    installMethod,
+    isMarketplace,
     hasInfo,
     isLastStep,
     isProvisionStep,
@@ -246,10 +249,11 @@ const Provision: FunctionComponent = () => {
   }, [isClusterZero, push]);
 
   useEffect(() => {
-    if (installMethod === InstallationType.CIVO_MARKETPLACE) {
-      dispatch(setInstallType(InstallationType.CIVO_MARKETPLACE));
+    if (isMarketplace && installMethod) {
+      const [cloud] = installMethod.split('-') || [''];
+      dispatch(setInstallType(cloud as InstallationType));
     }
-  }, [dispatch, installMethod]);
+  }, [dispatch, installMethod, installationStep, isMarketplace]);
 
   return (
     <Form component="form" onSubmit={handleSubmit(onSubmit)}>
@@ -271,7 +275,8 @@ const Provision: FunctionComponent = () => {
         {info && (
           <InstallationInfoCard
             info={info}
-            isCivoMarketplace={installType === InstallationType.CIVO_MARKETPLACE}
+            isMarketplace={isMarketplace}
+            installationType={installType}
           />
         )}
       </InstallationStepContainer>

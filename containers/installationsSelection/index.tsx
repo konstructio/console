@@ -67,16 +67,16 @@ export const InstallationsSelection: FunctionComponent<InstallationsSelectionPro
         <AdventureContent>
           <Subtitle variant="subtitle2">Now select your cloud adventure</Subtitle>
           <CloudProviderContainer>
-            {INSTALLATION_TYPES.filter(
-              (type) => ![InstallationType.LOCAL, InstallationType.CIVO_MARKETPLACE].includes(type),
-            ).map((type) => (
-              <CloudProviderCard
-                key={type}
-                option={type}
-                active={type === installType}
-                onClick={() => handleInstallTypeChange(type)}
-              />
-            ))}
+            {INSTALLATION_TYPES.filter((type) => ![InstallationType.LOCAL].includes(type)).map(
+              (type) => (
+                <CloudProviderCard
+                  key={type}
+                  option={type}
+                  active={type === installType}
+                  onClick={() => handleInstallTypeChange(type)}
+                />
+              ),
+            )}
           </CloudProviderContainer>
         </AdventureContent>
       )}

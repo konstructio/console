@@ -4,13 +4,14 @@ import { useInstallation } from '../useInstallation';
 import { InstallationType } from '../../types/redux';
 import { GitProvider } from '../../types';
 import {
-  CivoMarketpalceFormStep,
   FormStep,
   INFO_INSTALLATION_TYPES,
   INSTALLATION_TYPE_API_KEYS,
   INSTALL_TYPE_STEPS,
   LOCAL_INSTALL_TITLES,
   LocalFormStep,
+  MARKETPLACE_STEPS,
+  MarketplaceFormStep,
 } from '../../constants/installation';
 
 describe('useInstallation', () => {
@@ -208,43 +209,38 @@ describe('useInstallation', () => {
     });
   });
 
-  describe('civo marketplace installation', () => {
+  describe('marketplace installation', () => {
     test('Authentication step', () => {
       const { result } = renderHook(() =>
         useInstallation(
-          InstallationType.CIVO_MARKETPLACE,
+          InstallationType.CIVO,
           GitProvider.GITHUB,
-          CivoMarketpalceFormStep.AUTHENTICATION,
+          MarketplaceFormStep.AUTHENTICATION,
+          true,
         ),
       );
 
       const { apiKeyInfo, info, isAuthStep, isProvisionStep, isSetupStep, stepTitles } =
         result.current;
 
-      expect(apiKeyInfo).toBe(INSTALLATION_TYPE_API_KEYS[InstallationType.CIVO_MARKETPLACE]);
-      expect(stepTitles).toStrictEqual(INSTALL_TYPE_STEPS[InstallationType.CIVO_MARKETPLACE]);
+      expect(apiKeyInfo).toBe(INSTALLATION_TYPE_API_KEYS[InstallationType.CIVO]);
+      expect(stepTitles).toStrictEqual(MARKETPLACE_STEPS);
       expect(isAuthStep).toBe(true);
       expect(isProvisionStep).toBe(false);
       expect(isSetupStep).toBe(false);
       expect(info).toStrictEqual(
-        INFO_INSTALLATION_TYPES[InstallationType.CIVO_MARKETPLACE][
-          CivoMarketpalceFormStep.AUTHENTICATION
-        ],
+        INFO_INSTALLATION_TYPES[InstallationType.CIVO][FormStep.AUTHENTICATION],
       );
     });
 
     test('Setup step', () => {
       const { result } = renderHook(() =>
-        useInstallation(
-          InstallationType.CIVO_MARKETPLACE,
-          GitProvider.GITHUB,
-          CivoMarketpalceFormStep.SETUP,
-        ),
+        useInstallation(InstallationType.CIVO, GitProvider.GITHUB, MarketplaceFormStep.SETUP, true),
       );
 
       const { isAuthStep, isProvisionStep, isSetupStep, stepTitles } = result.current;
 
-      expect(stepTitles).toStrictEqual(INSTALL_TYPE_STEPS[InstallationType.CIVO_MARKETPLACE]);
+      expect(stepTitles).toStrictEqual(MARKETPLACE_STEPS);
       expect(isAuthStep).toBe(false);
       expect(isProvisionStep).toBe(false);
       expect(isSetupStep).toBe(true);
@@ -253,15 +249,16 @@ describe('useInstallation', () => {
     test('Provision step', () => {
       const { result } = renderHook(() =>
         useInstallation(
-          InstallationType.CIVO_MARKETPLACE,
+          InstallationType.CIVO,
           GitProvider.GITHUB,
-          CivoMarketpalceFormStep.PROVISIONING,
+          MarketplaceFormStep.PROVISIONING,
+          true,
         ),
       );
 
       const { isAuthStep, isProvisionStep, isSetupStep, stepTitles } = result.current;
 
-      expect(stepTitles).toStrictEqual(INSTALL_TYPE_STEPS[InstallationType.CIVO_MARKETPLACE]);
+      expect(stepTitles).toStrictEqual(MARKETPLACE_STEPS);
       expect(isAuthStep).toBe(false);
       expect(isProvisionStep).toBe(true);
       expect(isSetupStep).toBe(false);
@@ -269,16 +266,12 @@ describe('useInstallation', () => {
 
     test('Ready step', () => {
       const { result } = renderHook(() =>
-        useInstallation(
-          InstallationType.CIVO_MARKETPLACE,
-          GitProvider.GITHUB,
-          CivoMarketpalceFormStep.READY,
-        ),
+        useInstallation(InstallationType.CIVO, GitProvider.GITHUB, MarketplaceFormStep.READY, true),
       );
 
       const { isAuthStep, isProvisionStep, isSetupStep, stepTitles } = result.current;
 
-      expect(stepTitles).toStrictEqual(INSTALL_TYPE_STEPS[InstallationType.CIVO_MARKETPLACE]);
+      expect(stepTitles).toStrictEqual(MARKETPLACE_STEPS);
       expect(isAuthStep).toBe(false);
       expect(isProvisionStep).toBe(false);
       expect(isSetupStep).toBe(false);

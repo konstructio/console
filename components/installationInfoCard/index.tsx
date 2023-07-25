@@ -8,8 +8,11 @@ import CopyToClipboard from 'react-copy-to-clipboard';
 import useToggle from '../../hooks/useToggle';
 import Typography from '../typography/index';
 import { TRUE_BLUE, VOLCANIC_SAND } from '../../constants/colors';
-import { InstallationInfo } from '../../types/redux';
+import { InstallationInfo, InstallationType } from '../../types/redux';
 import CivoLogo from '../../assets/civo.svg';
+import AwsLogo from '../../assets/aws_logo.svg';
+import DigitalOceanLogo from '../../assets/digital_ocean_logo.svg';
+import VultrLogo from '../../assets/vultr_logo.svg';
 
 import {
   Card,
@@ -22,24 +25,35 @@ import {
   Image,
 } from './installationInfoCard.styled';
 
+const MARKETPLACE_LOGOS: Record<InstallationType, unknown | null> = {
+  [InstallationType.LOCAL]: null,
+  [InstallationType.AWS]: AwsLogo,
+  [InstallationType.CIVO]: CivoLogo,
+  [InstallationType.DIGITAL_OCEAN]: DigitalOceanLogo,
+  [InstallationType.VULTR]: VultrLogo,
+};
+
 interface InstallationInfoCardProps {
   info: InstallationInfo;
-  isCivoMarketplace?: boolean;
+  installationType?: InstallationType;
+  isMarketplace?: boolean;
 }
 
 const InstallationInfoCard: FunctionComponent<InstallationInfoCardProps> = ({
   info,
-  isCivoMarketplace = false,
+  installationType,
+  isMarketplace = false,
   ...rest
 }) => {
   const { isOpen, open, close } = useToggle(false);
   const { title, description, code, ctaLink, ctaDescription } = info;
+  const logo = MARKETPLACE_LOGOS[installationType as InstallationType];
 
   return (
     <Card {...rest}>
-      {isCivoMarketplace && <Image src={CivoLogo} alt="civo-logo" height={24} width={72} />}
+      {isMarketplace && <Image src={logo as string} alt="prerequisites-logo" />}
       <CardInfoHeader>
-        {!isCivoMarketplace && <InfoOutlinedIcon htmlColor={TRUE_BLUE} />}
+        {!isMarketplace && <InfoOutlinedIcon htmlColor={TRUE_BLUE} />}
         <Typography variant="subtitle3" color={VOLCANIC_SAND}>
           {title}
         </Typography>
