@@ -194,21 +194,19 @@ const Provision: FunctionComponent = () => {
             domainName={values?.domainName as string}
           />
         </FormContent>
-        {isSetupStep &&
-          installType &&
-          ![InstallationType.LOCAL, InstallationType.CIVO_MARKETPLACE].includes(installType) && (
-            <AdvancedOptionsContainer>
-              <AdvancedOptions
-                control={control}
-                currentStep={installationStep}
-                setValue={setValue}
-                trigger={trigger}
-                watch={watch}
-                clusterName={values?.clusterName as string}
-                domainName={values?.domainName as string}
-              />
-            </AdvancedOptionsContainer>
-          )}
+        {isSetupStep && installType && ![InstallationType.LOCAL].includes(installType) && (
+          <AdvancedOptionsContainer>
+            <AdvancedOptions
+              control={control}
+              currentStep={installationStep}
+              setValue={setValue}
+              trigger={trigger}
+              watch={watch}
+              clusterName={values?.clusterName as string}
+              domainName={values?.domainName as string}
+            />
+          </AdvancedOptionsContainer>
+        )}
       </>
     );
   }, [
