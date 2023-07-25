@@ -1,13 +1,15 @@
 export interface GitValues {
   gitToken?: string;
   gitOwner?: string;
-  gitopsTemplateUrl: string;
-  gitopsTemplateBranch: string;
+  gitProtocol?: string;
 }
 
-export interface LocalInstallValues extends GitValues {
-  gitOpsBranch?: string;
-  templateRepoUrl?: string;
+export interface AdvancedOptions extends GitValues {
+  gitopsTemplateUrl?: string;
+  gitopsTemplateBranch?: string;
+  useHttps?: boolean;
+  dnsProvider?: string;
+  cloudflareToken?: string;
 }
 
 export interface AuthValues {
@@ -50,7 +52,7 @@ export interface CivoInstallValues extends ClusterValues {
 }
 export type CivoClusterValues = CivoInstallValues & ClusterValues & GitValues;
 
-export type InstallValues = AwsClusterValues & LocalInstallValues & CivoInstallValues;
+export type InstallValues = AwsClusterValues & AdvancedOptions & CivoInstallValues;
 
 export enum InstallationType {
   LOCAL = 'k3d',

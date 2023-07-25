@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { ComponentStory, ComponentMeta } from '@storybook/react';
 
+import Button from '../../components/button';
 import useModal from '../../hooks/useModal';
 
 import Modal from './index';
@@ -21,6 +22,10 @@ const Wrapper = styled.div`
 const Content = styled.div`
   height: 400px;
   width: 100%;
+
+  & input {
+    width: 100px;
+  }
 `;
 
 const Template: ComponentStory<typeof Modal> = (props) => {
@@ -28,13 +33,13 @@ const Template: ComponentStory<typeof Modal> = (props) => {
 
   return (
     <>
-      <input type="button" value="Open modal" onClick={openModal} />
+      <Button variant="contained" color="primary" onClick={openModal}>
+        Open modal
+      </Button>
       <Wrapper>
-        <Modal {...props} isModalVisible={isOpen} onCloseModal={closeModal}>
+        <Modal {...props} isOpen={isOpen} onCloseModal={closeModal}>
           <Content>
-            <Modal.Header>
-              <span>This is a modal</span>
-            </Modal.Header>
+            <span>This is a modal</span>
           </Content>
         </Modal>
       </Wrapper>

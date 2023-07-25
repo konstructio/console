@@ -11,7 +11,7 @@ export const LocalSetupForm: FunctionComponent<FormFlowProps<InstallValues>> = (
     <>
       <ControlledPassword
         control={control}
-        name="githubToken"
+        name="gitToken"
         label="GitHub token"
         rules={{
           required: true,

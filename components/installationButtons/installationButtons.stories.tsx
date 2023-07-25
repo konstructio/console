@@ -1,5 +1,5 @@
 import React from 'react';
-import { Story } from '@storybook/react';
+import { ComponentStory } from '@storybook/react';
 
 import { noop } from '../../utils/noop';
 
@@ -16,7 +16,7 @@ export default {
   },
 };
 
-const DefaultTemplate: Story = (args) => {
+const DefaultTemplate: ComponentStory<typeof InstallationButtons> = (args) => {
   return <InstallationButtons onBackButtonClick={noop} {...args} />;
 };
 

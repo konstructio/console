@@ -1,6 +1,7 @@
 import React from 'react';
 import { Story } from '@storybook/react';
 
+import { LocalFormStep } from '../../constants/installation';
 import { GitProvider } from '../../types';
 import { useInstallation } from '../../hooks/useInstallation';
 import useStep from '../../hooks/useStep';
@@ -14,8 +15,12 @@ export default {
 };
 
 const DefaultTemplate: Story = () => {
-  const { stepTitles, installTitles } = useInstallation(InstallationType.LOCAL, GitProvider.GITHUB);
-  const { currentStep, goToNext, goToPrev } = useStep(0);
+  const { stepTitles, installTitles } = useInstallation(
+    InstallationType.LOCAL,
+    GitProvider.GITHUB,
+    LocalFormStep.SETUP,
+  );
+  const { currentStep, goToPrev } = useStep(0);
 
   const installTitle = installTitles[currentStep];
 
@@ -25,8 +30,9 @@ const DefaultTemplate: Story = () => {
       steps={stepTitles}
       activeStep={currentStep}
       showBackButton={currentStep > 0}
-      onNextButtonClick={goToNext}
       onBackButtonClick={goToPrev}
+      isProvisionStep={false}
+      showNextButton
     >
       <h1 style={{ margin: '0 auto' }}>Current Step: {currentStep}</h1>
     </InstallationStepContainer>

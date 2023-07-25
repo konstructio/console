@@ -1,13 +1,12 @@
 import React, { ChangeEvent, FunctionComponent, useEffect, useMemo, useState } from 'react';
 import debounce from 'lodash/debounce';
-import { Required } from 'components/textField/textField.styled';
-import GitProviderButton from 'components/gitProviderButton';
 
+import { Required } from '../../../../components/textField/textField.styled';
+import GitProviderButton from '../../../../components/gitProviderButton';
 import Typography from '../../../../components/typography';
 import { useInstallation } from '../../../../hooks/useInstallation';
 // import LearnMore from '../../../../components/learnMore';
 import ControlledPassword from '../../../../components/controlledFields/Password';
-import ControlledTextField from '../../../../components/controlledFields/TextField';
 import ControlledAutocomplete from '../../../../components/controlledFields/AutoComplete';
 import { useAppDispatch, useAppSelector } from '../../../../redux/store';
 import { GIT_PROVIDERS, GitProvider } from '../../../../types';
@@ -231,6 +230,8 @@ const AuthForm: FunctionComponent<FormFlowProps<InstallValues>> = ({
           <ControlledPassword
             key={name}
             control={control}
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            //@ts-ignore
             name={`${apiKeyInfo.authKey}.${name}`}
             label={label}
             helperText={helperText}

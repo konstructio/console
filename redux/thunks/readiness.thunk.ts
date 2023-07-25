@@ -11,10 +11,8 @@ export const checkSiteReadiness = createAsyncThunk<
     dispatch: AppDispatch;
     state: RootState;
   }
->('readiness/check', async (body, { dispatch, getState }) => {
-  const state = getState();
-
-  if (body.url.includes(state.config.k3dDomain || 'localdev.me')) {
+>('readiness/check', async (body, { dispatch }) => {
+  if (body.url.includes('localdev.me')) {
     await fetch(body.url, { mode: 'no-cors' });
     return { success: true, url: body.url };
   } else {
