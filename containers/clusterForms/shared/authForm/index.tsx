@@ -54,6 +54,7 @@ const AuthForm: FunctionComponent<FormFlowProps<InstallValues>> = ({
     installationType,
     isGitSelected,
     isTokenValid,
+    installMethod,
     token = '',
   } = useAppSelector(({ config, installation, git }) => ({
     currentStep: installation.installationStep,
@@ -123,6 +124,8 @@ const AuthForm: FunctionComponent<FormFlowProps<InstallValues>> = ({
 
   const gitLabel = useMemo(() => (isGitHub ? 'GitHub' : 'GitLab'), [isGitHub]);
 
+  const isMarketplace = useMemo(() => installMethod?.includes('marketplace'), [installMethod]);
+
   const gitErrorLabel = useMemo(
     () => (isGitHub ? 'GitHub organization' : 'GitLab group'),
     [isGitHub],
@@ -150,7 +153,7 @@ const AuthForm: FunctionComponent<FormFlowProps<InstallValues>> = ({
 
   return (
     <>
-      {installationType === InstallationType.CIVO_MARKETPLACE && (
+      {isMarketplace && (
         <div>
           <Typography
             variant="labelLarge"
@@ -171,12 +174,7 @@ const AuthForm: FunctionComponent<FormFlowProps<InstallValues>> = ({
           </GitContainer>
         </div>
       )}
-      <FormContainer
-        isVisible={
-          installationType !== InstallationType.CIVO_MARKETPLACE ||
-          (installationType === InstallationType.CIVO_MARKETPLACE && isGitSelected)
-        }
-      >
+      <FormContainer isVisible={!isMarketplace || (isMarketplace && isGitSelected)}>
         <ControlledPassword
           control={control}
           name="gitToken"

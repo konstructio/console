@@ -1,6 +1,5 @@
 import React, { FunctionComponent } from 'react';
 import { Divider } from '@mui/material';
-import { formatCloudProvider } from 'utils';
 
 import NextLink from '../../components/nextLink';
 import { InstallationType } from '../../types/redux';
@@ -23,7 +22,7 @@ const LearnMore: FunctionComponent<LearnMoreProps> = ({
   const docsDomainLink = `https://docs.kubefirst.io/${
     installType && [InstallationType.DIGITAL_OCEAN, InstallationType.VULTR].includes(installType)
       ? 'k3d'
-      : formatCloudProvider(installType)
+      : installType
   }`;
 
   return (

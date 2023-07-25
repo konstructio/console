@@ -58,9 +58,15 @@ export enum InstallationType {
   LOCAL = 'k3d',
   AWS = 'aws',
   CIVO = 'civo',
-  CIVO_MARKETPLACE = 'civo-marketplace',
   DIGITAL_OCEAN = 'digitalocean',
   VULTR = 'vultr',
+}
+
+export enum InstallMethod {
+  AWS = 'aws-marketplace',
+  CIVO = 'civo-marketplace',
+  DIGITAL_OCEAN = 'digitalocean-marketplace',
+  VULTR = 'vultr-marketplace',
 }
 
 export const INSTALLATION_TYPES = Object.values(InstallationType);
