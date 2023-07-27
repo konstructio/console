@@ -1,7 +1,7 @@
 import React from 'react';
 import { Story } from '@storybook/react';
 
-import Tag, { TAG_COLOR_OPTIONS, TagProps } from '.';
+import Tag, { TAG_COLOR_OPTIONS, TagProps, TAG_ICON_OPTONS } from '.';
 
 export default {
   title: 'Components/Tag',
@@ -10,6 +10,10 @@ export default {
     bgColor: {
       control: 'select',
       options: TAG_COLOR_OPTIONS,
+    },
+    icon: {
+      control: 'radio',
+      options: Object.keys(TAG_ICON_OPTONS),
     },
   },
 };
