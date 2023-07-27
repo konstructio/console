@@ -1,10 +1,11 @@
 import styled, { css } from 'styled-components';
+import Image from 'next/image';
 
-import Typography, { ITypographyProps } from '../typography';
+import Row from '../row/';
 
 import { TagColor } from '.';
 
-export const TagContainer = styled(Typography)<{ bgColor?: TagColor } & ITypographyProps>`
+export const TagContainer = styled(Row)<{ bgColor?: TagColor }>`
   border-radius: 4px;
   padding: 4px;
   text-transform: capitalize;
@@ -59,4 +60,8 @@ export const TagContainer = styled(Typography)<{ bgColor?: TagColor } & ITypogra
           background-color: none;
           color: #71717a;
         `}
+`;
+
+export const IconImage = styled(Image)`
+  margin-right: 4px;
 `;
