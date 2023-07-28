@@ -7,7 +7,8 @@ import ReactFlow, {
   useNodesState,
   useEdgesState,
 } from 'reactflow';
-import { GraphNode, type CustomGraphNode } from 'components/graphNode';
+
+import { GraphNode, type CustomGraphNode } from '../graphNode';
 import 'reactflow/dist/style.css';
 
 const initialNodes: CustomGraphNode[] = [
