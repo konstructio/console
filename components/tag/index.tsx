@@ -18,6 +18,7 @@ export const TAG_COLOR_OPTIONS = [
   'purple',
   'yellow',
   'green',
+  'grey',
 ] as const;
 
 export const TAG_ICON_OPTONS = {
@@ -29,10 +30,12 @@ export const TAG_ICON_OPTONS = {
 
 export type TagColor = (typeof TAG_COLOR_OPTIONS)[number];
 
+export type TagIconOption = keyof typeof TAG_ICON_OPTONS;
+
 export interface TagProps {
   text: string;
   bgColor?: TagColor;
-  icon?: keyof typeof TAG_ICON_OPTONS;
+  icon?: TagIconOption;
 }
 
 const Tag: FunctionComponent<TagProps> = ({ text, icon, ...rest }) => (
