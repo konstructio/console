@@ -53,6 +53,9 @@ export const METRO = '#808191';
 export const IVY_LEAGUE = '#047857';
 export const DR_WHITE = '#F9FAFB';
 export const CHEFS_HAT = '#F3F4F6';
+export const BLUE_REFLECTION = '#CBD5E1';
+export const MAGIC_MINT = '#A7F3D0';
+export const SASSY_PINK = '#F5D0FE';
 
 export const ANSI_COLORS = {
   black: '\x1b[30m',
