@@ -5366,6 +5366,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/react-transition-group@npm:^4":
+  version: 4.4.6
+  resolution: "@types/react-transition-group@npm:4.4.6"
+  dependencies:
+    "@types/react": "npm:*"
+  checksum: 67cb6a41704655d5cc1708952b13cbfad74911290928a78a0f27febd3798d2d2838fb501d54439ddac684cb08f26f47d8099f7a8028f52c67264226e105bb128
+  languageName: node
+  linkType: hard
+
 "@types/react-transition-group@npm:^4.4.5":
   version: 4.4.5
   resolution: "@types/react-transition-group@npm:4.4.5"
@@ -13451,6 +13460,7 @@ __metadata:
     "@types/react": "npm:^18.0.24"
     "@types/react-copy-to-clipboard": "npm:^5.0.4"
     "@types/react-dom": "npm:18.0.8"
+    "@types/react-transition-group": "npm:^4"
     "@types/styled-components": "npm:^5.1.26"
     "@types/websocket": "npm:^1.0.5"
     "@typescript-eslint/eslint-plugin": "npm:^5.33.1"
@@ -13490,6 +13500,7 @@ __metadata:
     react-icons: "npm:^4.4.0"
     react-instantsearch-hooks-web: "npm:^6.44.0"
     react-redux: "npm:^8.0.5"
+    react-transition-group: "npm:^4.4.5"
     reactflow: "npm:^11.7.4"
     redux-deep-persist: "npm:^1.0.7"
     redux-persist: "npm:^6.0.0"
