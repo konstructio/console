@@ -1,7 +1,20 @@
 import styled from 'styled-components';
+
 import Row from '../row';
 
-export const NumInput = styled.input.attrs({ type: 'number' })`
+export const InputContainer = styled(Row)`
+  flex: 1;
+`;
+
+export const LabelContainer = styled(Row)`
+  gap: 5px;
+
+  span {
+    color: #dc2626;
+  }
+`;
+
+export const NumInput = styled.input`
   &::-webkit-outer-spin-button,
   &::-webkit-inner-spin-button {
     -webkit-appearance: none;
@@ -17,10 +30,18 @@ export const NumInput = styled.input.attrs({ type: 'number' })`
   color: #3f3f46;
 `;
 
-export const Root = styled(Row)`
+export const Root = styled.label`
+  display: flex;
+  flex-direction: column;
   width: 100%;
+  gap: 8px;
+  font-size: 14px;
+  color: #71717a;
 
   button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     height: 36px;
     width: 36px;
     border: 1px solid #e4e4e7;
