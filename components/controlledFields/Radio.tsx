@@ -1,9 +1,8 @@
-import { VOLCANIC_SAND } from 'constants/colors';
-
 import React from 'react';
 import { FormControlLabel, FormGroup, Radio, RadioGroup } from '@mui/material';
 import { Control, Controller, UseControllerProps, FieldValues } from 'react-hook-form';
 
+import { VOLCANIC_SAND } from '../../constants/colors';
 import Typography from '../typography';
 
 export interface ControlledTextFieldProps<T extends FieldValues> extends UseControllerProps<T> {
