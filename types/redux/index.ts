@@ -10,6 +10,7 @@ export interface AdvancedOptions extends GitValues {
   useHttps?: boolean;
   dnsProvider?: string;
   cloudflareToken?: string;
+  imageRepository?: string;
 }
 
 export interface AuthValues {

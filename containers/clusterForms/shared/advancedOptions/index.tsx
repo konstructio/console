@@ -1,14 +1,18 @@
-import React, { ChangeEvent, FunctionComponent, useState } from 'react';
+import React, { ChangeEvent, FunctionComponent, useMemo, useState } from 'react';
 import { useFormContext } from 'react-hook-form';
 
-import LearnMore from '../../../../components/learnMore';
+import LearnMore from 'components/learnMore';
 import Typography from '../../../../components/typography';
 import SwitchComponent from '../../../../components/switch';
 import Checkbox from '../../../../components/controlledFields/Checkbox';
 import ControlledTextField from '../../../../components/controlledFields/TextField';
 import ControlledAutocomplete from '../../../../components/controlledFields/AutoComplete';
+import ControlledRadio from '../../../../components/controlledFields/Radio';
+import ControlledPassword from '../../../../components/controlledFields/Password';
 import { useAppSelector } from '../../../../redux/store';
-import { InstallValues } from '../../../../types/redux';
+import { FormFlowProps } from '../../../../types/provision';
+import { InstallValues, InstallationType } from '../../../../types/redux';
+import { GitProvider } from '../../../../types';
 import { EXCLUSIVE_PLUM } from '../../../../constants/colors';
 
 import { CheckboxContainer, Switch } from './advancedOptions.styled';
@@ -21,7 +25,10 @@ const AdvancedOptions: FunctionComponent = () => {
     setIsAdvancedOptionsEnabled(target.checked);
   };
 
-  const { values, installType } = useAppSelector(({ installation }) => installation);
+  const { values, installType, gitProvider } = useAppSelector(({ installation }) => installation);
+
+  const isGitHub = useMemo(() => gitProvider === GitProvider.GITHUB, [gitProvider]);
+  const gitLabel = useMemo(() => (isGitHub ? 'GitHub' : 'GitLab'), [isGitHub]);
 
   const { control } = useFormContext<InstallValues>();
 
@@ -65,6 +72,26 @@ const AdvancedOptions: FunctionComponent = () => {
               }}
             />
           </CheckboxContainer>
+          {installType === InstallationType.AWS && (
+            <CheckboxContainer>
+              <Typography variant="body2" color={EXCLUSIVE_PLUM}>
+                Manage image repositories with
+              </Typography>
+              <ControlledRadio
+                control={control}
+                rules={{
+                  required: true,
+                }}
+                defaultValue="git"
+                name="imageRepository"
+                options={[
+                  { label: `${gitLabel} Container Registry`, value: 'git' },
+                  { label: 'AWS Elastic Container Registry (ECR)', value: 'ecr' },
+                ]}
+              />
+            </CheckboxContainer>
+          )}
+
           <ControlledAutocomplete
             control={control}
             name="dnsProvider"
@@ -80,7 +107,7 @@ const AdvancedOptions: FunctionComponent = () => {
             }}
           />
           {isCloudFlareSelected && (
-            <ControlledTextField
+            <ControlledPassword
               control={control}
               name="cloudflareToken"
               label="Cloudflare API key"
