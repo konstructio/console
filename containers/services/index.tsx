@@ -1,4 +1,5 @@
 import React, { FunctionComponent, useEffect, useCallback, useState, useMemo, useRef } from 'react';
+import { FormProvider, useForm } from 'react-hook-form';
 import { Box, Tabs } from '@mui/material';
 import { useRouter } from 'next/router';
 import Image from 'next/image';
@@ -27,11 +28,15 @@ import {
   ClusterMenuFooter,
   Container,
   Content,
+  FinalFormContainer,
+  Form,
   Header,
   LearnMoreLink,
   MenuHeader,
   ServicesContainer,
 } from './services.styled';
+
+import FinalForm, { ClusterConfig } from '../clusterForms/finalForm';
 
 enum SERVICES_TABS {
   LIST_VIEW = 0,
@@ -105,6 +110,8 @@ const Services: FunctionComponent = () => {
 
   const nodeRef = useRef<HTMLDivElement>(null);
 
+  const methods = useForm<ClusterConfig>();
+
   return (
     <Container>
       {isGitOpsCatalogEnabled ? (
@@ -150,15 +157,31 @@ const Services: FunctionComponent = () => {
                   <Image src={closeImageSrc} height={24} width={24} alt="close" />
                 </CloseButton>
               </MenuHeader>
-              <Column style={{ flex: 1 }}>{/* TODO: ADD CLUSTER FORM */}</Column>
-              <ClusterMenuFooter>
-                <Button variant="outlined" color="primary" onClick={() => setShowPanel(false)}>
-                  Close
-                </Button>
-                <Button variant="contained" color="primary">
-                  Create cluster
-                </Button>
-              </ClusterMenuFooter>
+              <Column style={{ flex: 1 }}>
+                <FormProvider {...methods}>
+                  <Form
+                    onSubmit={methods.handleSubmit((values) =>
+                      console.log('the form values =>', values),
+                    )}
+                  >
+                    <FinalFormContainer>
+                      <FinalForm />
+                    </FinalFormContainer>
+                    <ClusterMenuFooter>
+                      <Button
+                        variant="outlined"
+                        color="primary"
+                        onClick={() => setShowPanel(false)}
+                      >
+                        Close
+                      </Button>
+                      <Button variant="contained" color="primary" type="submit">
+                        Create cluster
+                      </Button>
+                    </ClusterMenuFooter>
+                  </Form>
+                </FormProvider>
+              </Column>
             </ClusterMenu>
           </CSSTransition>
           <Content>

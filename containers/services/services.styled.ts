@@ -55,6 +55,18 @@ export const Content = styled(Column)`
   width: 100%;
 `;
 
+export const FinalFormContainer = styled(Column)`
+  gap: 32px;
+  padding: 23px;
+  flex: 1;
+`;
+
+export const Form = styled.form`
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+`;
+
 export const Header = styled(Row)`
   color: ${({ theme }) => theme.colors.volcanicSand};
   height: 70px;
