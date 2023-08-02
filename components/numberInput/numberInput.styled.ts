@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+
 import Row from '../row';
 
 export const NumInput = styled.input.attrs({ type: 'number' })`

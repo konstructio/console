@@ -1,5 +1,6 @@
-import React, { FunctionComponent } from 'react';
+import React, { FunctionComponent, useState } from 'react';
 
+import DnsProvider from '../../../clusterForms/shared/dnsProvider';
 import ControlledAutocomplete from '../../../../components/controlledFields/AutoComplete';
 import ControlledTextField from '../../../../components/controlledFields/TextField';
 // import LearnMore from '../../../../components/learnMore';
@@ -9,7 +10,9 @@ import { InstallValues } from '../../../../types/redux';
 import { FormFlowProps } from '../../../../types/provision';
 import { EMAIL_REGEX } from '../../../../constants/index';
 
-const AwsSetupForm: FunctionComponent<FormFlowProps<InstallValues>> = ({ control }) => {
+const AwsSetupForm: FunctionComponent<FormFlowProps<InstallValues>> = ({ control, reset }) => {
+  const [selectedRegion, setSelectedRegion] = useState<string>('');
+
   const dispatch = useAppDispatch();
   const { cloudDomains, cloudRegions, values } = useAppSelector(({ api, installation }) => ({
     cloudDomains: api.cloudDomains,
@@ -18,7 +21,8 @@ const AwsSetupForm: FunctionComponent<FormFlowProps<InstallValues>> = ({ control
   }));
 
   const handleRegionOnSelect = async (region: string) => {
-    dispatch(getCloudDomains(region));
+    setSelectedRegion(region);
+    dispatch(getCloudDomains({ region }));
   };
 
   const formatDomains = (domains: Array<string>) => {
@@ -54,6 +58,7 @@ const AwsSetupForm: FunctionComponent<FormFlowProps<InstallValues>> = ({ control
         options={cloudRegions && cloudRegions.map((region) => ({ label: region, value: region }))}
         onChange={handleRegionOnSelect}
       />
+      <DnsProvider control={control} selectedRegion={selectedRegion} reset={reset} />
       <ControlledAutocomplete
         control={control}
         name="domainName"

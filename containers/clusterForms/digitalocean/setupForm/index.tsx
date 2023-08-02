@@ -1,6 +1,7 @@
-import React, { FunctionComponent } from 'react';
+import React, { FunctionComponent, useState } from 'react';
 
 // import LearnMore from '../../../../components/learnMore';
+import DnsProvider from '../../../clusterForms/shared/dnsProvider';
 import ControlledAutocomplete from '../../../../components/controlledFields/AutoComplete';
 import ControlledTextField from '../../../../components/controlledFields/TextField';
 import { useAppDispatch, useAppSelector } from '../../../../redux/store';
@@ -9,7 +10,12 @@ import { EMAIL_REGEX } from '../../../../constants';
 import { InstallValues } from '../../../../types/redux';
 import { FormFlowProps } from '../../../../types/provision';
 
-const DigitalOceanSetupForm: FunctionComponent<FormFlowProps<InstallValues>> = ({ control }) => {
+const DigitalOceanSetupForm: FunctionComponent<FormFlowProps<InstallValues>> = ({
+  control,
+  reset,
+}) => {
+  const [selectedRegion, setSelectedRegion] = useState<string>('');
+
   const dispatch = useAppDispatch();
   const { cloudDomains, cloudRegions, values } = useAppSelector(({ api, installation }) => ({
     cloudDomains: api.cloudDomains,
@@ -18,7 +24,8 @@ const DigitalOceanSetupForm: FunctionComponent<FormFlowProps<InstallValues>> = (
   }));
 
   const handleRegionOnSelect = async (region: string) => {
-    dispatch(getCloudDomains(region));
+    setSelectedRegion(region);
+    dispatch(getCloudDomains({ region }));
   };
 
   return (
@@ -45,6 +52,7 @@ const DigitalOceanSetupForm: FunctionComponent<FormFlowProps<InstallValues>> = (
         options={cloudRegions && cloudRegions.map((region) => ({ label: region, value: region }))}
         onChange={handleRegionOnSelect}
       />
+      <DnsProvider control={control} selectedRegion={selectedRegion} reset={reset} />
       <ControlledAutocomplete
         control={control}
         name="domainName"

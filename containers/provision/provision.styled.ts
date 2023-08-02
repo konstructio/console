@@ -1,4 +1,4 @@
-import { Box } from '@mui/material';
+import { Box, BoxProps } from '@mui/material';
 import styled from 'styled-components';
 
 import FormContainer from '../../components/formContainer';
@@ -15,7 +15,7 @@ export const AdvancedOptionsContainer = styled(FormContainer)`
   `};
 `;
 
-export const Form = styled(Box)`
+export const Form = styled(Box)<BoxProps>`
   height: 100%;
   overflow: auto;
 `;

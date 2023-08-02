@@ -5,9 +5,7 @@ import Typography from '../../../../components/typography';
 import SwitchComponent from '../../../../components/switch';
 import Checkbox from '../../../../components/controlledFields/Checkbox';
 import ControlledTextField from '../../../../components/controlledFields/TextField';
-import ControlledAutocomplete from '../../../../components/controlledFields/AutoComplete';
 import ControlledRadio from '../../../../components/controlledFields/Radio';
-import ControlledPassword from '../../../../components/controlledFields/Password';
 import { useAppSelector } from '../../../../redux/store';
 import { FormFlowProps } from '../../../../types/provision';
 import { InstallValues, InstallationType } from '../../../../types/redux';
@@ -18,7 +16,6 @@ import { CheckboxContainer, Switch } from './advancedOptions.styled';
 
 const AdvancedOptions: FunctionComponent<FormFlowProps<InstallValues>> = ({ control }) => {
   const [isAdvancedOptionsEnabled, setIsAdvancedOptionsEnabled] = useState<boolean>(false);
-  const [isCloudFlareSelected, setIsCloudFlareSelected] = useState<boolean>(false);
 
   const handleOnChangeSwitch = ({ target }: ChangeEvent<HTMLInputElement>) => {
     setIsAdvancedOptionsEnabled(target.checked);
@@ -87,33 +84,6 @@ const AdvancedOptions: FunctionComponent<FormFlowProps<InstallValues>> = ({ cont
                 ]}
               />
             </CheckboxContainer>
-          )}
-
-          <ControlledAutocomplete
-            control={control}
-            name="dnsProvider"
-            label="DNS provider"
-            defaultValue="default"
-            options={[
-              { label: 'default', value: 'default' },
-              { label: 'cloudflare', value: 'cloudflare' },
-            ]}
-            onChange={(value) => setIsCloudFlareSelected(value === 'cloudflare')}
-            rules={{
-              required: false,
-            }}
-          />
-          {isCloudFlareSelected && (
-            <ControlledPassword
-              control={control}
-              name="cloudflareToken"
-              label="Cloudflare API key"
-              required
-              defaultValue={values?.gitopsTemplateBranch}
-              rules={{
-                required: true,
-              }}
-            />
           )}
           <LearnMore
             installType={installType}

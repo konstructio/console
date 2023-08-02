@@ -10,7 +10,7 @@ export default {
 
 const inputMinimum = 0;
 
-const DefaultTemplate: Story = (args) => {
+const DefaultTemplate: Story = () => {
   const [value, setValue] = useState(inputMinimum);
   return (
     <NumberInput
