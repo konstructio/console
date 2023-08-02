@@ -76,9 +76,11 @@ export const createCluster = createAsyncThunk<
     gitops_template_branch: values?.gitopsTemplateBranch,
     git_protocol: values?.useHttps ? 'https' : 'ssh',
     dns_provider: values?.dnsProvider,
-    cf_api_token: values?.cloudflareToken,
     ecr: values?.imageRepository === 'ecr',
     type: 'mgmt',
+    cloudflare_auth: {
+      token: values?.cloudflareToken,
+    },
     aws_auth: {
       ...values?.aws_auth,
     },
@@ -243,21 +245,24 @@ export const getCloudRegions = createAsyncThunk<
 
 export const getCloudDomains = createAsyncThunk<
   Array<string>,
-  string,
+  { region: string; cloudflareToken?: string },
   {
     dispatch: AppDispatch;
     state: RootState;
   }
->('api/getCloudDomains', async (cloudRegion, { getState }) => {
+>('api/getCloudDomains', async ({ cloudflareToken, region }, { getState }) => {
   const {
     installation: { values, installType },
   } = getState();
 
   const res = await axios.post<{ domains: Array<string> }>('/api/proxy', {
-    url: `/domain/${installType}`,
+    url: `/domain/${cloudflareToken ? 'cloudflare' : installType}`,
     body: {
       ...values,
-      cloud_region: cloudRegion,
+      cloud_region: region,
+      cloudflare_auth: {
+        token: cloudflareToken,
+      },
     },
   });
 

@@ -55,6 +55,9 @@ const apiSlice = createSlice({
     clearValidation: (state) => {
       state.isAuthenticationValid = undefined;
     },
+    clearDomains: (state) => {
+      state.cloudDomains = [];
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -114,6 +117,7 @@ const apiSlice = createSlice({
   },
 });
 
-export const { clearValidation, setCompletedSteps, clearClusterState } = apiSlice.actions;
+export const { clearValidation, setCompletedSteps, clearClusterState, clearDomains } =
+  apiSlice.actions;
 
 export const apiReducer = apiSlice.reducer;
