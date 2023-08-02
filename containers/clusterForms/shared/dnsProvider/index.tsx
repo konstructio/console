@@ -1,5 +1,5 @@
-import React, { ChangeEvent, FunctionComponent, useState } from 'react';
-import { Control, UseFormReset } from 'react-hook-form';
+import React, { ChangeEvent, FunctionComponent, useEffect, useState } from 'react';
+import { Control, UseFormReset, UseFormSetValue } from 'react-hook-form';
 import { getCloudDomains } from 'redux/thunks/api.thunk';
 
 import ControlledAutocomplete from '../../../../components/controlledFields/AutoComplete';
@@ -12,6 +12,7 @@ export interface DnsProviderProps {
   control: Control<InstallValues>;
   reset?: UseFormReset<InstallValues>;
   selectedRegion: string;
+  setValue: UseFormSetValue<InstallValues>;
 }
 
 const DnsProvider: FunctionComponent<DnsProviderProps> = ({ control, reset, selectedRegion }) => {
@@ -56,9 +57,8 @@ const DnsProvider: FunctionComponent<DnsProviderProps> = ({ control, reset, sele
           { label: 'cloudflare', value: 'cloudflare' },
         ]}
         onChange={handleDnsProviderOnChange}
-        rules={{
-          required: false,
-        }}
+        required
+        rules={{ required: true }}
       />
       {isCloudFlareSelected && (
         <ControlledPassword

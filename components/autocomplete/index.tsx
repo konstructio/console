@@ -1,4 +1,4 @@
-import React, { ForwardedRef, FunctionComponent } from 'react';
+import React, { ForwardedRef, FunctionComponent, useMemo } from 'react';
 import { Autocomplete as AutocompleteMUI, CircularProgress, SxProps } from '@mui/material';
 import { ControllerRenderProps, FieldValues } from 'react-hook-form';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
@@ -35,6 +35,9 @@ const AutocompleteComponent: FunctionComponent<IAutocompleteProps> = ({
   disabled,
   ...props
 }) => {
+  // Unfortunately MaterialUI doesn't not update the dom state when no options are available
+  const value = useMemo(() => (options.length ? props.value : ''), [options.length, props.value]);
+
   return (
     <AutocompleteMUI
       loading={loading}
@@ -51,6 +54,7 @@ const AutocompleteComponent: FunctionComponent<IAutocompleteProps> = ({
         },
       }}
       {...props}
+      isOptionEqualToValue={(option: string, value: string) => option === value}
       renderInput={(params) => (
         <TextField
           ref={params.InputProps.ref}
@@ -66,6 +70,7 @@ const AutocompleteComponent: FunctionComponent<IAutocompleteProps> = ({
               )}
             </InputAdornmentContainer>
           }
+          value={value}
           {...params}
           label={label}
         />
