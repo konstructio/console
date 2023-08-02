@@ -4,8 +4,7 @@ import TerminalLogs from '../../terminalLogs';
 import { FormStep } from '../../../constants/installation';
 import AuthForm from '../shared/authForm';
 import ClusterRunning from '../shared/clusterRunning';
-
-import SetupForm from './setupForm';
+import SetupForm from '../shared/setupForm';
 
 const CIVO_FORM_FLOW = {
   [FormStep.AUTHENTICATION]: AuthForm,

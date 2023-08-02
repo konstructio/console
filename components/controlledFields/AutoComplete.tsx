@@ -48,6 +48,7 @@ function ControlledAutocomplete<T extends FieldValues>({
             field.onBlur();
             setIsBlur(true);
           }}
+          value={options.length ? field.value : ''}
           loading={loading}
           placeholder={placeholder}
           disabled={disabled}
