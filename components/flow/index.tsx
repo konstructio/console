@@ -27,7 +27,7 @@ const initialNodes: CustomGraphNode[] = [
   },
   {
     id: '2',
-    type: 'workload',
+    type: 'worker',
     data: {
       label: 'kubefirst-worker-one',
       cloud: 'AWS',
@@ -40,7 +40,7 @@ const initialNodes: CustomGraphNode[] = [
   },
   {
     id: '3',
-    type: 'workload',
+    type: 'worker',
     data: {
       label: 'kubefirst-worker-one',
       cloud: 'AWS',

@@ -21,3 +21,7 @@ export interface Row {
   id: string;
   selected?: boolean;
 }
+
+export type NodeStatus = 'available' | 'unavailable' | 'draft' | 'deleting';
+
+export type NodeType = 'management' | 'worker' | 'draft';

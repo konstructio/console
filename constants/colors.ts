@@ -56,6 +56,7 @@ export const CHEFS_HAT = '#F3F4F6';
 export const BLUE_REFLECTION = '#CBD5E1';
 export const MAGIC_MINT = '#A7F3D0';
 export const SASSY_PINK = '#F5D0FE';
+export const DODGER_BLUE = '#3B82F6';
 
 export const ANSI_COLORS = {
   black: '\x1b[30m',
