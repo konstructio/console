@@ -5,8 +5,9 @@ import greenPolygon from '../../assets/managementIcon.svg';
 import pinkClusterIcon from '../../assets/cluster.svg';
 import unavailableClusterSrc from '../../assets/cluster-unavailable.svg';
 import { BLUE_REFLECTION, MAGIC_MINT, SASSY_PINK } from '../../constants/colors';
-import { TAG_CONFIG } from '../../constants';
-import { NodeStatus, NodeType } from '../../types';
+import { CLUSTER_TAG_CONFIG } from '../../constants';
+import { ClusterStatus, ClusterType } from '../../types/provision';
+import { ClusterInfo } from '../clusterTable/clusterTable';
 
 import {
   Container,
@@ -22,16 +23,8 @@ import {
   StyledTag,
 } from './graphNode.styled';
 
-export type NodeData = {
-  label?: string;
-  cloud?: string;
-  region?: string;
-  status: NodeStatus;
-  nodeCount?: number;
-};
-
-const nodeConfig: Record<
-  NodeType,
+const GRAPH_NODE_CONFIG: Record<
+  ClusterType,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   { handle: HandleType; position: Position; imageSrc: any; nodeColor: string }
 > = {
@@ -41,13 +34,13 @@ const nodeConfig: Record<
     imageSrc: unavailableClusterSrc,
     nodeColor: BLUE_REFLECTION,
   },
-  management: {
+  mgmt: {
     handle: 'source',
     position: Position.Right,
     imageSrc: greenPolygon,
     nodeColor: MAGIC_MINT,
   },
-  worker: {
+  workload: {
     handle: 'target',
     position: Position.Left,
     imageSrc: pinkClusterIcon,
@@ -55,36 +48,32 @@ const nodeConfig: Record<
   },
 };
 
-export type CustomGraphNode = Node<NodeData, NodeType>;
+export type CustomGraphNode = Node<ClusterInfo, 'custom'>;
 
-export const GraphNode: FunctionComponent<NodeProps<NodeData>> = ({
-  data,
-  isConnectable,
-  type,
-}) => {
-  const { label, cloud, region, nodeCount, status } = data;
+export const GraphNode: FunctionComponent<NodeProps<ClusterInfo>> = ({ data, isConnectable }) => {
+  const { status, type, clusterName, cloudProvider, cloudRegion, nodes } = data;
 
-  const { iconLabel, iconType, bgColor } = TAG_CONFIG[status];
-  const { handle, position, imageSrc, nodeColor } = nodeConfig[type as NodeType];
+  const { iconLabel, iconType, bgColor } = CLUSTER_TAG_CONFIG[status ?? ClusterStatus.ERROR];
+  const { handle, position, imageSrc, nodeColor } = GRAPH_NODE_CONFIG[type];
 
   return (
     <Container borderColor={nodeColor}>
       <MainContainerInfo>
-        <NodeLabel>{label}</NodeLabel>
+        <NodeLabel>{clusterName}</NodeLabel>
         <LabelContainer>
           <Label>CLOUD:</Label>
-          {cloud && <p>{cloud}</p>}
+          {cloudProvider && <p>{cloudProvider}</p>}
         </LabelContainer>
         <LabelContainer>
           <Label>REGION:</Label>
-          {region && <Region>{region}</Region>}
+          {cloudRegion && <Region>{cloudRegion}</Region>}
         </LabelContainer>
       </MainContainerInfo>
       <OtherContainerInfo>
-        <StyledTag text={iconLabel} bgColor={bgColor} icon={iconType} />
+        {status && <StyledTag text={iconLabel} bgColor={bgColor} icon={iconType} />}
         <NodeLabelContainer>
           <Label>NODE COUNT:</Label>
-          {nodeCount && <p>{nodeCount}</p>}
+          {nodes && <p>{nodes}</p>}
         </NodeLabelContainer>
       </OtherContainerInfo>
       <NodeHandle
