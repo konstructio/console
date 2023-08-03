@@ -10,43 +10,54 @@ import ReactFlow, {
 
 import { GraphNode, type CustomGraphNode } from '../graphNode';
 import 'reactflow/dist/style.css';
+import { ClusterStatus, ClusterType } from '../../types/provision';
+import { InstallationType } from '../../types/redux';
 
 const initialNodes: CustomGraphNode[] = [
   {
     id: '1',
-    type: 'management',
+    type: 'custom',
     data: {
-      label: 'kubefirst-mgmt',
-      cloud: 'AWS',
-      region: 'ap-southeast-1',
-      status: 'available',
-      nodeCount: 2,
+      clusterName: 'kuberfirst-mgmt2',
+      type: ClusterType.MANAGEMENT,
+      cloudProvider: InstallationType.AWS,
+      cloudRegion: 'ap-southeast-1',
+      creationDate: '05 Apr 2023, 12:24:56',
+      gitUser: 'Eleanor Carroll',
+      status: ClusterStatus.PROVISIONED,
+      nodes: 2,
     },
     position: { x: 5, y: 0 },
     draggable: false,
   },
   {
     id: '2',
-    type: 'worker',
+    type: 'custom',
     data: {
-      label: 'kubefirst-worker-one',
-      cloud: 'AWS',
-      region: 'ap-southeast-1',
-      status: 'unavailable',
-      nodeCount: 2,
+      clusterName: 'kuberfirst-worker-1',
+      type: ClusterType.WORKLOAD,
+      cloudProvider: InstallationType.AWS,
+      cloudRegion: 'ap-southeast-1',
+      creationDate: '05 Apr 2023, 12:24:56',
+      gitUser: 'Eleanor Carroll',
+      status: ClusterStatus.ERROR,
+      nodes: 2,
     },
     position: { x: 500, y: -100 },
     draggable: false,
   },
   {
     id: '3',
-    type: 'worker',
+    type: 'custom',
     data: {
-      label: 'kubefirst-worker-one',
-      cloud: 'AWS',
-      region: 'ap-southeast-1',
-      status: 'available',
-      nodeCount: 2,
+      clusterName: 'kuberfirst-worker-2',
+      type: ClusterType.WORKLOAD,
+      cloudProvider: InstallationType.AWS,
+      cloudRegion: 'ap-southeast-1',
+      creationDate: '05 Apr 2023, 12:24:56',
+      gitUser: 'Eleanor Carroll',
+      status: ClusterStatus.PROVISIONED,
+      nodes: 2,
     },
     position: { x: 500, y: 100 },
   },
@@ -72,9 +83,7 @@ const initialEdges: Edge[] = [
 ];
 
 const nodeTypes: NodeTypes = {
-  management: GraphNode,
-  workload: GraphNode,
-  draft: GraphNode,
+  custom: GraphNode,
 };
 
 export const Flow: FunctionComponent = () => {
