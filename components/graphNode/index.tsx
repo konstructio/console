@@ -4,8 +4,9 @@ import { Node, NodeProps, Position, HandleType } from 'reactflow';
 import greenPolygon from '../../assets/managementIcon.svg';
 import pinkClusterIcon from '../../assets/cluster.svg';
 import unavailableClusterSrc from '../../assets/cluster-unavailable.svg';
-import { TagColor, TagIconOption } from '../tag';
 import { BLUE_REFLECTION, MAGIC_MINT, SASSY_PINK } from '../../constants/colors';
+import { TAG_CONFIG } from '../../constants';
+import { NodeStatus, NodeType } from '../../types';
 
 import {
   Container,
@@ -21,26 +22,12 @@ import {
   StyledTag,
 } from './graphNode.styled';
 
-type NodeStatus = 'available' | 'unavailable' | 'draft' | 'deleting';
-
-type NodeType = 'management' | 'workload' | 'draft';
-
-type NodeData = {
+export type NodeData = {
   label?: string;
   cloud?: string;
   region?: string;
   status: NodeStatus;
   nodeCount?: number;
-};
-
-const tagConfig: Record<
-  NodeStatus,
-  { iconLabel: string; iconType?: TagIconOption; bgColor: TagColor }
-> = {
-  available: { iconLabel: 'Available', iconType: 'check', bgColor: 'green' },
-  deleting: { iconLabel: 'Deleting', iconType: 'trash', bgColor: 'pink' },
-  draft: { iconLabel: 'DRAFT', bgColor: 'grey' },
-  unavailable: { iconLabel: 'Unavailable', iconType: 'warning', bgColor: 'light-orange' },
 };
 
 const nodeConfig: Record<
@@ -60,7 +47,7 @@ const nodeConfig: Record<
     imageSrc: greenPolygon,
     nodeColor: MAGIC_MINT,
   },
-  workload: {
+  worker: {
     handle: 'target',
     position: Position.Left,
     imageSrc: pinkClusterIcon,
@@ -77,7 +64,7 @@ export const GraphNode: FunctionComponent<NodeProps<NodeData>> = ({
 }) => {
   const { label, cloud, region, nodeCount, status } = data;
 
-  const { iconLabel, iconType, bgColor } = tagConfig[status];
+  const { iconLabel, iconType, bgColor } = TAG_CONFIG[status];
   const { handle, position, imageSrc, nodeColor } = nodeConfig[type as NodeType];
 
   return (

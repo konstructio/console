@@ -1,3 +1,6 @@
+import { TagColor, TagIconOption } from '../components/tag';
+import { NodeStatus } from '../types';
+
 export const AWS_REGIONS = [
   { label: 'US East (Ohio) (us-east-2)', value: 'us-east-2' },
   { label: 'US East (N. Virginia) (us-east-1)', value: 'us-east-1' },
@@ -30,3 +33,13 @@ export const FLAPPY_TWEET = `The @kubefirst team is making kubernetes platform p
 export const AUTHENTICATION_ERROR_MSG = `
   Please check that your cloud provider authentication inputs are correct, then click Next to retry. If the issue persists please <a href="https://kubefirst.io/slack" target="_blank">contact the kubefirst team via Slack</a>.
 `;
+
+export const TAG_CONFIG: Record<
+  NodeStatus,
+  { iconLabel: string; iconType?: TagIconOption; bgColor: TagColor }
+> = {
+  available: { iconLabel: 'Available', iconType: 'check', bgColor: 'green' },
+  deleting: { iconLabel: 'Deleting', iconType: 'trash', bgColor: 'pink' },
+  draft: { iconLabel: 'DRAFT', bgColor: 'grey' },
+  unavailable: { iconLabel: 'Unavailable', iconType: 'warning', bgColor: 'light-orange' },
+};
