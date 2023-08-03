@@ -8,7 +8,7 @@ import {
 } from 'react-hook-form';
 
 import { Row } from '../';
-import { InstallValues } from '../redux';
+import { InstallValues, InstallationType } from '../redux';
 
 export interface FormFlowProps<T extends FieldValues> {
   currentStep: number;
@@ -71,19 +71,25 @@ export enum ClusterStatus {
   PROVISIONING = 'provisioning',
 }
 
+export enum ClusterType {
+  MANAGEMENT = 'mgmt',
+  WORKLOAD = 'workload',
+  DRAFT = 'draft',
+}
+
 export interface Cluster extends Row {
   adminEmail: string;
   clusterName: string;
-  cloudProvider: string;
+  cloudProvider: InstallationType;
   cloudRegion: string;
   domainName: string;
   gitOwner: string;
   gitProvider: string;
   gitUser: string;
   gitToken?: string;
-  type: string;
+  type: ClusterType.MANAGEMENT | ClusterType.WORKLOAD;
   creationDate?: string;
-  status?: string;
+  status?: ClusterStatus;
   lastErrorCondition: string;
   checks: {
     install_tools_check: boolean;
