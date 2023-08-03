@@ -36,6 +36,7 @@ import { BISCAY, SALTBOX_BLUE } from '../../constants/colors';
 import { Flow } from '../../components/flow';
 import closeImageSrc from '../../assets/close.svg';
 import Column from '../../components/column';
+import { ClusterTable } from '../../components/clusterTable/clusterTable';
 
 enum MANAGEMENT_TABS {
   LIST_VIEW = 0,
@@ -157,7 +158,7 @@ const ClusterManagement: FunctionComponent = () => {
       </Header>
       <Content>
         <TabPanel value={activeTab} index={MANAGEMENT_TABS.LIST_VIEW}>
-          {/* TODO: ADD LIST VIEW */}
+          <ClusterTable clusters={clusters} />
         </TabPanel>
         <TabPanel value={activeTab} index={MANAGEMENT_TABS.GRAPH_VIEW}>
           <Flow />
