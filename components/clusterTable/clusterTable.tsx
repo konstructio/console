@@ -13,9 +13,10 @@ import awsLogo from '../../assets/aws_logo.svg';
 import civoLogo from '../../assets/civo_logo.svg';
 import digitalOceanLogo from '../../assets/digital_ocean_logo.svg';
 import vultrLogo from '../../assets/vultr_logo.svg';
-import { TAG_CONFIG } from '../../constants';
-import { NodeStatus, NodeType } from '../../types';
+import { CLUSTER_TAG_CONFIG } from '../../constants';
 import { DODGER_BLUE, ROCK_BLUE } from '../../constants/colors';
+import { Cluster, ClusterType } from '../../types/provision';
+import { InstallationType } from '../../types/redux';
 
 import {
   StyledTableRow,
@@ -27,39 +28,40 @@ import {
   StyledCellText,
 } from './clusterTable.styled';
 
-const CLOUD_OPTIONS = {
-  k3d: k3dLogo,
-  aws: awsLogo,
-  civo: civoLogo,
-  digitalOcean: digitalOceanLogo,
-  vultr: vultrLogo,
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const CLOUD_LOGO_OPTIONS: Record<InstallationType, any> = {
+  [InstallationType.LOCAL]: k3dLogo,
+  [InstallationType.AWS]: awsLogo,
+  [InstallationType.CIVO]: civoLogo,
+  [InstallationType.DIGITAL_OCEAN]: digitalOceanLogo,
+  [InstallationType.VULTR]: vultrLogo,
 };
 
-export type ClusterInfo = {
-  name: string;
-  nodeType: NodeType;
-  cloud: keyof typeof CLOUD_OPTIONS;
-  region: string;
-  nodes: number;
-  created: string;
-  createdBy: string;
-  status: NodeStatus;
+export type ClusterInfo = Pick<
+  Cluster,
+  'clusterName' | 'type' | 'cloudProvider' | 'cloudRegion' | 'creationDate' | 'gitUser' | 'status'
+> & {
+  nodes?: number;
 };
 
 const ClusterRow: FunctionComponent<ClusterInfo> = ({
-  name,
-  nodeType,
-  cloud,
-  region,
-  nodes,
-  created,
-  createdBy,
+  clusterName,
+  type,
+  cloudProvider,
+  cloudRegion,
+  creationDate,
+  gitUser: createdBy,
   status,
+  nodes,
 }) => {
   const [open, setOpen] = useState(false);
 
-  const cloudLogoSrc = CLOUD_OPTIONS[cloud];
-  const { iconLabel, iconType, bgColor } = TAG_CONFIG[status];
+  const cloudLogoSrc = CLOUD_LOGO_OPTIONS[cloudProvider];
+  const { iconLabel, iconType, bgColor } = CLUSTER_TAG_CONFIG[status ?? 'draft'];
+  const formattedClusterType = type === ClusterType.MANAGEMENT ? 'management' : 'worker';
+
+  // placeholder for now. new field yet to be implemented
+  const nodeCount = nodes ?? 2;
 
   return (
     <>
@@ -77,23 +79,23 @@ const ClusterRow: FunctionComponent<ClusterInfo> = ({
         </StyledTableCell>
         <StyledTableCell component="th" scope="row">
           <StyledCellText variant="body2" style={{ fontWeight: 500 }}>
-            {name}
+            {clusterName}
           </StyledCellText>
           <StyledCellText variant="body2" style={{ color: DODGER_BLUE }}>
-            {nodeType}
+            {formattedClusterType}
           </StyledCellText>
         </StyledTableCell>
         <StyledTableCell align="left">
-          <Image src={cloudLogoSrc} height={18} width={30} alt={cloud} />
+          <Image src={cloudLogoSrc} height={18} width={30} alt={cloudProvider} />
         </StyledTableCell>
         <StyledTableCell>
-          <StyledCellText variant="body2">{region}</StyledCellText>
+          <StyledCellText variant="body2">{cloudRegion}</StyledCellText>
         </StyledTableCell>
         <StyledTableCell align="right">
-          <StyledCellText variant="body2">{nodes}</StyledCellText>
+          <StyledCellText variant="body2">{nodeCount}</StyledCellText>
         </StyledTableCell>
         <StyledTableCell>
-          <StyledCellText variant="body2">{created}</StyledCellText>
+          <StyledCellText variant="body2">{creationDate}</StyledCellText>
         </StyledTableCell>
         <StyledTableCell>
           <StyledCellText variant="body2">{createdBy}</StyledCellText>
@@ -119,12 +121,12 @@ const ClusterRow: FunctionComponent<ClusterInfo> = ({
 };
 
 interface ClusterTableProps extends ComponentPropsWithoutRef<'div'> {
-  rows: ClusterInfo[];
+  clusters: ClusterInfo[];
 }
 
-export const ClusterTable: FunctionComponent<ClusterTableProps> = ({ rows, ...rest }) => (
-  <TableContainer style={{ padding: '2px' }} {...rest}>
-    <Table aria-label="collapsible table" sx={{ borderCollapse: 'collapse' }}>
+export const ClusterTable: FunctionComponent<ClusterTableProps> = ({ clusters, ...rest }) => (
+  <TableContainer style={{ display: 'flex' }} {...rest}>
+    <Table aria-label="collapsible table" sx={{ borderCollapse: 'collapse', margin: '5px' }}>
       <TableHead>
         <StyledTableRow>
           <StyledTableCell />
@@ -153,8 +155,8 @@ export const ClusterTable: FunctionComponent<ClusterTableProps> = ({ rows, ...re
         </StyledTableRow>
       </TableHead>
       <StyledTableBody>
-        {rows.map((row) => (
-          <ClusterRow key={row.name} {...row} />
+        {clusters.map((cluster) => (
+          <ClusterRow key={cluster.clusterName} {...cluster} />
         ))}
       </StyledTableBody>
     </Table>
