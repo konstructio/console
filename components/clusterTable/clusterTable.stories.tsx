@@ -1,6 +1,9 @@
 import React from 'react';
 import { Story } from '@storybook/react';
 
+import { ClusterStatus, ClusterType } from '../../types/provision';
+import { InstallationType } from '../../types/redux';
+
 import { ClusterTable, ClusterInfo } from './clusterTable';
 
 export default {
@@ -8,59 +11,59 @@ export default {
   component: ClusterTable,
 };
 
-const rows: ClusterInfo[] = [
+const clusters: ClusterInfo[] = [
   {
-    name: 'kuberfirst-mgmt2',
-    nodeType: 'management',
-    cloud: 'aws',
-    region: 'ap-southeast-1',
+    clusterName: 'kuberfirst-mgmt2',
+    type: ClusterType.MANAGEMENT,
+    cloudProvider: InstallationType.AWS,
+    cloudRegion: 'ap-southeast-1',
+    creationDate: '05 Apr 2023, 12:24:56',
+    gitUser: 'Eleanor Carroll',
+    status: ClusterStatus.PROVISIONED,
     nodes: 2,
-    created: '05 Apr 2023, 12:24:56',
-    createdBy: 'Eleanor Carroll',
-    status: 'available',
   },
   {
-    name: 'kuberfirst-mgmt2',
-    nodeType: 'management',
-    cloud: 'civo',
-    region: 'ap-southeast-1',
+    clusterName: 'kuberfirst-mgmt2',
+    type: ClusterType.MANAGEMENT,
+    cloudProvider: InstallationType.CIVO,
+    cloudRegion: 'ap-southeast-1',
     nodes: 2,
-    created: '05 Apr 2023, 12:24:56',
-    createdBy: 'Eleanor Carroll',
-    status: 'unavailable',
+    creationDate: '05 Apr 2023, 12:24:56',
+    gitUser: 'Eleanor Carroll',
+    status: ClusterStatus.ERROR,
   },
   {
-    name: 'kuberfirst-mgmt2',
-    nodeType: 'management',
-    cloud: 'digitalOcean',
-    region: 'ap-southeast-1',
+    clusterName: 'kuberfirst-mgmt2',
+    type: ClusterType.MANAGEMENT,
+    cloudProvider: InstallationType.DIGITAL_OCEAN,
+    cloudRegion: 'ap-southeast-1',
     nodes: 2,
-    created: '05 Apr 2023, 12:24:56',
-    createdBy: 'Eleanor Carroll',
-    status: 'deleting',
+    creationDate: '05 Apr 2023, 12:24:56',
+    gitUser: 'Eleanor Carroll',
+    status: ClusterStatus.DELETING,
   },
   {
-    name: 'kuberfirst-mgmt2',
-    nodeType: 'worker',
-    cloud: 'digitalOcean',
-    region: 'ap-southeast-1',
+    clusterName: 'kuberfirst-mgmt2',
+    type: ClusterType.WORKLOAD,
+    cloudProvider: InstallationType.DIGITAL_OCEAN,
+    cloudRegion: 'ap-southeast-1',
     nodes: 2,
-    created: '05 Apr 2023, 12:24:56',
-    createdBy: 'Eleanor Carroll',
-    status: 'available',
+    creationDate: '05 Apr 2023, 12:24:56',
+    gitUser: 'Eleanor Carroll',
+    status: ClusterStatus.PROVISIONED,
   },
   {
-    name: 'kuberfirst-mgmt2',
-    nodeType: 'worker',
-    cloud: 'vultr',
-    region: 'ap-southeast-1',
+    clusterName: 'kuberfirst-mgmt2',
+    type: ClusterType.WORKLOAD,
+    cloudProvider: InstallationType.VULTR,
+    cloudRegion: 'ap-southeast-1',
     nodes: 2,
-    created: '05 Apr 2023, 12:24:56',
-    createdBy: 'Eleanor Carroll',
-    status: 'available',
+    creationDate: '05 Apr 2023, 12:24:56',
+    gitUser: 'Eleanor Carroll',
+    status: ClusterStatus.PROVISIONED,
   },
 ];
 
-const DefaultTemplate: Story = (args) => <ClusterTable rows={rows} {...args} />;
+const DefaultTemplate: Story = (args) => <ClusterTable clusters={clusters} {...args} />;
 
 export const Default = DefaultTemplate.bind({});
