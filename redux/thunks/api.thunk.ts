@@ -53,7 +53,7 @@ const mapClusterFromRaw = (cluster: ClusterResponse): Cluster => ({
 
 export const createCluster = createAsyncThunk<
   Cluster,
-  void,
+  Cluster,
   {
     dispatch: AppDispatch;
     state: RootState;
@@ -91,7 +91,7 @@ export const createCluster = createAsyncThunk<
       ...values?.vultr_auth,
     },
   };
-  const res = await axios.post('/api/proxy', {
+  const res = await axios.post<Cluster>('/api/proxy', {
     url: `/cluster/${values?.clusterName || 'kubefirst'}`,
     body: params,
   });
