@@ -1,8 +1,6 @@
 import React, { FunctionComponent, useCallback, useEffect, useRef, useState } from 'react';
 import { Box, Snackbar, Tabs } from '@mui/material';
 import { useRouter } from 'next/router';
-import { FormProvider, useForm } from 'react-hook-form';
-import Image from 'next/image';
 
 import Button from '../../components/button';
 import Typography from '../../components/typography';
@@ -16,29 +14,13 @@ import Drawer from '../../components/drawer';
 import { Row } from '../../types';
 import useModal from '../../hooks/useModal';
 import DeleteCluster from '../deleteCluster';
-
-import {
-  CloseButton,
-  ClusterMenuFooter,
-  Container,
-  Content,
-  FinalFormContainer,
-  Form,
-  Header,
-  MenuHeader,
-} from './clusterManagement.styled';
-
-import { getClusterManagementColumns, getClusterState } from './columnDefinition';
-
-import FinalForm, { ClusterConfig } from '../../containers/clusterForms/finalForm';
 import TabPanel, { Tab, a11yProps } from '../../components/tab';
 import { BISCAY, SALTBOX_BLUE } from '../../constants/colors';
 import { Flow } from '../../components/flow';
-import closeImageSrc from '../../assets/close.svg';
-import Column from '../../components/column';
 import { ClusterTable } from '../../components/clusterTable/clusterTable';
-import LinearProgress from '../../components/linearProgress';
-import TerminalLogs from '../../containers/terminalLogs/terminalLogs';
+import { CreateClusterFlow } from './createClusterFlow';
+
+import { Container, Content, Header } from './clusterManagement.styled';
 
 enum MANAGEMENT_TABS {
   LIST_VIEW = 0,
@@ -77,14 +59,14 @@ const ClusterManagement: FunctionComponent = () => {
     }
   };
 
-  const handleDeleteCluster = () => {
-    dispatch(deleteCluster({ clusterName: selectedCluster?.clusterName })).unwrap();
+  const handleDeleteCluster = async () => {
+    await dispatch(deleteCluster({ clusterName: selectedCluster?.clusterName })).unwrap();
     handleGetClusters();
     closeDeleteModal();
   };
 
-  const handleCreateCluster = async () => {
-    await dispatch(resetInstallState());
+  const handleCreateCluster = () => {
+    dispatch(resetInstallState());
     push('/provision');
   };
 
@@ -126,31 +108,6 @@ const ClusterManagement: FunctionComponent = () => {
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setActiveTab(newValue);
   };
-
-  const methods = useForm<ClusterConfig>();
-
-  const formRef = useRef<HTMLFormElement>(null);
-
-  enum CLUSTER_MANAGEMENT_STEP {
-    CREATE,
-    PROVISION,
-    DETAILS,
-  }
-
-  const [workloadClusterStep, setWorkloadClusterStep] = useState<CLUSTER_MANAGEMENT_STEP>(
-    CLUSTER_MANAGEMENT_STEP.CREATE,
-  );
-
-  const handleMenuClose = useCallback(() => {
-    closeDetailsPanel();
-    setWorkloadClusterStep(CLUSTER_MANAGEMENT_STEP.CREATE);
-  }, [setWorkloadClusterStep, CLUSTER_MANAGEMENT_STEP, closeDetailsPanel]);
-
-  const handleClick = useCallback(() => {
-    setWorkloadClusterStep((curStep) =>
-      curStep === CLUSTER_MANAGEMENT_STEP.DETAILS ? curStep : curStep + 1,
-    );
-  }, [setWorkloadClusterStep, CLUSTER_MANAGEMENT_STEP]);
 
   return (
     <Container>
@@ -210,40 +167,8 @@ const ClusterManagement: FunctionComponent = () => {
             height: 'calc(100% - 65px)',
           },
         }}
-        onClose={() => setWorkloadClusterStep(CLUSTER_MANAGEMENT_STEP.CREATE)}
       >
-        <MenuHeader>
-          <Typography variant="subtitle2">Create workload cluster</Typography>
-          <CloseButton onClick={handleMenuClose}>
-            <Image src={closeImageSrc} height={24} width={24} alt="close" />
-          </CloseButton>
-        </MenuHeader>
-        <Column style={{ flex: 1, padding: '0 24px' }}>
-          {workloadClusterStep === CLUSTER_MANAGEMENT_STEP.CREATE && (
-            <FormProvider {...methods}>
-              <FinalForm
-                onFinalFormSubmit={(config) => console.log('the values =>', config)}
-                ref={formRef}
-                style={{ height: '100%', marginTop: '32px' }}
-              />
-            </FormProvider>
-          )}
-          {workloadClusterStep === CLUSTER_MANAGEMENT_STEP.PROVISION && (
-            <Column style={{ gap: '32px' }}>
-              <LinearProgress progress={80} />
-              <TerminalLogs />
-            </Column>
-          )}
-          {workloadClusterStep === CLUSTER_MANAGEMENT_STEP.DETAILS && <p>Details step</p>}
-        </Column>
-        <ClusterMenuFooter>
-          <Button variant="outlined" color="primary" onClick={handleMenuClose}>
-            Close
-          </Button>
-          <Button variant="contained" color="primary" onClick={handleClick}>
-            Create cluster
-          </Button>
-        </ClusterMenuFooter>
+        <CreateClusterFlow onMenuClose={closeDetailsPanel} />
       </Drawer>
       <DeleteCluster
         isOpen={isDeleteModalOpen}
