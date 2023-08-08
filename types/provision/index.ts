@@ -10,6 +10,20 @@ import {
 import { Row } from '../';
 import { InstallValues, InstallationType } from '../redux';
 
+export enum ClusterStatus {
+  DELETED = 'deleted',
+  DELETING = 'deleting',
+  ERROR = 'error',
+  PROVISIONED = 'provisioned',
+  PROVISIONING = 'provisioning',
+}
+
+export enum ClusterType {
+  MANAGEMENT = 'mgmt',
+  WORKLOAD = 'workload',
+  DRAFT = 'draft',
+}
+
 export interface FormFlowProps<T extends FieldValues> {
   currentStep: number;
   control: Control<InstallValues>;
@@ -30,14 +44,14 @@ export interface ClusterRequestProps {
 export interface ClusterResponse {
   _id: string;
   creation_timestamp: string;
-  status: string;
+  status: ClusterStatus;
   in_progress: boolean;
   cluster_name: string;
-  cloud_provider: string;
+  cloud_provider: InstallationType;
   cloud_region: string;
   domain_name: string;
   cluster_id: string;
-  cluster_type: string;
+  cluster_type: ClusterType.MANAGEMENT | ClusterType.WORKLOAD;
   alerts_email: string;
   git_provider: string;
   git_owner: string;
@@ -61,20 +75,6 @@ export interface ClusterResponse {
   vault_initialized_check: boolean;
   vault_terraform_apply_check: boolean;
   users_terraform_apply_check: boolean;
-}
-
-export enum ClusterStatus {
-  DELETED = 'deleted',
-  DELETING = 'deleting',
-  ERROR = 'error',
-  PROVISIONED = 'provisioned',
-  PROVISIONING = 'provisioning',
-}
-
-export enum ClusterType {
-  MANAGEMENT = 'mgmt',
-  WORKLOAD = 'workload',
-  DRAFT = 'draft',
 }
 
 export interface Cluster extends Row {
