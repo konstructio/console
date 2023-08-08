@@ -53,7 +53,7 @@ const mapClusterFromRaw = (cluster: ClusterResponse): Cluster => ({
 
 export const createCluster = createAsyncThunk<
   Cluster,
-  Cluster,
+  void,
   {
     dispatch: AppDispatch;
     state: RootState;
