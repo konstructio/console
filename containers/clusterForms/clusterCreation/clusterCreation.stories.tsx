@@ -2,11 +2,11 @@ import React, { useRef } from 'react';
 import { Story } from '@storybook/react';
 import { FormProvider, useForm } from 'react-hook-form';
 
-import FinalForm, { ClusterConfig } from '.';
+import ClusterCreationForm, { ClusterConfig } from '.';
 
 export default {
-  title: 'Forms/FinalForm',
-  component: FinalForm,
+  title: 'Forms/ClusterCreationForm',
+  component: ClusterCreationForm,
 };
 
 const DefaultTemplate: Story = () => {
@@ -22,9 +22,9 @@ const DefaultTemplate: Story = () => {
 
   return (
     <FormProvider {...methods}>
-      <FinalForm
+      <ClusterCreationForm
         ref={formRef}
-        onFinalFormSubmit={(config) => console.log('the form values =>', config)}
+        onFormSubmit={(config) => console.log('the form values =>', config)}
       />
       <button onClick={handleClick}>Submit me</button>
     </FormProvider>
