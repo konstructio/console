@@ -37,6 +37,8 @@ import { Flow } from '../../components/flow';
 import closeImageSrc from '../../assets/close.svg';
 import Column from '../../components/column';
 import { ClusterTable } from '../../components/clusterTable/clusterTable';
+import LinearProgress from '../../components/linearProgress';
+import TerminalLogs from '../../containers/terminalLogs/terminalLogs';
 
 enum MANAGEMENT_TABS {
   LIST_VIEW = 0,
@@ -127,6 +129,29 @@ const ClusterManagement: FunctionComponent = () => {
 
   const methods = useForm<ClusterConfig>();
 
+  const formRef = useRef<HTMLFormElement>(null);
+
+  enum CLUSTER_MANAGEMENT_STEP {
+    CREATE,
+    PROVISION,
+    DETAILS,
+  }
+
+  const [workloadClusterStep, setWorkloadClusterStep] = useState<CLUSTER_MANAGEMENT_STEP>(
+    CLUSTER_MANAGEMENT_STEP.CREATE,
+  );
+
+  const handleMenuClose = useCallback(() => {
+    closeDetailsPanel();
+    setWorkloadClusterStep(CLUSTER_MANAGEMENT_STEP.CREATE);
+  }, [setWorkloadClusterStep, CLUSTER_MANAGEMENT_STEP, closeDetailsPanel]);
+
+  const handleClick = useCallback(() => {
+    setWorkloadClusterStep((curStep) =>
+      curStep === CLUSTER_MANAGEMENT_STEP.DETAILS ? curStep : curStep + 1,
+    );
+  }, [setWorkloadClusterStep, CLUSTER_MANAGEMENT_STEP]);
+
   return (
     <Container>
       <Header>
@@ -177,37 +202,48 @@ const ClusterManagement: FunctionComponent = () => {
         open={isDetailsPanelOpen}
         anchor="right"
         hideBackdrop
-        sx={{ top: '20px' }}
         PaperProps={{
-          sx: { top: '65px', boxShadow: '0px 2px 4px rgba(100, 116, 139, 0.16)', width: '684px' },
+          sx: {
+            top: '65px',
+            boxShadow: '0px 2px 4px rgba(100, 116, 139, 0.16)',
+            width: '684px',
+            height: 'calc(100% - 65px)',
+          },
         }}
-        onClose={closeDetailsPanel}
+        onClose={() => setWorkloadClusterStep(CLUSTER_MANAGEMENT_STEP.CREATE)}
       >
         <MenuHeader>
           <Typography variant="subtitle2">Create workload cluster</Typography>
-          <CloseButton onClick={closeDetailsPanel}>
+          <CloseButton onClick={handleMenuClose}>
             <Image src={closeImageSrc} height={24} width={24} alt="close" />
           </CloseButton>
         </MenuHeader>
-        <Column style={{ flex: 1 }}>
-          <FormProvider {...methods}>
-            <Form
-              onSubmit={methods.handleSubmit((values) => console.log('the form values =>', values))}
-            >
-              <FinalFormContainer>
-                <FinalForm />
-              </FinalFormContainer>
-              <ClusterMenuFooter>
-                <Button variant="outlined" color="primary" onClick={closeDetailsPanel}>
-                  Close
-                </Button>
-                <Button variant="contained" color="primary" type="submit">
-                  Create cluster
-                </Button>
-              </ClusterMenuFooter>
-            </Form>
-          </FormProvider>
+        <Column style={{ flex: 1, padding: '0 24px' }}>
+          {workloadClusterStep === CLUSTER_MANAGEMENT_STEP.CREATE && (
+            <FormProvider {...methods}>
+              <FinalForm
+                onFinalFormSubmit={(config) => console.log('the values =>', config)}
+                ref={formRef}
+                style={{ height: '100%', marginTop: '32px' }}
+              />
+            </FormProvider>
+          )}
+          {workloadClusterStep === CLUSTER_MANAGEMENT_STEP.PROVISION && (
+            <Column style={{ gap: '32px' }}>
+              <LinearProgress progress={80} />
+              <TerminalLogs />
+            </Column>
+          )}
+          {workloadClusterStep === CLUSTER_MANAGEMENT_STEP.DETAILS && <p>Details step</p>}
         </Column>
+        <ClusterMenuFooter>
+          <Button variant="outlined" color="primary" onClick={handleMenuClose}>
+            Close
+          </Button>
+          <Button variant="contained" color="primary" onClick={handleClick}>
+            Create cluster
+          </Button>
+        </ClusterMenuFooter>
       </Drawer>
       <DeleteCluster
         isOpen={isDeleteModalOpen}
