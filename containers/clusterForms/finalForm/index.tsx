@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useState } from 'react';
+import React, { ComponentPropsWithRef, forwardRef, useState } from 'react';
 import { useFormContext } from 'react-hook-form';
 
 import ControlledAutocomplete from '../../../components/controlledFields/AutoComplete';
@@ -9,6 +9,7 @@ import ControlledSelect from '../../../components/controlledFields/Select';
 import NumberInput from '../../../components/numberInput';
 import Row from '../../../components/row';
 import Button from '../../../components/button';
+import { Form } from './finalForm.styled';
 
 export type ClusterConfig = {
   clusterName?: string;
@@ -20,7 +21,14 @@ export type ClusterConfig = {
 
 const minNodeCount = 1;
 
-const FinalForm: FunctionComponent = () => {
+interface FinalFormProps extends ComponentPropsWithRef<'form'> {
+  onFinalFormSubmit: (config: ClusterConfig) => void;
+}
+
+const FinalForm = forwardRef<HTMLFormElement, FinalFormProps>(function FinalForm(
+  { onFinalFormSubmit, ...rest },
+  ref,
+) {
   const dispatch = useAppDispatch();
   const { cloudDomains, cloudRegions, values } = useAppSelector(({ api, installation }) => ({
     cloudDomains: api.cloudDomains,
@@ -43,10 +51,10 @@ const FinalForm: FunctionComponent = () => {
 
   const [value, setValue] = useState(minNodeCount);
 
-  const { control, register } = useFormContext<ClusterConfig>();
+  const { control, register, handleSubmit } = useFormContext<ClusterConfig>();
 
   return (
-    <>
+    <Form ref={ref} onSubmit={handleSubmit(onFinalFormSubmit)} {...rest}>
       <ControlledTextField
         control={control}
         name="clusterName"
@@ -109,8 +117,8 @@ const FinalForm: FunctionComponent = () => {
         }}
       />
       {/* TODO: ADD Advanced options */}
-    </>
+    </Form>
   );
-};
+});
 
 export default FinalForm;

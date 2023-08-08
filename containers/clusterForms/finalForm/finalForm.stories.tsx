@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { Story } from '@storybook/react';
 import { FormProvider, useForm } from 'react-hook-form';
 
@@ -9,18 +9,24 @@ export default {
   component: FinalForm,
 };
 
-const DefaultTemplate: Story = (args) => {
+const DefaultTemplate: Story = () => {
   const methods = useForm<ClusterConfig>();
+
+  const formRef = useRef<HTMLFormElement>(null);
+
+  const handleClick = () => {
+    if (formRef.current) {
+      formRef.current.requestSubmit();
+    }
+  };
 
   return (
     <FormProvider {...methods}>
-      <form
-        onSubmit={methods.handleSubmit((values) => console.log('the form values =>', values))}
-        style={{ display: 'flex', flexDirection: 'column', gap: '32px' }}
-      >
-        <FinalForm {...args} />
-        <button>Submit me</button>
-      </form>
+      <FinalForm
+        ref={formRef}
+        onFinalFormSubmit={(config) => console.log('the form values =>', config)}
+      />
+      <button onClick={handleClick}>Submit me</button>
     </FormProvider>
   );
 };
