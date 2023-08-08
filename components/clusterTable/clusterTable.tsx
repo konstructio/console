@@ -39,9 +39,19 @@ const CLOUD_LOGO_OPTIONS: Record<InstallationType, any> = {
 
 export type ClusterInfo = Pick<
   Cluster,
-  'clusterName' | 'type' | 'cloudProvider' | 'cloudRegion' | 'creationDate' | 'gitUser' | 'status'
+  | 'clusterName'
+  | 'type'
+  | 'domainName'
+  | 'gitProvider'
+  | 'cloudProvider'
+  | 'cloudRegion'
+  | 'creationDate'
+  | 'gitUser'
+  | 'status'
+  | 'adminEmail'
 > & {
   nodes?: number;
+  instanceSize?: string;
 };
 
 const ClusterRow: FunctionComponent<ClusterInfo> = ({

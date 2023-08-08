@@ -20,6 +20,9 @@ const clusters: ClusterInfo[] = [
     creationDate: '05 Apr 2023, 12:24:56',
     gitUser: 'Eleanor Carroll',
     status: ClusterStatus.PROVISIONED,
+    adminEmail: 'admin@mycompany.com',
+    gitProvider: 'Github',
+    domainName: 'yourdomain.com',
     nodes: 2,
   },
   {
@@ -31,6 +34,9 @@ const clusters: ClusterInfo[] = [
     creationDate: '05 Apr 2023, 12:24:56',
     gitUser: 'Eleanor Carroll',
     status: ClusterStatus.ERROR,
+    adminEmail: 'admin@mycompany.com',
+    gitProvider: 'Github',
+    domainName: 'yourdomain.com',
   },
   {
     clusterName: 'kuberfirst-mgmt2',
@@ -41,6 +47,9 @@ const clusters: ClusterInfo[] = [
     creationDate: '05 Apr 2023, 12:24:56',
     gitUser: 'Eleanor Carroll',
     status: ClusterStatus.DELETING,
+    adminEmail: 'admin@mycompany.com',
+    gitProvider: 'Github',
+    domainName: 'yourdomain.com',
   },
   {
     clusterName: 'kuberfirst-mgmt2',
@@ -51,6 +60,9 @@ const clusters: ClusterInfo[] = [
     creationDate: '05 Apr 2023, 12:24:56',
     gitUser: 'Eleanor Carroll',
     status: ClusterStatus.PROVISIONED,
+    adminEmail: 'admin@mycompany.com',
+    gitProvider: 'Github',
+    domainName: 'yourdomain.com',
   },
   {
     clusterName: 'kuberfirst-mgmt2',
@@ -61,6 +73,9 @@ const clusters: ClusterInfo[] = [
     creationDate: '05 Apr 2023, 12:24:56',
     gitUser: 'Eleanor Carroll',
     status: ClusterStatus.PROVISIONED,
+    adminEmail: 'admin@mycompany.com',
+    gitProvider: 'Github',
+    domainName: 'yourdomain.com',
   },
 ];
 
