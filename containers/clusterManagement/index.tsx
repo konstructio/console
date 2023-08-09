@@ -1,8 +1,6 @@
 import React, { FunctionComponent, useCallback, useEffect, useRef, useState } from 'react';
 import { Box, Snackbar, Tabs } from '@mui/material';
 import { useRouter } from 'next/router';
-import { FormProvider, useForm } from 'react-hook-form';
-import Image from 'next/image';
 
 import Button from '../../components/button';
 import Typography from '../../components/typography';
@@ -16,27 +14,13 @@ import Drawer from '../../components/drawer';
 import { Row } from '../../types';
 import useModal from '../../hooks/useModal';
 import DeleteCluster from '../deleteCluster';
-
-import {
-  CloseButton,
-  ClusterMenuFooter,
-  Container,
-  Content,
-  FinalFormContainer,
-  Form,
-  Header,
-  MenuHeader,
-} from './clusterManagement.styled';
-
-import { getClusterManagementColumns, getClusterState } from './columnDefinition';
-
-import FinalForm, { ClusterConfig } from '../../containers/clusterForms/finalForm';
 import TabPanel, { Tab, a11yProps } from '../../components/tab';
 import { BISCAY, SALTBOX_BLUE } from '../../constants/colors';
 import { Flow } from '../../components/flow';
-import closeImageSrc from '../../assets/close.svg';
-import Column from '../../components/column';
 import { ClusterTable } from '../../components/clusterTable/clusterTable';
+import { CreateClusterFlow } from './createClusterFlow';
+
+import { Container, Content, Header } from './clusterManagement.styled';
 
 enum MANAGEMENT_TABS {
   LIST_VIEW = 0,
@@ -75,14 +59,14 @@ const ClusterManagement: FunctionComponent = () => {
     }
   };
 
-  const handleDeleteCluster = () => {
-    dispatch(deleteCluster({ clusterName: selectedCluster?.clusterName })).unwrap();
+  const handleDeleteCluster = async () => {
+    await dispatch(deleteCluster({ clusterName: selectedCluster?.clusterName })).unwrap();
     handleGetClusters();
     closeDeleteModal();
   };
 
-  const handleCreateCluster = async () => {
-    await dispatch(resetInstallState());
+  const handleCreateCluster = () => {
+    dispatch(resetInstallState());
     push('/provision');
   };
 
@@ -124,8 +108,6 @@ const ClusterManagement: FunctionComponent = () => {
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setActiveTab(newValue);
   };
-
-  const methods = useForm<ClusterConfig>();
 
   return (
     <Container>
@@ -177,37 +159,16 @@ const ClusterManagement: FunctionComponent = () => {
         open={isDetailsPanelOpen}
         anchor="right"
         hideBackdrop
-        sx={{ top: '20px' }}
         PaperProps={{
-          sx: { top: '65px', boxShadow: '0px 2px 4px rgba(100, 116, 139, 0.16)', width: '684px' },
+          sx: {
+            top: '65px',
+            boxShadow: '0px 2px 4px rgba(100, 116, 139, 0.16)',
+            width: '684px',
+            height: 'calc(100% - 65px)',
+          },
         }}
-        onClose={closeDetailsPanel}
       >
-        <MenuHeader>
-          <Typography variant="subtitle2">Create workload cluster</Typography>
-          <CloseButton onClick={closeDetailsPanel}>
-            <Image src={closeImageSrc} height={24} width={24} alt="close" />
-          </CloseButton>
-        </MenuHeader>
-        <Column style={{ flex: 1 }}>
-          <FormProvider {...methods}>
-            <Form
-              onSubmit={methods.handleSubmit((values) => console.log('the form values =>', values))}
-            >
-              <FinalFormContainer>
-                <FinalForm />
-              </FinalFormContainer>
-              <ClusterMenuFooter>
-                <Button variant="outlined" color="primary" onClick={closeDetailsPanel}>
-                  Close
-                </Button>
-                <Button variant="contained" color="primary" type="submit">
-                  Create cluster
-                </Button>
-              </ClusterMenuFooter>
-            </Form>
-          </FormProvider>
-        </Column>
+        <CreateClusterFlow onMenuClose={closeDetailsPanel} />
       </Drawer>
       <DeleteCluster
         isOpen={isDeleteModalOpen}
