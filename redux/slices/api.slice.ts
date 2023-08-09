@@ -118,6 +118,11 @@ const apiSlice = createSlice({
         state.isError = false;
         state.clusters = payload;
       })
+      .addCase(getClusters.rejected, (state) => {
+        state.loading = false;
+        state.isError = true;
+        state.clusters = [];
+      })
       .addCase(getCloudDomains.fulfilled, (state, { payload }: PayloadAction<Array<string>>) => {
         state.cloudDomains = payload;
       })
