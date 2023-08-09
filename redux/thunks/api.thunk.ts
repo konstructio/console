@@ -22,7 +22,7 @@ const mapClusterFromRaw = (cluster: ClusterResponse): Cluster => ({
   cloudProvider: cluster.cloud_provider,
   cloudRegion: cluster.cloud_region,
   domainName: cluster.domain_name,
-  gitOwner: cluster.git_owner,
+  gitAuth: cluster.gitAuth,
   gitProvider: cluster.git_provider,
   gitUser: cluster.git_user,
   type: cluster.cluster_type,

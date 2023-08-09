@@ -1,4 +1,4 @@
-import React, { ChangeEvent, FunctionComponent, useEffect, useState } from 'react';
+import React, { ChangeEvent, FunctionComponent, useState } from 'react';
 import { Control, UseFormReset, UseFormSetValue } from 'react-hook-form';
 import { getCloudDomains } from 'redux/thunks/api.thunk';
 
