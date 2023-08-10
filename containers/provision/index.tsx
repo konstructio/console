@@ -1,5 +1,5 @@
 import React, { FunctionComponent, useCallback, useEffect, useMemo } from 'react';
-import { useForm } from 'react-hook-form';
+import { FormProvider, useForm } from 'react-hook-form';
 import { useRouter } from 'next/router';
 
 import { AUTHENTICATION_ERROR_MSG } from '../../constants';
@@ -38,7 +38,6 @@ const Provision: FunctionComponent = () => {
     installMethod,
     installationStep,
     gitProvider,
-    values,
   } = useAppSelector(({ api, config, git, installation }) => ({
     installType: installation.installType,
     gitProvider: installation.gitProvider,
@@ -69,16 +68,13 @@ const Provision: FunctionComponent = () => {
     !!isMarketplace,
   );
 
+  const methods = useForm<InstallValues>({ mode: 'onChange' });
   const {
-    control,
     formState: { isValid: isFormValid },
     getValues,
-    handleSubmit,
-    setValue,
     trigger,
-    watch,
-    reset,
-  } = useForm<InstallValues>({ mode: 'onChange' });
+    handleSubmit,
+  } = methods;
 
   const installTitle = useMemo(
     () => installTitles[installationStep],
@@ -119,8 +115,11 @@ const Provision: FunctionComponent = () => {
   const handleGoNext = useCallback(() => {
     dispatch(setInstallationStep(installationStep + 1));
     dispatch(clearError());
-    dispatch(clearClusterState());
-  }, [dispatch, installationStep]);
+
+    if (isProvisioned) {
+      dispatch(clearClusterState());
+    }
+  }, [dispatch, installationStep, isProvisioned]);
 
   const handleNextButtonClick = async () => {
     if (isAuthStep) {
@@ -170,7 +169,7 @@ const Provision: FunctionComponent = () => {
 
   const form = useMemo(() => {
     if (installationStep === 0 && !isMarketplace) {
-      return <InstallationsSelection steps={stepTitles} reset={reset} />;
+      return <InstallationsSelection />;
     }
 
     return (
@@ -186,28 +185,11 @@ const Provision: FunctionComponent = () => {
               )}
             </ErrorContainer>
           ) : null}
-          <FormFlow
-            control={control}
-            currentStep={isMarketplace ? installationStep + 1 : installationStep}
-            setValue={setValue}
-            trigger={trigger}
-            watch={watch}
-            reset={reset}
-            clusterName={values?.clusterName as string}
-            domainName={values?.domainName as string}
-          />
+          <FormFlow currentStep={isMarketplace ? installationStep + 1 : installationStep} />
         </FormContent>
         {isSetupStep && installType && ![InstallationType.LOCAL].includes(installType) && (
           <AdvancedOptionsContainer>
-            <AdvancedOptions
-              control={control}
-              currentStep={installationStep}
-              setValue={setValue}
-              trigger={trigger}
-              watch={watch}
-              clusterName={values?.clusterName as string}
-              domainName={values?.domainName as string}
-            />
+            <AdvancedOptions />
           </AdvancedOptionsContainer>
         )}
       </>
@@ -222,16 +204,8 @@ const Provision: FunctionComponent = () => {
     authErrors,
     provisionCluster,
     FormFlow,
-    control,
-    setValue,
-    trigger,
-    watch,
-    reset,
-    values?.clusterName,
-    values?.domainName,
     isSetupStep,
     installType,
-    stepTitles,
   ]);
 
   useEffect(() => {
@@ -256,31 +230,33 @@ const Provision: FunctionComponent = () => {
   }, [dispatch, installMethod, installationStep, isMarketplace]);
 
   return (
-    <Form component="form" onSubmit={handleSubmit(onSubmit)}>
-      <InstallationStepContainer
-        activeStep={installationStep}
-        steps={stepTitles}
-        installationTitle={installTitle}
-        showBackButton={
-          installationStep < stepTitles.length - 1 && installationStep > 0 && !isProvisionStep
-        }
-        onBackButtonClick={handleBackButtonClick}
-        nextButtonText={isSetupStep ? 'Create cluster' : 'Next'}
-        nextButtonDisabled={!isValid}
-        hasInfo={hasInfo}
-        isProvisionStep={isProvisionStep}
-        showNextButton={installationStep < stepTitles.length - 1}
-      >
-        {form}
-        {info && (
-          <InstallationInfoCard
-            info={info}
-            isMarketplace={isMarketplace}
-            installationType={installType}
-          />
-        )}
-      </InstallationStepContainer>
-    </Form>
+    <FormProvider {...methods}>
+      <Form component="form" onSubmit={handleSubmit(onSubmit)}>
+        <InstallationStepContainer
+          activeStep={installationStep}
+          steps={stepTitles}
+          installationTitle={installTitle}
+          showBackButton={
+            installationStep < stepTitles.length - 1 && installationStep > 0 && !isProvisionStep
+          }
+          onBackButtonClick={handleBackButtonClick}
+          nextButtonText={isSetupStep ? 'Create cluster' : 'Next'}
+          nextButtonDisabled={!isValid}
+          hasInfo={hasInfo}
+          isProvisionStep={isProvisionStep}
+          showNextButton={installationStep < stepTitles.length - 1}
+        >
+          {form}
+          {info && (
+            <InstallationInfoCard
+              info={info}
+              isMarketplace={isMarketplace}
+              installationType={installType}
+            />
+          )}
+        </InstallationStepContainer>
+      </Form>
+    </FormProvider>
   );
 };
 

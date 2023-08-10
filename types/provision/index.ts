@@ -1,14 +1,5 @@
-import {
-  Control,
-  FieldValues,
-  UseFormReset,
-  UseFormSetValue,
-  UseFormTrigger,
-  UseFormWatch,
-} from 'react-hook-form';
-
 import { Row } from '../';
-import { InstallValues, InstallationType } from '../redux';
+import { InstallationType } from '../redux';
 
 export enum ClusterStatus {
   DELETED = 'deleted',
@@ -24,18 +15,19 @@ export enum ClusterType {
   DRAFT = 'draft',
 }
 
-export interface FormFlowProps<T extends FieldValues> {
-  currentStep: number;
-  control: Control<InstallValues>;
-  clusterName: string;
-  domainName: string;
-  onFormSubmit?: (values: T) => void;
-  setValue: UseFormSetValue<T>;
-  reset?: UseFormReset<T>;
-  step?: number;
-  trigger: UseFormTrigger<T>;
-  watch: UseFormWatch<T>;
+export enum ClusterCreationStep {
+  CONFIG,
+  PROVISION,
+  DETAILS,
 }
+
+export type NewClusterConfig = {
+  clusterName?: string;
+  domainName?: string;
+  cloudRegion?: string;
+  instanceSize?: string;
+  nodeCount?: number;
+};
 
 export interface ClusterRequestProps {
   clusterName?: string;

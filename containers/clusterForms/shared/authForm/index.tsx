@@ -1,5 +1,6 @@
 import React, { ChangeEvent, FunctionComponent, useEffect, useMemo, useState } from 'react';
 import debounce from 'lodash/debounce';
+import { useFormContext } from 'react-hook-form';
 
 import { Required } from '../../../../components/textField/textField.styled';
 import GitProviderButton from '../../../../components/gitProviderButton';
@@ -10,7 +11,6 @@ import ControlledPassword from '../../../../components/controlledFields/Password
 import ControlledAutocomplete from '../../../../components/controlledFields/AutoComplete';
 import { useAppDispatch, useAppSelector } from '../../../../redux/store';
 import { GIT_PROVIDERS, GitProvider } from '../../../../types';
-import { FormFlowProps } from '../../../../types/provision';
 import { InstallValues, InstallationType } from '../../../../types/redux/index';
 import { FormStep } from '../../../../constants/installation';
 import { EXCLUSIVE_PLUM } from '../../../../constants/colors';
@@ -34,11 +34,7 @@ import { setGitProvider } from '../../../../redux/slices/installation.slice';
 
 import { FormContainer, GitContainer, GitUserField, GitUserFieldInput } from './authForm.styled';
 
-const AuthForm: FunctionComponent<FormFlowProps<InstallValues>> = ({
-  control,
-  reset,
-  setValue,
-}) => {
+const AuthForm: FunctionComponent = () => {
   const [isGitRequested, setIsGitRequested] = useState<boolean>();
   const [gitUserName, setGitUserName] = useState<string>();
 
@@ -71,6 +67,9 @@ const AuthForm: FunctionComponent<FormFlowProps<InstallValues>> = ({
     gitProvider as GitProvider,
     FormStep.AUTHENTICATION,
   );
+
+  const { control, reset, setValue } = useFormContext<InstallValues>();
+
   const isGitHub = useMemo(() => gitProvider === GitProvider.GITHUB, [gitProvider]);
 
   const validateGitOwner = async (gitOwner: string) => {

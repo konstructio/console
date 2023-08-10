@@ -1,4 +1,5 @@
 import React, { FunctionComponent } from 'react';
+import { useFormContext } from 'react-hook-form';
 
 import ControlledAutocomplete from '../../../../components/controlledFields/AutoComplete';
 import ControlledTextField from '../../../../components/controlledFields/TextField';
@@ -6,10 +7,9 @@ import ControlledTextField from '../../../../components/controlledFields/TextFie
 import { useAppDispatch, useAppSelector } from '../../../../redux/store';
 import { getCloudDomains } from '../../../../redux/thunks/api.thunk';
 import { InstallValues } from '../../../../types/redux';
-import { FormFlowProps } from '../../../../types/provision';
 import { EMAIL_REGEX } from '../../../../constants/index';
 
-const AwsSetupForm: FunctionComponent<FormFlowProps<InstallValues>> = ({ control }) => {
+const AwsSetupForm: FunctionComponent = () => {
   const dispatch = useAppDispatch();
   const { cloudDomains, cloudRegions, values } = useAppSelector(({ api, installation }) => ({
     cloudDomains: api.cloudDomains,
@@ -29,6 +29,8 @@ const AwsSetupForm: FunctionComponent<FormFlowProps<InstallValues>> = ({ control
       return { label: formattedDomain, value: formattedDomain };
     });
   };
+
+  const { control } = useFormContext<InstallValues>();
 
   return (
     <>

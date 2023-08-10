@@ -20,10 +20,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       data: body,
       method: req.method,
       headers: {
-        ...req.headers,
         Authorization: `Bearer ${K1_ACCESS_TOKEN}`,
       },
     });
+
     res.status(200).json(response.data);
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {

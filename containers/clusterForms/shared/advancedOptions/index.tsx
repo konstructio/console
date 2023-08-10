@@ -1,19 +1,19 @@
 import React, { ChangeEvent, FunctionComponent, useState } from 'react';
-import LearnMore from 'components/learnMore';
+import { useFormContext } from 'react-hook-form';
 
+import LearnMore from '../../../../components/learnMore';
 import Typography from '../../../../components/typography';
 import SwitchComponent from '../../../../components/switch';
 import Checkbox from '../../../../components/controlledFields/Checkbox';
 import ControlledTextField from '../../../../components/controlledFields/TextField';
 import ControlledAutocomplete from '../../../../components/controlledFields/AutoComplete';
 import { useAppSelector } from '../../../../redux/store';
-import { FormFlowProps } from '../../../../types/provision';
 import { InstallValues } from '../../../../types/redux';
 import { EXCLUSIVE_PLUM } from '../../../../constants/colors';
 
 import { CheckboxContainer, Switch } from './advancedOptions.styled';
 
-const AdvancedOptions: FunctionComponent<FormFlowProps<InstallValues>> = ({ control }) => {
+const AdvancedOptions: FunctionComponent = () => {
   const [isAdvancedOptionsEnabled, setIsAdvancedOptionsEnabled] = useState<boolean>(false);
   const [isCloudFlareSelected, setIsCloudFlareSelected] = useState<boolean>(false);
 
@@ -22,6 +22,8 @@ const AdvancedOptions: FunctionComponent<FormFlowProps<InstallValues>> = ({ cont
   };
 
   const { values, installType } = useAppSelector(({ installation }) => installation);
+
+  const { control } = useFormContext<InstallValues>();
 
   return (
     <>

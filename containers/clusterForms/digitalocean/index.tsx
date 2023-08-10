@@ -1,9 +1,7 @@
 import React, { FunctionComponent } from 'react';
-import { FormFlowProps } from 'types/provision';
 
 import TerminalLogs from '../../terminalLogs';
 import { FormStep } from '../../../constants/installation';
-import { InstallValues } from '../../../types/redux';
 import AuthForm from '../shared/authForm';
 import ClusterRunning from '../shared/clusterRunning';
 
@@ -16,15 +14,14 @@ const DIGITAL_OCEAN_FORM_FLOW = {
   [FormStep.READY]: ClusterRunning,
 };
 
-export const DigitalOceanFormFlow: FunctionComponent<FormFlowProps<InstallValues>> = ({
+export const DigitalOceanFormFlow: FunctionComponent<{ currentStep: FormStep }> = ({
   currentStep,
-  ...rest
 }) => {
-  const ActiveFormStep = DIGITAL_OCEAN_FORM_FLOW[currentStep as FormStep];
+  const ActiveFormStep = DIGITAL_OCEAN_FORM_FLOW[currentStep];
 
   if (!ActiveFormStep) {
     return null;
   }
 
-  return <ActiveFormStep {...rest} currentStep={currentStep} />;
+  return <ActiveFormStep />;
 };

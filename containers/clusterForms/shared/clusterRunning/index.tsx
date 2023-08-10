@@ -2,16 +2,17 @@ import React, { FunctionComponent } from 'react';
 import { useRouter } from 'next/router';
 
 import { getClusters } from '../../../../redux/thunks/api.thunk';
-import { useAppDispatch } from '../../../../redux/store';
+import { useAppDispatch, useAppSelector } from '../../../../redux/store';
 import ClusterReady from '../../../../components/clusterReady';
 
-export interface ClusterRunning {
+export interface ClusterRunningProps {
   clusterName?: string;
   domainName?: string;
 }
 
-const ClusterRunning: FunctionComponent<ClusterRunning> = (props) => {
+const ClusterRunning: FunctionComponent<ClusterRunningProps> = (props) => {
   const dispatch = useAppDispatch();
+  const installValues = useAppSelector(({ installation }) => installation.values);
   const { push } = useRouter();
 
   const onOpenConsole = () => {
@@ -19,7 +20,14 @@ const ClusterRunning: FunctionComponent<ClusterRunning> = (props) => {
     push('/services');
   };
 
-  return <ClusterReady onOpenConsole={onOpenConsole} {...props} />;
+  return (
+    <ClusterReady
+      onOpenConsole={onOpenConsole}
+      clusterName={installValues?.clusterName}
+      domainName={installValues?.domainName}
+      {...props}
+    />
+  );
 };
 
 export default ClusterRunning;
