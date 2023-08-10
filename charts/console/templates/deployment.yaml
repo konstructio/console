@@ -43,6 +43,11 @@ spec:
               value: {{ .Values.isClusterZero | default "true" | quote }}
             - name: INSTALL_METHOD
               value: {{ .Values.installMethod | default "helm" }}
+            - name: K1_ACCESS_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.existingSecret | default "kubefirst-initial-secrets" }}
+                  key: K1_ACCESS_TOKEN
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
