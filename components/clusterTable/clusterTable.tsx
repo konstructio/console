@@ -7,6 +7,7 @@ import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import Image from 'next/image';
+import moment from 'moment';
 
 import k3dLogo from '../../assets/k3d_logo.svg';
 import awsLogo from '../../assets/aws_logo.svg';
@@ -105,7 +106,9 @@ const ClusterRow: FunctionComponent<ClusterInfo> = ({
           <StyledCellText variant="body2">{nodeCount}</StyledCellText>
         </StyledTableCell>
         <StyledTableCell>
-          <StyledCellText variant="body2">{creationDate}</StyledCellText>
+          <StyledCellText variant="body2">
+            {moment(new Date(creationDate as string)).format('DD MMM YYYY')}
+          </StyledCellText>
         </StyledTableCell>
         <StyledTableCell>
           <StyledCellText variant="body2">{createdBy}</StyledCellText>

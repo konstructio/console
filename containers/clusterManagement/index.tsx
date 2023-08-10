@@ -18,8 +18,8 @@ import TabPanel, { Tab, a11yProps } from '../../components/tab';
 import { BISCAY, SALTBOX_BLUE } from '../../constants/colors';
 import { Flow } from '../../components/flow';
 import { ClusterTable } from '../../components/clusterTable/clusterTable';
-import { CreateClusterFlow } from './createClusterFlow';
 
+import { CreateClusterFlow } from './createClusterFlow';
 import { Container, Content, Header } from './clusterManagement.styled';
 
 enum MANAGEMENT_TABS {
