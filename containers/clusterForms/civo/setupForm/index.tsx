@@ -1,5 +1,5 @@
 import React, { FunctionComponent } from 'react';
-import { FormFlowProps } from 'types/provision';
+import { useFormContext } from 'react-hook-form';
 
 import ControlledAutocomplete from '../../../../components/controlledFields/AutoComplete';
 import ControlledTextField from '../../../../components/controlledFields/TextField';
@@ -9,13 +9,15 @@ import { getCloudDomains } from '../../../../redux/thunks/api.thunk';
 import { InstallValues } from '../../../../types/redux';
 import { EMAIL_REGEX } from '../../../../constants';
 
-const CivoSetupForm: FunctionComponent<FormFlowProps<InstallValues>> = ({ control }) => {
+const CivoSetupForm: FunctionComponent = () => {
   const dispatch = useAppDispatch();
   const { cloudDomains, cloudRegions, values } = useAppSelector(({ api, installation }) => ({
     cloudDomains: api.cloudDomains,
     cloudRegions: api.cloudRegions,
     values: installation.values,
   }));
+
+  const { control } = useFormContext<InstallValues>();
 
   const handleRegionOnSelect = async (region: string) => {
     dispatch(getCloudDomains(region));

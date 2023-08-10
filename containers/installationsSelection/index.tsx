@@ -1,5 +1,5 @@
 import React, { FunctionComponent, useCallback } from 'react';
-import { UseFormReset } from 'react-hook-form';
+import { useFormContext } from 'react-hook-form';
 
 import { clearError, setGitProvider, setInstallType } from '../../redux/slices/installation.slice';
 import GitProviderButton from '../../components/gitProviderButton';
@@ -17,17 +17,12 @@ import {
   CloudProviderContainer,
 } from './installationsSelection.styled';
 
-export interface InstallationsSelectionProps {
-  steps: Array<string>;
-  reset: UseFormReset<InstallValues>;
-}
-
-export const InstallationsSelection: FunctionComponent<InstallationsSelectionProps> = ({
-  reset,
-}) => {
+export const InstallationsSelection: FunctionComponent = () => {
   const dispatch = useAppDispatch();
 
   const { installType, gitProvider } = useAppSelector(({ installation }) => installation);
+
+  const { reset } = useFormContext<InstallValues>();
 
   const clearState = useCallback(() => {
     dispatch(clearGitState());

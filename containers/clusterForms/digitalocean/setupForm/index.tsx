@@ -1,4 +1,5 @@
 import React, { FunctionComponent } from 'react';
+import { useFormContext } from 'react-hook-form';
 
 // import LearnMore from '../../../../components/learnMore';
 import ControlledAutocomplete from '../../../../components/controlledFields/AutoComplete';
@@ -7,15 +8,16 @@ import { useAppDispatch, useAppSelector } from '../../../../redux/store';
 import { getCloudDomains } from '../../../../redux/thunks/api.thunk';
 import { EMAIL_REGEX } from '../../../../constants';
 import { InstallValues } from '../../../../types/redux';
-import { FormFlowProps } from '../../../../types/provision';
 
-const DigitalOceanSetupForm: FunctionComponent<FormFlowProps<InstallValues>> = ({ control }) => {
+const DigitalOceanSetupForm: FunctionComponent = () => {
   const dispatch = useAppDispatch();
   const { cloudDomains, cloudRegions, values } = useAppSelector(({ api, installation }) => ({
     cloudDomains: api.cloudDomains,
     cloudRegions: api.cloudRegions,
     values: installation.values,
   }));
+
+  const { control } = useFormContext<InstallValues>();
 
   const handleRegionOnSelect = async (region: string) => {
     dispatch(getCloudDomains(region));
