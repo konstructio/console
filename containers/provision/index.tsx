@@ -115,8 +115,11 @@ const Provision: FunctionComponent = () => {
   const handleGoNext = useCallback(() => {
     dispatch(setInstallationStep(installationStep + 1));
     dispatch(clearError());
-    dispatch(clearClusterState());
-  }, [dispatch, installationStep]);
+
+    if (isProvisioned) {
+      dispatch(clearClusterState());
+    }
+  }, [dispatch, installationStep, isProvisioned]);
 
   const handleNextButtonClick = async () => {
     if (isAuthStep) {
