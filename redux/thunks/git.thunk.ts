@@ -81,7 +81,7 @@ export const getGitlabGroups = createAsyncThunk<GitLabGroup[], string>(
   'git/getGitlabGroups',
   async (token) => {
     return (
-      await gitlabApi.get<GitLabGroup[]>('/groups?per_page=100', {
+      await gitlabApi.get<GitLabGroup[]>('/groups?per_page=100&top_level_only=true', {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -89,6 +89,19 @@ export const getGitlabGroups = createAsyncThunk<GitLabGroup[], string>(
     ).data;
   },
 );
+
+export const getGitLabSubgroups = createAsyncThunk<
+  GitLabProject[],
+  { token: string; group: string }
+>('git/getGitLabSubgroups', async ({ token, group }) => {
+  return (
+    await gitlabApi.get<GitLabProject[]>(`/groups/${group}/subgroups?per_page=100`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+  ).data;
+});
 
 export const getGitLabProjects = createAsyncThunk<
   GitLabProject[],

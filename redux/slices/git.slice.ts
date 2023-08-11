@@ -8,6 +8,7 @@ import {
   getGitHubOrgTeams,
   getGitlabGroups,
   getGitlabUser,
+  getGitLabSubgroups,
   getGitLabProjects,
 } from '../thunks/git.thunk';
 import { GitLabGroup, GitLabUser } from '../../types/gitlab';
@@ -147,22 +148,21 @@ const gitSlice = createSlice({
           KUBEFIRST_REPOSITORIES.includes(name),
         );
 
-        const kubefirstTeams = state.gitlabGroups.filter(({ name }) =>
-          KUBEFIRST_TEAMS.includes(name),
-        );
+        if (kubefirstRepos.length) {
+          state.errors.push(`
+            GitLab organization <a href="https://gitlab.com/${state.gitOwner}" target="_blank"><strong>${state.gitOwner}</strong></a>
+            already has repositories named either <strong>gitops</strong> and <strong>metaphor</strong>.
+          Please remove or rename to continue.`);
+        }
+      })
+      .addCase(getGitLabSubgroups.fulfilled, (state, { payload: gitlabSubgroups }) => {
+        const kubefirstTeams = gitlabSubgroups.filter(({ name }) => KUBEFIRST_TEAMS.includes(name));
 
         if (kubefirstTeams.length) {
           state.errors.push(`
             GitLab organization <a href="https://gitlab.com/${state.gitOwner}" target="_blank"><strong>${state.gitOwner}</strong></a>
             already has teams named <strong>admins</strong> or <strong>developers</strong>. 
             Please remove or rename them to continue.`);
-        }
-
-        if (kubefirstRepos.length) {
-          state.errors.push(`
-            GitLab organization <a href="https://gitlab.com/${state.gitOwner}" target="_blank"><strong>${state.gitOwner}</strong></a>
-            already has repositories named either <strong>gitops</strong> and <strong>metaphor</strong>.
-          Please remove or rename to continue.`);
         }
       });
   },
