@@ -18,6 +18,7 @@ import {
   getGitHubOrgRepositories,
   getGitHubOrgTeams,
   getGitLabProjects,
+  getGitLabSubgroups,
   getGithubUser,
   getGithubUserOrganizations,
   getGitlabGroups,
@@ -83,6 +84,7 @@ const AuthForm: FunctionComponent<FormFlowProps<InstallValues>> = ({
         await dispatch(getGitHubOrgTeams({ token, organization: gitOwner })).unwrap();
       } else {
         await dispatch(getGitLabProjects({ token, group: gitOwner }));
+        await dispatch(getGitLabSubgroups({ token, group: gitOwner }));
       }
     }
   };
