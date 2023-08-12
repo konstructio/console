@@ -1,6 +1,7 @@
 import React, { ChangeEvent, FunctionComponent, useMemo, useState } from 'react';
 import { useFormContext } from 'react-hook-form';
 
+import { Required } from '../../../../components/textField/textField.styled';
 import LearnMore from '../../../../components/learnMore';
 import Typography from '../../../../components/typography';
 import SwitchComponent from '../../../../components/switch';
@@ -27,6 +28,7 @@ const AdvancedOptions: FunctionComponent = () => {
   const gitLabel = useMemo(() => (isGitHub ? 'GitHub' : 'GitLab'), [isGitHub]);
 
   const { control } = useFormContext<InstallValues>();
+  const isAwsInstallation = useMemo(() => installType === InstallationType.AWS, [installType]);
 
   return (
     <>
@@ -68,17 +70,20 @@ const AdvancedOptions: FunctionComponent = () => {
               }}
             />
           </CheckboxContainer>
-          {installType === InstallationType.AWS && (
+          {isAwsInstallation && (
             <CheckboxContainer>
-              <Typography variant="body2" color={EXCLUSIVE_PLUM}>
-                Manage image repositories with
+              <Typography
+                variant="body2"
+                color={EXCLUSIVE_PLUM}
+                sx={{ display: 'flex', gap: '4px' }}
+              >
+                Manage image repositories with <Required>*</Required>
               </Typography>
               <ControlledRadio
                 control={control}
                 rules={{
                   required: true,
                 }}
-                defaultValue="git"
                 name="imageRepository"
                 options={[
                   { label: `${gitLabel} Container Registry`, value: 'git' },

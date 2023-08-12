@@ -1,11 +1,11 @@
 import React from 'react';
 import { Story } from '@storybook/react';
 
-import ClusterDetails from '.';
-
 import { ClusterInfo } from '../clusterTable/clusterTable';
 import { ClusterStatus, ClusterType } from '../../types/provision';
 import { InstallationType } from '../../types/redux';
+
+import ClusterDetails from '.';
 
 export default {
   title: 'Components/ClusterDetails',
