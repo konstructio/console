@@ -51,21 +51,7 @@ const apiSlice = createSlice({
     setCompletedSteps: (state, action) => {
       state.completedSteps = action.payload;
     },
-    clearClusterState: (state) => {
-      state.isProvisioning = true;
-      state.isProvisioned = false;
-      state.isError = false;
-      state.lastErrorCondition = undefined;
-      state.isDeleting = false;
-      state.isDeleted = false;
-      state.status = undefined;
-      state.loading = false;
-      state.clusters = [];
-      state.selectedCluster = undefined;
-      state.completedSteps = [];
-      state.cloudDomains = [];
-      state.isAuthenticationValid = undefined;
-    },
+    clearClusterState: () => initialState,
     clearValidation: (state) => {
       state.isAuthenticationValid = undefined;
     },
@@ -78,9 +64,9 @@ const apiSlice = createSlice({
       .addCase(createCluster.pending, (state) => {
         state.loading = true;
       })
-      .addCase(createCluster.fulfilled, (state, { payload }: PayloadAction<Cluster>) => {
+      .addCase(createCluster.fulfilled, (state, { payload }) => {
         state.loading = false;
-        state.status = payload.status as ClusterStatus;
+        state.status = payload.status;
         state.isProvisioning = true;
       })
       .addCase(createCluster.rejected, (state) => {

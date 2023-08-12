@@ -1,27 +1,33 @@
-import {
-  Control,
-  FieldValues,
-  UseFormReset,
-  UseFormSetValue,
-  UseFormTrigger,
-  UseFormWatch,
-} from 'react-hook-form';
-
 import { Row } from '../';
-import { InstallValues } from '../redux';
+import { InstallationType } from '../redux';
 
-export interface FormFlowProps<T extends FieldValues> {
-  currentStep: number;
-  control: Control<InstallValues>;
-  clusterName: string;
-  domainName: string;
-  onFormSubmit?: (values: T) => void;
-  setValue: UseFormSetValue<T>;
-  reset?: UseFormReset<T>;
-  step?: number;
-  trigger: UseFormTrigger<T>;
-  watch: UseFormWatch<T>;
+export enum ClusterStatus {
+  DELETED = 'deleted',
+  DELETING = 'deleting',
+  ERROR = 'error',
+  PROVISIONED = 'provisioned',
+  PROVISIONING = 'provisioning',
 }
+
+export enum ClusterType {
+  MANAGEMENT = 'mgmt',
+  WORKLOAD = 'workload',
+  DRAFT = 'draft',
+}
+
+export enum ClusterCreationStep {
+  CONFIG,
+  PROVISION,
+  DETAILS,
+}
+
+export type NewClusterConfig = {
+  clusterName?: string;
+  domainName?: string;
+  cloudRegion?: string;
+  instanceSize?: string;
+  nodeCount?: number;
+};
 
 export interface ClusterRequestProps {
   clusterName?: string;
@@ -30,14 +36,14 @@ export interface ClusterRequestProps {
 export interface ClusterResponse {
   _id: string;
   creation_timestamp: string;
-  status: string;
+  status: ClusterStatus;
   in_progress: boolean;
   cluster_name: string;
-  cloud_provider: string;
+  cloud_provider: InstallationType;
   cloud_region: string;
   domain_name: string;
   cluster_id: string;
-  cluster_type: string;
+  cluster_type: ClusterType.MANAGEMENT | ClusterType.WORKLOAD;
   alerts_email: string;
   git_provider: string;
   git_user: string;
@@ -66,25 +72,18 @@ export interface ClusterResponse {
   users_terraform_apply_check: boolean;
 }
 
-export enum ClusterStatus {
-  DELETED = 'deleted',
-  DELETING = 'deleting',
-  ERROR = 'error',
-  PROVISIONED = 'provisioned',
-  PROVISIONING = 'provisioning',
-}
-
 export interface Cluster extends Row {
   adminEmail: string;
   clusterName: string;
-  cloudProvider: string;
+  cloudProvider: InstallationType;
   cloudRegion: string;
   domainName: string;
   gitProvider: string;
   gitUser: string;
-  type: string;
+  gitToken?: string;
+  type: ClusterType.MANAGEMENT | ClusterType.WORKLOAD;
   creationDate?: string;
-  status?: string;
+  status?: ClusterStatus;
   lastErrorCondition: string;
   gitAuth: {
     gitOwner: string;

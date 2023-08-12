@@ -1,20 +1,20 @@
 import React, { ChangeEvent, FunctionComponent, useMemo, useState } from 'react';
-import LearnMore from 'components/learnMore';
+import { useFormContext } from 'react-hook-form';
 
+import LearnMore from '../../../../components/learnMore';
 import Typography from '../../../../components/typography';
 import SwitchComponent from '../../../../components/switch';
 import Checkbox from '../../../../components/controlledFields/Checkbox';
 import ControlledTextField from '../../../../components/controlledFields/TextField';
 import ControlledRadio from '../../../../components/controlledFields/Radio';
 import { useAppSelector } from '../../../../redux/store';
-import { FormFlowProps } from '../../../../types/provision';
 import { InstallValues, InstallationType } from '../../../../types/redux';
 import { GitProvider } from '../../../../types';
 import { EXCLUSIVE_PLUM } from '../../../../constants/colors';
 
 import { CheckboxContainer, Switch } from './advancedOptions.styled';
 
-const AdvancedOptions: FunctionComponent<FormFlowProps<InstallValues>> = ({ control }) => {
+const AdvancedOptions: FunctionComponent = () => {
   const [isAdvancedOptionsEnabled, setIsAdvancedOptionsEnabled] = useState<boolean>(false);
 
   const handleOnChangeSwitch = ({ target }: ChangeEvent<HTMLInputElement>) => {
@@ -25,6 +25,8 @@ const AdvancedOptions: FunctionComponent<FormFlowProps<InstallValues>> = ({ cont
 
   const isGitHub = useMemo(() => gitProvider === GitProvider.GITHUB, [gitProvider]);
   const gitLabel = useMemo(() => (isGitHub ? 'GitHub' : 'GitLab'), [isGitHub]);
+
+  const { control } = useFormContext<InstallValues>();
 
   return (
     <>

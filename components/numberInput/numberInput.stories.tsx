@@ -14,10 +14,15 @@ const DefaultTemplate: Story = () => {
   const [value, setValue] = useState(inputMinimum);
   return (
     <NumberInput
-      value={value}
-      min={inputMinimum}
+      label="Number of nodes"
       onIncrease={() => setValue((curVal) => curVal + 1)}
       onDecrease={() => setValue((curVal) => (curVal === inputMinimum ? curVal : curVal - 1))}
+      inputProps={{
+        min: 0,
+        value,
+        type: 'number',
+        required: true,
+      }}
       style={{ margin: '50px auto' }}
     />
   );

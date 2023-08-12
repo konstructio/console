@@ -1,11 +1,9 @@
 import React, { FunctionComponent, useCallback, useEffect, useRef, useState } from 'react';
-import { Snackbar } from '@mui/material';
+import { Box, Snackbar, Tabs } from '@mui/material';
 import { useRouter } from 'next/router';
 
-import ClusterDetails from '../../components/clusterDetails';
 import Button from '../../components/button';
 import Typography from '../../components/typography';
-import Table from '../../components/table';
 import { DELETE_OPTION, VIEW_DETAILS_OPTION } from '../../constants/cluster';
 import { useAppDispatch, useAppSelector } from '../../redux/store';
 import { deleteCluster, getCluster, getClusters } from '../../redux/thunks/api.thunk';
@@ -16,11 +14,21 @@ import Drawer from '../../components/drawer';
 import { Row } from '../../types';
 import useModal from '../../hooks/useModal';
 import DeleteCluster from '../deleteCluster';
+import TabPanel, { Tab, a11yProps } from '../../components/tab';
+import { BISCAY, SALTBOX_BLUE } from '../../constants/colors';
+import { Flow } from '../../components/flow';
+import { ClusterTable } from '../../components/clusterTable/clusterTable';
 
-import { Container, Content, Description, Header, LearnMoreLink } from './clusterManagement.styled';
-import { getClusterManagementColumns, getClusterState } from './columnDefinition';
+import { CreateClusterFlow } from './createClusterFlow';
+import { Container, Content, Header } from './clusterManagement.styled';
+
+enum MANAGEMENT_TABS {
+  LIST_VIEW = 0,
+  GRAPH_VIEW = 1,
+}
 
 const ClusterManagement: FunctionComponent = () => {
+  const [activeTab, setActiveTab] = useState(MANAGEMENT_TABS.LIST_VIEW);
   const [selectedCluster, setSelectedCluster] = useState<Cluster>();
   const {
     isOpen: isDetailsPanelOpen,
@@ -51,14 +59,14 @@ const ClusterManagement: FunctionComponent = () => {
     }
   };
 
-  const handleDeleteCluster = () => {
-    dispatch(deleteCluster({ clusterName: selectedCluster?.clusterName })).unwrap();
+  const handleDeleteCluster = async () => {
+    await dispatch(deleteCluster({ clusterName: selectedCluster?.clusterName })).unwrap();
     handleGetClusters();
     closeDeleteModal();
   };
 
-  const handleCreateCluster = async () => {
-    await dispatch(resetInstallState());
+  const handleCreateCluster = () => {
+    dispatch(resetInstallState());
     push('/provision');
   };
 
@@ -97,32 +105,46 @@ const ClusterManagement: FunctionComponent = () => {
     handleGetClusters();
   }, [dispatch, handleGetClusters]);
 
+  const handleChange = (event: React.SyntheticEvent, newValue: number) => {
+    setActiveTab(newValue);
+  };
+
   return (
     <Container>
       <Header>
-        <div>
-          <Typography variant="h6">Cluster Management</Typography>
-          <Description variant="body2">
-            Add and manage your clusters.{' '}
-            <LearnMoreLink href="https://docs.kubefirst.io" target="_blank">
-              Learn more
-            </LearnMoreLink>
-          </Description>
-        </div>
-        {isClusterZero && (
-          <Button variant="contained" color="primary" onClick={handleCreateCluster}>
-            Add cluster
-          </Button>
-        )}
+        <Box sx={{ width: 'fit-content', marginLeft: '39px' }}>
+          <Tabs value={activeTab} onChange={handleChange} indicatorColor="primary">
+            <Tab
+              color={activeTab === MANAGEMENT_TABS.LIST_VIEW ? BISCAY : SALTBOX_BLUE}
+              label={<Typography variant="buttonSmall">List view</Typography>}
+              {...a11yProps(MANAGEMENT_TABS.LIST_VIEW)}
+              sx={{ textTransform: 'initial', mr: 3 }}
+            />
+
+            <Tab
+              color={activeTab === MANAGEMENT_TABS.GRAPH_VIEW ? BISCAY : SALTBOX_BLUE}
+              label={<Typography variant="buttonSmall">Graph view</Typography>}
+              {...a11yProps(MANAGEMENT_TABS.GRAPH_VIEW)}
+              sx={{ textTransform: 'initial' }}
+            />
+          </Tabs>
+        </Box>
+        <Button
+          color="primary"
+          variant="contained"
+          style={{ marginRight: '24px' }}
+          onClick={openDetailsPanel}
+        >
+          Add workload cluster
+        </Button>
       </Header>
       <Content>
-        {clusters && (
-          <Table
-            columns={getClusterManagementColumns(handleMenuClick)}
-            rows={clusters}
-            getRowClassName={getClusterState}
-          />
-        )}
+        <TabPanel value={activeTab} index={MANAGEMENT_TABS.LIST_VIEW}>
+          <ClusterTable clusters={clusters} />
+        </TabPanel>
+        <TabPanel value={activeTab} index={MANAGEMENT_TABS.GRAPH_VIEW}>
+          <Flow />
+        </TabPanel>
       </Content>
       <Snackbar
         anchorOrigin={{
@@ -137,13 +159,16 @@ const ClusterManagement: FunctionComponent = () => {
         open={isDetailsPanelOpen}
         anchor="right"
         hideBackdrop
-        sx={{ top: '20px' }}
-        PaperProps={{ sx: { top: '65px', boxShadow: '0px 2px 4px rgba(100, 116, 139, 0.16)' } }}
-        onClose={closeDetailsPanel}
+        PaperProps={{
+          sx: {
+            top: '65px',
+            boxShadow: '0px 2px 4px rgba(100, 116, 139, 0.16)',
+            width: '684px',
+            height: 'calc(100% - 65px)',
+          },
+        }}
       >
-        {selectedCluster && (
-          <ClusterDetails cluster={selectedCluster} onClose={closeDetailsPanel} />
-        )}
+        <CreateClusterFlow onMenuClose={closeDetailsPanel} />
       </Drawer>
       <DeleteCluster
         isOpen={isDeleteModalOpen}

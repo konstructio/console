@@ -1,3 +1,6 @@
+import { TagColor, TagIconOption } from '../components/tag';
+import { ClusterStatus } from '../types/provision';
+
 export const AWS_REGIONS = [
   { label: 'US East (Ohio) (us-east-2)', value: 'us-east-2' },
   { label: 'US East (N. Virginia) (us-east-1)', value: 'us-east-1' },
@@ -30,3 +33,19 @@ export const FLAPPY_TWEET = `The @kubefirst team is making kubernetes platform p
 export const AUTHENTICATION_ERROR_MSG = `
   Please check that your cloud provider authentication inputs are correct, then click Next to retry. If the issue persists please <a href="https://kubefirst.io/slack" target="_blank">contact the kubefirst team via Slack</a>.
 `;
+
+export const CLUSTER_TAG_CONFIG: Record<
+  ClusterStatus | 'draft',
+  { iconLabel: string; iconType?: TagIconOption; bgColor: TagColor }
+> = {
+  [ClusterStatus.PROVISIONED]: { iconLabel: 'Available', iconType: 'check', bgColor: 'green' },
+  [ClusterStatus.PROVISIONING]: {
+    iconLabel: 'Provisioning',
+    iconType: 'auto-renew',
+    bgColor: 'light-blue',
+  },
+  [ClusterStatus.DELETING]: { iconLabel: 'Deleting', iconType: 'trash', bgColor: 'pink' },
+  [ClusterStatus.DELETED]: { iconLabel: 'Deleted', iconType: 'trash', bgColor: 'pink' },
+  [ClusterStatus.ERROR]: { iconLabel: 'Unavailable', iconType: 'warning', bgColor: 'light-orange' },
+  draft: { iconLabel: 'DRAFT', bgColor: 'grey' },
+};

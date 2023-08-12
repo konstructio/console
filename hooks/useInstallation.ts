@@ -12,17 +12,16 @@ import {
   MarketplaceFormStep,
 } from '../constants/installation';
 import { GitProvider } from '../types';
-import { InstallValues, InstallationType } from '../types/redux';
+import { InstallationType } from '../types/redux';
 import { CivoFormFlow } from '../containers/clusterForms/civo';
 import { AwsFormFlow } from '../containers/clusterForms/aws';
 import { LocalFormFlow } from '../containers/clusterForms/k3d';
 import { DigitalOceanFormFlow } from '../containers/clusterForms/digitalocean';
 import { VultrFormFlow } from '../containers/clusterForms/vultr';
-import { FormFlowProps } from '../types/provision';
 
 export const FormFlowByType: Record<
   InstallationType,
-  FunctionComponent<FormFlowProps<InstallValues>>
+  FunctionComponent<{ currentStep: FormStep }>
 > = {
   [InstallationType.LOCAL]: LocalFormFlow,
   [InstallationType.AWS]: AwsFormFlow,
@@ -134,7 +133,7 @@ export function useInstallation(
     isAuthStep: getIsAuthStep(type, step, isMarketplace),
     isSetupStep: getIsSetupStep(type, step, isMarketplace),
     isProvisionStep: getIsProvisionStep(type, step, isMarketplace),
-    formFlow: formByType as FunctionComponent<FormFlowProps<InstallValues>>,
+    formFlow: formByType,
     apiKeyInfo: INSTALLATION_TYPE_API_KEYS[type],
   };
 }
