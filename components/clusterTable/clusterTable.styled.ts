@@ -9,11 +9,24 @@ import {
   IconButton,
   iconButtonClasses,
   typographyClasses,
+  Box,
 } from '@mui/material';
 
 import Typography from '../typography';
 import Tag from '../tag';
-import { PASTEL_LIGHT_BLUE, SALTBOX_BLUE, VOLCANIC_SAND } from '../../constants/colors';
+import { CHEFS_HAT, PASTEL_LIGHT_BLUE, SALTBOX_BLUE, VOLCANIC_SAND } from '../../constants/colors';
+
+export const Menu = styled(Box)`
+  position: absolute;
+  bottom: -40px;
+  left: -110px;
+  width: 160px;
+  background-color: white;
+  border: 1px solid ${CHEFS_HAT};
+  border-radius: 8px;
+  box-shadow: 0px 2px 4px 0px rgba(100, 116, 139, 0.25);
+  z-index: 1;
+`;
 
 export const StyledIconButton = muiStyled(IconButton)(() => ({
   [`&.${iconButtonClasses.root}`]: {
@@ -41,6 +54,7 @@ export const StyledTag = styled(Tag)`
 export const StyledTableRow = muiStyled(TableRow)(() => ({
   [`&.${tableRowClasses.root}`]: {
     border: 0,
+    height: 'fit-content',
   },
 }));
 

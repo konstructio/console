@@ -4,14 +4,12 @@ import { useRouter } from 'next/router';
 
 import Button from '../../components/button';
 import Typography from '../../components/typography';
-import { DELETE_OPTION, VIEW_DETAILS_OPTION } from '../../constants/cluster';
 import { useAppDispatch, useAppSelector } from '../../redux/store';
 import { deleteCluster, getCluster, getClusters } from '../../redux/thunks/api.thunk';
 import { resetInstallState } from '../../redux/slices/installation.slice';
-import { Cluster, ClusterRequestProps } from '../../types/provision';
+import { ClusterRequestProps } from '../../types/provision';
 import useToggle from '../../hooks/useToggle';
 import Drawer from '../../components/drawer';
-import { Row } from '../../types';
 import useModal from '../../hooks/useModal';
 import DeleteCluster from '../deleteCluster';
 import TabPanel, { Tab, a11yProps } from '../../components/tab';
@@ -29,7 +27,9 @@ enum MANAGEMENT_TABS {
 
 const ClusterManagement: FunctionComponent = () => {
   const [activeTab, setActiveTab] = useState(MANAGEMENT_TABS.LIST_VIEW);
-  const [selectedCluster, setSelectedCluster] = useState<Cluster>();
+  const [selectedClusterName, setSelectedClusterName] = useState<string>();
+  const isClusterZero = useAppSelector(({ config }) => config.isClusterZero);
+
   const {
     isOpen: isDetailsPanelOpen,
     open: openDetailsPanel,
@@ -45,34 +45,25 @@ const ClusterManagement: FunctionComponent = () => {
   const { push } = useRouter();
 
   const dispatch = useAppDispatch();
-  const isClusterZero = useAppSelector(({ config }) => config.isClusterZero);
+
   const { isDeleted, isDeleting, isError, clusters } = useAppSelector(({ api }) => api);
 
-  const handleMenuClick = (option: string, rowItem: Row) => {
-    const { clusterName } = rowItem;
-    setSelectedCluster(clusters.find((cluster) => cluster.clusterName === clusterName));
+  const handleGetClusters = useCallback(async (): Promise<void> => {
+    await dispatch(getClusters());
+  }, [dispatch]);
 
-    if (option === DELETE_OPTION) {
-      openDeleteModal();
-    } else if (option === VIEW_DETAILS_OPTION) {
-      openDetailsPanel();
+  const handleDeleteCluster = useCallback(async () => {
+    if (selectedClusterName) {
+      await dispatch(deleteCluster({ clusterName: selectedClusterName })).unwrap();
+      handleGetClusters();
+      closeDeleteModal();
     }
-  };
-
-  const handleDeleteCluster = async () => {
-    await dispatch(deleteCluster({ clusterName: selectedCluster?.clusterName })).unwrap();
-    handleGetClusters();
-    closeDeleteModal();
-  };
+  }, [dispatch, selectedClusterName, handleGetClusters, closeDeleteModal]);
 
   const handleCreateCluster = () => {
     dispatch(resetInstallState());
     push('/provision');
   };
-
-  const handleGetClusters = useCallback(async (): Promise<void> => {
-    await dispatch(getClusters());
-  }, [dispatch]);
 
   const getClusterInterval = (params: ClusterRequestProps) => {
     return setInterval(async () => {
@@ -81,9 +72,9 @@ const ClusterManagement: FunctionComponent = () => {
   };
 
   useEffect(() => {
-    if (isDeleting && !isDeleted && selectedCluster) {
+    if (isDeleting && !isDeleted && selectedClusterName) {
       interval.current = getClusterInterval({
-        clusterName: selectedCluster?.clusterName as string,
+        clusterName: selectedClusterName,
       });
       handleGetClusters();
     }
@@ -140,7 +131,11 @@ const ClusterManagement: FunctionComponent = () => {
       </Header>
       <Content>
         <TabPanel value={activeTab} index={MANAGEMENT_TABS.LIST_VIEW}>
-          <ClusterTable clusters={clusters} />
+          <ClusterTable
+            clusters={clusters}
+            onDeleteCluster={openDeleteModal}
+            onMenuOpenClose={(clusterName) => setSelectedClusterName(clusterName)}
+          />
         </TabPanel>
         <TabPanel value={activeTab} index={MANAGEMENT_TABS.GRAPH_VIEW}>
           <Flow />
@@ -153,7 +148,7 @@ const ClusterManagement: FunctionComponent = () => {
         }}
         open={isDeleted}
         autoHideDuration={3000}
-        message={`Cluster ${selectedCluster?.clusterName} has been deleted`}
+        message={`Cluster ${selectedClusterName} has been deleted`}
       />
       <Drawer
         open={isDetailsPanelOpen}
@@ -170,12 +165,14 @@ const ClusterManagement: FunctionComponent = () => {
       >
         <CreateClusterFlow onMenuClose={closeDetailsPanel} />
       </Drawer>
-      <DeleteCluster
-        isOpen={isDeleteModalOpen}
-        onClose={closeDeleteModal}
-        onDelete={handleDeleteCluster}
-        clusterName={selectedCluster?.clusterName}
-      />
+      {selectedClusterName && (
+        <DeleteCluster
+          isOpen={isDeleteModalOpen}
+          onClose={closeDeleteModal}
+          onDelete={handleDeleteCluster}
+          clusterName={selectedClusterName}
+        />
+      )}
     </Container>
   );
 };
