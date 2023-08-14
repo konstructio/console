@@ -46,6 +46,15 @@ export const ErrorButton = styled(Button)`
   &:hover {
     background-color: ${({ theme }) => theme.colors.fireBrick};
   }
+
+  ${({ disabled }) =>
+    disabled &&
+    `
+    background-color: ${LIGHT_GREY} !important;
+    border-color: ${EXCLUSIVE_PLUM} !important;
+    color: ${EXCLUSIVE_PLUM} !important;
+    cursor: not-allowed !important;
+  `}
 `;
 
 export const InfoButton = styled(Button)`

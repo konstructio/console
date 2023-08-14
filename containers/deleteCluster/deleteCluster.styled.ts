@@ -1,6 +1,9 @@
 import styled from 'styled-components';
 
-export const Content = styled.div`
+import Column from '../../components/column';
+
+export const Content = styled(Column)`
+  gap: 24px;
   margin-left: 38px;
 `;
 

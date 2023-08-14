@@ -1,8 +1,14 @@
-import React, { useState, FunctionComponent, ComponentPropsWithoutRef } from 'react';
+import React, {
+  useState,
+  FunctionComponent,
+  ComponentPropsWithoutRef,
+  useCallback,
+  useRef,
+} from 'react';
 import Table from '@mui/material/Table';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
-import { Box, Collapse, IconButton } from '@mui/material';
+import { Box, Collapse, IconButton, List, ListItem, ListItemButton } from '@mui/material';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
@@ -15,9 +21,11 @@ import civoLogo from '../../assets/civo_logo.svg';
 import digitalOceanLogo from '../../assets/digital_ocean_logo.svg';
 import vultrLogo from '../../assets/vultr_logo.svg';
 import { CLUSTER_TAG_CONFIG } from '../../constants';
-import { DODGER_BLUE, ROCK_BLUE } from '../../constants/colors';
-import { Cluster, ClusterType } from '../../types/provision';
+import { DODGER_BLUE, FIRE_BRICK, ROCK_BLUE } from '../../constants/colors';
+import { Cluster, ClusterStatus, ClusterType } from '../../types/provision';
 import { InstallationType } from '../../types/redux';
+import Typography from '../../components/typography';
+import { useOnClickOutside } from '../../hooks/useOnClickOutside';
 
 import {
   StyledTableRow,
@@ -27,6 +35,8 @@ import {
   StyledIconButton,
   StyledTableHeading,
   StyledCellText,
+  Menu,
+  StyledHeaderCell,
 } from './clusterTable.styled';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -55,17 +65,29 @@ export type ClusterInfo = Pick<
   instanceSize?: string;
 };
 
-const ClusterRow: FunctionComponent<ClusterInfo> = ({
-  clusterName,
-  type,
-  cloudProvider,
-  cloudRegion,
-  creationDate = '',
-  gitUser: createdBy,
-  status,
-  nodes,
+type ClusterRowProps = ClusterInfo & {
+  onMenuOpenClose: (clusterName?: string) => void;
+  onDeleteCluster: () => void;
+};
+
+const ClusterRow: FunctionComponent<ClusterRowProps> = ({
+  onDeleteCluster,
+  onMenuOpenClose,
+  ...rest
 }) => {
+  const {
+    clusterName,
+    type,
+    cloudProvider,
+    cloudRegion,
+    creationDate = '',
+    gitUser: createdBy,
+    status,
+    nodes,
+  } = rest;
+
   const [open, setOpen] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
 
   const cloudLogoSrc = CLOUD_LOGO_OPTIONS[cloudProvider];
   const { iconLabel, iconType, bgColor } = CLUSTER_TAG_CONFIG[status ?? 'draft'];
@@ -74,10 +96,21 @@ const ClusterRow: FunctionComponent<ClusterInfo> = ({
   // placeholder for now. new field yet to be implemented
   const nodeCount = nodes ?? 2;
 
+  const handleMenu = useCallback(() => {
+    setMenuOpen(!menuOpen);
+    onMenuOpenClose(!menuOpen ? clusterName : undefined);
+  }, [menuOpen, onMenuOpenClose, clusterName]);
+
+  const buttonRef = useRef(null);
+
+  useOnClickOutside(buttonRef, () => setMenuOpen(false));
+
   return (
     <>
       <StyledTableRow
-        sx={{ '&:hover td:first-child button': { opacity: 1, pointerEvents: 'all' } }}
+        sx={{
+          '&:hover td:first-child button': { opacity: 1, pointerEvents: 'all' },
+        }}
       >
         <StyledTableCell align="right" style={{ width: '50px' }}>
           <StyledIconButton aria-label="expand row" size="small" onClick={() => setOpen(!open)}>
@@ -116,60 +149,95 @@ const ClusterRow: FunctionComponent<ClusterInfo> = ({
         <StyledTableCell>
           <StyledTag text={iconLabel} bgColor={bgColor} icon={iconType} />
         </StyledTableCell>
-        <StyledTableCell>
-          <IconButton aria-label="more info">
+        <StyledTableCell style={{ position: 'relative' }}>
+          <IconButton
+            aria-label="more info"
+            onClick={handleMenu}
+            ref={buttonRef}
+            disabled={status === ClusterStatus.DELETED}
+          >
             <MoreHorizIcon />
           </IconButton>
+          {menuOpen && (
+            <Menu>
+              <List>
+                <ListItem disablePadding>
+                  <ListItemButton onClick={onDeleteCluster}>
+                    <Typography variant="body2" style={{ color: `${FIRE_BRICK}` }}>
+                      Delete cluster
+                    </Typography>
+                  </ListItemButton>
+                </ListItem>
+              </List>
+            </Menu>
+          )}
         </StyledTableCell>
       </StyledTableRow>
-      <StyledTableRow>
-        <StyledTableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
-          <Collapse in={open} timeout="auto" unmountOnExit>
-            <Box sx={{ margin: 1, height: '100px' }}>TBD</Box>
-          </Collapse>
-        </StyledTableCell>
-      </StyledTableRow>
+      {open && (
+        <StyledTableRow>
+          <StyledTableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
+            <Collapse in={open} timeout="auto" unmountOnExit>
+              <Box sx={{ margin: 1, height: '100px' }}>TBD</Box>
+            </Collapse>
+          </StyledTableCell>
+        </StyledTableRow>
+      )}
     </>
   );
 };
 
 interface ClusterTableProps extends ComponentPropsWithoutRef<'div'> {
   clusters: ClusterInfo[];
+  onDeleteCluster: () => void;
+  onMenuOpenClose: (clusterName?: string) => void;
 }
 
-export const ClusterTable: FunctionComponent<ClusterTableProps> = ({ clusters, ...rest }) => (
-  <TableContainer style={{ display: 'flex' }} {...rest}>
-    <Table aria-label="collapsible table" sx={{ borderCollapse: 'collapse', margin: '5px' }}>
+export const ClusterTable: FunctionComponent<ClusterTableProps> = ({
+  clusters,
+  onDeleteCluster,
+  onMenuOpenClose,
+  ...rest
+}) => (
+  <TableContainer style={{ display: 'flex', height: '100%' }} {...rest}>
+    <Table
+      aria-label="collapsible table"
+      sx={{ borderCollapse: 'collapse', margin: '5px', height: 'fit-content' }}
+    >
       <TableHead>
         <StyledTableRow>
-          <StyledTableCell />
-          <StyledTableCell>
+          <StyledHeaderCell />
+          <StyledHeaderCell>
             <StyledTableHeading variant="labelMedium">Name</StyledTableHeading>
-          </StyledTableCell>
-          <StyledTableCell>
+          </StyledHeaderCell>
+          <StyledHeaderCell>
             <StyledTableHeading variant="labelMedium">Cloud</StyledTableHeading>
-          </StyledTableCell>
-          <StyledTableCell>
+          </StyledHeaderCell>
+          <StyledHeaderCell>
             <StyledTableHeading variant="labelMedium">Region</StyledTableHeading>
-          </StyledTableCell>
-          <StyledTableCell>
+          </StyledHeaderCell>
+          <StyledHeaderCell>
             <StyledTableHeading variant="labelMedium">Nodes</StyledTableHeading>
-          </StyledTableCell>
-          <StyledTableCell>
+          </StyledHeaderCell>
+          <StyledHeaderCell>
             <StyledTableHeading variant="labelMedium">Created</StyledTableHeading>
-          </StyledTableCell>
-          <StyledTableCell>
+          </StyledHeaderCell>
+          <StyledHeaderCell>
             <StyledTableHeading variant="labelMedium">Created by</StyledTableHeading>
-          </StyledTableCell>
-          <StyledTableCell>
+          </StyledHeaderCell>
+          <StyledHeaderCell>
             <StyledTableHeading variant="labelMedium">Status</StyledTableHeading>
-          </StyledTableCell>
-          <StyledTableCell />
+          </StyledHeaderCell>
+          <StyledHeaderCell />
         </StyledTableRow>
       </TableHead>
       <StyledTableBody>
         {clusters.map((cluster) => (
-          <ClusterRow key={cluster.clusterName} {...cluster} />
+          <ClusterRow
+            key={cluster.clusterName}
+            {...cluster}
+            onDeleteCluster={onDeleteCluster}
+            onMenuOpenClose={onMenuOpenClose}
+          />
         ))}
       </StyledTableBody>
     </Table>
