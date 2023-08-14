@@ -25,7 +25,7 @@ export const getGithubUserOrganizations = createAsyncThunk<GithubUserOrganizatio
   'git/getUserOrganizations',
   async (token) => {
     return (
-      await githubApi.get<GithubUserOrganization[]>('/user/orgs', {
+      await githubApi.get<GithubUserOrganization[]>('/user/orgs?per_page=100', {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Accept': 'application/vnd.github+json',
@@ -41,7 +41,7 @@ export const getGitHubOrgRepositories = createAsyncThunk<
   { token: string; organization: string }
 >('git/getGitHubRepositories', async ({ token, organization }) => {
   return (
-    await githubApi.get<GithubOrganizationRepos[]>(`/orgs/${organization}/repos`, {
+    await githubApi.get<GithubOrganizationRepos[]>(`/orgs/${organization}/repos?per_page=100`, {
       headers: {
         'Authorization': `Bearer ${token}`,
         'Accept': 'application/vnd.github+json',
