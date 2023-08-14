@@ -25,7 +25,7 @@ export const getGithubUserOrganizations = createAsyncThunk<GithubUserOrganizatio
   'git/getUserOrganizations',
   async (token) => {
     return (
-      await githubApi.get<GithubUserOrganization[]>('/user/orgs', {
+      await githubApi.get<GithubUserOrganization[]>('/user/orgs?per_page=100', {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Accept': 'application/vnd.github+json',
@@ -41,7 +41,7 @@ export const getGitHubOrgRepositories = createAsyncThunk<
   { token: string; organization: string }
 >('git/getGitHubRepositories', async ({ token, organization }) => {
   return (
-    await githubApi.get<GithubOrganizationRepos[]>(`/orgs/${organization}/repos`, {
+    await githubApi.get<GithubOrganizationRepos[]>(`/orgs/${organization}/repos?per_page=100`, {
       headers: {
         'Authorization': `Bearer ${token}`,
         'Accept': 'application/vnd.github+json',
@@ -81,7 +81,7 @@ export const getGitlabGroups = createAsyncThunk<GitLabGroup[], string>(
   'git/getGitlabGroups',
   async (token) => {
     return (
-      await gitlabApi.get<GitLabGroup[]>('/groups', {
+      await gitlabApi.get<GitLabGroup[]>('/groups?per_page=100&top_level_only=true', {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -90,12 +90,25 @@ export const getGitlabGroups = createAsyncThunk<GitLabGroup[], string>(
   },
 );
 
+export const getGitLabSubgroups = createAsyncThunk<
+  GitLabProject[],
+  { token: string; group: string }
+>('git/getGitLabSubgroups', async ({ token, group }) => {
+  return (
+    await gitlabApi.get<GitLabProject[]>(`/groups/${group}/subgroups?per_page=100`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+  ).data;
+});
+
 export const getGitLabProjects = createAsyncThunk<
   GitLabProject[],
   { token: string; group: string }
 >('git/getGitLabProjects', async ({ token, group }) => {
   return (
-    await gitlabApi.get<GitLabProject[]>(`/groups/${group}/projects`, {
+    await gitlabApi.get<GitLabProject[]>(`/groups/${group}/projects?per_page=100`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },

@@ -46,8 +46,11 @@ export interface ClusterResponse {
   cluster_type: ClusterType.MANAGEMENT | ClusterType.WORKLOAD;
   alerts_email: string;
   git_provider: string;
-  git_owner: string;
   git_user: string;
+  gitAuth: {
+    gitOwner: string;
+    gitToken?: string;
+  };
   last_condition: string;
   install_tools_check: boolean;
   domain_liveness_check: boolean;
@@ -75,7 +78,6 @@ export interface Cluster extends Row {
   cloudProvider: InstallationType;
   cloudRegion: string;
   domainName: string;
-  gitOwner: string;
   gitProvider: string;
   gitUser: string;
   gitToken?: string;
@@ -83,6 +85,10 @@ export interface Cluster extends Row {
   creationDate?: string;
   status?: ClusterStatus;
   lastErrorCondition: string;
+  gitAuth: {
+    gitOwner: string;
+    gitToken?: string;
+  };
   checks: {
     install_tools_check: boolean;
     domain_liveness_check: boolean;

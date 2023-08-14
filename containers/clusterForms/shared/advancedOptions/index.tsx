@@ -1,29 +1,34 @@
-import React, { ChangeEvent, FunctionComponent, useState } from 'react';
+import React, { ChangeEvent, FunctionComponent, useMemo, useState } from 'react';
 import { useFormContext } from 'react-hook-form';
 
+import { Required } from '../../../../components/textField/textField.styled';
 import LearnMore from '../../../../components/learnMore';
 import Typography from '../../../../components/typography';
 import SwitchComponent from '../../../../components/switch';
 import Checkbox from '../../../../components/controlledFields/Checkbox';
 import ControlledTextField from '../../../../components/controlledFields/TextField';
-import ControlledAutocomplete from '../../../../components/controlledFields/AutoComplete';
+import ControlledRadio from '../../../../components/controlledFields/Radio';
 import { useAppSelector } from '../../../../redux/store';
-import { InstallValues } from '../../../../types/redux';
+import { InstallValues, InstallationType } from '../../../../types/redux';
+import { GitProvider } from '../../../../types';
 import { EXCLUSIVE_PLUM } from '../../../../constants/colors';
 
 import { CheckboxContainer, Switch } from './advancedOptions.styled';
 
 const AdvancedOptions: FunctionComponent = () => {
   const [isAdvancedOptionsEnabled, setIsAdvancedOptionsEnabled] = useState<boolean>(false);
-  const [isCloudFlareSelected, setIsCloudFlareSelected] = useState<boolean>(false);
 
   const handleOnChangeSwitch = ({ target }: ChangeEvent<HTMLInputElement>) => {
     setIsAdvancedOptionsEnabled(target.checked);
   };
 
-  const { values, installType } = useAppSelector(({ installation }) => installation);
+  const { values, installType, gitProvider } = useAppSelector(({ installation }) => installation);
+
+  const isGitHub = useMemo(() => gitProvider === GitProvider.GITHUB, [gitProvider]);
+  const gitLabel = useMemo(() => (isGitHub ? 'GitHub' : 'GitLab'), [isGitHub]);
 
   const { control } = useFormContext<InstallValues>();
+  const isAwsInstallation = useMemo(() => installType === InstallationType.AWS, [installType]);
 
   return (
     <>
@@ -65,31 +70,27 @@ const AdvancedOptions: FunctionComponent = () => {
               }}
             />
           </CheckboxContainer>
-          <ControlledAutocomplete
-            control={control}
-            name="dnsProvider"
-            label="DNS provider"
-            defaultValue="default"
-            options={[
-              { label: 'default', value: 'default' },
-              { label: 'cloudflare', value: 'cloudflare' },
-            ]}
-            onChange={(value) => setIsCloudFlareSelected(value === 'cloudflare')}
-            rules={{
-              required: false,
-            }}
-          />
-          {isCloudFlareSelected && (
-            <ControlledTextField
-              control={control}
-              name="cloudflareToken"
-              label="Cloudflare API key"
-              required
-              defaultValue={values?.gitopsTemplateBranch}
-              rules={{
-                required: true,
-              }}
-            />
+          {isAwsInstallation && (
+            <CheckboxContainer>
+              <Typography
+                variant="body2"
+                color={EXCLUSIVE_PLUM}
+                sx={{ display: 'flex', gap: '4px' }}
+              >
+                Manage image repositories with <Required>*</Required>
+              </Typography>
+              <ControlledRadio
+                control={control}
+                rules={{
+                  required: true,
+                }}
+                name="imageRepository"
+                options={[
+                  { label: `${gitLabel} Container Registry`, value: 'git' },
+                  { label: 'AWS Elastic Container Registry (ECR)', value: 'ecr' },
+                ]}
+              />
+            </CheckboxContainer>
           )}
           <LearnMore
             installType={installType}

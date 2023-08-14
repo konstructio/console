@@ -22,7 +22,7 @@ const mapClusterFromRaw = (cluster: ClusterResponse): Cluster => ({
   cloudProvider: cluster.cloud_provider,
   cloudRegion: cluster.cloud_region,
   domainName: cluster.domain_name,
-  gitOwner: cluster.git_owner,
+  gitAuth: cluster.gitAuth,
   gitProvider: cluster.git_provider,
   gitUser: cluster.git_user,
   type: cluster.cluster_type,
@@ -69,15 +69,20 @@ export const createCluster = createAsyncThunk<
     cloud_provider: installType?.toString(),
     cloud_region: values?.cloudRegion,
     domain_name: values?.domainName,
-    git_owner: values?.gitOwner,
     git_provider: gitProvider,
-    git_token: values?.gitToken,
     gitops_template_url: values?.gitopsTemplateUrl,
     gitops_template_branch: values?.gitopsTemplateBranch,
     git_protocol: values?.useHttps ? 'https' : 'ssh',
     dns_provider: values?.dnsProvider,
-    cloudflare_api_token: values?.cloudflareToken,
+    ecr: values?.imageRepository === 'ecr',
     type: 'mgmt',
+    git_auth: {
+      git_owner: values?.gitOwner,
+      git_token: values?.gitToken,
+    },
+    cloudflare_auth: {
+      token: values?.cloudflareToken,
+    },
     aws_auth: {
       ...values?.aws_auth,
     },
@@ -242,21 +247,24 @@ export const getCloudRegions = createAsyncThunk<
 
 export const getCloudDomains = createAsyncThunk<
   Array<string>,
-  string,
+  { region: string; cloudflareToken?: string },
   {
     dispatch: AppDispatch;
     state: RootState;
   }
->('api/getCloudDomains', async (cloudRegion, { getState }) => {
+>('api/getCloudDomains', async ({ cloudflareToken, region }, { getState }) => {
   const {
     installation: { values, installType },
   } = getState();
 
   const res = await axios.post<{ domains: Array<string> }>('/api/proxy', {
-    url: `/domain/${installType}`,
+    url: `/domain/${cloudflareToken ? 'cloudflare' : installType}`,
     body: {
       ...values,
-      cloud_region: cloudRegion,
+      cloud_region: region,
+      cloudflare_auth: {
+        token: cloudflareToken,
+      },
     },
   });
 

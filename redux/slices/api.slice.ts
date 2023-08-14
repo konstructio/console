@@ -55,6 +55,9 @@ const apiSlice = createSlice({
     clearValidation: (state) => {
       state.isAuthenticationValid = undefined;
     },
+    clearDomains: (state) => {
+      state.cloudDomains = [];
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -101,6 +104,11 @@ const apiSlice = createSlice({
         state.isError = false;
         state.clusters = payload;
       })
+      .addCase(getClusters.rejected, (state) => {
+        state.loading = false;
+        state.isError = true;
+        state.clusters = [];
+      })
       .addCase(getCloudDomains.fulfilled, (state, { payload }: PayloadAction<Array<string>>) => {
         state.cloudDomains = payload;
       })
@@ -114,6 +122,7 @@ const apiSlice = createSlice({
   },
 });
 
-export const { clearValidation, setCompletedSteps, clearClusterState } = apiSlice.actions;
+export const { clearValidation, setCompletedSteps, clearClusterState, clearDomains } =
+  apiSlice.actions;
 
 export const apiReducer = apiSlice.reducer;
