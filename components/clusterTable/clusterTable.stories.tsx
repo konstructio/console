@@ -3,6 +3,7 @@ import { Story } from '@storybook/react';
 
 import { ClusterStatus, ClusterType } from '../../types/provision';
 import { InstallationType } from '../../types/redux';
+import { noop } from '../../utils/noop';
 
 import { ClusterTable, ClusterInfo } from './clusterTable';
 
@@ -79,6 +80,8 @@ const clusters: ClusterInfo[] = [
   },
 ];
 
-const DefaultTemplate: Story = (args) => <ClusterTable clusters={clusters} {...args} />;
+const DefaultTemplate: Story = (args) => (
+  <ClusterTable clusters={clusters} {...args} onMenuOpenClose={noop} onDeleteCluster={noop} />
+);
 
 export const Default = DefaultTemplate.bind({});

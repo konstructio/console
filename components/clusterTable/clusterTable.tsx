@@ -36,6 +36,7 @@ import {
   StyledTableHeading,
   StyledCellText,
   Menu,
+  StyledHeaderCell,
 } from './clusterTable.styled';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -172,13 +173,15 @@ const ClusterRow: FunctionComponent<ClusterRowProps> = ({
           )}
         </StyledTableCell>
       </StyledTableRow>
-      <StyledTableRow>
-        <StyledTableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
-          <Collapse in={open} timeout="auto" unmountOnExit>
-            <Box sx={{ margin: 1, height: '100px' }}>TBD</Box>
-          </Collapse>
-        </StyledTableCell>
-      </StyledTableRow>
+      {open && (
+        <StyledTableRow>
+          <StyledTableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
+            <Collapse in={open} timeout="auto" unmountOnExit>
+              <Box sx={{ margin: 1, height: '100px' }}>TBD</Box>
+            </Collapse>
+          </StyledTableCell>
+        </StyledTableRow>
+      )}
     </>
   );
 };
@@ -202,29 +205,29 @@ export const ClusterTable: FunctionComponent<ClusterTableProps> = ({
     >
       <TableHead>
         <StyledTableRow>
-          <StyledTableCell />
-          <StyledTableCell>
+          <StyledHeaderCell />
+          <StyledHeaderCell>
             <StyledTableHeading variant="labelMedium">Name</StyledTableHeading>
-          </StyledTableCell>
-          <StyledTableCell>
+          </StyledHeaderCell>
+          <StyledHeaderCell>
             <StyledTableHeading variant="labelMedium">Cloud</StyledTableHeading>
-          </StyledTableCell>
-          <StyledTableCell>
+          </StyledHeaderCell>
+          <StyledHeaderCell>
             <StyledTableHeading variant="labelMedium">Region</StyledTableHeading>
-          </StyledTableCell>
-          <StyledTableCell>
+          </StyledHeaderCell>
+          <StyledHeaderCell>
             <StyledTableHeading variant="labelMedium">Nodes</StyledTableHeading>
-          </StyledTableCell>
-          <StyledTableCell>
+          </StyledHeaderCell>
+          <StyledHeaderCell>
             <StyledTableHeading variant="labelMedium">Created</StyledTableHeading>
-          </StyledTableCell>
-          <StyledTableCell>
+          </StyledHeaderCell>
+          <StyledHeaderCell>
             <StyledTableHeading variant="labelMedium">Created by</StyledTableHeading>
-          </StyledTableCell>
-          <StyledTableCell>
+          </StyledHeaderCell>
+          <StyledHeaderCell>
             <StyledTableHeading variant="labelMedium">Status</StyledTableHeading>
-          </StyledTableCell>
-          <StyledTableCell />
+          </StyledHeaderCell>
+          <StyledHeaderCell />
         </StyledTableRow>
       </TableHead>
       <StyledTableBody>

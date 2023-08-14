@@ -41,9 +41,17 @@ export const StyledTableBody = muiStyled(TableBody)(() => ({
     boxShadow: `0 0 0 2px ${PASTEL_LIGHT_BLUE}`,
   },
 }));
+
 export const StyledTableCell = muiStyled(TableCell)(() => ({
   [`&.${tableCellClasses.root}`]: {
     border: 0,
+    backgroundColor: 'white',
+  },
+}));
+
+export const StyledHeaderCell = muiStyled(StyledTableCell)(() => ({
+  [`&.${tableCellClasses.root}`]: {
+    backgroundColor: 'transparent',
   },
 }));
 
@@ -55,6 +63,18 @@ export const StyledTableRow = muiStyled(TableRow)(() => ({
   [`&.${tableRowClasses.root}`]: {
     border: 0,
     height: 'fit-content',
+  },
+  ['&:first-child td:first-child']: {
+    borderTopLeftRadius: '20px',
+  },
+  ['&:first-child td:last-child']: {
+    borderTopRightRadius: '20px',
+  },
+  ['&:last-child td:first-child']: {
+    borderBottomLeftRadius: '20px',
+  },
+  ['&:last-child td:last-child']: {
+    borderBottomRightRadius: '20px',
   },
 }));
 
