@@ -2,11 +2,11 @@ import React from 'react';
 import { Story } from '@storybook/react';
 import { useForm } from 'react-hook-form';
 
-import RadioGroup from '.';
+import Radio from './';
 
 export default {
-  title: 'Components/RadioGroup',
-  component: RadioGroup,
+  title: 'Components/Radio',
+  component: Radio,
 };
 
 const DefaultTemplate: Story = () => {
@@ -17,7 +17,7 @@ const DefaultTemplate: Story = () => {
   });
 
   return (
-    <RadioGroup
+    <Radio
       control={control}
       label="Gender"
       rules={{ required: false }}
