@@ -1,9 +1,10 @@
 import styled from 'styled-components';
 
 import Column from '../../components/column';
+import NextLinkComp from '../../components/nextLink';
 
 export const Content = styled(Column)`
-  gap: 24px;
+  gap: 8px;
   margin-left: 38px;
 `;
 
@@ -18,4 +19,12 @@ export const Header = styled.div`
   display: flex;
   gap: 12px;
   margin-bottom: 8px;
+`;
+
+export const NextLink = styled(NextLinkComp)`
+  a {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
 `;
