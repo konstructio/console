@@ -2174,16 +2174,16 @@
     glob "7.1.7"
 
 "@next/eslint-plugin-next@^13.0.4":
-  version "13.4.15"
-  resolved "https://registry.yarnpkg.com/@next/eslint-plugin-next/-/eslint-plugin-next-13.4.15.tgz#cba8ac50cef554feae34cab5805522fa5a79999d"
-  integrity sha512-R+cOYbVyJM30d4OaDgRSCbtqsaoHfjnRUUuKxm74rswR82mv0c8En7+SXXsEfIpLCmGNSqOP5zF8aEE5e09VQQ==
+  version "13.4.16"
+  resolved "https://registry.yarnpkg.com/@next/eslint-plugin-next/-/eslint-plugin-next-13.4.16.tgz#444c0ec4bf70ec8646e5339053cfeb59ec5d40c6"
+  integrity sha512-QuFtQl+oSEEQb0HMYBdvBoUaTiMxbY3go/MFkF3zOnfY0t84+IbAX78cw8ZCfr6cA6UcTq3nMIlCrHwDC/moxg==
   dependencies:
     glob "7.1.7"
 
 "@next/font@^13.0.2":
-  version "13.4.15"
-  resolved "https://registry.yarnpkg.com/@next/font/-/font-13.4.15.tgz#ed552c5f02e1ac4b8b8bebfc0535e3a95b43ac89"
-  integrity sha512-5eyONhTa8h3yAOtc3cosE5yCoTvURmzMN7fYqzQkmb/oTwnvkx5fDWlGCmqlgRgC7Xmddvj3L7c2iV/jKP6Zrw==
+  version "13.4.16"
+  resolved "https://registry.yarnpkg.com/@next/font/-/font-13.4.16.tgz#e411255e416b22732409623b68c2d2b4a0de9528"
+  integrity sha512-1UciFHgwieMfDygileymqeYPEmIeZWIfgrsa2POZlRW+yAsDt0qy0InfFAYvXhNgALTI6ix3JU2XhcuzonhQLA==
 
 "@next/swc-android-arm-eabi@13.0.3":
   version "13.0.3"

@@ -15,9 +15,9 @@
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",
     "test:coverage:watch": "jest --coverage --watch",
-    "storybook": "start-storybook -p 6006",
+    "storybook": "NODE_OPTIONS='--openssl-legacy-provider' start-storybook -p 6006",
     "storybook-production": "node .storybook/server.js",
-    "build-storybook": "build-storybook -o storybook-static"
+    "build-storybook": "NODE_OPTIONS='--openssl-legacy-provider' build-storybook -o storybook-static"
   },
   "dependencies": {
     "@emotion/react": "^11.10.5",
@@ -113,7 +113,7 @@
     "styled-components": "^5"
   },
   "volta": {
-    "node": "16.15.1",
-    "yarn": "4.0.0-rc.40"
+    "node": "18.17.1",
+    "yarn": "1.22.19"
   }
 }
