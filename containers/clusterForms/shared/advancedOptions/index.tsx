@@ -7,7 +7,7 @@ import Typography from '../../../../components/typography';
 import SwitchComponent from '../../../../components/switch';
 import Checkbox from '../../../../components/controlledFields/Checkbox';
 import ControlledTextField from '../../../../components/controlledFields/TextField';
-import ControlledRadio from '../../../../components/controlledFields/Radio';
+import ControlledRadio from '../../../../components/controlledFields/radio/';
 import { useAppSelector } from '../../../../redux/store';
 import { InstallValues, InstallationType } from '../../../../types/redux';
 import { GitProvider } from '../../../../types';
