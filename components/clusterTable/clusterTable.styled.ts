@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { styled as muiStyled } from '@mui/material/styles';
 import TableCell, { tableCellClasses } from '@mui/material/TableCell';
 import {
@@ -7,14 +7,21 @@ import {
   tableRowClasses,
   tableBodyClasses,
   IconButton,
-  iconButtonClasses,
   typographyClasses,
   Box,
+  TableContainer,
+  Table,
 } from '@mui/material';
 
 import Typography from '../typography';
 import Tag from '../tag';
-import { CHEFS_HAT, PASTEL_LIGHT_BLUE, SALTBOX_BLUE, VOLCANIC_SAND } from '../../constants/colors';
+import {
+  CHEFS_HAT,
+  PASTEL_LIGHT_BLUE,
+  ROCK_BLUE,
+  SALTBOX_BLUE,
+  VOLCANIC_SAND,
+} from '../../constants/colors';
 
 export const Menu = styled(Box)`
   position: absolute;
@@ -28,12 +35,20 @@ export const Menu = styled(Box)`
   z-index: 1;
 `;
 
-export const StyledIconButton = muiStyled(IconButton)(() => ({
-  [`&.${iconButtonClasses.root}`]: {
-    opacity: 0,
-    pointerEvents: 'none',
-  },
-}));
+export const StyledIconButton = styled(IconButton)<{ expanded?: boolean }>`
+  svg {
+    color: ${ROCK_BLUE};
+    transition: transform 0.3s ease;
+  }
+
+  ${({ expanded }) =>
+    expanded &&
+    css`
+      svg {
+        transform: rotate(180deg);
+      }
+    `}
+`;
 
 export const StyledTableBody = muiStyled(TableBody)(() => ({
   [`&.${tableBodyClasses.root}`]: {
@@ -90,3 +105,15 @@ export const StyledCellText = muiStyled(Typography)(() => ({
     fontWeight: 400,
   },
 }));
+
+export const StyledTable = styled(Table)`
+  border-collapse: collapse;
+  margin: 5px;
+  height: fit-content;
+  margin: 0 28px;
+`;
+
+export const StyledTableContainer = styled(TableContainer)`
+  display: flex;
+  height: 100%;
+`;

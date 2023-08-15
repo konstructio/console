@@ -4,6 +4,7 @@ import { Story } from '@storybook/react';
 import { ClusterStatus, ClusterType } from '../../types/provision';
 import { InstallationType } from '../../types/redux';
 import { noop } from '../../utils/noop';
+import { sortClustersByType } from '../../utils/sortClusterByType';
 
 import { ClusterTable, ClusterInfo } from './clusterTable';
 
@@ -14,7 +15,7 @@ export default {
 
 const clusters: ClusterInfo[] = [
   {
-    clusterName: 'kuberfirst-mgmt2',
+    clusterName: 'kuberfirst-mgmt',
     type: ClusterType.MANAGEMENT,
     cloudProvider: InstallationType.AWS,
     cloudRegion: 'ap-southeast-1',
@@ -27,8 +28,8 @@ const clusters: ClusterInfo[] = [
     nodes: 2,
   },
   {
-    clusterName: 'kuberfirst-mgmt2',
-    type: ClusterType.MANAGEMENT,
+    clusterName: 'kuberfirst-worker-1',
+    type: ClusterType.WORKLOAD,
     cloudProvider: InstallationType.CIVO,
     cloudRegion: 'ap-southeast-1',
     nodes: 2,
@@ -40,8 +41,8 @@ const clusters: ClusterInfo[] = [
     domainName: 'yourdomain.com',
   },
   {
-    clusterName: 'kuberfirst-mgmt2',
-    type: ClusterType.MANAGEMENT,
+    clusterName: 'kuberfirst-worker-2',
+    type: ClusterType.WORKLOAD,
     cloudProvider: InstallationType.DIGITAL_OCEAN,
     cloudRegion: 'ap-southeast-1',
     nodes: 2,
@@ -53,7 +54,7 @@ const clusters: ClusterInfo[] = [
     domainName: 'yourdomain.com',
   },
   {
-    clusterName: 'kuberfirst-mgmt2',
+    clusterName: 'kuberfirst-worker-3',
     type: ClusterType.WORKLOAD,
     cloudProvider: InstallationType.DIGITAL_OCEAN,
     cloudRegion: 'ap-southeast-1',
@@ -66,7 +67,7 @@ const clusters: ClusterInfo[] = [
     domainName: 'yourdomain.com',
   },
   {
-    clusterName: 'kuberfirst-mgmt2',
+    clusterName: 'kuberfirst-worker-4',
     type: ClusterType.WORKLOAD,
     cloudProvider: InstallationType.VULTR,
     cloudRegion: 'ap-southeast-1',
@@ -80,8 +81,19 @@ const clusters: ClusterInfo[] = [
   },
 ];
 
-const DefaultTemplate: Story = (args) => (
-  <ClusterTable clusters={clusters} {...args} onMenuOpenClose={noop} onDeleteCluster={noop} />
-);
+const { managementCluster, workloadClusters } = sortClustersByType(clusters);
+
+const DefaultTemplate: Story = (args) =>
+  managementCluster ? (
+    <ClusterTable
+      {...args}
+      onMenuOpenClose={noop}
+      onDeleteCluster={noop}
+      managementCluster={managementCluster}
+      workloadClusters={workloadClusters}
+    />
+  ) : (
+    <></>
+  );
 
 export const Default = DefaultTemplate.bind({});
