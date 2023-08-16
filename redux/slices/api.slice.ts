@@ -9,6 +9,7 @@ import {
   getClusters,
 } from '../thunks/api.thunk';
 import { Cluster, ClusterStatus } from '../../types/provision';
+import { sortClustersByType } from '../../utils/sortClusterByType';
 
 export interface ApiState {
   loading: boolean;
@@ -19,7 +20,8 @@ export interface ApiState {
   status?: ClusterStatus;
   isError: boolean;
   lastErrorCondition?: string;
-  clusters: Array<Cluster>;
+  managementCluster?: Cluster;
+  workloadClusters: Cluster[];
   selectedCluster?: Cluster;
   completedSteps: Array<{ label: string; order: number }>;
   cloudDomains: Array<string>;
@@ -36,7 +38,7 @@ export const initialState: ApiState = {
   isDeleted: false,
   status: undefined,
   loading: false,
-  clusters: [],
+  workloadClusters: [],
   selectedCluster: undefined,
   completedSteps: [],
   cloudDomains: [],
@@ -102,12 +104,17 @@ const apiSlice = createSlice({
       .addCase(getClusters.fulfilled, (state, { payload }: PayloadAction<Array<Cluster>>) => {
         state.loading = false;
         state.isError = false;
-        state.clusters = payload;
+
+        const { managementCluster, workloadClusters } = sortClustersByType(payload);
+
+        state.managementCluster = managementCluster;
+        state.workloadClusters = workloadClusters;
       })
       .addCase(getClusters.rejected, (state) => {
         state.loading = false;
         state.isError = true;
-        state.clusters = [];
+        state.managementCluster = undefined;
+        state.workloadClusters = [];
       })
       .addCase(getCloudDomains.fulfilled, (state, { payload }: PayloadAction<Array<string>>) => {
         state.cloudDomains = payload;

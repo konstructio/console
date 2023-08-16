@@ -1,7 +1,7 @@
 import React, { FunctionComponent, useState } from 'react';
 import { Box } from '@mui/material';
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
-import Image from 'next/image';
+import LaunchOutlinedIcon from '@mui/icons-material/LaunchOutlined';
 
 import Typography from '../../components/typography';
 import TextFieldWithRef from '../../components/textField';
@@ -10,7 +10,6 @@ import { LAUGHING_ORANGE } from '../../constants/colors';
 import Button from '../../components/button';
 import { ClusterInfo } from '../../components/clusterTable/clusterTable';
 import { ClusterType } from '../../types/provision';
-import frameIconSrc from '../../assets/frame.svg';
 
 import { Content, Footer, Header, NextLink } from './deleteCluster.styled';
 
@@ -46,10 +45,10 @@ const DeleteCluster: FunctionComponent<DeleteClusterProps> = ({
                 corresponding worker clusters
               </Typography>
               <NextLink href="https://docs.kubefirst.io/common/deprovision" target="_blank">
-                <a>
+                <>
                   How to delete a management cluster
-                  <Image src={frameIconSrc} height={18} width={18} alt="delete cluster" />
-                </a>
+                  <LaunchOutlinedIcon />
+                </>
               </NextLink>
             </>
           ) : (

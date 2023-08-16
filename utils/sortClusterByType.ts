@@ -1,9 +1,8 @@
-import { ClusterInfo } from '../components/clusterTable/clusterTable';
-import { ClusterType } from '../types/provision';
+import { Cluster, ClusterType } from '../types/provision';
 
-export function sortClustersByType(clusters: ClusterInfo[]) {
-  let managementCluster: ClusterInfo | undefined;
-  const workloadClusters: ClusterInfo[] = [];
+export function sortClustersByType(clusters: Cluster[]) {
+  let managementCluster: Cluster | undefined;
+  const workloadClusters: Cluster[] = [];
 
   for (const cluster of clusters) {
     if (cluster.type === ClusterType.MANAGEMENT) {

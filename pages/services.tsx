@@ -15,7 +15,9 @@ const ServicesPage: FunctionComponent<ServicesPageProps> = ({ isClusterZero }) =
 
   const { selectedCluster, clusters } = useAppSelector(({ cluster, api }) => ({
     selectedCluster: cluster.selectedCluster,
-    clusters: api.clusters,
+    clusters: api.managementCluster
+      ? [api.managementCluster, ...api.workloadClusters]
+      : [...api.workloadClusters],
   }));
 
   const hasExistingCluster = useMemo(

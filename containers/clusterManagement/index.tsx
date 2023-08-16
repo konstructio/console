@@ -47,7 +47,9 @@ const ClusterManagement: FunctionComponent = () => {
 
   const dispatch = useAppDispatch();
 
-  const { isDeleted, isDeleting, isError, clusters } = useAppSelector(({ api }) => api);
+  const { isDeleted, isDeleting, isError, managementCluster, workloadClusters } = useAppSelector(
+    ({ api }) => api,
+  );
 
   const handleGetClusters = useCallback(async (): Promise<void> => {
     await dispatch(getClusters());
@@ -65,11 +67,6 @@ const ClusterManagement: FunctionComponent = () => {
     dispatch(resetInstallState());
     push('/provision');
   };
-
-  const { managementCluster, workloadClusters } = useMemo(
-    () => sortClustersByType(clusters),
-    [clusters],
-  );
 
   const getClusterInterval = (params: ClusterRequestProps) => {
     return setInterval(async () => {

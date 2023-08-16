@@ -17,7 +17,9 @@ const Header: FunctionComponent = () => {
   const { pathname } = useRouter();
   const { isEnabled } = useFeatureFlag('cluster-management');
   const { clusters, selectedCluster } = useAppSelector(({ api, cluster }) => ({
-    clusters: api.clusters,
+    clusters: api.managementCluster
+      ? [api.managementCluster, ...api.workloadClusters]
+      : [...api.workloadClusters],
     selectedCluster: cluster.selectedCluster,
   }));
 
