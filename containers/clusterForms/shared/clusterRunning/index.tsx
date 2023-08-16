@@ -12,11 +12,12 @@ export interface ClusterRunningProps {
 
 const ClusterRunning: FunctionComponent<ClusterRunningProps> = (props) => {
   const dispatch = useAppDispatch();
-  const { installValues, selectedCluster } = useAppSelector(({ installation, cluster }) => ({
-    installValues: installation.values,
-    selectedCluster: cluster.selectedCluster,
-  }));
   const { push } = useRouter();
+
+  const { installValues, selectedCluster } = useAppSelector(({ installation, api }) => ({
+    installValues: installation.values,
+    selectedCluster: api.selectedCluster,
+  }));
 
   const onOpenConsole = () => {
     dispatch(getClusters());
