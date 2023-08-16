@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useMemo } from 'react';
+import React, { FunctionComponent } from 'react';
 import { useRouter } from 'next/router';
 
 import ClusterReady from '../../../../components/clusterReady';
