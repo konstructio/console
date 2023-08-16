@@ -14,4 +14,5 @@ const DefaultTemplate: ComponentStory<typeof ClusterReady> = (args) => <ClusterR
 export const Default = DefaultTemplate.bind({});
 Default.args = {
   onOpenConsole: noop,
+  kbotPassword: 'feedkray',
 };

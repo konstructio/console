@@ -7,7 +7,7 @@ import Typography from '../typography';
 import { Container, FormHelperText, InputAdornmentError, Required } from './textField.styled';
 
 export interface TextFieldProps extends InputProps {
-  label: string;
+  label?: string;
   helperText?: string;
 }
 
@@ -48,11 +48,13 @@ const TextField: FunctionComponent<TextFieldProps> = ({
 
   return (
     <Container isDisabled={disabled}>
-      <InputLabel disabled={disabled}>
-        <Typography variant="labelLarge" sx={{ display: 'flex', gap: '4px' }}>
-          {label} {required && <Required>*</Required>}
-        </Typography>
-      </InputLabel>
+      {label && (
+        <InputLabel disabled={disabled}>
+          <Typography variant="labelLarge" sx={{ display: 'flex', gap: '4px' }}>
+            {label} {required && <Required>*</Required>}
+          </Typography>
+        </InputLabel>
+      )}
       <Input
         {...props}
         autoComplete="off"

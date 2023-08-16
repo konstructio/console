@@ -123,4 +123,14 @@ declare module '@mui/material/styles' {
     body3?: React.CSSProperties;
     tooltip?: React.CSSProperties;
   }
+
+  interface ButtonPropsColorOverrides {
+    text: true;
+  }
+}
+
+declare module '@mui/material/Button' {
+  interface ButtonPropsColorOverrides {
+    text: true;
+  }
 }

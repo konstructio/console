@@ -29,6 +29,9 @@ const mapClusterFromRaw = (cluster: ClusterResponse): Cluster => ({
   creationDate: cluster.creation_timestamp,
   lastErrorCondition: cluster.last_condition,
   status: cluster.status,
+  vaultAuth: {
+    kbotPassword: cluster.vault_auth?.kbot_password,
+  },
   checks: {
     install_tools_check: cluster.install_tools_check,
     domain_liveness_check: cluster.domain_liveness_check,

@@ -51,6 +51,9 @@ export interface ClusterResponse {
     gitOwner: string;
     gitToken?: string;
   };
+  vault_auth: {
+    kbot_password: string;
+  };
   last_condition: string;
   install_tools_check: boolean;
   domain_liveness_check: boolean;
@@ -88,6 +91,9 @@ export interface Cluster extends Row {
   gitAuth: {
     gitOwner: string;
     gitToken?: string;
+  };
+  vaultAuth: {
+    kbotPassword: string;
   };
   checks: {
     install_tools_check: boolean;
