@@ -7,6 +7,7 @@ import {
   SecondaryButton,
   ErrorButton,
   InfoButton,
+  TextButton,
 } from './button.styled';
 
 const BUTTONS_MAP = {
@@ -14,10 +15,11 @@ const BUTTONS_MAP = {
   ['secondary']: SecondaryButton,
   ['error']: ErrorButton,
   ['info']: InfoButton,
+  ['text']: TextButton,
 };
 
 export interface IButtonProps extends ButtonProps {
-  color: 'primary' | 'secondary' | 'error' | 'info';
+  color: 'primary' | 'secondary' | 'error' | 'info' | 'text';
 }
 
 const Button: FunctionComponent<IButtonProps> = ({ variant, color, disabled, ...rest }) => {

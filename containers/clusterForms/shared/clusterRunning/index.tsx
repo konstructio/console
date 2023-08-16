@@ -1,9 +1,9 @@
 import React, { FunctionComponent } from 'react';
 import { useRouter } from 'next/router';
 
+import ClusterReady from '../../../../components/clusterReady';
 import { getClusters } from '../../../../redux/thunks/api.thunk';
 import { useAppDispatch, useAppSelector } from '../../../../redux/store';
-import ClusterReady from '../../../../components/clusterReady';
 
 export interface ClusterRunningProps {
   clusterName?: string;
@@ -12,7 +12,10 @@ export interface ClusterRunningProps {
 
 const ClusterRunning: FunctionComponent<ClusterRunningProps> = (props) => {
   const dispatch = useAppDispatch();
-  const installValues = useAppSelector(({ installation }) => installation.values);
+  const { installValues, selectedCluster } = useAppSelector(({ installation, cluster }) => ({
+    installValues: installation.values,
+    selectedCluster: cluster.selectedCluster,
+  }));
   const { push } = useRouter();
 
   const onOpenConsole = () => {
@@ -25,6 +28,7 @@ const ClusterRunning: FunctionComponent<ClusterRunningProps> = (props) => {
       onOpenConsole={onOpenConsole}
       clusterName={installValues?.clusterName}
       domainName={installValues?.domainName}
+      kbotPassword={selectedCluster?.vaultAuth?.kbotPassword}
       {...props}
     />
   );

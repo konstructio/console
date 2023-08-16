@@ -63,6 +63,7 @@ export type ClusterInfo = Pick<
 > & {
   nodes?: number;
   instanceSize?: string;
+  workerNodes?: ClusterInfo[];
 };
 
 type ClusterRowProps = ClusterInfo & {

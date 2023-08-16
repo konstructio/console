@@ -11,6 +11,7 @@ export interface LearnMoreProps {
   href: string;
   linkTitle: string;
   installType?: InstallationType;
+  withoutDivider?: boolean;
 }
 
 const LearnMore: FunctionComponent<LearnMoreProps> = ({
@@ -18,6 +19,7 @@ const LearnMore: FunctionComponent<LearnMoreProps> = ({
   href,
   installType,
   linkTitle,
+  withoutDivider,
 }) => {
   const docsDomainLink = `https://docs.kubefirst.io/${
     installType && [InstallationType.DIGITAL_OCEAN, InstallationType.VULTR].includes(installType)
@@ -27,7 +29,7 @@ const LearnMore: FunctionComponent<LearnMoreProps> = ({
 
   return (
     <>
-      <Divider sx={{ m: '-20px', p: '8px 0' }} />
+      {!withoutDivider && <Divider sx={{ m: '-20px', p: '8px 0' }} />}
       <Text variant="labelLarge">
         {description}{' '}
         <NextLink

@@ -1,6 +1,11 @@
 import styled from 'styled-components';
 
 import Row from '../row';
+import { DANGER } from '../../constants/colors';
+
+export const Asterisk = styled.span`
+  color: ${DANGER};
+`;
 
 export const InputContainer = styled(Row)`
   flex: 1;
@@ -8,9 +13,6 @@ export const InputContainer = styled(Row)`
 
 export const LabelContainer = styled(Row)`
   gap: 5px;
-  span {
-    color: #dc2626;
-  }
 `;
 
 export const NumInput = styled.input`

@@ -8,8 +8,13 @@ import {
   getCluster,
   getClusters,
 } from '../thunks/api.thunk';
-import { Cluster, ClusterStatus } from '../../types/provision';
 import { sortClustersByType } from '../../utils/sortClusterByType';
+import {
+  Cluster,
+  ClusterCreationStep,
+  ClusterStatus,
+  NewClusterConfig,
+} from '../../types/provision';
 
 export interface ApiState {
   loading: boolean;
@@ -27,6 +32,8 @@ export interface ApiState {
   cloudDomains: Array<string>;
   cloudRegions: Array<string>;
   isAuthenticationValid?: boolean;
+  clusterCreationStep: ClusterCreationStep;
+  clusterConfig?: NewClusterConfig;
 }
 
 export const initialState: ApiState = {
@@ -44,6 +51,7 @@ export const initialState: ApiState = {
   cloudDomains: [],
   cloudRegions: [],
   isAuthenticationValid: undefined,
+  clusterCreationStep: ClusterCreationStep.CONFIG,
 };
 
 const apiSlice = createSlice({
@@ -59,6 +67,12 @@ const apiSlice = createSlice({
     },
     clearDomains: (state) => {
       state.cloudDomains = [];
+    },
+    setClusterCreationStep: (state, { payload }: PayloadAction<ClusterCreationStep>) => {
+      state.clusterCreationStep = payload;
+    },
+    setClusterConfig: (state, { payload }: PayloadAction<NewClusterConfig>) => {
+      state.clusterConfig = payload;
     },
   },
   extraReducers: (builder) => {
@@ -129,7 +143,13 @@ const apiSlice = createSlice({
   },
 });
 
-export const { clearValidation, setCompletedSteps, clearClusterState, clearDomains } =
-  apiSlice.actions;
+export const {
+  clearValidation,
+  setCompletedSteps,
+  clearClusterState,
+  clearDomains,
+  setClusterCreationStep,
+  setClusterConfig,
+} = apiSlice.actions;
 
 export const apiReducer = apiSlice.reducer;

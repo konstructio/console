@@ -9,6 +9,7 @@ export const CloseButton = styled.button`
 `;
 
 export const ClusterMenuFooter = styled(Row)<{ reverseButtonOrder?: boolean }>`
+  flex-shrink: 0;
   flex-direction: ${({ reverseButtonOrder }) => (reverseButtonOrder ? 'row-reverse' : 'row')};
   justify-content: ${({ reverseButtonOrder }) =>
     reverseButtonOrder ? 'space-between' : 'flex-end'};
@@ -19,7 +20,14 @@ export const ClusterMenuFooter = styled(Row)<{ reverseButtonOrder?: boolean }>`
   border-top: 1px solid #e2e8f0;
 `;
 
+export const Form = styled.form`
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+`;
+
 export const MenuHeader = styled(Row)`
+  flex-shrink: 0;
   color: ${({ theme }) => theme.colors.volcanicSand};
   height: 70px;
   justify-content: space-between;

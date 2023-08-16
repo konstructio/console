@@ -1,5 +1,5 @@
 import { Row } from '../';
-import { InstallationType } from '../redux';
+import { AdvancedOptions, InstallationType } from '../redux';
 
 export enum ClusterStatus {
   DELETED = 'deleted',
@@ -21,13 +21,18 @@ export enum ClusterCreationStep {
   DETAILS,
 }
 
-export type NewClusterConfig = {
+export enum ImageRepository {
+  GIT = 'git',
+  ECR = 'ecr',
+}
+
+export interface NewClusterConfig extends AdvancedOptions {
   clusterName?: string;
-  domainName?: string;
   cloudRegion?: string;
   instanceSize?: string;
   nodeCount?: number;
-};
+  environment: string;
+}
 
 export interface ClusterRequestProps {
   clusterName?: string;
@@ -50,6 +55,9 @@ export interface ClusterResponse {
   gitAuth: {
     gitOwner: string;
     gitToken?: string;
+  };
+  vault_auth: {
+    kbot_password: string;
   };
   last_condition: string;
   install_tools_check: boolean;
@@ -88,6 +96,9 @@ export interface Cluster extends Row {
   gitAuth: {
     gitOwner: string;
     gitToken?: string;
+  };
+  vaultAuth: {
+    kbotPassword: string;
   };
   checks: {
     install_tools_check: boolean;

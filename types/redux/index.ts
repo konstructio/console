@@ -1,3 +1,5 @@
+import { ImageRepository } from '../provision';
+
 export interface GitValues {
   gitToken?: string;
   gitOwner?: string;
@@ -10,7 +12,7 @@ export interface AdvancedOptions extends GitValues {
   useHttps?: boolean;
   dnsProvider?: string;
   cloudflareToken?: string;
-  imageRepository?: string;
+  imageRepository?: ImageRepository;
 }
 
 export interface AuthValues {
