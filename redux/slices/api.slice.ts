@@ -51,7 +51,21 @@ const apiSlice = createSlice({
     setCompletedSteps: (state, action) => {
       state.completedSteps = action.payload;
     },
-    clearClusterState: () => initialState,
+    clearClusterState: (state) => {
+      state.isProvisioning = true;
+      state.isProvisioned = false;
+      state.isError = false;
+      state.lastErrorCondition = undefined;
+      state.isDeleting = false;
+      state.isDeleted = false;
+      state.status = undefined;
+      state.loading = false;
+      state.clusters = [];
+      state.completedSteps = [];
+      state.cloudDomains = [];
+      state.cloudRegions = [];
+      state.isAuthenticationValid = undefined;
+    },
     clearValidation: (state) => {
       state.isAuthenticationValid = undefined;
     },
