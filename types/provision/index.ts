@@ -1,5 +1,5 @@
 import { Row } from '../';
-import { InstallationType } from '../redux';
+import { AdvancedOptions, InstallationType } from '../redux';
 
 export enum ClusterStatus {
   DELETED = 'deleted',
@@ -21,13 +21,18 @@ export enum ClusterCreationStep {
   DETAILS,
 }
 
-export type NewClusterConfig = {
+export enum ImageRepository {
+  GIT = 'git',
+  ECR = 'ecr',
+}
+
+export interface NewClusterConfig extends AdvancedOptions {
   clusterName?: string;
-  domainName?: string;
   cloudRegion?: string;
   instanceSize?: string;
   nodeCount?: number;
-};
+  environment: string;
+}
 
 export interface ClusterRequestProps {
   clusterName?: string;

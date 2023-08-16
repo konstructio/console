@@ -51,7 +51,7 @@ const CustomSwitch = styled((props: SwitchProps) => (
   },
 }));
 
-const Switch: FunctionComponent<SwitchProps> = ({ ...props }) => {
+const Switch: FunctionComponent<SwitchProps> = (props) => {
   return <CustomSwitch {...props} />;
 };
 

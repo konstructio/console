@@ -10,4 +10,7 @@ module.exports = {
   features: {
     previewMdx2: true,
   },
+  typescript: {
+    reactDocgen: 'react-docgen',
+  },
 };

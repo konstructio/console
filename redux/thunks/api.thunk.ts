@@ -10,6 +10,7 @@ import {
   ClusterRequestProps,
   ClusterResponse,
   ClusterServices,
+  NewClusterConfig,
 } from '../../types/provision';
 import { GitOpsCatalogApp, GitOpsCatalogProps } from '../../types/gitOpsCatalog';
 import { InstallValues, InstallationType } from '../../types/redux';
@@ -108,6 +109,28 @@ export const createCluster = createAsyncThunk<
     throw res.error;
   }
   return res.data;
+});
+
+export const createWorkloadCluster = createAsyncThunk<
+  void,
+  NewClusterConfig,
+  {
+    dispatch: AppDispatch;
+    state: RootState;
+  }
+>('api/cluster/createWorkloadCluster', async (config) => {
+  const res = await axios.post('http://localhost:8080/api/v1/cluster', {
+    workload_cluster_name: config.clusterName,
+    cloud_region: config.cloudRegion,
+    instance_size: config.instanceSize,
+    node_count: config.nodeCount,
+    environment: config.environment,
+  });
+
+  if ('error' in res) {
+    throw res.error;
+  }
+  console.log('the res =>', res.data);
 });
 
 export const getCluster = createAsyncThunk<

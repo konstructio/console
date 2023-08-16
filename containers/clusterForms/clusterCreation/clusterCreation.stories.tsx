@@ -1,9 +1,11 @@
-import React, { useRef } from 'react';
+import React from 'react';
 import { Story } from '@storybook/react';
 import { action } from '@storybook/addon-actions';
 import { FormProvider, useForm } from 'react-hook-form';
 
-import ClusterCreationForm, { ClusterConfig } from '.';
+import { NewClusterConfig } from '../../../types/provision';
+
+import ClusterCreationForm from '.';
 
 export default {
   title: 'Forms/ClusterCreationForm',
@@ -11,20 +13,14 @@ export default {
 };
 
 const DefaultTemplate: Story = () => {
-  const methods = useForm<ClusterConfig>();
-
-  const formRef = useRef<HTMLFormElement>(null);
-
-  const handleClick = () => {
-    if (formRef.current) {
-      formRef.current.requestSubmit();
-    }
-  };
+  const methods = useForm<NewClusterConfig>();
 
   return (
     <FormProvider {...methods}>
-      <ClusterCreationForm ref={formRef} onFormSubmit={() => action('onSubmit')} />
-      <button onClick={handleClick}>Submit me</button>
+      <form onSubmit={() => action('onSubmit')}>
+        <ClusterCreationForm />
+        <button type="submit">Submit me</button>
+      </form>
     </FormProvider>
   );
 };
