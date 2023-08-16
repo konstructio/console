@@ -1,5 +1,3 @@
-import { FunctionComponent, useMemo } from 'react';
-
 import {
   DEFAULT_STEPS,
   FormStep,
@@ -13,22 +11,6 @@ import {
 } from '../constants/installation';
 import { GitProvider } from '../types';
 import { InstallationType } from '../types/redux';
-import { CivoFormFlow } from '../containers/clusterForms/civo';
-import { AwsFormFlow } from '../containers/clusterForms/aws';
-import { LocalFormFlow } from '../containers/clusterForms/k3d';
-import { DigitalOceanFormFlow } from '../containers/clusterForms/digitalocean';
-import { VultrFormFlow } from '../containers/clusterForms/vultr';
-
-export const FormFlowByType: Record<
-  InstallationType,
-  FunctionComponent<{ currentStep: FormStep }>
-> = {
-  [InstallationType.LOCAL]: LocalFormFlow,
-  [InstallationType.AWS]: AwsFormFlow,
-  [InstallationType.CIVO]: CivoFormFlow,
-  [InstallationType.DIGITAL_OCEAN]: DigitalOceanFormFlow,
-  [InstallationType.VULTR]: VultrFormFlow,
-};
 
 const getInstallationTitles = (
   installType: InstallationType,
@@ -116,24 +98,17 @@ const getIsProvisionStep = (
   return isLocalProvisionStep || isProvisionStep;
 };
 
-export function useInstallation(
+export const useInstallation = (
   type: InstallationType,
   gitProvider: GitProvider,
   step: number,
   isMarketplace = false,
-) {
-  const formByType = useMemo(() => {
-    return FormFlowByType[type] || FormFlowByType.aws;
-  }, [type]);
-
-  return {
-    stepTitles: getStepTitles(type, isMarketplace),
-    installTitles: getInstallationTitles(type, gitProvider, isMarketplace),
-    info: getInfoByType(type, step, isMarketplace),
-    isAuthStep: getIsAuthStep(type, step, isMarketplace),
-    isSetupStep: getIsSetupStep(type, step, isMarketplace),
-    isProvisionStep: getIsProvisionStep(type, step, isMarketplace),
-    formFlow: formByType,
-    apiKeyInfo: INSTALLATION_TYPE_API_KEYS[type],
-  };
-}
+) => ({
+  stepTitles: getStepTitles(type, isMarketplace),
+  installTitles: getInstallationTitles(type, gitProvider, isMarketplace),
+  info: getInfoByType(type, step, isMarketplace),
+  isAuthStep: getIsAuthStep(type, step, isMarketplace),
+  isSetupStep: getIsSetupStep(type, step, isMarketplace),
+  isProvisionStep: getIsProvisionStep(type, step, isMarketplace),
+  apiKeyInfo: INSTALLATION_TYPE_API_KEYS[type],
+});

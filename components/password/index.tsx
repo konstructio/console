@@ -8,7 +8,7 @@ import TextField from '../textField';
 import { InputAdornmentContainer } from './password.styled';
 
 export interface PasswordProps extends InputProps {
-  label: string;
+  label?: string;
   helperText?: string;
 }
 

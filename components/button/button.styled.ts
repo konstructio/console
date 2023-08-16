@@ -62,3 +62,14 @@ export const InfoButton = styled(Button)`
   box-shadow: none !important;
   color: ${({ theme }) => theme.colors.saltboxBlue};
 `;
+
+export const TextButton = styled(Button)`
+  background-color: inherit;
+  box-shadow: none !important;
+  color: ${({ theme }) => theme.colors.saltboxBlue} !important;
+
+  &:hover {
+    color: ${({ theme }) => theme.colors.primary} !important;
+    background-color: ${({ theme }) => theme.colors.magnolia};
+  }
+`;

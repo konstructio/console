@@ -2,6 +2,7 @@ import styled from 'styled-components';
 import NextLink from 'next/link';
 
 import Column from '../column';
+import Row from '../row';
 
 export const Container = styled(Column)`
   align-items: center;
@@ -23,4 +24,10 @@ export const Title = styled.div`
   strong {
     font-size: 16px;
   }
+`;
+
+export const PasswordContainer = styled(Row)`
+  align-items: center;
+  gap: 8px;
+  margin: 18px 0 32px 0;
 `;

@@ -2,11 +2,13 @@ import React, { FunctionComponent, useCallback, useEffect, useMemo } from 'react
 import { FormProvider, useForm } from 'react-hook-form';
 import { useRouter } from 'next/router';
 
-import { AUTHENTICATION_ERROR_MSG } from '../../constants';
-import { createCluster, getCloudRegions, resetClusterProgress } from '../../redux/thunks/api.thunk';
 import InstallationStepContainer from '../../components/installationStepContainer';
 import InstallationInfoCard from '../../components/installationInfoCard';
+import ErrorBanner from '../../components/errorBanner';
+import Button from '../../components/button';
 import { InstallationsSelection } from '../installationsSelection';
+import { FormFlow } from '../clusterForms';
+import AdvancedOptions from '../clusterForms/shared/advancedOptions';
 import {
   clearError,
   setError,
@@ -14,14 +16,13 @@ import {
   setInstallValues,
   setInstallationStep,
 } from '../../redux/slices/installation.slice';
+import { clearClusterState, clearValidation } from '../../redux/slices/api.slice';
 import { useAppDispatch, useAppSelector } from '../../redux/store';
+import { createCluster, getCloudRegions, resetClusterProgress } from '../../redux/thunks/api.thunk';
 import { useInstallation } from '../../hooks/useInstallation';
 import { InstallValues, InstallationType } from '../../types/redux';
 import { GitProvider } from '../../types';
-import { clearClusterState, clearValidation } from '../../redux/slices/api.slice';
-import AdvancedOptions from '../clusterForms/shared/advancedOptions';
-import ErrorBanner from '../../components/errorBanner';
-import Button from '../../components/button';
+import { AUTHENTICATION_ERROR_MSG } from '../../constants';
 
 import { AdvancedOptionsContainer, ErrorContainer, Form, FormContent } from './provision.styled';
 
@@ -53,20 +54,13 @@ const Provision: FunctionComponent = () => {
   const { isProvisioned } = useAppSelector(({ api }) => api);
   const isMarketplace = useMemo(() => installMethod?.includes('marketplace'), [installMethod]);
 
-  const {
-    stepTitles,
-    formFlow: FormFlow,
-    installTitles,
-    info,
-    isAuthStep,
-    isProvisionStep,
-    isSetupStep,
-  } = useInstallation(
-    installType as InstallationType,
-    gitProvider as GitProvider,
-    installationStep,
-    !!isMarketplace,
-  );
+  const { stepTitles, installTitles, info, isAuthStep, isProvisionStep, isSetupStep } =
+    useInstallation(
+      installType as InstallationType,
+      gitProvider as GitProvider,
+      installationStep,
+      !!isMarketplace,
+    );
 
   const methods = useForm<InstallValues>({ mode: 'onChange' });
   const {
@@ -203,7 +197,6 @@ const Provision: FunctionComponent = () => {
     error,
     authErrors,
     provisionCluster,
-    FormFlow,
     isSetupStep,
     installType,
   ]);
