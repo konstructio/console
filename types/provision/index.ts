@@ -22,8 +22,8 @@ export enum ClusterCreationStep {
 }
 
 export enum ImageRepository {
-  GITHUB = 'github',
-  AWS = 'aws',
+  GIT = 'git',
+  ECR = 'ecr',
 }
 
 export interface NewClusterConfig extends AdvancedOptions {

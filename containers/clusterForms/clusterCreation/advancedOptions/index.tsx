@@ -98,8 +98,8 @@ const AdvancedOptions: FunctionComponent = () => {
             required: false,
           }}
           options={[
-            { label: 'Github Container Registry', value: ImageRepository.GITHUB },
-            { label: 'AWS Elastic Container Registry (ECR)', value: ImageRepository.AWS },
+            { label: 'Github Container Registry', value: ImageRepository.GIT },
+            { label: 'AWS Elastic Container Registry (ECR)', value: ImageRepository.ECR },
           ]}
         />
       </InputContainer>
