@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { Handle } from 'reactflow';
 import Image from 'next/image';
 
@@ -7,7 +7,7 @@ import Column from '../column';
 import Row from '../row';
 import Tag from '../tag';
 
-export const Container = styled(Row)<{ borderColor: string }>`
+export const Container = styled(Row)<{ borderColor: string; selected: boolean }>`
   height: 64px;
   width: 360px;
   background: white;
@@ -16,6 +16,12 @@ export const Container = styled(Row)<{ borderColor: string }>`
   align-items: center;
   padding: 12px 16px;
   color: #3f3f46;
+
+  ${({ selected }) =>
+    selected &&
+    css`
+      filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+    `}
 `;
 
 export const Img = styled(Image)`
