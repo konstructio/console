@@ -26,12 +26,14 @@ const actionButtonText: Record<ClusterCreationStep, string> = {
 
 interface CreateClusterFlowProps {
   onMenuClose: () => void;
+  onClusterDelete: () => void;
   cluster?: ClusterInfo;
 }
 
 export const CreateClusterFlow: FunctionComponent<CreateClusterFlowProps> = ({
   cluster,
   onMenuClose,
+  onClusterDelete,
 }) => {
   const { clusterCreationStep } = useAppSelector(({ api }) => api);
 
@@ -48,16 +50,20 @@ export const CreateClusterFlow: FunctionComponent<CreateClusterFlowProps> = ({
   }, [dispatch, clusterCreationStep, onMenuClose]);
 
   const handleClick = useCallback(() => {
-    if (clusterCreationStep !== ClusterCreationStep.DETAILS && methods.formState.isValid) {
+    if (clusterCreationStep === ClusterCreationStep.DETAILS) {
+      onClusterDelete();
+    } else if (methods.formState.isValid) {
       dispatch(setClusterCreationStep(clusterCreationStep + 1));
     }
-  }, [dispatch, clusterCreationStep, methods]);
+  }, [onClusterDelete, dispatch, clusterCreationStep, methods]);
 
   const handleSubmit = useCallback(
     (config: NewClusterConfig) => {
-      dispatch(createWorkloadCluster(config));
+      if (clusterCreationStep !== ClusterCreationStep.DETAILS) {
+        dispatch(createWorkloadCluster(config));
+      }
     },
-    [dispatch],
+    [clusterCreationStep, dispatch],
   );
 
   const showingClusterDetails = clusterCreationStep === ClusterCreationStep.DETAILS;

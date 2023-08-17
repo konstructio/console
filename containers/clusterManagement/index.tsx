@@ -7,7 +7,7 @@ import Typography from '../../components/typography';
 import { useAppDispatch, useAppSelector } from '../../redux/store';
 import { deleteCluster, getCluster, getClusters } from '../../redux/thunks/api.thunk';
 import { resetInstallState } from '../../redux/slices/installation.slice';
-import { ClusterRequestProps } from '../../types/provision';
+import { ClusterCreationStep, ClusterRequestProps } from '../../types/provision';
 import useToggle from '../../hooks/useToggle';
 import Drawer from '../../components/drawer';
 import useModal from '../../hooks/useModal';
@@ -16,7 +16,7 @@ import TabPanel, { Tab, a11yProps } from '../../components/tab';
 import { BISCAY, SALTBOX_BLUE } from '../../constants/colors';
 import { Flow } from '../../components/flow';
 import { ClusterInfo, ClusterTable } from '../../components/clusterTable/clusterTable';
-import { sortClustersByType } from '../../utils/sortClusterByType';
+import { setClusterCreationStep } from '../../redux/slices/api.slice';
 
 import { CreateClusterFlow } from './createClusterFlow';
 import { Container, Content, Header } from './clusterManagement.styled';
@@ -32,10 +32,11 @@ const ClusterManagement: FunctionComponent = () => {
   const isClusterZero = useAppSelector(({ config }) => config.isClusterZero);
 
   const {
-    isOpen: isDetailsPanelOpen,
-    open: openDetailsPanel,
-    close: closeDetailsPanel,
+    isOpen: createClusterFlowOpen,
+    open: openCreateClusterFlow,
+    close: closeCreateClusterFlow,
   } = useToggle();
+
   const {
     isOpen: isDeleteModalOpen,
     openModal: openDeleteModal,
@@ -103,6 +104,15 @@ const ClusterManagement: FunctionComponent = () => {
     setActiveTab(newValue);
   };
 
+  const handleNodeClick = useCallback(
+    (info: ClusterInfo) => {
+      setSelectedCluster(info);
+      dispatch(setClusterCreationStep(ClusterCreationStep.DETAILS));
+      openCreateClusterFlow();
+    },
+    [dispatch, openCreateClusterFlow],
+  );
+
   return (
     <Container>
       <Header>
@@ -127,7 +137,7 @@ const ClusterManagement: FunctionComponent = () => {
           color="primary"
           variant="contained"
           style={{ marginRight: '24px' }}
-          onClick={openDetailsPanel}
+          onClick={openCreateClusterFlow}
         >
           Add workload cluster
         </Button>
@@ -144,7 +154,7 @@ const ClusterManagement: FunctionComponent = () => {
           )}
         </TabPanel>
         <TabPanel value={activeTab} index={MANAGEMENT_TABS.GRAPH_VIEW}>
-          <Flow />
+          <Flow onNodeClick={handleNodeClick} />
         </TabPanel>
       </Content>
       <Snackbar
@@ -157,7 +167,7 @@ const ClusterManagement: FunctionComponent = () => {
         message={`Cluster ${selectedCluster?.clusterName} has been deleted`}
       />
       <Drawer
-        open={isDetailsPanelOpen}
+        open={createClusterFlowOpen}
         anchor="right"
         hideBackdrop
         PaperProps={{
@@ -169,7 +179,11 @@ const ClusterManagement: FunctionComponent = () => {
           },
         }}
       >
-        <CreateClusterFlow onMenuClose={closeDetailsPanel} />
+        <CreateClusterFlow
+          onMenuClose={closeCreateClusterFlow}
+          onClusterDelete={openDeleteModal}
+          cluster={selectedCluster}
+        />
       </Drawer>
       {selectedCluster && (
         <DeleteCluster
