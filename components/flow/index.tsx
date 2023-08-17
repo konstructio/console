@@ -7,6 +7,8 @@ import ReactFlow, {
   useNodesState,
   useEdgesState,
   Node,
+  ReactFlowProvider,
+  useReactFlow,
 } from 'reactflow';
 
 import { GraphNode, type CustomGraphNode } from '../graphNode';
@@ -153,13 +155,16 @@ const nodeTypes: NodeTypes = {
   custom: GraphNode,
 };
 
-interface FlowProps {
+interface GraphViewProps {
   onNodeClick: (clusterInfo: ClusterInfo) => void;
 }
 
-export const Flow: FunctionComponent<FlowProps> = ({ onNodeClick }) => {
+const GraphView: FunctionComponent<GraphViewProps> = ({ onNodeClick }) => {
   const [nodes, , onNodesChange] = useNodesState(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
+
+  const { setCenter } = useReactFlow();
+
   const onConnect = useCallback(
     (params: Connection | Edge) => setEdges((eds) => addEdge(params, eds)),
     [setEdges],
@@ -167,9 +172,15 @@ export const Flow: FunctionComponent<FlowProps> = ({ onNodeClick }) => {
 
   const handleNodeClick = useCallback(
     (e: MouseEvent, node: Node) => {
-      onNodeClick(node.data);
+      const { data, position, width, height } = node;
+      // Focus in viewport on selected node
+      setCenter(position.x + (width ?? 400), position.y + (height ?? 0), {
+        zoom: 1.2,
+        duration: 500,
+      });
+      onNodeClick(data);
     },
-    [onNodeClick],
+    [onNodeClick, setCenter],
   );
 
   return (
@@ -185,3 +196,9 @@ export const Flow: FunctionComponent<FlowProps> = ({ onNodeClick }) => {
     />
   );
 };
+
+export const Flow: FunctionComponent<GraphViewProps> = (props) => (
+  <ReactFlowProvider>
+    <GraphView {...props} />
+  </ReactFlowProvider>
+);
