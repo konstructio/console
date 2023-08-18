@@ -22,6 +22,7 @@ import {
   featureFlagsReducer,
   gitReducer,
   installationReducer,
+  reactFlowReducer,
   readinessReducer,
 } from './slices';
 
@@ -34,6 +35,7 @@ const rootReducer = combineReducers({
   api: apiReducer,
   featureFlags: featureFlagsReducer,
   cluster: clusterReducer,
+  reactFlow: reactFlowReducer,
 });
 
 const config = getPersistConfig({
