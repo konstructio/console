@@ -50,14 +50,18 @@ const GRAPH_NODE_CONFIG: Record<
 
 export type CustomGraphNode = Node<ClusterInfo, 'custom'>;
 
-export const GraphNode: FunctionComponent<NodeProps<ClusterInfo>> = ({ data, isConnectable }) => {
+export const GraphNode: FunctionComponent<NodeProps<ClusterInfo>> = ({
+  data,
+  isConnectable,
+  selected,
+}) => {
   const { status, type, clusterName, cloudProvider, cloudRegion, nodes } = data;
 
   const { iconLabel, iconType, bgColor } = CLUSTER_TAG_CONFIG[status ?? ClusterStatus.ERROR];
   const { handle, position, imageSrc, nodeColor } = GRAPH_NODE_CONFIG[type];
 
   return (
-    <Container borderColor={nodeColor}>
+    <Container borderColor={nodeColor} selected={selected}>
       <MainContainerInfo>
         <NodeLabel>{clusterName}</NodeLabel>
         <LabelContainer>
