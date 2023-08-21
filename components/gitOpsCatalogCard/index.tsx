@@ -2,8 +2,8 @@ import React, { FunctionComponent, PropsWithChildren } from 'react';
 import Image from 'next/image';
 import { Box, CircularProgress } from '@mui/material';
 
-import Tag from '../tag';
-import { GitOpsCatalogApp } from '../../types/gitOpsCatalog';
+import Tag, { TagColor } from '../tag';
+import { AppCategory, GitOpsCatalogApp } from '../../types/gitOpsCatalog';
 import Button from '../button';
 import Typography from '../typography';
 import { VOLCANIC_SAND } from '../../constants/colors';
@@ -12,21 +12,37 @@ import {
   App,
   Body,
   Card,
-  Categories,
+  Category,
   Description,
   Header,
   Installing,
 } from './gitOpsCatalogCard.styled';
 
-export interface GitOpsCatalogCardProps extends GitOpsCatalogApp {
+export const CATEGORY_LABEL_CONFIG: Record<AppCategory, { color: TagColor; label?: string }> = {
+  [AppCategory.APP_MANAGEMENT]: { color: 'purple', label: 'App Management' },
+  [AppCategory.ARCHITECTURE]: { color: 'pink' },
+  [AppCategory.CI_CD]: { color: 'yellow', label: 'CI/CD' },
+  [AppCategory.DATABASE]: { color: 'purple' },
+  [AppCategory.FIN_OPS]: { color: 'light-blue' },
+  [AppCategory.INFRASTRUCTURE]: { color: 'grey' },
+  [AppCategory.MONITORING]: { color: 'emerald' },
+  [AppCategory.OBSERVABIILITY]: { color: 'light-orange' },
+  [AppCategory.SECURITY]: { color: 'dark-sky-blue' },
+  [AppCategory.STORAGE]: { color: 'green' },
+  [AppCategory.TESTING]: { color: 'neon-green' },
+  [AppCategory.QUEUEING]: { color: 'sky-blue' },
+  [AppCategory.KUBESHOP]: { color: 'sky-blue' },
+};
+
+export type GitOpsCatalogCardProps = PropsWithChildren<GitOpsCatalogApp> & {
   isInstalling?: boolean;
   onClick?: () => void;
   showSubmitButton?: boolean;
-}
+};
 
-const GitOpsCatalogCard: FunctionComponent<PropsWithChildren<GitOpsCatalogCardProps>> = ({
+const GitOpsCatalogCard: FunctionComponent<GitOpsCatalogCardProps> = ({
   display_name,
-  categories,
+  category,
   image_url,
   description,
   isInstalling,
@@ -34,6 +50,7 @@ const GitOpsCatalogCard: FunctionComponent<PropsWithChildren<GitOpsCatalogCardPr
   showSubmitButton = true,
   children,
 }) => {
+  const { color, label } = CATEGORY_LABEL_CONFIG[category ?? AppCategory.APP_MANAGEMENT] ?? [];
   return (
     <Card>
       <Header>
@@ -53,10 +70,11 @@ const GitOpsCatalogCard: FunctionComponent<PropsWithChildren<GitOpsCatalogCardPr
             {display_name}
           </Typography>
         </App>
-        <Categories>
-          {categories &&
-            categories.map((category) => <Tag key={category} text={category} bgColor="purple" />)}
-        </Categories>
+        {category && (
+          <Category>
+            <Tag key={category} text={label ?? category} bgColor={color} />
+          </Category>
+        )}
       </Header>
       <Body>
         <Description variant="body2">{description || children}</Description>
