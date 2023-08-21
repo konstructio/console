@@ -22,7 +22,7 @@ export const CATEGORY_LABEL_CONFIG: Record<AppCategory, { color: TagColor; label
   [AppCategory.APP_MANAGEMENT]: { color: 'purple', label: 'App Management' },
   [AppCategory.ARCHITECTURE]: { color: 'pink' },
   [AppCategory.CI_CD]: { color: 'yellow', label: 'CI/CD' },
-  [AppCategory.DATABASE]: { color: 'purple' },
+  [AppCategory.DATABASE]: { color: 'indigo' },
   [AppCategory.FIN_OPS]: { color: 'light-blue' },
   [AppCategory.INFRASTRUCTURE]: { color: 'grey' },
   [AppCategory.MONITORING]: { color: 'emerald' },
