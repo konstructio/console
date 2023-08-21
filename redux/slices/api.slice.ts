@@ -8,7 +8,6 @@ import {
   getCluster,
   getClusters,
 } from '../thunks/api.thunk';
-import { sortClustersByType } from '../../utils/sortClusterByType';
 import {
   Cluster,
   ClusterCreationStep,
@@ -115,7 +114,7 @@ const apiSlice = createSlice({
       .addCase(getCluster.fulfilled, (state, { payload }: PayloadAction<Cluster>) => {
         state.selectedCluster = payload;
         state.loading = false;
-        state.status = payload.status as ClusterStatus;
+        state.status = payload.status;
 
         if (state.status === ClusterStatus.DELETED) {
           state.isDeleted = true;
@@ -130,14 +129,11 @@ const apiSlice = createSlice({
           state.lastErrorCondition = payload.lastErrorCondition;
         }
       })
-      .addCase(getClusters.fulfilled, (state, { payload }: PayloadAction<Array<Cluster>>) => {
+      .addCase(getClusters.fulfilled, (state, { payload }) => {
         state.loading = false;
         state.isError = false;
-
-        const { managementCluster, workloadClusters } = sortClustersByType(payload);
-
-        state.managementCluster = managementCluster;
-        state.workloadClusters = workloadClusters;
+        state.managementCluster = payload.managementCluster;
+        state.workloadClusters = payload.workloadClusters;
       })
       .addCase(getClusters.rejected, (state) => {
         state.loading = false;
