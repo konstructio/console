@@ -26,6 +26,11 @@ export const TagContainer = styled(Row)<{ bgColor?: TagColor }>`
           background-color: #fce7f3;
           color: #be185d;
         `
+      : bgColor === 'fuscia'
+      ? css`
+          background-color: #fdf4ff;
+          color: #a21caf;
+        `
       : bgColor === 'light-blue'
       ? css`
           background-color: #ecfeff;
@@ -53,13 +58,23 @@ export const TagContainer = styled(Row)<{ bgColor?: TagColor }>`
         `
       : bgColor === 'green'
       ? css`
-          background-color: #d1fae5;
-          color: #059669;
+          background-color: #dcfce7;
+          color: #15803d;
+        `
+      : bgColor === 'emerald'
+      ? css`
+          background-color: #ecfdf5;
+          color: #047857;
         `
       : bgColor === 'grey'
       ? css`
           background-color: #f8fafc;
           color: #71717a;
+        `
+      : bgColor === 'indigo'
+      ? css`
+          background-color: #e0e7ff;
+          color: #4338ca;
         `
       : css`
           background-color: none;

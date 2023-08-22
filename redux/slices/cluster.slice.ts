@@ -73,7 +73,12 @@ const clusterSlice = createSlice({
       .addCase(
         getGitOpsCatalogApps.fulfilled,
         (state, { payload }: PayloadAction<Array<GitOpsCatalogApp>>) => {
-          state.gitOpsCatalogApps = payload;
+          // temporarily add category field until api fetch result change.
+          const appsWithAddedSingleCategory = payload.map((app) => ({
+            ...app,
+            category: app.categories[0],
+          }));
+          state.gitOpsCatalogApps = appsWithAddedSingleCategory;
         },
       )
       .addCase(getGitOpsCatalogApps.rejected, (state) => {

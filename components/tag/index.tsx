@@ -9,15 +9,18 @@ import warningImageSrc from '../../assets/warning.svg';
 import { TagContainer, IconImage } from './tag.styled';
 
 export const TAG_COLOR_OPTIONS = [
+  'purple',
+  'pink',
+  'fuscia',
+  'yellow',
+  'indigo',
   'neon-green',
   'light-orange',
-  'pink',
   'light-blue',
   'sky-blue',
   'dark-sky-blue',
-  'purple',
-  'yellow',
   'green',
+  'emerald',
   'grey',
 ] as const;
 

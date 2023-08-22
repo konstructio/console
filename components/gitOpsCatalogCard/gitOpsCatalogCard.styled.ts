@@ -26,9 +26,8 @@ export const Card = styled.div`
   width: 372px;
 `;
 
-export const Categories = styled.div`
+export const Category = styled.div`
   display: flex;
-  gap: 8px;
 `;
 
 export const Description = styled(Typography)`
