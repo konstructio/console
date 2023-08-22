@@ -73,7 +73,8 @@ const ClusterCreationForm: FunctionComponent<ComponentPropsWithoutRef<'div'>> = 
         defaultValue={values?.cloudRegion}
         required
         rules={{ required: true }}
-        options={cloudRegions && cloudRegions.map((region) => ({ label: region, value: region }))}
+        // options={cloudRegions && cloudRegions.map((region) => ({ label: region, value: region }))}
+        options={[{ label: 'LON1', value: 'LON1' }]}
         onChange={handleRegionOnSelect}
       />
       <ControlledSelect

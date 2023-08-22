@@ -1,5 +1,6 @@
 import React, { FunctionComponent, useCallback } from 'react';
 import CloseIcon from '@mui/icons-material/Close';
+import CircularProgress from '@mui/material/CircularProgress';
 import { FormProvider, useForm } from 'react-hook-form';
 
 import Typography from '../../../components/typography';
@@ -15,8 +16,11 @@ import { useAppDispatch, useAppSelector } from '../../../redux/store';
 import { ClusterCreationStep, NewClusterConfig } from '../../../types/provision';
 import { createWorkloadCluster } from '../../../redux/thunks/api.thunk';
 import { setClusterCreationStep } from '../../../redux/slices/api.slice';
+import { mockClusterConfig } from '../../../tests/mocks/mockClusterConfig';
 
 import { CloseButton, ClusterMenuFooter, Form, MenuHeader } from './createClusterFlow.styled';
+
+const isDevelopment = process.env.NEXT_PUBLIC_NODE_ENV === 'development';
 
 const actionButtonText: Record<ClusterCreationStep, string> = {
   [ClusterCreationStep.CONFIG]: 'Create cluster',
@@ -35,11 +39,13 @@ export const CreateClusterFlow: FunctionComponent<CreateClusterFlowProps> = ({
   onMenuClose,
   onClusterDelete,
 }) => {
-  const { clusterCreationStep } = useAppSelector(({ api }) => api);
+  const { clusterCreationStep, loading } = useAppSelector(({ api }) => api);
 
   const dispatch = useAppDispatch();
 
-  const methods = useForm<NewClusterConfig>();
+  const methods = useForm<NewClusterConfig>({
+    defaultValues: isDevelopment ? mockClusterConfig : {},
+  });
 
   const handleMenuClose = useCallback(() => {
     // if provisioning, keep menu on provisioning step
@@ -52,21 +58,27 @@ export const CreateClusterFlow: FunctionComponent<CreateClusterFlowProps> = ({
   const handleClick = useCallback(() => {
     if (clusterCreationStep === ClusterCreationStep.DETAILS) {
       onClusterDelete();
-    } else if (methods.formState.isValid) {
+    } else if (clusterCreationStep === ClusterCreationStep.PROVISION) {
       dispatch(setClusterCreationStep(clusterCreationStep + 1));
     }
-  }, [onClusterDelete, dispatch, clusterCreationStep, methods]);
+  }, [onClusterDelete, dispatch, clusterCreationStep]);
 
   const handleSubmit = useCallback(
     (config: NewClusterConfig) => {
       if (clusterCreationStep !== ClusterCreationStep.DETAILS) {
-        dispatch(createWorkloadCluster(config));
+        dispatch(createWorkloadCluster(config))
+          .unwrap()
+          .then(() => dispatch(setClusterCreationStep(clusterCreationStep + 1)));
       }
     },
     [clusterCreationStep, dispatch],
   );
 
   const showingClusterDetails = clusterCreationStep === ClusterCreationStep.DETAILS;
+
+  const {
+    formState: { isValid },
+  } = methods;
 
   return (
     <FormProvider {...methods}>
@@ -101,8 +113,10 @@ export const CreateClusterFlow: FunctionComponent<CreateClusterFlowProps> = ({
             variant="contained"
             color={showingClusterDetails ? 'error' : 'primary'}
             onClick={handleClick}
+            disabled={!isValid || loading}
             type="submit"
           >
+            {loading && <CircularProgress size={20} sx={{ mr: '8px' }} />}
             {actionButtonText[clusterCreationStep]}
           </Button>
         </ClusterMenuFooter>
