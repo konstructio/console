@@ -32,6 +32,7 @@ export const CATEGORY_LABEL_CONFIG: Record<AppCategory, { color: TagColor; label
   [AppCategory.TESTING]: { color: 'neon-green' },
   [AppCategory.QUEUEING]: { color: 'sky-blue' },
   [AppCategory.KUBESHOP]: { color: 'sky-blue' },
+  [AppCategory.APPLICATIONS]: { color: 'sky-blue' },
 };
 
 export type GitOpsCatalogCardProps = PropsWithChildren<GitOpsCatalogApp> & {
@@ -50,7 +51,7 @@ const GitOpsCatalogCard: FunctionComponent<GitOpsCatalogCardProps> = ({
   showSubmitButton = true,
   children,
 }) => {
-  const { color, label } = CATEGORY_LABEL_CONFIG[category ?? AppCategory.APP_MANAGEMENT] ?? [];
+  const { color, label } = CATEGORY_LABEL_CONFIG[category ?? AppCategory.APP_MANAGEMENT] ?? {};
   return (
     <Card>
       <Header>

@@ -14,6 +14,7 @@ export enum AppCategory {
   TESTING = 'Testing',
   QUEUEING = 'Queueing',
   KUBESHOP = 'Kubeshop',
+  APPLICATIONS = 'Applications',
 }
 
 export interface GitOpsCatalogApp {

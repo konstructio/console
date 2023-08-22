@@ -11,6 +11,7 @@ import { TagContainer, IconImage } from './tag.styled';
 export const TAG_COLOR_OPTIONS = [
   'purple',
   'pink',
+  'fuscia',
   'yellow',
   'indigo',
   'neon-green',

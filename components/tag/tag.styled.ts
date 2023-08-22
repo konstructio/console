@@ -26,6 +26,11 @@ export const TagContainer = styled(Row)<{ bgColor?: TagColor }>`
           background-color: #fce7f3;
           color: #be185d;
         `
+      : bgColor === 'fuscia'
+      ? css`
+          background-color: #fdf4ff;
+          color: #a21caf;
+        `
       : bgColor === 'light-blue'
       ? css`
           background-color: #ecfeff;
