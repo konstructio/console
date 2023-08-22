@@ -2,6 +2,7 @@ import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 
 import {
   createCluster,
+  createWorkloadCluster,
   deleteCluster,
   getCloudDomains,
   getCloudRegions,
@@ -103,6 +104,16 @@ const apiSlice = createSlice({
         state.loading = false;
         state.isError = true;
         state.isProvisioning = false;
+      })
+      .addCase(createWorkloadCluster.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(createWorkloadCluster.rejected, (state) => {
+        state.loading = false;
+        state.isError = true;
+      })
+      .addCase(createWorkloadCluster.fulfilled, (state) => {
+        state.loading = false;
       })
       .addCase(deleteCluster.pending, (state) => {
         state.isDeleting = true;

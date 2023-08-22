@@ -19,6 +19,7 @@ import { sortClustersByType } from '../../utils/sortClusterByType';
 import { generateNodesConfig } from '../../utils/reactFlow';
 import { mapClusterFromRaw } from '../../utils/mapClustersFromRaw';
 import { setEdges, setNodes } from '../../redux/slices/reactFlow.slice';
+import { delayedPromise } from '../../utils/delayedPromise';
 
 export const createCluster = createAsyncThunk<
   Cluster,
@@ -84,18 +85,11 @@ export const createWorkloadCluster = createAsyncThunk<
     state: RootState;
   }
 >('api/cluster/createWorkloadCluster', async (config) => {
-  const res = await axios.post('http://localhost:8080/api/v1/cluster', {
-    workload_cluster_name: config.clusterName,
-    cloud_region: config.cloudRegion,
-    instance_size: config.instanceSize,
-    node_count: config.nodeCount,
-    environment: config.environment,
-  });
+  const res = await delayedPromise({ message: 'success' });
 
   if ('error' in res) {
     throw res.error;
   }
-  console.log('the res =>', res.data);
 });
 
 export const getCluster = createAsyncThunk<
