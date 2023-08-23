@@ -1,5 +1,5 @@
-import React, { useCallback, type FunctionComponent, MouseEvent } from 'react';
-import ReactFlow, { NodeTypes, Node, ReactFlowProvider, useReactFlow } from 'reactflow';
+import React, { type FunctionComponent, useEffect } from 'react';
+import ReactFlow, { NodeTypes, ReactFlowProvider, useReactFlow } from 'reactflow';
 
 import { GraphNode } from '../graphNode';
 import { ClusterInfo } from '../../components/clusterTable/clusterTable';
@@ -21,20 +21,21 @@ const GraphView: FunctionComponent<GraphViewProps> = ({ onNodeClick }) => {
 
   const dispatch = useAppDispatch();
 
-  const { setCenter } = useReactFlow();
+  const { setCenter, fitView } = useReactFlow();
 
-  const handleNodeClick = useCallback(
-    (e: MouseEvent, node: Node) => {
-      const { data, position, width, height } = node;
-      // Focus in viewport on selected node
+  useEffect(() => {
+    const selectedNode = nodes.find((node) => node.selected);
+    if (selectedNode) {
+      const { position, width, height } = selectedNode;
+
       setCenter(position.x + (width ?? 400), position.y + (height ?? 0), {
         zoom: 1.2,
         duration: 500,
       });
-      onNodeClick(data);
-    },
-    [onNodeClick, setCenter],
-  );
+    } else {
+      fitView({ duration: 500, padding: 0.2 });
+    }
+  }, [nodes, setCenter, fitView]);
 
   return (
     <ReactFlow
@@ -43,7 +44,7 @@ const GraphView: FunctionComponent<GraphViewProps> = ({ onNodeClick }) => {
       onNodesChange={(changes) => dispatch(onNodesChange(changes))}
       onEdgesChange={(changes) => dispatch(onEdgesChange(changes))}
       onConnect={(connection) => dispatch(onConnect(connection))}
-      onNodeClick={handleNodeClick}
+      onNodeClick={(_, node) => onNodeClick(node.data)}
       nodeTypes={nodeTypes}
       fitView
     />
