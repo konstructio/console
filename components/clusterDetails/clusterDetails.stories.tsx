@@ -1,16 +1,11 @@
 import React from 'react';
-import { Story } from '@storybook/react';
+import { Meta, StoryObj } from '@storybook/react';
 
 import { ClusterInfo } from '../clusterTable/clusterTable';
 import { ClusterStatus, ClusterType } from '../../types/provision';
 import { InstallationType } from '../../types/redux';
 
 import ClusterDetails from '.';
-
-export default {
-  title: 'Components/ClusterDetails',
-  component: ClusterDetails,
-};
 
 const cluster: ClusterInfo = {
   clusterName: 'kuberfirst-mgmt2',
@@ -27,6 +22,14 @@ const cluster: ClusterInfo = {
   instanceSize: '8 CPU Cores / 64 GB RAM / 120 GB NvME storage / 8 TB Data Transfer',
 };
 
-const DefaultTemplate: Story = (args) => <ClusterDetails cluster={cluster} {...args} />;
+const meta: Meta<typeof ClusterDetails> = {
+  component: ClusterDetails,
+};
 
-export const Default = DefaultTemplate.bind({});
+export default meta;
+
+export const Default: StoryObj<typeof ClusterDetails> = {
+  args: {
+    cluster,
+  },
+};

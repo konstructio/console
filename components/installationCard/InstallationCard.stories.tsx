@@ -1,34 +1,28 @@
-import React from 'react';
-import styled from 'styled-components';
-import { Story } from '@storybook/react';
+import { Meta, StoryObj } from '@storybook/react';
 
-import Column from '../column';
+import InstallationCard from '.';
 
-import InstallationCard, { InstallationCardProps } from '.';
-
-export default {
+const meta: Meta<typeof InstallationCard> = {
   title: 'Components/InstallationCard',
   component: InstallationCard,
+  argTypes: {
+    active: {
+      control: { type: 'boolean' },
+    },
+  },
+  args: {
+    active: true,
+  },
 };
 
-const DefaultTemplate: Story<InstallationCardProps> = (args) => {
-  return (
-    <Container>
-      <InstallationCard {...args} />
-    </Container>
-  );
-};
+export default meta;
 
-const Container = styled(Column)`
-  align-items: center;
-  gap: 20px;
-`;
-
-export const Default = DefaultTemplate.bind({});
-Default.args = {
-  active: true,
-  info: {
-    description: 'test',
-    title: 'aws',
+export const Default: StoryObj<typeof InstallationCard> = {
+  args: {
+    info: {
+      description: 'test',
+      title: 'aws',
+    },
+    style: { margin: '50px auto' },
   },
 };

@@ -1,22 +1,16 @@
-import React from 'react';
-import { Story } from '@storybook/react';
-import styled from 'styled-components';
+import { Meta, StoryObj } from '@storybook/react';
 
 import NextLink from '.';
 
-export default {
-  title: 'Components/NextLink',
+const meta: Meta<typeof NextLink> = {
   component: NextLink,
 };
 
-const DefaultTemplate: Story = () => <Link href="">Link</Link>;
+export default meta;
 
-const Link = styled(NextLink)`
-  margin: 50px;
-
-  a {
-    text-decoration: none;
-  }
-`;
-
-export const Default = DefaultTemplate.bind({});
+export const Default: StoryObj<typeof NextLink> = {
+  args: {
+    href: '#',
+    children: 'Next Link',
+  },
+};

@@ -1,24 +1,18 @@
-import React from 'react';
-import { Story } from '@storybook/react';
+import { Meta, StoryObj } from '@storybook/react';
 
 import NumberInput from '.';
 
-export default {
-  title: 'Components/NumberInput',
+const meta: Meta<typeof NumberInput> = {
   component: NumberInput,
 };
 
-const DefaultTemplate: Story = () => {
-  return (
-    <NumberInput
-      label="Number of nodes"
-      inputProps={{
-        type: 'number',
-        required: true,
-      }}
-      onChange={(value) => console.log('the value =>', value)}
-    />
-  );
-};
+export default meta;
 
-export const Default = DefaultTemplate.bind({});
+export const Default: StoryObj<typeof NumberInput> = {
+  args: {
+    label: 'Number of nodes',
+    inputProps: {
+      required: true,
+    },
+  },
+};

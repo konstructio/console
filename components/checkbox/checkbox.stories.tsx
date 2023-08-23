@@ -1,13 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
-import { ComponentStory, ComponentMeta } from '@storybook/react';
+import { Meta, StoryObj } from '@storybook/react';
 
 import CheckboxComponent from './index';
-
-export default {
-  title: 'Form Elements/Checkbox',
-  component: CheckboxComponent,
-} as ComponentMeta<typeof CheckboxComponent>;
 
 const Wrapper = styled.div`
   background: rgb(255, 255, 255);
@@ -17,26 +12,33 @@ const Wrapper = styled.div`
   width: 40px;
 `;
 
-const DefaultTemplate: ComponentStory<typeof CheckboxComponent> = () => (
-  <Wrapper>
-    <CheckboxComponent required />
-  </Wrapper>
-);
+const meta: Meta<typeof CheckboxComponent> = {
+  component: CheckboxComponent,
+  decorators: [
+    (Story) => (
+      <Wrapper>
+        <Story />
+      </Wrapper>
+    ),
+  ],
+};
 
-const CheckedTemplate: ComponentStory<typeof CheckboxComponent> = () => (
-  <Wrapper>
-    <CheckboxComponent checked />
-  </Wrapper>
-);
+export default meta;
 
-const DisabledTemplate: ComponentStory<typeof CheckboxComponent> = () => (
-  <Wrapper>
-    <CheckboxComponent disabled />
-  </Wrapper>
-);
+export const Default: StoryObj<typeof CheckboxComponent> = {
+  args: {
+    required: true,
+  },
+};
 
-export const Default = DefaultTemplate.bind({});
+export const Checked: StoryObj<typeof CheckboxComponent> = {
+  args: {
+    checked: true,
+  },
+};
 
-export const Checked = CheckedTemplate.bind({});
-
-export const Disabled = DisabledTemplate.bind({});
+export const Disabled: StoryObj<typeof CheckboxComponent> = {
+  args: {
+    disabled: true,
+  },
+};

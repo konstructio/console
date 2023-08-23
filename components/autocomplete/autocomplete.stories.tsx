@@ -1,14 +1,15 @@
 import React from 'react';
 import styled from 'styled-components';
-import { ComponentStory, ComponentMeta } from '@storybook/react';
+import { Meta, StoryObj } from '@storybook/react';
 import { Controller, useForm } from 'react-hook-form';
 
 import AutoComplete from './index';
 
-export default {
-  title: 'Form Elements/Autocomplete',
+const meta: Meta<typeof AutoComplete> = {
   component: AutoComplete,
-} as ComponentMeta<typeof AutoComplete>;
+};
+
+export default meta;
 
 const Wrapper = styled.div`
   background: rgb(255, 255, 255);
@@ -29,7 +30,7 @@ const OPTIONS = [
   },
 ];
 
-const DefaultTemplate: ComponentStory<typeof AutoComplete> = () => {
+const AutoCompleteWithHooks = () => {
   const { control } = useForm();
   return (
     <Wrapper>
@@ -51,4 +52,6 @@ const DefaultTemplate: ComponentStory<typeof AutoComplete> = () => {
   );
 };
 
-export const Default = DefaultTemplate.bind({});
+export const Default: StoryObj<typeof AutoCompleteWithHooks> = {
+  render: () => <AutoCompleteWithHooks />,
+};

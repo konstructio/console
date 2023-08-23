@@ -1,5 +1,5 @@
 import React from 'react';
-import { Story } from '@storybook/react';
+import { Meta, StoryObj } from '@storybook/react';
 import { action } from '@storybook/addon-actions';
 import { FormProvider, useForm } from 'react-hook-form';
 
@@ -7,12 +7,14 @@ import { NewClusterConfig } from '../../../types/provision';
 
 import ClusterCreationForm from '.';
 
-export default {
+const meta: Meta<typeof ClusterCreationForm> = {
   title: 'Forms/ClusterCreationForm',
   component: ClusterCreationForm,
 };
 
-const DefaultTemplate: Story = () => {
+export default meta;
+
+const ClusterCreationFormWithHooks = () => {
   const methods = useForm<NewClusterConfig>();
 
   return (
@@ -25,4 +27,6 @@ const DefaultTemplate: Story = () => {
   );
 };
 
-export const Default = DefaultTemplate.bind({});
+export const Default: StoryObj<typeof ClusterCreationForm> = {
+  render: () => <ClusterCreationFormWithHooks />,
+};

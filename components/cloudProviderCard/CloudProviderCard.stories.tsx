@@ -1,30 +1,30 @@
-import React from 'react';
-import { Story } from '@storybook/react';
+import { Meta, StoryObj } from '@storybook/react';
 
 import { InstallationType } from '../../types/redux';
 
-import CloudProviderCard, { CloudProviderCardProps } from '.';
+import CloudProviderCard from '.';
 
-export default {
-  title: 'Components/CloudProviderCard',
+const meta: Meta<typeof CloudProviderCard> = {
   component: CloudProviderCard,
   argTypes: {
     option: {
       control: 'select',
       options: InstallationType,
-      defaultValue: InstallationType.LOCAL,
     },
     active: {
       control: 'boolean',
-      defaultValue: false,
     },
     withHoverEffect: {
       control: 'boolean',
-      defaultValue: true,
     },
+  },
+  args: {
+    option: InstallationType.LOCAL,
+    active: false,
+    withHoverEffect: true,
   },
 };
 
-const DefaultTemplate: Story<CloudProviderCardProps> = (args) => <CloudProviderCard {...args} />;
+export default meta;
 
-export const Default = DefaultTemplate.bind({});
+export const Default: StoryObj<typeof CloudProviderCard> = {};

@@ -1,5 +1,4 @@
-import React from 'react';
-import { Story } from '@storybook/react';
+import { Meta, StoryObj } from '@storybook/react';
 
 import { ClusterStatus, ClusterType } from '../../types/provision';
 import { InstallationType } from '../../types/redux';
@@ -7,11 +6,6 @@ import { noop } from '../../utils/noop';
 import { sortClustersByType } from '../../utils/sortClusterByType';
 
 import { ClusterTable, ClusterInfo } from './clusterTable';
-
-export default {
-  title: 'Components/ClusterTable',
-  component: ClusterTable,
-};
 
 const clusters: ClusterInfo[] = [
   {
@@ -81,19 +75,19 @@ const clusters: ClusterInfo[] = [
   },
 ];
 
+const meta: Meta<typeof ClusterTable> = {
+  component: ClusterTable,
+};
+
+export default meta;
+
 const { managementCluster, workloadClusters } = sortClustersByType(clusters);
 
-const DefaultTemplate: Story = (args) =>
-  managementCluster ? (
-    <ClusterTable
-      {...args}
-      onMenuOpenClose={noop}
-      onDeleteCluster={noop}
-      managementCluster={managementCluster}
-      workloadClusters={workloadClusters}
-    />
-  ) : (
-    <></>
-  );
-
-export const Default = DefaultTemplate.bind({});
+export const Default: StoryObj<typeof ClusterTable> = {
+  args: {
+    onMenuOpenClose: noop,
+    onDeleteCluster: noop,
+    managementCluster,
+    workloadClusters,
+  },
+};
