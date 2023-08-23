@@ -1,5 +1,5 @@
 import { TagColor, TagIconOption } from '../components/tag';
-import { ClusterStatus } from '../types/provision';
+import { ClusterStatus, ClusterType } from '../types/provision';
 
 export const AWS_REGIONS = [
   { label: 'US East (Ohio) (us-east-2)', value: 'us-east-2' },
@@ -35,7 +35,7 @@ export const AUTHENTICATION_ERROR_MSG = `
 `;
 
 export const CLUSTER_TAG_CONFIG: Record<
-  ClusterStatus | 'draft',
+  ClusterStatus | ClusterType.DRAFT,
   { iconLabel: string; iconType?: TagIconOption; bgColor: TagColor }
 > = {
   [ClusterStatus.PROVISIONED]: { iconLabel: 'Available', iconType: 'check', bgColor: 'green' },
@@ -47,5 +47,5 @@ export const CLUSTER_TAG_CONFIG: Record<
   [ClusterStatus.DELETING]: { iconLabel: 'Deleting', iconType: 'trash', bgColor: 'pink' },
   [ClusterStatus.DELETED]: { iconLabel: 'Deleted', iconType: 'trash', bgColor: 'pink' },
   [ClusterStatus.ERROR]: { iconLabel: 'Unavailable', iconType: 'warning', bgColor: 'light-orange' },
-  draft: { iconLabel: 'DRAFT', bgColor: 'grey' },
+  [ClusterType.DRAFT]: { iconLabel: 'DRAFT', bgColor: 'grey' },
 };

@@ -94,7 +94,7 @@ const ClusterRow: FunctionComponent<ClusterRowProps> = ({
   const [menuOpen, setMenuOpen] = useState(false);
 
   const cloudLogoSrc = CLOUD_LOGO_OPTIONS[cloudProvider];
-  const { iconLabel, iconType, bgColor } = CLUSTER_TAG_CONFIG[status ?? 'draft'];
+  const { iconLabel, iconType, bgColor } = CLUSTER_TAG_CONFIG[status ?? ClusterType.DRAFT];
   const formattedClusterType = type === ClusterType.MANAGEMENT ? 'management' : 'worker';
 
   // placeholder for now. new field yet to be implemented
