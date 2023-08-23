@@ -89,7 +89,7 @@ export interface Cluster extends Row {
   gitProvider: string;
   gitUser: string;
   gitToken?: string;
-  type: ClusterType.MANAGEMENT | ClusterType.WORKLOAD;
+  type: ClusterType;
   creationDate?: string;
   status?: ClusterStatus;
   lastErrorCondition: string;

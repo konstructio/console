@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, { FunctionComponent, useCallback, useEffect, useRef, useState } from 'react';
 import { Box, Snackbar, Tabs } from '@mui/material';
 import { useRouter } from 'next/router';
 
@@ -17,6 +17,12 @@ import { BISCAY, SALTBOX_BLUE } from '../../constants/colors';
 import { Flow } from '../../components/flow';
 import { ClusterInfo, ClusterTable } from '../../components/clusterTable/clusterTable';
 import { setClusterCreationStep } from '../../redux/slices/api.slice';
+import {
+  generateDraftNode,
+  removeDraftNode,
+  setDraftNodeActive,
+  unSelectNodes,
+} from '../../redux/slices/reactFlow.slice';
 
 import { CreateClusterFlow } from './createClusterFlow';
 import { Container, Content, Header } from './clusterManagement.styled';
@@ -48,9 +54,14 @@ const ClusterManagement: FunctionComponent = () => {
 
   const dispatch = useAppDispatch();
 
-  const { isDeleted, isDeleting, isError, managementCluster, workloadClusters } = useAppSelector(
-    ({ api }) => api,
-  );
+  const {
+    isDeleted,
+    isDeleting,
+    isError,
+    managementCluster,
+    workloadClusters,
+    clusterCreationStep,
+  } = useAppSelector(({ api }) => api);
 
   const handleGetClusters = useCallback(async (): Promise<void> => {
     await dispatch(getClusters());
@@ -113,6 +124,24 @@ const ClusterManagement: FunctionComponent = () => {
     [dispatch, openCreateClusterFlow],
   );
 
+  const handleAddWorkloadCluster = useCallback(() => {
+    if (clusterCreationStep === ClusterCreationStep.CONFIG) {
+      dispatch(generateDraftNode());
+    }
+    if (clusterCreationStep === ClusterCreationStep.PROVISION) {
+      dispatch(setDraftNodeActive());
+    }
+    openCreateClusterFlow();
+  }, [dispatch, openCreateClusterFlow, clusterCreationStep]);
+
+  const handleMenuClose = useCallback(() => {
+    if (clusterCreationStep === ClusterCreationStep.CONFIG) {
+      dispatch(removeDraftNode());
+    }
+    dispatch(unSelectNodes());
+    closeCreateClusterFlow();
+  }, [clusterCreationStep, dispatch, closeCreateClusterFlow]);
+
   return (
     <Container>
       <Header>
@@ -137,7 +166,7 @@ const ClusterManagement: FunctionComponent = () => {
           color="primary"
           variant="contained"
           style={{ marginRight: '24px' }}
-          onClick={openCreateClusterFlow}
+          onClick={handleAddWorkloadCluster}
         >
           Add workload cluster
         </Button>
@@ -180,7 +209,7 @@ const ClusterManagement: FunctionComponent = () => {
         }}
       >
         <CreateClusterFlow
-          onMenuClose={closeCreateClusterFlow}
+          onMenuClose={handleMenuClose}
           onClusterDelete={openDeleteModal}
           cluster={selectedCluster}
         />
