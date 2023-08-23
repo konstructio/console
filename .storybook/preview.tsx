@@ -2,7 +2,6 @@ import React from 'react';
 import { Provider } from 'react-redux';
 import { ThemeProvider as ThemeProviderMUI } from '@mui/material';
 import { ThemeProvider } from 'styled-components';
-import * as NextImage from 'next/image';
 import { RouterContext } from 'next/dist/shared/lib/router-context';
 
 import { makeStore } from '../redux/store';
@@ -44,10 +43,3 @@ export const decorators = [
     </Provider>
   ),
 ];
-
-const OriginalNextImage = NextImage.default;
-
-Object.defineProperty(NextImage, 'default', {
-  configurable: true,
-  value: (props) => <OriginalNextImage {...props} unoptimized />,
-});
