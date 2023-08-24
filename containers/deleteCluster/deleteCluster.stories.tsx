@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Story } from '@storybook/react';
+import React, { FunctionComponent, useState } from 'react';
+import { Meta, StoryObj } from '@storybook/react';
 
 import Button from '../../components/button';
 import { noop } from '../../utils/noop';
@@ -9,10 +9,12 @@ import { ClusterInfo } from '../../components/clusterTable/clusterTable';
 
 import DeleteCluster, { DeleteClusterProps } from './';
 
-export default {
+const meta: Meta<typeof DeleteCluster> = {
   title: 'Components/DeleteCluster',
   component: DeleteCluster,
 };
+
+export default meta;
 
 const clusters: ClusterInfo[] = [
   {
@@ -43,11 +45,11 @@ const clusters: ClusterInfo[] = [
   },
 ];
 
-const DefaultTemplate: Story<DeleteClusterProps> = (args) => {
+const DeleteClusterWithHooks: FunctionComponent<DeleteClusterProps> = (props) => {
   const [open, setOpen] = useState(true);
   return (
     <>
-      <DeleteCluster {...args} isOpen={open} onClose={() => setOpen(false)} onDelete={noop} />
+      <DeleteCluster {...props} isOpen={open} onClose={() => setOpen(false)} onDelete={noop} />
       <Button variant="contained" color="primary" onClick={() => setOpen(!open)}>
         {open ? 'Close' : 'Open'}
       </Button>
@@ -55,12 +57,12 @@ const DefaultTemplate: Story<DeleteClusterProps> = (args) => {
   );
 };
 
-export const Management = DefaultTemplate.bind({});
-Management.args = {
-  cluster: clusters[0],
+type Story = StoryObj<typeof DeleteCluster>;
+
+export const Management: Story = {
+  render: (args) => <DeleteClusterWithHooks {...args} cluster={clusters[0]} />,
 };
 
-export const Worker = DefaultTemplate.bind({});
-Worker.args = {
-  cluster: clusters[1],
+export const Worker: Story = {
+  render: (args) => <DeleteClusterWithHooks {...args} cluster={clusters[1]} />,
 };

@@ -1,13 +1,15 @@
-import React from 'react';
-import { Story } from '@storybook/react';
+import { Meta, StoryObj } from '@storybook/react';
 
 import FormContainer from '.';
 
-export default {
-  title: 'Components/FormContainer',
+const meta: Meta<typeof FormContainer> = {
   component: FormContainer,
 };
 
-const DefaultTemplate: Story = () => <FormContainer style={{ margin: 50 }} />;
+export default meta;
 
-export const Default = DefaultTemplate.bind({});
+export const DefaultTemplate: StoryObj<typeof FormContainer> = {
+  args: {
+    style: { width: '90%', margin: '50px auto' },
+  },
+};

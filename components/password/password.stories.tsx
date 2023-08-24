@@ -1,19 +1,20 @@
 import React from 'react';
-import { noop } from 'lodash';
 import styled from 'styled-components';
 import { Meta, StoryObj } from '@storybook/react';
 
-import Navigation from './index';
+import PasswordComponent from '.';
 
 const Wrapper = styled.div`
   background: rgb(255, 255, 255);
   display: flex;
   flex-direction: column;
   gap: 10px;
+  width: 200px;
 `;
 
-const meta: Meta<typeof Navigation> = {
-  component: Navigation,
+const meta: Meta<typeof PasswordComponent> = {
+  title: 'Form Elements/Password',
+  component: PasswordComponent,
   decorators: [
     (Story) => (
       <Wrapper>
@@ -25,14 +26,8 @@ const meta: Meta<typeof Navigation> = {
 
 export default meta;
 
-export const Default: StoryObj<typeof Navigation> = {
+export const Default: StoryObj<typeof PasswordComponent> = {
   args: {
-    domLoaded: true,
-    handleIsActiveItem: () => true,
-    handleOpenContent: noop,
-    handleOpenGame: noop,
-    isProvisionStep: false,
-    kubefirstVersion: 'v1.0.0',
-    routes: [],
+    label: 'Password',
   },
 };

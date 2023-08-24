@@ -1,26 +1,30 @@
-import React from 'react';
-import { Story } from '@storybook/react';
+import { Meta, StoryObj } from '@storybook/react';
 
 import { GitProvider } from '../../types';
 
-import GitProviderButton, { GitProviderButtonProps } from '.';
+import GitProviderButton from '.';
 
-export default {
-  title: 'Components/GitProviderButton',
+const meta: Meta<typeof GitProviderButton> = {
   component: GitProviderButton,
   argTypes: {
     option: {
       control: 'select',
       options: GitProvider,
-      defaultValue: GitProvider.GITHUB,
     },
     active: {
       control: 'boolean',
-      defaultValue: false,
     },
+  },
+  args: {
+    option: GitProvider.GITHUB,
+    active: false,
   },
 };
 
-const DefaultTemplate: Story<GitProviderButtonProps> = (args) => <GitProviderButton {...args} />;
+export default meta;
 
-export const Default = DefaultTemplate.bind({});
+export const Default: StoryObj<typeof GitProviderButton> = {
+  args: {
+    style: { margin: '50px auto' },
+  },
+};

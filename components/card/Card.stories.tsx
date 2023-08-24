@@ -1,25 +1,27 @@
-import React from 'react';
-import { Story } from '@storybook/react';
+import { Meta, StoryObj } from '@storybook/react';
 
-import Card, { CardProps } from '.';
+import Card from '.';
 
-export default {
-  title: 'Components/Card',
+const meta: Meta<typeof Card> = {
   component: Card,
   argTypes: {
     active: {
       control: 'boolean',
-      defaultValue: false,
     },
     withHoverEffect: {
       control: 'boolean',
-      defaultValue: false,
     },
+  },
+  args: {
+    active: false,
+    withHoverEffect: false,
   },
 };
 
-const DefaultTemplate: Story<CardProps> = (args) => (
-  <Card style={{ height: 100, width: 150 }} {...args} />
-);
+export default meta;
 
-export const Default = DefaultTemplate.bind({});
+export const Default: StoryObj<typeof Card> = {
+  args: {
+    style: { height: 100, width: 150 },
+  },
+};

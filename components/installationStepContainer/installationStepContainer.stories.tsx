@@ -1,5 +1,5 @@
 import React from 'react';
-import { Story } from '@storybook/react';
+import { Meta, StoryObj } from '@storybook/react';
 
 import { LocalFormStep } from '../../constants/installation';
 import { GitProvider } from '../../types';
@@ -9,12 +9,13 @@ import { InstallationType } from '../../types/redux';
 
 import InstallationStepContainer from '.';
 
-export default {
-  title: 'Components/InstallationStepContainer',
+const meta: Meta<typeof InstallationStepContainer> = {
   component: InstallationStepContainer,
 };
 
-const DefaultTemplate: Story = () => {
+export default meta;
+
+const InstallationStepContainerWithHooks = () => {
   const { stepTitles, installTitles } = useInstallation(
     InstallationType.LOCAL,
     GitProvider.GITHUB,
@@ -39,4 +40,6 @@ const DefaultTemplate: Story = () => {
   );
 };
 
-export const Default = DefaultTemplate.bind({});
+export const Default: StoryObj<typeof InstallationStepContainer> = {
+  render: () => <InstallationStepContainerWithHooks />,
+};

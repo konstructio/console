@@ -1,16 +1,17 @@
 import React from 'react';
+import { Meta, StoryObj } from '@storybook/react';
 import styled from 'styled-components';
-import { ComponentStory, ComponentMeta } from '@storybook/react';
 
 import Button from '../../components/button';
 import useModal from '../../hooks/useModal';
 
 import Modal from './index';
 
-export default {
-  title: 'Overlay/Modal',
+const meta: Meta<typeof Modal> = {
   component: Modal,
-} as ComponentMeta<typeof Modal>;
+};
+
+export default meta;
 
 const Wrapper = styled.div`
   display: flex;
@@ -22,13 +23,9 @@ const Wrapper = styled.div`
 const Content = styled.div`
   height: 400px;
   width: 100%;
-
-  & input {
-    width: 100px;
-  }
 `;
 
-const Template: ComponentStory<typeof Modal> = (props) => {
+const ModalWithHooks = () => {
   const { isOpen, openModal, closeModal } = useModal(false);
 
   return (
@@ -37,7 +34,7 @@ const Template: ComponentStory<typeof Modal> = (props) => {
         Open modal
       </Button>
       <Wrapper>
-        <Modal {...props} isOpen={isOpen} onCloseModal={closeModal}>
+        <Modal isOpen={isOpen} onCloseModal={closeModal}>
           <Content>
             <span>This is a modal</span>
           </Content>
@@ -47,5 +44,6 @@ const Template: ComponentStory<typeof Modal> = (props) => {
   );
 };
 
-export const Basic = Template.bind({});
-Basic.args = {};
+export const Default: StoryObj<typeof Modal> = {
+  render: () => <ModalWithHooks />,
+};

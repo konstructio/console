@@ -43,7 +43,7 @@ const NumberInput = forwardRef<HTMLLabelElement | null, NumberInputProps>(functi
         >
           <Image src={removeIconSrc} alt="remove" width={20} height={20} />
         </button>
-        <NumInput {...inputProps} value={value} readOnly />
+        <NumInput {...inputProps} type="number" value={value} readOnly />
         <button
           type="button"
           onClick={() => {

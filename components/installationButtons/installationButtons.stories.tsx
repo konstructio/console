@@ -1,23 +1,29 @@
-import React from 'react';
-import { ComponentStory } from '@storybook/react';
+import { Meta, StoryObj } from '@storybook/react';
 
 import { noop } from '../../utils/noop';
 
 import InstallationButtons from '.';
 
-export default {
-  title: 'Components/InstallationButtons',
+const meta: Meta<typeof InstallationButtons> = {
   component: InstallationButtons,
   argTypes: {
+    showNextButton: {
+      control: { type: 'boolean' },
+    },
     showBackButton: {
-      defaultValue: true,
       control: { type: 'boolean' },
     },
   },
+  args: {
+    showNextButton: true,
+    showBackButton: true,
+  },
 };
 
-const DefaultTemplate: ComponentStory<typeof InstallationButtons> = (args) => {
-  return <InstallationButtons onBackButtonClick={noop} {...args} />;
-};
+export default meta;
 
-export const Default = DefaultTemplate.bind({});
+export const Default: StoryObj<typeof InstallationButtons> = {
+  args: {
+    onBackButtonClick: noop,
+  },
+};

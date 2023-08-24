@@ -1,16 +1,11 @@
 import React from 'react';
+import { Meta, StoryObj } from '@storybook/react';
 import styled from 'styled-components';
-import { ComponentStory, ComponentMeta } from '@storybook/react';
 
 import Typography from '../typography';
 import Button from '../button';
 
 import TooltipComponent from '.';
-
-export default {
-  title: 'Components/Tooltip',
-  component: TooltipComponent,
-} as ComponentMeta<typeof TooltipComponent>;
 
 const Wrapper = styled.div`
   background: rgb(255, 255, 255);
@@ -20,14 +15,25 @@ const Wrapper = styled.div`
   width: 150px;
 `;
 
-const DefaultTemplate: ComponentStory<typeof TooltipComponent> = () => (
-  <Wrapper>
+const meta: Meta<typeof TooltipComponent> = {
+  component: TooltipComponent,
+  decorators: [
+    (Story) => (
+      <Wrapper>
+        <Story />
+      </Wrapper>
+    ),
+  ],
+};
+
+export default meta;
+
+export const DefaultTemplate: StoryObj<typeof TooltipComponent> = {
+  render: () => (
     <TooltipComponent title="This is a tooltip" placement="bottom">
       <Button variant="contained" color="primary">
         <Typography variant="body2">Hover here</Typography>
       </Button>
     </TooltipComponent>
-  </Wrapper>
-);
-
-export const Default = DefaultTemplate.bind({});
+  ),
+};

@@ -1,10 +1,8 @@
-import React from 'react';
-import { Story } from '@storybook/react';
+import { Meta, StoryObj } from '@storybook/react';
 
-import Tag, { TAG_COLOR_OPTIONS, TagProps, TAG_ICON_OPTONS } from '.';
+import Tag, { TAG_COLOR_OPTIONS, TAG_ICON_OPTONS } from '.';
 
-export default {
-  title: 'Components/Tag',
+const meta: Meta<typeof Tag> = {
   component: Tag,
   argTypes: {
     bgColor: {
@@ -18,9 +16,10 @@ export default {
   },
 };
 
-const DefaultTemplate: Story<TagProps> = (args) => <Tag {...args} />;
+export default meta;
 
-export const Default = DefaultTemplate.bind({});
-Default.args = {
-  text: 'Tag',
+export const Default: StoryObj<typeof Tag> = {
+  args: {
+    text: 'Tag',
+  },
 };

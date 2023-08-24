@@ -1,15 +1,16 @@
 import React from 'react';
-import { Story } from '@storybook/react';
+import { Meta, StoryObj } from '@storybook/react';
 import { useForm } from 'react-hook-form';
 
 import Radio from './';
 
-export default {
-  title: 'Components/Radio',
+const meta: Meta<typeof Radio> = {
   component: Radio,
 };
 
-const DefaultTemplate: Story = () => {
+export default meta;
+
+const RadioWithHooks = () => {
   const { control } = useForm({
     defaultValues: {
       gender: 'male',
@@ -19,7 +20,6 @@ const DefaultTemplate: Story = () => {
   return (
     <Radio
       control={control}
-      label="Gender"
       rules={{ required: false }}
       name="gender"
       options={[
@@ -31,4 +31,6 @@ const DefaultTemplate: Story = () => {
   );
 };
 
-export const Default = DefaultTemplate.bind({});
+export const Default: StoryObj<typeof Radio> = {
+  render: () => <RadioWithHooks />,
+};

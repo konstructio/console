@@ -1,16 +1,17 @@
 import React from 'react';
-import { Story } from '@storybook/react';
+import { Meta, StoryObj } from '@storybook/react';
 import { action } from '@storybook/addon-actions';
 import { useForm } from 'react-hook-form';
 
 import ControlledNumberInput from '.';
 
-export default {
-  title: 'Components/ControlledNumberInput',
+const meta: Meta<typeof ControlledNumberInput> = {
   component: ControlledNumberInput,
 };
 
-const DefaultTemplate: Story = () => {
+export default meta;
+
+const ControlledNumberInputWithHooks = () => {
   const { control } = useForm({
     defaultValues: {
       numberOfNodes: 3,
@@ -24,4 +25,6 @@ const DefaultTemplate: Story = () => {
   );
 };
 
-export const Default = DefaultTemplate.bind({});
+export const Default: StoryObj<typeof ControlledNumberInput> = {
+  render: () => <ControlledNumberInputWithHooks />,
+};

@@ -1,45 +1,52 @@
-import React from 'react';
-import { Story } from '@storybook/react';
+import { Meta, StoryObj } from '@storybook/react';
 
-import Button, { IButtonProps } from '.';
+import Button from '.';
 
-export default {
-  title: 'Form Elements/Button',
+const meta: Meta<typeof Button> = {
   component: Button,
+  argTypes: {
+    style: { margin: 50 },
+  },
 };
 
-const Template: Story<IButtonProps> = (args) => <Button {...args} style={{ margin: 50 }} />;
+export default meta;
 
-export const Primary = Template.bind({});
-Primary.args = {
-  variant: 'contained',
-  color: 'primary',
-  children: 'Primary',
-};
+type Story = StoryObj<typeof Button>;
 
-export const Secondary = Template.bind({});
-Secondary.args = {
-  variant: 'outlined',
-  color: 'secondary',
-  children: 'Secondary',
+export const Primary: Story = {
+  args: {
+    variant: 'contained',
+    color: 'primary',
+    children: 'Primary',
+  },
 };
-export const Danger = Template.bind({});
-Danger.args = {
-  variant: 'contained',
-  color: 'error',
-  children: 'Danger',
+export const Secondary: Story = {
+  args: {
+    variant: 'outlined',
+    color: 'secondary',
+    children: 'Secondary',
+  },
 };
-export const Disabled = Template.bind({});
-Disabled.args = {
-  variant: 'contained',
-  color: 'primary',
-  disabled: true,
-  children: 'Disabled',
+export const Danger: Story = {
+  args: {
+    variant: 'contained',
+    color: 'error',
+    children: 'Danger',
+  },
 };
-export const DisabledSecondary = Template.bind({});
-DisabledSecondary.args = {
-  variant: 'outlined',
-  color: 'secondary',
-  disabled: true,
-  children: 'Disabled',
+export const Disabled: Story = {
+  args: {
+    variant: 'contained',
+    color: 'primary',
+    disabled: true,
+    children: 'Disabled',
+  },
+};
+export const DisabledSecondary: Story = {
+  args: {
+    variant: 'outlined',
+    color: 'secondary',
+    disabled: true,
+    children: 'Disabled',
+  },
 };
