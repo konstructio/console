@@ -1,4 +1,6 @@
 import React, { ChangeEvent, FunctionComponent, useMemo, useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { capitalize } from 'lodash';
 
 import { clearDomains } from '../../../../redux/slices/api.slice';
 import ControlledPassword from '../../../../components/controlledFields/Password';
@@ -7,12 +9,7 @@ import { getCloudDomains } from '../../../../redux/thunks/api.thunk';
 import ControlledTextField from '../../../../components/controlledFields/TextField';
 import ControlledAutocomplete from '../../../../components/controlledFields/AutoComplete';
 import { EMAIL_REGEX } from '../../../../constants';
-import { FormFlowProps } from '../../../../types/provision';
 import { InstallValues, InstallationType } from '../../../../types/redux';
-
-export interface SetupFormProps {
-  children: FunctionComponent;
-}
 
 const CLOUD_REGION_LABELS: Record<InstallationType, string | null> = {
   [InstallationType.AWS]: 'Cloud region',
@@ -22,7 +19,7 @@ const CLOUD_REGION_LABELS: Record<InstallationType, string | null> = {
   [InstallationType.LOCAL]: null,
 };
 
-const SetupForm: FunctionComponent<FormFlowProps<InstallValues>> = ({ control, setValue }) => {
+const SetupForm: FunctionComponent = () => {
   const [isCloudFlareSelected, setIsCloudFlareSelected] = useState<boolean>(false);
   const [selectedRegion, setSelectedRegion] = useState<string>('');
   const dispatch = useAppDispatch();
@@ -35,6 +32,8 @@ const SetupForm: FunctionComponent<FormFlowProps<InstallValues>> = ({ control, s
       installType: installation.installType,
     }),
   );
+
+  const { control, setValue } = useForm<InstallValues>();
 
   const cloudRegionLabel = useMemo(
     () =>
@@ -111,8 +110,8 @@ const SetupForm: FunctionComponent<FormFlowProps<InstallValues>> = ({ control, s
         required
         rules={{ required: true }}
         options={[
-          { label: installType as string, value: installType as string },
-          { label: 'cloudflare', value: 'cloudflare' },
+          { label: capitalize(installType as string), value: installType as string },
+          { label: 'Cloudflare', value: 'cloudflare' },
         ]}
         onChange={handleDnsProviderOnChange}
       />
