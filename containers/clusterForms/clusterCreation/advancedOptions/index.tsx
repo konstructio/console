@@ -67,8 +67,8 @@ const AdvancedOptions: FunctionComponent = () => {
         label="DNS provider"
         defaultValue="default"
         options={[
-          { label: 'default', value: 'default' },
-          { label: 'cloudflare', value: 'cloudflare' },
+          { label: 'Default', value: 'default' },
+          { label: 'Cloudflare', value: 'cloudflare' },
         ]}
         onChange={(value) => setIsCloudFlareSelected(value === 'cloudflare')}
         rules={{
