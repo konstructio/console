@@ -1,5 +1,5 @@
 import React, { ChangeEvent, FunctionComponent, useMemo, useState } from 'react';
-import { useForm } from 'react-hook-form';
+import { useFormContext } from 'react-hook-form';
 import { capitalize } from 'lodash';
 
 import { clearDomains } from '../../../../redux/slices/api.slice';
@@ -33,7 +33,7 @@ const SetupForm: FunctionComponent = () => {
     }),
   );
 
-  const { control, setValue } = useForm<InstallValues>();
+  const { control, setValue } = useFormContext<InstallValues>();
 
   const cloudRegionLabel = useMemo(
     () =>
