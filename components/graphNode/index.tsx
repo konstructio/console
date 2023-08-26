@@ -1,8 +1,8 @@
 import React, { FunctionComponent } from 'react';
 import { Node, NodeProps, Position, HandleType } from 'reactflow';
 
-import greenPolygon from '../../assets/managementIcon.svg';
-import pinkClusterIcon from '../../assets/cluster.svg';
+import managementClusterIcon from '../../assets/managementIcon.svg';
+import workloadClusterIcon from '../../assets/cluster.svg';
 import unavailableClusterSrc from '../../assets/cluster-unavailable.svg';
 import { BLUE_REFLECTION, MAGIC_MINT, SASSY_PINK } from '../../constants/colors';
 import { CLUSTER_TAG_CONFIG } from '../../constants';
@@ -37,20 +37,25 @@ const GRAPH_NODE_CONFIG: Record<
   [ClusterType.MANAGEMENT]: {
     handle: 'source',
     position: Position.Right,
-    imageSrc: greenPolygon,
+    imageSrc: managementClusterIcon,
     nodeColor: MAGIC_MINT,
   },
   [ClusterType.WORKLOAD]: {
     handle: 'target',
     position: Position.Left,
-    imageSrc: pinkClusterIcon,
+    imageSrc: workloadClusterIcon,
     nodeColor: SASSY_PINK,
   },
 };
 
-export type CustomGraphNode = Node<Partial<ClusterInfo>>;
+export type GraphNodeInfo = Pick<
+  ClusterInfo,
+  'status' | 'type' | 'clusterName' | 'cloudProvider' | 'cloudRegion' | 'nodes'
+>;
 
-export const GraphNode: FunctionComponent<NodeProps<ClusterInfo>> = ({
+export type CustomGraphNode = Node<Partial<GraphNodeInfo>>;
+
+export const GraphNode: FunctionComponent<NodeProps<GraphNodeInfo>> = ({
   data,
   isConnectable,
   selected,

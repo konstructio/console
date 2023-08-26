@@ -181,20 +181,20 @@ const ClusterRow: FunctionComponent<ClusterRowProps> = ({
 };
 
 interface ClusterTableProps extends ComponentPropsWithoutRef<'div'> {
-  managementCluster: ClusterInfo;
-  workloadClusters: ClusterInfo[];
+  managementCluster: Cluster;
   onDeleteCluster: () => void;
   onMenuOpenClose: (selectedCluster?: ClusterInfo) => void;
 }
 
 export const ClusterTable: FunctionComponent<ClusterTableProps> = ({
   managementCluster,
-  workloadClusters,
   onDeleteCluster,
   onMenuOpenClose,
   ...rest
 }) => {
   const [expanded, setExpanded] = useState(false);
+  const { workloadClusters, domainName, gitProvider, cloudProvider, gitUser, adminEmail } =
+    managementCluster;
 
   return (
     <StyledTableContainer {...rest}>
@@ -242,6 +242,11 @@ export const ClusterTable: FunctionComponent<ClusterTableProps> = ({
                 {...cluster}
                 onDeleteCluster={onDeleteCluster}
                 onMenuOpenClose={onMenuOpenClose}
+                domainName={domainName}
+                gitProvider={gitProvider}
+                cloudProvider={cloudProvider}
+                gitUser={gitUser}
+                adminEmail={adminEmail}
               />
             ))}
         </StyledTableBody>

@@ -5,11 +5,11 @@ import {
   getGitOpsCatalogApps,
   installGitOpsApp,
 } from '../../redux/thunks/api.thunk';
-import { Cluster, ClusterServices } from '../../types/provision';
+import { Cluster, ClusterServices, WorkloadCluster } from '../../types/provision';
 import { GitOpsCatalogApp } from '../../types/gitOpsCatalog';
 
 export interface ConfigState {
-  selectedCluster?: Cluster;
+  selectedCluster?: Cluster | WorkloadCluster;
   clusterServices: Array<ClusterServices>;
   gitOpsCatalogApps: Array<GitOpsCatalogApp>;
   isGitOpsCatalogNotificationOpen: boolean;
@@ -28,7 +28,7 @@ const clusterSlice = createSlice({
   name: 'cluster',
   initialState,
   reducers: {
-    setSelectedCluster: (state, { payload: cluster }: PayloadAction<Cluster>) => {
+    setSelectedCluster: (state, { payload: cluster }: PayloadAction<Cluster | WorkloadCluster>) => {
       state.selectedCluster = cluster;
     },
     setIsGitOpsCatalogNotificationOpen: (state, { payload }: PayloadAction<boolean>) => {

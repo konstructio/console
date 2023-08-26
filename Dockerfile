@@ -1,5 +1,9 @@
 FROM node:18-alpine AS base
 
+RUN corepack enable
+RUN yarn set version 3.6.2
+RUN yarn plugin import workspace-tools
+
 FROM base AS deps
 RUN apk add --no-cache libc6-compat
 RUN apk add --no-cache python3 make g++

@@ -1,4 +1,4 @@
-import { ClusterResponse, Cluster } from '../types/provision';
+import { ClusterResponse, Cluster, ClusterType } from '../types/provision';
 
 export const mapClusterFromRaw = (cluster: ClusterResponse): Cluster => ({
   id: cluster._id,
@@ -14,6 +14,16 @@ export const mapClusterFromRaw = (cluster: ClusterResponse): Cluster => ({
   creationDate: cluster.creation_timestamp,
   lastErrorCondition: cluster.last_condition,
   status: cluster.status,
+  workloadClusters: cluster.workload_clusters.map((item) => ({
+    id: item._id,
+    clusterName: item.workload_cluster_name,
+    cloudRegion: item.cloud_region,
+    instanceSize: item.instance_size,
+    nodeCount: item.node_count,
+    environment: item.environment,
+    status: item.status,
+    type: ClusterType.WORKLOAD,
+  })),
   vaultAuth: {
     kbotPassword: cluster.vault_auth?.kbot_password,
   },

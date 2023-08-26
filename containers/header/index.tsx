@@ -18,14 +18,14 @@ const Header: FunctionComponent = () => {
   const { isEnabled } = useFeatureFlag('cluster-management');
   const { clusters, selectedCluster } = useAppSelector(({ api, cluster }) => ({
     clusters: api.managementCluster
-      ? [api.managementCluster, ...api.workloadClusters]
-      : [...api.workloadClusters],
+      ? [api.managementCluster, ...api.managementCluster.workloadClusters]
+      : [],
     selectedCluster: cluster.selectedCluster,
   }));
 
   const isClusterSelectorEnabled = useMemo(
-    () => pathname.includes('/services') && clusters?.length && isEnabled,
-    [clusters?.length, isEnabled, pathname],
+    () => pathname.includes('/services') && clusters.length && isEnabled,
+    [clusters.length, isEnabled, pathname],
   );
 
   const handleSelectCluster = async (selectedClusterName: string) => {

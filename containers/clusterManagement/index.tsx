@@ -1,12 +1,10 @@
 import React, { FunctionComponent, useCallback, useEffect, useRef, useState } from 'react';
 import { Box, Snackbar, Tabs } from '@mui/material';
-import { useRouter } from 'next/router';
 
 import Button from '../../components/button';
 import Typography from '../../components/typography';
 import { useAppDispatch, useAppSelector } from '../../redux/store';
 import { deleteCluster, getCluster, getClusters } from '../../redux/thunks/api.thunk';
-import { resetInstallState } from '../../redux/slices/installation.slice';
 import { ClusterCreationStep, ClusterRequestProps } from '../../types/provision';
 import useToggle from '../../hooks/useToggle';
 import Drawer from '../../components/drawer';
@@ -16,13 +14,12 @@ import TabPanel, { Tab, a11yProps } from '../../components/tab';
 import { BISCAY, SALTBOX_BLUE } from '../../constants/colors';
 import { Flow } from '../../components/flow';
 import { ClusterInfo, ClusterTable } from '../../components/clusterTable/clusterTable';
-import { setClusterCreationStep } from '../../redux/slices/api.slice';
 import {
-  generateDraftNode,
-  removeDraftNode,
-  setDraftNodeActive,
-  unSelectNodes,
-} from '../../redux/slices/reactFlow.slice';
+  createDraftCluster,
+  removeDraftCluster,
+  setClusterCreationStep,
+} from '../../redux/slices/api.slice';
+import { setDraftNodeActive, unSelectNodes } from '../../redux/slices/reactFlow.slice';
 
 import { CreateClusterFlow } from './createClusterFlow';
 import { Container, Content, Header } from './clusterManagement.styled';
@@ -35,7 +32,6 @@ enum MANAGEMENT_TABS {
 const ClusterManagement: FunctionComponent = () => {
   const [activeTab, setActiveTab] = useState(MANAGEMENT_TABS.LIST_VIEW);
   const [selectedCluster, setSelectedCluster] = useState<ClusterInfo>();
-  const isClusterZero = useAppSelector(({ config }) => config.isClusterZero);
 
   const {
     isOpen: createClusterFlowOpen,
@@ -50,18 +46,12 @@ const ClusterManagement: FunctionComponent = () => {
   } = useModal();
 
   const interval = useRef<NodeJS.Timer>();
-  const { push } = useRouter();
 
   const dispatch = useAppDispatch();
 
-  const {
-    isDeleted,
-    isDeleting,
-    isError,
-    managementCluster,
-    workloadClusters,
-    clusterCreationStep,
-  } = useAppSelector(({ api }) => api);
+  const { isDeleted, isDeleting, isError, managementCluster, clusterCreationStep } = useAppSelector(
+    ({ api }) => api,
+  );
 
   const handleGetClusters = useCallback(async (): Promise<void> => {
     await dispatch(getClusters());
@@ -74,11 +64,6 @@ const ClusterManagement: FunctionComponent = () => {
       closeDeleteModal();
     }
   }, [dispatch, selectedCluster, handleGetClusters, closeDeleteModal]);
-
-  const handleCreateCluster = () => {
-    dispatch(resetInstallState());
-    push('/provision');
-  };
 
   const getClusterInterval = (params: ClusterRequestProps) => {
     return setInterval(async () => {
@@ -125,18 +110,23 @@ const ClusterManagement: FunctionComponent = () => {
   );
 
   const handleAddWorkloadCluster = useCallback(() => {
-    if (clusterCreationStep === ClusterCreationStep.CONFIG) {
-      dispatch(generateDraftNode());
+    if (clusterCreationStep === ClusterCreationStep.CONFIG && managementCluster) {
+      dispatch(
+        createDraftCluster({
+          cloudProvider: managementCluster.cloudProvider,
+          managementNodeId: managementCluster.id,
+        }),
+      );
     }
     if (clusterCreationStep === ClusterCreationStep.PROVISION) {
       dispatch(setDraftNodeActive());
     }
     openCreateClusterFlow();
-  }, [dispatch, openCreateClusterFlow, clusterCreationStep]);
+  }, [managementCluster, dispatch, openCreateClusterFlow, clusterCreationStep]);
 
   const handleMenuClose = useCallback(() => {
     if (clusterCreationStep === ClusterCreationStep.CONFIG) {
-      dispatch(removeDraftNode());
+      dispatch(removeDraftCluster());
     }
     dispatch(unSelectNodes());
     closeCreateClusterFlow();
@@ -176,7 +166,6 @@ const ClusterManagement: FunctionComponent = () => {
           {managementCluster && (
             <ClusterTable
               managementCluster={managementCluster}
-              workloadClusters={workloadClusters}
               onDeleteCluster={openDeleteModal}
               onMenuOpenClose={(clusterInfo) => setSelectedCluster(clusterInfo)}
             />

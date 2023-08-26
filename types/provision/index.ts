@@ -52,6 +52,15 @@ export interface ClusterResponse {
   alerts_email: string;
   git_provider: string;
   git_user: string;
+  workload_clusters: {
+    _id: string;
+    workload_cluster_name: string;
+    cloud_region: string;
+    instance_size: string;
+    node_count: number;
+    environment: string;
+    status: ClusterStatus;
+  }[];
   gitAuth: {
     gitOwner: string;
     gitToken?: string;
@@ -80,6 +89,17 @@ export interface ClusterResponse {
   users_terraform_apply_check: boolean;
 }
 
+export type WorkloadCluster = {
+  id: string;
+  clusterName: string;
+  cloudRegion: string;
+  instanceSize: string;
+  nodeCount: number;
+  environment: string;
+  status: ClusterStatus;
+  type: ClusterType.WORKLOAD;
+};
+
 export interface Cluster extends Row {
   adminEmail: string;
   clusterName: string;
@@ -93,6 +113,7 @@ export interface Cluster extends Row {
   creationDate?: string;
   status?: ClusterStatus;
   lastErrorCondition: string;
+  workloadClusters: WorkloadCluster[];
   gitAuth: {
     gitOwner: string;
     gitToken?: string;
