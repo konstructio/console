@@ -11,7 +11,12 @@ import ClusterCreationForm from '../../../containers/clusterForms/clusterCreatio
 import ClusterDetails from '../../../components/clusterDetails';
 import { ClusterInfo } from '../../../components/clusterTable/clusterTable';
 import { useAppDispatch, useAppSelector } from '../../../redux/store';
-import { ClusterCreationStep, NewClusterConfig } from '../../../types/provision';
+import {
+  ClusterCreationStep,
+  ClusterStatus,
+  ClusterType,
+  NewClusterConfig,
+} from '../../../types/provision';
 import { createWorkloadCluster } from '../../../redux/thunks/api.thunk';
 import { setClusterCreationStep } from '../../../redux/slices/api.slice';
 import { mockClusterConfig } from '../../../tests/mocks/mockClusterConfig';
@@ -74,6 +79,11 @@ export const CreateClusterFlow: FunctionComponent<CreateClusterFlowProps> = ({
     formState: { isValid },
   } = methods;
 
+  const submitButtonDisabled =
+    !isValid ||
+    loading ||
+    (cluster?.type !== ClusterType.DRAFT && cluster?.status === ClusterStatus.PROVISIONING);
+
   return (
     <FormProvider {...methods}>
       <Form onSubmit={methods.handleSubmit(handleSubmit)}>
@@ -101,7 +111,7 @@ export const CreateClusterFlow: FunctionComponent<CreateClusterFlowProps> = ({
             variant="contained"
             color={showingClusterDetails ? 'error' : 'primary'}
             onClick={handleClick}
-            disabled={!isValid || loading}
+            disabled={submitButtonDisabled}
             type="submit"
           >
             {loading && <CircularProgress size={20} sx={{ mr: '8px' }} />}

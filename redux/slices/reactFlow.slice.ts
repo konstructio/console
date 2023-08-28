@@ -11,7 +11,7 @@ import {
 
 import { CustomGraphNode } from '../../components/graphNode';
 
-import { createDraftCluster, setSelectedCluster } from './api.slice';
+import { setSelectedCluster } from './api.slice';
 
 export interface ReactFlowState {
   nodes: CustomGraphNode[];
@@ -48,23 +48,22 @@ const reactFlowSlice = createSlice({
     onConnect: (state, { payload }: PayloadAction<Connection>) => {
       state.edges = addEdge(payload, state.edges);
     },
+    selectNodeById: (state, { payload }: PayloadAction<string>) => {
+      const selectedNode = state.nodes.find((node) => node.id === payload);
+      if (selectedNode) {
+        selectedNode.selected = true;
+      }
+    },
     unSelectNodes: (state) => {
       state.nodes = state.nodes.map((node) => ({ ...node, selected: false }));
     },
   },
   extraReducers: (builder) => {
-    builder
-      .addCase(setSelectedCluster, (state, { payload }) => {
-        if (!payload) {
-          state.nodes = state.nodes.map((node) => ({ ...node, selected: false }));
-        }
-      })
-      .addCase(createDraftCluster, (state) => {
-        const draftNode = state.nodes.find((node) => node.id === 'draft');
-        if (draftNode) {
-          draftNode.selected = true;
-        }
-      });
+    builder.addCase(setSelectedCluster, (state, { payload }) => {
+      if (!payload) {
+        state.nodes = state.nodes.map((node) => ({ ...node, selected: false }));
+      }
+    });
   },
 });
 
@@ -76,6 +75,7 @@ export const {
   onNodesChange,
   onEdgesChange,
   onConnect,
+  selectNodeById,
   unSelectNodes,
 } = reactFlowSlice.actions;
 

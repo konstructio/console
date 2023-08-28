@@ -8,8 +8,10 @@ import {
   onConnect,
   onEdgesChange,
   onNodesChange,
+  selectNodeById,
   setEdges,
   setNodes,
+  unSelectNodes,
 } from '../../redux/slices/reactFlow.slice';
 import 'reactflow/dist/style.css';
 import { generateNodesConfig } from '../../utils/reactFlow';
@@ -34,7 +36,9 @@ const GraphView: FunctionComponent<GraphViewProps> = ({ onNodeClick }) => {
     if (selectedCluster) {
       const selectedNode = nodes.find((node) => node.id === selectedCluster.id);
       if (selectedNode) {
-        const { position, width, height } = selectedNode;
+        const { position, width, height, id } = selectedNode;
+
+        dispatch(selectNodeById(id));
 
         setCenter(position.x + (width ?? 400), position.y + (height ?? 0), {
           zoom: 1.2,

@@ -127,7 +127,6 @@ const ClusterManagement: FunctionComponent = () => {
       dispatch(setClusterCreationStep(ClusterCreationStep.CONFIG));
     }
     dispatch(setSelectedCluster(undefined));
-    // dispatch(unSelectNodes());
     closeCreateClusterFlow();
   }, [clusterCreationStep, dispatch, closeCreateClusterFlow]);
 
