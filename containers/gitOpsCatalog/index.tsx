@@ -137,7 +137,8 @@ const gitOpsCatalog: FunctionComponent = () => {
           Category
         </Typography>
         {sortedAvailableCategories.map((category) => {
-          const { label } = CATEGORY_LABEL_CONFIG[category];
+          const { label } =
+            CATEGORY_LABEL_CONFIG[category] ?? CATEGORY_LABEL_CONFIG[AppCategory.APPLICATIONS];
           return (
             <FormGroup key={category} sx={{ mb: 2 }}>
               <FormControlLabel
