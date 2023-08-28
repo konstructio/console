@@ -19,7 +19,7 @@ import digitalOceanLogo from '../../assets/digital_ocean_logo.svg';
 import vultrLogo from '../../assets/vultr_logo.svg';
 import { CLUSTER_TAG_CONFIG } from '../../constants';
 import { DODGER_BLUE, FIRE_BRICK } from '../../constants/colors';
-import { Cluster, ClusterStatus, ClusterType } from '../../types/provision';
+import { ManagementCluster, ClusterStatus, ClusterType } from '../../types/provision';
 import { InstallationType } from '../../types/redux';
 import Typography from '../../components/typography';
 import { useOnClickOutside } from '../../hooks/useOnClickOutside';
@@ -48,22 +48,25 @@ const CLOUD_LOGO_OPTIONS: Record<InstallationType, any> = {
   [InstallationType.VULTR]: vultrLogo,
 };
 
-export type ClusterInfo = Pick<
-  Cluster,
-  | 'clusterName'
-  | 'type'
-  | 'domainName'
-  | 'gitProvider'
-  | 'cloudProvider'
-  | 'cloudRegion'
-  | 'creationDate'
-  | 'gitUser'
-  | 'status'
-  | 'adminEmail'
+export type ClusterInfo = Omit<
+  Pick<
+    ManagementCluster,
+    | 'id'
+    | 'clusterName'
+    | 'domainName'
+    | 'gitProvider'
+    | 'cloudProvider'
+    | 'cloudRegion'
+    | 'creationDate'
+    | 'gitUser'
+    | 'status'
+    | 'adminEmail'
+  >,
+  'type'
 > & {
   nodes?: number;
   instanceSize?: string;
-  workerNodes?: ClusterInfo[];
+  type: ClusterType;
 };
 
 type ClusterRowProps = ClusterInfo & {
@@ -93,7 +96,7 @@ const ClusterRow: FunctionComponent<ClusterRowProps> = ({
 
   const [menuOpen, setMenuOpen] = useState(false);
 
-  const cloudLogoSrc = CLOUD_LOGO_OPTIONS[cloudProvider];
+  const cloudLogoSrc = CLOUD_LOGO_OPTIONS[cloudProvider ?? InstallationType.LOCAL];
   const { iconLabel, iconType, bgColor } = CLUSTER_TAG_CONFIG[status ?? ClusterType.DRAFT];
   const formattedClusterType = type === ClusterType.MANAGEMENT ? 'management' : 'worker';
 
@@ -102,7 +105,7 @@ const ClusterRow: FunctionComponent<ClusterRowProps> = ({
 
   const handleMenu = useCallback(() => {
     setMenuOpen(!menuOpen);
-    onMenuOpenClose(!menuOpen ? rest : undefined);
+    onMenuOpenClose(!menuOpen ? undefined : rest);
   }, [menuOpen, onMenuOpenClose, rest]);
 
   const buttonRef = useRef(null);
@@ -133,7 +136,7 @@ const ClusterRow: FunctionComponent<ClusterRowProps> = ({
           </StyledCellText>
         </StyledTableCell>
         <StyledTableCell align="left">
-          <Image src={cloudLogoSrc} height={18} width={30} alt={cloudProvider} />
+          <Image src={cloudLogoSrc} height={18} width={30} alt={cloudProvider ?? ''} />
         </StyledTableCell>
         <StyledTableCell>
           <StyledCellText variant="body2">{cloudRegion}</StyledCellText>
@@ -181,7 +184,7 @@ const ClusterRow: FunctionComponent<ClusterRowProps> = ({
 };
 
 interface ClusterTableProps extends ComponentPropsWithoutRef<'div'> {
-  managementCluster: Cluster;
+  managementCluster: ManagementCluster;
   onDeleteCluster: () => void;
   onMenuOpenClose: (selectedCluster?: ClusterInfo) => void;
 }

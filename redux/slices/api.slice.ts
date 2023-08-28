@@ -10,13 +10,13 @@ import {
   getClusters,
 } from '../thunks/api.thunk';
 import {
-  Cluster,
+  ManagementCluster,
   ClusterCreationStep,
   ClusterStatus,
+  ClusterType,
   NewClusterConfig,
+  WorkloadCluster,
 } from '../../types/provision';
-import { GraphNodeInfo } from '../../components/graphNode';
-import { InstallationType } from 'types/redux';
 
 export interface ApiState {
   loading: boolean;
@@ -27,9 +27,8 @@ export interface ApiState {
   status?: ClusterStatus;
   isError: boolean;
   lastErrorCondition?: string;
-  managementCluster?: Cluster;
-  draftCluster?: Partial<GraphNodeInfo>;
-  selectedCluster?: Cluster;
+  managementCluster?: ManagementCluster;
+  selectedCluster?: ManagementCluster | WorkloadCluster;
   completedSteps: Array<{ label: string; order: number }>;
   cloudDomains: Array<string>;
   cloudRegions: Array<string>;
@@ -59,6 +58,9 @@ const apiSlice = createSlice({
   name: 'api',
   initialState,
   reducers: {
+    setSelectedCluster: (state, { payload }: PayloadAction<ApiState['selectedCluster']>) => {
+      state.selectedCluster = payload;
+    },
     setCompletedSteps: (state, action) => {
       state.completedSteps = action.payload;
     },
@@ -89,43 +91,40 @@ const apiSlice = createSlice({
     setClusterConfig: (state, { payload }: PayloadAction<NewClusterConfig>) => {
       state.clusterConfig = payload;
     },
-    createDraftCluster: {
-      prepare: ({
-        cloudProvider,
-        managementNodeId,
-      }: {
-        cloudProvider: InstallationType;
-        managementNodeId: string;
-      }) => {
-        return {
-          payload: {
-            id: 'draft',
-            managementNodeId,
-            cloudProvider,
-          },
+    createDraftCluster: (state) => {
+      if (state.managementCluster) {
+        const draftCluster: WorkloadCluster = {
+          id: 'draft',
+          cloudProvider: state.managementCluster.cloudProvider,
+          cloudRegion: state.managementCluster.cloudRegion,
+          type: ClusterType.DRAFT,
         };
-      },
-      reducer: (
-        state,
-        {
-          payload,
-        }: PayloadAction<{
-          cloudProvider: InstallationType;
-          managementNodeId: string;
-        }>,
-      ) => {
-        state.draftCluster = payload;
-      },
+        state.managementCluster.workloadClusters.push(draftCluster);
+        state.selectedCluster = draftCluster;
+      }
     },
     removeDraftCluster: (state) => {
-      state.draftCluster = undefined;
+      if (state.managementCluster) {
+        state.managementCluster.workloadClusters = state.managementCluster.workloadClusters.filter(
+          (cluster) => cluster.type !== ClusterType.DRAFT,
+        );
+      }
     },
-    addWorkloadCluster: (state) => {
-      // if(state.managementCluster){
-      //   state.managementCluster.push()
-      // }
+    updateDraftCluster: (state, { payload }: PayloadAction<WorkloadCluster>) => {
+      if (state.managementCluster) {
+        state.managementCluster.workloadClusters = state.managementCluster.workloadClusters.map(
+          (cluster) => {
+            if (cluster.type === ClusterType.DRAFT) {
+              cluster = payload;
+            }
+            return cluster;
+          },
+        );
+        state.selectedCluster = payload;
+      }
     },
   },
+
   extraReducers: (builder) => {
     builder
       .addCase(createCluster.pending, (state) => {
@@ -158,7 +157,7 @@ const apiSlice = createSlice({
         state.isDeleting = false;
         state.isError = true;
       })
-      .addCase(getCluster.fulfilled, (state, { payload }: PayloadAction<Cluster>) => {
+      .addCase(getCluster.fulfilled, (state, { payload }: PayloadAction<ManagementCluster>) => {
         state.selectedCluster = payload;
         state.loading = false;
         state.status = payload.status;
@@ -208,6 +207,8 @@ export const {
   setClusterConfig,
   createDraftCluster,
   removeDraftCluster,
+  updateDraftCluster,
+  setSelectedCluster,
 } = apiSlice.actions;
 
 export const apiReducer = apiSlice.reducer;

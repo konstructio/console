@@ -8,6 +8,7 @@ import { InstallationType } from '../../types/redux';
 import ClusterDetails from '.';
 
 const cluster: ClusterInfo = {
+  id: 'mock',
   clusterName: 'kuberfirst-mgmt2',
   type: ClusterType.MANAGEMENT,
   cloudProvider: InstallationType.AWS,

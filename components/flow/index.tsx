@@ -4,9 +4,15 @@ import ReactFlow, { NodeTypes, ReactFlowProvider, useReactFlow } from 'reactflow
 import { GraphNode } from '../graphNode';
 import { ClusterInfo } from '../../components/clusterTable/clusterTable';
 import { useAppDispatch, useAppSelector } from '../../redux/store';
-import { onConnect, onEdgesChange, onNodesChange } from '../../redux/slices/reactFlow.slice';
-
+import {
+  onConnect,
+  onEdgesChange,
+  onNodesChange,
+  setEdges,
+  setNodes,
+} from '../../redux/slices/reactFlow.slice';
 import 'reactflow/dist/style.css';
+import { generateNodesConfig } from '../../utils/reactFlow';
 
 const nodeTypes: NodeTypes = {
   custom: GraphNode,
@@ -18,24 +24,35 @@ interface GraphViewProps {
 
 const GraphView: FunctionComponent<GraphViewProps> = ({ onNodeClick }) => {
   const { nodes, edges } = useAppSelector(({ reactFlow }) => reactFlow);
+  const { managementCluster, selectedCluster } = useAppSelector(({ api }) => api);
 
   const dispatch = useAppDispatch();
 
   const { setCenter, fitView } = useReactFlow();
 
   useEffect(() => {
-    const selectedNode = nodes.find((node) => node.selected);
-    if (selectedNode) {
-      const { position, width, height } = selectedNode;
+    if (selectedCluster) {
+      const selectedNode = nodes.find((node) => node.id === selectedCluster.id);
+      if (selectedNode) {
+        const { position, width, height } = selectedNode;
 
-      setCenter(position.x + (width ?? 400), position.y + (height ?? 0), {
-        zoom: 1.2,
-        duration: 500,
-      });
+        setCenter(position.x + (width ?? 400), position.y + (height ?? 0), {
+          zoom: 1.2,
+          duration: 500,
+        });
+      }
     } else {
       fitView({ duration: 500, padding: 0.2 });
     }
-  }, [nodes, setCenter, fitView]);
+  }, [selectedCluster, nodes, setCenter, fitView, dispatch]);
+
+  useEffect(() => {
+    if (managementCluster) {
+      const [nodes, edges] = generateNodesConfig(managementCluster);
+      dispatch(setNodes(nodes));
+      dispatch(setEdges(edges));
+    }
+  }, [managementCluster, dispatch]);
 
   return (
     <ReactFlow

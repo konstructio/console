@@ -1,6 +1,6 @@
 import { Edge } from 'reactflow';
 
-import { Cluster, ClusterType } from '../../types/provision';
+import { ManagementCluster, ClusterType, ClusterStatus } from '../../types/provision';
 import { CustomGraphNode, GraphNodeInfo } from '../../components/graphNode';
 
 export function generateNode(
@@ -30,8 +30,9 @@ export function generateEdge(id: string, source: string, target: string, animate
   };
 }
 
-export function generateNodesConfig(cluster: Cluster): [CustomGraphNode[], Edge[]] {
-  const { id: managementClusterId, workloadClusters, ...managementClusterInfo } = cluster;
+export function generateNodesConfig(cluster: ManagementCluster): [CustomGraphNode[], Edge[]] {
+  const { workloadClusters, ...managementClusterInfo } = cluster;
+  const { id: managementClusterId } = managementClusterInfo;
 
   const nodes: CustomGraphNode[] = [
     generateNode(
@@ -50,18 +51,20 @@ export function generateNodesConfig(cluster: Cluster): [CustomGraphNode[], Edge[
     const workloadCluster = workloadClusters[i];
     const { id: workloadClusterId } = workloadCluster;
 
-    nodes.push(
-      generateNode(
+    const animatedEdge =
+      workloadCluster.type === ClusterType.DRAFT ||
+      workloadCluster.status === ClusterStatus.PROVISIONING;
+
+    nodes.push(generateNode(workloadClusterId, { x: 600, y: i * 200 }, workloadCluster));
+
+    edges.push(
+      generateEdge(
+        `edge-${workloadClusterId}`,
+        managementClusterId,
         workloadClusterId,
-        { x: 600, y: i * 200 },
-        {
-          ...workloadCluster,
-          cloudProvider: managementClusterInfo.cloudProvider,
-          type: ClusterType.WORKLOAD,
-        },
+        animatedEdge,
       ),
     );
-    edges.push(generateEdge(`edge-${workloadClusterId}`, managementClusterId, workloadClusterId));
   }
 
   return [nodes, edges];

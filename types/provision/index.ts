@@ -17,7 +17,6 @@ export enum ClusterType {
 
 export enum ClusterCreationStep {
   CONFIG,
-  PROVISION,
   DETAILS,
 }
 
@@ -26,13 +25,7 @@ export enum ImageRepository {
   ECR = 'ecr',
 }
 
-export interface NewClusterConfig extends AdvancedOptions {
-  clusterName?: string;
-  cloudRegion?: string;
-  instanceSize?: string;
-  nodeCount?: number;
-  environment: string;
-}
+export type NewClusterConfig = Omit<WorkloadCluster, 'id' | 'type'> & AdvancedOptions;
 
 export interface ClusterRequestProps {
   clusterName?: string;
@@ -48,7 +41,7 @@ export interface ClusterResponse {
   cloud_region: string;
   domain_name: string;
   cluster_id: string;
-  cluster_type: ClusterType.MANAGEMENT | ClusterType.WORKLOAD;
+  cluster_type: ClusterType.MANAGEMENT;
   alerts_email: string;
   git_provider: string;
   git_user: string;
@@ -91,16 +84,17 @@ export interface ClusterResponse {
 
 export type WorkloadCluster = {
   id: string;
-  clusterName: string;
-  cloudRegion: string;
-  instanceSize: string;
-  nodeCount: number;
-  environment: string;
-  status: ClusterStatus;
-  type: ClusterType.WORKLOAD;
+  clusterName?: string;
+  cloudRegion?: string;
+  cloudProvider?: InstallationType;
+  instanceSize?: string;
+  nodeCount?: number;
+  environment?: string;
+  status?: ClusterStatus;
+  type: ClusterType.WORKLOAD | ClusterType.DRAFT;
 };
 
-export interface Cluster extends Row {
+export interface ManagementCluster extends Row {
   adminEmail: string;
   clusterName: string;
   cloudProvider: InstallationType;
@@ -109,7 +103,7 @@ export interface Cluster extends Row {
   gitProvider: string;
   gitUser: string;
   gitToken?: string;
-  type: ClusterType;
+  type: ClusterType.MANAGEMENT;
   creationDate?: string;
   status?: ClusterStatus;
   lastErrorCondition: string;

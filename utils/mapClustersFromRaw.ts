@@ -1,6 +1,6 @@
-import { ClusterResponse, Cluster, ClusterType } from '../types/provision';
+import { ClusterResponse, ManagementCluster, ClusterType } from '../types/provision';
 
-export const mapClusterFromRaw = (cluster: ClusterResponse): Cluster => ({
+export const mapClusterFromRaw = (cluster: ClusterResponse): ManagementCluster => ({
   id: cluster._id,
   clusterName: cluster.cluster_name,
   adminEmail: cluster.alerts_email,
@@ -18,6 +18,7 @@ export const mapClusterFromRaw = (cluster: ClusterResponse): Cluster => ({
     id: item._id,
     clusterName: item.workload_cluster_name,
     cloudRegion: item.cloud_region,
+    cloudProvider: cluster.cloud_provider,
     instanceSize: item.instance_size,
     nodeCount: item.node_count,
     environment: item.environment,

@@ -1,30 +1,30 @@
 import axios from 'axios';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { FieldValues } from 'react-hook-form';
-import sortBy from 'lodash/sortBy';
-import { uniqueId } from 'lodash';
+import { uniqueId, sortBy } from 'lodash';
 
 import { AppDispatch, RootState } from '../store';
 import { createQueryString } from '../../utils/url/formatDomain';
 import {
-  Cluster,
+  ManagementCluster,
   ClusterRequestProps,
-  ClusterResponse,
   ClusterServices,
-  ClusterStatus,
   NewClusterConfig,
+  ClusterType,
+  ClusterStatus,
+  WorkloadCluster,
 } from '../../types/provision';
 import { GitOpsCatalogApp, GitOpsCatalogProps } from '../../types/gitOpsCatalog';
 import { InstallValues, InstallationType } from '../../types/redux';
 import { TelemetryClickEvent } from '../../types/telemetry';
-import { generateNodesConfig } from '../../utils/reactFlow';
 import { mapClusterFromRaw } from '../../utils/mapClustersFromRaw';
-import { setEdges, setNodes, updateDraftNode } from '../../redux/slices/reactFlow.slice';
 import { delayedPromise } from '../../utils/delayedPromise';
 import { mockClusterResponse } from '../../tests/mocks/mockClusterResponse';
+import { updateDraftCluster } from '../../redux/slices/api.slice';
+import { setSelectedCluster } from '../../redux/slices/cluster.slice';
 
 export const createCluster = createAsyncThunk<
-  Cluster,
+  ManagementCluster,
   void,
   {
     dispatch: AppDispatch;
@@ -68,7 +68,7 @@ export const createCluster = createAsyncThunk<
       ...values?.vultr_auth,
     },
   };
-  const res = await axios.post<Cluster>('/api/proxy', {
+  const res = await axios.post<ManagementCluster>('/api/proxy', {
     url: `/cluster/${values?.clusterName || 'kubefirst'}`,
     body: params,
   });
@@ -80,7 +80,7 @@ export const createCluster = createAsyncThunk<
 });
 
 export const createWorkloadCluster = createAsyncThunk<
-  { message: string; data: { clusterId: string } },
+  { status: number },
   NewClusterConfig,
   {
     dispatch: AppDispatch;
@@ -88,22 +88,22 @@ export const createWorkloadCluster = createAsyncThunk<
   }
 >('api/cluster/createWorkloadCluster', async (config, { dispatch, getState }) => {
   const { managementCluster } = getState().api;
-  const res = await delayedPromise({ status: 200 });
-  // if (managementCluster) {
-  //   dispatch(
-  //     updateDraftNode({
-  //       ...config,
-  //       id: res.data.clusterId,
-  //       status: ClusterStatus.PROVISIONING,
-  //       cloudProvider: managementCluster.cloudProvider,
-  //     }),
-  //   );
-  // }
+  const res = await delayedPromise({ status: 200, id: uniqueId() });
+  if (managementCluster) {
+    const updatedCluster: WorkloadCluster = {
+      ...config,
+      id: res.id,
+      type: ClusterType.WORKLOAD,
+      status: ClusterStatus.PROVISIONING,
+      cloudProvider: managementCluster.cloudProvider,
+    };
+    dispatch(updateDraftCluster(updatedCluster));
+  }
   return res;
 });
 
 export const getCluster = createAsyncThunk<
-  Cluster,
+  ManagementCluster,
   ClusterRequestProps,
   {
     dispatch: AppDispatch;
@@ -121,7 +121,7 @@ export const getCluster = createAsyncThunk<
 });
 
 export const getClusters = createAsyncThunk<
-  Cluster,
+  ManagementCluster,
   void,
   {
     dispatch: AppDispatch;
@@ -140,15 +140,12 @@ export const getClusters = createAsyncThunk<
   // const [managementCluster] = res.data.map(mapClusterFromRaw);
 
   const managementCluster = mapClusterFromRaw(mockClusterResponse);
-  const [nodes, edges] = generateNodesConfig(managementCluster);
-  dispatch(setNodes(nodes));
-  dispatch(setEdges(edges));
 
   return managementCluster;
 });
 
 export const deleteCluster = createAsyncThunk<
-  Cluster,
+  ManagementCluster,
   ClusterRequestProps,
   {
     dispatch: AppDispatch;
