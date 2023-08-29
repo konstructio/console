@@ -89,7 +89,7 @@ const ClusterRow: FunctionComponent<ClusterRowProps> = ({
 
   const handleMenu = useCallback(() => {
     setMenuOpen(!menuOpen);
-    onMenuOpenClose(!menuOpen ? undefined : rest);
+    onMenuOpenClose(!menuOpen ? rest : undefined);
   }, [menuOpen, onMenuOpenClose, rest]);
 
   const buttonRef = useRef(null);
