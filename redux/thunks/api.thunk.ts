@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { FieldValues } from 'react-hook-form';
-import { uniqueId, sortBy } from 'lodash';
+import { sortBy } from 'lodash';
 
 import { AppDispatch, RootState } from '../store';
 import { createQueryString } from '../../utils/url/formatDomain';
@@ -13,15 +13,13 @@ import {
   ClusterType,
   ClusterStatus,
   WorkloadCluster,
+  ClusterResponse,
 } from '../../types/provision';
 import { GitOpsCatalogApp, GitOpsCatalogProps } from '../../types/gitOpsCatalog';
 import { InstallValues, InstallationType } from '../../types/redux';
 import { TelemetryClickEvent } from '../../types/telemetry';
 import { mapClusterFromRaw } from '../../utils/mapClustersFromRaw';
-import { delayedPromise } from '../../utils/delayedPromise';
-import { mockClusterResponse } from '../../tests/mocks/mockClusterResponse';
 import { updateDraftCluster } from '../../redux/slices/api.slice';
-import { setSelectedCluster } from '../../redux/slices/cluster.slice';
 
 export const createCluster = createAsyncThunk<
   ManagementCluster,
@@ -88,11 +86,26 @@ export const createWorkloadCluster = createAsyncThunk<
   }
 >('api/cluster/createWorkloadCluster', async (config, { dispatch, getState }) => {
   const { managementCluster } = getState().api;
-  const res = await delayedPromise({ status: 200, id: uniqueId() });
-  if (managementCluster) {
+  const res = await axios.post(`/api/proxy?target=ee`, {
+    url: `/cluster/${managementCluster?.id}`,
+    body: {
+      cluster_name: config.clusterName,
+      cloud_region: config.cloudRegion,
+      instance_size: config.instanceSize,
+      node_count: config.nodeCount,
+      environment: config.environment,
+      cluster_type: 'workload-cluster',
+    },
+  });
+
+  if ('error' in res) {
+    throw res.error;
+  }
+
+  if (managementCluster && res.data.cluster_id) {
     const updatedCluster: WorkloadCluster = {
       ...config,
-      id: res.id,
+      id: res.data.cluster_id,
       type: ClusterType.WORKLOAD,
       status: ClusterStatus.PROVISIONING,
       cloudProvider: managementCluster.cloudProvider,
@@ -127,19 +140,16 @@ export const getClusters = createAsyncThunk<
     dispatch: AppDispatch;
     state: RootState;
   }
->('api/cluster/getClusters', async (_, { dispatch }) => {
-  // const res = await axios.get<ClusterResponse[]>(
-  //   `/api/proxy?${createQueryString('url', `/cluster`)}`,
-  // );
+>('api/cluster/getClusters', async () => {
+  const res = await axios.get<ClusterResponse[]>(
+    `/api/proxy?${createQueryString('url', `/cluster`)}`,
+  );
 
-  // if ('error' in res) {
-  //   throw res.error;
-  // }
+  if ('error' in res) {
+    throw res.error;
+  }
 
-  // only expect one cluster
-  // const [managementCluster] = res.data.map(mapClusterFromRaw);
-
-  const managementCluster = mapClusterFromRaw(mockClusterResponse);
+  const [managementCluster] = res.data.map(mapClusterFromRaw);
 
   return managementCluster;
 });

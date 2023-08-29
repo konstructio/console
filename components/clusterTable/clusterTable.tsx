@@ -73,7 +73,7 @@ const ClusterRow: FunctionComponent<ClusterRowProps> = ({
     cloudProvider,
     cloudRegion,
     creationDate = '',
-    gitUser: createdBy,
+    gitAuth: { gitUser } = {},
     status,
     nodeCount,
   } = rest;
@@ -83,9 +83,6 @@ const ClusterRow: FunctionComponent<ClusterRowProps> = ({
   const cloudLogoSrc = CLOUD_LOGO_OPTIONS[cloudProvider ?? InstallationType.LOCAL];
   const { iconLabel, iconType, bgColor } = CLUSTER_TAG_CONFIG[status ?? ClusterType.DRAFT];
   const formattedClusterType = type === ClusterType.MANAGEMENT ? 'management' : 'worker';
-
-  // placeholder for now. new field yet to be implemented
-  const nodes = nodeCount ?? 2;
 
   const handleMenu = useCallback(() => {
     setMenuOpen(!menuOpen);
@@ -126,7 +123,7 @@ const ClusterRow: FunctionComponent<ClusterRowProps> = ({
           <StyledCellText variant="body2">{cloudRegion}</StyledCellText>
         </StyledTableCell>
         <StyledTableCell align="right">
-          <StyledCellText variant="body2">{nodes}</StyledCellText>
+          <StyledCellText variant="body2">{nodeCount}</StyledCellText>
         </StyledTableCell>
         <StyledTableCell>
           <StyledCellText variant="body2">
@@ -134,7 +131,7 @@ const ClusterRow: FunctionComponent<ClusterRowProps> = ({
           </StyledCellText>
         </StyledTableCell>
         <StyledTableCell>
-          <StyledCellText variant="body2">{createdBy}</StyledCellText>
+          <StyledCellText variant="body2">{gitUser}</StyledCellText>
         </StyledTableCell>
         <StyledTableCell>
           <StyledTag text={iconLabel} bgColor={bgColor} icon={iconType} />
@@ -180,7 +177,7 @@ export const ClusterTable: FunctionComponent<ClusterTableProps> = ({
   ...rest
 }) => {
   const [expanded, setExpanded] = useState(false);
-  const { workloadClusters, domainName, gitProvider, cloudProvider, gitUser, adminEmail } =
+  const { workloadClusters, domainName, gitProvider, cloudProvider, adminEmail } =
     managementCluster;
 
   return (
@@ -215,7 +212,11 @@ export const ClusterTable: FunctionComponent<ClusterTableProps> = ({
         </TableHead>
         <StyledTableBody>
           <ClusterRow
-            {...{ ...managementCluster, gitOwner: managementCluster.gitAuth.gitOwner }}
+            {...{
+              ...managementCluster,
+              gitOwner: managementCluster.gitAuth.gitOwner,
+              nodeCount: undefined,
+            }}
             onDeleteCluster={onDeleteCluster}
             onMenuOpenClose={onMenuOpenClose}
             expanded={expanded}
@@ -232,7 +233,6 @@ export const ClusterTable: FunctionComponent<ClusterTableProps> = ({
                 domainName={domainName}
                 gitProvider={gitProvider}
                 cloudProvider={cloudProvider}
-                gitUser={gitUser}
                 adminEmail={adminEmail}
               />
             ))}

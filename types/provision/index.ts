@@ -55,9 +55,10 @@ export interface ClusterResponse {
     environment: string;
     status: ClusterStatus;
   }[];
-  gitAuth: {
-    gitOwner: string;
-    gitToken?: string;
+  git_auth: {
+    git_owner?: string;
+    git_token?: string;
+    git_username?: string;
   };
   vault_auth: {
     kbot_password: string;
@@ -93,14 +94,14 @@ export interface Cluster {
   domainName: string;
   environment?: string;
   gitProvider: string;
-  gitUser: string;
   instanceSize?: string;
   nodeCount?: number;
   status?: ClusterStatus;
   type: ClusterType;
   gitAuth: {
-    gitOwner: string;
+    gitOwner?: string;
     gitToken?: string;
+    gitUser?: string;
   };
 }
 

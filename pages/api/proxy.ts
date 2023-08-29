@@ -1,16 +1,23 @@
 import axios from 'axios';
 import type { NextApiRequest, NextApiResponse } from 'next';
 
+const API_TARGET_ID = 'api';
+
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  const { API_URL = '', K1_ACCESS_TOKEN = '' } = process.env;
+  const { API_URL = '', ENTERPRISE_API_URL = '', K1_ACCESS_TOKEN = '' } = process.env;
   const { body, url } = req.body;
-  const { url: queryUrl } = req.query;
+  const { url: queryUrl, target = API_TARGET_ID } = req.query;
 
   if (!API_URL) {
     return res.status(200).json('API_URL not provided');
   }
 
-  const kubefirstEndpointUrl = `${API_URL}/api/v1${queryUrl || url}`;
+  const apiBaseUrl = target === API_TARGET_ID ? API_URL : ENTERPRISE_API_URL;
+
+  // eslint-disable-next-line no-console
+  console.log('BASE URL:', apiBaseUrl);
+
+  const kubefirstEndpointUrl = `${apiBaseUrl}/api/v1${queryUrl || url}`;
 
   // eslint-disable-next-line no-console
   console.log(`METHOD: ${req.method} URL: ${kubefirstEndpointUrl}`);
