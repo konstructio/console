@@ -19,7 +19,9 @@ function ControlledNumberInput<T extends FieldValues>({
   return (
     <Controller
       {...props}
-      render={({ field }) => <NumberInput label={label} inputProps={numberInputProps} {...field} />}
+      render={({ field }) => (
+        <NumberInput label={label} inputProps={numberInputProps} {...field} {...props} />
+      )}
     />
   );
 }

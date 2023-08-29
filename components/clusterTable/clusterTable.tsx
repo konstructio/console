@@ -19,7 +19,12 @@ import digitalOceanLogo from '../../assets/digital_ocean_logo.svg';
 import vultrLogo from '../../assets/vultr_logo.svg';
 import { CLUSTER_TAG_CONFIG } from '../../constants';
 import { DODGER_BLUE, FIRE_BRICK } from '../../constants/colors';
-import { ManagementCluster, ClusterStatus, ClusterType } from '../../types/provision';
+import {
+  ManagementCluster,
+  ClusterStatus,
+  ClusterType,
+  WorkloadCluster,
+} from '../../types/provision';
 import { InstallationType } from '../../types/redux';
 import Typography from '../../components/typography';
 import { useOnClickOutside } from '../../hooks/useOnClickOutside';
@@ -48,31 +53,10 @@ const CLOUD_LOGO_OPTIONS: Record<InstallationType, any> = {
   [InstallationType.VULTR]: vultrLogo,
 };
 
-export type ClusterInfo = Omit<
-  Pick<
-    ManagementCluster,
-    | 'id'
-    | 'clusterName'
-    | 'domainName'
-    | 'gitProvider'
-    | 'cloudProvider'
-    | 'cloudRegion'
-    | 'creationDate'
-    | 'gitUser'
-    | 'status'
-    | 'adminEmail'
-  >,
-  'type'
-> & {
-  nodes?: number;
-  instanceSize?: string;
-  type: ClusterType;
-};
-
-type ClusterRowProps = ClusterInfo & {
+type ClusterRowProps = WorkloadCluster & {
   expanded?: boolean;
   onExpanseClick?: () => void;
-  onMenuOpenClose: (selectedCluster?: ClusterInfo) => void;
+  onMenuOpenClose: (selectedCluster?: WorkloadCluster) => void;
   onDeleteCluster: () => void;
 };
 
@@ -91,7 +75,7 @@ const ClusterRow: FunctionComponent<ClusterRowProps> = ({
     creationDate = '',
     gitUser: createdBy,
     status,
-    nodes,
+    nodeCount,
   } = rest;
 
   const [menuOpen, setMenuOpen] = useState(false);
@@ -101,7 +85,7 @@ const ClusterRow: FunctionComponent<ClusterRowProps> = ({
   const formattedClusterType = type === ClusterType.MANAGEMENT ? 'management' : 'worker';
 
   // placeholder for now. new field yet to be implemented
-  const nodeCount = nodes ?? 2;
+  const nodes = nodeCount ?? 2;
 
   const handleMenu = useCallback(() => {
     setMenuOpen(!menuOpen);
@@ -142,7 +126,7 @@ const ClusterRow: FunctionComponent<ClusterRowProps> = ({
           <StyledCellText variant="body2">{cloudRegion}</StyledCellText>
         </StyledTableCell>
         <StyledTableCell align="right">
-          <StyledCellText variant="body2">{nodeCount}</StyledCellText>
+          <StyledCellText variant="body2">{nodes}</StyledCellText>
         </StyledTableCell>
         <StyledTableCell>
           <StyledCellText variant="body2">
@@ -186,7 +170,7 @@ const ClusterRow: FunctionComponent<ClusterRowProps> = ({
 interface ClusterTableProps extends ComponentPropsWithoutRef<'div'> {
   managementCluster: ManagementCluster;
   onDeleteCluster: () => void;
-  onMenuOpenClose: (selectedCluster?: ClusterInfo) => void;
+  onMenuOpenClose: (selectedCluster?: WorkloadCluster) => void;
 }
 
 export const ClusterTable: FunctionComponent<ClusterTableProps> = ({
@@ -231,7 +215,7 @@ export const ClusterTable: FunctionComponent<ClusterTableProps> = ({
         </TableHead>
         <StyledTableBody>
           <ClusterRow
-            {...managementCluster}
+            {...{ ...managementCluster, gitOwner: managementCluster.gitAuth.gitOwner }}
             onDeleteCluster={onDeleteCluster}
             onMenuOpenClose={onMenuOpenClose}
             expanded={expanded}

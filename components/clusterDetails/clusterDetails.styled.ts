@@ -14,19 +14,15 @@ import {
   VOLCANIC_SAND,
 } from '../../constants/colors';
 
+export const Container = styled(ColumnComponent)`
+  width: 100%;
+  gap: 24px;
+`;
+
 export const Content = styled.div`
   display: flex;
   flex-direction: column;
   gap: 32px;
-  margin-top: 24px;
-`;
-
-export const StatusContainer = styled(RowComponent)`
-  gap: 8px;
-  padding: 16px;
-  background-color: ${DR_WHITE};
-  border: 1px solid ${CHEFS_HAT};
-  border-radius: 4px;
 `;
 
 export const ColumnInfo = styled(ColumnComponent)`
@@ -49,6 +45,14 @@ export const Link = styled(NextLink)`
 
 export const RowInfo = styled(RowComponent)`
   gap: 156px;
+`;
+
+export const StatusContainer = styled(RowComponent)`
+  gap: 8px;
+  padding: 16px;
+  background-color: ${DR_WHITE};
+  border: 1px solid ${CHEFS_HAT};
+  border-radius: 4px;
 `;
 
 export const StyledLabel = muiStyled(Typography)(() => ({

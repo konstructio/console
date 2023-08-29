@@ -11,7 +11,8 @@ export enum ClusterStatus {
 
 export enum ClusterType {
   MANAGEMENT = 'mgmt',
-  WORKLOAD = 'workload',
+  WORKLOAD = 'workload-cluster',
+  WORKLOAD_V_CLUSTER = 'workload-vcluster',
   DRAFT = 'draft',
 }
 
@@ -82,36 +83,32 @@ export interface ClusterResponse {
   users_terraform_apply_check: boolean;
 }
 
-export type WorkloadCluster = {
+export interface Cluster {
   id: string;
+  adminEmail: string;
   clusterName?: string;
   cloudRegion?: string;
   cloudProvider?: InstallationType;
-  instanceSize?: string;
-  nodeCount?: number;
-  environment?: string;
-  status?: ClusterStatus;
-  type: ClusterType.WORKLOAD | ClusterType.DRAFT;
-};
-
-export interface ManagementCluster extends Row {
-  adminEmail: string;
-  clusterName: string;
-  cloudProvider: InstallationType;
-  cloudRegion: string;
+  creationDate?: string;
   domainName: string;
+  environment?: string;
   gitProvider: string;
   gitUser: string;
-  gitToken?: string;
-  type: ClusterType.MANAGEMENT;
-  creationDate?: string;
+  instanceSize?: string;
+  nodeCount?: number;
   status?: ClusterStatus;
-  lastErrorCondition: string;
-  workloadClusters: WorkloadCluster[];
+  type: ClusterType;
   gitAuth: {
     gitOwner: string;
     gitToken?: string;
   };
+}
+
+export interface ManagementCluster extends Cluster, Row {
+  gitToken?: string;
+  status?: ClusterStatus;
+  lastErrorCondition: string;
+  workloadClusters: WorkloadCluster[];
   vaultAuth: {
     kbotPassword: string;
   };
@@ -136,6 +133,10 @@ export interface ManagementCluster extends Row {
     users_terraform_apply_check: boolean;
     [key: string]: boolean;
   };
+}
+
+export interface WorkloadCluster extends Cluster {
+  environment?: string;
 }
 
 export interface ClusterServices {

@@ -5,7 +5,7 @@ import Button from '../../components/button';
 import Typography from '../../components/typography';
 import { useAppDispatch, useAppSelector } from '../../redux/store';
 import { deleteCluster, getCluster, getClusters } from '../../redux/thunks/api.thunk';
-import { ClusterCreationStep, ClusterRequestProps } from '../../types/provision';
+import { Cluster, ClusterCreationStep, ClusterRequestProps } from '../../types/provision';
 import useToggle from '../../hooks/useToggle';
 import Drawer from '../../components/drawer';
 import useModal from '../../hooks/useModal';
@@ -13,13 +13,12 @@ import DeleteCluster from '../deleteCluster';
 import TabPanel, { Tab, a11yProps } from '../../components/tab';
 import { BISCAY, SALTBOX_BLUE } from '../../constants/colors';
 import { Flow } from '../../components/flow';
-import { ClusterInfo, ClusterTable } from '../../components/clusterTable/clusterTable';
+import { ClusterTable } from '../../components/clusterTable/clusterTable';
 import {
   createDraftCluster,
   removeDraftCluster,
   setClusterCreationStep,
 } from '../../redux/slices/api.slice';
-import { unSelectNodes } from '../../redux/slices/reactFlow.slice';
 import { setSelectedCluster } from '../../redux/slices/api.slice';
 
 import { CreateClusterFlow } from './createClusterFlow';
@@ -105,8 +104,8 @@ const ClusterManagement: FunctionComponent = () => {
   };
 
   const handleNodeClick = useCallback(
-    (info: ClusterInfo) => {
-      dispatch(setSelectedCluster(info));
+    (cluster: Cluster) => {
+      dispatch(setSelectedCluster(cluster));
       dispatch(setClusterCreationStep(ClusterCreationStep.DETAILS));
       openCreateClusterFlow();
     },

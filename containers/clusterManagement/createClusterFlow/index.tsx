@@ -9,9 +9,9 @@ import { SALTBOX_BLUE } from '../../../constants/colors';
 import Column from '../../../components/column';
 import ClusterCreationForm from '../../../containers/clusterForms/clusterCreation';
 import ClusterDetails from '../../../components/clusterDetails';
-import { ClusterInfo } from '../../../components/clusterTable/clusterTable';
 import { useAppDispatch, useAppSelector } from '../../../redux/store';
 import {
+  Cluster,
   ClusterCreationStep,
   ClusterStatus,
   ClusterType,
@@ -33,7 +33,7 @@ const actionButtonText: Record<ClusterCreationStep, string> = {
 interface CreateClusterFlowProps {
   onMenuClose: () => void;
   onClusterDelete: () => void;
-  cluster?: ClusterInfo;
+  cluster?: Cluster;
 }
 
 export const CreateClusterFlow: FunctionComponent<CreateClusterFlowProps> = ({

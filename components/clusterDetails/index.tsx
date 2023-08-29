@@ -1,13 +1,13 @@
 import React, { ComponentPropsWithoutRef, FunctionComponent } from 'react';
 import moment from 'moment';
 
-import { ClusterInfo } from '../clusterTable/clusterTable';
 import Typography from '../../components/typography';
 import Row from '../../components/row';
 import Column from '../../components/column';
-import { ClusterStatus, ClusterType } from '../../types/provision';
+import { Cluster, ClusterStatus, ClusterType } from '../../types/provision';
 
 import {
+  Container,
   Content,
   ColumnInfo,
   RowInfo,
@@ -19,11 +19,12 @@ import {
 } from './clusterDetails.styled';
 
 export interface ClusterDetailsProps extends ComponentPropsWithoutRef<'div'> {
-  cluster: ClusterInfo;
+  cluster: Cluster;
 }
 
-const ClusterDetails: FunctionComponent<ClusterDetailsProps> = ({ cluster }) => {
+const ClusterDetails: FunctionComponent<ClusterDetailsProps> = ({ cluster, ...rest }) => {
   const {
+    clusterName,
     adminEmail,
     cloudProvider,
     cloudRegion,
@@ -31,13 +32,17 @@ const ClusterDetails: FunctionComponent<ClusterDetailsProps> = ({ cluster }) => 
     domainName,
     gitProvider,
     gitUser,
-    nodes,
+    nodeCount,
     instanceSize,
     status,
     type,
+    gitAuth,
   } = cluster;
+
+  const clusterDetailsLink = `https://github.com/${gitAuth?.gitOwner}/gitops/tree/main/registry/${clusterName}`;
+
   return (
-    <>
+    <Container {...rest}>
       <StatusContainer>
         <Row>
           <InfoIcon />
@@ -49,12 +54,12 @@ const ClusterDetails: FunctionComponent<ClusterDetailsProps> = ({ cluster }) => 
                 The cluster has been registered and will be synced
               </Typography>
               <Typography variant="body2">
-                Provisioning details: <Link href="">Link</Link>
+                Provisioning details: <Link href={clusterDetailsLink}>{clusterDetailsLink}</Link>
               </Typography>
             </>
           ) : (
             <Typography>
-              Cluster details: <Link href="">Link</Link>{' '}
+              Cluster details: <Link href={clusterDetailsLink}>{clusterDetailsLink}</Link>{' '}
             </Typography>
           )}
         </Column>
@@ -106,7 +111,7 @@ const ClusterDetails: FunctionComponent<ClusterDetailsProps> = ({ cluster }) => 
           </ColumnInfo>
           <ColumnInfo>
             <StyledLabel variant="labelLarge">Number of nodes</StyledLabel>
-            <StyledValue variant="body2">{nodes}</StyledValue>
+            <StyledValue variant="body2">{nodeCount}</StyledValue>
           </ColumnInfo>
         </RowInfo>
 
@@ -120,7 +125,7 @@ const ClusterDetails: FunctionComponent<ClusterDetailsProps> = ({ cluster }) => 
           </ColumnInfo>
         </RowInfo>
       </Content>
-    </>
+    </Container>
   );
 };
 
