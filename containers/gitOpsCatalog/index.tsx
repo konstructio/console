@@ -7,7 +7,7 @@ import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 
 import Checkbox from '../../components/checkbox';
 import Typography from '../../components/typography';
-import GitOpsCatalogCard, { CATEGORY_LABEL_CONFIG } from '../../components/gitOpsCatalogCard';
+import GitOpsCatalogCard from '../../components/gitOpsCatalogCard';
 import GitopsAppModal from '../../components/gitopsAppModal';
 import useModal from '../../hooks/useModal';
 import { useAppDispatch, useAppSelector } from '../../redux/store';
@@ -139,23 +139,19 @@ const gitOpsCatalog: FunctionComponent = () => {
         <Typography variant="subtitle2" sx={{ mb: 3 }}>
           Category
         </Typography>
-        {sortedAvailableCategories.map((category) => {
-          const { label } =
-            CATEGORY_LABEL_CONFIG[category] ?? CATEGORY_LABEL_CONFIG[AppCategory.APPLICATIONS];
-          return (
-            <FormGroup key={category} sx={{ mb: 2 }}>
-              <FormControlLabel
-                control={<Checkbox sx={{ mr: 2 }} onClick={() => onClickCategory(category)} />}
-                label={
-                  <Typography variant="body2" color={VOLCANIC_SAND}>
-                    {label ?? category}
-                  </Typography>
-                }
-                sx={{ ml: 0 }}
-              />
-            </FormGroup>
-          );
-        })}
+        {sortedAvailableCategories.map((category) => (
+          <FormGroup key={category} sx={{ mb: 2 }}>
+            <FormControlLabel
+              control={<Checkbox sx={{ mr: 2 }} onClick={() => onClickCategory(category)} />}
+              label={
+                <Typography variant="body2" color={VOLCANIC_SAND}>
+                  {category}
+                </Typography>
+              }
+              sx={{ ml: 0 }}
+            />
+          </FormGroup>
+        ))}
       </Filter>
       <Content>
         {!selectedCategories.length && <Typography variant="subtitle2">All</Typography>}
