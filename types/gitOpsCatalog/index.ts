@@ -1,9 +1,9 @@
 import { FieldValues } from 'react-hook-form';
 
 export enum AppCategory {
-  APP_MANAGEMENT = 'Application Management',
+  APP_MANAGEMENT = 'App Management',
   ARCHITECTURE = 'Architecture',
-  CI_CD = 'Continuous Delivery',
+  CI_CD = 'CI/CD',
   DATABASE = 'Database',
   FIN_OPS = 'FinOps',
   INFRASTRUCTURE = 'Infrastructure',
