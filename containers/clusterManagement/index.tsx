@@ -178,7 +178,7 @@ const ClusterManagement: FunctionComponent = () => {
             <ClusterTable
               managementCluster={managementCluster}
               onDeleteCluster={openDeleteModal}
-              onMenuOpenClose={(clusterInfo) => setSelectedCluster(clusterInfo)}
+              onMenuOpenClose={(clusterInfo) => dispatch(setSelectedCluster(clusterInfo))}
             />
           )}
         </TabPanel>
