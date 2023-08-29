@@ -16,6 +16,7 @@ import {
   ClusterType,
   NewClusterConfig,
   WorkloadCluster,
+  Cluster,
 } from '../../types/provision';
 
 export interface ApiState {
@@ -28,7 +29,7 @@ export interface ApiState {
   isError: boolean;
   lastErrorCondition?: string;
   managementCluster?: ManagementCluster;
-  selectedCluster?: ManagementCluster | WorkloadCluster;
+  selectedCluster?: Cluster;
   completedSteps: Array<{ label: string; order: number }>;
   cloudDomains: Array<string>;
   cloudRegions: Array<string>;
@@ -93,12 +94,31 @@ const apiSlice = createSlice({
     },
     createDraftCluster: (state) => {
       if (state.managementCluster) {
+        const {
+          gitProvider,
+          cloudProvider,
+          cloudRegion,
+          domainName,
+          gitUser,
+          adminEmail,
+          nodeCount,
+          gitAuth,
+        } = state.managementCluster;
+
         const draftCluster: WorkloadCluster = {
           id: 'draft',
-          cloudProvider: state.managementCluster.cloudProvider,
-          cloudRegion: state.managementCluster.cloudRegion,
+          clusterName: '',
           type: ClusterType.DRAFT,
+          cloudProvider,
+          cloudRegion,
+          gitProvider,
+          domainName,
+          gitUser,
+          adminEmail,
+          nodeCount,
+          gitAuth,
         };
+
         state.managementCluster.workloadClusters.push(draftCluster);
         state.selectedCluster = draftCluster;
       }
@@ -112,19 +132,29 @@ const apiSlice = createSlice({
     },
     updateDraftCluster: (state, { payload }: PayloadAction<WorkloadCluster>) => {
       if (state.managementCluster) {
-        state.managementCluster.workloadClusters = state.managementCluster.workloadClusters.map(
-          (cluster) => {
-            if (cluster.type === ClusterType.DRAFT) {
-              cluster = payload;
-            }
-            return cluster;
-          },
+        const workloadClusterToUpdate = state.managementCluster.workloadClusters.find(
+          (cluster) => cluster.type === ClusterType.DRAFT,
         );
-        state.selectedCluster = payload;
+
+        if (workloadClusterToUpdate) {
+          const updatedCluster: WorkloadCluster = {
+            ...workloadClusterToUpdate,
+            ...payload,
+          };
+          state.managementCluster.workloadClusters = state.managementCluster.workloadClusters.map(
+            (cluster) => {
+              if (cluster.type === ClusterType.DRAFT) {
+                cluster = updatedCluster;
+              }
+              return cluster;
+            },
+          );
+
+          state.selectedCluster = updatedCluster;
+        }
       }
     },
   },
-
   extraReducers: (builder) => {
     builder
       .addCase(createCluster.pending, (state) => {
