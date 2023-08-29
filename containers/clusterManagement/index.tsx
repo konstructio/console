@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useCallback, useEffect, useRef, useState } from 'react';
+import React, { FunctionComponent, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Box, Snackbar, Tabs } from '@mui/material';
 
 import Button from '../../components/button';
@@ -32,6 +32,8 @@ enum MANAGEMENT_TABS {
 const ClusterManagement: FunctionComponent = () => {
   const [activeTab, setActiveTab] = useState(MANAGEMENT_TABS.LIST_VIEW);
   const {
+    isProvisioning,
+    isProvisioned,
     isDeleted,
     isDeleting,
     isError,
@@ -62,7 +64,7 @@ const ClusterManagement: FunctionComponent = () => {
 
   const handleDeleteCluster = useCallback(async () => {
     if (selectedCluster) {
-      await dispatch(deleteCluster({ clusterName: selectedCluster.clusterName })).unwrap();
+      await dispatch(deleteCluster(selectedCluster?.id)).unwrap();
       handleGetClusters();
       closeDeleteModal();
     }
@@ -73,31 +75,6 @@ const ClusterManagement: FunctionComponent = () => {
       dispatch(getCluster(params)).unwrap();
     }, 10000);
   };
-
-  useEffect(() => {
-    if (isDeleting && !isDeleted && selectedCluster) {
-      interval.current = getClusterInterval({
-        clusterName: selectedCluster.clusterName,
-      });
-      handleGetClusters();
-    }
-
-    if (isDeleted) {
-      clearInterval(interval.current);
-      handleGetClusters();
-    }
-
-    if (isError) {
-      handleGetClusters();
-    }
-
-    return () => clearInterval(interval.current);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isDeleted, isDeleting]);
-
-  useEffect(() => {
-    handleGetClusters();
-  }, [dispatch, handleGetClusters]);
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setActiveTab(newValue);
@@ -128,6 +105,43 @@ const ClusterManagement: FunctionComponent = () => {
     dispatch(setSelectedCluster(undefined));
     closeCreateClusterFlow();
   }, [clusterCreationStep, dispatch, closeCreateClusterFlow]);
+
+  const handleOnCreateCluster = async () => {
+    if (managementCluster) {
+      await dispatch(getCluster(managementCluster)).unwrap();
+    }
+  };
+
+  const isPerformingClusterAction = useMemo(
+    () => (isDeleting && !isDeleted) || (isProvisioning && !isProvisioned),
+    [isDeleted, isDeleting, isProvisioned, isProvisioning],
+  );
+
+  useEffect(() => {
+    if (isPerformingClusterAction && managementCluster) {
+      interval.current = getClusterInterval({
+        clusterName: managementCluster?.clusterName,
+      });
+      handleGetClusters();
+    }
+
+    if (isDeleted || isProvisioned) {
+      clearInterval(interval.current);
+      handleGetClusters();
+    }
+
+    if (isError) {
+      clearInterval(interval.current);
+      handleGetClusters();
+    }
+
+    return () => clearInterval(interval.current);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isDeleted, isDeleting, isProvisioned, isProvisioning]);
+
+  useEffect(() => {
+    handleGetClusters();
+  }, [dispatch, handleGetClusters]);
 
   return (
     <Container>
@@ -198,6 +212,7 @@ const ClusterManagement: FunctionComponent = () => {
           onMenuClose={handleMenuClose}
           onClusterDelete={openDeleteModal}
           cluster={selectedCluster}
+          onSubmit={handleOnCreateCluster}
         />
       </Drawer>
       {selectedCluster && (

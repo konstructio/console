@@ -39,7 +39,7 @@ export interface ApiState {
 }
 
 export const initialState: ApiState = {
-  isProvisioning: true,
+  isProvisioning: false,
   isProvisioned: false,
   isError: false,
   lastErrorCondition: undefined,
@@ -99,7 +99,6 @@ const apiSlice = createSlice({
           cloudProvider,
           cloudRegion,
           domainName,
-          gitUser,
           adminEmail,
           nodeCount,
           gitAuth,
@@ -113,10 +112,9 @@ const apiSlice = createSlice({
           cloudRegion,
           gitProvider,
           domainName,
-          gitUser,
+          gitAuth,
           adminEmail,
           nodeCount,
-          gitAuth,
         };
 
         state.managementCluster.workloadClusters.push(draftCluster);
@@ -176,9 +174,12 @@ const apiSlice = createSlice({
       .addCase(createWorkloadCluster.rejected, (state) => {
         state.loading = false;
         state.isError = true;
+        state.isProvisioning = false;
       })
       .addCase(createWorkloadCluster.fulfilled, (state) => {
         state.loading = false;
+        state.isProvisioning = true;
+        state.isProvisioned = false;
       })
       .addCase(deleteCluster.pending, (state) => {
         state.isDeleting = true;
@@ -191,6 +192,21 @@ const apiSlice = createSlice({
         state.selectedCluster = payload;
         state.loading = false;
         state.status = payload.status;
+
+        // Workload Check status
+        if (payload.workloadClusters) {
+          const provisioningClusters = payload.workloadClusters.filter(
+            ({ status }) => status === ClusterStatus.PROVISIONING,
+          );
+
+          if (provisioningClusters.length) {
+            state.isProvisioning = true;
+          } else {
+            state.isProvisioned = true;
+          }
+
+          return;
+        }
 
         if (state.status === ClusterStatus.DELETED) {
           state.isDeleted = true;
@@ -209,6 +225,19 @@ const apiSlice = createSlice({
         state.loading = false;
         state.isError = false;
         state.managementCluster = payload;
+
+        // Workload Check status
+        if (payload.workloadClusters) {
+          const provisioningClusters = payload.workloadClusters.filter(
+            ({ status }) => status === ClusterStatus.PROVISIONING,
+          );
+
+          if (provisioningClusters.length) {
+            state.isProvisioning = true;
+          } else {
+            state.isProvisioned = true;
+          }
+        }
       })
       .addCase(getClusters.rejected, (state) => {
         state.loading = false;

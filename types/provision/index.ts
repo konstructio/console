@@ -47,8 +47,8 @@ export interface ClusterResponse {
   git_provider: string;
   git_user: string;
   workload_clusters: {
-    _id: string;
-    workload_cluster_name: string;
+    cluster_id: string;
+    cluster_name: string;
     cloud_region: string;
     instance_size: string;
     node_count: number;
@@ -106,7 +106,6 @@ export interface Cluster {
 }
 
 export interface ManagementCluster extends Cluster, Row {
-  gitToken?: string;
   status?: ClusterStatus;
   lastErrorCondition: string;
   workloadClusters: WorkloadCluster[];

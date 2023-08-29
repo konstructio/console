@@ -1,5 +1,5 @@
 import React, { type FunctionComponent, useEffect } from 'react';
-import ReactFlow, { NodeTypes, ReactFlowProvider, useReactFlow } from 'reactflow';
+import ReactFlow, { Controls, NodeTypes, ReactFlowProvider, useReactFlow } from 'reactflow';
 
 import { GraphNode } from '../graphNode';
 import { ClusterInfo } from '../../components/clusterTable/clusterTable';
@@ -11,7 +11,6 @@ import {
   selectNodeById,
   setEdges,
   setNodes,
-  unSelectNodes,
 } from '../../redux/slices/reactFlow.slice';
 import 'reactflow/dist/style.css';
 import { generateNodesConfig } from '../../utils/reactFlow';
@@ -75,5 +74,6 @@ const GraphView: FunctionComponent<GraphViewProps> = ({ onNodeClick }) => {
 export const Flow: FunctionComponent<GraphViewProps> = (props) => (
   <ReactFlowProvider>
     <GraphView {...props} />
+    <Controls />
   </ReactFlowProvider>
 );

@@ -17,7 +17,7 @@ import {
   ClusterType,
   NewClusterConfig,
 } from '../../../types/provision';
-import { createWorkloadCluster } from '../../../redux/thunks/api.thunk';
+import { createWorkloadCluster, getCluster } from '../../../redux/thunks/api.thunk';
 import { setClusterCreationStep } from '../../../redux/slices/api.slice';
 import { mockClusterConfig } from '../../../tests/mocks/mockClusterConfig';
 
@@ -31,15 +31,17 @@ const actionButtonText: Record<ClusterCreationStep, string> = {
 };
 
 interface CreateClusterFlowProps {
-  onMenuClose: () => void;
-  onClusterDelete: () => void;
   cluster?: Cluster;
+  onClusterDelete: () => void;
+  onMenuClose: () => void;
+  onSubmit: () => void;
 }
 
 export const CreateClusterFlow: FunctionComponent<CreateClusterFlowProps> = ({
   cluster,
-  onMenuClose,
   onClusterDelete,
+  onMenuClose,
+  onSubmit,
 }) => {
   const { clusterCreationStep, loading } = useAppSelector(({ api }) => api);
 
@@ -67,10 +69,13 @@ export const CreateClusterFlow: FunctionComponent<CreateClusterFlowProps> = ({
       if (clusterCreationStep !== ClusterCreationStep.DETAILS) {
         dispatch(createWorkloadCluster(config))
           .unwrap()
-          .then(() => dispatch(setClusterCreationStep(clusterCreationStep + 1)));
+          .then(() => {
+            onSubmit();
+            dispatch(setClusterCreationStep(clusterCreationStep + 1));
+          });
       }
     },
-    [clusterCreationStep, dispatch],
+    [clusterCreationStep, dispatch, onSubmit],
   );
 
   const showingClusterDetails = clusterCreationStep === ClusterCreationStep.DETAILS;

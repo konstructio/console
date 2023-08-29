@@ -21,8 +21,8 @@ export const mapClusterFromRaw = (cluster: ClusterResponse): ManagementCluster =
   nodeCount: 2,
   workloadClusters:
     cluster.workload_clusters?.map((item) => ({
-      id: item._id,
-      clusterName: item.workload_cluster_name,
+      id: item.cluster_id,
+      clusterName: item.cluster_name,
       cloudRegion: item.cloud_region,
       cloudProvider: cluster.cloud_provider,
       instanceSize: item.instance_size,

@@ -86,6 +86,7 @@ export const createWorkloadCluster = createAsyncThunk<
   }
 >('api/cluster/createWorkloadCluster', async (config, { dispatch, getState }) => {
   const { managementCluster } = getState().api;
+
   const res = await axios.post(`/api/proxy?target=ee`, {
     url: `/cluster/${managementCluster?.id}`,
     body: {
@@ -149,21 +150,29 @@ export const getClusters = createAsyncThunk<
     throw res.error;
   }
 
-  const [managementCluster] = res.data.map(mapClusterFromRaw);
+  const [managementCluster] = res.data
+    .filter(({ status }) => status === ClusterStatus.PROVISIONED)
+    .map(mapClusterFromRaw);
 
   return managementCluster;
 });
 
 export const deleteCluster = createAsyncThunk<
-  ManagementCluster,
-  ClusterRequestProps,
+  WorkloadCluster,
+  string,
   {
     dispatch: AppDispatch;
     state: RootState;
   }
->('api/cluster/delete', async ({ clusterName }) => {
+>('api/cluster/delete', async (workloadClusterId, { getState }) => {
+  const {
+    api: { managementCluster },
+  } = getState();
   const res = await axios.delete(
-    `/api/proxy?${createQueryString('url', `/cluster/${clusterName || 'kubefirst'}`)}`,
+    `/api/proxy?${createQueryString(
+      'url',
+      `/cluster/${managementCluster?.id || 'kubefirst'}/${workloadClusterId}`,
+    )}&target=ee`,
   );
 
   if ('error' in res) {
