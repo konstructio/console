@@ -65,8 +65,11 @@ const ClusterManagement: FunctionComponent = () => {
   const handleDeleteCluster = useCallback(async () => {
     if (selectedCluster) {
       await dispatch(deleteCluster(selectedCluster?.id)).unwrap();
-      handleGetClusters();
-      closeDeleteModal();
+
+      setTimeout(() => {
+        handleGetClusters();
+        closeDeleteModal();
+      }, 500);
     }
   }, [dispatch, selectedCluster, handleGetClusters, closeDeleteModal]);
 

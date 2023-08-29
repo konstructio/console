@@ -4,7 +4,7 @@ import { ManagementCluster, ClusterType, ClusterStatus } from '../../types/provi
 import { CustomGraphNode, GraphNodeInfo } from '../../components/graphNode';
 
 const WORKLOAD_CLUSTER_Y_SPACE = 60;
-const WORKLOAD_CLUSTER_X_SPACE = 140;
+const WORKLOAD_CLUSTER_X_SPACE = 250;
 const NODE_HEIGHT = 90;
 const NODE_WIDTH = 360;
 

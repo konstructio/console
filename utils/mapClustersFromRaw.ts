@@ -1,4 +1,4 @@
-import { ClusterResponse, ManagementCluster, ClusterType } from '../types/provision';
+import { ClusterResponse, ManagementCluster, ClusterType, ClusterStatus } from '../types/provision';
 
 export const mapClusterFromRaw = (cluster: ClusterResponse): ManagementCluster => ({
   id: cluster.cluster_id,
@@ -20,22 +20,24 @@ export const mapClusterFromRaw = (cluster: ClusterResponse): ManagementCluster =
   status: cluster.status,
   nodeCount: 2,
   workloadClusters:
-    cluster.workload_clusters?.map((item) => ({
-      id: item.cluster_id,
-      clusterName: item.cluster_name,
-      cloudRegion: item.cloud_region,
-      cloudProvider: cluster.cloud_provider,
-      instanceSize: item.instance_size,
-      nodeCount: item.node_count,
-      environment: item.environment,
-      status: item.status,
-      type: ClusterType.WORKLOAD,
-      domainName: cluster.domain_name,
-      gitProvider: cluster.git_provider,
-      gitUser: cluster.git_user,
-      adminEmail: cluster.alerts_email,
-      gitAuth: { gitOwner: cluster.git_auth.git_owner, gitToken: cluster.git_auth.git_token },
-    })) || [],
+    cluster.workload_clusters
+      ?.filter(({ status }) => ![ClusterStatus.DELETED, ClusterStatus.DELETING].includes(status))
+      .map((item) => ({
+        id: item.cluster_id,
+        clusterName: item.cluster_name,
+        cloudRegion: item.cloud_region,
+        cloudProvider: cluster.cloud_provider,
+        instanceSize: item.instance_size,
+        nodeCount: item.node_count,
+        environment: item.environment,
+        status: item.status,
+        type: ClusterType.WORKLOAD,
+        domainName: cluster.domain_name,
+        gitProvider: cluster.git_provider,
+        gitUser: cluster.git_user,
+        adminEmail: cluster.alerts_email,
+        gitAuth: { gitOwner: cluster.git_auth.git_owner, gitToken: cluster.git_auth.git_token },
+      })) || [],
   vaultAuth: {
     kbotPassword: cluster.vault_auth?.kbot_password,
   },

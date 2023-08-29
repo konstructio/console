@@ -181,8 +181,9 @@ const apiSlice = createSlice({
         state.isProvisioning = true;
         state.isProvisioned = false;
       })
-      .addCase(deleteCluster.pending, (state) => {
+      .addCase(deleteCluster.fulfilled, (state) => {
         state.isDeleting = true;
+        state.isDeleted = false;
       })
       .addCase(deleteCluster.rejected, (state) => {
         state.isDeleting = false;
