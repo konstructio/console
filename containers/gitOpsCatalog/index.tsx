@@ -48,7 +48,7 @@ const gitOpsCatalog: FunctionComponent = () => {
   );
 
   const gitOpsCatalogApps = useAppSelector(({ cluster }) =>
-    cluster.gitOpsCatalogApps?.filter(
+    cluster.gitOpsCatalogApps.filter(
       (app) => !cluster.clusterServices.map((s) => s.name).includes(app.name),
     ),
   );
@@ -120,14 +120,17 @@ const gitOpsCatalog: FunctionComponent = () => {
   };
 
   const filteredApps = useMemo(() => {
+    let apps: GitOpsCatalogApp[] = [];
+
     if (!selectedCategories.length) {
-      return gitOpsCatalogApps;
+      apps = gitOpsCatalogApps;
+    } else {
+      apps = gitOpsCatalogApps.filter(
+        ({ category }) => category && selectedCategories.includes(category),
+      );
     }
 
-    return (
-      gitOpsCatalogApps &&
-      gitOpsCatalogApps.filter(({ category }) => category && selectedCategories.includes(category))
-    );
+    return sortBy(apps, (app) => app.display_name);
   }, [gitOpsCatalogApps, selectedCategories]);
 
   return (
