@@ -10,10 +10,13 @@ import {
   getClusters,
 } from '../thunks/api.thunk';
 import {
-  Cluster,
+  ManagementCluster,
   ClusterCreationStep,
   ClusterStatus,
+  ClusterType,
   NewClusterConfig,
+  WorkloadCluster,
+  Cluster,
 } from '../../types/provision';
 
 export interface ApiState {
@@ -25,8 +28,7 @@ export interface ApiState {
   status?: ClusterStatus;
   isError: boolean;
   lastErrorCondition?: string;
-  managementCluster?: Cluster;
-  workloadClusters: Cluster[];
+  managementCluster?: ManagementCluster;
   selectedCluster?: Cluster;
   completedSteps: Array<{ label: string; order: number }>;
   cloudDomains: Array<string>;
@@ -45,7 +47,6 @@ export const initialState: ApiState = {
   isDeleted: false,
   status: undefined,
   loading: false,
-  workloadClusters: [],
   selectedCluster: undefined,
   completedSteps: [],
   cloudDomains: [],
@@ -58,6 +59,9 @@ const apiSlice = createSlice({
   name: 'api',
   initialState,
   reducers: {
+    setSelectedCluster: (state, { payload }: PayloadAction<ApiState['selectedCluster']>) => {
+      state.selectedCluster = payload;
+    },
     setCompletedSteps: (state, action) => {
       state.completedSteps = action.payload;
     },
@@ -71,7 +75,6 @@ const apiSlice = createSlice({
       state.status = undefined;
       state.loading = false;
       state.managementCluster = undefined;
-      state.workloadClusters = [];
       state.completedSteps = [];
       state.cloudDomains = [];
       state.cloudRegions = [];
@@ -88,6 +91,68 @@ const apiSlice = createSlice({
     },
     setClusterConfig: (state, { payload }: PayloadAction<NewClusterConfig>) => {
       state.clusterConfig = payload;
+    },
+    createDraftCluster: (state) => {
+      if (state.managementCluster) {
+        const {
+          gitProvider,
+          cloudProvider,
+          cloudRegion,
+          domainName,
+          gitUser,
+          adminEmail,
+          nodeCount,
+          gitAuth,
+        } = state.managementCluster;
+
+        const draftCluster: WorkloadCluster = {
+          id: 'draft',
+          clusterName: '',
+          type: ClusterType.DRAFT,
+          cloudProvider,
+          cloudRegion,
+          gitProvider,
+          domainName,
+          gitUser,
+          adminEmail,
+          nodeCount,
+          gitAuth,
+        };
+
+        state.managementCluster.workloadClusters.push(draftCluster);
+        state.selectedCluster = draftCluster;
+      }
+    },
+    removeDraftCluster: (state) => {
+      if (state.managementCluster) {
+        state.managementCluster.workloadClusters = state.managementCluster.workloadClusters.filter(
+          (cluster) => cluster.type !== ClusterType.DRAFT,
+        );
+      }
+    },
+    updateDraftCluster: (state, { payload }: PayloadAction<WorkloadCluster>) => {
+      if (state.managementCluster) {
+        const workloadClusterToUpdate = state.managementCluster.workloadClusters.find(
+          (cluster) => cluster.type === ClusterType.DRAFT,
+        );
+
+        if (workloadClusterToUpdate) {
+          const updatedCluster: WorkloadCluster = {
+            ...workloadClusterToUpdate,
+            ...payload,
+          };
+          state.managementCluster.workloadClusters = state.managementCluster.workloadClusters.map(
+            (cluster) => {
+              if (cluster.type === ClusterType.DRAFT) {
+                cluster = updatedCluster;
+              }
+              return cluster;
+            },
+          );
+
+          state.selectedCluster = updatedCluster;
+        }
+      }
     },
   },
   extraReducers: (builder) => {
@@ -122,7 +187,7 @@ const apiSlice = createSlice({
         state.isDeleting = false;
         state.isError = true;
       })
-      .addCase(getCluster.fulfilled, (state, { payload }: PayloadAction<Cluster>) => {
+      .addCase(getCluster.fulfilled, (state, { payload }: PayloadAction<ManagementCluster>) => {
         state.selectedCluster = payload;
         state.loading = false;
         state.status = payload.status;
@@ -143,14 +208,12 @@ const apiSlice = createSlice({
       .addCase(getClusters.fulfilled, (state, { payload }) => {
         state.loading = false;
         state.isError = false;
-        state.managementCluster = payload.managementCluster;
-        state.workloadClusters = payload.workloadClusters;
+        state.managementCluster = payload;
       })
       .addCase(getClusters.rejected, (state) => {
         state.loading = false;
         state.isError = true;
         state.managementCluster = undefined;
-        state.workloadClusters = [];
       })
       .addCase(getCloudDomains.fulfilled, (state, { payload }: PayloadAction<Array<string>>) => {
         state.cloudDomains = payload;
@@ -172,6 +235,10 @@ export const {
   clearDomains,
   setClusterCreationStep,
   setClusterConfig,
+  createDraftCluster,
+  removeDraftCluster,
+  updateDraftCluster,
+  setSelectedCluster,
 } = apiSlice.actions;
 
 export const apiReducer = apiSlice.reducer;

@@ -7,13 +7,16 @@ import Typography from '../../../components/typography';
 import Button from '../../../components/button';
 import { SALTBOX_BLUE } from '../../../constants/colors';
 import Column from '../../../components/column';
-import LinearProgress from '../../../components/linearProgress';
 import ClusterCreationForm from '../../../containers/clusterForms/clusterCreation';
-import TerminalLogs from '../../../containers/terminalLogs';
 import ClusterDetails from '../../../components/clusterDetails';
-import { ClusterInfo } from '../../../components/clusterTable/clusterTable';
 import { useAppDispatch, useAppSelector } from '../../../redux/store';
-import { ClusterCreationStep, NewClusterConfig } from '../../../types/provision';
+import {
+  Cluster,
+  ClusterCreationStep,
+  ClusterStatus,
+  ClusterType,
+  NewClusterConfig,
+} from '../../../types/provision';
 import { createWorkloadCluster } from '../../../redux/thunks/api.thunk';
 import { setClusterCreationStep } from '../../../redux/slices/api.slice';
 import { mockClusterConfig } from '../../../tests/mocks/mockClusterConfig';
@@ -24,14 +27,13 @@ const isDevelopment = process.env.NEXT_PUBLIC_NODE_ENV === 'development';
 
 const actionButtonText: Record<ClusterCreationStep, string> = {
   [ClusterCreationStep.CONFIG]: 'Create cluster',
-  [ClusterCreationStep.PROVISION]: 'View cluster details',
   [ClusterCreationStep.DETAILS]: 'Delete Cluster',
 };
 
 interface CreateClusterFlowProps {
   onMenuClose: () => void;
   onClusterDelete: () => void;
-  cluster?: ClusterInfo;
+  cluster?: Cluster;
 }
 
 export const CreateClusterFlow: FunctionComponent<CreateClusterFlowProps> = ({
@@ -48,8 +50,7 @@ export const CreateClusterFlow: FunctionComponent<CreateClusterFlowProps> = ({
   });
 
   const handleMenuClose = useCallback(() => {
-    // if provisioning, keep menu on provisioning step
-    if (clusterCreationStep !== ClusterCreationStep.PROVISION) {
+    if (clusterCreationStep !== ClusterCreationStep.DETAILS) {
       dispatch(setClusterCreationStep(ClusterCreationStep.CONFIG));
     }
     onMenuClose();
@@ -58,10 +59,8 @@ export const CreateClusterFlow: FunctionComponent<CreateClusterFlowProps> = ({
   const handleClick = useCallback(() => {
     if (clusterCreationStep === ClusterCreationStep.DETAILS) {
       onClusterDelete();
-    } else if (clusterCreationStep === ClusterCreationStep.PROVISION) {
-      dispatch(setClusterCreationStep(clusterCreationStep + 1));
     }
-  }, [onClusterDelete, dispatch, clusterCreationStep]);
+  }, [onClusterDelete, clusterCreationStep]);
 
   const handleSubmit = useCallback(
     (config: NewClusterConfig) => {
@@ -80,6 +79,11 @@ export const CreateClusterFlow: FunctionComponent<CreateClusterFlowProps> = ({
     formState: { isValid },
   } = methods;
 
+  const submitButtonDisabled =
+    !isValid ||
+    loading ||
+    (cluster?.type !== ClusterType.DRAFT && cluster?.status === ClusterStatus.PROVISIONING);
+
   return (
     <FormProvider {...methods}>
       <Form onSubmit={methods.handleSubmit(handleSubmit)}>
@@ -95,12 +99,6 @@ export const CreateClusterFlow: FunctionComponent<CreateClusterFlowProps> = ({
           {clusterCreationStep === ClusterCreationStep.CONFIG && (
             <ClusterCreationForm style={{ flex: 1, margin: '32px 0' }} />
           )}
-          {clusterCreationStep === ClusterCreationStep.PROVISION && (
-            <Column style={{ gap: '32px' }}>
-              <LinearProgress progress={80} />
-              <TerminalLogs />
-            </Column>
-          )}
           {clusterCreationStep === ClusterCreationStep.DETAILS && cluster && (
             <ClusterDetails cluster={cluster} style={{ marginTop: '24px' }} />
           )}
@@ -113,7 +111,7 @@ export const CreateClusterFlow: FunctionComponent<CreateClusterFlowProps> = ({
             variant="contained"
             color={showingClusterDetails ? 'error' : 'primary'}
             onClick={handleClick}
-            disabled={!isValid || loading}
+            disabled={submitButtonDisabled}
             type="submit"
           >
             {loading && <CircularProgress size={20} sx={{ mr: '8px' }} />}

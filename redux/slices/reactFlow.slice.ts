@@ -10,8 +10,8 @@ import {
 } from 'reactflow';
 
 import { CustomGraphNode } from '../../components/graphNode';
-import { ClusterType } from '../../types/provision';
-import { generateEdge, generateNode } from '../../utils/reactFlow';
+
+import { setSelectedCluster } from './api.slice';
 
 export interface ReactFlowState {
   nodes: CustomGraphNode[];
@@ -48,42 +48,22 @@ const reactFlowSlice = createSlice({
     onConnect: (state, { payload }: PayloadAction<Connection>) => {
       state.edges = addEdge(payload, state.edges);
     },
-    generateDraftNode: (state) => {
-      const managementNode = state.nodes.find((node) => node.data.type === ClusterType.MANAGEMENT);
-      // last node position
-      const { position } = state.nodes[state.nodes.length - 1];
-
-      if (managementNode) {
-        const {
-          id,
-          data: { cloudProvider },
-        } = managementNode;
-
-        const draftNode = generateNode(
-          'draft',
-          { ...position, y: position.y + 200 },
-          { cloudProvider },
-          true,
-        );
-
-        const draftEdge = generateEdge('edge-draft', id, draftNode.id, true);
-
-        state.nodes = [...state.nodes, draftNode];
-        state.edges = addEdge(draftEdge, state.edges);
+    selectNodeById: (state, { payload }: PayloadAction<string>) => {
+      const selectedNode = state.nodes.find((node) => node.id === payload);
+      if (selectedNode) {
+        selectedNode.selected = true;
       }
-    },
-    removeDraftNode: (state) => {
-      state.edges = state.edges.filter((edge) => !edge.id.includes('draft'));
-      state.nodes = state.nodes.filter((node) => node.id !== 'draft');
     },
     unSelectNodes: (state) => {
       state.nodes = state.nodes.map((node) => ({ ...node, selected: false }));
     },
-    setDraftNodeActive: (state) => {
-      state.nodes = state.nodes.map((node) =>
-        node.id === 'draft' ? { ...node, selected: true } : node,
-      );
-    },
+  },
+  extraReducers: (builder) => {
+    builder.addCase(setSelectedCluster, (state, { payload }) => {
+      if (!payload) {
+        state.nodes = state.nodes.map((node) => ({ ...node, selected: false }));
+      }
+    });
   },
 });
 
@@ -95,10 +75,8 @@ export const {
   onNodesChange,
   onEdgesChange,
   onConnect,
-  generateDraftNode,
-  removeDraftNode,
+  selectNodeById,
   unSelectNodes,
-  setDraftNodeActive,
 } = reactFlowSlice.actions;
 
 export const reactFlowReducer = reactFlowSlice.reducer;

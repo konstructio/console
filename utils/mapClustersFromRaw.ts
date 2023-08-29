@@ -1,6 +1,6 @@
-import { ClusterResponse, Cluster } from '../types/provision';
+import { ClusterResponse, ManagementCluster, ClusterType } from '../types/provision';
 
-export const mapClusterFromRaw = (cluster: ClusterResponse): Cluster => ({
+export const mapClusterFromRaw = (cluster: ClusterResponse): ManagementCluster => ({
   id: cluster._id,
   clusterName: cluster.cluster_name,
   adminEmail: cluster.alerts_email,
@@ -14,6 +14,24 @@ export const mapClusterFromRaw = (cluster: ClusterResponse): Cluster => ({
   creationDate: cluster.creation_timestamp,
   lastErrorCondition: cluster.last_condition,
   status: cluster.status,
+  nodeCount: 2,
+  workloadClusters: cluster.workload_clusters.map((item) => ({
+    id: item._id,
+    clusterName: item.workload_cluster_name,
+    cloudRegion: item.cloud_region,
+    cloudProvider: cluster.cloud_provider,
+    instanceSize: item.instance_size,
+    nodeCount: item.node_count,
+    environment: item.environment,
+    status: item.status,
+    type: ClusterType.WORKLOAD,
+    domainName: cluster.domain_name,
+    gitProvider: cluster.git_provider,
+    gitUser: cluster.git_user,
+    adminEmail: cluster.alerts_email,
+    gitOwner: cluster.gitAuth.gitOwner,
+    gitAuth: cluster.gitAuth,
+  })),
   vaultAuth: {
     kbotPassword: cluster.vault_auth?.kbot_password,
   },
