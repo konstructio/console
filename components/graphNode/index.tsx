@@ -43,6 +43,11 @@ const GRAPH_NODE_CONFIG: Record<
     position: Position.Left,
     nodeColor: SASSY_PINK,
   },
+  [ClusterType.WORKLOAD_V_CLUSTER]: {
+    handle: 'target',
+    position: Position.Left,
+    nodeColor: SASSY_PINK,
+  },
 };
 
 export type GraphNodeInfo = Pick<
