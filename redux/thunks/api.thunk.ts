@@ -9,7 +9,7 @@ import {
   ManagementCluster,
   ClusterRequestProps,
   ClusterServices,
-  NewClusterConfig,
+  NewWorkloadClusterConfig,
   ClusterType,
   ClusterStatus,
   WorkloadCluster,
@@ -79,7 +79,7 @@ export const createCluster = createAsyncThunk<
 
 export const createWorkloadCluster = createAsyncThunk<
   { status: number },
-  NewClusterConfig,
+  NewWorkloadClusterConfig,
   {
     dispatch: AppDispatch;
     state: RootState;
@@ -95,7 +95,7 @@ export const createWorkloadCluster = createAsyncThunk<
       instance_size: config.instanceSize,
       node_count: config.nodeCount,
       environment: config.environment,
-      cluster_type: 'workload-cluster',
+      cluster_type: config.type,
     },
   });
 
@@ -110,6 +110,10 @@ export const createWorkloadCluster = createAsyncThunk<
       type: ClusterType.WORKLOAD,
       status: ClusterStatus.PROVISIONING,
       cloudProvider: managementCluster.cloudProvider,
+      adminEmail: managementCluster.adminEmail,
+      domainName: managementCluster.domainName,
+      gitProvider: managementCluster.gitProvider,
+      gitAuth: managementCluster.gitAuth,
     };
     dispatch(updateDraftCluster(updatedCluster));
     dispatch(getCluster(managementCluster));
