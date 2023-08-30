@@ -9,6 +9,7 @@ export interface ControlledTextFieldProps<T extends FieldValues> extends UseCont
   required?: boolean;
   control: Control<T>;
   numberInputProps?: NumberInputProps['inputProps'];
+  style?: React.CSSProperties;
 }
 
 function ControlledNumberInput<T extends FieldValues>({

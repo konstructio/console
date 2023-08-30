@@ -30,10 +30,6 @@ export const Container = styled(Column)`
   width: 100%;
 `;
 
-export const NumberInput = styled(ControlledNumberInput)`
-  width: 136px;
-`;
-
 export const StyledButton = styled(Button)`
   width: 163px;
   margin-top: -8px;

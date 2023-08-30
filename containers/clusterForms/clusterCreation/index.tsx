@@ -10,9 +10,10 @@ import ControlledSelect from '../../../components/controlledFields/Select';
 import Typography from '../../../components/typography';
 import { NewClusterConfig } from '../../../types/provision';
 import { EXCLUSIVE_PLUM } from '../../../constants/colors';
+import ControlledNumberInput from '../../../components/controlledFields/numberInput';
 
 import AdvancedOptions from './advancedOptions';
-import { AdvancedOptionsButton, Container, NumberInput } from './clusterCreation.styled';
+import { AdvancedOptionsButton, Container } from './clusterCreation.styled';
 
 const minNodeCount = 3;
 
@@ -88,11 +89,12 @@ const ClusterCreationForm: FunctionComponent<ComponentPropsWithoutRef<'div'>> = 
           },
         ]}
       />
-      <NumberInput
+      <ControlledNumberInput
         label="Number of nodes"
         control={control}
         name="nodeCount"
         numberInputProps={{ min: minNodeCount }}
+        style={{ width: '136px' }}
       />
       <AdvancedOptionsButton onClick={() => setShowOptions(!showOptions)} expanded={showOptions}>
         <KeyboardArrowDownIcon style={{ color: EXCLUSIVE_PLUM }} />
