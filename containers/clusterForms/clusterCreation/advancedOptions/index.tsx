@@ -8,8 +8,11 @@ import ControlledTextField from '../../../../components/controlledFields/TextFie
 import ControlledAutocomplete from '../../../../components/controlledFields/AutoComplete';
 import ControlledRadioGroup from '../../../../components/controlledFields/radio/';
 import { useAppSelector } from '../../../../redux/store';
-import { InstallValues } from '../../../../types/redux';
-import { ImageRepository } from '../../../../types/provision';
+import {
+  ClusterType,
+  ImageRepository,
+  NewWorkloadClusterConfig,
+} from '../../../../types/provision';
 import { EXCLUSIVE_PLUM } from '../../../../constants/colors';
 
 import { InputContainer } from './advancedOptions.styled';
@@ -17,9 +20,11 @@ import { InputContainer } from './advancedOptions.styled';
 const AdvancedOptions: FunctionComponent = () => {
   const [isCloudFlareSelected, setIsCloudFlareSelected] = useState<boolean>(false);
 
-  const { values, installType } = useAppSelector(({ installation }) => installation);
+  const { installType } = useAppSelector(({ installation }) => installation);
 
-  const { control } = useFormContext<InstallValues>();
+  const { control, getValues } = useFormContext<NewWorkloadClusterConfig>();
+
+  const { gitopsTemplateUrl, gitopsTemplateBranch, imageRepository, type } = getValues();
 
   return (
     <>
@@ -34,7 +39,7 @@ const AdvancedOptions: FunctionComponent = () => {
         control={control}
         name="gitopsTemplateUrl"
         label="GitOps template override"
-        defaultValue={values?.gitopsTemplateUrl}
+        defaultValue={gitopsTemplateUrl}
         rules={{
           required: false,
         }}
@@ -43,7 +48,7 @@ const AdvancedOptions: FunctionComponent = () => {
         control={control}
         name="gitopsTemplateBranch"
         label="GitOps template branch"
-        defaultValue={values?.gitopsTemplateBranch}
+        defaultValue={gitopsTemplateBranch}
         rules={{
           required: false,
         }}
@@ -81,7 +86,7 @@ const AdvancedOptions: FunctionComponent = () => {
           name="cloudflareToken"
           label="Cloudflare API key"
           required
-          defaultValue={values?.gitopsTemplateBranch}
+          defaultValue={gitopsTemplateBranch}
           rules={{
             required: true,
           }}
@@ -101,6 +106,24 @@ const AdvancedOptions: FunctionComponent = () => {
             { label: 'Github Container Registry', value: ImageRepository.GIT },
             { label: 'AWS Elastic Container Registry (ECR)', value: ImageRepository.ECR },
           ]}
+          defaultValue={imageRepository}
+        />
+      </InputContainer>
+      <InputContainer>
+        <Typography variant="labelLarge" color={EXCLUSIVE_PLUM}>
+          Cluster type
+        </Typography>
+        <ControlledRadioGroup
+          control={control}
+          name="type"
+          rules={{
+            required: false,
+          }}
+          options={[
+            { label: 'Workload cluster', value: ClusterType.WORKLOAD },
+            { label: 'Workload v cluster', value: ClusterType.WORKLOAD_V_CLUSTER },
+          ]}
+          defaultValue={type}
         />
       </InputContainer>
     </>

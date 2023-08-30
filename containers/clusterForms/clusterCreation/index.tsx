@@ -8,7 +8,7 @@ import { useAppDispatch, useAppSelector } from '../../../redux/store';
 import { getCloudDomains } from '../../../redux/thunks/api.thunk';
 import ControlledSelect from '../../../components/controlledFields/Select';
 import Typography from '../../../components/typography';
-import { NewClusterConfig } from '../../../types/provision';
+import { NewWorkloadClusterConfig } from '../../../types/provision';
 import { EXCLUSIVE_PLUM } from '../../../constants/colors';
 import ControlledNumberInput from '../../../components/controlledFields/numberInput';
 
@@ -22,7 +22,7 @@ const ClusterCreationForm: FunctionComponent<ComponentPropsWithoutRef<'div'>> = 
 
   const dispatch = useAppDispatch();
 
-  const { cloudDomains, cloudRegions, values } = useAppSelector(({ api, installation }) => ({
+  const { cloudDomains, cloudRegions } = useAppSelector(({ api, installation }) => ({
     cloudDomains: api.cloudDomains,
     cloudRegions: api.cloudRegions,
     values: installation.values,
@@ -41,14 +41,16 @@ const ClusterCreationForm: FunctionComponent<ComponentPropsWithoutRef<'div'>> = 
     });
   };
 
-  const { control } = useFormContext<NewClusterConfig>();
+  const { control, getValues } = useFormContext<NewWorkloadClusterConfig>();
+
+  const { clusterName, cloudRegion, instanceSize, nodeCount } = getValues();
 
   return (
     <Container {...props}>
       <ControlledTextField
         control={control}
         name="clusterName"
-        defaultValue={values?.clusterName}
+        defaultValue={clusterName}
         label="Cluster name"
         rules={{
           maxLength: 25,
@@ -70,7 +72,7 @@ const ClusterCreationForm: FunctionComponent<ComponentPropsWithoutRef<'div'>> = 
         control={control}
         name="cloudRegion"
         label="Cloud region"
-        defaultValue={values?.cloudRegion}
+        defaultValue={cloudRegion}
         required
         rules={{ required: true }}
         // options={cloudRegions && cloudRegions.map((region) => ({ label: region, value: region }))}
@@ -88,6 +90,7 @@ const ClusterCreationForm: FunctionComponent<ComponentPropsWithoutRef<'div'>> = 
             label: '8 CPU Cores / 64 GB RAM / 120 GB NvME storage / 8 TB Data Transfer',
           },
         ]}
+        defaultValue={instanceSize}
       />
       <ControlledNumberInput
         label="Number of nodes"
@@ -95,6 +98,7 @@ const ClusterCreationForm: FunctionComponent<ComponentPropsWithoutRef<'div'>> = 
         name="nodeCount"
         numberInputProps={{ min: minNodeCount }}
         style={{ width: '136px' }}
+        defaultValue={nodeCount}
       />
       <AdvancedOptionsButton onClick={() => setShowOptions(!showOptions)} expanded={showOptions}>
         <KeyboardArrowDownIcon style={{ color: EXCLUSIVE_PLUM }} />
