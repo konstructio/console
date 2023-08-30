@@ -3,7 +3,7 @@ import { Meta, StoryObj } from '@storybook/react';
 import { action } from '@storybook/addon-actions';
 import { FormProvider, useForm } from 'react-hook-form';
 
-import { NewClusterConfig } from '../../../types/provision';
+import { NewWorkloadClusterConfig } from '../../../types/provision';
 
 import ClusterCreationForm from '.';
 
@@ -15,7 +15,7 @@ const meta: Meta<typeof ClusterCreationForm> = {
 export default meta;
 
 const ClusterCreationFormWithHooks = () => {
-  const methods = useForm<NewClusterConfig>();
+  const methods = useForm<NewWorkloadClusterConfig>();
 
   return (
     <FormProvider {...methods}>

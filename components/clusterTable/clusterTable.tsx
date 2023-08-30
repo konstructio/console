@@ -19,12 +19,7 @@ import digitalOceanLogo from '../../assets/digital_ocean_logo.svg';
 import vultrLogo from '../../assets/vultr_logo.svg';
 import { CLUSTER_TAG_CONFIG } from '../../constants';
 import { DODGER_BLUE, FIRE_BRICK } from '../../constants/colors';
-import {
-  ManagementCluster,
-  ClusterStatus,
-  ClusterType,
-  WorkloadCluster,
-} from '../../types/provision';
+import { ManagementCluster, ClusterStatus, ClusterType, Cluster } from '../../types/provision';
 import { InstallationType } from '../../types/redux';
 import Typography from '../../components/typography';
 import { useOnClickOutside } from '../../hooks/useOnClickOutside';
@@ -53,10 +48,10 @@ const CLOUD_LOGO_OPTIONS: Record<InstallationType, any> = {
   [InstallationType.VULTR]: vultrLogo,
 };
 
-type ClusterRowProps = WorkloadCluster & {
+type ClusterRowProps = Cluster & {
   expanded?: boolean;
   onExpanseClick?: () => void;
-  onMenuOpenClose: (selectedCluster?: WorkloadCluster) => void;
+  onMenuOpenClose: (selectedCluster?: Cluster) => void;
   onDeleteCluster: () => void;
 };
 
@@ -167,7 +162,7 @@ const ClusterRow: FunctionComponent<ClusterRowProps> = ({
 interface ClusterTableProps extends ComponentPropsWithoutRef<'div'> {
   managementCluster: ManagementCluster;
   onDeleteCluster: () => void;
-  onMenuOpenClose: (selectedCluster?: WorkloadCluster) => void;
+  onMenuOpenClose: (selectedCluster?: Cluster) => void;
 }
 
 export const ClusterTable: FunctionComponent<ClusterTableProps> = ({

@@ -14,7 +14,7 @@ import {
   ClusterCreationStep,
   ClusterStatus,
   ClusterType,
-  NewClusterConfig,
+  NewWorkloadClusterConfig,
   WorkloadCluster,
   Cluster,
 } from '../../types/provision';
@@ -35,7 +35,7 @@ export interface ApiState {
   cloudRegions: Array<string>;
   isAuthenticationValid?: boolean;
   clusterCreationStep: ClusterCreationStep;
-  clusterConfig?: NewClusterConfig;
+  clusterConfig?: NewWorkloadClusterConfig;
 }
 
 export const initialState: ApiState = {
@@ -89,7 +89,7 @@ const apiSlice = createSlice({
     setClusterCreationStep: (state, { payload }: PayloadAction<ClusterCreationStep>) => {
       state.clusterCreationStep = payload;
     },
-    setClusterConfig: (state, { payload }: PayloadAction<NewClusterConfig>) => {
+    setClusterConfig: (state, { payload }: PayloadAction<NewWorkloadClusterConfig>) => {
       state.clusterConfig = payload;
     },
     createDraftCluster: (state) => {
@@ -114,7 +114,7 @@ const apiSlice = createSlice({
           domainName,
           gitAuth,
           adminEmail,
-          nodeCount,
+          nodeCount: nodeCount ?? 0,
         };
 
         state.managementCluster.workloadClusters.push(draftCluster);
