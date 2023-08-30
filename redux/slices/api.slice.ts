@@ -94,27 +94,18 @@ const apiSlice = createSlice({
     },
     createDraftCluster: (state) => {
       if (state.managementCluster) {
-        const {
-          gitProvider,
-          cloudProvider,
-          cloudRegion,
-          domainName,
-          adminEmail,
-          nodeCount,
-          gitAuth,
-        } = state.managementCluster;
+        const { gitProvider, cloudProvider, domainName, adminEmail, gitAuth } =
+          state.managementCluster;
 
         const draftCluster: WorkloadCluster = {
           id: 'draft',
           clusterName: '',
           type: ClusterType.DRAFT,
           cloudProvider,
-          cloudRegion,
           gitProvider,
           domainName,
           gitAuth,
           adminEmail,
-          nodeCount: nodeCount ?? 0,
         };
 
         state.managementCluster.workloadClusters.push(draftCluster);

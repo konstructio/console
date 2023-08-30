@@ -141,7 +141,6 @@ export interface ManagementCluster extends Cluster, Row {
 
 export interface WorkloadCluster extends Cluster {
   environment?: string;
-  nodeCount: number;
 }
 
 export interface ClusterServices {

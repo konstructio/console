@@ -2,7 +2,6 @@ import React, { type FunctionComponent, useEffect } from 'react';
 import ReactFlow, { Controls, NodeTypes, ReactFlowProvider, useReactFlow } from 'reactflow';
 
 import { GraphNode } from '../graphNode';
-import { ClusterInfo } from '../../components/clusterTable/clusterTable';
 import { useAppDispatch, useAppSelector } from '../../redux/store';
 import {
   onConnect,
@@ -14,13 +13,14 @@ import {
 } from '../../redux/slices/reactFlow.slice';
 import 'reactflow/dist/style.css';
 import { generateNodesConfig } from '../../utils/reactFlow';
+import { Cluster } from '../../types/provision';
 
 const nodeTypes: NodeTypes = {
   custom: GraphNode,
 };
 
 interface GraphViewProps {
-  onNodeClick: (clusterInfo: ClusterInfo) => void;
+  onNodeClick: (cluster: Cluster) => void;
 }
 
 const GraphView: FunctionComponent<GraphViewProps> = ({ onNodeClick }) => {
@@ -45,7 +45,7 @@ const GraphView: FunctionComponent<GraphViewProps> = ({ onNodeClick }) => {
         });
       }
     } else {
-      fitView({ duration: 500, padding: 0.2 });
+      window.requestAnimationFrame(() => fitView({ duration: 500, padding: 0.2 }));
     }
   }, [selectedCluster, nodes, setCenter, fitView, dispatch]);
 

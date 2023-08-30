@@ -6,8 +6,7 @@ import workloadClusterIcon from '../../assets/cluster.svg';
 import unavailableClusterSrc from '../../assets/cluster-unavailable.svg';
 import { BLUE_REFLECTION, MAGIC_MINT, SASSY_PINK } from '../../constants/colors';
 import { CLUSTER_TAG_CONFIG } from '../../constants';
-import { ClusterStatus, ClusterType } from '../../types/provision';
-import { ClusterInfo } from '../clusterTable/clusterTable';
+import { Cluster, ClusterStatus, ClusterType } from '../../types/provision';
 
 import {
   Container,
@@ -50,21 +49,16 @@ const GRAPH_NODE_CONFIG: Record<
   },
 };
 
-export type GraphNodeInfo = Pick<
-  ClusterInfo,
-  'status' | 'type' | 'clusterName' | 'cloudProvider' | 'cloudRegion' | 'nodes'
->;
+export type CustomGraphNode = Node<Partial<Cluster>>;
 
-export type CustomGraphNode = Node<Partial<GraphNodeInfo>>;
-
-export const GraphNode: FunctionComponent<NodeProps<GraphNodeInfo>> = ({
+export const GraphNode: FunctionComponent<NodeProps<Cluster>> = ({
   data,
   isConnectable,
   selected,
 }) => {
-  const { status, type, clusterName, cloudProvider, cloudRegion, nodes } = data ?? {};
+  const { status, type, clusterName, cloudProvider, cloudRegion, nodeCount } = data ?? {};
 
-  const { iconLabel, iconType, bgColor } = CLUSTER_TAG_CONFIG[status ?? 'draft'];
+  const { iconLabel, iconType, bgColor } = CLUSTER_TAG_CONFIG[status ?? ClusterType.DRAFT];
   const { handle, position } = GRAPH_NODE_CONFIG[type ?? ClusterType.DRAFT];
 
   const { nodeColor, imageSrc } = useMemo(
@@ -94,7 +88,7 @@ export const GraphNode: FunctionComponent<NodeProps<GraphNodeInfo>> = ({
         <StyledTag text={iconLabel} bgColor={bgColor} icon={iconType} />
         <NodeLabelContainer>
           <Label>NODE COUNT:</Label>
-          {nodes && <p>{nodes}</p>}
+          {nodeCount && <p>{nodeCount}</p>}
         </NodeLabelContainer>
       </OtherContainerInfo>
       <NodeHandle
