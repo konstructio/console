@@ -190,7 +190,6 @@ const apiSlice = createSlice({
         state.isError = true;
       })
       .addCase(getCluster.fulfilled, (state, { payload }: PayloadAction<ManagementCluster>) => {
-        state.selectedCluster = payload;
         state.loading = false;
         state.status = payload.status;
 

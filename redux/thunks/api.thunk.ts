@@ -112,6 +112,7 @@ export const createWorkloadCluster = createAsyncThunk<
       cloudProvider: managementCluster.cloudProvider,
     };
     dispatch(updateDraftCluster(updatedCluster));
+    dispatch(getCluster(managementCluster));
   }
   return res;
 });

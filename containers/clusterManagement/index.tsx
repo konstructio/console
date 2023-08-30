@@ -109,12 +109,6 @@ const ClusterManagement: FunctionComponent = () => {
     closeCreateClusterFlow();
   }, [clusterCreationStep, dispatch, closeCreateClusterFlow]);
 
-  const handleOnCreateCluster = async () => {
-    if (managementCluster) {
-      await dispatch(getCluster(managementCluster)).unwrap();
-    }
-  };
-
   const isPerformingClusterAction = useMemo(
     () => (isDeleting && !isDeleted) || (isProvisioning && !isProvisioned),
     [isDeleted, isDeleting, isProvisioned, isProvisioning],
@@ -215,7 +209,6 @@ const ClusterManagement: FunctionComponent = () => {
           onMenuClose={handleMenuClose}
           onClusterDelete={openDeleteModal}
           cluster={selectedCluster}
-          onSubmit={handleOnCreateCluster}
         />
       </Drawer>
       {selectedCluster && (
