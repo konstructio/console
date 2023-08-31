@@ -116,7 +116,7 @@ const ClusterCreationForm: FunctionComponent<ComponentPropsWithoutRef<'div'>> = 
           }}
           options={[
             { label: 'Workload cluster', value: ClusterType.WORKLOAD },
-            { label: 'Workload v cluster', value: ClusterType.WORKLOAD_V_CLUSTER },
+            { label: 'Workload virtual cluster', value: ClusterType.WORKLOAD_V_CLUSTER },
           ]}
           defaultValue={type}
         />

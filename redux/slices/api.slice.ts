@@ -190,6 +190,7 @@ const apiSlice = createSlice({
       .addCase(getCluster.fulfilled, (state, { payload }: PayloadAction<ManagementCluster>) => {
         state.loading = false;
         state.status = payload.status;
+        state.selectedCluster = payload;
 
         if (state.status === ClusterStatus.DELETED) {
           state.isDeleted = true;
