@@ -1,11 +1,11 @@
-import React, { FunctionComponent, useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { Box, Snackbar, Tabs } from '@mui/material';
+import React, { FunctionComponent, useCallback, useState } from 'react';
+import { Box, Tabs } from '@mui/material';
 
 import Button from '../../components/button';
 import Typography from '../../components/typography';
 import { useAppDispatch, useAppSelector } from '../../redux/store';
-import { deleteCluster, getCluster, getClusters } from '../../redux/thunks/api.thunk';
-import { Cluster, ClusterCreationStep, ClusterRequestProps } from '../../types/provision';
+import { deleteCluster, getClusters } from '../../redux/thunks/api.thunk';
+import { Cluster, ClusterCreationStep, ClusterStatus } from '../../types/provision';
 import useToggle from '../../hooks/useToggle';
 import Drawer from '../../components/drawer';
 import useModal from '../../hooks/useModal';
@@ -20,6 +20,7 @@ import {
   setClusterCreationStep,
 } from '../../redux/slices/api.slice';
 import { setSelectedCluster } from '../../redux/slices/api.slice';
+import { useQueue } from '../../hooks/useQueue';
 
 import { CreateClusterFlow } from './createClusterFlow';
 import { Container, Content, Header } from './clusterManagement.styled';
@@ -31,16 +32,17 @@ enum MANAGEMENT_TABS {
 
 const ClusterManagement: FunctionComponent = () => {
   const [activeTab, setActiveTab] = useState(MANAGEMENT_TABS.LIST_VIEW);
-  const {
-    isProvisioning,
-    isProvisioned,
-    isDeleted,
-    isDeleting,
-    isError,
-    managementCluster,
-    clusterCreationStep,
-    selectedCluster,
-  } = useAppSelector(({ api }) => api);
+
+  const { clusterQueue, managementCluster, clusterCreationStep, selectedCluster } = useAppSelector(
+    ({ api, queue }) => ({
+      managementCluster: api.managementCluster,
+      clusterCreationStep: api.clusterCreationStep,
+      selectedCluster: api.selectedCluster,
+      clusterQueue: queue.clusterQueue,
+    }),
+  );
+
+  const { addClusterToQueue } = useQueue();
 
   const {
     isOpen: createClusterFlowOpen,
@@ -54,8 +56,6 @@ const ClusterManagement: FunctionComponent = () => {
     closeModal: closeDeleteModal,
   } = useModal();
 
-  const interval = useRef<NodeJS.Timer>();
-
   const dispatch = useAppDispatch();
 
   const handleGetClusters = useCallback(async (): Promise<void> => {
@@ -65,19 +65,26 @@ const ClusterManagement: FunctionComponent = () => {
   const handleDeleteCluster = useCallback(async () => {
     if (selectedCluster) {
       await dispatch(deleteCluster(selectedCluster?.id)).unwrap();
+      handleGetClusters();
+      addClusterToQueue({
+        id: selectedCluster?.id,
+        clusterName: managementCluster?.clusterName as string,
+        status: ClusterStatus.DELETING,
+        callback: handleGetClusters,
+      });
 
-      setTimeout(() => {
-        handleGetClusters();
-        closeDeleteModal();
-      }, 500);
+      closeDeleteModal();
+      closeCreateClusterFlow();
     }
-  }, [dispatch, selectedCluster, handleGetClusters, closeDeleteModal]);
-
-  const getClusterInterval = (params: ClusterRequestProps) => {
-    return setInterval(async () => {
-      dispatch(getCluster(params)).unwrap();
-    }, 10000);
-  };
+  }, [
+    selectedCluster,
+    dispatch,
+    handleGetClusters,
+    addClusterToQueue,
+    managementCluster?.clusterName,
+    closeDeleteModal,
+    closeCreateClusterFlow,
+  ]);
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setActiveTab(newValue);
@@ -109,42 +116,17 @@ const ClusterManagement: FunctionComponent = () => {
     closeCreateClusterFlow();
   }, [clusterCreationStep, dispatch, closeCreateClusterFlow]);
 
-  const handleOnCreateCluster = async () => {
+  const handleOnCreateCluster = async (clusterId: string) => {
     if (managementCluster) {
-      await dispatch(getCluster(managementCluster)).unwrap();
+      handleGetClusters();
+      addClusterToQueue({
+        id: clusterId,
+        clusterName: managementCluster?.clusterName as string,
+        status: ClusterStatus.PROVISIONING,
+        callback: handleGetClusters,
+      });
     }
   };
-
-  const isPerformingClusterAction = useMemo(
-    () => (isDeleting && !isDeleted) || (isProvisioning && !isProvisioned),
-    [isDeleted, isDeleting, isProvisioned, isProvisioning],
-  );
-
-  useEffect(() => {
-    if (isPerformingClusterAction && managementCluster) {
-      interval.current = getClusterInterval({
-        clusterName: managementCluster?.clusterName,
-      });
-      handleGetClusters();
-    }
-
-    if (isDeleted || isProvisioned) {
-      clearInterval(interval.current);
-      handleGetClusters();
-    }
-
-    if (isError) {
-      clearInterval(interval.current);
-      handleGetClusters();
-    }
-
-    return () => clearInterval(interval.current);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isDeleted, isDeleting, isProvisioned, isProvisioning]);
-
-  useEffect(() => {
-    handleGetClusters();
-  }, [dispatch, handleGetClusters]);
 
   return (
     <Container>
@@ -189,15 +171,6 @@ const ClusterManagement: FunctionComponent = () => {
           <Flow onNodeClick={handleNodeClick} />
         </TabPanel>
       </Content>
-      <Snackbar
-        anchorOrigin={{
-          vertical: 'bottom',
-          horizontal: 'right',
-        }}
-        open={isDeleted}
-        autoHideDuration={3000}
-        message={`Cluster ${selectedCluster?.clusterName} has been deleted`}
-      />
       <Drawer
         open={createClusterFlowOpen}
         anchor="right"

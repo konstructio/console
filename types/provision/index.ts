@@ -147,3 +147,11 @@ export interface ClusterServices {
   links: Array<string>;
   status?: string;
 }
+
+export interface ClusterQueue {
+  clusterName: string;
+  id: string;
+  status: ClusterStatus;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  callback: any;
+}

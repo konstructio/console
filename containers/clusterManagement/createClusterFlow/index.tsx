@@ -34,7 +34,7 @@ interface CreateClusterFlowProps {
   cluster?: Cluster;
   onClusterDelete: () => void;
   onMenuClose: () => void;
-  onSubmit: () => void;
+  onSubmit: (clusterId: string) => void;
 }
 
 export const CreateClusterFlow: FunctionComponent<CreateClusterFlowProps> = ({
@@ -69,8 +69,8 @@ export const CreateClusterFlow: FunctionComponent<CreateClusterFlowProps> = ({
       if (clusterCreationStep !== ClusterCreationStep.DETAILS) {
         dispatch(createWorkloadCluster(config))
           .unwrap()
-          .then(() => {
-            onSubmit();
+          .then((response) => {
+            onSubmit(response.cluster_id);
             dispatch(setClusterCreationStep(clusterCreationStep + 1));
           });
       }

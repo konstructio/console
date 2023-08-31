@@ -39,7 +39,7 @@ export interface ApiState {
 }
 
 export const initialState: ApiState = {
-  isProvisioning: false,
+  isProvisioning: true,
   isProvisioned: false,
   isError: false,
   lastErrorCondition: undefined,
@@ -194,21 +194,6 @@ const apiSlice = createSlice({
         state.loading = false;
         state.status = payload.status;
 
-        // Workload Check status
-        if (payload.workloadClusters) {
-          const provisioningClusters = payload.workloadClusters.filter(
-            ({ status }) => status === ClusterStatus.PROVISIONING,
-          );
-
-          if (provisioningClusters.length) {
-            state.isProvisioning = true;
-          } else {
-            state.isProvisioned = true;
-          }
-
-          return;
-        }
-
         if (state.status === ClusterStatus.DELETED) {
           state.isDeleted = true;
           state.isDeleting = false;
@@ -226,19 +211,6 @@ const apiSlice = createSlice({
         state.loading = false;
         state.isError = false;
         state.managementCluster = payload;
-
-        // Workload Check status
-        if (payload.workloadClusters) {
-          const provisioningClusters = payload.workloadClusters.filter(
-            ({ status }) => status === ClusterStatus.PROVISIONING,
-          );
-
-          if (provisioningClusters.length) {
-            state.isProvisioning = true;
-          } else {
-            state.isProvisioned = true;
-          }
-        }
       })
       .addCase(getClusters.rejected, (state) => {
         state.loading = false;

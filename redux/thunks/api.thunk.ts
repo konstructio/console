@@ -78,7 +78,7 @@ export const createCluster = createAsyncThunk<
 });
 
 export const createWorkloadCluster = createAsyncThunk<
-  { status: number },
+  { cluster_id: string },
   NewClusterConfig,
   {
     dispatch: AppDispatch;
@@ -113,7 +113,7 @@ export const createWorkloadCluster = createAsyncThunk<
     };
     dispatch(updateDraftCluster(updatedCluster));
   }
-  return res;
+  return res.data;
 });
 
 export const getCluster = createAsyncThunk<

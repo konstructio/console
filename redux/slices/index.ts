@@ -6,3 +6,4 @@ export { apiReducer } from './api.slice';
 export { featureFlagsReducer } from './featureFlags.slice';
 export { clusterReducer } from './cluster.slice';
 export { reactFlowReducer } from './reactFlow.slice';
+export { queueReducer } from './queue.slice';

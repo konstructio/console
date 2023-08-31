@@ -31,15 +31,14 @@ const ClusterDetails: FunctionComponent<ClusterDetailsProps> = ({ cluster, ...re
     creationDate,
     domainName,
     gitProvider,
-    gitUser,
     nodeCount,
     instanceSize,
     status,
     type,
-    gitAuth,
+    gitAuth: { gitUser, gitOwner } = {},
   } = cluster;
 
-  const clusterDetailsLink = `https://github.com/${gitAuth?.gitOwner}/gitops/tree/main/registry/${clusterName}`;
+  const clusterDetailsLink = `https://github.com/${gitOwner}/gitops/tree/main/registry/${clusterName}`;
 
   return (
     <Container {...rest}>

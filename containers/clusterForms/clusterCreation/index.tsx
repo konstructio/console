@@ -1,6 +1,7 @@
 import React, { ComponentPropsWithoutRef, FunctionComponent, useState } from 'react';
 import { useFormContext } from 'react-hook-form';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import { Box } from '@mui/material';
 
 import ControlledAutocomplete from '../../../components/controlledFields/AutoComplete';
 import ControlledTextField from '../../../components/controlledFields/TextField';
@@ -10,9 +11,10 @@ import ControlledSelect from '../../../components/controlledFields/Select';
 import Typography from '../../../components/typography';
 import { NewClusterConfig } from '../../../types/provision';
 import { EXCLUSIVE_PLUM } from '../../../constants/colors';
+import ControlledNumberInput from '../../../components/controlledFields/numberInput';
 
 import AdvancedOptions from './advancedOptions';
-import { AdvancedOptionsButton, Container, NumberInput } from './clusterCreation.styled';
+import { AdvancedOptionsButton, Container } from './clusterCreation.styled';
 
 const minNodeCount = 3;
 
@@ -88,12 +90,15 @@ const ClusterCreationForm: FunctionComponent<ComponentPropsWithoutRef<'div'>> = 
           },
         ]}
       />
-      <NumberInput
-        label="Number of nodes"
-        control={control}
-        name="nodeCount"
-        numberInputProps={{ min: minNodeCount }}
-      />
+      <Box sx={{ width: 136 }}>
+        <ControlledNumberInput
+          label="Number of nodes"
+          control={control}
+          name="nodeCount"
+          defaultValue={3}
+          numberInputProps={{ min: minNodeCount }}
+        />
+      </Box>
       <AdvancedOptionsButton onClick={() => setShowOptions(!showOptions)} expanded={showOptions}>
         <KeyboardArrowDownIcon style={{ color: EXCLUSIVE_PLUM }} />
         <Typography variant="subtitle2">Advanced Options</Typography>

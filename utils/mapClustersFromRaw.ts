@@ -21,7 +21,7 @@ export const mapClusterFromRaw = (cluster: ClusterResponse): ManagementCluster =
   nodeCount: 2,
   workloadClusters:
     cluster.workload_clusters
-      ?.filter(({ status }) => ![ClusterStatus.DELETED, ClusterStatus.DELETING].includes(status))
+      ?.filter(({ status }) => ![ClusterStatus.DELETED].includes(status))
       .map((item) => ({
         id: item.cluster_id,
         clusterName: item.cluster_name,
@@ -29,14 +29,18 @@ export const mapClusterFromRaw = (cluster: ClusterResponse): ManagementCluster =
         cloudProvider: cluster.cloud_provider,
         instanceSize: item.instance_size,
         nodeCount: item.node_count,
+        creationDate: cluster.creation_timestamp,
         environment: item.environment,
         status: item.status,
         type: ClusterType.WORKLOAD,
         domainName: cluster.domain_name,
         gitProvider: cluster.git_provider,
-        gitUser: cluster.git_user,
         adminEmail: cluster.alerts_email,
-        gitAuth: { gitOwner: cluster.git_auth.git_owner, gitToken: cluster.git_auth.git_token },
+        gitAuth: {
+          gitOwner: cluster.git_auth.git_owner,
+          gitToken: cluster.git_auth.git_token,
+          gitUser: cluster.git_auth.git_username,
+        },
       })) || [],
   vaultAuth: {
     kbotPassword: cluster.vault_auth?.kbot_password,

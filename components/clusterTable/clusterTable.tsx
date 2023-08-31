@@ -176,7 +176,7 @@ export const ClusterTable: FunctionComponent<ClusterTableProps> = ({
   onMenuOpenClose,
   ...rest
 }) => {
-  const [expanded, setExpanded] = useState(false);
+  const [expanded, setExpanded] = useState(true);
   const { workloadClusters, domainName, gitProvider, cloudProvider, adminEmail } =
     managementCluster;
 
