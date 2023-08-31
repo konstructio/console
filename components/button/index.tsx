@@ -27,7 +27,12 @@ const Button: FunctionComponent<IButtonProps> = ({ variant, color, disabled, ...
 
   return (
     <Container disabled={disabled}>
-      <StyledButton variant={variant} disabled={disabled} {...rest} />
+      <StyledButton
+        variant={variant}
+        disabled={disabled}
+        {...rest}
+        sx={{ textTransform: 'initial' }}
+      />
     </Container>
   );
 };
