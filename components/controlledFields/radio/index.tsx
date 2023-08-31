@@ -5,7 +5,7 @@ import { Control, Controller, UseControllerProps, FieldValues } from 'react-hook
 import Typography from '../../typography';
 import { VOLCANIC_SAND } from '../../../constants/colors';
 
-export interface ControlledTextFieldProps<T extends FieldValues> extends UseControllerProps<T> {
+export interface ControlledRadioGroupProps<T extends FieldValues> extends UseControllerProps<T> {
   control: Control<T>;
   required?: boolean;
   rules: {
@@ -15,13 +15,13 @@ export interface ControlledTextFieldProps<T extends FieldValues> extends UseCont
   options: Array<{ label: string; value: string }>;
 }
 
-function ControlledRadio<T extends FieldValues>({
+function ControlledRadioGroup<T extends FieldValues>({
   defaultValue,
   name,
   options,
   required,
   ...props
-}: ControlledTextFieldProps<T>) {
+}: ControlledRadioGroupProps<T>) {
   return (
     <Controller
       {...props}
@@ -57,4 +57,4 @@ function ControlledRadio<T extends FieldValues>({
   );
 }
 
-export default ControlledRadio;
+export default ControlledRadioGroup;

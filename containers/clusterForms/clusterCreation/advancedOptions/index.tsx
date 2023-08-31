@@ -8,11 +8,7 @@ import ControlledTextField from '../../../../components/controlledFields/TextFie
 import ControlledAutocomplete from '../../../../components/controlledFields/AutoComplete';
 import ControlledRadioGroup from '../../../../components/controlledFields/radio/';
 import { useAppSelector } from '../../../../redux/store';
-import {
-  ClusterType,
-  ImageRepository,
-  NewWorkloadClusterConfig,
-} from '../../../../types/provision';
+import { ImageRepository, NewWorkloadClusterConfig } from '../../../../types/provision';
 import { EXCLUSIVE_PLUM } from '../../../../constants/colors';
 
 import { InputContainer } from './advancedOptions.styled';
@@ -24,7 +20,7 @@ const AdvancedOptions: FunctionComponent = () => {
 
   const { control, getValues } = useFormContext<NewWorkloadClusterConfig>();
 
-  const { gitopsTemplateUrl, gitopsTemplateBranch, imageRepository, type } = getValues();
+  const { gitopsTemplateUrl, gitopsTemplateBranch, imageRepository } = getValues();
 
   return (
     <>
@@ -107,23 +103,6 @@ const AdvancedOptions: FunctionComponent = () => {
             { label: 'AWS Elastic Container Registry (ECR)', value: ImageRepository.ECR },
           ]}
           defaultValue={imageRepository}
-        />
-      </InputContainer>
-      <InputContainer>
-        <Typography variant="labelLarge" color={EXCLUSIVE_PLUM}>
-          Cluster type
-        </Typography>
-        <ControlledRadioGroup
-          control={control}
-          name="type"
-          rules={{
-            required: false,
-          }}
-          options={[
-            { label: 'Workload cluster', value: ClusterType.WORKLOAD },
-            { label: 'Workload v cluster', value: ClusterType.WORKLOAD_V_CLUSTER },
-          ]}
-          defaultValue={type}
         />
       </InputContainer>
     </>

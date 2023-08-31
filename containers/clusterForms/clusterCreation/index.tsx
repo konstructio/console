@@ -9,12 +9,14 @@ import { useAppDispatch, useAppSelector } from '../../../redux/store';
 import { getCloudDomains } from '../../../redux/thunks/api.thunk';
 import ControlledSelect from '../../../components/controlledFields/Select';
 import Typography from '../../../components/typography';
-import { NewWorkloadClusterConfig } from '../../../types/provision';
+import { ClusterType, NewWorkloadClusterConfig } from '../../../types/provision';
 import { EXCLUSIVE_PLUM } from '../../../constants/colors';
 import ControlledNumberInput from '../../../components/controlledFields/numberInput';
 
 import AdvancedOptions from './advancedOptions';
 import { AdvancedOptionsButton, Container } from './clusterCreation.styled';
+import ControlledRadioGroup from '../../../components/controlledFields/radio';
+import { InputContainer } from './advancedOptions/advancedOptions.styled';
 
 const minNodeCount = 3;
 
@@ -44,7 +46,7 @@ const ClusterCreationForm: FunctionComponent<ComponentPropsWithoutRef<'div'>> = 
 
   const { control, getValues } = useFormContext<NewWorkloadClusterConfig>();
 
-  const { clusterName, cloudRegion, instanceSize, nodeCount } = getValues();
+  const { clusterName, cloudRegion, instanceSize, nodeCount, type } = getValues();
 
   return (
     <Container {...props}>
@@ -102,11 +104,23 @@ const ClusterCreationForm: FunctionComponent<ComponentPropsWithoutRef<'div'>> = 
           numberInputProps={{ min: minNodeCount }}
         />
       </Box>
-      <AdvancedOptionsButton onClick={() => setShowOptions(!showOptions)} expanded={showOptions}>
-        <KeyboardArrowDownIcon style={{ color: EXCLUSIVE_PLUM }} />
-        <Typography variant="subtitle2">Advanced Options</Typography>
-      </AdvancedOptionsButton>
-      {showOptions && <AdvancedOptions />}
+      <InputContainer>
+        <Typography variant="labelLarge" color={EXCLUSIVE_PLUM}>
+          Cluster type
+        </Typography>
+        <ControlledRadioGroup
+          control={control}
+          name="type"
+          rules={{
+            required: false,
+          }}
+          options={[
+            { label: 'Workload cluster', value: ClusterType.WORKLOAD },
+            { label: 'Workload v cluster', value: ClusterType.WORKLOAD_V_CLUSTER },
+          ]}
+          defaultValue={type}
+        />
+      </InputContainer>
     </Container>
   );
 };
