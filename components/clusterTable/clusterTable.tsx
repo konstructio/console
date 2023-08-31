@@ -122,7 +122,7 @@ const ClusterRow: FunctionComponent<ClusterRowProps> = ({
         </StyledTableCell>
         <StyledTableCell>
           <StyledCellText variant="body2">
-            {moment(new Date(creationDate)).format('DD MMM YYYY')}
+            {moment(+creationDate).format('DD MMM YYYY')}
           </StyledCellText>
         </StyledTableCell>
         <StyledTableCell>
