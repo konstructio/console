@@ -33,7 +33,7 @@ enum MANAGEMENT_TABS {
 const ClusterManagement: FunctionComponent = () => {
   const [activeTab, setActiveTab] = useState(MANAGEMENT_TABS.LIST_VIEW);
 
-  const { clusterQueue, managementCluster, clusterCreationStep, selectedCluster } = useAppSelector(
+  const { managementCluster, clusterCreationStep, selectedCluster } = useAppSelector(
     ({ api, queue }) => ({
       managementCluster: api.managementCluster,
       clusterCreationStep: api.clusterCreationStep,
@@ -116,7 +116,7 @@ const ClusterManagement: FunctionComponent = () => {
     closeCreateClusterFlow();
   }, [clusterCreationStep, dispatch, closeCreateClusterFlow]);
 
-  const handleOnCreateCluster = async (clusterId: string) => {
+  const handleCreateCluster = async (clusterId: string) => {
     if (managementCluster) {
       handleGetClusters();
       addClusterToQueue({
@@ -163,7 +163,7 @@ const ClusterManagement: FunctionComponent = () => {
             <ClusterTable
               managementCluster={managementCluster}
               onDeleteCluster={openDeleteModal}
-              onMenuOpenClose={(clusterInfo) => dispatch(setSelectedCluster(clusterInfo))}
+              onMenuOpenClose={(cluster) => dispatch(setSelectedCluster(cluster))}
             />
           )}
         </TabPanel>
@@ -188,7 +188,7 @@ const ClusterManagement: FunctionComponent = () => {
           onMenuClose={handleMenuClose}
           onClusterDelete={openDeleteModal}
           cluster={selectedCluster}
-          onSubmit={handleOnCreateCluster}
+          onSubmit={handleCreateCluster}
         />
       </Drawer>
       {selectedCluster && (

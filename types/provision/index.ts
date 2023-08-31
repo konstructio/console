@@ -26,7 +26,11 @@ export enum ImageRepository {
   ECR = 'ecr',
 }
 
-export type NewClusterConfig = Omit<WorkloadCluster, 'id' | 'type'> & AdvancedOptions;
+export type NewWorkloadClusterConfig = Pick<
+  WorkloadCluster,
+  'clusterName' | 'cloudRegion' | 'instanceSize' | 'nodeCount' | 'environment' | 'type'
+> &
+  AdvancedOptions;
 
 export interface ClusterRequestProps {
   clusterName?: string;

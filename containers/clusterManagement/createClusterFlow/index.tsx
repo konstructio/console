@@ -15,9 +15,9 @@ import {
   ClusterCreationStep,
   ClusterStatus,
   ClusterType,
-  NewClusterConfig,
+  NewWorkloadClusterConfig,
 } from '../../../types/provision';
-import { createWorkloadCluster, getCluster } from '../../../redux/thunks/api.thunk';
+import { createWorkloadCluster } from '../../../redux/thunks/api.thunk';
 import { setClusterCreationStep } from '../../../redux/slices/api.slice';
 import { mockClusterConfig } from '../../../tests/mocks/mockClusterConfig';
 
@@ -47,8 +47,8 @@ export const CreateClusterFlow: FunctionComponent<CreateClusterFlowProps> = ({
 
   const dispatch = useAppDispatch();
 
-  const methods = useForm<NewClusterConfig>({
-    defaultValues: isDevelopment ? mockClusterConfig : {},
+  const methods = useForm<NewWorkloadClusterConfig>({
+    defaultValues: isDevelopment ? mockClusterConfig : { type: ClusterType.WORKLOAD },
   });
 
   const handleMenuClose = useCallback(() => {
@@ -65,7 +65,7 @@ export const CreateClusterFlow: FunctionComponent<CreateClusterFlowProps> = ({
   }, [onClusterDelete, clusterCreationStep]);
 
   const handleSubmit = useCallback(
-    (config: NewClusterConfig) => {
+    (config: NewWorkloadClusterConfig) => {
       if (clusterCreationStep !== ClusterCreationStep.DETAILS) {
         dispatch(createWorkloadCluster(config))
           .unwrap()
