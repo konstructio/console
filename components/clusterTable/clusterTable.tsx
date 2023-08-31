@@ -51,7 +51,7 @@ const CLOUD_LOGO_OPTIONS: Record<InstallationType, any> = {
 type ClusterRowProps = Cluster & {
   expanded?: boolean;
   onExpanseClick?: () => void;
-  onMenuOpenClose: (selectedCluster?: Cluster) => void;
+  onMenuOpenClose: (presentedCluster?: Cluster) => void;
   onDeleteCluster: () => void;
 };
 
@@ -162,7 +162,7 @@ const ClusterRow: FunctionComponent<ClusterRowProps> = ({
 interface ClusterTableProps extends ComponentPropsWithoutRef<'div'> {
   managementCluster: ManagementCluster;
   onDeleteCluster: () => void;
-  onMenuOpenClose: (selectedCluster?: Cluster) => void;
+  onMenuOpenClose: (presentedCluster?: Cluster) => void;
 }
 
 export const ClusterTable: FunctionComponent<ClusterTableProps> = ({

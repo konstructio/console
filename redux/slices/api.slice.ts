@@ -30,6 +30,7 @@ export interface ApiState {
   lastErrorCondition?: string;
   managementCluster?: ManagementCluster;
   selectedCluster?: Cluster;
+  presentedCluster?: Cluster;
   completedSteps: Array<{ label: string; order: number }>;
   cloudDomains: Array<string>;
   cloudRegions: Array<string>;
@@ -48,6 +49,7 @@ export const initialState: ApiState = {
   status: undefined,
   loading: false,
   selectedCluster: undefined,
+  presentedCluster: undefined,
   completedSteps: [],
   cloudDomains: [],
   cloudRegions: [],
@@ -62,6 +64,9 @@ const apiSlice = createSlice({
     setSelectedCluster: (state, { payload }: PayloadAction<ApiState['selectedCluster']>) => {
       state.selectedCluster = payload;
     },
+    setPresentedCluster: (state, { payload }: PayloadAction<ApiState['presentedCluster']>) => {
+      state.presentedCluster = payload;
+    },
     setCompletedSteps: (state, action) => {
       state.completedSteps = action.payload;
     },
@@ -75,6 +80,8 @@ const apiSlice = createSlice({
       state.status = undefined;
       state.loading = false;
       state.managementCluster = undefined;
+      state.selectedCluster = undefined;
+      state.presentedCluster = undefined;
       state.completedSteps = [];
       state.cloudDomains = [];
       state.cloudRegions = [];
@@ -109,7 +116,7 @@ const apiSlice = createSlice({
         };
 
         state.managementCluster.workloadClusters.push(draftCluster);
-        state.selectedCluster = draftCluster;
+        state.presentedCluster = draftCluster;
       }
     },
     removeDraftCluster: (state) => {
@@ -139,7 +146,7 @@ const apiSlice = createSlice({
             },
           );
 
-          state.selectedCluster = updatedCluster;
+          state.presentedCluster = updatedCluster;
         }
       }
     },
@@ -231,6 +238,7 @@ export const {
   removeDraftCluster,
   updateDraftCluster,
   setSelectedCluster,
+  setPresentedCluster,
 } = apiSlice.actions;
 
 export const apiReducer = apiSlice.reducer;

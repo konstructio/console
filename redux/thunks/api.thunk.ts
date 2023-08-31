@@ -116,7 +116,6 @@ export const createWorkloadCluster = createAsyncThunk<
       gitAuth: managementCluster.gitAuth,
     };
     dispatch(updateDraftCluster(updatedCluster));
-    dispatch(getCluster(managementCluster));
   }
   return res.data;
 });

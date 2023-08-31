@@ -27,15 +27,15 @@ interface GraphViewProps {
 
 const GraphView: FunctionComponent<GraphViewProps> = ({ onNodeClick }) => {
   const { nodes, edges } = useAppSelector(({ reactFlow }) => reactFlow);
-  const { managementCluster, selectedCluster } = useAppSelector(({ api }) => api);
+  const { managementCluster, presentedCluster } = useAppSelector(({ api }) => api);
 
   const dispatch = useAppDispatch();
 
   const { setCenter, fitView, zoomIn, zoomOut } = useReactFlow();
 
   useEffect(() => {
-    if (selectedCluster) {
-      const selectedNode = nodes.find((node) => node.id === selectedCluster.id);
+    if (presentedCluster) {
+      const selectedNode = nodes.find((node) => node.id === presentedCluster.id);
       if (selectedNode) {
         const { position, width, height, id } = selectedNode;
 
@@ -49,7 +49,7 @@ const GraphView: FunctionComponent<GraphViewProps> = ({ onNodeClick }) => {
     } else {
       window.requestAnimationFrame(() => fitView({ duration: 500, padding: 0.2 }));
     }
-  }, [selectedCluster, nodes, setCenter, fitView, dispatch]);
+  }, [presentedCluster, nodes, setCenter, fitView, dispatch]);
 
   useEffect(() => {
     if (managementCluster) {

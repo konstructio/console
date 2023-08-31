@@ -19,7 +19,7 @@ import {
   removeDraftCluster,
   setClusterCreationStep,
 } from '../../redux/slices/api.slice';
-import { setSelectedCluster } from '../../redux/slices/api.slice';
+import { setPresentedCluster } from '../../redux/slices/api.slice';
 import { useQueue } from '../../hooks/useQueue';
 
 import { CreateClusterFlow } from './createClusterFlow';
@@ -33,11 +33,11 @@ enum MANAGEMENT_TABS {
 const ClusterManagement: FunctionComponent = () => {
   const [activeTab, setActiveTab] = useState(MANAGEMENT_TABS.LIST_VIEW);
 
-  const { managementCluster, clusterCreationStep, selectedCluster } = useAppSelector(
+  const { managementCluster, clusterCreationStep, presentedCluster } = useAppSelector(
     ({ api, queue }) => ({
       managementCluster: api.managementCluster,
       clusterCreationStep: api.clusterCreationStep,
-      selectedCluster: api.selectedCluster,
+      presentedCluster: api.presentedCluster,
       clusterQueue: queue.clusterQueue,
     }),
   );
@@ -63,11 +63,11 @@ const ClusterManagement: FunctionComponent = () => {
   }, [dispatch]);
 
   const handleDeleteCluster = useCallback(async () => {
-    if (selectedCluster) {
-      await dispatch(deleteCluster(selectedCluster?.id)).unwrap();
+    if (presentedCluster) {
+      await dispatch(deleteCluster(presentedCluster?.id)).unwrap();
       handleGetClusters();
       addClusterToQueue({
-        id: selectedCluster?.id,
+        id: presentedCluster?.id,
         clusterName: managementCluster?.clusterName as string,
         status: ClusterStatus.DELETING,
         callback: handleGetClusters,
@@ -77,7 +77,7 @@ const ClusterManagement: FunctionComponent = () => {
       closeCreateClusterFlow();
     }
   }, [
-    selectedCluster,
+    presentedCluster,
     dispatch,
     handleGetClusters,
     addClusterToQueue,
@@ -92,7 +92,7 @@ const ClusterManagement: FunctionComponent = () => {
 
   const handleNodeClick = useCallback(
     (cluster: Cluster) => {
-      dispatch(setSelectedCluster(cluster));
+      dispatch(setPresentedCluster(cluster));
       dispatch(setClusterCreationStep(ClusterCreationStep.DETAILS));
       openCreateClusterFlow();
     },
@@ -112,7 +112,7 @@ const ClusterManagement: FunctionComponent = () => {
     } else {
       dispatch(setClusterCreationStep(ClusterCreationStep.CONFIG));
     }
-    dispatch(setSelectedCluster(undefined));
+    dispatch(setPresentedCluster(undefined));
     closeCreateClusterFlow();
   }, [clusterCreationStep, dispatch, closeCreateClusterFlow]);
 
@@ -163,7 +163,7 @@ const ClusterManagement: FunctionComponent = () => {
             <ClusterTable
               managementCluster={managementCluster}
               onDeleteCluster={openDeleteModal}
-              onMenuOpenClose={(cluster) => dispatch(setSelectedCluster(cluster))}
+              onMenuOpenClose={(cluster) => dispatch(setPresentedCluster(cluster))}
             />
           )}
         </TabPanel>
@@ -187,16 +187,16 @@ const ClusterManagement: FunctionComponent = () => {
         <CreateClusterFlow
           onMenuClose={handleMenuClose}
           onClusterDelete={openDeleteModal}
-          cluster={selectedCluster}
+          cluster={presentedCluster}
           onSubmit={handleCreateCluster}
         />
       </Drawer>
-      {selectedCluster && (
+      {presentedCluster && (
         <DeleteCluster
           isOpen={isDeleteModalOpen}
           onClose={closeDeleteModal}
           onDelete={handleDeleteCluster}
-          cluster={selectedCluster}
+          cluster={presentedCluster}
         />
       )}
     </Container>
