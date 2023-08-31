@@ -1,5 +1,5 @@
 import React, { type FunctionComponent, useEffect } from 'react';
-import ReactFlow, { Controls, NodeTypes, ReactFlowProvider, useReactFlow } from 'reactflow';
+import ReactFlow, { NodeTypes, ReactFlowProvider, useReactFlow } from 'reactflow';
 
 import { GraphNode } from '../graphNode';
 import { useAppDispatch, useAppSelector } from '../../redux/store';
@@ -15,6 +15,8 @@ import 'reactflow/dist/style.css';
 import { generateNodesConfig } from '../../utils/reactFlow';
 import { Cluster } from '../../types/provision';
 
+import CustomReactFlowControls from './controls';
+
 const nodeTypes: NodeTypes = {
   custom: GraphNode,
 };
@@ -29,7 +31,7 @@ const GraphView: FunctionComponent<GraphViewProps> = ({ onNodeClick }) => {
 
   const dispatch = useAppDispatch();
 
-  const { setCenter, fitView } = useReactFlow();
+  const { setCenter, fitView, zoomIn, zoomOut } = useReactFlow();
 
   useEffect(() => {
     if (selectedCluster) {
@@ -67,13 +69,20 @@ const GraphView: FunctionComponent<GraphViewProps> = ({ onNodeClick }) => {
       onNodeClick={(_, node) => onNodeClick(node.data)}
       nodeTypes={nodeTypes}
       fitView
-    />
+    >
+      <CustomReactFlowControls
+        position="top-left"
+        style={{ left: 40, top: -10 }}
+        onFitView={() => fitView({ duration: 300, padding: 0.2 })}
+        onZoomIn={() => zoomIn({ duration: 300 })}
+        onZoomOut={() => zoomOut({ duration: 300 })}
+      />
+    </ReactFlow>
   );
 };
 
 export const Flow: FunctionComponent<GraphViewProps> = (props) => (
   <ReactFlowProvider>
     <GraphView {...props} />
-    <Controls />
   </ReactFlowProvider>
 );
