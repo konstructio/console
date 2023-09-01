@@ -27,7 +27,7 @@ const isDevelopment = process.env.NEXT_PUBLIC_NODE_ENV === 'development';
 
 const actionButtonText: Record<ClusterCreationStep, string> = {
   [ClusterCreationStep.CONFIG]: 'Create cluster',
-  [ClusterCreationStep.DETAILS]: 'Delete Cluster',
+  [ClusterCreationStep.DETAILS]: 'Delete cluster',
 };
 
 interface CreateClusterFlowProps {

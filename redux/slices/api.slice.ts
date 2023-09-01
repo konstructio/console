@@ -221,6 +221,15 @@ const apiSlice = createSlice({
         state.loading = false;
         state.isError = false;
         state.managementCluster = payload;
+
+        if (state.presentedCluster) {
+          const clusterUpdate = payload.workloadClusters.find(
+            (cluster) => cluster.id === state.presentedCluster?.id,
+          );
+          if (clusterUpdate) {
+            state.presentedCluster = clusterUpdate;
+          }
+        }
       })
       .addCase(getClusters.rejected, (state) => {
         state.loading = false;
