@@ -4,6 +4,7 @@ import { useRouter } from 'next/router';
 import ClusterReady from '../../../../components/clusterReady';
 import { getClusters } from '../../../../redux/thunks/api.thunk';
 import { useAppDispatch, useAppSelector } from '../../../../redux/store';
+import { ManagementCluster } from '../../../../types/provision';
 
 export interface ClusterRunningProps {
   clusterName?: string;
@@ -16,7 +17,7 @@ const ClusterRunning: FunctionComponent<ClusterRunningProps> = (props) => {
 
   const { installValues, selectedCluster } = useAppSelector(({ installation, api }) => ({
     installValues: installation.values,
-    selectedCluster: api.selectedCluster,
+    selectedCluster: api.selectedCluster as ManagementCluster,
   }));
 
   const onOpenConsole = () => {

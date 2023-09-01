@@ -38,9 +38,7 @@ const InstallationStepContainer: FunctionComponent<InstallationStepContainerProp
   children,
   ...rest
 }) => {
-  const { completedSteps, isProvisioned } = useAppSelector(({ api }) => ({
-    ...api,
-  }));
+  const { completedSteps, isProvisioned } = useAppSelector(({ api }) => api);
   const progress = useMemo(() => {
     const clusterChecks = Object.keys(CLUSTER_CHECKS);
     const progress = Math.round((completedSteps.length / clusterChecks.length) * 100);

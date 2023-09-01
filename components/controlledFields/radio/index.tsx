@@ -5,7 +5,7 @@ import { Control, Controller, UseControllerProps, FieldValues } from 'react-hook
 import Typography from '../../typography';
 import { VOLCANIC_SAND } from '../../../constants/colors';
 
-export interface ControlledTextFieldProps<T extends FieldValues> extends UseControllerProps<T> {
+export interface ControlledRadioGroupProps<T extends FieldValues> extends UseControllerProps<T> {
   control: Control<T>;
   required?: boolean;
   rules: {
@@ -13,21 +13,29 @@ export interface ControlledTextFieldProps<T extends FieldValues> extends UseCont
     pattern?: RegExp;
   };
   options: Array<{ label: string; value: string }>;
+  onChange?: (value: string) => void;
+  inLine?: boolean;
 }
 
-function ControlledRadio<T extends FieldValues>({
+function ControlledRadioGroup<T extends FieldValues>({
   defaultValue,
+  inLine = false,
   name,
   options,
+  onChange,
   required,
   ...props
-}: ControlledTextFieldProps<T>) {
+}: ControlledRadioGroupProps<T>) {
   return (
     <Controller
       {...props}
       name={name}
       render={({ field }) => (
-        <RadioGroup defaultValue={defaultValue} name={name}>
+        <RadioGroup
+          defaultValue={defaultValue}
+          name={name}
+          sx={{ display: 'flex', flexDirection: inLine ? 'row' : 'initial' }}
+        >
           {options.map(({ label, value }) => (
             <FormControlLabel
               key={label}
@@ -40,6 +48,7 @@ function ControlledRadio<T extends FieldValues>({
                   inputRef={field.ref}
                   value={value}
                   onChange={(e) => {
+                    onChange && onChange(e.target.value);
                     field.onChange(e);
                   }}
                 />
@@ -57,4 +66,4 @@ function ControlledRadio<T extends FieldValues>({
   );
 }
 
-export default ControlledRadio;
+export default ControlledRadioGroup;

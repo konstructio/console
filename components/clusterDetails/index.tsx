@@ -25,21 +25,21 @@ export interface ClusterDetailsProps extends ComponentPropsWithoutRef<'div'> {
 const ClusterDetails: FunctionComponent<ClusterDetailsProps> = ({ cluster, ...rest }) => {
   const {
     clusterName,
+    clusterType,
     adminEmail,
     cloudProvider,
     cloudRegion,
     creationDate,
     domainName,
     gitProvider,
-    gitUser,
     nodeCount,
     instanceSize,
     status,
     type,
-    gitAuth,
+    gitAuth: { gitUser, gitOwner } = {},
   } = cluster;
 
-  const clusterDetailsLink = `https://github.com/${gitAuth?.gitOwner}/gitops/tree/main/registry/${clusterName}`;
+  const clusterDetailsLink = `https://github.com/${gitOwner}/gitops/tree/main/registry/${clusterName}`;
 
   return (
     <Container {...rest}>
@@ -82,7 +82,7 @@ const ClusterDetails: FunctionComponent<ClusterDetailsProps> = ({ cluster, ...re
           <ColumnInfo>
             <StyledLabel variant="labelLarge">Created</StyledLabel>
             <StyledValue variant="body2">
-              {moment(new Date(creationDate as string)).format('DD MMM YYYY, HH:mm:ss')}
+              {creationDate && moment(+creationDate).format('DD MMM YYYY, HH:mm:ss')}
             </StyledValue>
           </ColumnInfo>
           <ColumnInfo>
@@ -116,14 +116,16 @@ const ClusterDetails: FunctionComponent<ClusterDetailsProps> = ({ cluster, ...re
         </RowInfo>
 
         {/* Fifth Row */}
-        <RowInfo>
-          <ColumnInfo>
-            <StyledLabel variant="labelLarge">Instance size</StyledLabel>
-            <StyledValue variant="body2" style={{ width: '100%' }}>
-              {instanceSize}
-            </StyledValue>
-          </ColumnInfo>
-        </RowInfo>
+        {clusterType === ClusterType.WORKLOAD && (
+          <RowInfo>
+            <ColumnInfo>
+              <StyledLabel variant="labelLarge">Instance size</StyledLabel>
+              <StyledValue variant="body2" style={{ width: '100%' }}>
+                {instanceSize}
+              </StyledValue>
+            </ColumnInfo>
+          </RowInfo>
+        )}
       </Content>
     </Container>
   );

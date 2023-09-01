@@ -15,7 +15,7 @@ import { ClusterIndicator, ClusterMenu, Container } from './header.styled';
 const Header: FunctionComponent = () => {
   const dispatch = useAppDispatch();
   const { pathname } = useRouter();
-  const { isEnabled } = useFeatureFlag('cluster-management');
+  const { isEnabled } = useFeatureFlag('multicluster-management');
   const { clusters, selectedCluster } = useAppSelector(({ api, cluster }) => ({
     clusters: api.managementCluster
       ? [api.managementCluster, ...api.managementCluster.workloadClusters]

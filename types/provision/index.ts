@@ -26,7 +26,11 @@ export enum ImageRepository {
   ECR = 'ecr',
 }
 
-export type NewClusterConfig = Omit<WorkloadCluster, 'id' | 'type'> & AdvancedOptions;
+export type NewWorkloadClusterConfig = Pick<
+  WorkloadCluster,
+  'clusterName' | 'cloudRegion' | 'instanceSize' | 'nodeCount' | 'environment' | 'type'
+> &
+  AdvancedOptions;
 
 export interface ClusterRequestProps {
   clusterName?: string;
@@ -47,17 +51,19 @@ export interface ClusterResponse {
   git_provider: string;
   git_user: string;
   workload_clusters: {
-    _id: string;
-    workload_cluster_name: string;
+    cluster_id: string;
+    cluster_name: string;
+    cluster_type: string;
     cloud_region: string;
     instance_size: string;
     node_count: number;
     environment: string;
     status: ClusterStatus;
   }[];
-  gitAuth: {
-    gitOwner: string;
-    gitToken?: string;
+  git_auth: {
+    git_owner?: string;
+    git_token?: string;
+    git_username?: string;
   };
   vault_auth: {
     kbot_password: string;
@@ -81,6 +87,25 @@ export interface ClusterResponse {
   vault_initialized_check: boolean;
   vault_terraform_apply_check: boolean;
   users_terraform_apply_check: boolean;
+  cloudflare_auth?: {
+    token: string;
+  };
+  aws_auth?: {
+    access_key_id: string;
+    secret_access_key: string;
+    session_token: string;
+  };
+  civo_auth?: {
+    token: string;
+  };
+  do_auth?: {
+    token: string;
+    spaces_key: string;
+    spaces_secret: string;
+  };
+  vultr_auth?: {
+    token: string;
+  };
 }
 
 export interface Cluster {
@@ -88,24 +113,24 @@ export interface Cluster {
   adminEmail: string;
   clusterName?: string;
   cloudRegion?: string;
+  clusterType: string;
   cloudProvider?: InstallationType;
   creationDate?: string;
   domainName: string;
   environment?: string;
   gitProvider: string;
-  gitUser: string;
   instanceSize?: string;
   nodeCount?: number;
   status?: ClusterStatus;
   type: ClusterType;
   gitAuth: {
-    gitOwner: string;
+    gitOwner?: string;
     gitToken?: string;
+    gitUser?: string;
   };
 }
 
 export interface ManagementCluster extends Cluster, Row {
-  gitToken?: string;
   status?: ClusterStatus;
   lastErrorCondition: string;
   workloadClusters: WorkloadCluster[];
@@ -133,6 +158,25 @@ export interface ManagementCluster extends Cluster, Row {
     users_terraform_apply_check: boolean;
     [key: string]: boolean;
   };
+  cloudflare_auth?: {
+    token: string;
+  };
+  aws_auth?: {
+    access_key_id: string;
+    secret_access_key: string;
+    session_token: string;
+  };
+  civo_auth?: {
+    token: string;
+  };
+  do_auth?: {
+    token: string;
+    spaces_key: string;
+    spaces_secret: string;
+  };
+  vultr_auth?: {
+    token: string;
+  };
 }
 
 export interface WorkloadCluster extends Cluster {
@@ -146,4 +190,12 @@ export interface ClusterServices {
   image: string;
   links: Array<string>;
   status?: string;
+}
+
+export interface ClusterQueue {
+  clusterName: string;
+  id: string;
+  status: ClusterStatus;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  callback: any;
 }

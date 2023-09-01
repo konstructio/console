@@ -15,7 +15,7 @@ import {
   ClusterCreationStep,
   ClusterStatus,
   ClusterType,
-  NewClusterConfig,
+  NewWorkloadClusterConfig,
 } from '../../../types/provision';
 import { createWorkloadCluster } from '../../../redux/thunks/api.thunk';
 import { setClusterCreationStep } from '../../../redux/slices/api.slice';
@@ -27,26 +27,28 @@ const isDevelopment = process.env.NEXT_PUBLIC_NODE_ENV === 'development';
 
 const actionButtonText: Record<ClusterCreationStep, string> = {
   [ClusterCreationStep.CONFIG]: 'Create cluster',
-  [ClusterCreationStep.DETAILS]: 'Delete Cluster',
+  [ClusterCreationStep.DETAILS]: 'Delete cluster',
 };
 
 interface CreateClusterFlowProps {
-  onMenuClose: () => void;
-  onClusterDelete: () => void;
   cluster?: Cluster;
+  onClusterDelete: () => void;
+  onMenuClose: () => void;
+  onSubmit: (clusterId: string) => void;
 }
 
 export const CreateClusterFlow: FunctionComponent<CreateClusterFlowProps> = ({
   cluster,
-  onMenuClose,
   onClusterDelete,
+  onMenuClose,
+  onSubmit,
 }) => {
   const { clusterCreationStep, loading } = useAppSelector(({ api }) => api);
 
   const dispatch = useAppDispatch();
 
-  const methods = useForm<NewClusterConfig>({
-    defaultValues: isDevelopment ? mockClusterConfig : {},
+  const methods = useForm<NewWorkloadClusterConfig>({
+    defaultValues: isDevelopment ? mockClusterConfig : { type: ClusterType.WORKLOAD },
   });
 
   const handleMenuClose = useCallback(() => {
@@ -63,14 +65,17 @@ export const CreateClusterFlow: FunctionComponent<CreateClusterFlowProps> = ({
   }, [onClusterDelete, clusterCreationStep]);
 
   const handleSubmit = useCallback(
-    (config: NewClusterConfig) => {
+    (config: NewWorkloadClusterConfig) => {
       if (clusterCreationStep !== ClusterCreationStep.DETAILS) {
         dispatch(createWorkloadCluster(config))
           .unwrap()
-          .then(() => dispatch(setClusterCreationStep(clusterCreationStep + 1)));
+          .then((response) => {
+            onSubmit(response.cluster_id);
+            dispatch(setClusterCreationStep(clusterCreationStep + 1));
+          });
       }
     },
-    [clusterCreationStep, dispatch],
+    [clusterCreationStep, dispatch, onSubmit],
   );
 
   const showingClusterDetails = clusterCreationStep === ClusterCreationStep.DETAILS;
