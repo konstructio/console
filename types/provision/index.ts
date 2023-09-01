@@ -53,6 +53,7 @@ export interface ClusterResponse {
   workload_clusters: {
     cluster_id: string;
     cluster_name: string;
+    cluster_type: string;
     cloud_region: string;
     instance_size: string;
     node_count: number;
@@ -86,6 +87,25 @@ export interface ClusterResponse {
   vault_initialized_check: boolean;
   vault_terraform_apply_check: boolean;
   users_terraform_apply_check: boolean;
+  cloudflare_auth?: {
+    token: string;
+  };
+  aws_auth?: {
+    access_key_id: string;
+    secret_access_key: string;
+    session_token: string;
+  };
+  civo_auth?: {
+    token: string;
+  };
+  do_auth?: {
+    token: string;
+    spaces_key: string;
+    spaces_secret: string;
+  };
+  vultr_auth?: {
+    token: string;
+  };
 }
 
 export interface Cluster {
@@ -93,6 +113,7 @@ export interface Cluster {
   adminEmail: string;
   clusterName?: string;
   cloudRegion?: string;
+  clusterType: string;
   cloudProvider?: InstallationType;
   creationDate?: string;
   domainName: string;
@@ -136,6 +157,25 @@ export interface ManagementCluster extends Cluster, Row {
     vault_terraform_apply_check: boolean;
     users_terraform_apply_check: boolean;
     [key: string]: boolean;
+  };
+  cloudflare_auth?: {
+    token: string;
+  };
+  aws_auth?: {
+    access_key_id: string;
+    secret_access_key: string;
+    session_token: string;
+  };
+  civo_auth?: {
+    token: string;
+  };
+  do_auth?: {
+    token: string;
+    spaces_key: string;
+    spaces_secret: string;
+  };
+  vultr_auth?: {
+    token: string;
   };
 }
 

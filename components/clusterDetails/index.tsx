@@ -25,6 +25,7 @@ export interface ClusterDetailsProps extends ComponentPropsWithoutRef<'div'> {
 const ClusterDetails: FunctionComponent<ClusterDetailsProps> = ({ cluster, ...rest }) => {
   const {
     clusterName,
+    clusterType,
     adminEmail,
     cloudProvider,
     cloudRegion,
@@ -115,14 +116,16 @@ const ClusterDetails: FunctionComponent<ClusterDetailsProps> = ({ cluster, ...re
         </RowInfo>
 
         {/* Fifth Row */}
-        <RowInfo>
-          <ColumnInfo>
-            <StyledLabel variant="labelLarge">Instance size</StyledLabel>
-            <StyledValue variant="body2" style={{ width: '100%' }}>
-              {instanceSize}
-            </StyledValue>
-          </ColumnInfo>
-        </RowInfo>
+        {clusterType === ClusterType.WORKLOAD && (
+          <RowInfo>
+            <ColumnInfo>
+              <StyledLabel variant="labelLarge">Instance size</StyledLabel>
+              <StyledValue variant="body2" style={{ width: '100%' }}>
+                {instanceSize}
+              </StyledValue>
+            </ColumnInfo>
+          </RowInfo>
+        )}
       </Content>
     </Container>
   );

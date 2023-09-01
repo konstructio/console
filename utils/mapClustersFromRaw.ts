@@ -6,6 +6,7 @@ export const mapClusterFromRaw = (cluster: ClusterResponse): ManagementCluster =
   adminEmail: cluster.alerts_email,
   cloudProvider: cluster.cloud_provider,
   cloudRegion: cluster.cloud_region,
+  clusterType: cluster.cluster_type,
   domainName: cluster.domain_name,
   gitAuth: {
     gitOwner: cluster.git_auth.git_owner,
@@ -19,12 +20,18 @@ export const mapClusterFromRaw = (cluster: ClusterResponse): ManagementCluster =
   lastErrorCondition: cluster.last_condition,
   status: cluster.status,
   nodeCount: 2,
+  cloudflare_auth: cluster.cloudflare_auth,
+  aws_auth: cluster?.aws_auth,
+  civo_auth: cluster?.civo_auth,
+  do_auth: cluster?.do_auth,
+  vultr_auth: cluster?.vultr_auth,
   workloadClusters:
     cluster.workload_clusters
       ?.filter(({ status }) => ![ClusterStatus.DELETED].includes(status))
       .map((item) => ({
         id: item.cluster_id,
         clusterName: item.cluster_name,
+        clusterType: item.cluster_type,
         cloudRegion: item.cloud_region,
         cloudProvider: cluster.cloud_provider,
         instanceSize: item.instance_size,

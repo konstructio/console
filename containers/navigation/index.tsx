@@ -37,7 +37,7 @@ const Navigation: FunctionComponent = () => {
     ...installation,
   }));
 
-  const { isEnabled: isClusterManagementEnabled } = useFeatureFlag('cluster-management');
+  const { isEnabled: isMultiClusterEnabled } = useFeatureFlag('multicluster-management');
 
   const { isProvisionStep } = useInstallation(
     installType as InstallationType,
@@ -52,7 +52,7 @@ const Navigation: FunctionComponent = () => {
           icon: <ScatterPlotIcon />,
           path: '/cluster-management',
           title: 'Cluster Management',
-          isEnabled: isClusterManagementEnabled,
+          isEnabled: isMultiClusterEnabled,
         },
         {
           icon: <GridViewOutlinedIcon />,
@@ -61,7 +61,7 @@ const Navigation: FunctionComponent = () => {
           isEnabled: !isClusterZero || !!selectedCluster?.clusterName,
         },
       ].filter(({ isEnabled }) => isEnabled),
-    [isClusterManagementEnabled, isClusterZero, selectedCluster?.clusterName],
+    [isMultiClusterEnabled, isClusterZero, selectedCluster?.clusterName],
   );
 
   const handleIsActiveItem = useCallback(

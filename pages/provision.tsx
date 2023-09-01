@@ -11,11 +11,11 @@ const ProvisionPage: FunctionComponent = () => {
   const { push } = useRouter();
   const selectedCluster = useAppSelector(({ cluster }) => cluster.selectedCluster);
 
-  const { isEnabled: isClusterManagementEnabled } = useFeatureFlag('cluster-management');
+  const { isEnabled: isMultiClusterEnabled } = useFeatureFlag('multicluster-management');
 
   const isEnabled = useMemo(
-    () => isClusterManagementEnabled || !selectedCluster?.clusterName,
-    [isClusterManagementEnabled, selectedCluster?.clusterName],
+    () => isMultiClusterEnabled || !selectedCluster?.clusterName,
+    [isMultiClusterEnabled, selectedCluster?.clusterName],
   );
 
   if (!isEnabled) {

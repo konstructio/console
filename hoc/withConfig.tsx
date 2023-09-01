@@ -25,7 +25,7 @@ export async function getServerSideProps() {
   let flags;
   try {
     const client = new PostHog(POSTHOG_KEY || 'phc_N4K5yJQsiIDBRK3X6rfrZlldK5uf2u1vgvlB82RADKn');
-    flags = await client.getAllFlags('');
+    flags = await client.getAllFlags(KUBEFIRST_VERSION);
   } catch (error) {
     // eslint-disable-next-line no-console
     console.log('An error occurred while getting feature flags', error);

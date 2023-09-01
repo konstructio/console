@@ -1,10 +1,10 @@
-import React, { FunctionComponent, useCallback, useState } from 'react';
+import React, { FunctionComponent, useCallback, useEffect, useState } from 'react';
 import { Box, Tabs } from '@mui/material';
 
 import Button from '../../components/button';
 import Typography from '../../components/typography';
 import { useAppDispatch, useAppSelector } from '../../redux/store';
-import { deleteCluster, getClusters } from '../../redux/thunks/api.thunk';
+import { deleteCluster, getCloudRegions, getClusters } from '../../redux/thunks/api.thunk';
 import { Cluster, ClusterCreationStep, ClusterStatus } from '../../types/provision';
 import useToggle from '../../hooks/useToggle';
 import Drawer from '../../components/drawer';
@@ -21,6 +21,7 @@ import {
 } from '../../redux/slices/api.slice';
 import { setPresentedCluster } from '../../redux/slices/api.slice';
 import { useQueue } from '../../hooks/useQueue';
+import { InstallationType } from '../../types/redux';
 
 import { CreateClusterFlow } from './createClusterFlow';
 import { Container, Content, Header } from './clusterManagement.styled';
@@ -126,6 +127,12 @@ const ClusterManagement: FunctionComponent = () => {
     }
   };
 
+  useEffect(() => {
+    if (managementCluster) {
+      dispatch(getCloudRegions(managementCluster));
+    }
+  }, [dispatch, managementCluster]);
+
   return (
     <Container>
       <Header>
@@ -146,14 +153,16 @@ const ClusterManagement: FunctionComponent = () => {
             />
           </Tabs>
         </Box>
-        <Button
-          color="primary"
-          variant="contained"
-          style={{ marginRight: '24px' }}
-          onClick={handleAddWorkloadCluster}
-        >
-          Add workload cluster
-        </Button>
+        {managementCluster?.cloudProvider === InstallationType.CIVO && (
+          <Button
+            color="primary"
+            variant="contained"
+            style={{ marginRight: '24px' }}
+            onClick={handleAddWorkloadCluster}
+          >
+            Add workload cluster
+          </Button>
+        )}
       </Header>
       <Content>
         <TabPanel value={activeTab} index={MANAGEMENT_TABS.LIST_VIEW}>

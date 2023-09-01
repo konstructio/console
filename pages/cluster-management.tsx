@@ -10,15 +10,15 @@ export { getServerSideProps } from '../hoc/withConfig';
 const ClusterManagementPage: FunctionComponent = () => {
   const { push } = useRouter();
 
-  const { isEnabled: isClusterManagementEnabled } = useFeatureFlag('cluster-management');
+  const { isEnabled: isMultiClusterEnabled } = useFeatureFlag('multicluster-management');
 
   useEffect(() => {
-    if (!isClusterManagementEnabled) {
+    if (!isMultiClusterEnabled) {
       push('/');
     }
   });
 
-  return isClusterManagementEnabled ? (
+  return isMultiClusterEnabled ? (
     <QueueProvider>
       <ClusterManagement />
     </QueueProvider>

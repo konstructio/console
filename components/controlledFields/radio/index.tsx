@@ -13,12 +13,16 @@ export interface ControlledRadioGroupProps<T extends FieldValues> extends UseCon
     pattern?: RegExp;
   };
   options: Array<{ label: string; value: string }>;
+  onChange?: (value: string) => void;
+  inLine?: boolean;
 }
 
 function ControlledRadioGroup<T extends FieldValues>({
   defaultValue,
+  inLine = false,
   name,
   options,
+  onChange,
   required,
   ...props
 }: ControlledRadioGroupProps<T>) {
@@ -27,7 +31,11 @@ function ControlledRadioGroup<T extends FieldValues>({
       {...props}
       name={name}
       render={({ field }) => (
-        <RadioGroup defaultValue={defaultValue} name={name}>
+        <RadioGroup
+          defaultValue={defaultValue}
+          name={name}
+          sx={{ display: 'flex', flexDirection: inLine ? 'row' : 'initial' }}
+        >
           {options.map(({ label, value }) => (
             <FormControlLabel
               key={label}
@@ -40,6 +48,7 @@ function ControlledRadioGroup<T extends FieldValues>({
                   inputRef={field.ref}
                   value={value}
                   onChange={(e) => {
+                    onChange && onChange(e.target.value);
                     field.onChange(e);
                   }}
                 />

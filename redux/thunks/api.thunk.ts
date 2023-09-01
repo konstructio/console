@@ -14,6 +14,7 @@ import {
   ClusterStatus,
   WorkloadCluster,
   ClusterResponse,
+  Cluster,
 } from '../../types/provision';
 import { GitOpsCatalogApp, GitOpsCatalogProps } from '../../types/gitOpsCatalog';
 import { InstallValues, InstallationType } from '../../types/redux';
@@ -249,7 +250,7 @@ export const installGitOpsApp = createAsyncThunk<
 
 export const getCloudRegions = createAsyncThunk<
   Array<string>,
-  InstallValues,
+  InstallValues | Cluster,
   {
     dispatch: AppDispatch;
     state: RootState;
@@ -260,7 +261,7 @@ export const getCloudRegions = createAsyncThunk<
   } = getState();
 
   const res = await axios.post<{ regions: Array<string> }>('/api/proxy', {
-    url: `/region/${installType}`,
+    url: `/region/${installType || (values as Cluster).cloudProvider}`,
     body: installType === InstallationType.AWS ? { ...values, cloud_region: 'us-east-1' } : values,
   });
 
