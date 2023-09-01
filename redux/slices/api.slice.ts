@@ -18,7 +18,7 @@ import {
   WorkloadCluster,
   Cluster,
 } from '../../types/provision';
-import { getPreviouslyUsedClusterNames } from 'utils/getPreviouslyUsedClusterNames';
+import { getPreviouslyUsedClusterNames } from '../../utils/getPreviouslyUsedClusterNames';
 
 export interface ApiState {
   loading: boolean;
