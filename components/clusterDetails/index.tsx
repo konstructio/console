@@ -38,7 +38,7 @@ const ClusterDetails: FunctionComponent<ClusterDetailsProps> = ({ cluster, ...re
     gitAuth: { gitUser } = {},
   } = cluster;
 
-  const GITHUB_CLUSTER_BASE_LINK = 'https://github.com/kubesecond-net/gitops/tree';
+  const GITHUB_CLUSTER_BASE_LINK = `https://github.com/${domainName.replace('.', '-')}/gitops/tree`;
 
   const clusterDetailsLink = `/main/registry/clusters/${clusterName}`;
 
