@@ -1,4 +1,4 @@
-import { ClusterResponse, ManagementCluster, ClusterType, ClusterStatus } from '../types/provision';
+import { ClusterResponse, ManagementCluster, ClusterType } from '../types/provision';
 
 export const mapClusterFromRaw = (cluster: ClusterResponse): ManagementCluster => ({
   id: cluster.cluster_id,
@@ -6,7 +6,6 @@ export const mapClusterFromRaw = (cluster: ClusterResponse): ManagementCluster =
   adminEmail: cluster.alerts_email,
   cloudProvider: cluster.cloud_provider,
   cloudRegion: cluster.cloud_region,
-  clusterType: cluster.cluster_type,
   domainName: cluster.domain_name,
   gitAuth: {
     gitOwner: cluster.git_auth.git_owner,
@@ -26,29 +25,26 @@ export const mapClusterFromRaw = (cluster: ClusterResponse): ManagementCluster =
   do_auth: cluster?.do_auth,
   vultr_auth: cluster?.vultr_auth,
   workloadClusters:
-    cluster.workload_clusters
-      ?.filter(({ status }) => ![ClusterStatus.DELETED].includes(status))
-      .map((item) => ({
-        id: item.cluster_id,
-        clusterName: item.cluster_name,
-        clusterType: item.cluster_type,
-        cloudRegion: item.cloud_region,
-        cloudProvider: cluster.cloud_provider,
-        instanceSize: item.instance_size,
-        nodeCount: item.node_count,
-        creationDate: cluster.creation_timestamp,
-        environment: item.environment,
-        status: item.status,
-        type: ClusterType.WORKLOAD,
-        domainName: cluster.domain_name,
-        gitProvider: cluster.git_provider,
-        adminEmail: cluster.alerts_email,
-        gitAuth: {
-          gitOwner: cluster.git_auth.git_owner,
-          gitToken: cluster.git_auth.git_token,
-          gitUser: cluster.git_auth.git_username,
-        },
-      })) || [],
+    cluster.workload_clusters.map((item) => ({
+      id: item.cluster_id,
+      clusterName: item.cluster_name,
+      cloudRegion: item.cloud_region,
+      cloudProvider: cluster.cloud_provider,
+      instanceSize: item.instance_size,
+      nodeCount: item.node_count,
+      creationDate: cluster.creation_timestamp,
+      environment: item.environment,
+      status: item.status,
+      type: item.cluster_type as ClusterType,
+      domainName: cluster.domain_name,
+      gitProvider: cluster.git_provider,
+      adminEmail: cluster.alerts_email,
+      gitAuth: {
+        gitOwner: cluster.git_auth.git_owner,
+        gitToken: cluster.git_auth.git_token,
+        gitUser: cluster.git_auth.git_username,
+      },
+    })) || [],
   vaultAuth: {
     kbotPassword: cluster.vault_auth?.kbot_password,
   },

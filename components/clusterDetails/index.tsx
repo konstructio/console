@@ -25,7 +25,6 @@ export interface ClusterDetailsProps extends ComponentPropsWithoutRef<'div'> {
 const ClusterDetails: FunctionComponent<ClusterDetailsProps> = ({ cluster, ...rest }) => {
   const {
     clusterName,
-    clusterType,
     adminEmail,
     cloudProvider,
     cloudRegion,
@@ -36,10 +35,12 @@ const ClusterDetails: FunctionComponent<ClusterDetailsProps> = ({ cluster, ...re
     instanceSize,
     status,
     type,
-    gitAuth: { gitUser, gitOwner } = {},
+    gitAuth: { gitUser } = {},
   } = cluster;
 
-  const clusterDetailsLink = `https://github.com/${gitOwner}/gitops/tree/main/registry/${clusterName}`;
+  const GITHUB_CLUSTER_BASE_LINK = 'https://github.com/kubesecond-net/gitops/tree';
+
+  const clusterDetailsLink = `/main/registry/clusters/${clusterName}`;
 
   return (
     <Container {...rest}>
@@ -54,12 +55,16 @@ const ClusterDetails: FunctionComponent<ClusterDetailsProps> = ({ cluster, ...re
                 The cluster has been registered and will be synced
               </Typography>
               <Typography variant="body2">
-                Provisioning details: <Link href={clusterDetailsLink}>{clusterDetailsLink}</Link>
+                Provisioning details:{' '}
+                <Link href={GITHUB_CLUSTER_BASE_LINK + clusterDetailsLink}>
+                  {clusterDetailsLink}
+                </Link>
               </Typography>
             </>
           ) : (
             <Typography>
-              Cluster details: <Link href={clusterDetailsLink}>{clusterDetailsLink}</Link>{' '}
+              Cluster details:{' '}
+              <Link href={GITHUB_CLUSTER_BASE_LINK + clusterDetailsLink}>{clusterDetailsLink}</Link>{' '}
             </Typography>
           )}
         </Column>
@@ -116,7 +121,7 @@ const ClusterDetails: FunctionComponent<ClusterDetailsProps> = ({ cluster, ...re
         </RowInfo>
 
         {/* Fifth Row */}
-        {clusterType === ClusterType.WORKLOAD && (
+        {type === ClusterType.WORKLOAD && (
           <RowInfo>
             <ColumnInfo>
               <StyledLabel variant="labelLarge">Instance size</StyledLabel>
