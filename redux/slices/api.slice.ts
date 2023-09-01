@@ -179,6 +179,18 @@ const apiSlice = createSlice({
         state.isProvisioning = true;
         state.isProvisioned = false;
       })
+      .addCase(deleteCluster.pending, (state) => {
+        state.isDeleting = true;
+        state.isDeleted = false;
+        if (state.managementCluster && state.presentedCluster) {
+          const deletingCluster = state.managementCluster.workloadClusters.find(
+            (cluster) => cluster.id === state.presentedCluster?.id,
+          );
+          if (deletingCluster) {
+            deletingCluster.status = ClusterStatus.DELETING;
+          }
+        }
+      })
       .addCase(deleteCluster.fulfilled, (state) => {
         state.isDeleting = true;
         state.isDeleted = false;

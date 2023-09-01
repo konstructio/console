@@ -62,10 +62,19 @@ const ClusterManagement: FunctionComponent = () => {
     await dispatch(getClusters());
   }, [dispatch]);
 
+  const handleMenuClose = useCallback(() => {
+    if (clusterCreationStep === ClusterCreationStep.CONFIG) {
+      dispatch(removeDraftCluster());
+    } else {
+      dispatch(setClusterCreationStep(ClusterCreationStep.CONFIG));
+    }
+    dispatch(setPresentedCluster(undefined));
+    closeCreateClusterFlow();
+  }, [clusterCreationStep, dispatch, closeCreateClusterFlow]);
+
   const handleDeleteCluster = useCallback(async () => {
     if (presentedCluster) {
       await dispatch(deleteCluster(presentedCluster?.id)).unwrap();
-      handleGetClusters();
       addClusterToQueue({
         id: presentedCluster?.id,
         clusterName: managementCluster?.clusterName as string,
@@ -74,7 +83,7 @@ const ClusterManagement: FunctionComponent = () => {
       });
 
       closeDeleteModal();
-      closeCreateClusterFlow();
+      handleMenuClose();
     }
   }, [
     presentedCluster,
@@ -83,7 +92,7 @@ const ClusterManagement: FunctionComponent = () => {
     addClusterToQueue,
     managementCluster?.clusterName,
     closeDeleteModal,
-    closeCreateClusterFlow,
+    handleMenuClose,
   ]);
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
@@ -106,19 +115,8 @@ const ClusterManagement: FunctionComponent = () => {
     openCreateClusterFlow();
   }, [managementCluster, dispatch, openCreateClusterFlow, clusterCreationStep]);
 
-  const handleMenuClose = useCallback(() => {
-    if (clusterCreationStep === ClusterCreationStep.CONFIG) {
-      dispatch(removeDraftCluster());
-    } else {
-      dispatch(setClusterCreationStep(ClusterCreationStep.CONFIG));
-    }
-    dispatch(setPresentedCluster(undefined));
-    closeCreateClusterFlow();
-  }, [clusterCreationStep, dispatch, closeCreateClusterFlow]);
-
   const handleCreateCluster = async (clusterId: string) => {
     if (managementCluster) {
-      handleGetClusters();
       addClusterToQueue({
         id: clusterId,
         clusterName: managementCluster?.clusterName as string,
