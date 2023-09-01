@@ -23,6 +23,8 @@ export const EMAIL_REGEX = /.+@.+\..+/;
 
 export const DOMAIN_REGEX = new RegExp(/[a-zA-Z0-9@:%._+~#=]{2,256}\.[a-z]{2,6}/);
 
+export const LOWER_KEBAB_CASE_REGEX = /^[a-z0-9-]+$/g;
+
 export const KUBEFIRST_REPOSITORIES = ['gitops', 'metaphor'];
 export const KUBEFIRST_TEAMS = ['admins', 'developers'];
 
