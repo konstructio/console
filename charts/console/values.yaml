@@ -86,4 +86,4 @@ affinity: {}
 
 env:
   ENTERPRISE_API_URL:
-    value: "http://kubefirst-kubefirst-api-ee.kubefirst.svc.cluster.local:8080"
+    value: "http://kubefirst-kubefirst-api-ee.kubefirst.svc.cluster.local"
