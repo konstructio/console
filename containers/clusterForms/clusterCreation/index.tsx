@@ -1,4 +1,4 @@
-import React, { ComponentPropsWithoutRef, FunctionComponent, useState } from 'react';
+import React, { ComponentPropsWithoutRef, FunctionComponent, useMemo, useState } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { Box } from '@mui/material';
 
@@ -30,6 +30,11 @@ const ClusterCreationForm: FunctionComponent<ComponentPropsWithoutRef<'div'>> = 
   } = useFormContext<NewWorkloadClusterConfig>();
 
   const { clusterName, cloudRegion, instanceSize, type } = getValues();
+
+  const showInstanceSizeSelect = useMemo(
+    () => selectedClusterType === ClusterType.WORKLOAD || type === ClusterType.WORKLOAD,
+    [selectedClusterType, type],
+  );
 
   return (
     <Container {...props}>
@@ -91,7 +96,7 @@ const ClusterCreationForm: FunctionComponent<ComponentPropsWithoutRef<'div'>> = 
         rules={{ required: true }}
         options={cloudRegions && cloudRegions.map((region) => ({ label: region, value: region }))}
       />
-      {selectedClusterType === ClusterType.WORKLOAD && (
+      {showInstanceSizeSelect && (
         <ControlledSelect
           control={control}
           name="instanceSize"
