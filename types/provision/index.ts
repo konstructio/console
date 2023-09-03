@@ -52,7 +52,7 @@ export interface ClusterResponse {
   alerts_email: string;
   git_provider: string;
   git_user: string;
-  workload_clusters: {
+  workload_clusters?: {
     cluster_id: string;
     cluster_name: string;
     cluster_type: string;
