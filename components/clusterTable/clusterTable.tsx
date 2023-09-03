@@ -67,7 +67,7 @@ const ClusterRow: FunctionComponent<ClusterRowProps> = ({
     type,
     cloudProvider,
     cloudRegion,
-    creationDate = '',
+    creationDate,
     gitAuth: { gitUser } = {},
     status,
     nodeCount,
@@ -117,13 +117,15 @@ const ClusterRow: FunctionComponent<ClusterRowProps> = ({
         <StyledTableCell>
           <StyledCellText variant="body2">{cloudRegion}</StyledCellText>
         </StyledTableCell>
-        <StyledTableCell align="right">
+        <StyledTableCell align="center">
           <StyledCellText variant="body2">{nodeCount}</StyledCellText>
         </StyledTableCell>
         <StyledTableCell>
-          <StyledCellText variant="body2">
-            {moment(+creationDate).format('DD MMM YYYY')}
-          </StyledCellText>
+          {creationDate && (
+            <StyledCellText variant="body2">
+              {moment(+creationDate).format('DD MMM YYYY')}
+            </StyledCellText>
+          )}
         </StyledTableCell>
         <StyledTableCell>
           <StyledCellText variant="body2">{gitUser}</StyledCellText>
@@ -219,18 +221,20 @@ export const ClusterTable: FunctionComponent<ClusterTableProps> = ({
           />
 
           {expanded &&
-            workloadClusters.map((cluster) => (
-              <ClusterRow
-                key={cluster.clusterName}
-                {...cluster}
-                onDeleteCluster={onDeleteCluster}
-                onMenuOpenClose={onMenuOpenClose}
-                domainName={domainName}
-                gitProvider={gitProvider}
-                cloudProvider={cloudProvider}
-                adminEmail={adminEmail}
-              />
-            ))}
+            workloadClusters
+              .filter((cluster) => cluster.status !== ClusterStatus.DELETED)
+              .map((cluster) => (
+                <ClusterRow
+                  key={cluster.clusterName}
+                  {...cluster}
+                  onDeleteCluster={onDeleteCluster}
+                  onMenuOpenClose={onMenuOpenClose}
+                  domainName={domainName}
+                  gitProvider={gitProvider}
+                  cloudProvider={cloudProvider}
+                  adminEmail={adminEmail}
+                />
+              ))}
         </StyledTableBody>
       </StyledTable>
     </StyledTableContainer>

@@ -1,7 +1,7 @@
 import { Edge } from 'reactflow';
 
-import { ManagementCluster, ClusterType, ClusterStatus } from '../../types/provision';
-import { CustomGraphNode, GraphNodeInfo } from '../../components/graphNode';
+import { ManagementCluster, ClusterType, ClusterStatus, Cluster } from '../../types/provision';
+import { CustomGraphNode } from '../../components/graphNode';
 
 const WORKLOAD_CLUSTER_Y_SPACE = 60;
 const WORKLOAD_CLUSTER_X_SPACE = 250;
@@ -11,7 +11,7 @@ const NODE_WIDTH = 360;
 export function generateNode(
   id: string,
   position: { x: number; y: number },
-  info: Partial<GraphNodeInfo>,
+  info: Cluster,
   selected = false,
 ): CustomGraphNode {
   return {
@@ -38,8 +38,11 @@ export function generateEdge(id: string, source: string, target: string, animate
 export function generateNodesConfig(cluster: ManagementCluster): [CustomGraphNode[], Edge[]] {
   const { workloadClusters, ...managementClusterInfo } = cluster;
   const { id: managementClusterId } = managementClusterInfo;
+  const filteredWorkloadClusters = workloadClusters.filter(
+    (cluster) => cluster.status !== ClusterStatus.DELETED,
+  );
 
-  const workloadClusterLength = workloadClusters.length;
+  const workloadClusterLength = filteredWorkloadClusters.length;
   const spacesBetweenClusterNodes = workloadClusterLength - 1;
 
   // get total height of all nodes and space inbetween
@@ -63,7 +66,7 @@ export function generateNodesConfig(cluster: ManagementCluster): [CustomGraphNod
   const edges: Edge[] = [];
 
   for (let i = 0; i < workloadClusterLength; i += 1) {
-    const workloadCluster = workloadClusters[i];
+    const workloadCluster = filteredWorkloadClusters[i];
     const { id: workloadClusterId } = workloadCluster;
 
     // if first node place - at initial position

@@ -18,6 +18,7 @@ import {
   WorkloadCluster,
   Cluster,
 } from '../../types/provision';
+import { getPreviouslyUsedClusterNames } from '../../utils/getPreviouslyUsedClusterNames';
 
 export interface ApiState {
   loading: boolean;
@@ -37,6 +38,7 @@ export interface ApiState {
   isAuthenticationValid?: boolean;
   clusterCreationStep: ClusterCreationStep;
   clusterConfig?: NewWorkloadClusterConfig;
+  previouslyUsedClusterNames: string[];
 }
 
 export const initialState: ApiState = {
@@ -55,6 +57,7 @@ export const initialState: ApiState = {
   cloudRegions: [],
   isAuthenticationValid: undefined,
   clusterCreationStep: ClusterCreationStep.CONFIG,
+  previouslyUsedClusterNames: [],
 };
 
 const apiSlice = createSlice({
@@ -86,6 +89,7 @@ const apiSlice = createSlice({
       state.cloudDomains = [];
       state.cloudRegions = [];
       state.isAuthenticationValid = undefined;
+      state.previouslyUsedClusterNames = [];
     },
     clearValidation: (state) => {
       state.isAuthenticationValid = undefined;
@@ -204,6 +208,8 @@ const apiSlice = createSlice({
         state.status = payload.status;
         state.selectedCluster = payload;
 
+        state.previouslyUsedClusterNames = getPreviouslyUsedClusterNames(payload);
+
         if (state.status === ClusterStatus.DELETED) {
           state.isDeleted = true;
           state.isDeleting = false;
@@ -221,6 +227,8 @@ const apiSlice = createSlice({
         state.loading = false;
         state.isError = false;
         state.managementCluster = payload;
+
+        state.previouslyUsedClusterNames = getPreviouslyUsedClusterNames(payload);
 
         if (state.presentedCluster) {
           const clusterUpdate = payload.workloadClusters.find(

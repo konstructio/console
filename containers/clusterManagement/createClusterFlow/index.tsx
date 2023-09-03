@@ -49,6 +49,7 @@ export const CreateClusterFlow: FunctionComponent<CreateClusterFlowProps> = ({
 
   const methods = useForm<NewWorkloadClusterConfig>({
     defaultValues: isDevelopment ? mockClusterConfig : { type: ClusterType.WORKLOAD },
+    mode: 'onChange',
   });
 
   const handleMenuClose = useCallback(() => {

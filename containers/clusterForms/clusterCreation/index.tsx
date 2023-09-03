@@ -1,4 +1,4 @@
-import React, { ComponentPropsWithoutRef, FunctionComponent, useState } from 'react';
+import React, { ComponentPropsWithoutRef, FunctionComponent, useMemo, useState } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { Box } from '@mui/material';
 
@@ -11,6 +11,7 @@ import { ClusterType, NewWorkloadClusterConfig } from '../../../types/provision'
 import { EXCLUSIVE_PLUM } from '../../../constants/colors';
 import ControlledNumberInput from '../../../components/controlledFields/numberInput';
 import ControlledRadioGroup from '../../../components/controlledFields/radio';
+import { LOWER_KEBAB_CASE_REGEX } from '../../../constants';
 
 import { Container } from './clusterCreation.styled';
 import { InputContainer } from './advancedOptions/advancedOptions.styled';
@@ -20,15 +21,20 @@ const minNodeCount = 3;
 const ClusterCreationForm: FunctionComponent<ComponentPropsWithoutRef<'div'>> = (props) => {
   const [selectedClusterType, setSelectedClusterType] = useState('');
 
-  const { cloudRegions } = useAppSelector(({ api, installation }) => ({
-    cloudDomains: api.cloudDomains,
-    cloudRegions: api.cloudRegions,
-    values: installation.values,
-  }));
+  const { cloudRegions, previouslyUsedClusterNames } = useAppSelector(({ api }) => api);
 
-  const { control, getValues } = useFormContext<NewWorkloadClusterConfig>();
+  const {
+    control,
+    getValues,
+    formState: { errors },
+  } = useFormContext<NewWorkloadClusterConfig>();
 
   const { clusterName, cloudRegion, instanceSize, type } = getValues();
+
+  const showInstanceSizeSelect = useMemo(
+    () => selectedClusterType === ClusterType.WORKLOAD || type === ClusterType.WORKLOAD,
+    [selectedClusterType, type],
+  );
 
   return (
     <Container {...props}>
@@ -59,8 +65,17 @@ const ClusterCreationForm: FunctionComponent<ComponentPropsWithoutRef<'div'>> = 
         rules={{
           maxLength: 25,
           required: true,
+          pattern: {
+            value: LOWER_KEBAB_CASE_REGEX,
+            message: 'Please use lower kebab case for cluster name',
+          },
+          validate: {
+            previouslyUsedClusterNames: (value) =>
+              !previouslyUsedClusterNames.includes(value as string) ||
+              'Please use a unique name that has not been previously provisioned',
+          },
         }}
-        onErrorText="Maximum 25 characters."
+        onErrorText={errors.clusterName?.message}
         required
       />
       <ControlledTextField
@@ -81,7 +96,7 @@ const ClusterCreationForm: FunctionComponent<ComponentPropsWithoutRef<'div'>> = 
         rules={{ required: true }}
         options={cloudRegions && cloudRegions.map((region) => ({ label: region, value: region }))}
       />
-      {selectedClusterType === ClusterType.WORKLOAD && (
+      {showInstanceSizeSelect && (
         <ControlledSelect
           control={control}
           name="instanceSize"
