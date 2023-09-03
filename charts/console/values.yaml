@@ -87,3 +87,6 @@ affinity: {}
 env:
   ENTERPRISE_API_URL:
     value: "http://kubefirst-kubefirst-api-ee.kubefirst.svc.cluster.local"
+
+global:
+  kubefirstVersion: "development"
