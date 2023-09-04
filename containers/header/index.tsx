@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useEffect, useMemo } from 'react';
+import React, { FunctionComponent, useCallback, useEffect, useMemo } from 'react';
 import { useRouter } from 'next/router';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 
@@ -28,17 +28,20 @@ const Header: FunctionComponent = () => {
     [clusters.length, isEnabled, pathname],
   );
 
-  const handleSelectCluster = async (selectedClusterName: string) => {
-    const selectedCluster = clusters.find(
-      ({ clusterName }) =>
-        clusterName && clusterName.toLowerCase() === selectedClusterName.toLowerCase(),
-    );
+  const handleSelectCluster = useCallback(
+    async (selectedClusterName: string) => {
+      const selectedCluster = clusters.find(
+        ({ clusterName }) =>
+          clusterName && clusterName.toLowerCase() === selectedClusterName.toLowerCase(),
+      );
 
-    if (selectedCluster) {
-      dispatch(resetClusterServices());
-      dispatch(setSelectedCluster(selectedCluster));
-    }
-  };
+      if (selectedCluster) {
+        dispatch(resetClusterServices());
+        dispatch(setSelectedCluster(selectedCluster));
+      }
+    },
+    [clusters, dispatch],
+  );
 
   useEffect(() => {
     dispatch(getClusters());
@@ -54,7 +57,7 @@ const Header: FunctionComponent = () => {
     <Container>
       {isClusterSelectorEnabled ? (
         <Menu
-          onClickMenu={(cluster) => handleSelectCluster(cluster)}
+          onClickMenu={handleSelectCluster}
           label={
             <ClusterMenu>
               <ClusterIndicator />

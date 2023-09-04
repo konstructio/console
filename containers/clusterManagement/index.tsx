@@ -116,7 +116,7 @@ const ClusterManagement: FunctionComponent = () => {
     openCreateClusterFlow();
   }, [managementCluster, dispatch, openCreateClusterFlow, clusterCreationStep]);
 
-  const handleCreateCluster = async (clusterId: string) => {
+  const handleCreateCluster = (clusterId: string) => {
     if (managementCluster) {
       addClusterToQueue({
         id: clusterId,

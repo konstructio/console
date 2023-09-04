@@ -58,9 +58,7 @@ const Services: FunctionComponent = () => {
 
   useEffect(() => {
     if (selectedCluster?.clusterName) {
-      dispatch(() => {
-        dispatch(getClusterServices({ clusterName: selectedCluster?.clusterName }));
-      });
+      dispatch(getClusterServices({ clusterName: selectedCluster?.clusterName }));
     }
   }, [dispatch, router, selectedCluster?.clusterName]);
 

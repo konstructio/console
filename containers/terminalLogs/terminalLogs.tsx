@@ -56,7 +56,7 @@ const TerminalLogs: FunctionComponent = () => {
       isProvisioning,
       isError,
       lastErrorCondition,
-      selectedCluster,
+      managementCluster,
       completedSteps,
     },
     installation: { values },
@@ -91,11 +91,14 @@ const TerminalLogs: FunctionComponent = () => {
     }
   }, []);
 
-  const getClusterInterval = (params: ClusterRequestProps) => {
-    return setInterval(async () => {
-      dispatch(getCluster(params)).unwrap();
-    }, 5000);
-  };
+  const getClusterInterval = useCallback(
+    (params: ClusterRequestProps) => {
+      return setInterval(async () => {
+        dispatch(getCluster(params)).unwrap();
+      }, 5000);
+    },
+    [dispatch],
+  );
 
   useEffect(() => {
     const clusterName = values?.clusterName;
@@ -116,8 +119,15 @@ const TerminalLogs: FunctionComponent = () => {
       clearInterval(interval.current);
       dispatch(clearError());
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isProvisioning, isProvisioned, isError]);
+  }, [
+    isProvisioning,
+    isProvisioned,
+    isError,
+    values,
+    getClusterInterval,
+    dispatch,
+    lastErrorCondition,
+  ]);
 
   useEffect(() => {
     if (terminalRef.current) {
@@ -192,15 +202,15 @@ const TerminalLogs: FunctionComponent = () => {
 
   useEffect(() => {
     Object.keys(CLUSTER_CHECKS).forEach((checkKey) => {
-      const step = CLUSTER_CHECKS[checkKey as string];
-      const isStepCompleted = selectedCluster?.checks[checkKey];
+      const step = CLUSTER_CHECKS[checkKey];
+      const isStepCompleted = managementCluster?.checks[checkKey];
       const isStepAdded = completedSteps.find(({ label }) => label === step.label);
 
       if (isStepCompleted && !isStepAdded?.label) {
         dispatch(setCompletedSteps([...completedSteps, step]));
       }
     });
-  }, [completedSteps, dispatch, selectedCluster?.checks]);
+  }, [completedSteps, dispatch, managementCluster?.checks]);
 
   return (
     <Container>

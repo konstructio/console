@@ -1,37 +1,27 @@
-import React, { FunctionComponent } from 'react';
+import React, { FunctionComponent, useCallback } from 'react';
 import { useRouter } from 'next/router';
 
 import ClusterReady from '../../../../components/clusterReady';
-import { getClusters } from '../../../../redux/thunks/api.thunk';
 import { useAppDispatch, useAppSelector } from '../../../../redux/store';
-import { ManagementCluster } from '../../../../types/provision';
+import { setSelectedCluster } from '../../../../redux/slices/cluster.slice';
 
-export interface ClusterRunningProps {
-  clusterName?: string;
-  domainName?: string;
-}
-
-const ClusterRunning: FunctionComponent<ClusterRunningProps> = (props) => {
-  const dispatch = useAppDispatch();
+const ClusterRunning: FunctionComponent = () => {
   const { push } = useRouter();
+  const dispatch = useAppDispatch();
 
-  const { installValues, selectedCluster } = useAppSelector(({ installation, api }) => ({
-    installValues: installation.values,
-    selectedCluster: api.selectedCluster as ManagementCluster,
-  }));
+  const { managementCluster } = useAppSelector(({ api }) => api);
 
-  const onOpenConsole = () => {
-    dispatch(getClusters());
+  const onOpenConsole = useCallback(() => {
+    dispatch(setSelectedCluster(managementCluster));
     push('/services');
-  };
+  }, [dispatch, managementCluster, push]);
 
   return (
     <ClusterReady
       onOpenConsole={onOpenConsole}
-      clusterName={installValues?.clusterName}
-      domainName={installValues?.domainName}
-      kbotPassword={selectedCluster?.vaultAuth?.kbotPassword}
-      {...props}
+      clusterName={managementCluster?.clusterName}
+      domainName={managementCluster?.domainName}
+      kbotPassword={managementCluster?.vaultAuth?.kbotPassword}
     />
   );
 };
