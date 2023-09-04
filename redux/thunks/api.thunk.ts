@@ -20,7 +20,7 @@ import { GitOpsCatalogApp, GitOpsCatalogProps } from '../../types/gitOpsCatalog'
 import { InstallValues, InstallationType } from '../../types/redux';
 import { TelemetryClickEvent } from '../../types/telemetry';
 import { mapClusterFromRaw } from '../../utils/mapClustersFromRaw';
-import { updateDraftCluster } from '../../redux/slices/api.slice';
+import { addToPreviouslyUsedClusterNames, updateDraftCluster } from '../../redux/slices/api.slice';
 
 export const createCluster = createAsyncThunk<
   ManagementCluster,
@@ -117,6 +117,7 @@ export const createWorkloadCluster = createAsyncThunk<
       gitAuth: managementCluster.gitAuth,
     };
     dispatch(updateDraftCluster(updatedCluster));
+    dispatch(addToPreviouslyUsedClusterNames(config.clusterName));
   }
   return res.data;
 });
@@ -155,11 +156,8 @@ export const getClusters = createAsyncThunk<
     throw res.error;
   }
 
-  const [managementCluster] = res.data
-    .filter(({ status }) => status === ClusterStatus.PROVISIONED)
-    .map(mapClusterFromRaw);
-
-  return managementCluster;
+  // only process single expected management cluster
+  return mapClusterFromRaw(res.data[0]);
 });
 
 export const deleteCluster = createAsyncThunk<

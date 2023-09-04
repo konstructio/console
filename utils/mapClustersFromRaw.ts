@@ -25,7 +25,7 @@ export const mapClusterFromRaw = (cluster: ClusterResponse): ManagementCluster =
   do_auth: cluster?.do_auth,
   vultr_auth: cluster?.vultr_auth,
   workloadClusters:
-    cluster.workload_clusters.map((item) => ({
+    cluster.workload_clusters?.map((item) => ({
       id: item.cluster_id,
       clusterName: item.cluster_name,
       cloudRegion: item.cloud_region,

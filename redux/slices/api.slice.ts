@@ -30,7 +30,6 @@ export interface ApiState {
   isError: boolean;
   lastErrorCondition?: string;
   managementCluster?: ManagementCluster;
-  selectedCluster?: Cluster;
   presentedCluster?: Cluster;
   completedSteps: Array<{ label: string; order: number }>;
   cloudDomains: Array<string>;
@@ -50,7 +49,6 @@ export const initialState: ApiState = {
   isDeleted: false,
   status: undefined,
   loading: false,
-  selectedCluster: undefined,
   presentedCluster: undefined,
   completedSteps: [],
   cloudDomains: [],
@@ -64,9 +62,6 @@ const apiSlice = createSlice({
   name: 'api',
   initialState,
   reducers: {
-    setSelectedCluster: (state, { payload }: PayloadAction<ApiState['selectedCluster']>) => {
-      state.selectedCluster = payload;
-    },
     setPresentedCluster: (state, { payload }: PayloadAction<ApiState['presentedCluster']>) => {
       state.presentedCluster = payload;
     },
@@ -82,14 +77,10 @@ const apiSlice = createSlice({
       state.isDeleted = false;
       state.status = undefined;
       state.loading = false;
-      state.managementCluster = undefined;
-      state.selectedCluster = undefined;
-      state.presentedCluster = undefined;
       state.completedSteps = [];
       state.cloudDomains = [];
       state.cloudRegions = [];
       state.isAuthenticationValid = undefined;
-      state.previouslyUsedClusterNames = [];
     },
     clearValidation: (state) => {
       state.isAuthenticationValid = undefined;
@@ -154,6 +145,9 @@ const apiSlice = createSlice({
         }
       }
     },
+    addToPreviouslyUsedClusterNames: (state, { payload }: PayloadAction<string>) => {
+      state.previouslyUsedClusterNames.push(payload);
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -164,6 +158,7 @@ const apiSlice = createSlice({
         state.loading = false;
         state.status = payload.status;
         state.isProvisioning = true;
+        state.managementCluster = payload;
       })
       .addCase(createCluster.rejected, (state) => {
         state.loading = false;
@@ -206,7 +201,7 @@ const apiSlice = createSlice({
       .addCase(getCluster.fulfilled, (state, { payload }: PayloadAction<ManagementCluster>) => {
         state.loading = false;
         state.status = payload.status;
-        state.selectedCluster = payload;
+        state.managementCluster = payload;
 
         state.previouslyUsedClusterNames = getPreviouslyUsedClusterNames(payload);
 
@@ -267,8 +262,8 @@ export const {
   createDraftCluster,
   removeDraftCluster,
   updateDraftCluster,
-  setSelectedCluster,
   setPresentedCluster,
+  addToPreviouslyUsedClusterNames,
 } = apiSlice.actions;
 
 export const apiReducer = apiSlice.reducer;

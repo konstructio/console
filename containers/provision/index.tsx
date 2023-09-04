@@ -35,6 +35,7 @@ const Provision: FunctionComponent = () => {
     error,
     installType,
     isAuthenticationValid,
+    isProvisioned,
     isClusterZero,
     installMethod,
     installationStep,
@@ -47,11 +48,11 @@ const Provision: FunctionComponent = () => {
     error: installation.error,
     authErrors: git.errors,
     isAuthenticationValid: api.isAuthenticationValid,
+    isProvisioned: api.isProvisioned,
     isClusterZero: config.isClusterZero,
     installMethod: config.installMethod,
   }));
 
-  const { isProvisioned } = useAppSelector(({ api }) => api);
   const isMarketplace = useMemo(() => installMethod?.includes('marketplace'), [installMethod]);
 
   const { stepTitles, installTitles, info, isAuthStep, isProvisionStep, isSetupStep } =

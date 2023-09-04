@@ -13,16 +13,11 @@ export interface ServicesPageProps {
 const ServicesPage: FunctionComponent<ServicesPageProps> = ({ isClusterZero }) => {
   const { push } = useRouter();
 
-  const { selectedCluster, clusters } = useAppSelector(({ cluster, api }) => ({
-    selectedCluster: cluster.selectedCluster,
-    clusters: api.managementCluster
-      ? [api.managementCluster, ...api.managementCluster.workloadClusters]
-      : [],
-  }));
+  const { managementCluster } = useAppSelector(({ api }) => api);
 
   const hasExistingCluster = useMemo(
-    () => !isClusterZero || (selectedCluster?.clusterName && clusters.length),
-    [clusters.length, isClusterZero, selectedCluster?.clusterName],
+    () => !isClusterZero || managementCluster,
+    [isClusterZero, managementCluster],
   );
 
   if (!hasExistingCluster) {

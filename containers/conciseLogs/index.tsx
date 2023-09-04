@@ -30,11 +30,8 @@ export interface ConciseLogsProps {
 const ConciseLogs: FunctionComponent<ConciseLogsProps> = ({ completedSteps }) => {
   const { installType, isError, isProvisioned, lastErrorCondition } = useAppSelector(
     ({ api, installation }) => ({
-      cluster: api.selectedCluster,
-      isProvisioned: api.isProvisioned,
-      lastErrorCondition: api.lastErrorCondition,
-      isError: api.isError,
       installType: installation.installType,
+      ...api,
     }),
   );
 

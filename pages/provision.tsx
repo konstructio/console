@@ -9,13 +9,13 @@ export { getServerSideProps } from '../hoc/withConfig';
 
 const ProvisionPage: FunctionComponent = () => {
   const { push } = useRouter();
-  const selectedCluster = useAppSelector(({ cluster }) => cluster.selectedCluster);
+  const { managementCluster } = useAppSelector(({ api }) => api);
 
   const { isEnabled: isMultiClusterEnabled } = useFeatureFlag('multicluster-management');
 
   const isEnabled = useMemo(
-    () => isMultiClusterEnabled || !selectedCluster?.clusterName,
-    [isMultiClusterEnabled, selectedCluster?.clusterName],
+    () => isMultiClusterEnabled || !managementCluster,
+    [isMultiClusterEnabled, managementCluster],
   );
 
   if (!isEnabled) {

@@ -38,7 +38,7 @@ const QueueProvider: FunctionComponent<PropsWithChildren> = ({ children }) => {
           `/api/proxy?${createQueryString('url', `/cluster/${clusterName || 'kubefirst'}`)}`,
         );
 
-        const workloadCluster = res.data.workload_clusters.find(
+        const workloadCluster = res.data.workload_clusters?.find(
           ({ cluster_id }) => cluster_id === id,
         );
         const { status } = workloadCluster ?? {};
