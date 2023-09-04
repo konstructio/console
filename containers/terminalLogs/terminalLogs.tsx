@@ -119,15 +119,10 @@ const TerminalLogs: FunctionComponent = () => {
       clearInterval(interval.current);
       dispatch(clearError());
     };
-  }, [
-    isProvisioning,
-    isProvisioned,
-    isError,
-    values,
-    getClusterInterval,
-    dispatch,
-    lastErrorCondition,
-  ]);
+    // This is intented, we only want to watch isProvisioning, isProvisioned, isError
+    // and will be deprecated with the queue
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isProvisioning, isProvisioned, isError]);
 
   useEffect(() => {
     if (terminalRef.current) {
@@ -201,16 +196,18 @@ const TerminalLogs: FunctionComponent = () => {
   }, [loadAddons]);
 
   useEffect(() => {
-    Object.keys(CLUSTER_CHECKS).forEach((checkKey) => {
-      const step = CLUSTER_CHECKS[checkKey];
-      const isStepCompleted = managementCluster?.checks[checkKey];
-      const isStepAdded = completedSteps.find(({ label }) => label === step.label);
+    if (managementCluster && managementCluster?.checks) {
+      Object.keys(CLUSTER_CHECKS).forEach((checkKey) => {
+        const step = CLUSTER_CHECKS[checkKey];
+        const isStepCompleted = managementCluster?.checks[checkKey];
+        const isStepAdded = completedSteps.find(({ label }) => label === step.label);
 
-      if (isStepCompleted && !isStepAdded?.label) {
-        dispatch(setCompletedSteps([...completedSteps, step]));
-      }
-    });
-  }, [completedSteps, dispatch, managementCluster?.checks]);
+        if (isStepCompleted && !isStepAdded?.label) {
+          dispatch(setCompletedSteps([...completedSteps, step]));
+        }
+      });
+    }
+  }, [completedSteps, dispatch, managementCluster]);
 
   return (
     <Container>
