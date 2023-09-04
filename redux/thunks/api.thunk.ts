@@ -156,6 +156,10 @@ export const getClusters = createAsyncThunk<
     throw res.error;
   }
 
+  if (!res.data && !res.data[0]) {
+    throw new Error('No clusters found');
+  }
+
   // only process single expected management cluster
   return mapClusterFromRaw(res.data[0]);
 });
