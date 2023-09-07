@@ -71,7 +71,8 @@ const Tag: FunctionComponent<TagProps> = ({
   onRemoval = noop,
   ...rest
 }) => {
-  const { bg, textColor } = TAG_COLOR_MAP[bgColor ?? 'none'];
+  // fallback for passing invalid color in case you happent to not expand/ignore the type.
+  const { bg, textColor } = TAG_COLOR_MAP[bgColor ?? 'none'] || TAG_COLOR_MAP['none'];
   return (
     <TagContainer bg={bg} textColor={textColor} {...rest}>
       {icon && <IconImage src={TAG_ICON_OPTONS[icon]} alt={icon} width={16} height={16} />}
