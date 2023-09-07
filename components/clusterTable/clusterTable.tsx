@@ -76,7 +76,7 @@ const ClusterRow: FunctionComponent<ClusterRowProps> = ({
   const [menuOpen, setMenuOpen] = useState(false);
 
   const cloudLogoSrc = CLOUD_LOGO_OPTIONS[cloudProvider ?? InstallationType.LOCAL];
-  const { iconLabel, iconType, bgColor } = CLUSTER_TAG_CONFIG[status ?? ClusterType.DRAFT];
+  const { iconLabel, iconType, bgColor } = CLUSTER_TAG_CONFIG[status ?? ClusterStatus.PROVISIONED];
   const formattedClusterType = type === ClusterType.MANAGEMENT ? 'management' : 'worker';
 
   const handleMenu = useCallback(() => {
@@ -174,8 +174,7 @@ export const ClusterTable: FunctionComponent<ClusterTableProps> = ({
   ...rest
 }) => {
   const [expanded, setExpanded] = useState(true);
-  const { workloadClusters, domainName, gitProvider, cloudProvider, adminEmail } =
-    managementCluster;
+  const { workloadClusters } = managementCluster;
 
   return (
     <StyledTableContainer {...rest}>
@@ -209,11 +208,7 @@ export const ClusterTable: FunctionComponent<ClusterTableProps> = ({
         </TableHead>
         <StyledTableBody>
           <ClusterRow
-            {...{
-              ...managementCluster,
-              gitOwner: managementCluster.gitAuth.gitOwner,
-              nodeCount: undefined,
-            }}
+            {...managementCluster}
             onDeleteCluster={onDeleteCluster}
             onMenuOpenClose={onMenuOpenClose}
             expanded={expanded}
@@ -229,10 +224,6 @@ export const ClusterTable: FunctionComponent<ClusterTableProps> = ({
                   {...cluster}
                   onDeleteCluster={onDeleteCluster}
                   onMenuOpenClose={onMenuOpenClose}
-                  domainName={domainName}
-                  gitProvider={gitProvider}
-                  cloudProvider={cloudProvider}
-                  adminEmail={adminEmail}
                 />
               ))}
         </StyledTableBody>

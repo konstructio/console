@@ -8,13 +8,12 @@ import TextFieldWithRef from '../../components/textField';
 import Modal from '../../components/modal';
 import { LAUGHING_ORANGE } from '../../constants/colors';
 import Button from '../../components/button';
-import { ClusterInfo } from '../../components/clusterTable/clusterTable';
-import { ClusterType } from '../../types/provision';
+import { Cluster, ClusterType } from '../../types/provision';
 
 import { Content, Footer, Header, NextLink } from './deleteCluster.styled';
 
 export interface DeleteClusterProps {
-  cluster: ClusterInfo;
+  cluster: Cluster;
   isOpen: boolean;
   onClose: () => void;
   onDelete: () => void;

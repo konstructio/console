@@ -1,4 +1,5 @@
 import styled, { css } from 'styled-components';
+import { styled as muiStyled, typographyClasses } from '@mui/material';
 import { Handle } from 'reactflow';
 import Image from 'next/image';
 
@@ -6,15 +7,42 @@ import Typography from '../typography';
 import Column from '../column';
 import Row from '../row';
 import Tag from '../tag';
+import { BLUE_REFLECTION, EXCLUSIVE_PLUM } from '../../constants/colors';
 
-export const Container = styled(Row)<{ borderColor: string; selected: boolean }>`
-  height: 64px;
+const StyledTag = styled(Tag)`
+  width: fit-content;
+`;
+export const StatusTag = styled(StyledTag)`
+  position: absolute;
+  top: 14px;
+  right: 17px;
+`;
+export const EnvironmentTag = styled(StyledTag)`
+  margin-top: 4px;
+`;
+
+export const LeftPanel = styled(Column)`
+  margin-left: 83px;
+  height: 100%;
+  justify-content: center;
+  gap: 4px;
+`;
+
+export const Img = styled(Image)`
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  margin: auto 0;
+  left: -50px;
+`;
+
+export const Container = styled(Row)<{ selected: boolean; managementCluster: boolean }>`
+  height: 126px;
   width: 360px;
-  background: white;
-  border: 2px solid ${({ borderColor }) => borderColor};
-  border-radius: 0 8px 8px 0;
+  background-color: white;
+  border: 2px solid ${BLUE_REFLECTION};
+  border-radius: 8px;
   align-items: center;
-  padding: 12px 16px;
   color: #3f3f46;
 
   ${({ selected }) =>
@@ -22,40 +50,56 @@ export const Container = styled(Row)<{ borderColor: string; selected: boolean }>
     css`
       filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
     `}
+
+  ${({ managementCluster }) =>
+    managementCluster &&
+    css`
+      height: 96px;
+      border-radius: 0 8px 8px 0;
+
+      ${LeftPanel} {
+        margin-left: 67px;
+      }
+
+      ${StyledTag} {
+        top: 16px;
+        right: 33px;
+      }
+
+      ${Img} {
+        height: 103px;
+        width: 103px;
+      }
+    `}
 `;
 
-export const Img = styled(Image)`
-  height: 93px;
-  width: 96px;
-  position: absolute;
-  left: -50px;
-  top: -2px;
-`;
-
-export const Label = styled(Typography).attrs({
-  variant: 'labelSmall',
-})`
-  margin: 0;
-  padding: 0;
-  color: ${({ theme }) => theme.colors.exclusivePlum};
-  letter-spacing: 0.5px;
-`;
+export const Nodes = muiStyled(Typography)(() => ({
+  [`&.${typographyClasses.root}`]: {
+    fontSize: '11px',
+    fontWeight: 400,
+    color: EXCLUSIVE_PLUM,
+    lineHeight: '16px',
+    letterSpacing: '0.5px',
+  },
+}));
+export const CloudProvider = muiStyled(Typography)(() => ({
+  [`&.${typographyClasses.root}`]: {
+    fontSize: '12px',
+    fontWeight: 400,
+    lineHeight: '16px',
+    letterSpacing: '0.4px',
+    textTransform: 'uppercase',
+  },
+}));
 
 export const LabelContainer = styled(Row)`
   align-items: center;
-  gap: 8px;
-
-  p {
-    font-size: 11px;
-    margiin: 0;
-  }
+  gap: 4px;
 `;
 
-export const MainContainerInfo = styled(Column)`
-  margin-left: 45px;
-  width: 181px;
+export const MainContainerInfo = styled(Row)`
   height: 100%;
-  justify-content: space-between;
+  width: 100%;
 `;
 
 export const NodeHandle = styled(Handle)<{ bgColor: string }>`
@@ -66,39 +110,14 @@ export const NodeHandle = styled(Handle)<{ bgColor: string }>`
   background-color: ${({ bgColor }) => bgColor};
 `;
 
-export const NodeLabel = styled(Typography)`
-  font-size: 12px;
-  font-weight: 600;
-  line-height: 16px;
-  letter-spacing: 0.4px;
-`;
-
-export const NodeLabelContainer = styled(Row)`
-  align-items: center;
-  gap: 4px;
-
-  p {
-    font-size: 11px;
-    margin: 0;
-  }
-`;
-
-export const OtherContainerInfo = styled(Column)`
-  flex: 1;
-  height: 100%;
-  justify-content: space-between;
-  align-items: flex-end;
-`;
-
-export const Region = styled.p`
-  margin: 0;
-  font-size: 11px;
-  width: 127px;
-  text-overflow: ellipsis;
-  overflow: hidden;
-  white-space: nowrap;
-`;
-
-export const StyledTag = styled(Tag)`
-  width: fit-content;
-`;
+export const ClusterName = muiStyled(Typography)(() => ({
+  [`&.${typographyClasses.root}`]: {
+    fontSize: '12px',
+    fontWeight: 600,
+    lineHeight: '16px',
+    letterSpacing: '0.4px',
+    textWrap: 'nowrap',
+    width: '196px',
+    marginBottom: '4px',
+  },
+}));

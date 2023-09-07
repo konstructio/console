@@ -1,51 +1,49 @@
 import React, { FunctionComponent, useMemo } from 'react';
 import { Node, NodeProps, Position, HandleType } from 'reactflow';
 
-import managementClusterIcon from '../../assets/managementIcon.svg';
-import workloadClusterIcon from '../../assets/cluster.svg';
-import unavailableClusterSrc from '../../assets/cluster-unavailable.svg';
-import { BLUE_REFLECTION, MAGIC_MINT, SASSY_PINK } from '../../constants/colors';
+import managementCluster from '../../assets/managementIcon.svg';
+import vCluster from '../../assets/vCluster.svg';
+import vClusterAvailable from '../../assets/vClusterAvailable.svg';
+import cluster from '../../assets/cluster.svg';
+import clusterAvailable from '../../assets/clusterAvailable.svg';
+import { BUBBLE_GUM_BABY_GIRL } from '../../constants/colors';
 import { CLUSTER_TAG_CONFIG } from '../../constants';
 import { Cluster, ClusterStatus, ClusterType } from '../../types/provision';
+import Typography from '../../components/typography';
 
 import {
   Container,
-  Img,
-  Label,
+  CloudProvider,
   LabelContainer,
   MainContainerInfo,
   NodeHandle,
-  NodeLabel,
-  NodeLabelContainer,
-  OtherContainerInfo,
-  Region,
-  StyledTag,
+  ClusterName,
+  StatusTag,
+  EnvironmentTag,
+  LeftPanel,
+  Nodes,
+  Img,
 } from './graphNode.styled';
 
 const GRAPH_NODE_CONFIG: Record<
   ClusterType,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  { handle: HandleType; position: Position; nodeColor: string }
+  { handle: HandleType; position: Position; iconSrc: any }
 > = {
-  [ClusterType.DRAFT]: {
-    handle: 'target',
-    position: Position.Left,
-    nodeColor: BLUE_REFLECTION,
-  },
   [ClusterType.MANAGEMENT]: {
     handle: 'source',
     position: Position.Right,
-    nodeColor: MAGIC_MINT,
+    iconSrc: managementCluster,
   },
   [ClusterType.WORKLOAD]: {
     handle: 'target',
     position: Position.Left,
-    nodeColor: SASSY_PINK,
+    iconSrc: cluster,
   },
   [ClusterType.WORKLOAD_V_CLUSTER]: {
     handle: 'target',
     position: Position.Left,
-    nodeColor: SASSY_PINK,
+    iconSrc: vCluster,
   },
 };
 
@@ -56,48 +54,58 @@ export const GraphNode: FunctionComponent<NodeProps<Cluster>> = ({
   isConnectable,
   selected,
 }) => {
-  const { status, type, clusterName, cloudProvider, cloudRegion, nodeCount } = data ?? {};
+  const { id, status, type, clusterName, cloudProvider, cloudRegion, nodeCount, environment } =
+    data ?? {};
 
-  const { iconLabel, iconType, bgColor } = CLUSTER_TAG_CONFIG[status ?? ClusterType.DRAFT];
-  const { handle, position } = GRAPH_NODE_CONFIG[type ?? ClusterType.DRAFT];
+  const { iconLabel, iconType, bgColor } = CLUSTER_TAG_CONFIG[status ?? ClusterStatus.PROVISIONED];
+  const { handle, position, iconSrc } = GRAPH_NODE_CONFIG[type ?? ClusterType.WORKLOAD];
 
-  const { nodeColor, imageSrc } = useMemo(
-    () =>
-      type === ClusterType.MANAGEMENT
-        ? { nodeColor: MAGIC_MINT, imageSrc: managementClusterIcon }
-        : type === ClusterType.DRAFT || status === ClusterStatus.PROVISIONING
-        ? { nodeColor: BLUE_REFLECTION, imageSrc: unavailableClusterSrc }
-        : { nodeColor: SASSY_PINK, imageSrc: workloadClusterIcon },
-    [type, status],
-  );
+  const draftNode = useMemo(() => id === 'draft', [id]);
+  const managementCluster = useMemo(() => type === ClusterType.MANAGEMENT, [type]);
+
+  const imageSrc = useMemo(() => {
+    if (status === ClusterStatus.PROVISIONED && id !== 'draft') {
+      if (type === ClusterType.WORKLOAD) {
+        return clusterAvailable;
+      } else if (type === ClusterType.WORKLOAD_V_CLUSTER) {
+        return vClusterAvailable;
+      }
+    }
+    return iconSrc;
+  }, [iconSrc, status, type, id]);
 
   return (
-    <Container borderColor={nodeColor} selected={selected}>
+    <Container selected={selected} managementCluster={managementCluster}>
       <MainContainerInfo>
-        <NodeLabel>{clusterName}</NodeLabel>
-        <LabelContainer>
-          <Label>CLOUD:</Label>
-          {cloudProvider && <p>{cloudProvider}</p>}
-        </LabelContainer>
-        <LabelContainer>
-          <Label>REGION:</Label>
-          {cloudRegion && <Region>{cloudRegion}</Region>}
-        </LabelContainer>
+        <LeftPanel>
+          <ClusterName>{clusterName}</ClusterName>
+          {cloudProvider && cloudRegion && (
+            <LabelContainer>
+              <CloudProvider>{cloudProvider}:</CloudProvider>
+              <Typography variant="body3">{cloudRegion}</Typography>
+            </LabelContainer>
+          )}
+          {nodeCount && (
+            <LabelContainer>
+              <Nodes>NODES:</Nodes>
+              <Typography variant="body3">{nodeCount}</Typography>
+            </LabelContainer>
+          )}
+          {environment && <EnvironmentTag text="Demo" bgColor="sky-blue" />}
+        </LeftPanel>
       </MainContainerInfo>
-      <OtherContainerInfo>
-        <StyledTag text={iconLabel} bgColor={bgColor} icon={iconType} />
-        <NodeLabelContainer>
-          <Label>NODE COUNT:</Label>
-          {nodeCount && <p>{nodeCount}</p>}
-        </NodeLabelContainer>
-      </OtherContainerInfo>
+      <StatusTag
+        text={draftNode ? 'DRAFT' : iconLabel}
+        bgColor={draftNode ? 'grey' : bgColor}
+        icon={!draftNode ? iconType : undefined}
+      />
       <NodeHandle
         type={handle}
         position={position}
         isConnectable={isConnectable}
-        bgColor={nodeColor}
+        bgColor={BUBBLE_GUM_BABY_GIRL}
       />
-      <Img src={imageSrc} alt={`cluster ${type} node`} />
+      <Img src={imageSrc} alt="cluster" />
     </Container>
   );
 };

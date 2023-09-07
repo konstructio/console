@@ -7,6 +7,9 @@ import { RouterContext } from 'next/dist/shared/lib/router-context';
 import { makeStore } from '../redux/store';
 import { muiTheme } from '../theme/muiTheme';
 import { theme } from '../theme';
+import { setManagementCluster } from '../redux/slices/api.slice';
+import { mapClusterFromRaw } from '../utils/mapClustersFromRaw';
+import { mockClusterResponse } from '../tests/mocks/mockClusterResponse';
 
 export const parameters = {
   actions: { argTypesRegex: '^on[A-Z].*' },
@@ -27,6 +30,10 @@ export const parameters = {
 };
 
 const store = makeStore();
+
+const mockManagementCluster = mapClusterFromRaw(mockClusterResponse);
+
+store.dispatch(setManagementCluster(mockManagementCluster));
 
 export const decorators = [
   (Story) => (

@@ -49,7 +49,7 @@ const ClusterDetails: FunctionComponent<ClusterDetailsProps> = ({ cluster, ...re
           <InfoIcon />
         </Row>
         <Column>
-          {status === ClusterStatus.PROVISIONING || type === ClusterType.DRAFT ? (
+          {status !== ClusterStatus.PROVISIONING ? (
             <>
               <Typography variant="body2">
                 The cluster has been registered and will be synced
@@ -121,7 +121,7 @@ const ClusterDetails: FunctionComponent<ClusterDetailsProps> = ({ cluster, ...re
         </RowInfo>
 
         {/* Fifth Row */}
-        {type === ClusterType.WORKLOAD && (
+        {type !== ClusterType.MANAGEMENT && (
           <RowInfo>
             <ColumnInfo>
               <StyledLabel variant="labelLarge">Instance size</StyledLabel>

@@ -4,11 +4,10 @@ module.exports = {
     '@storybook/addon-links',
     '@storybook/addon-essentials',
     '@storybook/addon-interactions',
-    '@storybook/addon-mdx-gfm'
   ],
   framework: {
     name: '@storybook/nextjs',
-    options: {}
+    options: {},
   },
   features: {
     previewMdx2: true,

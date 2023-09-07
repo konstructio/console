@@ -1,11 +1,12 @@
 import { Edge } from 'reactflow';
 
-import { ManagementCluster, ClusterType, ClusterStatus, Cluster } from '../../types/provision';
+import { ManagementCluster, ClusterStatus, Cluster } from '../../types/provision';
 import { CustomGraphNode } from '../../components/graphNode';
 
 const WORKLOAD_CLUSTER_Y_SPACE = 60;
 const WORKLOAD_CLUSTER_X_SPACE = 250;
-const NODE_HEIGHT = 90;
+const WORKLOAD_NODE_HEIGHT = 126;
+const MANAGEMENT_NODE_HEIGHT = 90;
 const NODE_WIDTH = 360;
 
 export function generateNode(
@@ -47,10 +48,11 @@ export function generateNodesConfig(cluster: ManagementCluster): [CustomGraphNod
 
   // get total height of all nodes and space inbetween
   const totalHeight =
-    workloadClusterLength * NODE_HEIGHT + spacesBetweenClusterNodes * WORKLOAD_CLUSTER_Y_SPACE;
+    workloadClusterLength * WORKLOAD_NODE_HEIGHT +
+    spacesBetweenClusterNodes * WORKLOAD_CLUSTER_Y_SPACE;
 
   // place the middle of the node at the top of the column
-  const initialClusterYPosition = -(totalHeight / 2) + NODE_HEIGHT / 2;
+  const initialClusterYPosition = -(totalHeight / 2) + MANAGEMENT_NODE_HEIGHT / 2;
 
   const nodes: CustomGraphNode[] = [
     generateNode(
@@ -69,15 +71,14 @@ export function generateNodesConfig(cluster: ManagementCluster): [CustomGraphNod
     const workloadCluster = filteredWorkloadClusters[i];
     const { id: workloadClusterId } = workloadCluster;
 
-    // if first node place - at initial position
-    // otherwise add node height and space multiplied by index
+    // if first node place at initial position
+    // otherwise add workload node height and space multiplied by index
     const nodeYPosition = !i
       ? initialClusterYPosition
-      : initialClusterYPosition + (WORKLOAD_CLUSTER_Y_SPACE + NODE_HEIGHT) * i;
+      : initialClusterYPosition + (WORKLOAD_CLUSTER_Y_SPACE + WORKLOAD_NODE_HEIGHT) * i;
 
     const animatedEdge =
-      workloadCluster.type === ClusterType.DRAFT ||
-      workloadCluster.status === ClusterStatus.PROVISIONING;
+      workloadCluster.id === 'draft' || workloadCluster.status === ClusterStatus.PROVISIONING;
 
     nodes.push(
       generateNode(
