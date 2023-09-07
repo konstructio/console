@@ -6,11 +6,30 @@ import Column from '../column';
 import Typography from '../typography';
 import { ECHO_BLUE, MOONLESS_MYTERY } from '../../constants/colors';
 
-export const Root = styled(Row)`
-  padding: 16px;
-  border-radius: 12px;
-  background-color: ${MOONLESS_MYTERY};
-  gap: 16px;
+export const CloseButton = styled.button`
+  border: none;
+  background-color: transparent;
+  padding: 8px;
+  align-self: start;
+  cursor: pointer;
+  margin-left: 4px;
+
+  & svg {
+    height: 16px;
+    width: 16px;
+    color: ${ECHO_BLUE};
+  }
+`;
+
+export const HeadsUp = muiStyled(Typography)(() => ({
+  [`&.${typographyClasses.root}`]: {
+    color: 'white',
+  },
+}));
+
+export const Info = styled(Column)`
+  width: 100%;
+  gap: 4px;
 `;
 
 export const LogoContainer = styled(Row)`
@@ -23,28 +42,15 @@ export const LogoContainer = styled(Row)`
   flex-shrink: 0;
 `;
 
-export const CloseButton = styled.button`
-  border: none;
-  background-color: transparent;
-  padding: 8px;
-  align-self: start;
-  cursor: pointer;
-  margin-left: 4px;
-`;
-
-export const Info = styled(Column)`
-  width: 100%;
-  gap: 4px;
-`;
-
-export const HeadsUp = muiStyled(Typography)(() => ({
-  [`&.${typographyClasses.root}`]: {
-    color: 'white',
-  },
-}));
-
 export const Message = muiStyled(Typography)(() => ({
   [`&.${typographyClasses.root}`]: {
     color: ECHO_BLUE,
   },
 }));
+
+export const Root = styled(Row)`
+  padding: 16px;
+  border-radius: 12px;
+  background-color: ${MOONLESS_MYTERY};
+  gap: 16px;
+`;

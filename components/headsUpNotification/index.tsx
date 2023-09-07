@@ -1,9 +1,9 @@
 import React, { ComponentPropsWithoutRef, FunctionComponent } from 'react';
-import styled from 'styled-components';
+import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
 import Image from 'next/image';
+import styled from 'styled-components';
 
 import lightningBolt from '../../assets/lightningBolt.svg';
-import roundedClose from '../../assets/closeRounded.svg';
 
 import {
   CloseButton,
@@ -32,7 +32,7 @@ const HeadsUpNotification: FunctionComponent<HeadsUpNotificationProps> = (props)
         </Message>
       </Info>
       <CloseButton>
-        <Image src={roundedClose} height={16} width={16} alt="close" />
+        <CloseRoundedIcon />
       </CloseButton>
     </Root>
   );
