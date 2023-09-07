@@ -3,9 +3,8 @@ import { Meta, StoryObj } from '@storybook/react';
 
 import Button from '../../components/button';
 import { noop } from '../../utils/noop';
-import { ClusterStatus, ClusterType } from '../../types/provision';
+import { Cluster, ClusterStatus, ClusterType } from '../../types/provision';
 import { InstallationType } from '../../types/redux';
-import { ClusterInfo } from '../../components/clusterTable/clusterTable';
 
 import DeleteCluster, { DeleteClusterProps } from './';
 
@@ -16,32 +15,44 @@ const meta: Meta<typeof DeleteCluster> = {
 
 export default meta;
 
-const clusters: ClusterInfo[] = [
+const clusters: Cluster[] = [
   {
+    id: '1',
     clusterName: 'kuberfirst-mgmt',
     type: ClusterType.MANAGEMENT,
     cloudProvider: InstallationType.AWS,
     cloudRegion: 'ap-southeast-1',
     creationDate: '05 Apr 2023, 12:24:56',
-    gitUser: 'Eleanor Carroll',
     status: ClusterStatus.PROVISIONED,
     adminEmail: 'admin@mycompany.com',
     gitProvider: 'Github',
     domainName: 'yourdomain.com',
-    nodes: 2,
+    dnsProvider: 'civo',
+    nodeCount: 2,
+    gitAuth: {
+      gitOwner: 'D-B-Hawk',
+      gitToken: 'secret',
+      gitUser: 'D-B-Hawk',
+    },
   },
   {
+    id: '2',
     clusterName: 'kuberfirst-worker-1',
     type: ClusterType.WORKLOAD,
     cloudProvider: InstallationType.CIVO,
     cloudRegion: 'ap-southeast-1',
-    nodes: 2,
     creationDate: '05 Apr 2023, 12:24:56',
-    gitUser: 'Eleanor Carroll',
     status: ClusterStatus.ERROR,
     adminEmail: 'admin@mycompany.com',
     gitProvider: 'Github',
     domainName: 'yourdomain.com',
+    dnsProvider: 'civo',
+    nodeCount: 2,
+    gitAuth: {
+      gitOwner: 'D-B-Hawk',
+      gitToken: 'secret',
+      gitUser: 'D-B-Hawk',
+    },
   },
 ];
 

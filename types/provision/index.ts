@@ -13,7 +13,6 @@ export enum ClusterType {
   MANAGEMENT = 'mgmt',
   WORKLOAD = 'workload-cluster',
   WORKLOAD_V_CLUSTER = 'workload-vcluster',
-  DRAFT = 'draft',
 }
 
 export enum ClusterCreationStep {
@@ -47,19 +46,31 @@ export interface ClusterResponse {
   cloud_provider: InstallationType;
   cloud_region: string;
   domain_name: string;
+  dns_provider: string;
   cluster_id: string;
   cluster_type: ClusterType.MANAGEMENT;
   alerts_email: string;
   git_provider: string;
   git_user: string;
   workload_clusters?: {
+    admin_email: string;
+    cloud_provider: string;
     cluster_id: string;
     cluster_name: string;
     cluster_type: string;
     cloud_region: string;
-    instance_size: string;
-    node_count: number;
+    creation_timestamp: string;
+    domain_name: string;
+    dns_provider: string;
     environment: string;
+    git_auth: {
+      git_owner?: string;
+      git_token?: string;
+      git_username?: string;
+    };
+    instance_size: string;
+    machine_type: string;
+    node_count: number;
     status: ClusterStatus;
   }[];
   git_auth: {
@@ -113,17 +124,18 @@ export interface ClusterResponse {
 export interface Cluster {
   id: string;
   adminEmail: string;
+  cloudProvider?: InstallationType;
+  type: ClusterType;
   clusterName?: string;
   cloudRegion?: string;
-  cloudProvider?: InstallationType;
   creationDate?: string;
   domainName: string;
+  dnsProvider: string;
   environment?: string;
   gitProvider: string;
   instanceSize?: string;
   nodeCount?: number;
   status?: ClusterStatus;
-  type: ClusterType;
   gitAuth: {
     gitOwner?: string;
     gitToken?: string;
@@ -182,6 +194,8 @@ export interface ManagementCluster extends Cluster, Row {
 
 export interface WorkloadCluster extends Cluster {
   environment?: string;
+  instanceSize?: string;
+  machineType?: string;
 }
 
 export interface ClusterServices {

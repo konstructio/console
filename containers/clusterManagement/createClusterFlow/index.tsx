@@ -86,9 +86,7 @@ export const CreateClusterFlow: FunctionComponent<CreateClusterFlowProps> = ({
   } = methods;
 
   const submitButtonDisabled =
-    !isValid ||
-    loading ||
-    (cluster?.type !== ClusterType.DRAFT && cluster?.status === ClusterStatus.PROVISIONING);
+    !isValid || loading || cluster?.status === ClusterStatus.PROVISIONING;
 
   return (
     <FormProvider {...methods}>

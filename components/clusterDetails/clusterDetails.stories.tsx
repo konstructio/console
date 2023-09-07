@@ -11,6 +11,18 @@ export default meta;
 
 export const Default: StoryObj<typeof ClusterDetails> = {
   args: {
-    mockCluster,
+    cluster: {
+      ...mockClusterConfig,
+      id: '1',
+      adminEmail: 'derrick@kubeshop.io',
+      domainName: 'kubefirst.io',
+      dnsProvider: 'civo',
+      gitProvider: 'Github',
+      gitAuth: {
+        gitOwner: 'D-B-Hawk',
+        gitToken: 'kray',
+        gitUser: 'D-B-Hawk',
+      },
+    },
   },
 };

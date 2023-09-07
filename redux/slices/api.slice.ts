@@ -65,6 +65,10 @@ const apiSlice = createSlice({
     setPresentedCluster: (state, { payload }: PayloadAction<ApiState['presentedCluster']>) => {
       state.presentedCluster = payload;
     },
+    // only used for storybook mock data
+    setManagementCluster: (state, { payload }: PayloadAction<ApiState['managementCluster']>) => {
+      state.managementCluster = payload;
+    },
     setCompletedSteps: (state, action) => {
       state.completedSteps = action.payload;
     },
@@ -102,12 +106,13 @@ const apiSlice = createSlice({
         const draftCluster: WorkloadCluster = {
           id: 'draft',
           clusterName: '',
-          type: ClusterType.DRAFT,
+          type: ClusterType.WORKLOAD,
           cloudProvider,
           gitProvider,
           domainName,
           gitAuth,
           adminEmail,
+          dnsProvider: '',
         };
 
         state.managementCluster.workloadClusters.push(draftCluster);
@@ -117,14 +122,14 @@ const apiSlice = createSlice({
     removeDraftCluster: (state) => {
       if (state.managementCluster) {
         state.managementCluster.workloadClusters = state.managementCluster.workloadClusters.filter(
-          (cluster) => cluster.type !== ClusterType.DRAFT,
+          (cluster) => cluster.id !== 'draft',
         );
       }
     },
     updateDraftCluster: (state, { payload }: PayloadAction<WorkloadCluster>) => {
       if (state.managementCluster) {
         const workloadClusterToUpdate = state.managementCluster.workloadClusters.find(
-          (cluster) => cluster.type === ClusterType.DRAFT,
+          (cluster) => cluster.id === 'draft',
         );
 
         if (workloadClusterToUpdate) {
@@ -134,7 +139,7 @@ const apiSlice = createSlice({
           };
           state.managementCluster.workloadClusters = state.managementCluster.workloadClusters.map(
             (cluster) => {
-              if (cluster.type === ClusterType.DRAFT) {
+              if (cluster.id === 'draft') {
                 cluster = updatedCluster;
               }
               return cluster;
@@ -264,6 +269,7 @@ export const {
   updateDraftCluster,
   setPresentedCluster,
   addToPreviouslyUsedClusterNames,
+  setManagementCluster,
 } = apiSlice.actions;
 
 export const apiReducer = apiSlice.reducer;

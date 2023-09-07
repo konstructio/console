@@ -1,4 +1,5 @@
 import { ClusterResponse, ManagementCluster, ClusterType } from '../types/provision';
+import { InstallationType } from '../types/redux';
 
 export const mapClusterFromRaw = (cluster: ClusterResponse): ManagementCluster => ({
   id: cluster.cluster_id,
@@ -7,6 +8,7 @@ export const mapClusterFromRaw = (cluster: ClusterResponse): ManagementCluster =
   cloudProvider: cluster.cloud_provider,
   cloudRegion: cluster.cloud_region,
   domainName: cluster.domain_name,
+  dnsProvider: cluster.dns_provider,
   gitAuth: {
     gitOwner: cluster.git_auth.git_owner,
     gitToken: cluster.git_auth.git_token,
@@ -29,20 +31,21 @@ export const mapClusterFromRaw = (cluster: ClusterResponse): ManagementCluster =
       id: item.cluster_id,
       clusterName: item.cluster_name,
       cloudRegion: item.cloud_region,
-      cloudProvider: cluster.cloud_provider,
+      cloudProvider: item.cloud_provider as InstallationType,
+      dnsProvider: item.dns_provider,
       instanceSize: item.instance_size,
       nodeCount: item.node_count,
-      creationDate: cluster.creation_timestamp,
+      creationDate: item.creation_timestamp,
       environment: item.environment,
       status: item.status,
       type: item.cluster_type as ClusterType,
-      domainName: cluster.domain_name,
+      domainName: item.domain_name,
       gitProvider: cluster.git_provider,
       adminEmail: cluster.alerts_email,
       gitAuth: {
-        gitOwner: cluster.git_auth.git_owner,
-        gitToken: cluster.git_auth.git_token,
-        gitUser: cluster.git_auth.git_username,
+        gitOwner: item.git_auth.git_owner,
+        gitToken: item.git_auth.git_token,
+        gitUser: item.git_auth.git_username,
       },
     })) || [],
   vaultAuth: {
