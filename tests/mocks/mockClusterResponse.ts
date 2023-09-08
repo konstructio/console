@@ -35,6 +35,7 @@ export const mockClusterResponse: ClusterResponse = {
       git_auth: {
         git_owner: 'D-B-Hawk',
         git_token: 'superSecretToken',
+        git_username: 'D-B-Hawk',
       },
       machine_type: 'super',
     },
@@ -55,6 +56,7 @@ export const mockClusterResponse: ClusterResponse = {
       git_auth: {
         git_owner: 'D-B-Hawk',
         git_token: 'superSecretToken',
+        git_username: 'D-B-Hawk',
       },
       machine_type: 'super',
     },
@@ -75,6 +77,7 @@ export const mockClusterResponse: ClusterResponse = {
       git_auth: {
         git_owner: 'D-B-Hawk',
         git_token: 'superSecretToken',
+        git_username: 'D-B-Hawk',
       },
       machine_type: 'super',
     },
@@ -82,6 +85,7 @@ export const mockClusterResponse: ClusterResponse = {
   git_auth: {
     git_owner: 'D-B-Hawk',
     git_token: 'superSecretToken',
+    git_username: 'D-B-Hawk',
   },
   vault_auth: {
     kbot_password: 'superSecretPassword',

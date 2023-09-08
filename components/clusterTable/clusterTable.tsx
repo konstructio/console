@@ -24,6 +24,7 @@ import { InstallationType } from '../../types/redux';
 import Typography from '../../components/typography';
 import { useOnClickOutside } from '../../hooks/useOnClickOutside';
 import { noop } from '../../utils/noop';
+import Tag from '../tag';
 
 import {
   StyledTableRow,
@@ -48,11 +49,18 @@ const CLOUD_LOGO_OPTIONS: Record<InstallationType, any> = {
   [InstallationType.VULTR]: vultrLogo,
 };
 
+const FORMATTED_CLUSTER_TYPE: Record<ClusterType, { nameLabel: string; typeLabel: string }> = {
+  [ClusterType.MANAGEMENT]: { nameLabel: 'management', typeLabel: 'Physical' },
+  [ClusterType.WORKLOAD]: { nameLabel: 'worker', typeLabel: 'Physical' },
+  [ClusterType.WORKLOAD_V_CLUSTER]: { nameLabel: 'worker', typeLabel: 'Virtual' },
+};
+
 type ClusterRowProps = Cluster & {
   expanded?: boolean;
   onExpanseClick?: () => void;
   onMenuOpenClose: (presentedCluster?: Cluster) => void;
   onDeleteCluster: () => void;
+  presentedClusterId?: string;
 };
 
 const ClusterRow: FunctionComponent<ClusterRowProps> = ({
@@ -63,6 +71,7 @@ const ClusterRow: FunctionComponent<ClusterRowProps> = ({
   ...rest
 }) => {
   const {
+    id,
     clusterName,
     type,
     cloudProvider,
@@ -71,13 +80,15 @@ const ClusterRow: FunctionComponent<ClusterRowProps> = ({
     gitAuth: { gitUser } = {},
     status,
     nodeCount,
+    environment,
+    presentedClusterId,
   } = rest;
 
   const [menuOpen, setMenuOpen] = useState(false);
 
   const cloudLogoSrc = CLOUD_LOGO_OPTIONS[cloudProvider ?? InstallationType.LOCAL];
   const { iconLabel, iconType, bgColor } = CLUSTER_TAG_CONFIG[status ?? ClusterStatus.PROVISIONED];
-  const formattedClusterType = type === ClusterType.MANAGEMENT ? 'management' : 'worker';
+  const { nameLabel, typeLabel } = FORMATTED_CLUSTER_TYPE[type];
 
   const handleMenu = useCallback(() => {
     setMenuOpen(!menuOpen);
@@ -88,10 +99,12 @@ const ClusterRow: FunctionComponent<ClusterRowProps> = ({
 
   useOnClickOutside(buttonRef, () => setMenuOpen(false));
 
+  const rowSelected = id === presentedClusterId;
+
   return (
     <>
-      <StyledTableRow>
-        <StyledTableCell align="right" style={{ width: '50px' }}>
+      <StyledTableRow selected={rowSelected}>
+        <StyledTableCell align="right" style={{ width: '50px' }} selected={rowSelected}>
           {type === ClusterType.MANAGEMENT && (
             <StyledIconButton
               aria-label="expand row"
@@ -103,37 +116,45 @@ const ClusterRow: FunctionComponent<ClusterRowProps> = ({
             </StyledIconButton>
           )}
         </StyledTableCell>
-        <StyledTableCell component="th" scope="row">
+        <StyledTableCell scope="row" selected={rowSelected}>
           <StyledCellText variant="body2" style={{ fontWeight: 500 }}>
             {clusterName}
           </StyledCellText>
           <StyledCellText variant="body2" style={{ color: DODGER_BLUE }}>
-            {formattedClusterType}
+            {nameLabel}
           </StyledCellText>
         </StyledTableCell>
-        <StyledTableCell align="left">
+        <StyledTableCell selected={rowSelected}>
+          <StyledCellText variant="body2">{typeLabel}</StyledCellText>
+        </StyledTableCell>
+        <StyledTableCell selected={rowSelected}>
+          <StyledCellText variant="body2">
+            {environment && <Tag text={environment} bgColor="light-blue" />}
+          </StyledCellText>
+        </StyledTableCell>
+        <StyledTableCell align="left" selected={rowSelected}>
           <Image src={cloudLogoSrc} height={18} width={30} alt={cloudProvider ?? ''} />
         </StyledTableCell>
-        <StyledTableCell>
+        <StyledTableCell selected={rowSelected}>
           <StyledCellText variant="body2">{cloudRegion}</StyledCellText>
         </StyledTableCell>
-        <StyledTableCell align="center">
+        <StyledTableCell align="center" selected={rowSelected}>
           <StyledCellText variant="body2">{nodeCount}</StyledCellText>
         </StyledTableCell>
-        <StyledTableCell>
+        <StyledTableCell selected={rowSelected}>
           {creationDate && (
             <StyledCellText variant="body2">
               {moment(+creationDate).format('DD MMM YYYY')}
             </StyledCellText>
           )}
         </StyledTableCell>
-        <StyledTableCell>
+        <StyledTableCell selected={rowSelected}>
           <StyledCellText variant="body2">{gitUser}</StyledCellText>
         </StyledTableCell>
-        <StyledTableCell>
+        <StyledTableCell selected={rowSelected}>
           <StyledTag text={iconLabel} bgColor={bgColor} icon={iconType} />
         </StyledTableCell>
-        <StyledTableCell style={{ position: 'relative' }}>
+        <StyledTableCell style={{ position: 'relative' }} selected={rowSelected}>
           <IconButton
             aria-label="more info"
             onClick={handleMenu}
@@ -165,12 +186,14 @@ interface ClusterTableProps extends ComponentPropsWithoutRef<'div'> {
   managementCluster: ManagementCluster;
   onDeleteCluster: () => void;
   onMenuOpenClose: (presentedCluster?: Cluster) => void;
+  presentedClusterId?: string;
 }
 
 export const ClusterTable: FunctionComponent<ClusterTableProps> = ({
   managementCluster,
   onDeleteCluster,
   onMenuOpenClose,
+  presentedClusterId,
   ...rest
 }) => {
   const [expanded, setExpanded] = useState(true);
@@ -184,6 +207,12 @@ export const ClusterTable: FunctionComponent<ClusterTableProps> = ({
             <StyledHeaderCell />
             <StyledHeaderCell>
               <StyledTableHeading variant="labelMedium">Name</StyledTableHeading>
+            </StyledHeaderCell>
+            <StyledHeaderCell>
+              <StyledTableHeading variant="labelMedium">Type</StyledTableHeading>
+            </StyledHeaderCell>
+            <StyledHeaderCell>
+              <StyledTableHeading variant="labelMedium">Environment</StyledTableHeading>
             </StyledHeaderCell>
             <StyledHeaderCell>
               <StyledTableHeading variant="labelMedium">Cloud</StyledTableHeading>
@@ -213,6 +242,7 @@ export const ClusterTable: FunctionComponent<ClusterTableProps> = ({
             onMenuOpenClose={onMenuOpenClose}
             expanded={expanded}
             onExpanseClick={() => setExpanded(!expanded)}
+            presentedClusterId={presentedClusterId}
           />
 
           {expanded &&
@@ -224,6 +254,7 @@ export const ClusterTable: FunctionComponent<ClusterTableProps> = ({
                   {...cluster}
                   onDeleteCluster={onDeleteCluster}
                   onMenuOpenClose={onMenuOpenClose}
+                  presentedClusterId={presentedClusterId}
                 />
               ))}
         </StyledTableBody>
