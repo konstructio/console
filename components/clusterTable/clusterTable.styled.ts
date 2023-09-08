@@ -57,10 +57,10 @@ export const StyledTableBody = muiStyled(TableBody)(() => ({
   },
 }));
 
-export const StyledTableCell = muiStyled(TableCell)(() => ({
+export const StyledTableCell = muiStyled(TableCell)<{ selected?: boolean }>(({ selected }) => ({
   [`&.${tableCellClasses.root}`]: {
     border: 0,
-    backgroundColor: 'white',
+    backgroundColor: selected ? '#FAF5FF' : 'white',
   },
 }));
 
@@ -74,10 +74,13 @@ export const StyledTag = styled(Tag)`
   width: fit-content;
 `;
 
-export const StyledTableRow = muiStyled(TableRow)(() => ({
+export const StyledTableRow = muiStyled(TableRow)<{ selected?: boolean }>(({ selected }) => ({
   [`&.${tableRowClasses.root}`]: {
     border: 0,
     height: 'fit-content',
+  },
+  [`&.${tableRowClasses.root}.Mui-selected`]: {
+    backgroundColor: 'transparent',
   },
   ['&:first-child td:first-child']: {
     borderTopLeftRadius: '20px',

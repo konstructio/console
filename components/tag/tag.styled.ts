@@ -9,6 +9,7 @@ export const TagContainer = styled(Row)<{ bgColor?: TagColor }>`
   border-radius: 4px;
   padding: 4px;
   text-transform: capitalize;
+  width: fit-content;
 
   ${({ bgColor }) =>
     bgColor === 'neon-green'
