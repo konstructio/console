@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "check-types": "tsc -p tsconfig.json",
-    "dev": "next dev",
+    "dev": "yarn run-mongo && next dev",
     "build": "next build",
     "build:start": "next start",
     "start": "node server.js",
@@ -17,7 +17,8 @@
     "test:coverage:watch": "jest --coverage --watch",
     "storybook": "storybook dev -p 6006",
     "storybook-production": "node .storybook/server.js",
-    "build-storybook": "storybook build -o storybook-static"
+    "build-storybook": "storybook build -o storybook-static",
+    "run-mongo": "docker compose up -d"
   },
   "dependencies": {
     "@emotion/react": "^11.10.5",
