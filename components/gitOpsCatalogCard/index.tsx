@@ -1,11 +1,12 @@
-import React, { FunctionComponent, PropsWithChildren } from 'react';
+import React, { FunctionComponent, PropsWithChildren, useMemo } from 'react';
 import Image from 'next/image';
 import { Box, CircularProgress } from '@mui/material';
 
 import Tag, { TagColor } from '../tag';
-import { AppCategory, GitOpsCatalogApp } from '../../types/gitOpsCatalog';
+import Tooltip from '../tooltip';
 import Button from '../button';
 import Typography from '../typography';
+import { AppCategory, GitOpsCatalogApp } from '../../types/gitOpsCatalog';
 import { VOLCANIC_SAND } from '../../constants/colors';
 
 import {
@@ -52,6 +53,11 @@ const GitOpsCatalogCard: FunctionComponent<GitOpsCatalogCardProps> = ({
   children,
 }) => {
   const tagColor = CATEGORY_COLOR_CONFIG[category ?? AppCategory.APP_MANAGEMENT] ?? {};
+  const showTooltip = useMemo(
+    () => (description ? description.length > 167 : false),
+    [description],
+  );
+
   return (
     <Card>
       <Header>
@@ -78,7 +84,13 @@ const GitOpsCatalogCard: FunctionComponent<GitOpsCatalogCardProps> = ({
         )}
       </Header>
       <Body>
-        <Description variant="body2">{description || children}</Description>
+        {showTooltip ? (
+          <Tooltip title={description} maxWidth="375px" whiteSpace="wrap">
+            <Description variant="body2">{description || children}</Description>
+          </Tooltip>
+        ) : (
+          <Description variant="body2">{description || children}</Description>
+        )}
         {showSubmitButton && !isInstalling && (
           <Button variant="outlined" color="secondary" onClick={onClick}>
             Install
