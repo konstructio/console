@@ -8,7 +8,7 @@
     "build": "next build",
     "build:start": "next start",
     "start": "node server.js",
-    "lint": "next lint && eslint './**/*.{js,jsx,ts,tsx}'",
+    "lint": "eslint './**/*.{js,jsx,ts,tsx}'",
     "lint:fix": "eslint --fix './**/*.{js,jsx,ts,tsx}'",
     "format": "prettier --write './**/*.{js,jsx,ts,tsx}' --config ./.prettierrc",
     "test": "jest --silent",
