@@ -1,5 +1,4 @@
 import React, { FunctionComponent } from 'react';
-import styled from 'styled-components';
 import CloseIcon from '@mui/icons-material/Close';
 
 import Typography from '../typography';

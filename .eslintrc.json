@@ -34,5 +34,10 @@
     "prefer-template": "warn",
     "react-hooks/exhaustive-deps": "error",
     "@typescript-eslint/no-explicit-any": "error"
+  },
+  "settings": {
+    "react": {
+      "version": "detect"
+    }
   }
 }

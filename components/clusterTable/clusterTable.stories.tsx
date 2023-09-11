@@ -42,6 +42,6 @@ export const Default: StoryObj<typeof ClusterTable> = {
   },
 };
 
-export const WithSelectableRows: StoryObj<typeof ClusterTable> = {
-  render: () => <ClusterTableWithHooks />,
-};
+// export const WithSelectableRows: StoryObj<typeof ClusterTable> = {
+//   render: () => <ClusterTableWithHooks />,
+// };
