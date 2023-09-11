@@ -6,7 +6,12 @@ import Typography from '../typography';
 
 import { StyledTooltip } from './tooltip.styled';
 
-const Tooltip: FunctionComponent<TooltipProps> = ({ children, title, ...rest }) => (
+export interface ITooltipProps extends TooltipProps {
+  maxWidth?: string;
+  whiteSpace?: string;
+}
+
+const Tooltip: FunctionComponent<ITooltipProps> = ({ children, title, ...rest }) => (
   <StyledTooltip
     {...rest}
     title={<Typography variant="tooltip">{title}</Typography>}
