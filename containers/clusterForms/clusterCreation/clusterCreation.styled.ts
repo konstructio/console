@@ -2,7 +2,6 @@ import styled, { css } from 'styled-components';
 
 import Column from '../../../components/column';
 import Button from '../../../components/button';
-import ControlledNumberInput from '../../../components/controlledFields/numberInput';
 
 export const AdvancedOptionsButton = styled.button.attrs({ type: 'button' })<{
   expanded?: boolean;

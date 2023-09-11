@@ -1,7 +1,6 @@
 import React, { FunctionComponent, useEffect } from 'react';
 import { useRouter } from 'next/router';
 
-import { QueueProvider } from '../hooks/useQueue';
 import withConfig from '../hoc/withConfig';
 import useFeatureFlag from '../hooks/useFeatureFlag';
 import ClusterManagement from '../containers/clusterManagement';
@@ -18,11 +17,7 @@ const ClusterManagementPage: FunctionComponent = () => {
     }
   });
 
-  return isMultiClusterEnabled ? (
-    <QueueProvider>
-      <ClusterManagement />
-    </QueueProvider>
-  ) : null;
+  return isMultiClusterEnabled ? <ClusterManagement /> : null;
 };
 
 export default withConfig(ClusterManagementPage);

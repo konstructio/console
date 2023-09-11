@@ -23,19 +23,13 @@ const Navigation: FunctionComponent = () => {
   } = useModal();
 
   const { asPath } = useRouter();
-  const {
-    gitProvider,
-    installationStep,
-    installType,
-    isClusterZero,
-    kubefirstVersion,
-    selectedCluster,
-  } = useAppSelector(({ config, cluster, installation }) => ({
-    kubefirstVersion: config.kubefirstVersion,
-    isClusterZero: config.isClusterZero,
-    selectedCluster: cluster.selectedCluster,
-    ...installation,
-  }));
+  const { gitProvider, installationStep, installType, isClusterZero, kubefirstVersion } =
+    useAppSelector(({ config, cluster, installation }) => ({
+      kubefirstVersion: config.kubefirstVersion,
+      isClusterZero: config.isClusterZero,
+      selectedCluster: cluster.selectedCluster,
+      ...installation,
+    }));
 
   const { isEnabled: isMultiClusterEnabled } = useFeatureFlag('multicluster-management');
 
@@ -52,16 +46,16 @@ const Navigation: FunctionComponent = () => {
           icon: <ScatterPlotIcon />,
           path: '/cluster-management',
           title: 'Cluster Management',
-          isEnabled: isMultiClusterEnabled,
+          isEnabled: isMultiClusterEnabled && !isClusterZero,
         },
         {
           icon: <GridViewOutlinedIcon />,
           path: '/services',
           title: 'Services',
-          isEnabled: !isClusterZero || !!selectedCluster?.clusterName,
+          isEnabled: !isClusterZero,
         },
       ].filter(({ isEnabled }) => isEnabled),
-    [isMultiClusterEnabled, isClusterZero, selectedCluster?.clusterName],
+    [isMultiClusterEnabled, isClusterZero],
   );
 
   const handleIsActiveItem = useCallback(

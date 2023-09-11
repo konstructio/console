@@ -1,7 +1,7 @@
 import React, { FunctionComponent } from 'react';
 import { Divider } from '@mui/material';
 import algoliasearch from 'algoliasearch/lite';
-import { InstantSearch } from 'react-instantsearch-hooks-web';
+import { InstantSearch } from 'react-instantsearch';
 
 const KUBEFIRST_CONTENT_INDEX_NAME = 'kubefirst-content';
 

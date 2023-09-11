@@ -40,8 +40,9 @@ const DeleteCluster: FunctionComponent<DeleteClusterProps> = ({
             <>
               <Typography>Deleting a management cluster is carried out via the CLI.</Typography>
               <Typography style={{ marginBottom: '13px' }}>
-                <strong>Note:</strong> deleting a management cluster will also delete all it's
-                corresponding worker clusters
+                <strong>Note:</strong>{' '}
+                {`deleting a management cluster will also delete all it's
+                corresponding worker clusters`}
               </Typography>
               <NextLink href="https://docs.kubefirst.io/common/deprovision" target="_blank">
                 <>

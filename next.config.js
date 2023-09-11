@@ -33,6 +33,10 @@ const nextConfig = {
     // nextjs doees not read the tsconfig.json properly and it's triggering different errors that we can't see using `yarn check-types`
     ignoreBuildErrors: true,
   },
+  eslint: {
+    // eslint will be executed before we run build
+    ignoreDuringBuilds: true,
+  }
 };
 
 module.exports = nextConfig;

@@ -1,5 +1,5 @@
 import React, { FunctionComponent } from 'react';
-import { useRefinementList } from 'react-instantsearch-hooks-web';
+import { useRefinementList } from 'react-instantsearch';
 import sortBy from 'lodash/sortBy';
 import { FormControlLabel, FormGroup } from '@mui/material';
 

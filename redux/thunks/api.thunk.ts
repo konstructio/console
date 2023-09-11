@@ -115,6 +115,7 @@ export const createWorkloadCluster = createAsyncThunk<
       domainName: managementCluster.domainName,
       gitProvider: managementCluster.gitProvider,
       gitAuth: managementCluster.gitAuth,
+      dnsProvider: managementCluster.dnsProvider,
     };
     dispatch(updateDraftCluster(updatedCluster));
     dispatch(addToPreviouslyUsedClusterNames(config.clusterName));
@@ -161,7 +162,7 @@ export const getClusters = createAsyncThunk<
   }
 
   // only process single expected management cluster
-  return mapClusterFromRaw(res.data[0]);
+  return mapClusterFromRaw(res.data[1]);
 });
 
 export const deleteCluster = createAsyncThunk<

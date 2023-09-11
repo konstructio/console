@@ -5,7 +5,7 @@ import Button from '../../components/button';
 import Typography from '../../components/typography';
 import { useAppDispatch, useAppSelector } from '../../redux/store';
 import { deleteCluster, getCloudRegions, getClusters } from '../../redux/thunks/api.thunk';
-import { Cluster, ClusterCreationStep, ClusterStatus } from '../../types/provision';
+import { Cluster, ClusterCreationStep, ClusterStatus, ClusterType } from '../../types/provision';
 import useToggle from '../../hooks/useToggle';
 import Drawer from '../../components/drawer';
 import useModal from '../../hooks/useModal';
@@ -80,6 +80,7 @@ const ClusterManagement: FunctionComponent = () => {
         id: presentedCluster?.id,
         clusterName: managementCluster?.clusterName as string,
         status: ClusterStatus.DELETING,
+        clusterType: ClusterType.WORKLOAD,
         callback: handleGetClusters,
       });
 
@@ -121,6 +122,7 @@ const ClusterManagement: FunctionComponent = () => {
       addClusterToQueue({
         id: clusterId,
         clusterName: managementCluster?.clusterName as string,
+        clusterType: ClusterType.WORKLOAD,
         status: ClusterStatus.PROVISIONING,
         callback: handleGetClusters,
       });

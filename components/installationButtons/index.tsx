@@ -1,23 +1,26 @@
 import React, { FunctionComponent } from 'react';
+import { CircularProgress } from '@mui/material';
 
 import Button from '../button';
 
 import { Container } from './installationButtons.styled';
 
 export interface InstallationButtonsProps {
-  showBackButton?: boolean;
-  onBackButtonClick?: () => void;
-  showNextButton: boolean;
-  nextButtonText?: string;
+  isLoading?: boolean;
   nextButtonDisabled?: boolean;
+  nextButtonText?: string;
+  onBackButtonClick?: () => void;
+  showBackButton?: boolean;
+  showNextButton: boolean;
 }
 
 const InstallationButtons: FunctionComponent<InstallationButtonsProps> = ({
-  showBackButton,
-  onBackButtonClick,
-  showNextButton,
-  nextButtonText = 'Next',
+  isLoading,
   nextButtonDisabled,
+  nextButtonText = 'Next',
+  onBackButtonClick,
+  showBackButton,
+  showNextButton,
   ...rest
 }) => (
   <Container {...rest}>
@@ -33,8 +36,9 @@ const InstallationButtons: FunctionComponent<InstallationButtonsProps> = ({
         variant="contained"
         color="primary"
         id="next"
-        disabled={nextButtonDisabled}
+        disabled={nextButtonDisabled || isLoading}
       >
+        {isLoading && <CircularProgress size={20} sx={{ mr: '8px' }} />}
         {nextButtonText}
       </Button>
     )}
