@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useCallback, useEffect, useLayoutEffect, useMemo } from 'react';
+import React, { FunctionComponent, useCallback, useEffect, useMemo } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { useRouter } from 'next/router';
 
