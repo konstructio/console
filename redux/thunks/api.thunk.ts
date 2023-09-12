@@ -162,7 +162,7 @@ export const getClusters = createAsyncThunk<
   }
 
   // only process single expected management cluster
-  return mapClusterFromRaw(res.data[1]);
+  return mapClusterFromRaw(res.data[0]);
 });
 
 export const deleteCluster = createAsyncThunk<
