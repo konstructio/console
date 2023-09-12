@@ -209,6 +209,7 @@ export interface ClusterServices {
 
 export interface ClusterQueue {
   clusterName: string;
+  clusterType: ClusterType;
   id: string;
   status: ClusterStatus;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

@@ -19,11 +19,8 @@ import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import Tooltip from '../../components/tooltip';
 import TabPanel, { Tab, a11yProps } from '../../components/tab';
 import ConciseLogs from '../conciseLogs';
-import { getCluster } from '../../redux/thunks/api.thunk';
-import { clearError, setError } from '../../redux/slices/installation.slice';
 import { setCompletedSteps } from '../../redux/slices/api.slice';
 import { useAppDispatch, useAppSelector } from '../../redux/store';
-import { ClusterRequestProps } from '../../types/provision';
 import { CLUSTER_CHECKS } from '../../constants/cluster';
 import { ANSI_COLORS, ECHO_BLUE, LIBERTY_BLUE } from '../../constants/colors';
 
@@ -48,18 +45,9 @@ const TerminalLogs: FunctionComponent = () => {
 
   const terminalRef = useRef(null);
   const searchAddonRef = useRef<SearchAddon>();
-  const interval = useRef<NodeJS.Timer>();
   const dispatch = useAppDispatch();
   const {
-    api: {
-      isProvisioned,
-      isProvisioning,
-      isError,
-      lastErrorCondition,
-      managementCluster,
-      completedSteps,
-    },
-    installation: { values },
+    api: { managementCluster, completedSteps },
   } = useAppSelector(({ config, api, installation }) => ({
     installation,
     config,
@@ -90,39 +78,6 @@ const TerminalLogs: FunctionComponent = () => {
       searchAddonRef.current = searchAddon;
     }
   }, []);
-
-  const getClusterInterval = useCallback(
-    (params: ClusterRequestProps) => {
-      return setInterval(async () => {
-        dispatch(getCluster(params)).unwrap();
-      }, 5000);
-    },
-    [dispatch],
-  );
-
-  useEffect(() => {
-    const clusterName = values?.clusterName;
-    if (isProvisioning && !isProvisioned && clusterName) {
-      interval.current = getClusterInterval({ clusterName });
-    }
-
-    if (isProvisioned) {
-      clearInterval(interval.current);
-    }
-
-    if (isError) {
-      dispatch(setError({ error: lastErrorCondition }));
-      clearInterval(interval.current);
-    }
-
-    return () => {
-      clearInterval(interval.current);
-      dispatch(clearError());
-    };
-    // This is intented, we only want to watch isProvisioning, isProvisioned, isError
-    // and will be deprecated with the queue
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isProvisioning, isProvisioned, isError]);
 
   useEffect(() => {
     if (terminalRef.current) {

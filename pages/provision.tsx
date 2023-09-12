@@ -18,7 +18,7 @@ const ProvisionPage: FunctionComponent = () => {
     [isMultiClusterEnabled, managementCluster],
   );
 
-  if (!isEnabled) {
+  if (process.env.NODE_ENV !== 'development' || !isEnabled) {
     push('/services');
   }
 

@@ -15,8 +15,13 @@
     "jsx": "preserve",
     "incremental": true,
     "allowSyntheticDefaultImports": true,
-    "baseUrl": "."
+    "baseUrl": ".",
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ]
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "custom.d.ts"],
   "exclude": ["node_modules", "dist", "tests", "server.js"]
 }

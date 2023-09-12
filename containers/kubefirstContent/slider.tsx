@@ -1,7 +1,7 @@
 import React, { FunctionComponent, useEffect, useMemo, useState } from 'react';
 import { Slider as SliderMui, styled } from '@mui/material';
 import moment from 'moment';
-import { RangeInputProps, useRange } from 'react-instantsearch-hooks-web';
+import { RangeInputProps, useRange } from 'react-instantsearch';
 import { RangeBoundaries } from 'instantsearch.js/es/connectors/range/connectRange';
 
 import { PORT_GORE, PRIMARY, SALTBOX_BLUE } from '../../constants/colors';

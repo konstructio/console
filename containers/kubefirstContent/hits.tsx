@@ -1,5 +1,5 @@
 import React, { FunctionComponent } from 'react';
-import { useHits } from 'react-instantsearch-hooks-web';
+import { useHits } from 'react-instantsearch';
 
 import ContentHit from '../../components/contentHit';
 import { Content } from '../../types/algolia/content';

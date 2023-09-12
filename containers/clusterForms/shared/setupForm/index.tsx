@@ -1,6 +1,14 @@
-import React, { ChangeEvent, FunctionComponent, useMemo, useState } from 'react';
+import React, {
+  ChangeEvent,
+  FunctionComponent,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 import { useFormContext } from 'react-hook-form';
 import { capitalize } from 'lodash';
+import { setInstallationStep } from 'redux/slices/installation.slice';
 
 import { clearDomains } from '../../../../redux/slices/api.slice';
 import ControlledPassword from '../../../../components/controlledFields/Password';
@@ -23,17 +31,17 @@ const SetupForm: FunctionComponent = () => {
   const [isCloudFlareSelected, setIsCloudFlareSelected] = useState<boolean>(false);
   const [selectedRegion, setSelectedRegion] = useState<string>('');
   const dispatch = useAppDispatch();
+  const { control, setValue } = useFormContext<InstallValues>();
 
-  const { cloudDomains, cloudRegions, installType, values } = useAppSelector(
+  const { cloudDomains, cloudRegions, installationStep, installType, values } = useAppSelector(
     ({ api, installation }) => ({
       cloudDomains: api.cloudDomains,
       cloudRegions: api.cloudRegions,
-      values: installation.values,
+      installationStep: installation.installationStep,
       installType: installation.installType,
+      values: installation.values,
     }),
   );
-
-  const { control, setValue } = useFormContext<InstallValues>();
 
   const cloudRegionLabel = useMemo(
     () =>
@@ -41,6 +49,12 @@ const SetupForm: FunctionComponent = () => {
       (CLOUD_REGION_LABELS[InstallationType.AWS] as string),
     [installType],
   );
+
+  const checkAuth = useCallback(() => {
+    if (!values?.gitToken) {
+      dispatch(setInstallationStep(installationStep - 1));
+    }
+  }, [dispatch, installationStep, values?.gitToken]);
 
   const handleRegionOnSelect = async (region: string) => {
     setSelectedRegion(region);
@@ -77,6 +91,10 @@ const SetupForm: FunctionComponent = () => {
       setValue && setValue('domainName', '');
     }
   };
+
+  useEffect(() => {
+    checkAuth();
+  }, [checkAuth]);
 
   return (
     <>

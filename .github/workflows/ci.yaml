@@ -1,0 +1,20 @@
+name: Console CI
+
+on:
+  push:
+    branches: [main, feat_queue_refactor]
+  pull_request:
+    branches: [main, feat_queue_refactor]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Use Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18.x'
+      - run: npm install --legacy-peer-deps
+      - run: npm run test
+      - run: npm run lint
+      - run: npm run check-types

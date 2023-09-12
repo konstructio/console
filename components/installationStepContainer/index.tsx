@@ -29,6 +29,7 @@ const InstallationStepContainer: FunctionComponent<InstallationStepContainerProp
   steps,
   hasInfo,
   installationTitle,
+  isLoading,
   isProvisionStep,
   showBackButton,
   onBackButtonClick = noop,
@@ -71,6 +72,7 @@ const InstallationStepContainer: FunctionComponent<InstallationStepContainerProp
         nextButtonText={nextButtonText}
         nextButtonDisabled={nextButtonDisabled}
         showNextButton={showNextButton}
+        isLoading={isLoading}
       />
     </Container>
   );

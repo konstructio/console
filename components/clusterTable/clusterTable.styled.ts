@@ -74,7 +74,7 @@ export const StyledTag = styled(Tag)`
   width: fit-content;
 `;
 
-export const StyledTableRow = muiStyled(TableRow)<{ selected?: boolean }>(({ selected }) => ({
+export const StyledTableRow = muiStyled(TableRow)<{ selected?: boolean }>(() => ({
   [`&.${tableRowClasses.root}`]: {
     border: 0,
     height: 'fit-content',

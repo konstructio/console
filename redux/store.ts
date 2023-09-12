@@ -1,16 +1,7 @@
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
 import { Action, combineReducers, configureStore, ThunkAction } from '@reduxjs/toolkit';
 import { createWrapper } from 'next-redux-wrapper';
-import {
-  // persistStore,
-  // persistReducer,
-  FLUSH,
-  REHYDRATE,
-  PAUSE,
-  PERSIST,
-  PURGE,
-  REGISTER,
-} from 'redux-persist';
+import { persistStore, persistReducer } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
 import { getPersistConfig } from 'redux-deep-persist';
 
@@ -63,17 +54,14 @@ const config = getPersistConfig({
 export const makeStore = () =>
   configureStore({
     devTools: process.env.NODE_ENV === 'development',
-    reducer: rootReducer,
+    reducer: persistReducer(config, rootReducer),
     middleware: (getDefaultMiddleware) =>
       getDefaultMiddleware({
-        serializableCheck: {
-          ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
-        },
+        serializableCheck: false,
       }).concat(consoleApi.middleware),
   });
 
 export type AppStore = ReturnType<typeof makeStore>;
-// export type RootState = ReturnType<AppStore['getState']>;
 export type RootState = ReturnType<typeof rootReducer>;
 
 export type AppDispatch = AppStore['dispatch'];
@@ -91,4 +79,4 @@ const store = makeStore() as AppStore;
 
 export const wrapper = createWrapper<AppStore>(() => store);
 
-// export const persistor = persistStore(store);
+export const persistor = persistStore(store);

@@ -11,9 +11,12 @@ import { Snackbar } from '@mui/material';
 
 import { setClusterQueue } from '../../redux/slices/queue.slice';
 import { createQueryString } from '../../utils/url/formatDomain';
-import { ClusterQueue, ClusterResponse, ClusterStatus } from '../../types/provision';
+import { ClusterQueue, ClusterResponse, ClusterStatus, ClusterType } from '../../types/provision';
 import { useAppDispatch, useAppSelector } from '../../redux/store';
 import useToggle from '../../hooks/useToggle';
+import { setManagementCluster } from '../../redux/slices/api.slice';
+import { setError } from '../../redux/slices/installation.slice';
+import { mapClusterFromRaw } from '../../utils/mapClustersFromRaw';
 
 import QueueContext from './queue.context';
 
@@ -33,10 +36,36 @@ const QueueProvider: FunctionComponent<PropsWithChildren> = ({ children }) => {
   const getClusterInterval = useCallback(
     (incomingClusterQueue: ClusterQueue) => {
       return setInterval(async () => {
-        const { clusterName, id } = incomingClusterQueue;
+        const { clusterName, clusterType, id } = incomingClusterQueue;
         const res = await axios.get<ClusterResponse>(
           `/api/proxy?${createQueryString('url', `/cluster/${clusterName || 'kubefirst'}`)}`,
         );
+
+        if (clusterType === ClusterType.MANAGEMENT) {
+          const { status } = res.data || {};
+
+          dispatch(
+            setClusterQueue({
+              ...clusterQueue,
+              [id]: { ...incomingClusterQueue, status: status as ClusterStatus },
+            }),
+          );
+
+          dispatch(setManagementCluster(mapClusterFromRaw(res.data)));
+
+          if (
+            ![ClusterStatus.DELETING, ClusterStatus.PROVISIONING].includes(status as ClusterStatus)
+          ) {
+            incomingClusterQueue.callback && incomingClusterQueue.callback();
+            clearInterval(queue[id]);
+          }
+
+          if (status === ClusterStatus.ERROR) {
+            dispatch(setError({ error: res.data.last_condition }));
+          }
+
+          return;
+        }
 
         const workloadCluster = res.data.workload_clusters?.find(
           ({ cluster_id }) => cluster_id === id,
@@ -70,8 +99,15 @@ const QueueProvider: FunctionComponent<PropsWithChildren> = ({ children }) => {
     dispatch(setClusterQueue({ ...clusterQueue, [incomingClusterQueue.id]: incomingClusterQueue }));
   };
 
+  const deleteFromClusterToQueue = (clusterId: string) => {
+    const { [clusterId.toString()]: clusterToDelete, ...rest } = clusterQueue;
+
+    delete queue[clusterToDelete.id];
+    dispatch(setClusterQueue(rest));
+  };
+
   useEffect(() => {
-    if (clusterQueue) {
+    clusterQueue &&
       Object.keys(clusterQueue).map((clusterId) => {
         const { status } = clusterQueue[clusterId];
         if (
@@ -81,13 +117,13 @@ const QueueProvider: FunctionComponent<PropsWithChildren> = ({ children }) => {
           queue[clusterId] = getClusterInterval(clusterQueue[clusterId]);
         }
       });
-    }
   }, [clusterQueue, getClusterInterval, queue]);
 
   return (
     <QueueContext.Provider
       value={{
         addClusterToQueue,
+        deleteFromClusterToQueue,
       }}
     >
       {children}

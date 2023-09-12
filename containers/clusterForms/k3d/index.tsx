@@ -24,7 +24,7 @@ export const LocalFormFlow: FunctionComponent<{ currentStep: LocalFormStep }> = 
 
   return (
     <ContentContainer>
-      <ActiveFormStep clusterName="kubefirst" domainName="kubefirst.dev" />
+      <ActiveFormStep />
     </ContentContainer>
   );
 };

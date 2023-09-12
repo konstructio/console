@@ -18,39 +18,50 @@ import {
 } from '../../redux/slices/installation.slice';
 import { clearClusterState, clearValidation } from '../../redux/slices/api.slice';
 import { useAppDispatch, useAppSelector } from '../../redux/store';
-import { createCluster, getCloudRegions, resetClusterProgress } from '../../redux/thunks/api.thunk';
+import {
+  createCluster,
+  getCloudRegions,
+  getCluster,
+  resetClusterProgress,
+} from '../../redux/thunks/api.thunk';
 import { useInstallation } from '../../hooks/useInstallation';
 import { InstallValues, InstallationType } from '../../types/redux';
 import { GitProvider } from '../../types';
 import { AUTHENTICATION_ERROR_MSG } from '../../constants';
+import { useQueue } from '../../hooks/useQueue';
+import { ClusterStatus, ClusterType } from '../../types/provision';
 
 import { AdvancedOptionsContainer, ErrorContainer, Form, FormContent } from './provision.styled';
 
 const Provision: FunctionComponent = () => {
   const dispatch = useAppDispatch();
   const { push } = useRouter();
+  const { addClusterToQueue, deleteFromClusterToQueue } = useQueue();
 
   const {
     authErrors,
     error,
     installType,
-    isAuthenticationValid,
-    isProvisioned,
-    isClusterZero,
     installMethod,
     installationStep,
+    isAuthenticationValid,
+    isClusterZero,
+    isLoading,
+    isProvisioned,
+    installValues,
     gitProvider,
   } = useAppSelector(({ api, config, git, installation }) => ({
-    installType: installation.installType,
-    gitProvider: installation.gitProvider,
-    installationStep: installation.installationStep,
-    values: installation.values,
-    error: installation.error,
     authErrors: git.errors,
+    error: installation.error,
+    gitProvider: installation.gitProvider,
+    installType: installation.installType,
     isAuthenticationValid: api.isAuthenticationValid,
-    isProvisioned: api.isProvisioned,
     isClusterZero: config.isClusterZero,
+    isLoading: api.loading,
+    isProvisioned: api.isProvisioned,
     installMethod: config.installMethod,
+    installationStep: installation.installationStep,
+    installValues: installation.values,
   }));
 
   const isMarketplace = useMemo(() => installMethod?.includes('marketplace'), [installMethod]);
@@ -62,7 +73,6 @@ const Provision: FunctionComponent = () => {
       installationStep,
       !!isMarketplace,
     );
-
   const methods = useForm<InstallValues>({ mode: 'onChange' });
   const {
     formState: { isValid: isFormValid },
@@ -152,15 +162,44 @@ const Provision: FunctionComponent = () => {
     }
   };
 
+  const handleGetCluster = useCallback(async () => {
+    const values = getValues();
+
+    values && dispatch(getCluster(values));
+  }, [dispatch, getValues]);
+
   const provisionCluster = useCallback(async () => {
+    const values = getValues();
+
     if (error) {
-      dispatch(resetClusterProgress());
+      await dispatch(resetClusterProgress());
+      deleteFromClusterToQueue(
+        (values.clusterName as string) || (installValues?.clusterName as string),
+      );
     }
 
     await dispatch(clearError());
     await dispatch(clearClusterState());
-    await dispatch(createCluster()).unwrap();
-  }, [dispatch, error]);
+    await dispatch(createCluster())
+      .unwrap()
+      .then(() => {
+        addClusterToQueue({
+          clusterName: (values.clusterName as string) || (installValues?.clusterName as string),
+          id: (values.clusterName as string) || (installValues?.clusterName as string),
+          clusterType: ClusterType.MANAGEMENT,
+          status: ClusterStatus.PROVISIONING,
+          callback: handleGetCluster,
+        });
+      });
+  }, [
+    addClusterToQueue,
+    deleteFromClusterToQueue,
+    dispatch,
+    error,
+    getValues,
+    handleGetCluster,
+    installValues?.clusterName,
+  ]);
 
   const form = useMemo(() => {
     if (installationStep === 0 && !isMarketplace) {
@@ -237,6 +276,7 @@ const Provision: FunctionComponent = () => {
           nextButtonText={isSetupStep ? 'Create cluster' : 'Next'}
           nextButtonDisabled={!isValid}
           hasInfo={hasInfo}
+          isLoading={isLoading}
           isProvisionStep={isProvisionStep}
           showNextButton={installationStep < stepTitles.length - 1}
         >

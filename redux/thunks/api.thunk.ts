@@ -115,6 +115,7 @@ export const createWorkloadCluster = createAsyncThunk<
       domainName: managementCluster.domainName,
       gitProvider: managementCluster.gitProvider,
       gitAuth: managementCluster.gitAuth,
+      dnsProvider: managementCluster.dnsProvider,
     };
     dispatch(updateDraftCluster(updatedCluster));
     dispatch(addToPreviouslyUsedClusterNames(config.clusterName));
