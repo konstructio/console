@@ -173,6 +173,7 @@ const ClusterManagement: FunctionComponent = () => {
               managementCluster={managementCluster}
               onDeleteCluster={openDeleteModal}
               onMenuOpenClose={(cluster) => dispatch(setPresentedCluster(cluster))}
+              presentedClusterId={presentedCluster?.id}
             />
           )}
         </TabPanel>

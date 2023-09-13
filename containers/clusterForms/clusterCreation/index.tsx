@@ -19,22 +19,18 @@ import { InputContainer } from './advancedOptions/advancedOptions.styled';
 const minNodeCount = 3;
 
 const ClusterCreationForm: FunctionComponent<ComponentPropsWithoutRef<'div'>> = (props) => {
-  const [selectedClusterType, setSelectedClusterType] = useState('');
-
   const { cloudRegions, previouslyUsedClusterNames } = useAppSelector(({ api }) => api);
 
   const {
     control,
     getValues,
+    setValue,
     formState: { errors },
   } = useFormContext<NewWorkloadClusterConfig>();
 
   const { clusterName, cloudRegion, instanceSize, type } = getValues();
 
-  const showInstanceSizeSelect = useMemo(
-    () => selectedClusterType === ClusterType.WORKLOAD || type === ClusterType.WORKLOAD,
-    [selectedClusterType, type],
-  );
+  const isVCluster = useMemo(() => type === ClusterType.WORKLOAD_V_CLUSTER, [type]);
 
   return (
     <Container {...props}>
@@ -53,7 +49,9 @@ const ClusterCreationForm: FunctionComponent<ComponentPropsWithoutRef<'div'>> = 
             { label: 'Physical', value: ClusterType.WORKLOAD },
           ]}
           defaultValue={type}
-          onChange={(e) => setSelectedClusterType(e)}
+          onChange={(clusterType) =>
+            setValue('type', clusterType as ClusterType, { shouldValidate: true })
+          }
           inLine
         />
       </InputContainer>
@@ -87,29 +85,33 @@ const ClusterCreationForm: FunctionComponent<ComponentPropsWithoutRef<'div'>> = 
         }}
         required
       />
-      <ControlledAutocomplete
-        control={control}
-        name="cloudRegion"
-        label="Cloud region"
-        defaultValue={cloudRegion}
-        required
-        rules={{ required: true }}
-        options={cloudRegions && cloudRegions.map((region) => ({ label: region, value: region }))}
-      />
-      {showInstanceSizeSelect && (
-        <ControlledSelect
-          control={control}
-          name="instanceSize"
-          label="Instance size"
-          rules={{ required: true }}
-          options={[
-            {
-              value: '8 CPU Cores / 64 GB RAM / 120 GB NvME storage / 8 TB Data Transfer',
-              label: '8 CPU Cores / 64 GB RAM / 120 GB NvME storage / 8 TB Data Transfer',
-            },
-          ]}
-          defaultValue={instanceSize}
-        />
+      {!isVCluster && (
+        <>
+          <ControlledAutocomplete
+            control={control}
+            name="cloudRegion"
+            label="Cloud region"
+            defaultValue={cloudRegion}
+            required
+            rules={{ required: true }}
+            options={
+              cloudRegions && cloudRegions.map((region) => ({ label: region, value: region }))
+            }
+          />
+          <ControlledSelect
+            control={control}
+            name="instanceSize"
+            label="Instance size"
+            rules={{ required: true }}
+            options={[
+              {
+                value: '8 CPU Cores / 64 GB RAM / 120 GB NvME storage / 8 TB Data Transfer',
+                label: '8 CPU Cores / 64 GB RAM / 120 GB NvME storage / 8 TB Data Transfer',
+              },
+            ]}
+            defaultValue={instanceSize}
+          />
+        </>
       )}
       <Box sx={{ width: 136 }}>
         <ControlledNumberInput
