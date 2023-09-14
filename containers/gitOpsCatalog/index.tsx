@@ -12,11 +12,7 @@ import GitopsAppModal from '../../components/gitopsAppModal';
 import useModal from '../../hooks/useModal';
 import { useAppDispatch, useAppSelector } from '../../redux/store';
 import { installGitOpsApp } from '../../redux/thunks/api.thunk';
-import {
-  addAppToQueue,
-  removeAppFromQueue,
-  setIsGitOpsCatalogNotificationOpen,
-} from '../../redux/slices/cluster.slice';
+import { setIsGitOpsCatalogNotificationOpen } from '../../redux/slices/cluster.slice';
 import { AppCategory, GitOpsCatalogApp } from '../../types/gitOpsCatalog';
 import { IVY_LEAGUE, VOLCANIC_SAND } from '../../constants/colors';
 
@@ -89,17 +85,12 @@ const gitOpsCatalog: FunctionComponent = () => {
   };
 
   const handleAddApp = async (app: GitOpsCatalogApp) => {
-    try {
-      const values = getValues();
-      dispatch(addAppToQueue(app));
-      await dispatch(
-        installGitOpsApp({ app, clusterName: selectedCluster?.clusterName as string, values }),
-      );
-      reset();
-    } catch (error) {
-      //todo: handle error
-      dispatch(removeAppFromQueue(app));
-    }
+    const values = getValues();
+    dispatch(
+      installGitOpsApp({ app, clusterName: selectedCluster?.clusterName as string, values }),
+    );
+    reset();
+    closeModal();
   };
 
   const handleSelectedApp = (app: GitOpsCatalogApp) => {
