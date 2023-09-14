@@ -27,6 +27,7 @@ export interface ApiState {
   isError: boolean;
   lastErrorCondition?: string;
   managementCluster?: ManagementCluster;
+  draftCluster?: WorkloadCluster;
   presentedCluster?: Cluster;
   completedSteps: Array<{ label: string; order: number }>;
   cloudDomains: Array<string>;
@@ -92,54 +93,43 @@ const apiSlice = createSlice({
     },
     createDraftCluster: (state) => {
       if (state.managementCluster) {
-        const { gitProvider, cloudProvider, domainName, adminEmail, gitAuth } =
-          state.managementCluster;
+        const {
+          gitProvider,
+          cloudProvider,
+          domainName,
+          adminEmail,
+          gitAuth,
+          dnsProvider,
+          cloudRegion,
+        } = state.managementCluster;
 
         const draftCluster: WorkloadCluster = {
           id: 'draft',
           clusterName: '',
-          type: ClusterType.WORKLOAD,
+          type: ClusterType.WORKLOAD_V_CLUSTER,
           cloudProvider,
+          cloudRegion,
           gitProvider,
           domainName,
           gitAuth,
           adminEmail,
-          dnsProvider: '',
+          dnsProvider,
         };
 
-        state.managementCluster.workloadClusters.push(draftCluster);
+        state.draftCluster = draftCluster;
         state.presentedCluster = draftCluster;
       }
     },
     removeDraftCluster: (state) => {
-      if (state.managementCluster) {
-        state.managementCluster.workloadClusters = state.managementCluster.workloadClusters.filter(
-          (cluster) => cluster.id !== 'draft',
-        );
-      }
+      state.draftCluster = undefined;
     },
     updateDraftCluster: (state, { payload }: PayloadAction<WorkloadCluster>) => {
+      state.draftCluster = payload;
+    },
+    addWorkloadCluster: (state, { payload }: PayloadAction<WorkloadCluster>) => {
       if (state.managementCluster) {
-        const workloadClusterToUpdate = state.managementCluster.workloadClusters.find(
-          (cluster) => cluster.id === 'draft',
-        );
-
-        if (workloadClusterToUpdate) {
-          const updatedCluster: WorkloadCluster = {
-            ...workloadClusterToUpdate,
-            ...payload,
-          };
-          state.managementCluster.workloadClusters = state.managementCluster.workloadClusters.map(
-            (cluster) => {
-              if (cluster.id === 'draft') {
-                cluster = updatedCluster;
-              }
-              return cluster;
-            },
-          );
-
-          state.presentedCluster = updatedCluster;
-        }
+        state.managementCluster.workloadClusters.push(payload);
+        state.presentedCluster = payload;
       }
     },
     addToPreviouslyUsedClusterNames: (state, { payload }: PayloadAction<string>) => {
@@ -242,6 +232,7 @@ export const {
   setPresentedCluster,
   addToPreviouslyUsedClusterNames,
   setManagementCluster,
+  addWorkloadCluster,
 } = apiSlice.actions;
 
 export const apiReducer = apiSlice.reducer;

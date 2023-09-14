@@ -24,6 +24,7 @@ export const TagContainer = styled(Row)<{ bg?: string; textColor?: string }>`
   text-transform: capitalize;
   background-color: ${({ bg }) => bg};
   color: ${({ textColor }) => textColor};
+  width: fit-content;
 
   ${RemovalButton} {
     & svg {

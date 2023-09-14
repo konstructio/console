@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { FunctionComponent } from 'react';
 import { Meta, StoryObj } from '@storybook/react';
 
 import { noop } from '../../utils/noop';
@@ -17,20 +17,20 @@ const meta: Meta<typeof ClusterTable> = {
 
 export default meta;
 
-const ClusterTableWithHooks = () => {
+const ClusterTableWithHooks: FunctionComponent = () => {
   const { presentedCluster, managementCluster } = useAppSelector(({ api }) => api);
 
   const dispatch = useAppDispatch();
 
-  return (
-    managementCluster && (
-      <ClusterTable
-        managementCluster={managementCluster}
-        presentedClusterId={presentedCluster?.id}
-        onMenuOpenClose={(presentedCluster) => dispatch(setPresentedCluster(presentedCluster))}
-        onDeleteCluster={noop}
-      />
-    )
+  return managementCluster ? (
+    <ClusterTable
+      managementCluster={managementCluster}
+      presentedClusterId={presentedCluster?.id}
+      onMenuOpenClose={(presentedCluster) => dispatch(setPresentedCluster(presentedCluster))}
+      onDeleteCluster={noop}
+    />
+  ) : (
+    <div>No management cluster</div>
   );
 };
 
@@ -42,6 +42,6 @@ export const Default: StoryObj<typeof ClusterTable> = {
   },
 };
 
-// export const WithSelectableRows: StoryObj<typeof ClusterTable> = {
-//   render: () => <ClusterTableWithHooks />,
-// };
+export const WithSelectableRows: StoryObj<typeof ClusterTable> = {
+  render: () => <ClusterTableWithHooks />,
+};

@@ -9,15 +9,12 @@ import Row from '../row';
 import Tag from '../tag';
 import { BLUE_REFLECTION, EXCLUSIVE_PLUM } from '../../constants/colors';
 
-const StyledTag = styled(Tag)`
-  width: fit-content;
-`;
-export const StatusTag = styled(StyledTag)`
+export const StatusTag = styled(Tag)`
   position: absolute;
   top: 14px;
   right: 17px;
 `;
-export const EnvironmentTag = styled(StyledTag)`
+export const EnvironmentTag = styled(Tag)`
   margin-top: 4px;
 `;
 
@@ -61,7 +58,7 @@ export const Container = styled(Row)<{ selected: boolean; managementCluster: boo
         margin-left: 67px;
       }
 
-      ${StyledTag} {
+      ${StatusTag} {
         top: 16px;
         right: 33px;
       }

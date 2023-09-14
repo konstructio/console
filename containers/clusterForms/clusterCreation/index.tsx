@@ -1,17 +1,23 @@
-import React, { ComponentPropsWithoutRef, FunctionComponent, useMemo, useState } from 'react';
+import React, { ComponentPropsWithoutRef, FunctionComponent, useEffect, useMemo } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { Box } from '@mui/material';
 
 import ControlledAutocomplete from '../../../components/controlledFields/AutoComplete';
 import ControlledTextField from '../../../components/controlledFields/TextField';
-import { useAppSelector } from '../../../redux/store';
+import { useAppDispatch, useAppSelector } from '../../../redux/store';
 import ControlledSelect from '../../../components/controlledFields/Select';
 import Typography from '../../../components/typography';
-import { ClusterType, NewWorkloadClusterConfig } from '../../../types/provision';
+import {
+  ClusterType,
+  NewWorkloadClusterConfig,
+  CLUSTER_ENVIRONMENTS,
+  ClusterEnvironment,
+} from '../../../types/provision';
 import { EXCLUSIVE_PLUM } from '../../../constants/colors';
 import ControlledNumberInput from '../../../components/controlledFields/numberInput';
 import ControlledRadioGroup from '../../../components/controlledFields/radio';
 import { LOWER_KEBAB_CASE_REGEX } from '../../../constants';
+import { updateDraftCluster } from '../../../redux/slices/api.slice';
 
 import { Container } from './clusterCreation.styled';
 import { InputContainer } from './advancedOptions/advancedOptions.styled';
@@ -19,18 +25,33 @@ import { InputContainer } from './advancedOptions/advancedOptions.styled';
 const minNodeCount = 3;
 
 const ClusterCreationForm: FunctionComponent<ComponentPropsWithoutRef<'div'>> = (props) => {
-  const { cloudRegions, previouslyUsedClusterNames } = useAppSelector(({ api }) => api);
+  const { cloudRegions, previouslyUsedClusterNames, draftCluster } = useAppSelector(
+    ({ api }) => api,
+  );
+
+  const dispatch = useAppDispatch();
 
   const {
     control,
     getValues,
     setValue,
+    watch,
     formState: { errors },
   } = useFormContext<NewWorkloadClusterConfig>();
 
-  const { clusterName, cloudRegion, instanceSize, type } = getValues();
+  const { type } = getValues();
 
   const isVCluster = useMemo(() => type === ClusterType.WORKLOAD_V_CLUSTER, [type]);
+
+  useEffect(() => {
+    const subscription = watch((values) => {
+      if (draftCluster) {
+        dispatch(updateDraftCluster({ ...draftCluster, ...values }));
+      }
+    });
+
+    return () => subscription.unsubscribe();
+  }, [watch, dispatch, draftCluster]);
 
   return (
     <Container {...props}>
@@ -48,17 +69,33 @@ const ClusterCreationForm: FunctionComponent<ComponentPropsWithoutRef<'div'>> = 
             { label: 'Virtual', value: ClusterType.WORKLOAD_V_CLUSTER },
             { label: 'Physical', value: ClusterType.WORKLOAD },
           ]}
-          defaultValue={type}
+          defaultValue={draftCluster?.type}
           onChange={(clusterType) =>
             setValue('type', clusterType as ClusterType, { shouldValidate: true })
           }
           inLine
         />
       </InputContainer>
+      <InputContainer>
+        <Typography variant="labelLarge" color={EXCLUSIVE_PLUM}>
+          Environment cluster will host
+        </Typography>
+        <ControlledRadioGroup
+          control={control}
+          name="environment"
+          rules={{
+            required: false,
+          }}
+          options={CLUSTER_ENVIRONMENTS.map((item) => ({ label: item, value: item }))}
+          defaultValue={draftCluster?.environment}
+          onChange={(env) => setValue('environment', env as ClusterEnvironment)}
+          inLine
+        />
+      </InputContainer>
       <ControlledTextField
         control={control}
         name="clusterName"
-        defaultValue={clusterName}
+        defaultValue={draftCluster?.clusterName}
         label="Cluster name"
         rules={{
           maxLength: 25,
@@ -76,22 +113,13 @@ const ClusterCreationForm: FunctionComponent<ComponentPropsWithoutRef<'div'>> = 
         onErrorText={errors.clusterName?.message}
         required
       />
-      <ControlledTextField
-        control={control}
-        name="environment"
-        label="Environment"
-        rules={{
-          required: true,
-        }}
-        required
-      />
       {!isVCluster && (
         <>
           <ControlledAutocomplete
             control={control}
             name="cloudRegion"
             label="Cloud region"
-            defaultValue={cloudRegion}
+            defaultValue={draftCluster?.cloudRegion}
             required
             rules={{ required: true }}
             options={
@@ -109,7 +137,7 @@ const ClusterCreationForm: FunctionComponent<ComponentPropsWithoutRef<'div'>> = 
                 label: '8 CPU Cores / 64 GB RAM / 120 GB NvME storage / 8 TB Data Transfer',
               },
             ]}
-            defaultValue={instanceSize}
+            defaultValue={draftCluster?.instanceSize}
           />
         </>
       )}

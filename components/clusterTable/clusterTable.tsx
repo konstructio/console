@@ -4,6 +4,7 @@ import React, {
   ComponentPropsWithoutRef,
   useCallback,
   useRef,
+  useMemo,
 } from 'react';
 import TableHead from '@mui/material/TableHead';
 import { IconButton, List, ListItem, ListItemButton } from '@mui/material';
@@ -19,7 +20,13 @@ import digitalOceanLogo from '../../assets/digital_ocean_logo.svg';
 import vultrLogo from '../../assets/vultr_logo.svg';
 import { CLUSTER_TAG_CONFIG } from '../../constants';
 import { DODGER_BLUE, FIRE_BRICK } from '../../constants/colors';
-import { ManagementCluster, ClusterStatus, ClusterType, Cluster } from '../../types/provision';
+import {
+  ManagementCluster,
+  ClusterStatus,
+  ClusterType,
+  Cluster,
+  WorkloadCluster,
+} from '../../types/provision';
 import { InstallationType } from '../../types/redux';
 import Typography from '../../components/typography';
 import { useOnClickOutside } from '../../hooks/useOnClickOutside';
@@ -184,6 +191,7 @@ const ClusterRow: FunctionComponent<ClusterRowProps> = ({
 
 interface ClusterTableProps extends ComponentPropsWithoutRef<'div'> {
   managementCluster: ManagementCluster;
+  draftCluster?: WorkloadCluster;
   onDeleteCluster: () => void;
   onMenuOpenClose: (presentedCluster?: Cluster) => void;
   presentedClusterId?: string;
@@ -191,6 +199,7 @@ interface ClusterTableProps extends ComponentPropsWithoutRef<'div'> {
 
 export const ClusterTable: FunctionComponent<ClusterTableProps> = ({
   managementCluster,
+  draftCluster,
   onDeleteCluster,
   onMenuOpenClose,
   presentedClusterId,
@@ -198,6 +207,14 @@ export const ClusterTable: FunctionComponent<ClusterTableProps> = ({
 }) => {
   const [expanded, setExpanded] = useState(true);
   const { workloadClusters } = managementCluster;
+
+  const filteredWorkloadClusters = useMemo(() => {
+    const clustersCopy = [...workloadClusters];
+    if (draftCluster) {
+      clustersCopy.push(draftCluster);
+    }
+    return clustersCopy.filter((cluster) => cluster.status !== ClusterStatus.DELETED);
+  }, [workloadClusters, draftCluster]);
 
   return (
     <StyledTableContainer {...rest}>
@@ -246,17 +263,15 @@ export const ClusterTable: FunctionComponent<ClusterTableProps> = ({
           />
 
           {expanded &&
-            workloadClusters
-              .filter((cluster) => cluster.status !== ClusterStatus.DELETED)
-              .map((cluster) => (
-                <ClusterRow
-                  key={cluster.clusterName}
-                  {...cluster}
-                  onDeleteCluster={onDeleteCluster}
-                  onMenuOpenClose={onMenuOpenClose}
-                  presentedClusterId={presentedClusterId}
-                />
-              ))}
+            filteredWorkloadClusters.map((cluster) => (
+              <ClusterRow
+                key={cluster.clusterName}
+                {...cluster}
+                onDeleteCluster={onDeleteCluster}
+                onMenuOpenClose={onMenuOpenClose}
+                presentedClusterId={presentedClusterId}
+              />
+            ))}
         </StyledTableBody>
       </StyledTable>
     </StyledTableContainer>
