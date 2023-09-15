@@ -1,6 +1,6 @@
 import { Edge } from 'reactflow';
 
-import { ManagementCluster, ClusterStatus, Cluster } from '../../types/provision';
+import { ManagementCluster, ClusterStatus, Cluster, WorkloadCluster } from '../../types/provision';
 import { CustomGraphNode } from '../../components/graphNode';
 
 const WORKLOAD_CLUSTER_Y_SPACE = 60;
@@ -36,12 +36,19 @@ export function generateEdge(id: string, source: string, target: string, animate
   };
 }
 
-export function generateNodesConfig(cluster: ManagementCluster): [CustomGraphNode[], Edge[]] {
+export function generateNodesConfig(
+  cluster: ManagementCluster,
+  draftCluster?: WorkloadCluster,
+): [CustomGraphNode[], Edge[]] {
   const { workloadClusters, ...managementClusterInfo } = cluster;
   const { id: managementClusterId } = managementClusterInfo;
   const filteredWorkloadClusters = workloadClusters.filter(
     (cluster) => cluster.status !== ClusterStatus.DELETED,
   );
+
+  if (draftCluster) {
+    filteredWorkloadClusters.push(draftCluster);
+  }
 
   const workloadClusterLength = filteredWorkloadClusters.length;
   const spacesBetweenClusterNodes = workloadClusterLength - 1;

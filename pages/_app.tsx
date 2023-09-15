@@ -39,8 +39,10 @@ export default function App({ Component, ...rest }: AppProps) {
         .dispatch(getClusters())
         .unwrap()
         .then(() => {
-          if (process.env.NODE_ENV !== 'development') {
+          if (process.env.NEXT_PUBLIC_NODE_ENV !== 'development') {
             push('/services');
+          } else {
+            push('/cluster-management');
           }
         })
         .catch(() => {

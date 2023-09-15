@@ -34,12 +34,10 @@ enum MANAGEMENT_TABS {
 const ClusterManagement: FunctionComponent = () => {
   const [activeTab, setActiveTab] = useState(MANAGEMENT_TABS.LIST_VIEW);
 
-  const { managementCluster, clusterCreationStep, presentedCluster } = useAppSelector(
+  const { managementCluster, draftCluster, clusterCreationStep, presentedCluster } = useAppSelector(
     ({ api, queue }) => ({
-      managementCluster: api.managementCluster,
-      clusterCreationStep: api.clusterCreationStep,
-      presentedCluster: api.presentedCluster,
       clusterQueue: queue.clusterQueue,
+      ...api,
     }),
   );
 
@@ -171,8 +169,10 @@ const ClusterManagement: FunctionComponent = () => {
           {managementCluster && (
             <ClusterTable
               managementCluster={managementCluster}
+              draftCluster={draftCluster}
               onDeleteCluster={openDeleteModal}
               onMenuOpenClose={(cluster) => dispatch(setPresentedCluster(cluster))}
+              presentedClusterId={presentedCluster?.id}
             />
           )}
         </TabPanel>

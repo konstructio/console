@@ -1,5 +1,7 @@
 import { Meta, StoryObj } from '@storybook/react';
-import { mockClusterConfig } from 'tests/mocks/mockClusterConfig';
+
+import { mockClusterConfig } from '../../tests/mocks/mockClusterConfig';
+import { ClusterType } from '../../types/provision';
 
 import ClusterDetails from '.';
 
@@ -23,6 +25,7 @@ export const Default: StoryObj<typeof ClusterDetails> = {
         gitToken: 'kray',
         gitUser: 'D-B-Hawk',
       },
+      type: mockClusterConfig.type as ClusterType,
     },
   },
 };

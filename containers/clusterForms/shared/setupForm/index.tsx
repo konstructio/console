@@ -16,7 +16,7 @@ import { useAppDispatch, useAppSelector } from '../../../../redux/store';
 import { getCloudDomains } from '../../../../redux/thunks/api.thunk';
 import ControlledTextField from '../../../../components/controlledFields/TextField';
 import ControlledAutocomplete from '../../../../components/controlledFields/AutoComplete';
-import { EMAIL_REGEX } from '../../../../constants';
+import { EMAIL_REGEX, LOWER_KEBAB_CASE_REGEX } from '../../../../constants';
 import { InstallValues, InstallationType } from '../../../../types/redux';
 
 const CLOUD_REGION_LABELS: Record<InstallationType, string | null> = {
@@ -31,7 +31,11 @@ const SetupForm: FunctionComponent = () => {
   const [isCloudFlareSelected, setIsCloudFlareSelected] = useState<boolean>(false);
   const [selectedRegion, setSelectedRegion] = useState<string>('');
   const dispatch = useAppDispatch();
-  const { control, setValue } = useFormContext<InstallValues>();
+  const {
+    control,
+    setValue,
+    formState: { errors },
+  } = useFormContext<InstallValues>();
 
   const { cloudDomains, cloudRegions, installationStep, installType, values } = useAppSelector(
     ({ api, installation }) => ({
@@ -163,8 +167,12 @@ const SetupForm: FunctionComponent = () => {
         rules={{
           maxLength: 25,
           required: true,
+          pattern: {
+            value: LOWER_KEBAB_CASE_REGEX,
+            message: 'Please use lower kebab case for cluster name',
+          },
         }}
-        onErrorText="Maximum 25 characters."
+        onErrorText={errors.clusterName?.message}
         required
       />
       {/* <LearnMore description="Learn more about" href="" linkTitle="configuring your cluster" /> */}

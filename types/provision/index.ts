@@ -15,6 +15,14 @@ export enum ClusterType {
   WORKLOAD_V_CLUSTER = 'workload-vcluster',
 }
 
+export enum ClusterEnvironment {
+  DEVELOPEMENT = 'Dev',
+  STAGING = 'Staging',
+  PRODUCTION = 'Production',
+}
+
+export const CLUSTER_ENVIRONMENTS = Object.values(ClusterEnvironment);
+
 export enum ClusterCreationStep {
   CONFIG,
   DETAILS,
@@ -25,7 +33,7 @@ export enum ImageRepository {
   ECR = 'ecr',
 }
 
-export type NewWorkloadClusterConfig = Required<
+export type NewWorkloadClusterConfig = Partial<
   Pick<
     WorkloadCluster,
     'clusterName' | 'cloudRegion' | 'instanceSize' | 'nodeCount' | 'environment' | 'type'
@@ -131,7 +139,7 @@ export interface Cluster {
   creationDate?: string;
   domainName: string;
   dnsProvider: string;
-  environment?: string;
+  environment?: ClusterEnvironment;
   gitProvider: string;
   instanceSize?: string;
   nodeCount?: number;
@@ -193,7 +201,6 @@ export interface ManagementCluster extends Cluster, Row {
 }
 
 export interface WorkloadCluster extends Cluster {
-  environment?: string;
   instanceSize?: string;
   machineType?: string;
 }

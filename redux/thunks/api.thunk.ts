@@ -9,8 +9,6 @@ import {
   ManagementCluster,
   ClusterRequestProps,
   ClusterServices,
-  NewWorkloadClusterConfig,
-  ClusterType,
   ClusterStatus,
   WorkloadCluster,
   ClusterResponse,
@@ -20,7 +18,11 @@ import { GitOpsCatalogApp, GitOpsCatalogProps } from '../../types/gitOpsCatalog'
 import { InstallValues, InstallationType } from '../../types/redux';
 import { TelemetryClickEvent } from '../../types/telemetry';
 import { mapClusterFromRaw } from '../../utils/mapClustersFromRaw';
-import { addToPreviouslyUsedClusterNames, updateDraftCluster } from '../slices/api.slice';
+import {
+  addToPreviouslyUsedClusterNames,
+  addWorkloadCluster,
+  removeDraftCluster,
+} from '../slices/api.slice';
 import { addAppToQueue, removeAppFromQueue } from '../slices/cluster.slice';
 
 export const createCluster = createAsyncThunk<
@@ -81,23 +83,31 @@ export const createCluster = createAsyncThunk<
 
 export const createWorkloadCluster = createAsyncThunk<
   { cluster_id: string },
-  NewWorkloadClusterConfig,
+  void,
   {
     dispatch: AppDispatch;
     state: RootState;
   }
->('api/cluster/createWorkloadCluster', async (config, { dispatch, getState }) => {
-  const { managementCluster } = getState().api;
+>('api/cluster/createWorkloadCluster', async (_, { dispatch, getState }) => {
+  const { managementCluster, draftCluster } = getState().api;
 
-  const res = await axios.post(`/api/proxy?target=ee`, {
+  if (!managementCluster) {
+    throw new Error('missing managament cluster');
+  }
+
+  if (!draftCluster) {
+    throw new Error('missing draft cluster');
+  }
+
+  const res = await axios.post<{ cluster_id: string }>(`/api/proxy?target=ee`, {
     url: `/cluster/${managementCluster?.id}`,
     body: {
-      cluster_name: config.clusterName,
-      cloud_region: config.cloudRegion,
-      instance_size: config.instanceSize,
-      node_count: config.nodeCount,
-      environment: config.environment,
-      cluster_type: config.type,
+      cluster_name: draftCluster.clusterName,
+      cloud_region: draftCluster.cloudRegion,
+      instance_size: draftCluster.instanceSize,
+      node_count: draftCluster.nodeCount,
+      environment: draftCluster.environment,
+      cluster_type: draftCluster.type,
     },
   });
 
@@ -105,22 +115,16 @@ export const createWorkloadCluster = createAsyncThunk<
     throw res.error;
   }
 
-  if (managementCluster && res.data.cluster_id) {
-    const updatedCluster: WorkloadCluster = {
-      ...config,
-      id: res.data.cluster_id,
-      type: ClusterType.WORKLOAD,
-      status: ClusterStatus.PROVISIONING,
-      cloudProvider: managementCluster.cloudProvider,
-      adminEmail: managementCluster.adminEmail,
-      domainName: managementCluster.domainName,
-      gitProvider: managementCluster.gitProvider,
-      gitAuth: managementCluster.gitAuth,
-      dnsProvider: managementCluster.dnsProvider,
-    };
-    dispatch(updateDraftCluster(updatedCluster));
-    dispatch(addToPreviouslyUsedClusterNames(config.clusterName));
-  }
+  const updatedCluster: WorkloadCluster = {
+    ...draftCluster,
+    id: res.data.cluster_id,
+    status: ClusterStatus.PROVISIONING,
+  };
+
+  dispatch(removeDraftCluster());
+  dispatch(addWorkloadCluster(updatedCluster));
+  dispatch(addToPreviouslyUsedClusterNames(updatedCluster.clusterName!));
+
   return res.data;
 });
 

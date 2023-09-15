@@ -27,7 +27,7 @@ interface GraphViewProps {
 
 const GraphView: FunctionComponent<GraphViewProps> = ({ onNodeClick }) => {
   const { nodes, edges } = useAppSelector(({ reactFlow }) => reactFlow);
-  const { managementCluster, presentedCluster } = useAppSelector(({ api }) => api);
+  const { managementCluster, presentedCluster, draftCluster } = useAppSelector(({ api }) => api);
 
   const dispatch = useAppDispatch();
 
@@ -53,11 +53,11 @@ const GraphView: FunctionComponent<GraphViewProps> = ({ onNodeClick }) => {
 
   useEffect(() => {
     if (managementCluster) {
-      const [nodes, edges] = generateNodesConfig(managementCluster);
+      const [nodes, edges] = generateNodesConfig(managementCluster, draftCluster);
       dispatch(setNodes(nodes));
       dispatch(setEdges(edges));
     }
-  }, [managementCluster, dispatch]);
+  }, [managementCluster, draftCluster, dispatch]);
 
   return (
     <ReactFlow
