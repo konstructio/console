@@ -71,7 +71,7 @@ const GitopsAppModal: FunctionComponent<GitopsAppModalProps> = ({
         </Content>
         <Divider />
         <Footer>
-          <Button variant="text" color="info" onClick={closeModal}>
+          <Button variant="text" color="text" onClick={closeModal}>
             Cancel
           </Button>
           <Button variant="contained" color="primary" disabled={!isValid} onClick={handleSubmit}>

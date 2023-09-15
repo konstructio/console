@@ -22,7 +22,8 @@ import {
   addToPreviouslyUsedClusterNames,
   addWorkloadCluster,
   removeDraftCluster,
-} from '../../redux/slices/api.slice';
+} from '../slices/api.slice';
+import { addAppToQueue, removeAppFromQueue } from '../slices/cluster.slice';
 
 export const createCluster = createAsyncThunk<
   ManagementCluster,
@@ -232,7 +233,9 @@ export const installGitOpsApp = createAsyncThunk<
     dispatch: AppDispatch;
     state: RootState;
   }
->('api/installGitOpsApp', async ({ app, clusterName, values }) => {
+>('api/installGitOpsApp', async ({ app, clusterName, values }, { dispatch }) => {
+  dispatch(addAppToQueue(app));
+
   const secret_keys =
     values &&
     Object.keys(values as FieldValues).map((key) => ({
@@ -250,8 +253,10 @@ export const installGitOpsApp = createAsyncThunk<
   });
 
   if ('error' in res) {
+    dispatch(removeAppFromQueue(app));
     throw res.error;
   }
+
   return app;
 });
 
