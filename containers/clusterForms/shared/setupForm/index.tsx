@@ -156,7 +156,7 @@ const SetupForm: FunctionComponent = () => {
             label="Cloudflare origin ca issuer key"
             required
             rules={{
-              required: true,
+              required: false,
             }}
             onErrorText="Invalid issuer key"
           />
