@@ -20,7 +20,8 @@ import { GitOpsCatalogApp, GitOpsCatalogProps } from '../../types/gitOpsCatalog'
 import { InstallValues, InstallationType } from '../../types/redux';
 import { TelemetryClickEvent } from '../../types/telemetry';
 import { mapClusterFromRaw } from '../../utils/mapClustersFromRaw';
-import { addToPreviouslyUsedClusterNames, updateDraftCluster } from '../../redux/slices/api.slice';
+import { addToPreviouslyUsedClusterNames, updateDraftCluster } from '../slices/api.slice';
+import { addAppToQueue, removeAppFromQueue } from '../slices/cluster.slice';
 
 export const createCluster = createAsyncThunk<
   ManagementCluster,
@@ -228,7 +229,9 @@ export const installGitOpsApp = createAsyncThunk<
     dispatch: AppDispatch;
     state: RootState;
   }
->('api/installGitOpsApp', async ({ app, clusterName, values }) => {
+>('api/installGitOpsApp', async ({ app, clusterName, values }, { dispatch }) => {
+  dispatch(addAppToQueue(app));
+
   const secret_keys =
     values &&
     Object.keys(values as FieldValues).map((key) => ({
@@ -246,8 +249,10 @@ export const installGitOpsApp = createAsyncThunk<
   });
 
   if ('error' in res) {
+    dispatch(removeAppFromQueue(app));
     throw res.error;
   }
+
   return app;
 });
 
