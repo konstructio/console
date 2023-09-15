@@ -138,17 +138,29 @@ const SetupForm: FunctionComponent = () => {
         onChange={handleDnsProviderOnChange}
       />
       {isCloudFlareSelected && (
-        <ControlledPassword
-          control={control}
-          name="cloudflareToken"
-          label="Cloudflare token"
-          required
-          rules={{
-            required: true,
-          }}
-          onErrorText="Invalid token."
-          onChange={handleCloudfareToken}
-        />
+        <>
+          <ControlledPassword
+            control={control}
+            name="cloudflareToken"
+            label="Cloudflare token"
+            required
+            rules={{
+              required: true,
+            }}
+            onErrorText="Invalid token."
+            onChange={handleCloudfareToken}
+          />
+          <ControlledPassword
+            control={control}
+            name="cloudflareOriginCaIssuerKey"
+            label="Cloudflare origin ca issuer key"
+            required
+            rules={{
+              required: true,
+            }}
+            onErrorText="Invalid issuer key"
+          />
+        </>
       )}
       <ControlledAutocomplete
         control={control}
