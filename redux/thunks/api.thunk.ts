@@ -302,7 +302,7 @@ export const getCloudDomains = createAsyncThunk<
       ...values,
       cloud_region: region,
       cloudflare_auth: {
-        token: cloudflareToken,
+        api_token: cloudflareToken,
       },
     },
   });
