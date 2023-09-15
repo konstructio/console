@@ -54,10 +54,6 @@ const TerminalLogs: FunctionComponent = () => {
     api,
   }));
 
-  window.onbeforeunload = function () {
-    return '';
-  };
-
   const handleSearch = (event: ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target;
     searchAddonRef.current?.findPrevious(value, SEARCH_OPTIONS);
