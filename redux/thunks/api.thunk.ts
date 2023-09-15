@@ -55,7 +55,8 @@ export const createCluster = createAsyncThunk<
       git_token: values?.gitToken,
     },
     cloudflare_auth: {
-      token: values?.cloudflareToken,
+      api_token: values?.cloudflareToken,
+      origin_ca_issuer_key: values?.cloudflareOriginCaIssuerKey,
     },
     aws_auth: {
       ...values?.aws_auth,
