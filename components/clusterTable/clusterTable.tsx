@@ -8,6 +8,7 @@ import React, {
 } from 'react';
 import TableHead from '@mui/material/TableHead';
 import { IconButton, List, ListItem, ListItemButton } from '@mui/material';
+import TableSortLabel from '@mui/material/TableSortLabel';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import Image from 'next/image';
@@ -32,6 +33,8 @@ import Typography from '../../components/typography';
 import { useOnClickOutside } from '../../hooks/useOnClickOutside';
 import { noop } from '../../utils/noop';
 import Tag from '../tag';
+import { NestedKeyOf } from '../../types';
+import { descendingComparator } from '../../utils/descendingComparator';
 
 import {
   StyledTableRow,
@@ -189,6 +192,79 @@ const ClusterRow: FunctionComponent<ClusterRowProps> = ({
   );
 };
 
+type NestedKeyOfCluster = NestedKeyOf<Cluster>;
+
+type HeadCell = {
+  id: NestedKeyOfCluster;
+  label: string;
+};
+
+const headCells: HeadCell[] = [
+  {
+    id: 'clusterName',
+    label: 'Name',
+  },
+  {
+    id: 'type',
+    label: 'Type',
+  },
+  {
+    id: 'environment',
+    label: 'Environment',
+  },
+  {
+    id: 'cloudProvider',
+    label: 'Cloud',
+  },
+  {
+    id: 'cloudRegion',
+    label: 'Region',
+  },
+  {
+    id: 'nodeCount',
+    label: 'Count',
+  },
+  {
+    id: 'creationDate',
+    label: 'Created',
+  },
+  {
+    id: 'gitAuth.gitOwner',
+    label: 'Created by',
+  },
+  {
+    id: 'status',
+    label: 'Status',
+  },
+];
+type Order = 'asc' | 'desc';
+interface ClusterTableHeadProps {
+  orderBy: NestedKeyOfCluster;
+  order: Order;
+  onSort: (orderBy: NestedKeyOfCluster) => void;
+}
+
+const ClusterTableHead: FunctionComponent<ClusterTableHeadProps> = ({ orderBy, order, onSort }) => {
+  return (
+    <TableHead>
+      <StyledTableRow>
+        <StyledHeaderCell />
+        {headCells.map((cell) => (
+          <StyledHeaderCell key={cell.id}>
+            <TableSortLabel
+              active={orderBy === cell.id}
+              direction={orderBy === cell.id ? order : 'asc'}
+              onClick={() => onSort(cell.id)}
+            >
+              <StyledTableHeading variant="labelMedium">{cell.label}</StyledTableHeading>
+            </TableSortLabel>
+          </StyledHeaderCell>
+        ))}
+      </StyledTableRow>
+    </TableHead>
+  );
+};
+
 interface ClusterTableProps extends ComponentPropsWithoutRef<'div'> {
   managementCluster: ManagementCluster;
   draftCluster?: WorkloadCluster;
@@ -206,52 +282,36 @@ export const ClusterTable: FunctionComponent<ClusterTableProps> = ({
   ...rest
 }) => {
   const [expanded, setExpanded] = useState(true);
+  const [orderBy, setOrderBy] = useState<NestedKeyOfCluster>('clusterName');
+  const [order, setOrder] = useState<Order>('asc');
+
   const { workloadClusters } = managementCluster;
+
+  const handleRequestSort = (property: NestedKeyOfCluster) => {
+    const isAsc = orderBy === property && order === 'asc';
+    setOrder(isAsc ? 'desc' : 'asc');
+    setOrderBy(property);
+  };
 
   const filteredWorkloadClusters = useMemo(() => {
     const clustersCopy = [...workloadClusters];
     if (draftCluster) {
       clustersCopy.push(draftCluster);
     }
-    return clustersCopy.filter((cluster) => cluster.status !== ClusterStatus.DELETED);
-  }, [workloadClusters, draftCluster]);
+
+    return clustersCopy
+      .filter((cluster) => cluster.status !== ClusterStatus.DELETED)
+      .sort((a, b) =>
+        order === 'asc'
+          ? -descendingComparator(a, b, orderBy)
+          : descendingComparator(a, b, orderBy),
+      );
+  }, [workloadClusters, draftCluster, order, orderBy]);
 
   return (
     <StyledTableContainer {...rest}>
       <StyledTable aria-label="collapsible table">
-        <TableHead>
-          <StyledTableRow>
-            <StyledHeaderCell />
-            <StyledHeaderCell>
-              <StyledTableHeading variant="labelMedium">Name</StyledTableHeading>
-            </StyledHeaderCell>
-            <StyledHeaderCell>
-              <StyledTableHeading variant="labelMedium">Type</StyledTableHeading>
-            </StyledHeaderCell>
-            <StyledHeaderCell>
-              <StyledTableHeading variant="labelMedium">Environment</StyledTableHeading>
-            </StyledHeaderCell>
-            <StyledHeaderCell>
-              <StyledTableHeading variant="labelMedium">Cloud</StyledTableHeading>
-            </StyledHeaderCell>
-            <StyledHeaderCell>
-              <StyledTableHeading variant="labelMedium">Region</StyledTableHeading>
-            </StyledHeaderCell>
-            <StyledHeaderCell>
-              <StyledTableHeading variant="labelMedium">Nodes</StyledTableHeading>
-            </StyledHeaderCell>
-            <StyledHeaderCell>
-              <StyledTableHeading variant="labelMedium">Created</StyledTableHeading>
-            </StyledHeaderCell>
-            <StyledHeaderCell>
-              <StyledTableHeading variant="labelMedium">Created by</StyledTableHeading>
-            </StyledHeaderCell>
-            <StyledHeaderCell>
-              <StyledTableHeading variant="labelMedium">Status</StyledTableHeading>
-            </StyledHeaderCell>
-            <StyledHeaderCell />
-          </StyledTableRow>
-        </TableHead>
+        <ClusterTableHead onSort={handleRequestSort} order={order} orderBy={orderBy} />
         <StyledTableBody>
           <ClusterRow
             {...managementCluster}
