@@ -133,3 +133,11 @@ declare module '@mui/material/Button' {
     text: true;
   }
 }
+
+declare global {
+  namespace Cypress {
+    interface Chainable {
+      openConsole(): Chainable<void>;
+    }
+  }
+}

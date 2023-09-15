@@ -59,7 +59,7 @@ export const InstallationsSelection: FunctionComponent = () => {
         ))}
       </ButtonContainer>
       {gitProvider && (
-        <AdventureContent>
+        <AdventureContent data-test-id="cloud-section">
           <Subtitle variant="subtitle2">Now select your cloud adventure</Subtitle>
           <CloudProviderContainer>
             {INSTALLATION_TYPES.filter((type) => ![InstallationType.LOCAL].includes(type)).map(

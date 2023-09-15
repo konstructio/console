@@ -25,7 +25,12 @@ const InstallationButtons: FunctionComponent<InstallationButtonsProps> = ({
 }) => (
   <Container {...rest}>
     {showBackButton && (
-      <Button variant="outlined" color="secondary" onClick={onBackButtonClick}>
+      <Button
+        variant="outlined"
+        color="secondary"
+        onClick={onBackButtonClick}
+        data-test-id="back-button"
+      >
         Back
       </Button>
     )}
@@ -37,6 +42,7 @@ const InstallationButtons: FunctionComponent<InstallationButtonsProps> = ({
         color="primary"
         id="next"
         disabled={nextButtonDisabled || isLoading}
+        data-test-id="next-button"
       >
         {isLoading && <CircularProgress size={20} sx={{ mr: '8px' }} />}
         {nextButtonText}

@@ -264,7 +264,7 @@ const Provision: FunctionComponent = () => {
 
   return (
     <FormProvider {...methods}>
-      <Form component="form" onSubmit={handleSubmit(onSubmit)}>
+      <Form component="form" onSubmit={handleSubmit(onSubmit)} data-test-id="form-section">
         <InstallationStepContainer
           activeStep={installationStep}
           steps={stepTitles}
