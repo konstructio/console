@@ -1,5 +1,4 @@
 import React, { FunctionComponent } from 'react';
-import { Box, Divider } from '@mui/material';
 import Image from 'next/image';
 import { Control } from 'react-hook-form';
 
@@ -10,7 +9,7 @@ import ControlledPassword from '../controlledFields/Password';
 import { GitOpsCatalogApp } from '../../types/gitOpsCatalog';
 import { BISCAY, SALTBOX_BLUE } from '../../constants/colors';
 
-import { Content, Close, Footer, Header } from './gitopsAppModal.styled';
+import { Container, Content, Close, Footer, Header } from './gitopsAppModal.styled';
 
 export interface GitopsAppModalProps extends GitOpsCatalogApp {
   control: Control;
@@ -37,15 +36,7 @@ const GitopsAppModal: FunctionComponent<GitopsAppModalProps> = ({
 
   return (
     <Modal isOpen={isOpen} padding={0}>
-      <Box
-        sx={{
-          width: '630px',
-          height: 'auto',
-          backgroundColor: 'white',
-          borderRadius: '8px',
-          boxShadow: '0px 2px 4px rgba(100, 116, 139, 0.1)',
-        }}
-      >
+      <Container>
         <Header>
           <Image alt={name} src={image_url} width={30} height={30} />
           <Typography variant="h6" color={BISCAY}>
@@ -53,7 +44,6 @@ const GitopsAppModal: FunctionComponent<GitopsAppModalProps> = ({
           </Typography>
           <Close onClick={closeModal} htmlColor={SALTBOX_BLUE} fontSize="medium" />
         </Header>
-        <Divider />
         <Content>
           {secret_keys &&
             secret_keys.map(({ label, name }) => (
@@ -69,7 +59,6 @@ const GitopsAppModal: FunctionComponent<GitopsAppModalProps> = ({
               />
             ))}
         </Content>
-        <Divider />
         <Footer>
           <Button variant="text" color="text" onClick={closeModal}>
             Cancel
@@ -78,7 +67,7 @@ const GitopsAppModal: FunctionComponent<GitopsAppModalProps> = ({
             Add
           </Button>
         </Footer>
-      </Box>
+      </Container>
     </Modal>
   );
 };

@@ -50,7 +50,14 @@ const TextField: FunctionComponent<TextFieldProps> = ({
     <Container isDisabled={disabled}>
       {label && (
         <InputLabel disabled={disabled}>
-          <Typography variant="labelLarge" sx={{ display: 'flex', gap: '4px' }}>
+          <Typography
+            variant="labelLarge"
+            sx={{
+              display: 'flex',
+              gap: '4px',
+              whiteSpace: 'pre-line',
+            }}
+          >
             {label} {required && <Required>*</Required>}
           </Typography>
         </InputLabel>
