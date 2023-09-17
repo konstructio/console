@@ -39,10 +39,14 @@ describe('create cluster - setup', () => {
     cy.get("[name='domainName']").click(); // click domainName multiselect to open menu
     cy.get('.MuiAutocomplete-popper li[data-option-index="13"]').click(); // select kubesecond.com
 
-    cy.get("[name='clusterName']").type('from-ui-dh-cypress');
+    cy.get("[name='clusterName']").type('je-cy002');
     cy.get("[name='advancedOptions']").click(); // click advanced options button
 
     cy.get("[name='gitopsTemplateBranch']").type('civo-gitlab-workload-clusters');
     cy.get('[data-test-id="next-button"]').click(); // create management cluster
+    cy.get('[data-test-id="next-button"]').click(); // create management cluster
+    
+    cy.get('[data-test-id="launch-console"]').click()
+    
   });
 });
