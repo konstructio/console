@@ -163,7 +163,7 @@ export const getClusters = createAsyncThunk<
     throw res.error;
   }
 
-  if (!res.data && !res.data[0]) {
+  if (!res.data) {
     throw new Error('No clusters found');
   }
 
