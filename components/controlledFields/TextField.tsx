@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { Control, Controller, FieldValues, UseControllerProps } from 'react-hook-form';
 
 import TextFieldWithRef from '../textField/index';
@@ -16,8 +16,6 @@ function ControlledTextField<T extends FieldValues>({
   disabled,
   label,
   required,
-  helperText,
-  onErrorText,
   ...props
 }: ControlledTextFieldProps<T>) {
   const [isBlur, setIsBlur] = useState(false);
@@ -38,7 +36,7 @@ function ControlledTextField<T extends FieldValues>({
           required={required}
           label={label}
           error={isBlur && error !== undefined}
-          helperText={helperText || (isBlur && error !== undefined) ? onErrorText : undefined}
+          helperText={error && isBlur ? props.onErrorText : props.helperText}
         />
       )}
     />

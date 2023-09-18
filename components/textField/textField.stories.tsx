@@ -32,6 +32,7 @@ export const Default: Story = {
   args: {
     label: 'Default',
     fullWidth: true,
+    helperText: 'test',
   },
 };
 
