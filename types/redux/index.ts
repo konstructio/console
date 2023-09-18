@@ -13,6 +13,7 @@ export interface AdvancedOptions extends GitValues {
   dnsProvider?: string;
   cloudflareToken?: string;
   cloudflareOriginCaIssuerKey?: string;
+  subDomain?: string;
   imageRepository?: ImageRepository;
 }
 

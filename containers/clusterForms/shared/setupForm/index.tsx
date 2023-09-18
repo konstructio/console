@@ -35,7 +35,12 @@ const SetupForm: FunctionComponent = () => {
     control,
     setValue,
     formState: { errors },
+    watch,
   } = useFormContext<InstallValues>();
+
+  const [domainName, subDomain] = watch(['domainName', 'subDomain']);
+
+  const subDomainHelperText = !subDomain ? '' : `${subDomain}.${domainName}`;
 
   const { cloudDomains, cloudRegions, installationStep, installType, values } = useAppSelector(
     ({ api, installation }) => ({
@@ -169,6 +174,17 @@ const SetupForm: FunctionComponent = () => {
         required
         rules={{ required: true }}
         options={cloudDomains && formatDomains(cloudDomains)}
+      />
+      <ControlledTextField
+        control={control}
+        name="subDomain"
+        label="Subdomain name"
+        defaultValue={values?.subDomain}
+        rules={{
+          maxLength: 25,
+        }}
+        onErrorText={errors.subDomain?.message}
+        helperText={subDomainHelperText}
       />
       <ControlledTextField
         control={control}
