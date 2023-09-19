@@ -23,7 +23,7 @@ describe('create cluster - setup', () => {
     cy.get('[data-test-id="next-button"]').click();
 
     cy.get('[data-test-id="form-section"]').contains('Now, let’s get you authenticated');
-    cy.get("[name='gitToken']").type(GITLAB_TOKEN);
+    cy.get("[name='gitToken']").type(GITLAB_TOKEN, { log: false });
 
     cy.get('[data-test-id="gitUser"]').contains(GITLAB_USER);
     cy.get("[name='gitOwner']").click();
@@ -32,7 +32,7 @@ describe('create cluster - setup', () => {
       cy.wrap(popper).contains(GITLAB_OWNER).click();
     });
 
-    cy.get("[name='civo_auth.token']").type(CIVO_TOKEN);
+    cy.get("[name='civo_auth.token']").type(CIVO_TOKEN, { log: false });
 
     cy.get('[data-test-id="next-button"]').click();
     cy.get("[name='alertsEmail']").type(ALERTS_EMAIL);
@@ -46,8 +46,8 @@ describe('create cluster - setup', () => {
       cy.wrap(popper).contains(DNS_PROVIDER).click();
     });
 
-    cy.get("[name='cloudflareToken']").type(CLOUDFLARE_TOKEN);
-    cy.get("[name='cloudflareOriginCaIssuerKey']").type(CLOUDFLARE_ORIGIN_CA_KEY);
+    cy.get("[name='cloudflareToken']").type(CLOUDFLARE_TOKEN, { log: false });
+    cy.get("[name='cloudflareOriginCaIssuerKey']").type(CLOUDFLARE_ORIGIN_CA_KEY, { log: false });
 
     cy.get("[name='domainName']").click(); // click domainName multiselect to open menu
     cy.get('.MuiAutocomplete-popper').then((popper) => {
