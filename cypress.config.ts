@@ -20,6 +20,8 @@ export default defineConfig({
     CLOUDFLARE_ORIGIN_CA_KEY: process.env.CLOUDFLARE_ORIGIN_CA_KEY,
     CLUSTER_NAME: process.env.CLUSTER_NAME,
     SUB_DOMAIN: process.env.SUB_DOMAIN,
+    WORKLOAD_ENVIRONMENT: process.env.WORKLOAD_ENVIRONMENT,
+    WORKLOAD_CLUSTER_NAME: process.env.WORKLOAD_CLUSTER_NAME,
   },
   e2e: {
     setupNodeEvents(on, config) {

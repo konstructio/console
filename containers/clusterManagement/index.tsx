@@ -159,7 +159,7 @@ const ClusterManagement: FunctionComponent = () => {
             variant="contained"
             style={{ marginRight: '24px' }}
             onClick={handleAddWorkloadCluster}
-            test-data-id="add-workload-cluster"
+            data-test-id="add-workload-cluster"
           >
             Add workload cluster
           </Button>

@@ -85,7 +85,7 @@ export const CreateClusterFlow: FunctionComponent<CreateClusterFlowProps> = ({
     <FormProvider {...methods}>
       <Form onSubmit={methods.handleSubmit(handleSubmit)}>
         <MenuHeader>
-          <Typography variant="subtitle2">
+          <Typography variant="subtitle2" data-test-id="menu-title">
             {showingClusterDetails ? cluster?.clusterName : 'Create workload cluster'}
           </Typography>
           <CloseButton onClick={handleMenuClose} type="button">
@@ -110,6 +110,7 @@ export const CreateClusterFlow: FunctionComponent<CreateClusterFlowProps> = ({
             onClick={handleClick}
             disabled={submitButtonDisabled}
             type="submit"
+            data-test-id="workload-cluster-create-details"
           >
             {loading && <CircularProgress size={20} sx={{ mr: '8px' }} />}
             {actionButtonText[clusterCreationStep]}

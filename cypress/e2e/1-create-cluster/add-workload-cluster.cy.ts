@@ -1,18 +1,30 @@
+const WORKLOAD_ENVIRONMENT = Cypress.env('WORKLOAD_ENVIRONMENT');
+const WORKLOAD_CLUSTER_NAME = Cypress.env('WORKLOAD_CLUSTER_NAME');
+
 describe('add a workload cluster', () => {
   beforeEach(() => {
     cy.openConsole();
   });
 
-  it('authentication', () => {
+  it('creates a workload cluster', () => {
     cy.get('[data-test-id="add-workload-cluster"]').click();
 
-    cy.get('.Mui-checked > .PrivateSwitchBase-input').click();
-    cy.get('.Mui-focused > .MuiInputBase-input').click();
-    cy.get('.sc-8ad53ea0-0:nth-child(2) .MuiInputBase-input').type('development');
-    cy.get('.Mui-focused > .MuiInputBase-input').click();
-    cy.get('.sc-8ad53ea0-0:nth-child(3) .MuiInputBase-input').type('development');
-    cy.get('#\3Ar1\3A').click();
-    cy.get('.Mui-disabled').click();
-    cy.get('.sc-1d58281b-2').submit();
+    cy.get("[name='environment']").check(WORKLOAD_ENVIRONMENT);
+
+    cy.get("[name='clusterName']").type(WORKLOAD_CLUSTER_NAME);
+
+    cy.get('[data-test-id="workload-cluster-create-details"]').click();
+
+    // recursive function to check for creation date when provisioning workload cluster
+    function waitForCreationDate() {
+      cy.get('[data-test-id="creation-date"]').then((element) => {
+        if (element.text() == '') {
+          cy.wait(10000);
+          waitForCreationDate();
+        }
+      });
+    }
+
+    waitForCreationDate();
   });
 });
