@@ -39,7 +39,9 @@ export const CreateClusterFlow: FunctionComponent<CreateClusterFlowProps> = ({
   onMenuClose,
   onSubmit,
 }) => {
-  const { clusterCreationStep, loading, draftCluster } = useAppSelector(({ api }) => api);
+  const { clusterCreationStep, loading, draftCluster, managementCluster } = useAppSelector(
+    ({ api }) => api,
+  );
 
   const dispatch = useAppDispatch();
 
@@ -97,7 +99,11 @@ export const CreateClusterFlow: FunctionComponent<CreateClusterFlowProps> = ({
             <ClusterCreationForm style={{ flex: 1, margin: '32px 0' }} />
           )}
           {clusterCreationStep === ClusterCreationStep.DETAILS && cluster && (
-            <ClusterDetails cluster={cluster} style={{ marginTop: '24px' }} />
+            <ClusterDetails
+              cluster={cluster}
+              host={managementCluster?.gitHost as string}
+              style={{ marginTop: '24px' }}
+            />
           )}
         </Column>
         <ClusterMenuFooter reverseButtonOrder={showingClusterDetails}>

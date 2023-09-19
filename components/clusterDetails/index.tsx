@@ -4,7 +4,7 @@ import moment from 'moment';
 import Typography from '../../components/typography';
 import Row from '../../components/row';
 import Column from '../../components/column';
-import { Cluster, ClusterStatus, ClusterType } from '../../types/provision';
+import { Cluster, ClusterStatus, ClusterType, ManagementCluster } from '../../types/provision';
 
 import {
   Container,
@@ -20,9 +20,10 @@ import {
 
 export interface ClusterDetailsProps extends ComponentPropsWithoutRef<'div'> {
   cluster: Cluster;
+  host: ManagementCluster['gitHost'];
 }
 
-const ClusterDetails: FunctionComponent<ClusterDetailsProps> = ({ cluster, ...rest }) => {
+const ClusterDetails: FunctionComponent<ClusterDetailsProps> = ({ cluster, host, ...rest }) => {
   const {
     clusterName,
     adminEmail,
@@ -38,7 +39,7 @@ const ClusterDetails: FunctionComponent<ClusterDetailsProps> = ({ cluster, ...re
     gitAuth: { gitUser } = {},
   } = cluster;
 
-  const GITHUB_CLUSTER_BASE_LINK = `https://github.com/${domainName.replace('.', '-')}/gitops/tree`;
+  const GITHUB_CLUSTER_BASE_LINK = `https://${host}/${domainName.replace('.', '-')}/gitops/tree`;
 
   const clusterDetailsLink = `/main/registry/clusters/${clusterName}`;
 
