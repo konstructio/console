@@ -42,3 +42,6 @@ storybook-static
 .vscode
 .yarnrc.yaml
 .yarnrc.yml
+
+cypress/screenshots/
+cypress/videos/
