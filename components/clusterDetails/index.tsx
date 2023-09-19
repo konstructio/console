@@ -86,7 +86,7 @@ const ClusterDetails: FunctionComponent<ClusterDetailsProps> = ({ cluster, ...re
         <RowInfo>
           <ColumnInfo>
             <StyledLabel variant="labelLarge">Created</StyledLabel>
-            <StyledValue variant="body2">
+            <StyledValue variant="body2" data-test-id="creation-date">
               {creationDate && moment(+creationDate).format('DD MMM YYYY, HH:mm:ss')}
             </StyledValue>
           </ColumnInfo>
