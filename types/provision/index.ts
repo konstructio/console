@@ -59,6 +59,7 @@ export interface ClusterResponse {
   cluster_type: ClusterType.MANAGEMENT;
   alerts_email: string;
   git_provider: string;
+  git_host: string;
   git_user: string;
   workload_clusters?: {
     admin_email: string;
@@ -155,6 +156,7 @@ export interface ManagementCluster extends Cluster, Row {
   status?: ClusterStatus;
   lastErrorCondition: string;
   workloadClusters: WorkloadCluster[];
+  gitHost: string;
   vaultAuth: {
     kbotPassword: string;
   };

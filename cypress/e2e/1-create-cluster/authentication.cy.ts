@@ -1,3 +1,5 @@
+import { createRandomTwoCharacters } from '../../../utils/createRandomTwoCharacters';
+
 const GITLAB_TOKEN = Cypress.env('GITLAB_TOKEN');
 const GITLAB_USER = Cypress.env('GITLAB_USER');
 const GITLAB_OWNER = Cypress.env('GITLAB_OWNER');
@@ -10,6 +12,8 @@ const CLOUDFLARE_TOKEN = Cypress.env('CLOUDFLARE_TOKEN');
 const CLOUDFLARE_ORIGIN_CA_KEY = Cypress.env('CLOUDFLARE_ORIGIN_CA_KEY');
 const CLUSTER_NAME = Cypress.env('CLUSTER_NAME');
 const SUB_DOMAIN = Cypress.env('SUB_DOMAIN');
+
+const twoRandomCharacters = createRandomTwoCharacters();
 
 describe('create cluster - setup', () => {
   beforeEach(() => {
@@ -58,7 +62,7 @@ describe('create cluster - setup', () => {
       cy.get("[name='subDomain']").type(SUB_DOMAIN);
     }
 
-    cy.get("[name='clusterName']").type(CLUSTER_NAME);
+    cy.get("[name='clusterName']").type(CLUSTER_NAME + twoRandomCharacters);
 
     cy.get("[name='advancedOptions']").click(); // click advanced options button
 

@@ -20,6 +20,7 @@ export const mapClusterFromRaw = (cluster: ClusterResponse): ManagementCluster =
     gitUser: cluster.git_auth.git_username,
   },
   gitProvider: cluster.git_provider,
+  gitHost: cluster.git_host,
   gitUser: cluster.git_user,
   type: cluster.cluster_type,
   creationDate: cluster.creation_timestamp,
