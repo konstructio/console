@@ -48,7 +48,7 @@ const ClusterReady: FunctionComponent<ClusterRunningMessageProps> = ({
           </Button>
         </CopyToClipboard>
       </PasswordContainer>
-      <Button variant="contained" color="primary">
+      <Button variant="contained" color="primary" data-test-id="launch-console">
         <Link
           href={`https://kubefirst.${domainName}/services`}
           target="_blank"

@@ -43,6 +43,7 @@ export const createCluster = createAsyncThunk<
     cloud_provider: installType?.toString(),
     cloud_region: values?.cloudRegion,
     domain_name: values?.domainName,
+    subdomain_name: values?.subDomain,
     git_provider: gitProvider,
     gitops_template_url: values?.gitopsTemplateUrl,
     gitops_template_branch: values?.gitopsTemplateBranch,
@@ -71,6 +72,7 @@ export const createCluster = createAsyncThunk<
       ...values?.vultr_auth,
     },
   };
+
   const res = await axios.post<ManagementCluster>('/api/proxy', {
     url: `/cluster/${values?.clusterName || 'kubefirst'}`,
     body: params,
@@ -163,7 +165,7 @@ export const getClusters = createAsyncThunk<
     throw res.error;
   }
 
-  if (!res.data && !res.data[0]) {
+  if (!res.data) {
     throw new Error('No clusters found');
   }
 
