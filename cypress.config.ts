@@ -1,5 +1,7 @@
 import { defineConfig } from 'cypress';
 import * as dotenv from 'dotenv';
+import { createRandomTwoCharacters } from 'utils/createRandomTwoCharacters';
+
 dotenv.config();
 
 export default defineConfig({
@@ -22,6 +24,8 @@ export default defineConfig({
     SUB_DOMAIN: process.env.SUB_DOMAIN,
     WORKLOAD_ENVIRONMENT: process.env.WORKLOAD_ENVIRONMENT,
     WORKLOAD_CLUSTER_NAME: process.env.WORKLOAD_CLUSTER_NAME,
+    GITOPS_TEMPLATE_BRANCH: process.env.GITOPS_TEMPLATE_BRANCH,
+    RANDOM_TWO_CHARACTERS: createRandomTwoCharacters(),
   },
   e2e: {
     setupNodeEvents(on, config) {

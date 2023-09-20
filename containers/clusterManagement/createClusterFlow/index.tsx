@@ -9,15 +9,13 @@ import { SALTBOX_BLUE } from '../../../constants/colors';
 import Column from '../../../components/column';
 import ClusterCreationForm from '../../../containers/clusterForms/clusterCreation';
 import ClusterDetails from '../../../components/clusterDetails';
-import { useAppDispatch, useAppSelector } from '../../../redux/store';
 import {
   Cluster,
   ClusterCreationStep,
   ClusterStatus,
+  ManagementCluster,
   NewWorkloadClusterConfig,
 } from '../../../types/provision';
-import { createWorkloadCluster } from '../../../redux/thunks/api.thunk';
-import { setClusterCreationStep } from '../../../redux/slices/api.slice';
 
 import { CloseButton, ClusterMenuFooter, Form, MenuHeader } from './createClusterFlow.styled';
 
@@ -28,9 +26,13 @@ const actionButtonText: Record<ClusterCreationStep, string> = {
 
 interface CreateClusterFlowProps {
   cluster?: Cluster;
+  managementCluster?: ManagementCluster;
   onClusterDelete: () => void;
   onMenuClose: () => void;
-  onSubmit: (clusterId: string) => void;
+  onSubmit: () => void;
+  clusterCreationStep: ClusterCreationStep;
+  defaultValues?: NewWorkloadClusterConfig;
+  loading: boolean;
 }
 
 export const CreateClusterFlow: FunctionComponent<CreateClusterFlowProps> = ({
@@ -38,41 +40,21 @@ export const CreateClusterFlow: FunctionComponent<CreateClusterFlowProps> = ({
   onClusterDelete,
   onMenuClose,
   onSubmit,
+  clusterCreationStep,
+  defaultValues,
+  managementCluster,
+  loading,
 }) => {
-  const { clusterCreationStep, loading, draftCluster, managementCluster } = useAppSelector(
-    ({ api }) => api,
-  );
-
-  const dispatch = useAppDispatch();
-
   const methods = useForm<NewWorkloadClusterConfig>({
-    defaultValues: draftCluster,
+    defaultValues,
     mode: 'onChange',
   });
-
-  const handleMenuClose = useCallback(() => {
-    if (clusterCreationStep !== ClusterCreationStep.DETAILS) {
-      dispatch(setClusterCreationStep(ClusterCreationStep.CONFIG));
-    }
-    onMenuClose();
-  }, [dispatch, clusterCreationStep, onMenuClose]);
 
   const handleClick = useCallback(() => {
     if (clusterCreationStep === ClusterCreationStep.DETAILS) {
       onClusterDelete();
     }
   }, [onClusterDelete, clusterCreationStep]);
-
-  const handleSubmit = useCallback(() => {
-    if (clusterCreationStep !== ClusterCreationStep.DETAILS) {
-      dispatch(createWorkloadCluster())
-        .unwrap()
-        .then((response) => {
-          onSubmit(response.cluster_id);
-          dispatch(setClusterCreationStep(clusterCreationStep + 1));
-        });
-    }
-  }, [clusterCreationStep, dispatch, onSubmit]);
 
   const showingClusterDetails = clusterCreationStep === ClusterCreationStep.DETAILS;
 
@@ -85,12 +67,12 @@ export const CreateClusterFlow: FunctionComponent<CreateClusterFlowProps> = ({
 
   return (
     <FormProvider {...methods}>
-      <Form onSubmit={methods.handleSubmit(handleSubmit)}>
+      <Form onSubmit={methods.handleSubmit(onSubmit)}>
         <MenuHeader>
           <Typography variant="subtitle2" data-test-id="menu-title">
             {showingClusterDetails ? cluster?.clusterName : 'Create workload cluster'}
           </Typography>
-          <CloseButton onClick={handleMenuClose} type="button">
+          <CloseButton onClick={onMenuClose} type="button">
             <CloseIcon htmlColor={SALTBOX_BLUE} />
           </CloseButton>
         </MenuHeader>
@@ -107,7 +89,7 @@ export const CreateClusterFlow: FunctionComponent<CreateClusterFlowProps> = ({
           )}
         </Column>
         <ClusterMenuFooter reverseButtonOrder={showingClusterDetails}>
-          <Button variant="outlined" color="primary" onClick={handleMenuClose} type="button">
+          <Button variant="outlined" color="primary" onClick={onMenuClose} type="button">
             Close
           </Button>
           <Button

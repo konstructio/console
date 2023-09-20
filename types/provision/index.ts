@@ -16,9 +16,9 @@ export enum ClusterType {
 }
 
 export enum ClusterEnvironment {
-  DEVELOPEMENT = 'Dev',
-  STAGING = 'Staging',
-  PRODUCTION = 'Production',
+  DEVELOPEMENT = 'development',
+  STAGING = 'staging',
+  PRODUCTION = 'production',
 }
 
 export const CLUSTER_ENVIRONMENTS = Object.values(ClusterEnvironment);

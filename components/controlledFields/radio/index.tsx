@@ -34,7 +34,7 @@ function ControlledRadioGroup<T extends FieldValues>({
         <RadioGroup
           defaultValue={defaultValue}
           name={name}
-          sx={{ display: 'flex', flexDirection: inLine ? 'row' : 'initial' }}
+          sx={{ display: 'flex', flexDirection: inLine ? 'row' : 'column' }}
         >
           {options.map(({ label, value }) => (
             <FormControlLabel

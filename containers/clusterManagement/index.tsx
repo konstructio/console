@@ -4,7 +4,12 @@ import { Box, Tabs } from '@mui/material';
 import Button from '../../components/button';
 import Typography from '../../components/typography';
 import { useAppDispatch, useAppSelector } from '../../redux/store';
-import { deleteCluster, getCloudRegions, getClusters } from '../../redux/thunks/api.thunk';
+import {
+  createWorkloadCluster,
+  deleteCluster,
+  getCloudRegions,
+  getClusters,
+} from '../../redux/thunks/api.thunk';
 import { Cluster, ClusterCreationStep, ClusterStatus, ClusterType } from '../../types/provision';
 import useToggle from '../../hooks/useToggle';
 import Drawer from '../../components/drawer';
@@ -34,12 +39,11 @@ enum MANAGEMENT_TABS {
 const ClusterManagement: FunctionComponent = () => {
   const [activeTab, setActiveTab] = useState(MANAGEMENT_TABS.LIST_VIEW);
 
-  const { managementCluster, draftCluster, clusterCreationStep, presentedCluster } = useAppSelector(
-    ({ api, queue }) => ({
+  const { managementCluster, draftCluster, clusterCreationStep, presentedCluster, loading } =
+    useAppSelector(({ api, queue }) => ({
       clusterQueue: queue.clusterQueue,
       ...api,
-    }),
-  );
+    }));
 
   const { addClusterToQueue } = useQueue();
 
@@ -115,15 +119,20 @@ const ClusterManagement: FunctionComponent = () => {
     openCreateClusterFlow();
   }, [managementCluster, dispatch, openCreateClusterFlow, clusterCreationStep]);
 
-  const handleCreateCluster = (clusterId: string) => {
-    if (managementCluster) {
-      addClusterToQueue({
-        id: clusterId,
-        clusterName: managementCluster?.clusterName as string,
-        clusterType: ClusterType.WORKLOAD,
-        status: ClusterStatus.PROVISIONING,
-        callback: handleGetClusters,
-      });
+  const handleCreateCluster = () => {
+    if (clusterCreationStep !== ClusterCreationStep.DETAILS) {
+      dispatch(createWorkloadCluster())
+        .unwrap()
+        .then((response) => {
+          addClusterToQueue({
+            id: response.cluster_id,
+            clusterName: managementCluster?.clusterName as string,
+            clusterType: ClusterType.WORKLOAD,
+            status: ClusterStatus.PROVISIONING,
+            callback: handleGetClusters,
+          });
+          dispatch(setClusterCreationStep(clusterCreationStep + 1));
+        });
     }
   };
 
@@ -195,10 +204,14 @@ const ClusterManagement: FunctionComponent = () => {
         }}
       >
         <CreateClusterFlow
+          cluster={presentedCluster}
+          managementCluster={managementCluster}
+          clusterCreationStep={clusterCreationStep}
           onMenuClose={handleMenuClose}
           onClusterDelete={openDeleteModal}
-          cluster={presentedCluster}
           onSubmit={handleCreateCluster}
+          defaultValues={draftCluster}
+          loading={loading}
         />
       </Drawer>
       {presentedCluster && (

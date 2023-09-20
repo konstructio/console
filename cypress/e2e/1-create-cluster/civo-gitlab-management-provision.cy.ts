@@ -1,5 +1,3 @@
-import { createRandomTwoCharacters } from '../../../utils/createRandomTwoCharacters';
-
 const GITLAB_TOKEN = Cypress.env('GITLAB_TOKEN');
 const GITLAB_USER = Cypress.env('GITLAB_USER');
 const GITLAB_OWNER = Cypress.env('GITLAB_OWNER');
@@ -12,10 +10,10 @@ const CLOUDFLARE_TOKEN = Cypress.env('CLOUDFLARE_TOKEN');
 const CLOUDFLARE_ORIGIN_CA_KEY = Cypress.env('CLOUDFLARE_ORIGIN_CA_KEY');
 const CLUSTER_NAME = Cypress.env('CLUSTER_NAME');
 const SUB_DOMAIN = Cypress.env('SUB_DOMAIN');
+const GITOPS_TEMPLATE_BRANCH = Cypress.env('GITOPS_TEMPLATE_BRANCH');
+const RANDOM_TWO_CHARACTERS = Cypress.env('RANDOM_TWO_CHARACTERS');
 
-const twoRandomCharacters = createRandomTwoCharacters();
-
-describe('create cluster - setup', () => {
+describe('create civo gitlab management cluster', () => {
   beforeEach(() => {
     cy.openConsole();
   });
@@ -62,11 +60,13 @@ describe('create cluster - setup', () => {
       cy.get("[name='subDomain']").type(SUB_DOMAIN);
     }
 
-    cy.get("[name='clusterName']").type(CLUSTER_NAME + twoRandomCharacters);
+    cy.get("[name='clusterName']").type(CLUSTER_NAME + RANDOM_TWO_CHARACTERS);
 
     cy.get("[name='advancedOptions']").click(); // click advanced options button
 
-    cy.get("[name='gitopsTemplateBranch']").type('civo-gitlab-workload-clusters');
+    if (GITOPS_TEMPLATE_BRANCH) {
+      cy.get("[name='gitopsTemplateBranch']").type(GITOPS_TEMPLATE_BRANCH);
+    }
     cy.get('[data-test-id="next-button"]').click(); // create management cluster
     // proceed to cluster provision completion page
 
