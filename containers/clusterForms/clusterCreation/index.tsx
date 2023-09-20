@@ -73,7 +73,6 @@ const ClusterCreationForm: FunctionComponent<ComponentPropsWithoutRef<'div'>> = 
           onChange={(clusterType) =>
             setValue('type', clusterType as ClusterType, { shouldValidate: true })
           }
-          inLine
         />
       </InputContainer>
       <InputContainer>
@@ -89,7 +88,6 @@ const ClusterCreationForm: FunctionComponent<ComponentPropsWithoutRef<'div'>> = 
           options={CLUSTER_ENVIRONMENTS.map((item) => ({ label: item, value: item }))}
           defaultValue={draftCluster?.environment}
           onChange={(env) => setValue('environment', env as ClusterEnvironment)}
-          inLine
         />
       </InputContainer>
       <ControlledTextField
