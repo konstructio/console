@@ -17,6 +17,7 @@ import {
   NewWorkloadClusterConfig,
   WorkloadCluster,
   Cluster,
+  DraftCluster,
 } from '../../types/provision';
 import { getPreviouslyUsedClusterNames } from '../../utils/getPreviouslyUsedClusterNames';
 
@@ -27,7 +28,7 @@ export interface ApiState {
   isError: boolean;
   lastErrorCondition?: string;
   managementCluster?: ManagementCluster;
-  draftCluster?: WorkloadCluster;
+  draftCluster?: DraftCluster;
   presentedCluster?: Cluster;
   completedSteps: Array<{ label: string; order: number }>;
   cloudDomains: Array<string>;
@@ -123,7 +124,7 @@ const apiSlice = createSlice({
     removeDraftCluster: (state) => {
       state.draftCluster = undefined;
     },
-    updateDraftCluster: (state, { payload }: PayloadAction<WorkloadCluster>) => {
+    updateDraftCluster: (state, { payload }: PayloadAction<DraftCluster>) => {
       state.draftCluster = payload;
     },
     addWorkloadCluster: (state, { payload }: PayloadAction<WorkloadCluster>) => {

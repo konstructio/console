@@ -27,6 +27,7 @@ import {
   ClusterType,
   Cluster,
   WorkloadCluster,
+  DraftCluster,
 } from '../../types/provision';
 import { InstallationType } from '../../types/redux';
 import Typography from '../../components/typography';
@@ -139,7 +140,9 @@ const ClusterRow: FunctionComponent<ClusterRowProps> = ({
         </StyledTableCell>
         <StyledTableCell selected={rowSelected}>
           <StyledCellText variant="body2">
-            {environment && <Tag text={environment} bgColor="light-blue" />}
+            {environment && (
+              <Tag text={environment.environmentName} bgColor={environment.labelColor} />
+            )}
           </StyledCellText>
         </StyledTableCell>
         <StyledTableCell align="left" selected={rowSelected}>
@@ -267,7 +270,7 @@ const ClusterTableHead: FunctionComponent<ClusterTableHeadProps> = ({ orderBy, o
 
 interface ClusterTableProps extends ComponentPropsWithoutRef<'div'> {
   managementCluster: ManagementCluster;
-  draftCluster?: WorkloadCluster;
+  draftCluster?: DraftCluster;
   onDeleteCluster: () => void;
   onMenuOpenClose: (presentedCluster?: Cluster) => void;
   presentedClusterId?: string;
@@ -296,7 +299,7 @@ export const ClusterTable: FunctionComponent<ClusterTableProps> = ({
   const filteredWorkloadClusters = useMemo(() => {
     const clustersCopy = [...workloadClusters];
     if (draftCluster) {
-      clustersCopy.push(draftCluster);
+      clustersCopy.push(draftCluster as WorkloadCluster);
     }
 
     return clustersCopy

@@ -7,11 +7,16 @@ import {
   SelectProps,
   styled,
 } from '@mui/material';
+import AddIcon from '@mui/icons-material/Add';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 
 import Typography from '../typography';
 import { Required } from '../textField/textField.styled';
-import { DOLPHIN, LIGHT_GREY, LINK_WATER } from '../../constants/colors';
+import Tag, { TagColor } from '../tag';
+import { DOLPHIN, LIGHT_GREY, LINK_WATER, ROYAL_PURPLE } from '../../constants/colors';
+import { StyledFormHelperText } from '../textArea/textArea.styled';
+import Row from '../row';
+import { ClusterEnvironment } from '../../types/provision';
 
 import { Container } from './select.styled';
 
@@ -56,6 +61,115 @@ export const Input = styled(InputBase)(({ theme, error }) => ({
   },
 }));
 
+interface EnvironmentSelectProps extends SelectProps<ClusterEnvironment> {
+  options?: ClusterEnvironment[];
+  helperText?: string;
+  error?: boolean;
+  onAddNewEnvironment: () => void;
+}
+
+const EnvironmentSelect: FunctionComponent<EnvironmentSelectProps> = ({
+  label,
+  required,
+  options = [],
+  helperText,
+  error,
+  onAddNewEnvironment,
+  ...props
+}) => {
+  return (
+    <Container>
+      <InputLabel sx={{ marginBottom: '8px' }}>
+        <Typography variant="labelLarge" sx={{ display: 'flex', gap: '4px' }}>
+          {label} {required && <Required>*</Required>}
+        </Typography>
+      </InputLabel>
+      <SelectMUI
+        {...props}
+        IconComponent={KeyboardArrowDownIcon}
+        fullWidth
+        required={required}
+        input={<Input error={error} sx={{ height: '36px' }} />}
+        MenuProps={MenuProps}
+        displayEmpty
+        sx={{ width: '100%' }}
+        renderValue={(value) => {
+          if (value) {
+            return <Tag text={value.environmentName} bgColor={value.labelColor} />;
+          }
+          if (props.value) {
+            return <Tag text={props.value.environmentName} bgColor={props.value.labelColor} />;
+          }
+        }}
+      >
+        <MenuItem disableRipple onClick={onAddNewEnvironment}>
+          <Row style={{ gap: '4px', alignItems: 'center' }}>
+            <AddIcon sx={{ height: 20, width: 20, color: ROYAL_PURPLE }} />
+            <Typography variant="body3" sx={{ color: ROYAL_PURPLE }}>
+              New environment
+            </Typography>
+          </Row>
+        </MenuItem>
+        {options.map((option) => (
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          //@ts-ignore
+          <MenuItem key={option.environmentName} value={option} disableRipple>
+            <Tag text={option.environmentName} bgColor={option.labelColor} />
+          </MenuItem>
+        ))}
+      </SelectMUI>
+      {helperText && <StyledFormHelperText error={error}>{helperText}</StyledFormHelperText>}
+    </Container>
+  );
+};
+
+interface TagSelectProps extends SelectProps<TagColor> {
+  options: readonly string[];
+  helperText?: string;
+  error?: boolean;
+}
+
+const TagSelect: FunctionComponent<TagSelectProps> = ({
+  label,
+  required,
+  options,
+  helperText,
+  error,
+  ...props
+}) => {
+  return (
+    <Container>
+      <InputLabel sx={{ marginBottom: '8px' }}>
+        <Typography variant="labelLarge" sx={{ display: 'flex', gap: '4px' }}>
+          {label} {required && <Required>*</Required>}
+        </Typography>
+      </InputLabel>
+      <SelectMUI
+        {...props}
+        IconComponent={KeyboardArrowDownIcon}
+        fullWidth
+        required={required}
+        input={<Input error={error} sx={{ height: '36px' }} />}
+        MenuProps={MenuProps}
+        displayEmpty
+        sx={{ width: '100%' }}
+        renderValue={(selected) => {
+          if (selected) {
+            return <Tag text={selected} bgColor={selected} />;
+          }
+        }}
+      >
+        {options.map((option) => (
+          <MenuItem key={option} value={option} disableRipple>
+            <Tag text={option} bgColor={option as TagColor} />
+          </MenuItem>
+        ))}
+      </SelectMUI>
+      {helperText && <StyledFormHelperText error={error}>{helperText}</StyledFormHelperText>}
+    </Container>
+  );
+};
+
 const Select: FunctionComponent<ISelectProps> = ({
   label,
   required,
@@ -95,6 +209,9 @@ const Select: FunctionComponent<ISelectProps> = ({
           <Typography variant="body2">{label}</Typography>
         </MenuItem>
       ))}
+      <MenuItem disableRipple>
+        <Typography variant="body2">Nice</Typography>
+      </MenuItem>
     </SelectMUI>
   </Container>
 );
@@ -102,5 +219,15 @@ const Select: FunctionComponent<ISelectProps> = ({
 const SelectWithRef = React.forwardRef<unknown, ISelectProps>((props, ref) => {
   return <Select inputRef={ref} {...props} />;
 });
+
+export const TagSelectWithRef = React.forwardRef<unknown, TagSelectProps>((props, ref) => {
+  return <TagSelect inputRef={ref} {...props} />;
+});
+
+export const EnvironmentSelectWithRef = React.forwardRef<unknown, EnvironmentSelectProps>(
+  (props, ref) => {
+    return <EnvironmentSelect inputRef={ref} {...props} />;
+  },
+);
 
 export default SelectWithRef;

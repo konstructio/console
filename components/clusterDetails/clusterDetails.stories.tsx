@@ -26,6 +26,7 @@ export const Default: StoryObj<typeof ClusterDetails> = {
         gitUser: 'D-B-Hawk',
       },
       type: mockClusterConfig.type as ClusterType,
+      environment: undefined,
     },
   },
 };

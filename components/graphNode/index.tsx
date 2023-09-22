@@ -8,9 +8,8 @@ import cluster from '../../assets/cluster.svg';
 import clusterAvailable from '../../assets/clusterAvailable.svg';
 import { BUBBLE_GUM_BABY_GIRL } from '../../constants/colors';
 import { CLUSTER_TAG_CONFIG } from '../../constants';
-import { Cluster, ClusterStatus, ClusterType, ClusterEnvironment } from '../../types/provision';
+import { Cluster, ClusterStatus, ClusterType } from '../../types/provision';
 import Typography from '../typography';
-import { TagColor } from '../tag';
 
 import {
   Container,
@@ -46,12 +45,6 @@ const GRAPH_NODE_CONFIG: Record<
     position: Position.Left,
     iconSrc: vCluster,
   },
-};
-
-const ENVIRONMENT_TAG_COLOR_MAP: Record<ClusterEnvironment, TagColor> = {
-  [ClusterEnvironment.DEVELOPEMENT]: 'sky-blue',
-  [ClusterEnvironment.STAGING]: 'yellow',
-  [ClusterEnvironment.PRODUCTION]: 'green',
 };
 
 export type CustomGraphNode = Node<Partial<Cluster>>;
@@ -99,7 +92,7 @@ export const GraphNode: FunctionComponent<NodeProps<Cluster>> = ({
             </LabelContainer>
           )}
           {environment && (
-            <EnvironmentTag text={environment} bgColor={ENVIRONMENT_TAG_COLOR_MAP[environment]} />
+            <EnvironmentTag text={environment.environmentName} bgColor={environment.labelColor} />
           )}
         </LeftPanel>
       </MainContainerInfo>

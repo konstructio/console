@@ -75,7 +75,9 @@ const Tag: FunctionComponent<TagProps> = ({
   return (
     <TagContainer bg={bg} textColor={textColor} {...rest}>
       {icon && <IconImage src={TAG_ICON_OPTONS[icon]} alt={icon} width={16} height={16} />}
-      <Typography variant="body3">{text}</Typography>
+      <Typography variant="body3" sx={{ textTransform: 'initial' }}>
+        {text}
+      </Typography>
       {removable && (
         <RemovalButton onClick={() => onRemoval(text)}>
           <CloseIcon />
