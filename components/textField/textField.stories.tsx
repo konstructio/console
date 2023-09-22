@@ -49,6 +49,7 @@ export const Error: Story = {
   args: {
     label: 'Label',
     required: true,
+    error: true,
     id: 'standard-error-helper-text',
     helperText: 'Incorrect entry.',
   },
