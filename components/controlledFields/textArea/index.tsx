@@ -3,7 +3,7 @@ import { Control, Controller, FieldValues, UseControllerProps } from 'react-hook
 
 import TextAreaWithRef from '../../textArea/';
 
-export interface ControlledTextFieldProps<T extends FieldValues> extends UseControllerProps<T> {
+export interface ControlledTextAreaProps<T extends FieldValues> extends UseControllerProps<T> {
   label: string;
   required?: boolean;
   control: Control<T>;
@@ -14,7 +14,7 @@ export interface ControlledTextFieldProps<T extends FieldValues> extends UseCont
 function ControlledTextArea<T extends FieldValues>({
   label,
   ...props
-}: ControlledTextFieldProps<T>) {
+}: ControlledTextAreaProps<T>) {
   return (
     <Controller
       {...props}
