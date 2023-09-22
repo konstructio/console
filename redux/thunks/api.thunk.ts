@@ -103,6 +103,14 @@ export const createWorkloadCluster = createAsyncThunk<
     throw new Error('missing draft cluster');
   }
 
+  const clusterEnvironment = !draftCluster.environment
+    ? undefined
+    : {
+        name: draftCluster.environment?.environmentName,
+        color: draftCluster.environment?.labelColor,
+        description: draftCluster.environment?.description,
+      };
+
   const res = await axios.post<{ cluster_id: string }>(`/api/proxy?target=ee`, {
     url: `/cluster/${managementCluster?.id}`,
     body: {
@@ -110,7 +118,7 @@ export const createWorkloadCluster = createAsyncThunk<
       cloud_region: draftCluster.cloudRegion,
       instance_size: draftCluster.instanceSize,
       node_count: draftCluster.nodeCount,
-      environment: draftCluster.environment,
+      environment: clusterEnvironment,
       cluster_type: draftCluster.type,
     },
   });
