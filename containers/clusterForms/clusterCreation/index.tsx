@@ -1,4 +1,10 @@
-import React, { ComponentPropsWithoutRef, FunctionComponent, useEffect, useMemo } from 'react';
+import React, {
+  ComponentPropsWithoutRef,
+  FunctionComponent,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 import { useFormContext } from 'react-hook-form';
 import { Box } from '@mui/material';
 
@@ -10,7 +16,6 @@ import Typography from '../../../components/typography';
 import {
   ClusterType,
   NewWorkloadClusterConfig,
-  CLUSTER_ENVIRONMENTS,
   ClusterEnvironment,
 } from '../../../types/provision';
 import { EXCLUSIVE_PLUM } from '../../../constants/colors';
@@ -18,6 +23,10 @@ import ControlledNumberInput from '../../../components/controlledFields/numberIn
 import ControlledRadioGroup from '../../../components/controlledFields/radio';
 import { LOWER_KEBAB_CASE_REGEX } from '../../../constants';
 import { updateDraftCluster } from '../../../redux/slices/api.slice';
+import ControlledEnvironmentSelect from '../../../components/controlledFields/environmentSelect';
+import Modal from '../../../components/modal';
+import useModal from '../../../hooks/useModal';
+import { CreateEnvironmentMenu } from '../../../components/createEnvironmentMenu';
 
 import { Container } from './clusterCreation.styled';
 import { InputContainer } from './advancedOptions/advancedOptions.styled';
@@ -25,6 +34,26 @@ import { InputContainer } from './advancedOptions/advancedOptions.styled';
 const minNodeCount = 3;
 
 const ClusterCreationForm: FunctionComponent<ComponentPropsWithoutRef<'div'>> = (props) => {
+  const { isOpen, openModal, closeModal } = useModal(false);
+
+  const [environments, setEnvironments] = useState<ClusterEnvironment[]>([
+    {
+      environmentName: 'development',
+      description: 'Environment for development',
+      labelColor: 'dark-sky-blue',
+    },
+    {
+      environmentName: 'staging',
+      description: 'Environment for staging',
+      labelColor: 'yellow',
+    },
+    {
+      environmentName: 'production',
+      description: 'Environment for production',
+      labelColor: 'green',
+    },
+  ]);
+
   const { cloudRegions, previouslyUsedClusterNames, draftCluster } = useAppSelector(
     ({ api }) => api,
   );
@@ -41,7 +70,11 @@ const ClusterCreationForm: FunctionComponent<ComponentPropsWithoutRef<'div'>> = 
 
   const { type } = getValues();
 
-  const isVCluster = useMemo(() => type === ClusterType.WORKLOAD_V_CLUSTER, [type]);
+  const handleAddEnvironment = (environment: ClusterEnvironment) => {
+    setEnvironments((curState) => [...curState, environment]);
+    setValue('environment', environment);
+    closeModal();
+  };
 
   useEffect(() => {
     const subscription = watch((values) => {
@@ -52,6 +85,8 @@ const ClusterCreationForm: FunctionComponent<ComponentPropsWithoutRef<'div'>> = 
 
     return () => subscription.unsubscribe();
   }, [watch, dispatch, draftCluster]);
+
+  const isVCluster = useMemo(() => type === ClusterType.WORKLOAD_V_CLUSTER, [type]);
 
   return (
     <Container {...props}>
@@ -75,21 +110,28 @@ const ClusterCreationForm: FunctionComponent<ComponentPropsWithoutRef<'div'>> = 
           }
         />
       </InputContainer>
-      <InputContainer>
-        <Typography variant="labelLarge" color={EXCLUSIVE_PLUM}>
-          Environment cluster will host
-        </Typography>
-        <ControlledRadioGroup
+      <>
+        <ControlledEnvironmentSelect
           control={control}
           name="environment"
-          rules={{
-            required: false,
-          }}
-          options={CLUSTER_ENVIRONMENTS.map((item) => ({ label: item, value: item }))}
-          defaultValue={draftCluster?.environment}
-          onChange={(env) => setValue('environment', env as ClusterEnvironment)}
+          label="Environment cluster will host"
+          onErrorText={errors.environment?.message}
+          options={environments}
+          onAddNewEnvironment={openModal}
         />
-      </InputContainer>
+        <Modal
+          padding={0}
+          isOpen={isOpen}
+          styleOverrides={{ width: '100%', maxWidth: '630px' }}
+          onCloseModal={closeModal}
+        >
+          <CreateEnvironmentMenu
+            onSubmit={handleAddEnvironment}
+            onClose={closeModal}
+            previouslyCreatedEnvironments={environments}
+          />
+        </Modal>
+      </>
       <ControlledTextField
         control={control}
         name="clusterName"
@@ -97,7 +139,7 @@ const ClusterCreationForm: FunctionComponent<ComponentPropsWithoutRef<'div'>> = 
         label="Cluster name"
         rules={{
           maxLength: 25,
-          required: true,
+          required: 'Cluster name is required',
           pattern: {
             value: LOWER_KEBAB_CASE_REGEX,
             message: 'Please use lower kebab case for cluster name',
