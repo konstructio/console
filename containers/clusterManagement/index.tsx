@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useCallback, useEffect, useState } from 'react';
+import React, { FunctionComponent, useCallback, useEffect, useRef, useState } from 'react';
 import { Box, Tabs } from '@mui/material';
 
 import Button from '../../components/button';
@@ -192,14 +192,21 @@ const ClusterManagement: FunctionComponent = () => {
       </Content>
       <Drawer
         open={createClusterFlowOpen}
+        onClose={closeCreateClusterFlow}
         anchor="right"
-        hideBackdrop
         PaperProps={{
           sx: {
             top: '65px',
             boxShadow: '0px 2px 4px rgba(100, 116, 139, 0.16)',
             width: '684px',
             height: 'calc(100% - 65px)',
+          },
+        }}
+        sx={{
+          '&.MuiDrawer-root': {
+            '.MuiBackdrop-root': {
+              backgroundColor: 'transparent',
+            },
           },
         }}
       >
