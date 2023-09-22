@@ -1,5 +1,6 @@
 import { Row } from '../';
 import { AdvancedOptions, InstallationType } from '../redux';
+import { TagColor } from '../../components/tag';
 
 export enum ClusterStatus {
   DELETED = 'deleted',
@@ -15,13 +16,11 @@ export enum ClusterType {
   WORKLOAD_V_CLUSTER = 'workload-vcluster',
 }
 
-export enum ClusterEnvironment {
-  DEVELOPEMENT = 'development',
-  STAGING = 'staging',
-  PRODUCTION = 'production',
-}
-
-export const CLUSTER_ENVIRONMENTS = Object.values(ClusterEnvironment);
+export type ClusterEnvironment = {
+  environmentName: string;
+  description?: string;
+  labelColor: TagColor;
+};
 
 export enum ClusterCreationStep {
   CONFIG,
@@ -34,12 +33,9 @@ export enum ImageRepository {
 }
 
 export type NewWorkloadClusterConfig = Partial<
-  Pick<
-    WorkloadCluster,
-    'clusterName' | 'cloudRegion' | 'instanceSize' | 'nodeCount' | 'environment' | 'type'
-  >
+  Pick<WorkloadCluster, 'clusterName' | 'cloudRegion' | 'instanceSize' | 'nodeCount' | 'type'>
 > &
-  AdvancedOptions;
+  AdvancedOptions & { environment?: Partial<WorkloadCluster['environment']> };
 
 export interface ClusterRequestProps {
   clusterName?: string;
@@ -71,7 +67,7 @@ export interface ClusterResponse {
     creation_timestamp: string;
     domain_name: string;
     dns_provider: string;
-    environment: string;
+    environment?: ClusterEnvironment;
     git_auth: {
       git_owner?: string;
       git_token?: string;
@@ -206,6 +202,10 @@ export interface WorkloadCluster extends Cluster {
   instanceSize?: string;
   machineType?: string;
 }
+
+export type DraftCluster = Omit<WorkloadCluster, 'environment'> & {
+  environment?: Partial<WorkloadCluster['environment']>;
+};
 
 export interface ClusterServices {
   name: string;

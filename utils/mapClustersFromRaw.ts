@@ -1,9 +1,4 @@
-import {
-  ClusterResponse,
-  ManagementCluster,
-  ClusterType,
-  ClusterEnvironment,
-} from '../types/provision';
+import { ClusterResponse, ManagementCluster, ClusterType } from '../types/provision';
 import { InstallationType } from '../types/redux';
 
 export const mapClusterFromRaw = (cluster: ClusterResponse): ManagementCluster => ({
@@ -42,7 +37,7 @@ export const mapClusterFromRaw = (cluster: ClusterResponse): ManagementCluster =
       instanceSize: item.instance_size,
       nodeCount: item.node_count,
       creationDate: item.creation_timestamp,
-      environment: item.environment as ClusterEnvironment,
+      environment: item.environment,
       status: item.status,
       type: item.cluster_type as ClusterType,
       domainName: item.domain_name,

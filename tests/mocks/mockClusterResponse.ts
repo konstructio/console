@@ -16,6 +16,7 @@ export const mockClusterResponse: ClusterResponse = {
   domain_name: 'k-ray.space',
   dns_provider: 'civo',
   git_provider: 'github',
+  git_host: 'github.com',
   git_user: 'D-B-Hawk',
   workload_clusters: [
     {
@@ -29,7 +30,10 @@ export const mockClusterResponse: ClusterResponse = {
       cloud_region: 'LON1',
       instance_size: '8 GPU',
       node_count: 3,
-      environment: 'preprod',
+      environment: {
+        environmentName: 'preprod',
+        labelColor: 'yellow',
+      },
       status: ClusterStatus.PROVISIONING,
       cluster_type: ClusterType.WORKLOAD_V_CLUSTER,
       git_auth: {
@@ -50,7 +54,10 @@ export const mockClusterResponse: ClusterResponse = {
       cloud_region: 'LON1',
       instance_size: '8 GPU',
       node_count: 3,
-      environment: 'preprod',
+      environment: {
+        environmentName: 'preprod',
+        labelColor: 'yellow',
+      },
       status: ClusterStatus.PROVISIONED,
       cluster_type: ClusterType.WORKLOAD,
       git_auth: {
@@ -71,7 +78,10 @@ export const mockClusterResponse: ClusterResponse = {
       cloud_region: 'LON1',
       instance_size: '8 GPU',
       node_count: 3,
-      environment: 'preprod',
+      environment: {
+        environmentName: 'preprod',
+        labelColor: 'yellow',
+      },
       status: ClusterStatus.PROVISIONED,
       cluster_type: ClusterType.WORKLOAD,
       git_auth: {

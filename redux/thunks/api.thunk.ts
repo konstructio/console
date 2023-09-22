@@ -13,6 +13,7 @@ import {
   WorkloadCluster,
   ClusterResponse,
   Cluster,
+  ClusterEnvironment,
 } from '../../types/provision';
 import { GitOpsCatalogApp, GitOpsCatalogProps } from '../../types/gitOpsCatalog';
 import { InstallValues, InstallationType } from '../../types/redux';
@@ -122,6 +123,7 @@ export const createWorkloadCluster = createAsyncThunk<
     ...draftCluster,
     id: res.data.cluster_id,
     status: ClusterStatus.PROVISIONING,
+    environment: draftCluster.environment as ClusterEnvironment,
   };
 
   dispatch(removeDraftCluster());
