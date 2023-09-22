@@ -1,6 +1,9 @@
+import React from 'react';
 import { Meta, StoryObj } from '@storybook/react';
 
-import SelectComponent from './index';
+import { TAG_COLOR_OPTIONS } from '../tag';
+
+import SelectComponent, { EnvironmentSelectWithRef, TagSelectWithRef } from './index';
 
 const meta: Meta<typeof SelectComponent> = {
   title: 'Form Elements/Select',
@@ -24,5 +27,24 @@ export const Default: StoryObj<typeof SelectComponent> = {
         value: 'us-west-1',
       },
     ],
+  },
+};
+
+export const TagSelect: StoryObj<typeof TagSelectWithRef> = {
+  render: (args) => <TagSelectWithRef {...args} />,
+  args: {
+    label: 'Cluster environments',
+    placeholder: 'Select',
+    required: true,
+    options: TAG_COLOR_OPTIONS,
+  },
+};
+
+export const EnvironmentSelect: StoryObj<typeof EnvironmentSelectWithRef> = {
+  render: (args) => <EnvironmentSelectWithRef {...args} />,
+  args: {
+    label: 'Environment cluster will host',
+    required: true,
+    options: [{ environmentName: 'development', labelColor: 'dark-sky-blue' }],
   },
 };
