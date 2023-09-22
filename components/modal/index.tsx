@@ -12,7 +12,7 @@ const style = {
   width: 'auto',
   borderRadius: '8px',
   outline: 'none',
-  zIndex: 2000,
+  zIndex: 1202,
 };
 
 export interface IModalProps {
@@ -22,6 +22,7 @@ export interface IModalProps {
   isOpen: boolean;
   onCloseModal?: () => void;
   padding?: number;
+  styleOverrides?: React.CSSProperties;
 }
 
 const Modal: FunctionComponent<IModalProps> = ({
@@ -31,15 +32,24 @@ const Modal: FunctionComponent<IModalProps> = ({
   isOpen,
   onCloseModal,
   padding = 4,
+  styleOverrides = {},
 }) => (
   <ModalMui
     open={isOpen}
     onClose={onCloseModal}
     aria-labelledby="modal-title"
     aria-describedby="modal-description"
-    sx={{ zIndex: 2000 }}
+    sx={{ zIndex: 1201 }}
   >
-    <Box sx={{ ...style, p: padding, backgroundColor, boxShadow: boxShadow ? 24 : 0 }}>
+    <Box
+      sx={{
+        ...style,
+        p: padding,
+        backgroundColor,
+        boxShadow: boxShadow ? 24 : 0,
+        ...styleOverrides,
+      }}
+    >
       {children}
     </Box>
   </ModalMui>
