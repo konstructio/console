@@ -44,12 +44,15 @@ describe('create civo github management cluster', () => {
     });
 
     cy.get("[name='dnsProvider']").click(); // click dnsProvider multiselect to open menu
+
     cy.get('.MuiAutocomplete-popper').then((popper) => {
       cy.wrap(popper).contains(DNS_PROVIDER).click();
     });
 
-    cy.get("[name='cloudflareToken']").type(CLOUDFLARE_TOKEN, { log: false });
-    cy.get("[name='cloudflareOriginCaIssuerKey']").type(CLOUDFLARE_ORIGIN_CA_KEY, { log: false });
+    if (DNS_PROVIDER === 'Cloudflare') {
+      cy.get("[name='cloudflareToken']").type(CLOUDFLARE_TOKEN, { log: false });
+      cy.get("[name='cloudflareOriginCaIssuerKey']").type(CLOUDFLARE_ORIGIN_CA_KEY, { log: false });
+    }
 
     cy.get("[name='domainName']").click(); // click domainName multiselect to open menu
     cy.get('.MuiAutocomplete-popper').then((popper) => {

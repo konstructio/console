@@ -41,11 +41,12 @@ const AdvancedOptions: FunctionComponent = () => {
           <ControlledTextField
             control={control}
             name="gitopsTemplateUrl"
-            label="GitOps template override"
+            label="gitops-template repository override"
             defaultValue={values?.gitopsTemplateUrl}
             rules={{
               required: false,
             }}
+            helperText={`Example format: https://${gitProvider}.com/kubefirst/gitops-template`}
           />
           <ControlledTextField
             control={control}
@@ -55,6 +56,7 @@ const AdvancedOptions: FunctionComponent = () => {
             rules={{
               required: false,
             }}
+            helperText="Example: main"
           />
           <CheckboxContainer>
             <Typography variant="labelLarge" color={EXCLUSIVE_PLUM}>
