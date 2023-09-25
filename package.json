@@ -28,7 +28,7 @@
     "@mui/material": "^5.11.4",
     "@mui/styles": "^5.11.2",
     "@mui/x-data-grid": "^6.3.0",
-    "@next/font": "^13.0.2",
+    "@next/font": "^13.5.3",
     "@reduxjs/toolkit": "^1.9.3",
     "@types/node": "18.11.9",
     "@types/react-dom": "18.0.8",
