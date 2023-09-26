@@ -24,7 +24,6 @@ import { EMAIL_REGEX, LOWER_KEBAB_CASE_REGEX } from '../../../../constants';
 import { InstallValues, InstallationType } from '../../../../types/redux';
 import { GitProvider } from '../../../../types';
 import { EXCLUSIVE_PLUM } from '../../../../constants/colors';
-import Typography from '../../../../components/typography';
 import { BISCAY } from '../../../../constants/colors';
 
 const CLOUD_REGION_LABELS: Record<InstallationType, string | null> = {
