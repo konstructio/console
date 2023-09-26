@@ -18,6 +18,7 @@ interface TextAreaProps extends TextareaAutosizeProps {
   error?: boolean;
   helperText?: string;
   required?: boolean;
+  textAreaStyleOverrides?: React.CSSProperties;
 }
 
 export const TextArea: FunctionComponent<TextAreaProps> = ({
@@ -25,6 +26,7 @@ export const TextArea: FunctionComponent<TextAreaProps> = ({
   helperText,
   error,
   required,
+  textAreaStyleOverrides,
   ...rest
 }) => {
   return (
@@ -37,7 +39,7 @@ export const TextArea: FunctionComponent<TextAreaProps> = ({
         </InputLabel>
       )}
       <TextAreaContainer>
-        <StyledTextArea error={error} {...rest} />
+        <StyledTextArea error={error} {...rest} style={textAreaStyleOverrides} />
         {error && <StyledErrorIcon color="error" fontSize="small" />}
       </TextAreaContainer>
 
