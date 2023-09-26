@@ -24,6 +24,8 @@ import { EMAIL_REGEX, LOWER_KEBAB_CASE_REGEX } from '../../../../constants';
 import { InstallValues, InstallationType } from '../../../../types/redux';
 import { GitProvider } from '../../../../types';
 import { EXCLUSIVE_PLUM } from '../../../../constants/colors';
+import Typography from '../../../../components/typography';
+import { BISCAY } from '../../../../constants/colors';
 
 const CLOUD_REGION_LABELS: Record<InstallationType, string | null> = {
   [InstallationType.AWS]: 'Cloud region',
@@ -114,6 +116,9 @@ const SetupForm: FunctionComponent = () => {
 
   return (
     <>
+      <Typography variant="subtitle2" color={BISCAY}>
+        General Settings
+      </Typography>
       <ControlledTextField
         control={control}
         name="alertsEmail"
@@ -125,6 +130,7 @@ const SetupForm: FunctionComponent = () => {
           required: true,
           pattern: EMAIL_REGEX,
         }}
+        helperText="This email address will receive important system notifications such cert expiry notices."
       />
       <ControlledAutocomplete
         control={control}
