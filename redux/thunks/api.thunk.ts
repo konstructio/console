@@ -52,6 +52,7 @@ export const createCluster = createAsyncThunk<
     dns_provider: values?.dnsProvider,
     ecr: values?.imageRepository === 'ecr',
     type: 'mgmt',
+    force_destroy: values?.forceDestroyTerraform,
     git_auth: {
       git_owner: values?.gitOwner,
       git_token: values?.gitToken,
@@ -71,6 +72,9 @@ export const createCluster = createAsyncThunk<
     },
     vultr_auth: {
       ...values?.vultr_auth,
+    },
+    google_auth: {
+      ...values?.google_auth,
     },
   };
 
