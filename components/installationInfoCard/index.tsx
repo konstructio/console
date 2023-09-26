@@ -13,6 +13,7 @@ import CivoLogo from '../../assets/civo.svg';
 import AwsLogo from '../../assets/aws_logo.svg';
 import DigitalOceanLogo from '../../assets/digital_ocean_logo.svg';
 import VultrLogo from '../../assets/vultr_logo.svg';
+import GoogleCloudLogo from '../../assets/googleCloud.svg';
 
 import {
   Card,
@@ -31,6 +32,7 @@ const MARKETPLACE_LOGOS: Record<InstallationType, unknown | null> = {
   [InstallationType.CIVO]: CivoLogo,
   [InstallationType.DIGITAL_OCEAN]: DigitalOceanLogo,
   [InstallationType.VULTR]: VultrLogo,
+  [InstallationType.GOOGLE]: GoogleCloudLogo,
 };
 
 interface InstallationInfoCardProps {
