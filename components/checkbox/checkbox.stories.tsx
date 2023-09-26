@@ -7,9 +7,8 @@ import CheckboxComponent from './index';
 const Wrapper = styled.div`
   background: rgb(255, 255, 255);
   display: flex;
-  flex-direction: column;
-  gap: 10px;
-  width: 40px;
+  height: 100vh;
+  align-items: center;
 `;
 
 const meta: Meta<typeof CheckboxComponent> = {
