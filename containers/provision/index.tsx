@@ -73,7 +73,9 @@ const Provision: FunctionComponent = () => {
       installationStep,
       !!isMarketplace,
     );
-  const methods = useForm<InstallValues>({ mode: 'onChange' });
+  const methods = useForm<InstallValues>({
+    mode: 'onChange',
+  });
   const {
     formState: { isValid: isFormValid },
     getValues,
