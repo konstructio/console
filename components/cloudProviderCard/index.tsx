@@ -10,6 +10,7 @@ import awsLogo from '../../assets/aws_logo.svg';
 import civoLogo from '../../assets/civo_logo.svg';
 import digitalOceanLogo from '../../assets/digital_ocean_logo.svg';
 import vultrLogo from '../../assets/vultr_logo.svg';
+import googleCloudLogo from '../../assets/googleCloud.svg';
 import { BISCAY } from '../../constants/colors';
 
 import { CardContainer, DetailsContainer, Link, LabelContainer } from './cloudProviderCard.styled';
@@ -73,6 +74,16 @@ const PROVIDER_OPTIONS: Record<
     learnMoreLink: 'https://www.vultr.com/',
     height: 43,
     width: 50,
+    beta: true,
+  },
+  [InstallationType.GOOGLE]: {
+    logoSrc: googleCloudLogo,
+    label: 'Google Cloud Platform (GCP)',
+    description:
+      'High-performance infrastructure for cloud computing, data analytics & machine learning. Secure, reliable and high performance cloud services.',
+    learnMoreLink: 'https://cloud.google.com/',
+    height: 50,
+    width: 51,
     beta: true,
   },
 };

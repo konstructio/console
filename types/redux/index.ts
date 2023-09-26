@@ -34,6 +34,10 @@ export interface AuthValues {
   vultr_auth?: {
     token: string;
   };
+  google_auth?: {
+    key_file?: string;
+    project_id?: string;
+  };
 }
 
 export interface ClusterValues extends AuthValues {
@@ -41,6 +45,7 @@ export interface ClusterValues extends AuthValues {
   cloudRegion?: string;
   domainName?: string;
   clusterName?: string;
+  forceDestroyTerraform?: boolean;
 }
 
 export interface AwsInstallValues {
@@ -65,6 +70,7 @@ export enum InstallationType {
   CIVO = 'civo',
   DIGITAL_OCEAN = 'digitalocean',
   VULTR = 'vultr',
+  GOOGLE = 'google',
 }
 
 export enum InstallMethod {
