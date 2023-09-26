@@ -7,18 +7,23 @@ import React, {
   useState,
 } from 'react';
 import { useFormContext } from 'react-hook-form';
+import styled from 'styled-components';
 import { capitalize } from 'lodash';
-import { setInstallationStep } from 'redux/slices/installation.slice';
 
+import { setInstallationStep } from '../../../../redux/slices/installation.slice';
 import { clearDomains } from '../../../../redux/slices/api.slice';
 import ControlledPassword from '../../../../components/controlledFields/Password';
 import { useAppDispatch, useAppSelector } from '../../../../redux/store';
 import { getCloudDomains } from '../../../../redux/thunks/api.thunk';
 import ControlledTextField from '../../../../components/controlledFields/TextField';
 import ControlledAutocomplete from '../../../../components/controlledFields/AutoComplete';
+import Column from '../../../../components/column';
+import Typography from '../../../../components/typography';
+import ControlledCheckbox from '../../../../components/controlledFields/checkbox';
 import { EMAIL_REGEX, LOWER_KEBAB_CASE_REGEX } from '../../../../constants';
 import { InstallValues, InstallationType } from '../../../../types/redux';
-import Typography from '../../../../components/typography';
+import { GitProvider } from '../../../../types';
+import { EXCLUSIVE_PLUM } from '../../../../constants/colors';
 import { BISCAY } from '../../../../constants/colors';
 
 const CLOUD_REGION_LABELS: Record<InstallationType, string | null> = {
@@ -27,6 +32,7 @@ const CLOUD_REGION_LABELS: Record<InstallationType, string | null> = {
   [InstallationType.DIGITAL_OCEAN]: 'Datacenter region',
   [InstallationType.VULTR]: 'Cloud location',
   [InstallationType.LOCAL]: null,
+  [InstallationType.GOOGLE]: 'Cloud zone',
 };
 
 const SetupForm: FunctionComponent = () => {
@@ -44,15 +50,15 @@ const SetupForm: FunctionComponent = () => {
 
   const subDomainHelperText = !subDomain ? '' : `${subDomain}.${domainName}`;
 
-  const { cloudDomains, cloudRegions, installationStep, installType, values } = useAppSelector(
-    ({ api, installation }) => ({
+  const { cloudDomains, cloudRegions, installationStep, installType, values, gitProvider } =
+    useAppSelector(({ api, installation }) => ({
       cloudDomains: api.cloudDomains,
       cloudRegions: api.cloudRegions,
       installationStep: installation.installationStep,
       installType: installation.installType,
       values: installation.values,
-    }),
-  );
+      gitProvider: installation.gitProvider,
+    }));
 
   const cloudRegionLabel = useMemo(
     () =>
@@ -208,9 +214,32 @@ const SetupForm: FunctionComponent = () => {
         onErrorText={errors.clusterName?.message}
         required
       />
+      {installType === InstallationType.GOOGLE && gitProvider === GitProvider.GITHUB && (
+        <CheckBoxContainer>
+          <Typography variant="labelLarge" color={EXCLUSIVE_PLUM}>
+            Automatically remove cloud provider resources such as buckets or kms keys when a worker
+            cluster is deleted
+          </Typography>
+          <ControlledCheckbox
+            control={control}
+            name="forceDestroyTerraform"
+            label="Enable Force Destroy on Terraform resources"
+            rules={{ required: false }}
+            defaultValue={true}
+          />
+        </CheckBoxContainer>
+      )}
       {/* <LearnMore description="Learn more about" href="" linkTitle="configuring your cluster" /> */}
     </>
   );
 };
 
 export default SetupForm;
+
+const CheckBoxContainer = styled(Column)`
+  gap: 9px;
+
+  label {
+    margin-left: 8px;
+  }
+`;

@@ -19,6 +19,7 @@ import awsLogo from '../../assets/aws_logo.svg';
 import civoLogo from '../../assets/civo_logo.svg';
 import digitalOceanLogo from '../../assets/digital_ocean_logo.svg';
 import vultrLogo from '../../assets/vultr_logo.svg';
+import googleCloudLogo from '../../assets/googleCloud.svg';
 import { CLUSTER_TAG_CONFIG } from '../../constants';
 import { DODGER_BLUE, FIRE_BRICK } from '../../constants/colors';
 import {
@@ -58,6 +59,7 @@ const CLOUD_LOGO_OPTIONS: Record<InstallationType, any> = {
   [InstallationType.CIVO]: civoLogo,
   [InstallationType.DIGITAL_OCEAN]: digitalOceanLogo,
   [InstallationType.VULTR]: vultrLogo,
+  [InstallationType.GOOGLE]: googleCloudLogo,
 };
 
 const FORMATTED_CLUSTER_TYPE: Record<ClusterType, { nameLabel: string; typeLabel: string }> = {

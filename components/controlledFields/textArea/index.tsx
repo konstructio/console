@@ -9,6 +9,8 @@ export interface ControlledTextAreaProps<T extends FieldValues> extends UseContr
   control: Control<T>;
   helperText?: string;
   onErrorText?: string;
+  minRows?: string | number;
+  textAreaStyleOverrides?: React.CSSProperties;
 }
 
 function ControlledTextArea<T extends FieldValues>({
@@ -25,6 +27,8 @@ function ControlledTextArea<T extends FieldValues>({
           label={label}
           error={!!error}
           helperText={error ? props.onErrorText : props.helperText}
+          minRows={props.minRows}
+          textAreaStyleOverrides={props.textAreaStyleOverrides}
         />
       )}
     />

@@ -5,7 +5,7 @@ import { Required } from '../../../../components/textField/textField.styled';
 import LearnMore from '../../../../components/learnMore';
 import Typography from '../../../../components/typography';
 import SwitchComponent from '../../../../components/switch';
-import Checkbox from '../../../../components/controlledFields/Checkbox';
+import Checkbox from '../../../../components/controlledFields/checkbox';
 import ControlledTextField from '../../../../components/controlledFields/TextField';
 import ControlledRadio from '../../../../components/controlledFields/radio/';
 import { useAppSelector } from '../../../../redux/store';

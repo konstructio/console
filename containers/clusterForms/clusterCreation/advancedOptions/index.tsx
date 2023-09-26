@@ -3,7 +3,7 @@ import { useFormContext } from 'react-hook-form';
 
 import LearnMore from '../../../../components/learnMore';
 import Typography from '../../../../components/typography';
-import Checkbox from '../../../../components/controlledFields/Checkbox';
+import Checkbox from '../../../../components/controlledFields/checkbox';
 import ControlledTextField from '../../../../components/controlledFields/TextField';
 import ControlledAutocomplete from '../../../../components/controlledFields/AutoComplete';
 import ControlledRadioGroup from '../../../../components/controlledFields/radio/';

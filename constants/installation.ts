@@ -72,6 +72,16 @@ export const INFO_INSTALLATION_TYPES: Record<InstallationType, Record<number, In
       ],
     },
   },
+  [InstallationType.GOOGLE]: {
+    [FormStep.AUTHENTICATION]: {
+      title: 'Google Cloud Provider Prerequisites',
+      description: [
+        'Create a <a href="https://cloud.google.com/" target="_blank">Google cloud account</a> in which you are the owner.',
+        'Have a <a href="https://cloud.google.com/dns/docs/overview" target="_blank">publicly routable DNS</a> available.',
+        'Use the <a href="https://cloud.google.com/docs/authentication/application-default-credentials#GAC" target="_blank">GOOGLE_APPLICATIONS_CREDENTIALS</a> environment variable to provide the location credentials JSON file.',
+      ],
+    },
+  },
 };
 
 export const INSTALLATION_TYPE_API_KEYS: Record<InstallationType, AuthKeys | null> = {
@@ -143,6 +153,7 @@ export const INSTALLATION_TYPE_API_KEYS: Record<InstallationType, AuthKeys | nul
       },
     ],
   },
+  [InstallationType.GOOGLE]: null,
 };
 
 export const DEFAULT_STEPS = [
@@ -161,6 +172,7 @@ export const INSTALL_TYPE_STEPS: Record<InstallationType, Array<string>> = {
   [InstallationType.CIVO]: DEFAULT_STEPS,
   [InstallationType.DIGITAL_OCEAN]: DEFAULT_STEPS,
   [InstallationType.VULTR]: DEFAULT_STEPS,
+  [InstallationType.GOOGLE]: DEFAULT_STEPS,
 };
 
 export const LOCAL_INSTALL_TITLES = {

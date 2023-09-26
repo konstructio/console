@@ -9,6 +9,8 @@ import { useInstallation } from '../../../../hooks/useInstallation';
 // import LearnMore from '../../../../components/learnMore';
 import ControlledPassword from '../../../../components/controlledFields/Password';
 import ControlledAutocomplete from '../../../../components/controlledFields/AutoComplete';
+import ControlledTextArea from '../../../../components/controlledFields/textArea';
+import ControlledTextField from '../../../../components/controlledFields/TextField';
 import { useAppDispatch, useAppSelector } from '../../../../redux/store';
 import { GIT_PROVIDERS, GitProvider } from '../../../../types';
 import { InstallValues, InstallationType } from '../../../../types/redux/index';
@@ -69,7 +71,12 @@ const AuthForm: FunctionComponent = () => {
     FormStep.AUTHENTICATION,
   );
 
-  const { control, reset, setValue } = useFormContext<InstallValues>();
+  const {
+    control,
+    reset,
+    setValue,
+    formState: { errors },
+  } = useFormContext<InstallValues>();
 
   const isGitHub = useMemo(() => gitProvider === GitProvider.GITHUB, [gitProvider]);
 
@@ -224,6 +231,30 @@ const AuthForm: FunctionComponent = () => {
             loading={gitStateLoading}
             label="GitLab group name"
           />
+        )}
+        {installationType === InstallationType.GOOGLE && (
+          <>
+            <ControlledTextArea
+              control={control}
+              name="google_auth.key_file"
+              label="Google Cloud key file"
+              rules={{ required: 'key file is required' }}
+              required
+              minRows={14}
+              onErrorText={errors.google_auth?.key_file?.message}
+              textAreaStyleOverrides={{ maxHeight: '266px' }}
+            />
+
+            <ControlledTextField
+              control={control}
+              name="google_auth.project_id"
+              label="Project ID"
+              rules={{ required: 'project id is required' }}
+              required
+              helperText="Retrieve the Project ID from the project Dashboard “Project info” card"
+              onErrorText={errors.google_auth?.project_id?.message}
+            />
+          </>
         )}
         {apiKeyInfo?.fieldKeys.map(({ label, name, helperText }) => (
           <ControlledPassword
