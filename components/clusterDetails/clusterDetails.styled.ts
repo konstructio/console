@@ -36,7 +36,7 @@ export const InfoIcon = styled(InfoOutlinedIcon)`
   width: 20px;
 `;
 
-export const Link = styled(NextLink)`
+export const Link = styled.a`
   display: inline-flex;
   a {
     color: ${TRUE_BLUE};

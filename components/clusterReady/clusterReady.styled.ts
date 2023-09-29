@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-import NextLink from 'next/link';
 
 import Column from '../column';
 import Row from '../row';
@@ -10,7 +9,7 @@ export const Container = styled(Column)`
   width: 100%;
 `;
 
-export const Link = styled(NextLink)`
+export const Link = styled.a`
   color: ${({ theme }) => theme.colors.white};
   text-transform: none;
   text-decoration: none;
