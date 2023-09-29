@@ -84,6 +84,7 @@ export const CreateClusterFlow: FunctionComponent<CreateClusterFlowProps> = ({
             <ClusterDetails
               cluster={cluster}
               host={managementCluster?.gitHost as string}
+              gitOwner={managementCluster?.gitAuth.gitOwner}
               style={{ marginTop: '24px' }}
             />
           )}

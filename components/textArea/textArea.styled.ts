@@ -2,7 +2,7 @@ import { FormHelperText, TextareaAutosize, styled as muiStyled } from '@mui/mate
 import ErrorIcon from '@mui/icons-material/Error';
 import styled from 'styled-components';
 
-import { LIGHT_GREY } from '../../constants/colors';
+import { LIGHT_GREY, VOLCANIC_SAND } from '../../constants/colors';
 import Typography from '../typography';
 import Column from '../column';
 
@@ -44,6 +44,8 @@ export const StyledTextArea = muiStyled(TextareaAutosize)<{ error?: boolean }>(
   resize: none;
   outline: none;
   font-family: inherit;
+  font-size: 14px;
+  color: ${VOLCANIC_SAND};
   &:focus {
     border-color: ${error ? theme.palette.error.main : theme.palette.primary.main};
   }

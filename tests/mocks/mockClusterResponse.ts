@@ -95,7 +95,7 @@ export const mockClusterResponse: ClusterResponse = {
       admin_email: 'derrick@kubeshop.io',
       cloud_provider: InstallationType.GOOGLE,
       domain_name: 'kgetpods.biz',
-      cluster_id: 'draft',
+      cluster_id: 'four',
       creation_timestamp: '1693932566',
       dns_provider: 'civo',
       cluster_name: 'worker-4',
