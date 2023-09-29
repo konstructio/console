@@ -14,11 +14,12 @@ import { Cluster, ClusterCreationStep, ClusterStatus, ClusterType } from '../../
 import useToggle from '../../hooks/useToggle';
 import Drawer from '../../components/drawer';
 import useModal from '../../hooks/useModal';
+import { useOnClickOutside } from '../../hooks/useOnClickOutside';
 import DeleteCluster from '../deleteCluster';
 import TabPanel, { Tab, a11yProps } from '../../components/tab';
 import { BISCAY, SALTBOX_BLUE } from '../../constants/colors';
 import { Flow } from '../../components/flow';
-import { ClusterTable } from '../../components/clusterTable/clusterTable';
+import ClusterTable from '../../components/clusterTable/clusterTable';
 import {
   createDraftCluster,
   removeDraftCluster,
@@ -101,6 +102,9 @@ const ClusterManagement: FunctionComponent = () => {
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setActiveTab(newValue);
+    if (presentedCluster) {
+      dispatch(setPresentedCluster(undefined));
+    }
   };
 
   const handleNodeClick = useCallback(
@@ -111,6 +115,10 @@ const ClusterManagement: FunctionComponent = () => {
     },
     [dispatch, openCreateClusterFlow],
   );
+
+  const handleMenuButtonClick = (cluster: Cluster) => {
+    dispatch(setPresentedCluster(presentedCluster?.id === cluster.id ? undefined : cluster));
+  };
 
   const handleAddWorkloadCluster = useCallback(() => {
     if (clusterCreationStep === ClusterCreationStep.CONFIG && managementCluster) {
@@ -141,6 +149,16 @@ const ClusterManagement: FunctionComponent = () => {
       dispatch(getCloudRegions(managementCluster));
     }
   }, [dispatch, managementCluster]);
+
+  const tableRef = useRef<HTMLTableSectionElement>(null);
+
+  const handleClickOutside = () => {
+    if (presentedCluster && activeTab === MANAGEMENT_TABS.LIST_VIEW) {
+      dispatch(setPresentedCluster(undefined));
+    }
+  };
+
+  useOnClickOutside(tableRef, handleClickOutside);
 
   return (
     <Container>
@@ -178,10 +196,11 @@ const ClusterManagement: FunctionComponent = () => {
         <TabPanel value={activeTab} index={MANAGEMENT_TABS.LIST_VIEW}>
           {managementCluster && (
             <ClusterTable
+              ref={tableRef}
               managementCluster={managementCluster}
               draftCluster={draftCluster}
               onDeleteCluster={openDeleteModal}
-              onMenuOpenClose={(cluster) => dispatch(setPresentedCluster(cluster))}
+              onMenuButtonClick={handleMenuButtonClick}
               presentedClusterId={presentedCluster?.id}
             />
           )}
@@ -192,7 +211,7 @@ const ClusterManagement: FunctionComponent = () => {
       </Content>
       <Drawer
         open={createClusterFlowOpen}
-        onClose={closeCreateClusterFlow}
+        onClose={handleMenuClose}
         anchor="right"
         PaperProps={{
           sx: {
