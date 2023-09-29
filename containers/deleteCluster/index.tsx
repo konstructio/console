@@ -9,8 +9,9 @@ import Modal from '../../components/modal';
 import { LAUGHING_ORANGE } from '../../constants/colors';
 import Button from '../../components/button';
 import { Cluster, ClusterType } from '../../types/provision';
+import CopyText from '../../components/copyText';
 
-import { Content, Footer, Header, NextLink } from './deleteCluster.styled';
+import { Content, CopyTextContainer, Footer, Header, NextLink } from './deleteCluster.styled';
 
 export interface DeleteClusterProps {
   cluster: Cluster;
@@ -26,6 +27,7 @@ const DeleteCluster: FunctionComponent<DeleteClusterProps> = ({
   onDelete,
 }) => {
   const [matchingClusterName, setMatchingClusterName] = useState('');
+
   const isManagementCluster = cluster.type === ClusterType.MANAGEMENT;
 
   return (
@@ -53,10 +55,11 @@ const DeleteCluster: FunctionComponent<DeleteClusterProps> = ({
             </>
           ) : (
             <>
-              <Typography style={{ marginBottom: '16px' }}>
-                Are you sure you want to delete the cluster <strong>{cluster.clusterName}</strong>?
-                This action cannot be undone.
-              </Typography>
+              <CopyTextContainer>
+                <Typography>Are you sure you want to delete the cluster</Typography>
+                <CopyText textToCopy={cluster.clusterName as string} />
+                <Typography>? This action cannot be undone.</Typography>
+              </CopyTextContainer>
               <TextFieldWithRef
                 style={{ width: '100%' }}
                 label="To delete, enter cluster name"

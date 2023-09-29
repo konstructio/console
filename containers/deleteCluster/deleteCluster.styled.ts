@@ -2,10 +2,17 @@ import styled from 'styled-components';
 
 import Column from '../../components/column';
 import NextLinkComp from '../../components/nextLink';
+import Row from '../../components/row';
 
 export const Content = styled(Column)`
   gap: 8px;
   margin-left: 38px;
+`;
+
+export const CopyTextContainer = styled(Row)`
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 3px;
 `;
 
 export const Footer = styled.div`
