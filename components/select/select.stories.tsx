@@ -31,7 +31,7 @@ export const Default: StoryObj<typeof SelectComponent> = {
 };
 
 export const TagSelect: StoryObj<typeof TagSelectWithRef> = {
-  render: (args) => <TagSelectWithRef {...args} />,
+  render: ({ key, ...args }) => <TagSelectWithRef {...args} />,
   args: {
     label: 'Cluster environments',
     placeholder: 'Select',
@@ -41,7 +41,7 @@ export const TagSelect: StoryObj<typeof TagSelectWithRef> = {
 };
 
 export const EnvironmentSelect: StoryObj<typeof EnvironmentSelectWithRef> = {
-  render: (args) => <EnvironmentSelectWithRef {...args} />,
+  render: ({ key, ...args }) => <EnvironmentSelectWithRef {...args} />,
   args: {
     label: 'Environment cluster will host',
     required: true,

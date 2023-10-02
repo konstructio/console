@@ -13,7 +13,8 @@ import { ClusterEnvironment } from '../../types/provision';
 
 import { CloseButton, Content, Footer, Header, Root } from './createEnvironmentMenu.styled';
 
-interface CreateEnvironmentMenuProps extends Omit<ComponentPropsWithoutRef<'form'>, 'onSubmit'> {
+interface CreateEnvironmentMenuProps
+  extends Omit<ComponentPropsWithoutRef<'form'>, 'onSubmit' | 'key'> {
   onSubmit: (environment: ClusterEnvironment) => void;
   onClose: () => void;
   previouslyCreatedEnvironments?: ClusterEnvironment[];

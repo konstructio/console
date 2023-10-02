@@ -3,7 +3,7 @@ import { Switch as SwitchMui, SwitchProps, styled } from '@mui/material';
 
 import { PRIMARY } from '../../constants/colors';
 
-const CustomSwitch = styled((props: SwitchProps) => (
+const CustomSwitch = styled((props: Omit<SwitchProps, 'key'>) => (
   <SwitchMui focusVisibleClassName=".Mui-focusVisible" disableRipple {...props} />
 ))(({ theme }) => ({
   'width': 44,
@@ -51,7 +51,7 @@ const CustomSwitch = styled((props: SwitchProps) => (
   },
 }));
 
-const Switch: FunctionComponent<SwitchProps> = (props) => {
+const Switch: FunctionComponent<Omit<SwitchProps, 'key'>> = (props) => {
   return <CustomSwitch {...props} />;
 };
 

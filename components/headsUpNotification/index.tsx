@@ -14,7 +14,7 @@ import {
   Root,
 } from './headsUpNotification.styled';
 
-interface HeadsUpNotificationProps extends ComponentPropsWithoutRef<'div'> {
+interface HeadsUpNotificationProps extends Omit<ComponentPropsWithoutRef<'div'>, 'key'> {
   onClose: () => void;
 }
 

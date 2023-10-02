@@ -33,7 +33,9 @@ import { InputContainer } from './advancedOptions/advancedOptions.styled';
 
 const MIN_NODE_COUNT = 1;
 
-const ClusterCreationForm: FunctionComponent<ComponentPropsWithoutRef<'div'>> = (props) => {
+const ClusterCreationForm: FunctionComponent<Omit<ComponentPropsWithoutRef<'div'>, 'key'>> = (
+  props,
+) => {
   const { isOpen, openModal, closeModal } = useModal(false);
 
   const [environments, setEnvironments] = useState<ClusterEnvironment[]>([

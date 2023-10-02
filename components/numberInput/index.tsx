@@ -10,7 +10,8 @@ import { EXCLUSIVE_PLUM } from '../../constants/colors';
 
 import { Root, NumInput, InputContainer, LabelContainer, Asterisk } from './numberInput.styled';
 
-export interface NumberInputProps extends Omit<ComponentPropsWithoutRef<'label'>, 'onChange'> {
+export interface NumberInputProps
+  extends Omit<ComponentPropsWithoutRef<'label'>, 'onChange' | 'key'> {
   label?: string;
   inputProps?: InputHTMLAttributes<HTMLInputElement>;
   onChange?: (value: number) => void;
