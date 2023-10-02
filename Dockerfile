@@ -3,6 +3,7 @@ FROM node:18-alpine AS base
 FROM base AS deps
 RUN apk add --no-cache libc6-compat
 RUN apk add --no-cache python3 make g++
+RUN npm i -g node-gyp
 WORKDIR /app
 
 # Install dependencies based on the preferred package manager
