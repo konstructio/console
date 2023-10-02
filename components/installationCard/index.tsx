@@ -5,7 +5,7 @@ import { CardOptionInfo } from '../../types';
 
 import { Card, CardTitle, CardDescription } from './installationCard.styled';
 
-export interface InstallationCardProps extends ComponentPropsWithoutRef<'div'> {
+export interface InstallationCardProps extends Omit<ComponentPropsWithoutRef<'div'>, 'key'> {
   active: boolean;
   info: CardOptionInfo;
 }

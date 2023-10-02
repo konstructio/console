@@ -18,7 +18,7 @@ const BUTTONS_MAP = {
   ['text']: TextButton,
 };
 
-export interface IButtonProps extends ButtonProps {
+export interface IButtonProps extends Omit<ButtonProps, 'key'> {
   color: 'primary' | 'secondary' | 'error' | 'info' | 'text';
 }
 

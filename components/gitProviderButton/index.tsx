@@ -17,7 +17,7 @@ const PROVIDER_OPTIONS: Record<
   [GitProvider.GITLAB]: { logoSrc: gitlabLogo, label: 'GitLab', height: 40, width: 42 },
 };
 
-export interface GitProviderButtonProps extends ComponentPropsWithoutRef<'button'> {
+export interface GitProviderButtonProps extends Omit<ComponentPropsWithoutRef<'button'>, 'key'> {
   option: GitProvider;
   active?: boolean;
 }

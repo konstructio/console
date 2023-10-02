@@ -19,7 +19,7 @@ import {
   StatusContainer,
 } from './clusterDetails.styled';
 
-export interface ClusterDetailsProps extends ComponentPropsWithoutRef<'div'> {
+export interface ClusterDetailsProps extends Omit<ComponentPropsWithoutRef<'div'>, 'key'> {
   cluster: Cluster;
   host: ManagementCluster['gitHost'];
   gitOwner: ManagementCluster['gitAuth']['gitOwner'];

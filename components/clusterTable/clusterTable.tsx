@@ -250,7 +250,7 @@ const ClusterTableHead: FunctionComponent<ClusterTableHeadProps> = ({ orderBy, o
   );
 };
 
-interface ClusterTableProps extends ComponentPropsWithRef<'tbody'> {
+interface ClusterTableProps extends Omit<ComponentPropsWithRef<'tbody'>, 'key'> {
   managementCluster: ManagementCluster;
   draftCluster?: DraftCluster;
   onDeleteCluster: () => void;

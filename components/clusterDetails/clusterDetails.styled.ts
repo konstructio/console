@@ -5,7 +5,6 @@ import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import ColumnComponent from '../column';
 import RowComponent from '../row';
 import Typography from '../typography';
-import NextLink from '../nextLink';
 import {
   CHEFS_HAT,
   DR_WHITE,

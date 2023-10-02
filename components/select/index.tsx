@@ -123,7 +123,7 @@ const EnvironmentSelect: FunctionComponent<EnvironmentSelectProps> = ({
   );
 };
 
-interface TagSelectProps extends SelectProps<TagColor> {
+interface TagSelectProps extends Omit<SelectProps<TagColor>, 'key'> {
   options: readonly string[];
   helperText?: string;
   error?: boolean;

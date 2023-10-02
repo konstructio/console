@@ -5,7 +5,9 @@ import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
 
 import { QUARTZ, SPUN_PEARL } from '../../constants/colors';
 
-const Checkbox: FunctionComponent<CheckboxProps> = (props) => (
+type ICheckBoxProps = Omit<CheckboxProps, 'key'>;
+
+const Checkbox: FunctionComponent<ICheckBoxProps> = (props) => (
   <CheckboxMUI
     {...props}
     style={{ border: '1px', padding: 0 }}
@@ -19,7 +21,7 @@ const Checkbox: FunctionComponent<CheckboxProps> = (props) => (
   />
 );
 
-const CheckBoxWithRef = React.forwardRef<HTMLInputElement, CheckboxProps>((props, ref) => {
+const CheckBoxWithRef = React.forwardRef<HTMLInputElement, ICheckBoxProps>((props, ref) => {
   return <Checkbox inputRef={ref} {...props} />;
 });
 

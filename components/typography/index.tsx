@@ -25,7 +25,7 @@ export interface ITypographyProps {
   children: React.ReactNode;
 }
 
-const Typography: FunctionComponent<TypographyProps> = ({ variant, ...props }) => {
+const Typography: FunctionComponent<Omit<TypographyProps, 'key'>> = ({ variant, ...props }) => {
   return <TypographyMUI variant={variant as Variant} {...props} />;
 };
 
