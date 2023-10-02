@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useCallback, useEffect, useRef, useState } from 'react';
+import React, { FunctionComponent, useCallback, useEffect, useState } from 'react';
 import { Box, Tabs } from '@mui/material';
 
 import Button from '../../components/button';
@@ -26,7 +26,6 @@ import {
 } from '../../redux/slices/api.slice';
 import { setPresentedCluster } from '../../redux/slices/api.slice';
 import { useQueue } from '../../hooks/useQueue';
-import { InstallationType } from '../../types/redux';
 
 import { CreateClusterFlow } from './createClusterFlow';
 import { Container, Content, Header } from './clusterManagement.styled';
@@ -162,17 +161,15 @@ const ClusterManagement: FunctionComponent = () => {
             />
           </Tabs>
         </Box>
-        {managementCluster?.cloudProvider === InstallationType.CIVO && (
-          <Button
-            color="primary"
-            variant="contained"
-            style={{ marginRight: '24px' }}
-            onClick={handleAddWorkloadCluster}
-            data-test-id="add-workload-cluster"
-          >
-            Add workload cluster
-          </Button>
-        )}
+        <Button
+          color="primary"
+          variant="contained"
+          style={{ marginRight: '24px' }}
+          onClick={handleAddWorkloadCluster}
+          data-test-id="add-workload-cluster"
+        >
+          Add workload cluster
+        </Button>
       </Header>
       <Content>
         <TabPanel value={activeTab} index={MANAGEMENT_TABS.LIST_VIEW}>
