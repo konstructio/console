@@ -26,7 +26,7 @@ const ClusterTableWithHooks: FunctionComponent = () => {
     <ClusterTable
       managementCluster={managementCluster}
       presentedClusterId={presentedCluster?.id}
-      onMenuOpenClose={(presentedCluster) => dispatch(setPresentedCluster(presentedCluster))}
+      onMenuButtonClick={(presentedCluster) => dispatch(setPresentedCluster(presentedCluster))}
       onDeleteCluster={noop}
     />
   ) : (
@@ -36,7 +36,6 @@ const ClusterTableWithHooks: FunctionComponent = () => {
 
 export const Default: StoryObj<typeof ClusterTable> = {
   args: {
-    onMenuOpenClose: noop,
     onDeleteCluster: noop,
     managementCluster,
   },

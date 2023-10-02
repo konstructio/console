@@ -31,7 +31,7 @@ import { CreateEnvironmentMenu } from '../../../components/createEnvironmentMenu
 import { Container } from './clusterCreation.styled';
 import { InputContainer } from './advancedOptions/advancedOptions.styled';
 
-const minNodeCount = 3;
+const MIN_NODE_COUNT = 1;
 
 const ClusterCreationForm: FunctionComponent<ComponentPropsWithoutRef<'div'>> = (props) => {
   const { isOpen, openModal, closeModal } = useModal(false);
@@ -186,8 +186,7 @@ const ClusterCreationForm: FunctionComponent<ComponentPropsWithoutRef<'div'>> = 
           label="Number of nodes"
           control={control}
           name="nodeCount"
-          defaultValue={3}
-          numberInputProps={{ min: minNodeCount }}
+          numberInputProps={{ min: MIN_NODE_COUNT }}
         />
       </Box>
     </Container>

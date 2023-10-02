@@ -4,6 +4,7 @@ import { Control, Controller, UseControllerProps, FieldValues } from 'react-hook
 
 import Checkbox from '../../checkbox/index';
 import Typography from '../../typography/index';
+import { VOLCANIC_SAND } from '../../../constants/colors';
 
 export interface ControlledCheckboxProps<T extends FieldValues> extends UseControllerProps<T> {
   label?: string;
@@ -33,7 +34,7 @@ function ControlledCheckbox<T extends FieldValues>({
         />
       }
       label={
-        <Typography variant="body2" sx={{ ml: 2 }}>
+        <Typography variant="body2" sx={{ ml: 2 }} color={VOLCANIC_SAND}>
           {label}
         </Typography>
       }

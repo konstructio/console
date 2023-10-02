@@ -5,6 +5,7 @@ import Typography from '../../components/typography';
 import Row from '../../components/row';
 import Column from '../../components/column';
 import { Cluster, ClusterStatus, ClusterType, ManagementCluster } from '../../types/provision';
+import { GitProvider } from '../../types';
 
 import {
   Container,
@@ -21,9 +22,15 @@ import {
 export interface ClusterDetailsProps extends ComponentPropsWithoutRef<'div'> {
   cluster: Cluster;
   host: ManagementCluster['gitHost'];
+  gitOwner: ManagementCluster['gitAuth']['gitOwner'];
 }
 
-const ClusterDetails: FunctionComponent<ClusterDetailsProps> = ({ cluster, host, ...rest }) => {
+const ClusterDetails: FunctionComponent<ClusterDetailsProps> = ({
+  cluster,
+  host,
+  gitOwner,
+  ...rest
+}) => {
   const {
     clusterName,
     adminEmail,
@@ -39,7 +46,9 @@ const ClusterDetails: FunctionComponent<ClusterDetailsProps> = ({ cluster, host,
     gitAuth: { gitUser } = {},
   } = cluster;
 
-  const GITHUB_CLUSTER_BASE_LINK = `https://${host}/${domainName.replace('.', '-')}/gitops/tree`;
+  const partialPath =
+    gitProvider === GitProvider.GITLAB ? gitOwner : `${host}/${domainName.replace('.', '-')}`;
+  const GITHUB_CLUSTER_BASE_LINK = `https://${host}/${partialPath}/gitops/tree`;
 
   const clusterDetailsLink = `/main/registry/clusters/${clusterName}`;
 

@@ -11,8 +11,8 @@ import { CustomGraphNode } from '../../components/graphNode';
 
 const WORKLOAD_CLUSTER_Y_SPACE = 60;
 const WORKLOAD_CLUSTER_X_SPACE = 250;
-const WORKLOAD_NODE_HEIGHT = 126;
-const MANAGEMENT_NODE_HEIGHT = 90;
+const WORKLOAD_NODE_HEIGHT = 128;
+const MANAGEMENT_NODE_HEIGHT = 97;
 const NODE_WIDTH = 360;
 
 export function generateNode(

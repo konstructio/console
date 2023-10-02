@@ -1,7 +1,7 @@
 import { useCallback, useEffect, RefObject } from 'react';
 
 export function useOnClickOutside(
-  ref: RefObject<HTMLButtonElement | HTMLDivElement>,
+  ref: RefObject<HTMLButtonElement | HTMLDivElement | HTMLTableElement>,
   handler: () => void,
 ) {
   const handleClickOutside = useCallback(() => {
