@@ -2,6 +2,7 @@ import React, { FunctionComponent, useCallback, useEffect, useMemo, useState } f
 import { useRouter } from 'next/router';
 import ScatterPlotIcon from '@mui/icons-material/ScatterPlot';
 import GridViewOutlinedIcon from '@mui/icons-material/GridViewOutlined';
+import CollectionsOutlinedIcon from '@mui/icons-material/CollectionsOutlined';
 import { useInstallation } from 'hooks/useInstallation';
 
 import KubefirstContent from '../kubefirstContent';
@@ -53,6 +54,12 @@ const Navigation: FunctionComponent = () => {
           path: '/services',
           title: 'Services',
           isEnabled: !isClusterZero,
+        },
+        {
+          icon: <CollectionsOutlinedIcon />,
+          path: '/environments',
+          title: 'Environments',
+          isEnabled: true,
         },
       ].filter(({ isEnabled }) => isEnabled),
     [isMultiClusterEnabled, isClusterZero],

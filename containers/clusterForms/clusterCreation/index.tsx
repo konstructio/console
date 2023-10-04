@@ -1,10 +1,4 @@
-import React, {
-  ComponentPropsWithoutRef,
-  FunctionComponent,
-  useEffect,
-  useMemo,
-  useState,
-} from 'react';
+import React, { ComponentPropsWithoutRef, FunctionComponent, useEffect, useMemo } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { Box } from '@mui/material';
 
@@ -38,27 +32,13 @@ const ClusterCreationForm: FunctionComponent<Omit<ComponentPropsWithoutRef<'div'
 ) => {
   const { isOpen, openModal, closeModal } = useModal(false);
 
-  const [environments, setEnvironments] = useState<ClusterEnvironment[]>([
-    {
-      environmentName: 'development',
-      description: 'Environment for development',
-      labelColor: 'dark-sky-blue',
-    },
-    {
-      environmentName: 'staging',
-      description: 'Environment for staging',
-      labelColor: 'yellow',
-    },
-    {
-      environmentName: 'production',
-      description: 'Environment for production',
-      labelColor: 'green',
-    },
-  ]);
-
-  const { cloudRegions, previouslyUsedClusterNames, draftCluster } = useAppSelector(
-    ({ api }) => api,
-  );
+  const {
+    cloudRegions,
+    previouslyUsedClusterNames,
+    draftCluster,
+    environments,
+    boundEnvironments,
+  } = useAppSelector(({ api, environments }) => ({ ...api, ...environments }));
 
   const dispatch = useAppDispatch();
 
@@ -73,7 +53,6 @@ const ClusterCreationForm: FunctionComponent<Omit<ComponentPropsWithoutRef<'div'
   const { type } = getValues();
 
   const handleAddEnvironment = (environment: ClusterEnvironment) => {
-    setEnvironments((curState) => [...curState, environment]);
     setValue('environment', environment);
     closeModal();
   };
@@ -130,7 +109,7 @@ const ClusterCreationForm: FunctionComponent<Omit<ComponentPropsWithoutRef<'div'
           <CreateEnvironmentMenu
             onSubmit={handleAddEnvironment}
             onClose={closeModal}
-            previouslyCreatedEnvironments={environments}
+            previouslyCreatedEnvironments={boundEnvironments}
           />
         </Modal>
       </>
