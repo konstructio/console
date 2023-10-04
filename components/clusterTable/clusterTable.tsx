@@ -123,9 +123,7 @@ const ClusterRow: FunctionComponent<ClusterRowProps> = ({
         </StyledTableCell>
         <StyledTableCell selected={selected}>
           <StyledCellText variant="body2">
-            {environment && (
-              <Tag text={environment.environmentName} bgColor={environment.labelColor} />
-            )}
+            {environment && <Tag text={environment.name} bgColor={environment.color} />}
           </StyledCellText>
         </StyledTableCell>
         <StyledTableCell align="left" selected={selected}>

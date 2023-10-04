@@ -10,8 +10,6 @@ export default meta;
 
 export const Default: StoryObj<typeof CreateEnvironmentMenu> = {
   args: {
-    previouslyCreatedEnvironments: [
-      { environmentName: 'development', labelColor: 'dark-sky-blue' },
-    ],
+    previouslyCreatedEnvironments: { development: true },
   },
 };

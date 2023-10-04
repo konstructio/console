@@ -95,10 +95,10 @@ const EnvironmentSelect: FunctionComponent<EnvironmentSelectProps> = ({
         sx={{ width: '100%' }}
         renderValue={(value) => {
           if (value) {
-            return <Tag text={value.environmentName} bgColor={value.labelColor} />;
+            return <Tag text={value.name} bgColor={value.color} />;
           }
           if (props.value) {
-            return <Tag text={props.value.environmentName} bgColor={props.value.labelColor} />;
+            return <Tag text={props.value.name} bgColor={props.value.color} />;
           }
         }}
       >
@@ -114,7 +114,7 @@ const EnvironmentSelect: FunctionComponent<EnvironmentSelectProps> = ({
           // eslint-disable-next-line @typescript-eslint/ban-ts-comment
           //@ts-ignore
           <MenuItem key={option.environmentName} value={option} disableRipple>
-            <Tag text={option.environmentName} bgColor={option.labelColor} />
+            <Tag text={option.name} bgColor={option.color} />
           </MenuItem>
         ))}
       </SelectMUI>

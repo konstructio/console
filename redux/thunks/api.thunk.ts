@@ -25,6 +25,7 @@ import {
   removeDraftCluster,
 } from '../slices/api.slice';
 import { addAppToQueue, removeAppFromQueue } from '../slices/cluster.slice';
+import { setBoundEnvironments } from '../../redux/slices/environments.slice';
 
 export const createCluster = createAsyncThunk<
   ManagementCluster,
@@ -110,8 +111,8 @@ export const createWorkloadCluster = createAsyncThunk<
   const clusterEnvironment = !draftCluster.environment
     ? undefined
     : {
-        name: draftCluster.environment?.environmentName,
-        color: draftCluster.environment?.labelColor,
+        name: draftCluster.environment?.name,
+        color: draftCluster.environment?.color,
         description: draftCluster.environment?.description,
       };
 
@@ -152,7 +153,7 @@ export const getCluster = createAsyncThunk<
     dispatch: AppDispatch;
     state: RootState;
   }
->('api/cluster/get', async ({ clusterName }) => {
+>('api/cluster/get', async ({ clusterName }, { dispatch }) => {
   const res = await axios.get(
     `/api/proxy?${createQueryString('url', `/cluster/${clusterName || 'kubefirst'}`)}`,
   );
@@ -160,7 +161,10 @@ export const getCluster = createAsyncThunk<
   if ('error' in res) {
     throw res.error;
   }
-  return mapClusterFromRaw(res.data);
+  const { managementCluster, envCache } = mapClusterFromRaw(res.data);
+  dispatch(setBoundEnvironments(envCache));
+
+  return managementCluster;
 });
 
 export const getClusters = createAsyncThunk<
@@ -170,7 +174,7 @@ export const getClusters = createAsyncThunk<
     dispatch: AppDispatch;
     state: RootState;
   }
->('api/cluster/getClusters', async () => {
+>('api/cluster/getClusters', async (_, { dispatch }) => {
   const res = await axios.get<ClusterResponse[]>(
     `/api/proxy?${createQueryString('url', `/cluster`)}`,
   );
@@ -184,7 +188,10 @@ export const getClusters = createAsyncThunk<
   }
 
   // only process single expected management cluster
-  return mapClusterFromRaw(res.data[0]);
+  const { managementCluster, envCache } = mapClusterFromRaw(res.data[0]);
+  dispatch(setBoundEnvironments(envCache));
+
+  return managementCluster;
 });
 
 export const deleteCluster = createAsyncThunk<

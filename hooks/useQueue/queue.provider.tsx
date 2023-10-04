@@ -17,6 +17,7 @@ import useToggle from '../../hooks/useToggle';
 import { setManagementCluster } from '../../redux/slices/api.slice';
 import { setError } from '../../redux/slices/installation.slice';
 import { mapClusterFromRaw } from '../../utils/mapClustersFromRaw';
+import { setBoundEnvironments } from '../../redux/slices/environments.slice';
 
 import QueueContext from './queue.context';
 
@@ -51,7 +52,10 @@ const QueueProvider: FunctionComponent<PropsWithChildren> = ({ children }) => {
             }),
           );
 
-          dispatch(setManagementCluster(mapClusterFromRaw(res.data)));
+          const { managementCluster, envCache } = mapClusterFromRaw(res.data);
+
+          dispatch(setManagementCluster(managementCluster));
+          dispatch(setBoundEnvironments(envCache));
 
           if (
             ![ClusterStatus.DELETING, ClusterStatus.PROVISIONING].includes(status as ClusterStatus)
