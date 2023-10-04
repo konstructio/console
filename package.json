@@ -74,7 +74,7 @@
     "@storybook/addon-links": "^7.3.2",
     "@storybook/addon-mdx-gfm": "^7.3.2",
     "@storybook/mdx2-csf": "^1.1.0",
-    "@storybook/nextjs": "^7.3.2",
+    "@storybook/nextjs": "^7.4.6",
     "@storybook/react": "^7.3.2",
     "@storybook/testing-library": "^0.2.0",
     "@testing-library/jest-dom": "^5.16.5",
