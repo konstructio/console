@@ -31,9 +31,9 @@ export const parameters = {
 
 const store = makeStore();
 
-const mockManagementCluster = mapClusterFromRaw(mockClusterResponse);
+const { managementCluster } = mapClusterFromRaw(mockClusterResponse);
 
-store.dispatch(setManagementCluster(mockManagementCluster));
+store.dispatch(setManagementCluster(managementCluster));
 
 export const decorators = [
   (Story) => (

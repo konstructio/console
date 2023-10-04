@@ -9,7 +9,7 @@ import { setPresentedCluster } from '../../redux/slices/api.slice';
 
 import { ClusterTable } from './clusterTable';
 
-const managementCluster = mapClusterFromRaw(mockClusterResponse);
+const { managementCluster } = mapClusterFromRaw(mockClusterResponse);
 
 const meta: Meta<typeof ClusterTable> = {
   component: ClusterTable,

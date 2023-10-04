@@ -91,9 +91,7 @@ export const GraphNode: FunctionComponent<NodeProps<Cluster>> = ({
               <Typography variant="body3">{nodeCount}</Typography>
             </LabelContainer>
           )}
-          {environment && (
-            <EnvironmentTag text={environment.environmentName} bgColor={environment.labelColor} />
-          )}
+          {environment && <EnvironmentTag text={environment.name} bgColor={environment.color} />}
         </LeftPanel>
       </MainContainerInfo>
       <StatusTag

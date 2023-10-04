@@ -40,11 +40,6 @@ export default defineConfig({
     DIGI_OCEAN_SPACES_SECRET: process.env.DIGI_OCEAN_SPACES_SECRET,
     VULTR_TOKEN: process.env.VULTR_TOKEN,
   },
-  e2e: {
-    setupNodeEvents(on, config) {
-      // implement node event listeners here
-    },
-  },
   viewportWidth: 1440,
   viewportHeight: 900,
 });

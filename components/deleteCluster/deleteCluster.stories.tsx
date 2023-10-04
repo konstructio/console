@@ -1,12 +1,12 @@
 import React, { FunctionComponent, useState } from 'react';
 import { Meta, StoryObj } from '@storybook/react';
 
-import Button from '../../components/button';
+import Button from '../button';
 import { noop } from '../../utils/noop';
 import { Cluster, ClusterStatus, ClusterType } from '../../types/provision';
 import { InstallationType } from '../../types/redux';
 
-import DeleteCluster, { DeleteClusterProps } from './';
+import DeleteCluster, { DeleteClusterProps } from '.';
 
 const meta: Meta<typeof DeleteCluster> = {
   title: 'Components/DeleteCluster',
