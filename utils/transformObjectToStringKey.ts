@@ -1,15 +1,17 @@
-export const transformObjectToStringKey = (obj: never) => {
-  function walk(into: never, obj: never, prefix = []) {
+import { JSONObject } from '../types';
+
+export const transformObjectToStringKey = (obj: JSONObject) => {
+  function walk(into: JSONObject, obj: JSONObject, prefix: string[]) {
     Object.entries(obj).forEach(([key, val]) => {
       if (typeof val === 'object' && !Array.isArray(val)) {
-        walk(into, val as never, [...prefix, key] as never);
+        walk(into, val, [...prefix, key]);
       } else {
         const objectKey = [...prefix, key].join('.');
-        into[objectKey as string] = val as never;
+        into[objectKey] = val;
       }
     });
   }
-  const out = {} as never;
-  walk(out, obj);
+  const out: JSONObject = {};
+  walk(out, obj, []);
   return out;
 };
