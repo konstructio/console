@@ -2,7 +2,7 @@ import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
 import { Action, combineReducers, configureStore, ThunkAction } from '@reduxjs/toolkit';
 import { createWrapper } from 'next-redux-wrapper';
 import { persistStore, persistReducer } from 'redux-persist';
-import storage from 'redux-persist/lib/storage';
+import storage from 'redux-persist/lib/storage/session';
 import { getPersistConfig } from 'redux-deep-persist';
 
 import { consoleApi } from './api';
@@ -40,6 +40,7 @@ const config = getPersistConfig({
     'installation.values.civo_auth',
     'installation.values.do_auth',
     'installation.values.vultr_auth',
+    'installation.values.google_auth',
     'cluster',
     'api',
     'featureFlags',
