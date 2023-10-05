@@ -1,8 +1,8 @@
 import styled from 'styled-components';
 
-import Column from '../../components/column';
-import NextLinkComp from '../../components/nextLink';
-import Row from '../../components/row';
+import Column from '../column';
+import NextLinkComp from '../nextLink';
+import Row from '../row';
 
 export const Content = styled(Column)`
   gap: 8px;

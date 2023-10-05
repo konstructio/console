@@ -16,6 +16,7 @@ import {
   queueReducer,
   reactFlowReducer,
   readinessReducer,
+  environmentsReducer,
 } from './slices';
 
 const rootReducer = combineReducers({
@@ -29,6 +30,7 @@ const rootReducer = combineReducers({
   cluster: clusterReducer,
   reactFlow: reactFlowReducer,
   queue: queueReducer,
+  environments: environmentsReducer,
 });
 
 const config = getPersistConfig({

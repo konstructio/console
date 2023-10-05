@@ -10,6 +10,7 @@ import ControlledTextField from '../controlledFields/TextField';
 import ControlledTagSelect from '../controlledFields/tagSelect';
 import ControlledTextArea from '../controlledFields/textArea';
 import { ClusterEnvironment } from '../../types/provision';
+import { EnvCache } from '../../types/redux';
 
 import { CloseButton, Content, Footer, Header, Root } from './createEnvironmentMenu.styled';
 
@@ -17,20 +18,20 @@ interface CreateEnvironmentMenuProps
   extends Omit<ComponentPropsWithoutRef<'form'>, 'onSubmit' | 'key'> {
   onSubmit: (environment: ClusterEnvironment) => void;
   onClose: () => void;
-  previouslyCreatedEnvironments?: ClusterEnvironment[];
+  previouslyCreatedEnvironments?: EnvCache;
 }
 
 export const CreateEnvironmentMenu: FunctionComponent<CreateEnvironmentMenuProps> = ({
   onSubmit,
   onClose,
-  previouslyCreatedEnvironments = [],
+  previouslyCreatedEnvironments = {},
   ...rest
 }) => {
   const {
     control,
     handleSubmit,
     formState: { isValid, errors },
-  } = useForm<ClusterEnvironment>({ mode: 'onBlur', defaultValues: { labelColor: 'grey' } });
+  } = useForm<ClusterEnvironment>({ mode: 'onBlur', defaultValues: { color: 'grey' } });
 
   return (
     <Root {...rest} onSubmit={handleSubmit(onSubmit)}>
@@ -42,7 +43,7 @@ export const CreateEnvironmentMenu: FunctionComponent<CreateEnvironmentMenuProps
       </Header>
       <Content>
         <ControlledTextField
-          name="environmentName"
+          name="name"
           label="Environment name"
           required
           rules={{
@@ -52,12 +53,10 @@ export const CreateEnvironmentMenu: FunctionComponent<CreateEnvironmentMenuProps
               message: 'Max 80 characters permitted',
             },
             validate: (name) =>
-              (name &&
-                !previouslyCreatedEnvironments.find((item) => item.environmentName === name)) ||
-              'Environment name must be unique',
+              (name && !previouslyCreatedEnvironments[name]) || 'Environment name must be unique',
           }}
           control={control}
-          onErrorText={errors.environmentName?.message}
+          onErrorText={errors.name?.message}
         />
         <ControlledTextArea
           name="description"
@@ -73,13 +72,13 @@ export const CreateEnvironmentMenu: FunctionComponent<CreateEnvironmentMenuProps
         />
         <div style={{ width: '290px' }}>
           <ControlledTagSelect
-            name="labelColor"
+            name="color"
             label="Label color"
             required
             rules={{ required: 'Label color is required' }}
             options={TAG_COLOR_OPTIONS}
             control={control}
-            onErrorText={errors.labelColor?.message as string}
+            onErrorText={errors.color?.message as string}
           />
         </div>
       </Content>

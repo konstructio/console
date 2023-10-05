@@ -15,7 +15,7 @@ import useToggle from '../../hooks/useToggle';
 import Drawer from '../../components/drawer';
 import useModal from '../../hooks/useModal';
 import { useOnClickOutside } from '../../hooks/useOnClickOutside';
-import DeleteCluster from '../deleteCluster';
+import DeleteCluster from '../../components/deleteCluster';
 import TabPanel, { Tab, a11yProps } from '../../components/tab';
 import { BISCAY, SALTBOX_BLUE } from '../../constants/colors';
 import { Flow } from '../../components/flow';

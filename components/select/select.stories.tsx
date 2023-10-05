@@ -47,6 +47,6 @@ export const EnvironmentSelect: StoryObj<typeof EnvironmentSelectWithRef> = {
   args: {
     label: 'Environment cluster will host',
     required: true,
-    options: [{ environmentName: 'development', labelColor: 'dark-sky-blue' }],
+    options: [{ id: 'one', creationDate: 'now', name: 'development', color: 'dark-sky-blue' }],
   },
 };

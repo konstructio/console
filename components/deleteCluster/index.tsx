@@ -1,19 +1,19 @@
-import React, { FunctionComponent, useState } from 'react';
+import React, { FunctionComponent, PropsWithChildren, useState } from 'react';
 import { Box } from '@mui/material';
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import LaunchOutlinedIcon from '@mui/icons-material/LaunchOutlined';
 
-import Typography from '../../components/typography';
-import TextFieldWithRef from '../../components/textField';
-import Modal from '../../components/modal';
+import Typography from '../typography';
+import TextFieldWithRef from '../textField';
+import Modal from '../modal';
 import { LAUGHING_ORANGE } from '../../constants/colors';
-import Button from '../../components/button';
+import Button from '../button';
 import { Cluster, ClusterType } from '../../types/provision';
-import CopyText from '../../components/copyText';
+import CopyText from '../copyText';
 
 import { Content, CopyTextContainer, Footer, Header, NextLink } from './deleteCluster.styled';
 
-export interface DeleteClusterProps {
+export interface DeleteClusterProps extends PropsWithChildren {
   cluster: Cluster;
   isOpen: boolean;
   onClose: () => void;

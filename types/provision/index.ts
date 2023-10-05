@@ -17,9 +17,16 @@ export enum ClusterType {
 }
 
 export type ClusterEnvironment = {
-  environmentName: string;
+  id: string;
+  name: string;
+  color: TagColor;
   description?: string;
-  labelColor: TagColor;
+  creationDate: string;
+};
+
+export type EnvironmentResponse = Omit<ClusterEnvironment, 'id' | 'creationDate'> & {
+  _id: string;
+  creation_timestamp: string;
 };
 
 export enum ClusterCreationStep {
@@ -67,7 +74,7 @@ export interface ClusterResponse {
     creation_timestamp: string;
     domain_name: string;
     dns_provider: string;
-    environment?: ClusterEnvironment;
+    environment?: EnvironmentResponse;
     git_auth: {
       git_owner?: string;
       git_token?: string;
