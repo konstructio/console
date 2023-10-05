@@ -1,6 +1,5 @@
 import axios from 'axios';
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { FieldValues } from 'react-hook-form';
 import { sortBy } from 'lodash';
 
 import { AppDispatch, RootState } from '../store';
@@ -261,10 +260,10 @@ export const installGitOpsApp = createAsyncThunk<
 >('api/installGitOpsApp', async ({ app, clusterName, values }, { dispatch }) => {
   dispatch(addAppToQueue(app));
 
-  const formValues = values && (transformObjectToStringKey(values as never) as FieldValues);
+  const formValues = values && transformObjectToStringKey(values);
   const secret_keys =
     formValues &&
-    Object.keys(formValues as FieldValues).map((key) => {
+    Object.keys(formValues).map((key) => {
       return {
         name: key,
         value: formValues[key],
