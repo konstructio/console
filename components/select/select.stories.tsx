@@ -31,6 +31,7 @@ export const Default: StoryObj<typeof SelectComponent> = {
 };
 
 export const TagSelect: StoryObj<typeof TagSelectWithRef> = {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   render: ({ key, ...args }) => <TagSelectWithRef {...args} />,
   args: {
     label: 'Cluster environments',
@@ -41,6 +42,7 @@ export const TagSelect: StoryObj<typeof TagSelectWithRef> = {
 };
 
 export const EnvironmentSelect: StoryObj<typeof EnvironmentSelectWithRef> = {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   render: ({ key, ...args }) => <EnvironmentSelectWithRef {...args} />,
   args: {
     label: 'Environment cluster will host',

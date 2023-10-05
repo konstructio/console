@@ -2,6 +2,7 @@ import {
   DEFAULT_STEPS,
   FormStep,
   INFO_INSTALLATION_TYPES,
+  INFO_MARKETPLACE_INSTALLATION_TYPES,
   INSTALLATION_TYPE_API_KEYS,
   INSTALL_TYPE_STEPS,
   LOCAL_INSTALL_TITLES,
@@ -40,7 +41,9 @@ const getInstallationTitles = (
 };
 
 const getInfoByType = (installType: InstallationType, step: number, isMarketplace: boolean) => {
-  const infoByCloud = INFO_INSTALLATION_TYPES[installType];
+  const infoByCloud = isMarketplace
+    ? INFO_MARKETPLACE_INSTALLATION_TYPES[installType]
+    : INFO_INSTALLATION_TYPES[installType];
 
   return infoByCloud && infoByCloud[isMarketplace ? step + 1 : step];
 };

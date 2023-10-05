@@ -6,6 +6,7 @@ import { GitProvider } from '../../types';
 import {
   FormStep,
   INFO_INSTALLATION_TYPES,
+  INFO_MARKETPLACE_INSTALLATION_TYPES,
   INSTALLATION_TYPE_API_KEYS,
   INSTALL_TYPE_STEPS,
   LOCAL_INSTALL_TITLES,
@@ -229,7 +230,7 @@ describe('useInstallation', () => {
       expect(isProvisionStep).toBe(false);
       expect(isSetupStep).toBe(false);
       expect(info).toStrictEqual(
-        INFO_INSTALLATION_TYPES[InstallationType.CIVO][FormStep.AUTHENTICATION],
+        INFO_MARKETPLACE_INSTALLATION_TYPES[InstallationType.CIVO][FormStep.AUTHENTICATION],
       );
     });
 
