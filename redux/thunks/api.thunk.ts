@@ -25,6 +25,7 @@ import {
   removeDraftCluster,
 } from '../slices/api.slice';
 import { addAppToQueue, removeAppFromQueue } from '../slices/cluster.slice';
+import { transformObjectToStringKey } from '../../utils/transformObjectToStringKey';
 
 export const createCluster = createAsyncThunk<
   ManagementCluster,
@@ -253,12 +254,15 @@ export const installGitOpsApp = createAsyncThunk<
 >('api/installGitOpsApp', async ({ app, clusterName, values }, { dispatch }) => {
   dispatch(addAppToQueue(app));
 
+  const formValues = values && (transformObjectToStringKey(values as never) as FieldValues);
   const secret_keys =
-    values &&
-    Object.keys(values as FieldValues).map((key) => ({
-      name: key,
-      value: (values as FieldValues)[key],
-    }));
+    formValues &&
+    Object.keys(formValues as FieldValues).map((key) => {
+      return {
+        name: key,
+        value: formValues[key],
+      };
+    });
 
   const params = {
     secret_keys,
