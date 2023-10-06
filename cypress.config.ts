@@ -30,7 +30,6 @@ export default defineConfig({
     AWS_ACCESS_KEY_ID: process.env.AWS_ACCESS_KEY_ID,
     AWS_SECRET_KEY: process.env.AWS_SECRET_KEY,
     AWS_SESSION_TOKEN: process.env.AWS_SESSION_TOKEN,
-    AWS_CLOUD_REGION: process.env.AWS_CLOUD_REGION,
     IMAGE_REPO: process.env.IMAGE_REPO,
     CLOUD_PROVIDER: process.env.CLOUD_PROVIDER,
     GOOGLE_KEY_FILE: process.env.GOOGLE_KEY_FILE,
@@ -39,7 +38,26 @@ export default defineConfig({
     DIGI_OCEAN_SPACES_KEY: process.env.DIGI_OCEAN_SPACES_KEY,
     DIGI_OCEAN_SPACES_SECRET: process.env.DIGI_OCEAN_SPACES_SECRET,
     VULTR_TOKEN: process.env.VULTR_TOKEN,
+    AWS_DOMAIN_NAME: process.env.AWS_DOMAIN_NAME,
+    CIVO_DOMAIN_NAME: process.env.CIVO_DOMAIN_NAME,
+    CLOUDFLARE_DOMAIN_NAME: process.env.CLOUDFLARE_DOMAIN_NAME,
+    DIGITAL_OCEAN_DOMAIN_NAME: process.env.DIGITAL_OCEAN_DOMAIN_NAME,
+    VULTR_DOMAIN_NAME: process.env.VULTR_DOMAIN_NAME,
+    GOOGLE_DOMAIN_NAME: process.env.GOOGLE_DOMAIN_NAME,
+    VULTR_CLOUD_REGION: process.env.VULTR_CLOUD_REGION,
+    DIGITAL_OCEAN_CLOUD_REGION: process.env.DIGITAL_OCEAN_CLOUD_REGION,
+    GOOGLE_CLOUD_REGION: process.env.GOOGLE_CLOUD_REGION,
+    AWS_CLOUD_REGION: process.env.AWS_CLOUD_REGION,
+    USE_HTTPS: process.env.USE_HTTPS,
+    FORCE_DESTROY_TERRAFORM: process.env.FORCE_DESTROY_TERRAFORM,
   },
+
   viewportWidth: 1440,
   viewportHeight: 900,
+
+  e2e: {
+    setupNodeEvents(on, config) {
+      // implement node event listeners here
+    },
+  },
 });
