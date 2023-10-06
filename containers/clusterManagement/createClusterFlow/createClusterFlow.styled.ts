@@ -1,6 +1,8 @@
 import styled from 'styled-components';
 
 import Row from '../../../components/row';
+import Column from '../../../components/column';
+import HeadsUpNotification from '../../../components/headsUpNotification';
 
 export const CloseButton = styled.button`
   border: none;
@@ -24,6 +26,16 @@ export const Form = styled.form`
   display: flex;
   flex-direction: column;
   height: 100%;
+`;
+
+export const FormContent = styled(Column)`
+  flex: 1;
+  padding: 0 24px;
+  overflow-y: auto;
+
+  ${HeadsUpNotification} {
+    margin-top: 20px;
+  }
 `;
 
 export const MenuHeader = styled(Row)`

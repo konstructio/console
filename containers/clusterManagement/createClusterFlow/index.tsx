@@ -6,7 +6,6 @@ import { FormProvider, useForm } from 'react-hook-form';
 import Typography from '../../../components/typography';
 import Button from '../../../components/button';
 import { SALTBOX_BLUE } from '../../../constants/colors';
-import Column from '../../../components/column';
 import ClusterCreationForm from '../../../containers/clusterForms/clusterCreation';
 import ClusterDetails from '../../../components/clusterDetails';
 import {
@@ -16,8 +15,15 @@ import {
   ManagementCluster,
   NewWorkloadClusterConfig,
 } from '../../../types/provision';
+import HeadsUpNotification from '../../../components/headsUpNotification';
 
-import { CloseButton, ClusterMenuFooter, Form, MenuHeader } from './createClusterFlow.styled';
+import {
+  CloseButton,
+  ClusterMenuFooter,
+  Form,
+  FormContent,
+  MenuHeader,
+} from './createClusterFlow.styled';
 
 const actionButtonText: Record<ClusterCreationStep, string> = {
   [ClusterCreationStep.CONFIG]: 'Create cluster',
@@ -33,6 +39,8 @@ interface CreateClusterFlowProps {
   clusterCreationStep: ClusterCreationStep;
   defaultValues?: NewWorkloadClusterConfig;
   loading: boolean;
+  notifiedOfBetaPhysicalClusters: boolean;
+  onNotificationClose: () => void;
 }
 
 export const CreateClusterFlow: FunctionComponent<CreateClusterFlowProps> = ({
@@ -44,6 +52,8 @@ export const CreateClusterFlow: FunctionComponent<CreateClusterFlowProps> = ({
   defaultValues,
   managementCluster,
   loading,
+  notifiedOfBetaPhysicalClusters,
+  onNotificationClose,
 }) => {
   const methods = useForm<NewWorkloadClusterConfig>({
     defaultValues,
@@ -76,7 +86,8 @@ export const CreateClusterFlow: FunctionComponent<CreateClusterFlowProps> = ({
             <CloseIcon htmlColor={SALTBOX_BLUE} />
           </CloseButton>
         </MenuHeader>
-        <Column style={{ flex: 1, padding: '0 24px', overflow: 'auto' }}>
+        <FormContent>
+          {!notifiedOfBetaPhysicalClusters && <HeadsUpNotification onClose={onNotificationClose} />}
           {clusterCreationStep === ClusterCreationStep.CONFIG && (
             <ClusterCreationForm style={{ flex: 1, margin: '32px 0' }} />
           )}
@@ -88,7 +99,7 @@ export const CreateClusterFlow: FunctionComponent<CreateClusterFlowProps> = ({
               style={{ marginTop: '24px' }}
             />
           )}
-        </Column>
+        </FormContent>
         <ClusterMenuFooter reverseButtonOrder={showingClusterDetails}>
           <Button variant="outlined" color="primary" onClick={onMenuClose} type="button">
             Close

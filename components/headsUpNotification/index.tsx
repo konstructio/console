@@ -18,9 +18,9 @@ interface HeadsUpNotificationProps extends Omit<ComponentPropsWithoutRef<'div'>,
   onClose: () => void;
 }
 
-const HeadsUpNotification: FunctionComponent<HeadsUpNotificationProps> = (props) => {
+const HeadsUpNotification: FunctionComponent<HeadsUpNotificationProps> = ({ onClose, ...rest }) => {
   return (
-    <Root {...props}>
+    <Root {...rest}>
       <LogoContainer>
         <Image src={lightningBolt} height={32} width={32} alt="lightning bolt" />
       </LogoContainer>
@@ -31,7 +31,7 @@ const HeadsUpNotification: FunctionComponent<HeadsUpNotificationProps> = (props)
           restrictions in the future. We’ll give you plenty of notice when that happens.
         </Message>
       </Info>
-      <CloseButton>
+      <CloseButton type="button" onClick={onClose}>
         <CloseRoundedIcon />
       </CloseButton>
     </Root>
