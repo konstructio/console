@@ -45,8 +45,20 @@ spec:
               value: {{ .Values.installMethod | default "helm" }}
             - name: K1_ACCESS_TOKEN
               valueFrom:
-                name: kubefirst-initial-secrets
-                key: K1_ACCESS_TOKEN
+                secretKeyRef:
+                  name: kubefirst-initial-secrets
+                  key: K1_ACCESS_TOKEN
+            {{- range $key, $value := .Values.extraEnv }}
+            - name: {{ $key }}
+              value: {{ $value | quote}}
+            {{ end }}
+            {{- range $key, $value := .Values.extraEnvSecrets }}
+            - name: {{ $key }}
+              valueFrom:
+                secretKeyRef:
+                  name: {{ $value.name | quote }}
+                  key: {{ $value.key | quote }}
+            {{ end }}
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
