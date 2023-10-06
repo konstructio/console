@@ -44,7 +44,9 @@ spec:
             - name: INSTALL_METHOD
               value: {{ .Values.installMethod | default "helm" }}
             - name: K1_ACCESS_TOKEN
-              value: feedkray
+              valueFrom:
+                name: kubefirst-initial-secrets
+                key: K1_ACCESS_TOKEN
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
