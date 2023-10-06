@@ -214,7 +214,7 @@ const SetupForm: FunctionComponent = () => {
         onErrorText={errors.clusterName?.message}
         required
       />
-      {installType === InstallationType.GOOGLE && gitProvider === GitProvider.GITHUB && (
+      {installType === InstallationType.GOOGLE && (
         <CheckBoxContainer>
           <Typography variant="labelLarge" color={EXCLUSIVE_PLUM}>
             Automatically remove cloud provider resources such as buckets or kms keys when a worker
@@ -226,6 +226,7 @@ const SetupForm: FunctionComponent = () => {
             label="Enable Force Destroy on Terraform resources"
             rules={{ required: false }}
             defaultValue={true}
+            data-test-id="forceDestroyTerraform"
           />
         </CheckBoxContainer>
       )}
