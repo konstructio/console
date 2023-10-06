@@ -141,7 +141,8 @@ export const createWorkloadCluster = createAsyncThunk<
 
   dispatch(removeDraftCluster());
   dispatch(addWorkloadCluster(updatedCluster));
-  dispatch(addToPreviouslyUsedClusterNames(updatedCluster.clusterName!));
+  // cast as string ( will be present as clusterName is a required validated field before reaching this call)
+  dispatch(addToPreviouslyUsedClusterNames(updatedCluster.clusterName as string));
 
   return res.data;
 });
