@@ -57,6 +57,7 @@ export interface ClusterResponse {
   cloud_provider: InstallationType;
   cloud_region: string;
   domain_name: string;
+  subdomain_name: string;
   dns_provider: string;
   cluster_id: string;
   cluster_type: ClusterType.MANAGEMENT;
@@ -73,6 +74,7 @@ export interface ClusterResponse {
     cloud_region: string;
     creation_timestamp: string;
     domain_name: string;
+    subdomain_name: string;
     dns_provider: string;
     environment?: EnvironmentResponse;
     git_auth: {
@@ -142,6 +144,7 @@ export interface Cluster {
   cloudRegion?: string;
   creationDate?: string;
   domainName: string;
+  subDomainName?: string;
   dnsProvider: string;
   environment?: ClusterEnvironment;
   gitProvider: string;

@@ -22,7 +22,6 @@ import Typography from '../../../../components/typography';
 import ControlledCheckbox from '../../../../components/controlledFields/checkbox';
 import { EMAIL_REGEX, LOWER_KEBAB_CASE_REGEX } from '../../../../constants';
 import { InstallValues, InstallationType } from '../../../../types/redux';
-import { GitProvider } from '../../../../types';
 import { EXCLUSIVE_PLUM } from '../../../../constants/colors';
 import { BISCAY } from '../../../../constants/colors';
 
@@ -50,15 +49,15 @@ const SetupForm: FunctionComponent = () => {
 
   const subDomainHelperText = !subDomain ? '' : `${subDomain}.${domainName}`;
 
-  const { cloudDomains, cloudRegions, installationStep, installType, values, gitProvider } =
-    useAppSelector(({ api, installation }) => ({
+  const { cloudDomains, cloudRegions, installationStep, installType, values } = useAppSelector(
+    ({ api, installation }) => ({
       cloudDomains: api.cloudDomains,
       cloudRegions: api.cloudRegions,
       installationStep: installation.installationStep,
       installType: installation.installType,
       values: installation.values,
-      gitProvider: installation.gitProvider,
-    }));
+    }),
+  );
 
   const cloudRegionLabel = useMemo(
     () =>

@@ -14,6 +14,7 @@ export const mapClusterFromRaw = (cluster: ClusterResponse) => {
     cloudProvider: cluster.cloud_provider,
     cloudRegion: cluster.cloud_region,
     domainName: cluster.domain_name,
+    subDomainName: cluster.subdomain_name,
     dnsProvider: cluster.dns_provider,
     gitAuth: {
       gitOwner: cluster.git_auth.git_owner,
@@ -82,6 +83,7 @@ export const mapClusterFromRaw = (cluster: ClusterResponse) => {
         status: curVal.status,
         type: curVal.cluster_type as ClusterType,
         domainName: curVal.domain_name,
+        subDomainName: curVal.subdomain_name,
         gitProvider: cluster.git_provider,
         adminEmail: cluster.alerts_email,
         gitAuth: {
