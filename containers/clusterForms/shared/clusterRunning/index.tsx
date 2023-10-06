@@ -9,6 +9,10 @@ const ClusterRunning: FunctionComponent = () => {
 
   const { managementCluster } = useAppSelector(({ api }) => api);
 
+  const { clusterName, domainName, subDomainName, vaultAuth } = managementCluster ?? {};
+
+  const fullDomainName = `${subDomainName ? `${subDomainName}.${domainName}` : domainName}`;
+
   const onOpenConsole = useCallback(() => {
     dispatch(setSelectedCluster(managementCluster));
   }, [dispatch, managementCluster]);
@@ -16,9 +20,9 @@ const ClusterRunning: FunctionComponent = () => {
   return (
     <ClusterReady
       onOpenConsole={onOpenConsole}
-      clusterName={managementCluster?.clusterName}
-      domainName={managementCluster?.domainName}
-      kbotPassword={managementCluster?.vaultAuth?.kbotPassword}
+      clusterName={clusterName}
+      domainName={fullDomainName}
+      kbotPassword={vaultAuth?.kbotPassword}
     />
   );
 };
