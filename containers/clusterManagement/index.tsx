@@ -27,6 +27,7 @@ import {
 } from '../../redux/slices/api.slice';
 import { setPresentedCluster } from '../../redux/slices/api.slice';
 import { useQueue } from '../../hooks/useQueue';
+import { setNotifiedOfBetaPhysicalClusters } from '../../redux/slices/notifications.slice';
 
 import { CreateClusterFlow } from './createClusterFlow';
 import { Container, Content, Header } from './clusterManagement.styled';
@@ -39,11 +40,18 @@ enum MANAGEMENT_TABS {
 const ClusterManagement: FunctionComponent = () => {
   const [activeTab, setActiveTab] = useState(MANAGEMENT_TABS.LIST_VIEW);
 
-  const { managementCluster, draftCluster, clusterCreationStep, presentedCluster, loading } =
-    useAppSelector(({ api, queue }) => ({
-      clusterQueue: queue.clusterQueue,
-      ...api,
-    }));
+  const {
+    managementCluster,
+    draftCluster,
+    clusterCreationStep,
+    presentedCluster,
+    loading,
+    notifiedOfBetaPhysicalClusters,
+  } = useAppSelector(({ api, queue, notifications }) => ({
+    clusterQueue: queue.clusterQueue,
+    notifiedOfBetaPhysicalClusters: notifications.notifiedOfBetaPhysicalClusters,
+    ...api,
+  }));
 
   const { addClusterToQueue } = useQueue();
 
@@ -143,6 +151,10 @@ const ClusterManagement: FunctionComponent = () => {
     }
   };
 
+  const handleNotificationClose = useCallback(() => {
+    dispatch(setNotifiedOfBetaPhysicalClusters(true));
+  }, [dispatch]);
+
   useEffect(() => {
     if (managementCluster) {
       dispatch(getCloudRegions(managementCluster));
@@ -235,6 +247,8 @@ const ClusterManagement: FunctionComponent = () => {
           onSubmit={handleCreateCluster}
           defaultValues={draftCluster}
           loading={loading}
+          notifiedOfBetaPhysicalClusters={notifiedOfBetaPhysicalClusters}
+          onNotificationClose={handleNotificationClose}
         />
       </Drawer>
       {presentedCluster && (
