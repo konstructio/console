@@ -17,6 +17,7 @@ import { persistor, wrapper } from '../redux/store';
 import { getClusters } from '../redux/thunks/api.thunk';
 import { QueueProvider } from '../hooks/useQueue';
 import '../styles/globals.css';
+import { NotificationsProvider } from '../context/Notification.context';
 
 const Layout = styled(Row)`
   background-color: ${({ theme }) => theme.colors.washMe};
@@ -29,8 +30,10 @@ export const Content = styled(Column)`
 `;
 
 export default function App({ Component, ...rest }: AppProps) {
-  const [hasLoadedClusters, setHasLoadedClusters] = useState<boolean>(false);
+  const [hasLoadedClusters, setHasLoadedClusters] = useState(false);
+
   const { store, props } = wrapper.useWrappedStore(rest);
+
   const { push } = useRouter();
 
   useEffect(() => {
@@ -64,13 +67,15 @@ export default function App({ Component, ...rest }: AppProps) {
           <ThemeProviderMUI theme={muiTheme}>
             <ThemeProvider theme={theme}>
               <QueueProvider>
-                <Layout>
-                  <Navigation />
-                  <Content>
-                    <Header />
-                    <Component {...props.pageProps} />
-                  </Content>
-                </Layout>
+                <NotificationsProvider>
+                  <Layout>
+                    <Navigation />
+                    <Content>
+                      <Header />
+                      <Component {...props.pageProps} />
+                    </Content>
+                  </Layout>
+                </NotificationsProvider>
               </QueueProvider>
             </ThemeProvider>
           </ThemeProviderMUI>
