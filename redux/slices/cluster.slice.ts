@@ -4,7 +4,7 @@ import {
   getClusterServices,
   getGitOpsCatalogApps,
   installGitOpsApp,
-} from '../../redux/thunks/api.thunk';
+} from '../../redux/thunks/cluster.thunk';
 import { ManagementCluster, ClusterServices, WorkloadCluster } from '../../types/provision';
 import { GitOpsCatalogApp } from '../../types/gitOpsCatalog';
 
@@ -12,7 +12,6 @@ export interface ConfigState {
   selectedCluster?: ManagementCluster | WorkloadCluster;
   clusterServices: Array<ClusterServices>;
   gitOpsCatalogApps: Array<GitOpsCatalogApp>;
-  isGitOpsCatalogNotificationOpen: boolean;
   appsQueue: Array<string>;
 }
 
@@ -20,7 +19,6 @@ export const initialState: ConfigState = {
   selectedCluster: undefined,
   clusterServices: [],
   gitOpsCatalogApps: [],
-  isGitOpsCatalogNotificationOpen: false,
   appsQueue: [],
 };
 
@@ -30,9 +28,6 @@ const clusterSlice = createSlice({
   reducers: {
     setSelectedCluster: (state, { payload }: PayloadAction<ConfigState['selectedCluster']>) => {
       state.selectedCluster = payload;
-    },
-    setIsGitOpsCatalogNotificationOpen: (state, { payload }: PayloadAction<boolean>) => {
-      state.isGitOpsCatalogNotificationOpen = payload;
     },
     addAppToQueue: (state, { payload }: PayloadAction<GitOpsCatalogApp>) => {
       state.appsQueue.push(payload.name);
@@ -63,7 +58,6 @@ const clusterSlice = createSlice({
           image: image_url,
           links: [],
         });
-        state.isGitOpsCatalogNotificationOpen = true;
       })
       .addCase(installGitOpsApp.rejected, (state) => {
         const queue = Object.assign(state.appsQueue, []);
@@ -87,12 +81,7 @@ const clusterSlice = createSlice({
   },
 });
 
-export const {
-  addAppToQueue,
-  removeAppFromQueue,
-  resetClusterServices,
-  setSelectedCluster,
-  setIsGitOpsCatalogNotificationOpen,
-} = clusterSlice.actions;
+export const { addAppToQueue, removeAppFromQueue, resetClusterServices, setSelectedCluster } =
+  clusterSlice.actions;
 
 export const clusterReducer = clusterSlice.reducer;

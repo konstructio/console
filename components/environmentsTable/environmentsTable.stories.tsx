@@ -2,15 +2,15 @@ import React, { useEffect, useState } from 'react';
 import { Meta, StoryObj } from '@storybook/react';
 
 import { mockEnvironmentsResponse } from '../../tests/mocks/mockEnvironmentsResponse';
-import { mapEnvironmentFromRaw } from '../../utils/mapEnvironmentFromRaw';
 import { useAppDispatch, useAppSelector } from '../../redux/store';
 import { setEnvironments } from '../../redux/slices/environments.slice';
 import { ClusterEnvironment } from '../../types/provision';
 import { noop } from '../../utils/noop';
+import { createEnvMap } from '../../utils/createEnvMap';
 
 import EnvironmentsTable from './';
 
-const mockEnvironments = mockEnvironmentsResponse.map(mapEnvironmentFromRaw);
+const mockEnvironments = createEnvMap(mockEnvironmentsResponse);
 
 const meta: Meta<typeof EnvironmentsTable> = {
   component: EnvironmentsTable,

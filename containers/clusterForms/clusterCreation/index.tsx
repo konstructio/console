@@ -21,6 +21,7 @@ import ControlledEnvironmentSelect from '../../../components/controlledFields/en
 import Modal from '../../../components/modal';
 import useModal from '../../../hooks/useModal';
 import { CreateEnvironmentMenu } from '../../../components/createEnvironmentMenu';
+import LearnMore from '../../../components/learnMore';
 
 import { Container } from './clusterCreation.styled';
 import { InputContainer } from './advancedOptions/advancedOptions.styled';
@@ -90,6 +91,12 @@ const ClusterCreationForm: FunctionComponent<Omit<ComponentPropsWithoutRef<'div'
             setValue('type', clusterType as ClusterType, { shouldValidate: true })
           }
         />
+        <LearnMore
+          href="#"
+          description="A partitioned space in your management cluster."
+          linkTitle="Learn More"
+          withoutDivider
+        />
       </InputContainer>
       <>
         <ControlledEnvironmentSelect
@@ -97,7 +104,7 @@ const ClusterCreationForm: FunctionComponent<Omit<ComponentPropsWithoutRef<'div'
           name="environment"
           label="Environment cluster will host"
           onErrorText={errors.environment?.message}
-          options={environments}
+          options={Object.values(environments)}
           onAddNewEnvironment={openModal}
         />
         <Modal
