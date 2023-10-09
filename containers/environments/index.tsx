@@ -41,7 +41,7 @@ const Environments: FunctionComponent = () => {
 
   const handleEnvironmentDelete = () => {
     if (selectedEnv) {
-      dispatch(deleteEnvironment(selectedEnv.name));
+      dispatch(deleteEnvironment(selectedEnv));
       setSelectedEnv(undefined);
       closeDeleteEnv();
     }

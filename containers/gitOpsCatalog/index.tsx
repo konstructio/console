@@ -2,8 +2,7 @@ import React, { FunctionComponent, useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import NextLink from 'next/link';
 import sortBy from 'lodash/sortBy';
-import { Alert, FormControlLabel, FormGroup, Snackbar, alertClasses } from '@mui/material';
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import { FormControlLabel, FormGroup } from '@mui/material';
 
 import Checkbox from '../../components/checkbox';
 import Typography from '../../components/typography';
@@ -11,10 +10,9 @@ import GitOpsCatalogCard from '../../components/gitOpsCatalogCard';
 import GitopsAppModal from '../../components/gitopsAppModal';
 import useModal from '../../hooks/useModal';
 import { useAppDispatch, useAppSelector } from '../../redux/store';
-import { installGitOpsApp } from '../../redux/thunks/api.thunk';
-import { setIsGitOpsCatalogNotificationOpen } from '../../redux/slices/cluster.slice';
+import { installGitOpsApp } from '../../redux/thunks/cluster.thunk';
 import { AppCategory, GitOpsCatalogApp } from '../../types/gitOpsCatalog';
-import { IVY_LEAGUE, VOLCANIC_SAND } from '../../constants/colors';
+import { VOLCANIC_SAND } from '../../constants/colors';
 
 import {
   CardsByCategory,
@@ -35,13 +33,7 @@ const gitOpsCatalog: FunctionComponent = () => {
   const [selectedCategories, setSelectedCategories] = useState<AppCategory[]>([]);
   const [selectedApp, setSelectedApp] = useState<GitOpsCatalogApp>();
 
-  const { appsQueue, isGitOpsCatalogNotificationOpen, selectedCluster } = useAppSelector(
-    ({ cluster }) => ({
-      selectedCluster: cluster.selectedCluster,
-      isGitOpsCatalogNotificationOpen: cluster.isGitOpsCatalogNotificationOpen,
-      appsQueue: cluster.appsQueue,
-    }),
-  );
+  const { appsQueue, selectedCluster } = useAppSelector(({ cluster }) => cluster);
 
   const gitOpsCatalogApps = useAppSelector(({ cluster }) =>
     cluster.gitOpsCatalogApps.filter(
@@ -100,14 +92,6 @@ const gitOpsCatalog: FunctionComponent = () => {
     } else {
       handleAddApp(app);
     }
-  };
-
-  const handleCloseNotification = (event?: React.SyntheticEvent | Event, reason?: string) => {
-    if (reason === 'clickaway') {
-      return;
-    }
-
-    dispatch(setIsGitOpsCatalogNotificationOpen(false));
   };
 
   const filteredApps = useMemo(() => {
@@ -208,30 +192,6 @@ const gitOpsCatalog: FunctionComponent = () => {
           {...selectedApp}
         />
       )}
-      <Snackbar
-        anchorOrigin={{
-          vertical: 'bottom',
-          horizontal: 'right',
-        }}
-        open={isGitOpsCatalogNotificationOpen}
-        autoHideDuration={3000}
-        onClose={handleCloseNotification}
-        sx={{
-          [`.${alertClasses.root}`]: {
-            backgroundColor: IVY_LEAGUE,
-          },
-        }}
-      >
-        <Alert
-          onClose={handleCloseNotification}
-          severity="success"
-          sx={{ width: '100%' }}
-          variant="filled"
-          icon={<CheckCircleIcon />}
-        >
-          <Typography variant="subtitle2">{`${selectedApp?.display_name} successfully added to provisioned services in cluster ${selectedCluster?.clusterName}!`}</Typography>
-        </Alert>
-      </Snackbar>
     </Container>
   );
 };

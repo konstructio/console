@@ -7,11 +7,8 @@ import GitOpsCatalog from '../gitOpsCatalog';
 import TabPanel, { Tab, a11yProps } from '../../components/tab';
 import Typography from '../../components/typography';
 import useFeatureFlag from '../../hooks/useFeatureFlag';
-import {
-  getClusterServices,
-  getGitOpsCatalogApps,
-  sendTelemetryEvent,
-} from '../../redux/thunks/api.thunk';
+import { getClusterServices, getGitOpsCatalogApps } from '../../redux/thunks/cluster.thunk';
+import { sendTelemetryEvent } from '../../redux/thunks/api.thunk';
 import { useAppDispatch, useAppSelector } from '../../redux/store';
 import { DOCS_LINK } from '../../constants';
 import { BISCAY, SALTBOX_BLUE, VOLCANIC_SAND } from '../../constants/colors';

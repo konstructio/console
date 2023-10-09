@@ -1,12 +1,13 @@
-import React, { FunctionComponent } from 'react';
+import React, { ComponentPropsWithoutRef, FunctionComponent } from 'react';
 import { Divider } from '@mui/material';
+import styled from 'styled-components';
 
 import NextLink from '../../components/nextLink';
 import { InstallationType } from '../../types/redux';
 
 import { Text } from './learnMore.styled';
 
-export interface LearnMoreProps {
+export interface LearnMoreProps extends ComponentPropsWithoutRef<'div'> {
   description: string;
   href: string;
   linkTitle: string;
@@ -20,6 +21,7 @@ const LearnMore: FunctionComponent<LearnMoreProps> = ({
   installType,
   linkTitle,
   withoutDivider,
+  ...rest
 }) => {
   const docsDomainLink = `https://docs.kubefirst.io/${
     installType && [InstallationType.DIGITAL_OCEAN, InstallationType.VULTR].includes(installType)
@@ -28,7 +30,7 @@ const LearnMore: FunctionComponent<LearnMoreProps> = ({
   }`;
 
   return (
-    <>
+    <div {...rest}>
       {!withoutDivider && <Divider sx={{ m: '-20px', p: '8px 0' }} />}
       <Text variant="labelLarge">
         {description}{' '}
@@ -42,8 +44,8 @@ const LearnMore: FunctionComponent<LearnMoreProps> = ({
           {linkTitle}
         </NextLink>
       </Text>
-    </>
+    </div>
   );
 };
 
-export default LearnMore;
+export default styled(LearnMore)<LearnMoreProps>``;

@@ -7,14 +7,12 @@ import { createQueryString } from '../../utils/url/formatDomain';
 import {
   ManagementCluster,
   ClusterRequestProps,
-  ClusterServices,
   ClusterStatus,
   WorkloadCluster,
   ClusterResponse,
   Cluster,
   ClusterEnvironment,
 } from '../../types/provision';
-import { GitOpsCatalogApp, GitOpsCatalogProps } from '../../types/gitOpsCatalog';
 import { InstallValues, InstallationType } from '../../types/redux';
 import { TelemetryClickEvent } from '../../types/telemetry';
 import { mapClusterFromRaw } from '../../utils/mapClustersFromRaw';
@@ -23,8 +21,6 @@ import {
   addWorkloadCluster,
   removeDraftCluster,
 } from '../slices/api.slice';
-import { addAppToQueue, removeAppFromQueue } from '../slices/cluster.slice';
-import { transformObjectToStringKey } from '../../utils/transformObjectToStringKey';
 import { setBoundEnvironments } from '../../redux/slices/environments.slice';
 
 export const createCluster = createAsyncThunk<
@@ -217,75 +213,6 @@ export const deleteCluster = createAsyncThunk<
     throw res.error;
   }
   return res.data;
-});
-
-export const getClusterServices = createAsyncThunk<
-  Array<ClusterServices>,
-  ClusterRequestProps,
-  {
-    dispatch: AppDispatch;
-    state: RootState;
-  }
->('api/cluster/getClusterServices', async ({ clusterName }) => {
-  const res = await axios.get(`/api/proxy?${createQueryString('url', `/services/${clusterName}`)}`);
-
-  if ('error' in res) {
-    throw res.error;
-  }
-  return res.data?.services;
-});
-
-export const getGitOpsCatalogApps = createAsyncThunk<
-  Array<GitOpsCatalogApp>,
-  void,
-  {
-    dispatch: AppDispatch;
-    state: RootState;
-  }
->('api/getGitOpsCatalogApps', async () => {
-  const res = await axios.get(`/api/proxy?${createQueryString('url', `/gitops-catalog/apps`)}`);
-
-  if ('error' in res) {
-    throw res.error;
-  }
-  return res.data?.apps;
-});
-
-export const installGitOpsApp = createAsyncThunk<
-  GitOpsCatalogApp,
-  GitOpsCatalogProps,
-  {
-    dispatch: AppDispatch;
-    state: RootState;
-  }
->('api/installGitOpsApp', async ({ app, clusterName, values }, { dispatch }) => {
-  dispatch(addAppToQueue(app));
-
-  const formValues = values && transformObjectToStringKey(values);
-  const secret_keys =
-    formValues &&
-    Object.keys(formValues).map((key) => {
-      return {
-        name: key,
-        value: formValues[key],
-      };
-    });
-
-  const params = {
-    secret_keys,
-  };
-
-  const res = await axios.post('/api/proxy', {
-    url: `/services/${clusterName}/${app.name}`,
-    body: secret_keys?.length ? params : undefined,
-  });
-
-  if ('error' in res) {
-    dispatch(removeAppFromQueue(app));
-    throw res.error;
-  }
-
-  return app;
 });
 
 export const getCloudRegions = createAsyncThunk<

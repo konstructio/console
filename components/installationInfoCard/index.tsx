@@ -1,11 +1,9 @@
-import React, { FunctionComponent } from 'react';
+import React, { FunctionComponent, useCallback } from 'react';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import ContentCopyOutlinedIcon from '@mui/icons-material/ContentCopyOutlined';
 import LaunchOutlinedIcon from '@mui/icons-material/LaunchOutlined';
-import { Snackbar } from '@mui/material';
 import CopyToClipboard from 'react-copy-to-clipboard';
 
-import useToggle from '../../hooks/useToggle';
 import Typography from '../typography/index';
 import { TRUE_BLUE, VOLCANIC_SAND } from '../../constants/colors';
 import { InstallationInfo, InstallationType } from '../../types/redux';
@@ -14,6 +12,8 @@ import AwsLogo from '../../assets/aws_logo.svg';
 import DigitalOceanLogo from '../../assets/digital_ocean_logo.svg';
 import VultrLogo from '../../assets/vultr_logo.svg';
 import GoogleCloudLogo from '../../assets/googleCloud.svg';
+import { useAppDispatch } from '../../redux/store';
+import { createNotification } from '../../redux/slices/notifications.slice';
 
 import {
   Card,
@@ -47,9 +47,23 @@ const InstallationInfoCard: FunctionComponent<InstallationInfoCardProps> = ({
   isMarketplace = false,
   ...rest
 }) => {
-  const { isOpen, open, close } = useToggle(false);
   const { title, description, code, ctaLink, ctaDescription } = info;
   const logo = MARKETPLACE_LOGOS[installationType as InstallationType];
+
+  const dispatch = useAppDispatch();
+
+  const handleCopy = useCallback(() => {
+    dispatch(
+      createNotification({
+        message: 'Copied!',
+        type: 'success',
+        snackBarOrigin: {
+          vertical: 'bottom',
+          horizontal: 'right',
+        },
+      }),
+    );
+  }, [dispatch]);
 
   return (
     <Card {...rest}>
@@ -81,19 +95,9 @@ const InstallationInfoCard: FunctionComponent<InstallationInfoCardProps> = ({
       {code && (
         <Code>
           <Typography variant="body2">{code}</Typography>
-          <CopyToClipboard text={code} onCopy={open}>
+          <CopyToClipboard text={code} onCopy={handleCopy}>
             <ContentCopyOutlinedIcon />
           </CopyToClipboard>
-          <Snackbar
-            anchorOrigin={{
-              vertical: 'bottom',
-              horizontal: 'right',
-            }}
-            open={isOpen}
-            autoHideDuration={3000}
-            onClose={close}
-            message="Copied!"
-          />
         </Code>
       )}
       {ctaLink && (

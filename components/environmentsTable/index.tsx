@@ -12,6 +12,7 @@ import { ClusterEnvironment } from '../../types/provision';
 import Typography from '../../components/typography';
 import Tag from '../tag';
 import { descendingComparator } from '../../utils/descendingComparator';
+import { EnvMap } from '../../redux/slices/environments.slice';
 
 import {
   StyledTableRow,
@@ -173,7 +174,7 @@ const EnvironmentTableHead: FunctionComponent<EnvironmentTableHeadProps> = ({
 };
 
 interface EnvironmentsTableProps extends Omit<ComponentPropsWithRef<'tbody'>, 'key'> {
-  environments: ClusterEnvironment[];
+  environments: EnvMap;
   selectedEnvironment?: ClusterEnvironment;
   onDeleteEnvironment: () => void;
   onMenuButtonClick: (env: ClusterEnvironment) => void;
@@ -199,7 +200,7 @@ export const EnvironmentsTable: FunctionComponent<EnvironmentsTableProps> = ({
   };
 
   const sortedEnvironments = useMemo(() => {
-    return [...environments].sort((a, b) =>
+    return Object.values(environments).sort((a, b) =>
       order === 'asc' ? -descendingComparator(a, b, orderBy) : descendingComparator(a, b, orderBy),
     );
   }, [environments, order, orderBy]);

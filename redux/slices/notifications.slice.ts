@@ -1,31 +1,47 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
+import { AlertProps, SnackbarOrigin } from '@mui/material';
+import { v4 as uuid } from 'uuid';
 
-type Message = {
+export type Message = {
   id: string;
   message: string;
-  type: 'error' | 'success';
+  type: AlertProps['severity'];
+  snackBarOrigin?: SnackbarOrigin;
 };
 
 export interface NotificationsState {
-  messages: Message[];
+  messages: Record<Message['id'], Message>;
   notifiedOfBetaPhysicalClusters: boolean;
 }
 
 export const initialState: NotificationsState = {
-  messages: [],
+  messages: {},
   notifiedOfBetaPhysicalClusters: false,
 };
 
 const notificationsSlice = createSlice({
-  name: 'config',
+  name: 'notifications',
   initialState,
   reducers: {
     setNotifiedOfBetaPhysicalClusters: (state, { payload }: PayloadAction<boolean>) => {
       state.notifiedOfBetaPhysicalClusters = payload;
     },
+    createNotification: (state, { payload }: PayloadAction<Omit<Message, 'id'>>) => {
+      const messageId = uuid();
+      const newNotification: Message = {
+        ...payload,
+        id: messageId,
+      };
+
+      state.messages[messageId] = newNotification;
+    },
+    deleteNotificationById: (state, { payload }: PayloadAction<Message['id']>) => {
+      delete state.messages[payload];
+    },
   },
 });
 
-export const { setNotifiedOfBetaPhysicalClusters } = notificationsSlice.actions;
+export const { setNotifiedOfBetaPhysicalClusters, createNotification, deleteNotificationById } =
+  notificationsSlice.actions;
 
 export const notificationsReducer = notificationsSlice.reducer;

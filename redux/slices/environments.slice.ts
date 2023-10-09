@@ -8,9 +8,10 @@ import {
 } from '../thunks/environments.thunk';
 import { EnvCache } from '../../types/redux';
 
+export type EnvMap = Record<ClusterEnvironment['id'], ClusterEnvironment>;
 export interface EnvironmentsState {
   loading: boolean;
-  environments: ClusterEnvironment[];
+  environments: EnvMap;
   /**
    * environments cache for environments in use by cluster(s)
    */
@@ -19,7 +20,7 @@ export interface EnvironmentsState {
 
 export const initialState: EnvironmentsState = {
   loading: false,
-  environments: [],
+  environments: {},
   boundEnvironments: {},
 };
 
@@ -27,7 +28,7 @@ const environmentsSlice = createSlice({
   name: 'environments',
   initialState,
   reducers: {
-    setEnvironments: (state, { payload }: PayloadAction<ClusterEnvironment[]>) => {
+    setEnvironments: (state, { payload }: PayloadAction<EnvMap>) => {
       state.environments = payload;
     },
     setBoundEnvironments: (state, { payload }: PayloadAction<EnvCache>) => {
@@ -41,7 +42,7 @@ const environmentsSlice = createSlice({
       })
       .addCase(getAllEnvironments.rejected, (state) => {
         state.loading = false;
-        state.environments = [];
+        state.environments = {};
       })
       .addCase(getAllEnvironments.fulfilled, (state, { payload }) => {
         state.loading = false;
@@ -55,7 +56,7 @@ const environmentsSlice = createSlice({
       })
       .addCase(createEnvironment.fulfilled, (state, { payload }) => {
         state.loading = false;
-        state.environments.push(payload);
+        state.environments[payload.id] = payload;
       })
       .addCase(deleteEnvironment.pending, (state) => {
         state.loading = true;
@@ -63,9 +64,9 @@ const environmentsSlice = createSlice({
       .addCase(deleteEnvironment.rejected, (state) => {
         state.loading = false;
       })
-      .addCase(deleteEnvironment.fulfilled, (state, { payload }) => {
+      .addCase(deleteEnvironment.fulfilled, (state, { payload: envId }) => {
         state.loading = false;
-        state.environments = state.environments.filter((env) => env.name !== payload);
+        delete state.environments[envId];
       });
   },
 });

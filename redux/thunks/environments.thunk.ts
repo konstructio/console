@@ -4,8 +4,11 @@ import axios from 'axios';
 import { ClusterEnvironment, EnvironmentResponse } from '../../types/provision';
 import { createQueryString } from '../../utils/url/formatDomain';
 import { mapEnvironmentFromRaw } from '../../utils/mapEnvironmentFromRaw';
+import { createNotification } from '../../redux/slices/notifications.slice';
+import { EnvMap } from '../../redux/slices/environments.slice';
+import { createEnvMap } from '../../utils/createEnvMap';
 
-export const getAllEnvironments = createAsyncThunk<ClusterEnvironment[], void>(
+export const getAllEnvironments = createAsyncThunk<EnvMap, void>(
   'environments/getAllEnvironments',
   async () => {
     const rawEnvironments = (
@@ -13,7 +16,8 @@ export const getAllEnvironments = createAsyncThunk<ClusterEnvironment[], void>(
         `/api/proxy?${createQueryString('url', `/environment`)}`,
       )
     ).data;
-    return rawEnvironments.map(mapEnvironmentFromRaw);
+
+    return createEnvMap(rawEnvironments);
   },
 );
 
@@ -31,11 +35,22 @@ export const createEnvironment = createAsyncThunk<ClusterEnvironment, ClusterEnv
   },
 );
 
-export const deleteEnvironment = createAsyncThunk<
-  ClusterEnvironment['name'],
-  ClusterEnvironment['name']
->('environments/deleteEnvironment', async (environmentName) => {
-  await axios.delete(`/api/proxy?${createQueryString('url', `/environment/${environmentName}`)}`);
+export const deleteEnvironment = createAsyncThunk<ClusterEnvironment['id'], ClusterEnvironment>(
+  'environments/deleteEnvironment',
+  async (environment, { dispatch }) => {
+    await axios.delete(`/api/proxy?${createQueryString('url', `/environment/${environment.id}`)}`);
 
-  return environmentName;
-});
+    dispatch(
+      createNotification({
+        message: `${environment.name} environment successfully deleted.`,
+        type: 'success',
+        snackBarOrigin: {
+          vertical: 'bottom',
+          horizontal: 'right',
+        },
+      }),
+    );
+
+    return environment.id;
+  },
+);
