@@ -1,6 +1,7 @@
 import React, { ComponentPropsWithoutRef, FunctionComponent } from 'react';
 import { useForm } from 'react-hook-form';
 import CloseIcon from '@mui/icons-material/Close';
+import { Alert } from '@mui/material';
 
 import Typography from '../typography';
 import Button from '../button';
@@ -10,7 +11,7 @@ import ControlledTextField from '../controlledFields/TextField';
 import ControlledTagSelect from '../controlledFields/tagSelect';
 import ControlledTextArea from '../controlledFields/textArea';
 import { ClusterEnvironment } from '../../types/provision';
-import { EnvCache } from '../../types/redux';
+import { EnvMap } from '../../redux/slices/environments.slice';
 
 import { CloseButton, Content, Footer, Header, Root } from './createEnvironmentMenu.styled';
 
@@ -18,13 +19,17 @@ interface CreateEnvironmentMenuProps
   extends Omit<ComponentPropsWithoutRef<'form'>, 'onSubmit' | 'key'> {
   onSubmit: (environment: ClusterEnvironment) => void;
   onClose: () => void;
-  previouslyCreatedEnvironments?: EnvCache;
+  previouslyCreatedEnvironments?: EnvMap;
+  errorMessage?: string;
+  onErrorClose?: () => void;
 }
 
 export const CreateEnvironmentMenu: FunctionComponent<CreateEnvironmentMenuProps> = ({
   onSubmit,
   onClose,
   previouslyCreatedEnvironments = {},
+  errorMessage,
+  onErrorClose,
   ...rest
 }) => {
   const {
@@ -42,6 +47,11 @@ export const CreateEnvironmentMenu: FunctionComponent<CreateEnvironmentMenuProps
         </CloseButton>
       </Header>
       <Content>
+        {errorMessage && (
+          <Alert variant="filled" severity="error" onClose={onErrorClose}>
+            {errorMessage}
+          </Alert>
+        )}
         <ControlledTextField
           name="name"
           label="Environment name"
