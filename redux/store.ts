@@ -52,6 +52,7 @@ const config = getPersistConfig({
     'config',
     'internalApi',
     'readiness',
+    'environments',
   ],
   rootReducer,
 });
