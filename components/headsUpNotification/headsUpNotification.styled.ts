@@ -40,6 +40,7 @@ export const LogoContainer = styled(Row)`
   border-radius: 16px;
   background: linear-gradient(90deg, #6f37ae 40.63%, #7aa5e2 100%, #7aa5e2 100%);
   flex-shrink: 0;
+  align-self: center;
 `;
 
 export const Message = muiStyled(Typography)(() => ({

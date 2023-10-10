@@ -30,10 +30,10 @@ import { CreateEnvironmentMenu } from '../../../components/createEnvironmentMenu
 import LearnMore from '../../../components/learnMore';
 import { createEnvironment } from '../../../redux/thunks/environments.thunk';
 import { noop } from '../../../utils/noop';
+import { clearEnvironmentError } from '../../../redux/slices/environments.slice';
 
 import { Container } from './clusterCreation.styled';
 import { InputContainer } from './advancedOptions/advancedOptions.styled';
-import { clearEnvironmentError, setEnvironmentError } from 'redux/slices/environments.slice';
 
 const MIN_NODE_COUNT = 1;
 
