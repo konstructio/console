@@ -1,3 +1,4 @@
+'use client';
 import styled from 'styled-components';
 
 import Column from '../column';
@@ -34,12 +35,12 @@ export const Content = styled(Column)<{ hasInfo?: boolean; isProvisionStep: bool
       height: 100%;
   `}
 
-  ${media.greaterThan<{ hasInfo: boolean }>('lg')`
-    flex-direction: ${({ hasInfo }) => hasInfo && 'row'};
+  ${media.greaterThan('lg')`
+    flex-direction: ${({ hasInfo }: { hasInfo: boolean }) => hasInfo && 'row'};
     height: calc(100% - 285px);
 
 
-    ${({ hasInfo }) =>
+    ${({ hasInfo }: { hasInfo: boolean }) =>
       hasInfo &&
       `
         align-items: flex-start;

@@ -1,5 +1,5 @@
 import React, { FunctionComponent, PropsWithChildren } from 'react';
-import { Drawer as DrawerMui, DrawerProps } from '@mui/material';
+import DrawerMui, { DrawerProps } from '@mui/material/Drawer';
 
 const Drawer: FunctionComponent<Omit<PropsWithChildren<DrawerProps>, 'key'>> = ({
   children,

@@ -2,7 +2,8 @@ import React, { FunctionComponent, MouseEvent, ReactNode, useState } from 'react
 import Button from '@mui/material/Button';
 import MenuMui from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
-import { ListItemIcon, ListItemText } from '@mui/material';
+import ListItemText from '@mui/material/ListItemText';
+import ListItemIcon from '@mui/material/ListItemIcon';
 
 import Typography from '../typography';
 import { VOLCANIC_SAND } from '../../constants/colors';

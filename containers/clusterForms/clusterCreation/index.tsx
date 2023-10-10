@@ -1,6 +1,6 @@
 import React, { ComponentPropsWithoutRef, FunctionComponent, useEffect, useMemo } from 'react';
 import { useFormContext } from 'react-hook-form';
-import { Box } from '@mui/material';
+import Box from '@mui/material/Box';
 
 import ControlledAutocomplete from '../../../components/controlledFields/AutoComplete';
 import ControlledTextField from '../../../components/controlledFields/TextField';

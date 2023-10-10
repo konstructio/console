@@ -1,6 +1,9 @@
 import React, { useState, FunctionComponent, useMemo, ComponentPropsWithRef } from 'react';
 import TableHead from '@mui/material/TableHead';
-import { IconButton, List, ListItem, ListItemButton } from '@mui/material';
+import IconButton from '@mui/material/IconButton';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemButton from '@mui/material/ListItemButton';
 import TableSortLabel from '@mui/material/TableSortLabel';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';

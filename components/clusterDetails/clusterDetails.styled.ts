@@ -1,5 +1,7 @@
+'use client';
 import styled from 'styled-components';
-import { styled as muiStyled, typographyClasses } from '@mui/material';
+import { styled as muiStyled } from '@mui/material/styles';
+import { typographyClasses } from '@mui/material/Typography';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 
 import ColumnComponent from '../column';

@@ -1,8 +1,9 @@
+'use client';
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
 import { Action, combineReducers, configureStore, ThunkAction } from '@reduxjs/toolkit';
 import { createWrapper } from 'next-redux-wrapper';
 import { persistStore, persistReducer } from 'redux-persist';
-import storage from 'redux-persist/lib/storage';
+import storage from 'redux-persist/lib/storage/session';
 import { getPersistConfig } from 'redux-deep-persist';
 
 import { consoleApi } from './api';
@@ -77,7 +78,7 @@ export type AppThunk<ReturnType = void> = ThunkAction<
 export const useAppDispatch: () => AppDispatch = useDispatch;
 export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
 
-const store = makeStore() as AppStore;
+export const store = makeStore() as AppStore;
 
 export const wrapper = createWrapper<AppStore>(() => store);
 

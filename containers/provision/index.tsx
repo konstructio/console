@@ -1,6 +1,7 @@
+'use client';
 import React, { FunctionComponent, useCallback, useEffect, useMemo } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 
 import InstallationStepContainer from '../../components/installationStepContainer';
 import InstallationInfoCard from '../../components/installationInfoCard';
@@ -250,12 +251,6 @@ const Provision: FunctionComponent = () => {
       handleGoNext();
     }
   }, [dispatch, handleGoNext, isAuthStep, isAuthenticationValid]);
-
-  useEffect(() => {
-    if (!isClusterZero) {
-      push('/services');
-    }
-  }, [isClusterZero, push]);
 
   useEffect(() => {
     if (isMarketplace && installMethod) {

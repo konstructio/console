@@ -1,7 +1,10 @@
+'use client';
 import React, { useState, FunctionComponent, useMemo, ComponentPropsWithRef } from 'react';
 import styled from 'styled-components';
 import TableHead from '@mui/material/TableHead';
-import { List, ListItem, ListItemButton } from '@mui/material';
+import ListItemButton from '@mui/material/ListItemButton';
+import ListItem from '@mui/material/ListItem';
+import List from '@mui/material/List';
 import TableSortLabel from '@mui/material/TableSortLabel';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';

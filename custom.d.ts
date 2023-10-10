@@ -1,4 +1,5 @@
-import 'styled-components';
+'use client';
+import '@lib/styled-components';
 import '@mui/material/styles';
 
 declare module '*.css' {
@@ -139,5 +140,18 @@ declare global {
     interface Chainable {
       openConsole(): Chainable<void>;
     }
+  }
+}
+
+declare module 'next-auth' {
+  /**
+   * Returned by `useSession`, `getSession` and received as a prop on the `SessionProvider` React Context
+   */
+  interface Profile {
+    groups: Array<string>;
+  }
+
+  interface Session {
+    groups: Array<string>;
   }
 }

@@ -1,4 +1,5 @@
-import { Box, BoxProps } from '@mui/material';
+'use client';
+import Box, { BoxProps } from '@mui/material/Box';
 import styled from 'styled-components';
 
 import FormContainer from '../../components/formContainer';
@@ -48,10 +49,10 @@ export const FormContent = styled(FormContainer)<{
       background-color: transparent;
   `}
 
-  ${media.greaterThan<{ hasInfo: boolean }>('lg')`
+  ${media.greaterThan('lg')`
     width: 1024px;
 
-    ${({ hasInfo }) =>
+    ${({ hasInfo }: { hasInfo: boolean }) =>
       hasInfo &&
       `
         width: 680px;

@@ -1,17 +1,12 @@
-import styled, { css } from 'styled-components';
 import { styled as muiStyled } from '@mui/material/styles';
 import TableCell, { tableCellClasses } from '@mui/material/TableCell';
-import {
-  TableBody,
-  TableRow,
-  tableRowClasses,
-  tableBodyClasses,
-  IconButton,
-  typographyClasses,
-  Box,
-  TableContainer,
-  Table,
-} from '@mui/material';
+import TableBody, { tableBodyClasses } from '@mui/material/TableBody';
+import TableRow, { tableRowClasses } from '@mui/material/TableRow';
+import IconButton from '@mui/material/IconButton';
+import Box from '@mui/material/Box';
+import TableContainer from '@mui/material/TableContainer';
+import Table from '@mui/material/Table';
+import { typographyClasses } from '@mui/material/Typography';
 
 import Typography from '../typography';
 import Tag from '../tag';
@@ -22,6 +17,8 @@ import {
   SALTBOX_BLUE,
   VOLCANIC_SAND,
 } from '../../constants/colors';
+
+import styled, { css } from '@/lib/styled-components';
 
 export const Menu = styled(Box)`
   position: absolute;

@@ -1,5 +1,5 @@
 import React, { FunctionComponent, ReactNode } from 'react';
-import { Box } from '@mui/material';
+import Box from '@mui/material/Box';
 import { DataGrid, DataGridProps, gridClasses } from '@mui/x-data-grid';
 
 import { CHILD_OF_LIGHT, SALTBOX_BLUE } from '../../constants/colors';

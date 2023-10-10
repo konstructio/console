@@ -1,5 +1,7 @@
 import React, { FunctionComponent } from 'react';
-import { Step, StepIconProps, Stepper } from '@mui/material';
+import Stepper from '@mui/material/Stepper';
+import Step from '@mui/material/Step';
+import { StepIconProps } from '@mui/material/StepIcon';
 import CheckIcon from '@mui/icons-material/Check';
 
 import Typography from '../typography';

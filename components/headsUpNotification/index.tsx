@@ -1,3 +1,4 @@
+'use client';
 import React, { ComponentPropsWithoutRef, FunctionComponent } from 'react';
 import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
 import Image from 'next/image';

@@ -1,3 +1,4 @@
+'use client';
 import React from 'react';
 import { Meta, StoryObj } from '@storybook/react';
 import styled from 'styled-components';
@@ -41,7 +42,7 @@ export const Example: StoryObj<typeof CopyText> = {
   render: (args) => (
     <Row style={{ alignItems: 'baseline' }}>
       <Typography>Are you sure you want to delete the cluster</Typography>
-      <CopyText {...args} style={{ margin: '0 3px' }} />
+      <CopyText textToCopy={args.textToCopy} style={{ margin: '0 3px' }} />
       <Typography>? This action cannot be undone.</Typography>
     </Row>
   ),

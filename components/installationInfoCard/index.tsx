@@ -2,7 +2,7 @@ import React, { FunctionComponent } from 'react';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import ContentCopyOutlinedIcon from '@mui/icons-material/ContentCopyOutlined';
 import LaunchOutlinedIcon from '@mui/icons-material/LaunchOutlined';
-import { Snackbar } from '@mui/material';
+import Snackbar from '@mui/material/Snackbar';
 import CopyToClipboard from 'react-copy-to-clipboard';
 
 import useToggle from '../../hooks/useToggle';

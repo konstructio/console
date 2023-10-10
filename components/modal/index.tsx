@@ -1,6 +1,6 @@
 import React, { FunctionComponent } from 'react';
 import ModalMui from '@mui/material/Modal';
-import { Box } from '@mui/material';
+import Box from '@mui/material/Box';
 
 export { Close } from './modal.styled';
 

@@ -1,7 +1,8 @@
 import React, { FunctionComponent } from 'react';
 import { useRefinementList } from 'react-instantsearch';
 import sortBy from 'lodash/sortBy';
-import { FormControlLabel, FormGroup } from '@mui/material';
+import FormGroup from '@mui/material/FormGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
 
 import Checkbox from '../../components/checkbox';
 import Typography from '../../components/typography';

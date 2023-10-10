@@ -1,3 +1,4 @@
+'use client';
 import React, {
   FunctionComponent,
   PropsWithChildren,
@@ -7,7 +8,7 @@ import React, {
   useState,
 } from 'react';
 import axios from 'axios';
-import { Snackbar } from '@mui/material';
+import Snackbar from '@mui/material/Snackbar';
 
 import { setClusterQueue } from '../../redux/slices/queue.slice';
 import { createQueryString } from '../../utils/url/formatDomain';

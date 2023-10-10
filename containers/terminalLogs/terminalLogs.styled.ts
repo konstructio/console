@@ -1,5 +1,6 @@
+'use client';
 import styled from 'styled-components';
-import { TextField } from '@mui/material';
+import TextField from '@mui/material/TextField';
 
 export const Container = styled.div`
   align-items: flex-start;

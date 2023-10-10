@@ -1,5 +1,6 @@
 import React, { FunctionComponent, ReactNode } from 'react';
-import { styled, Tab as MuiTab, tabClasses } from '@mui/material';
+import { styled } from '@mui/material/styles';
+import MuiTab, { tabClasses } from '@mui/material/Tab';
 
 import { ECHO_BLUE } from '../../constants/colors';
 

@@ -1,5 +1,5 @@
 import React, { FunctionComponent } from 'react';
-import { InputLabel } from '@mui/material';
+import InputLabel from '@mui/material/InputLabel';
 import { TextareaAutosizeProps } from '@mui/base/TextareaAutosize';
 
 import { Required } from '../textField/textField.styled';

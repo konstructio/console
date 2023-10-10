@@ -1,5 +1,8 @@
-import React, { FunctionComponent, useCallback, useEffect, useRef, useState } from 'react';
-import { Box, Tabs } from '@mui/material';
+'use client';
+import React, { FunctionComponent, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import Box from '@mui/material/Box';
+import Tabs from '@mui/material/Tabs';
+import { useSession } from 'next-auth/react';
 
 import Button from '../../components/button';
 import Typography from '../../components/typography';
@@ -37,6 +40,9 @@ enum MANAGEMENT_TABS {
 }
 
 const ClusterManagement: FunctionComponent = () => {
+  const { data: session } = useSession();
+
+  const isAdmin = useMemo(() => session?.groups?.includes('admins'), [session?.groups]);
   const [activeTab, setActiveTab] = useState(MANAGEMENT_TABS.LIST_VIEW);
 
   const { managementCluster, draftCluster, clusterCreationStep, presentedCluster, loading } =

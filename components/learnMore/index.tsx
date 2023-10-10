@@ -1,5 +1,5 @@
 import React, { FunctionComponent } from 'react';
-import { Divider } from '@mui/material';
+import Divider from '@mui/material/Divider';
 
 import NextLink from '../../components/nextLink';
 import { InstallationType } from '../../types/redux';
