@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useEffect, useState } from 'react';
+import React, { FunctionComponent, useCallback, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import Image from 'next/image';
 
@@ -20,6 +20,8 @@ import {
 import EnvironmentsTable from '../../components/environmentsTable';
 import { ClusterEnvironment } from '../../types/provision';
 import DeleteEnvironment from '../../components/deleteEnvironment';
+import { clearEnvironmentError } from '../../redux/slices/environments.slice';
+import { noop } from '../../utils/noop';
 
 const Environments: FunctionComponent = () => {
   const { isOpen, close, open } = useToggle();
@@ -27,30 +29,52 @@ const Environments: FunctionComponent = () => {
 
   const [selectedEnv, setSelectedEnv] = useState<ClusterEnvironment>();
 
-  const { environments, boundEnvironments } = useAppSelector(({ environments }) => environments);
+  const { environments, boundEnvironments, error } = useAppSelector(
+    ({ environments }) => environments,
+  );
   const dispatch = useAppDispatch();
 
-  const handleMenuButtonClick = (env: ClusterEnvironment) => {
+  const handleMenuButtonClick = useCallback((env: ClusterEnvironment) => {
     setSelectedEnv((curEnv) => (curEnv?.name === env.name ? undefined : env));
-  };
+  }, []);
 
-  const handleAddEnvironment = (env: ClusterEnvironment) => {
-    dispatch(createEnvironment(env));
-    close();
-  };
+  const handleAddEnvironment = useCallback(
+    (env: ClusterEnvironment) => {
+      dispatch(createEnvironment(env))
+        .unwrap()
+        .then(() => {
+          close();
+        })
+        .catch(noop);
+    },
+    [dispatch, close],
+  );
 
-  const handleEnvironmentDelete = () => {
+  const handleEnvironmentDelete = useCallback(() => {
     if (selectedEnv) {
-      dispatch(deleteEnvironment(selectedEnv));
-      setSelectedEnv(undefined);
-      closeDeleteEnv();
+      dispatch(deleteEnvironment(selectedEnv))
+        .unwrap()
+        .then(() => {
+          setSelectedEnv(undefined);
+          closeDeleteEnv();
+        })
+        .catch(noop);
     }
-  };
+  }, [selectedEnv, dispatch, closeDeleteEnv]);
 
-  const handleDeleteModal = () => {
+  const handleDeleteModal = useCallback(() => {
     setSelectedEnv(undefined);
     close();
-  };
+  }, [close]);
+
+  const handleErrorClose = useCallback(() => {
+    dispatch(clearEnvironmentError());
+  }, [dispatch]);
+
+  const handleModalClose = useCallback(() => {
+    dispatch(clearEnvironmentError());
+    close();
+  }, [dispatch, close]);
 
   useEffect(() => {
     dispatch(getAllEnvironments());
@@ -73,7 +97,7 @@ const Environments: FunctionComponent = () => {
         </Button>
       </Header>
 
-      {environments.length ? (
+      {Object.keys(environments).length ? (
         <EnvironmentsTable
           // ref={tableRef}
           environments={environments}
@@ -97,12 +121,14 @@ const Environments: FunctionComponent = () => {
         padding={0}
         isOpen={isOpen}
         styleOverrides={{ width: '100%', maxWidth: '630px' }}
-        onCloseModal={close}
+        onCloseModal={handleModalClose}
       >
         <CreateEnvironmentMenu
           onSubmit={handleAddEnvironment}
           onClose={close}
-          previouslyCreatedEnvironments={boundEnvironments}
+          previouslyCreatedEnvironments={environments}
+          errorMessage={error}
+          onErrorClose={handleErrorClose}
         />
       </Modal>
       {selectedEnv && (
