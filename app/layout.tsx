@@ -2,9 +2,9 @@ import React, { PropsWithChildren } from 'react';
 import { getServerSession } from 'next-auth/next';
 import { Session } from 'next-auth';
 
-import { Providers } from '@/lib/providers';
+import { Providers } from '@/app/lib/providers';
 import { authOptions } from '@/pages/api/auth/[...nextauth]';
-import StyledComponentsRegistry from '@/lib/registry';
+import StyledComponentsRegistry from '@/app/lib/registry';
 
 import '../styles/globals.css';
 

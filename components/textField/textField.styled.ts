@@ -3,7 +3,7 @@ import FormHelperTextMui from '@mui/material/FormHelperText';
 
 import { SPUN_PEARL } from '../../constants/colors';
 
-import styled, { css } from '@/lib/styled-components';
+import styled, { css } from '@/app/lib/styled-components';
 
 export const Container = styled.div<{ isDisabled?: boolean }>`
   width: 100%;

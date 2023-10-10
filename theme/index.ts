@@ -1,4 +1,4 @@
-import { DefaultTheme } from '@/lib/styled-components';
+import { DefaultTheme } from '@/app/lib/styled-components';
 import {
   AMERICAN_BLUE,
   AMERICAN_GREEN,

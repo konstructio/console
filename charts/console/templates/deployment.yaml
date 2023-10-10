@@ -43,6 +43,13 @@ spec:
               value: {{ .Values.isClusterZero | default "true" | quote }}
             - name: INSTALL_METHOD
               value: {{ .Values.installMethod | default "helm" }}
+            - name: DOMAIN
+              value: {{ .Values.domain }}
+            - name: NEXTAUTH_SECRET
+              value: {{ $clusterId }}
+            - name: NEXTAUTH_URL
+              value: https://console.{{ .Values.domain }}
+              {{ .Release.Name }}
             - name: K1_ACCESS_TOKEN
               valueFrom:
                 secretKeyRef:

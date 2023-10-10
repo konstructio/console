@@ -9,7 +9,7 @@ import { PersistGate } from 'redux-persist/integration/react';
 
 import { NotificationsProvider } from '@/context/Notification.context';
 import { QueueProvider } from '@/hooks/useQueue';
-import { ThemeProvider } from '@/lib/styled-components';
+import { ThemeProvider } from '@/app/lib/styled-components';
 import { persistor, store } from '@/redux/store';
 import { muiTheme } from '@/theme/muiTheme';
 import { theme } from '@/theme/index';

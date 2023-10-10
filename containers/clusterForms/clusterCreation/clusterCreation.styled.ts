@@ -1,4 +1,4 @@
-import styled, { css } from '@/lib/styled-components';
+import styled, { css } from '@/app/lib/styled-components';
 
 import Column from '../../../components/column';
 import Button from '../../../components/button';

@@ -1,12 +1,11 @@
-FROM node:18-alpine AS base
+# Utiliza una imagen oficial de Node.js como base
+FROM node:18 AS builder
 
-FROM base AS deps
-RUN apk add --no-cache libc6-compat
-RUN apk add --no-cache python3 make g++
+# Establece el directorio de trabajo en el contenedor
 RUN npm i -g node-gyp
 WORKDIR /app
 
-# Install dependencies based on the preferred package manager
+# Copia el archivo package.json y package-lock.json al contenedor
 COPY package.json yarn.lock* package-lock.json* pnpm-lock.yaml* ./
 RUN \
   if [ -f yarn.lock ]; then yarn --production --frozen-lockfile; \
@@ -15,40 +14,27 @@ RUN \
   else echo "Lockfile not found." && exit 1; \
   fi
 
-
-# Rebuild the source code only when needed
-FROM base AS builder
-WORKDIR /app
-COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
-ENV NEXT_TELEMETRY_DISABLED 1
-
+# Construye la aplicación Next.js
 RUN yarn build
 
-# Production image, copy all the files and run next
-FROM base AS runner
+# Utiliza una nueva etapa para reducir el tamaño de la imagen final
+FROM node:18
+
+# Establece el directorio de trabajo
 WORKDIR /app
 
-ENV NODE_ENV production
-ENV NEXT_TELEMETRY_DISABLED 1
-
-RUN addgroup --system --gid 1001 nodejs
-RUN adduser --system --uid 1001 nextjs
-
+# Copia las dependencias y el código construido desde la etapa anterior
+COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/.next ./.next
 COPY --from=builder /app/public ./public
+COPY --from=builder /app/package*.json ./
 
-# Automatically leverage output traces to reduce image size
-# https://nextjs.org/docs/advanced-features/output-file-tracing
-COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
-COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
-COPY --from=builder --chown=nextjs:nodejs /app/next.config.js ./next.config.js
-COPY --from=builder --chown=nextjs:nodejs /app/server.js ./server.js
-
-USER nextjs
-
+# Exponer el puerto en el que se ejecutará tu aplicación (por defecto Next.js usa el 3000)
 EXPOSE 8080
 
 ENV PORT 8080
 
-CMD ["node", "server.js"]
+# Comando para ejecutar la aplicación
+CMD ["yarn", "start"]
