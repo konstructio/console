@@ -1,6 +1,8 @@
+'use client';
 import React, { FunctionComponent, useEffect, useCallback, useState, useMemo } from 'react';
-import { Box, Tabs } from '@mui/material';
-import { useRouter } from 'next/router';
+import Box from '@mui/material/Box';
+import Tabs from '@mui/material/Tabs';
+import { useRouter } from 'next/navigation';
 
 import Service from '../service';
 import GitOpsCatalog from '../gitOpsCatalog';

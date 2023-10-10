@@ -1,5 +1,7 @@
+'use client';
 import React, { FunctionComponent, useCallback, useEffect, useRef, useState } from 'react';
-import { Box, Tabs } from '@mui/material';
+import Box from '@mui/material/Box';
+import Tabs from '@mui/material/Tabs';
 
 import Button from '../../components/button';
 import Typography from '../../components/typography';

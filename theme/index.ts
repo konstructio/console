@@ -1,5 +1,4 @@
-import { DefaultTheme } from 'styled-components';
-
+import { DefaultTheme } from '@/lib/styled-components';
 import {
   AMERICAN_BLUE,
   AMERICAN_GREEN,
@@ -40,7 +39,7 @@ import {
   PASTEL_LIGHT_BLUE,
   METRO,
   EXCLUSIVE_PLUM,
-} from '../constants/colors';
+} from '@/constants/colors';
 
 export const theme: DefaultTheme = {
   colors: {

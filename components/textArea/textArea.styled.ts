@@ -1,4 +1,7 @@
-import { FormHelperText, TextareaAutosize, styled as muiStyled } from '@mui/material';
+'use client';
+import { styled as muiStyled } from '@mui/material/styles';
+import TextareaAutosize from '@mui/material/TextareaAutosize';
+import FormHelperText from '@mui/material/FormHelperText';
 import ErrorIcon from '@mui/icons-material/Error';
 import styled from 'styled-components';
 

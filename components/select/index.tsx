@@ -1,14 +1,11 @@
 import React, { FunctionComponent } from 'react';
-import {
-  InputBase,
-  InputLabel,
-  MenuItem,
-  Select as SelectMUI,
-  SelectProps,
-  styled,
-} from '@mui/material';
+import { styled } from '@mui/material/styles';
+import InputBase from '@mui/material/InputBase';
+import InputLabel from '@mui/material/InputLabel';
 import AddIcon from '@mui/icons-material/Add';
+import SelectMUI, { SelectProps } from '@mui/material/Select';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import MenuItem from '@mui/material/MenuItem';
 
 import Typography from '../typography';
 import { Required } from '../textField/textField.styled';

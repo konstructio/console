@@ -1,5 +1,5 @@
 import React, { ComponentPropsWithoutRef, FunctionComponent } from 'react';
-import { Divider } from '@mui/material';
+import Divider from '@mui/material/Divider';
 import styled from 'styled-components';
 
 import NextLink from '../../components/nextLink';

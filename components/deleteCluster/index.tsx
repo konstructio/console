@@ -1,5 +1,5 @@
 import React, { FunctionComponent, PropsWithChildren, useState } from 'react';
-import { Box } from '@mui/material';
+import Box from '@mui/material/Box';
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import LaunchOutlinedIcon from '@mui/icons-material/LaunchOutlined';
 

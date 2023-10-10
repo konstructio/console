@@ -1,6 +1,7 @@
+'use client';
 import { createContext } from 'react';
 
-import { ClusterQueue } from '../../types/provision';
+import { ClusterQueue } from '@/types/provision';
 
 export interface QueueContenxtProps {
   addClusterToQueue: (clusterQueue: ClusterQueue) => void;

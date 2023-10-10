@@ -1,10 +1,7 @@
-import {
-  StepConnector,
-  stepConnectorClasses,
-  stepLabelClasses,
-  StepLabel,
-  styled as muiStyled,
-} from '@mui/material';
+'use client';
+import StepLabel, { stepLabelClasses } from '@mui/material/StepLabel';
+import StepConnector, { stepConnectorClasses } from '@mui/material/StepConnector';
+import { styled as muiStyled } from '@mui/material/styles';
 import styled from 'styled-components';
 
 import { theme } from '../../theme';

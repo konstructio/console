@@ -1,8 +1,8 @@
 import React from 'react';
 import { Provider } from 'react-redux';
-import { ThemeProvider as ThemeProviderMUI } from '@mui/material';
+import { ThemeProvider as ThemeProviderMUI } from '@mui/material/styles';
+import { AppRouterContext } from 'next/dist/shared/lib/app-router-context.shared-runtime';
 import { ThemeProvider } from 'styled-components';
-import { RouterContext } from 'next/dist/shared/lib/router-context';
 
 import { makeStore } from '../redux/store';
 import { muiTheme } from '../theme/muiTheme';
@@ -12,6 +12,9 @@ import { mapClusterFromRaw } from '../utils/mapClustersFromRaw';
 import { mockClusterResponse } from '../tests/mocks/mockClusterResponse';
 
 export const parameters = {
+  nextjs: {
+    appDirectory: true,
+  },
   actions: { argTypesRegex: '^on[A-Z].*' },
   controls: {
     matchers: {
@@ -20,7 +23,7 @@ export const parameters = {
     },
   },
   nextRouter: {
-    Provider: RouterContext.Provider,
+    Provider: AppRouterContext.Provider,
     path: '/',
     asPath: '/',
     query: {},

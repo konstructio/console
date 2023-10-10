@@ -22,6 +22,7 @@ const config: Config.InitialOptions = {
   moduleNameMapper: {
     'tests/(.*)': '<rootDir>/tests/$1',
     'uuid': require.resolve('uuid'),
+    '^@/(.*)$': '<rootDir>//$1',
   },
   testEnvironment: 'jsdom',
   globals: {

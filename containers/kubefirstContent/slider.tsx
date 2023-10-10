@@ -1,5 +1,6 @@
 import React, { FunctionComponent, useEffect, useMemo, useState } from 'react';
-import { Slider as SliderMui, styled } from '@mui/material';
+import { styled } from '@mui/material/styles';
+import SliderMui from '@mui/material/Slider';
 import moment from 'moment';
 import { RangeInputProps, useRange } from 'react-instantsearch';
 import { RangeBoundaries } from 'instantsearch.js/es/connectors/range/connectRange';

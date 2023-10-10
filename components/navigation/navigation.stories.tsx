@@ -1,3 +1,4 @@
+'use client';
 import React from 'react';
 import { noop } from 'lodash';
 import styled from 'styled-components';

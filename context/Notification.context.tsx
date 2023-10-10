@@ -6,7 +6,8 @@ import React, {
   useState,
   useCallback,
 } from 'react';
-import { Alert, Snackbar } from '@mui/material';
+import Alert from '@mui/material/Alert';
+import Snackbar from '@mui/material/Snackbar';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import { useAppDispatch, useAppSelector } from 'redux/store';
 import { Message, deleteNotificationById } from 'redux/slices/notifications.slice';

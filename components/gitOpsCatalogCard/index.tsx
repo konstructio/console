@@ -1,6 +1,7 @@
 import React, { FunctionComponent, PropsWithChildren, useMemo } from 'react';
 import Image from 'next/image';
-import { Box, CircularProgress } from '@mui/material';
+import Box from '@mui/material/Box';
+import CircularProgress from '@mui/material/CircularProgress';
 
 import Tag, { TagColor } from '../tag';
 import Tooltip from '../tooltip';

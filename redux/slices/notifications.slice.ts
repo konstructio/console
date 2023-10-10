@@ -1,5 +1,6 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
-import { AlertProps, SnackbarOrigin } from '@mui/material';
+import { AlertProps } from '@mui/material/Alert';
+import { SnackbarOrigin } from '@mui/material/Snackbar';
 import { v4 as uuid } from 'uuid';
 
 export type Message = {

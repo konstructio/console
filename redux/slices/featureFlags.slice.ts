@@ -1,26 +1,35 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { PayloadAction, createSlice } from '@reduxjs/toolkit';
+
+import { getFlags } from '@/redux/thunks/config.thunk';
+import { Flags } from '@/types/config';
 
 export interface FeatureFlagsState {
-  flags: { [key: string]: boolean };
-  loaded: boolean;
+  flags?: Record<string, string | boolean>;
+  isLoading: boolean;
 }
 
 export const initialState: FeatureFlagsState = {
   flags: {},
-  loaded: false,
+  isLoading: false,
 };
 
 const featureFlagsSlice = createSlice({
   name: 'featureFlags',
   initialState,
-  reducers: {
-    setFeatureFlags(state, { payload }) {
-      state.flags = payload;
-      state.loaded = true;
-    },
+  reducers: {},
+  extraReducers: (builder) => {
+    builder
+      .addCase(getFlags.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(getFlags.fulfilled, (state, { payload }: PayloadAction<Flags>) => {
+        state.isLoading = false;
+        state.flags = payload.flags;
+      })
+      .addCase(getFlags.rejected, (state) => {
+        state.isLoading = false;
+      });
   },
 });
-
-export const { setFeatureFlags } = featureFlagsSlice.actions;
 
 export const featureFlagsReducer = featureFlagsSlice.reducer;

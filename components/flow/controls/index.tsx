@@ -1,3 +1,4 @@
+'use client';
 import React, { FunctionComponent } from 'react';
 import { ControlProps, Controls } from 'reactflow';
 import styled from 'styled-components';

@@ -1,5 +1,5 @@
 import React, { FunctionComponent } from 'react';
-import { ButtonProps } from '@mui/material';
+import { ButtonProps } from '@mui/material/Button';
 
 import {
   Container,
@@ -31,7 +31,7 @@ const Button: FunctionComponent<IButtonProps> = ({ variant, color, disabled, ...
         variant={variant}
         disabled={disabled}
         {...rest}
-        sx={{ textTransform: 'initial' }}
+        sx={{ textTransform: 'initial', ...rest.sx }}
       />
     </Container>
   );

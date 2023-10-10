@@ -1,5 +1,7 @@
 import React, { ForwardedRef, FunctionComponent, useMemo } from 'react';
-import { Autocomplete as AutocompleteMUI, CircularProgress, SxProps } from '@mui/material';
+import CircularProgress from '@mui/material/CircularProgress';
+import AutocompleteMUI from '@mui/material/Autocomplete';
+import { SxProps } from '@mui/system';
 import { ControllerRenderProps, FieldValues } from 'react-hook-form';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 

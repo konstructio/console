@@ -1,14 +1,12 @@
+'use client';
 import styled from 'styled-components';
 import { styled as muiStyled } from '@mui/material/styles';
 import TableCell, { tableCellClasses } from '@mui/material/TableCell';
-import {
-  TableBody,
-  TableRow,
-  tableBodyClasses,
-  typographyClasses,
-  Box,
-  Table,
-} from '@mui/material';
+import Table from '@mui/material/Table';
+import Box from '@mui/material/Box';
+import TableRow from '@mui/material/TableRow';
+import TableBody, { tableBodyClasses } from '@mui/material/TableBody';
+import { typographyClasses } from '@mui/material/Typography';
 
 import Row from '../row';
 import Typography from '../typography';

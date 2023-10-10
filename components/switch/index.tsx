@@ -1,5 +1,6 @@
 import React, { FunctionComponent } from 'react';
-import { Switch as SwitchMui, SwitchProps, styled } from '@mui/material';
+import SwitchMui, { SwitchProps } from '@mui/material/Switch';
+import { styled } from '@mui/material/styles';
 
 import { PRIMARY } from '../../constants/colors';
 

@@ -1,3 +1,4 @@
+'use client';
 import React from 'react';
 import { Meta, StoryObj } from '@storybook/react';
 import styled from 'styled-components';
