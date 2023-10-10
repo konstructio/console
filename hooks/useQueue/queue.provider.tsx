@@ -5,35 +5,26 @@ import React, {
   useEffect,
   useMemo,
   useCallback,
-  useState,
 } from 'react';
 import axios from 'axios';
-import Snackbar from '@mui/material/Snackbar';
 
 import { setClusterQueue } from '../../redux/slices/queue.slice';
 import { createQueryString } from '../../utils/url/formatDomain';
 import { ClusterQueue, ClusterResponse, ClusterStatus, ClusterType } from '../../types/provision';
 import { useAppDispatch, useAppSelector } from '../../redux/store';
-import useToggle from '../../hooks/useToggle';
 import { setManagementCluster } from '../../redux/slices/api.slice';
 import { setError } from '../../redux/slices/installation.slice';
 import { mapClusterFromRaw } from '../../utils/mapClustersFromRaw';
 import { setBoundEnvironments } from '../../redux/slices/environments.slice';
+import { createNotification } from '../../redux/slices/notifications.slice';
 
 import QueueContext from './queue.context';
 
 const QueueProvider: FunctionComponent<PropsWithChildren> = ({ children }) => {
-  const [deletedCluster, setDeletedCluster] = useState<string>('');
-  const { isOpen, open, close } = useToggle();
-  const dispatch = useAppDispatch();
   const { clusterQueue } = useAppSelector(({ queue }) => queue);
+  const dispatch = useAppDispatch();
 
   const queue: { [key: string]: NodeJS.Timer } = useMemo(() => ({}), []);
-
-  const handleCloseNotification = () => {
-    setDeletedCluster('');
-    close();
-  };
 
   const getClusterInterval = useCallback(
     (incomingClusterQueue: ClusterQueue) => {
@@ -92,12 +83,20 @@ const QueueProvider: FunctionComponent<PropsWithChildren> = ({ children }) => {
         }
 
         if (status === ClusterStatus.DELETED) {
-          setDeletedCluster(workloadCluster?.cluster_name as string);
-          open();
+          dispatch(
+            createNotification({
+              message: `Cluster ${workloadCluster?.cluster_name} has been deleted`,
+              type: 'success',
+              snackBarOrigin: {
+                vertical: 'bottom',
+                horizontal: 'right',
+              },
+            }),
+          );
         }
       }, 10000);
     },
-    [clusterQueue, dispatch, open, queue],
+    [clusterQueue, dispatch, queue],
   );
 
   const addClusterToQueue = (incomingClusterQueue: ClusterQueue) => {
@@ -132,16 +131,6 @@ const QueueProvider: FunctionComponent<PropsWithChildren> = ({ children }) => {
       }}
     >
       {children}
-      <Snackbar
-        anchorOrigin={{
-          vertical: 'bottom',
-          horizontal: 'right',
-        }}
-        open={isOpen}
-        autoHideDuration={3000}
-        message={`Cluster ${deletedCluster} has been deleted`}
-        onClose={handleCloseNotification}
-      />
     </QueueContext.Provider>
   );
 };

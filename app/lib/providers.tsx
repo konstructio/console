@@ -7,6 +7,7 @@ import { SessionProvider } from 'next-auth/react';
 import { ThemeProvider as ThemeProviderMUI } from '@mui/material/styles';
 import { PersistGate } from 'redux-persist/integration/react';
 
+import { NotificationsProvider } from '@/context/Notification.context';
 import { QueueProvider } from '@/hooks/useQueue';
 import { ThemeProvider } from '@/lib/styled-components';
 import { persistor, store } from '@/redux/store';
@@ -20,7 +21,9 @@ export function Providers({ children, session }: PropsWithChildren<{ session: Se
         <PersistGate persistor={persistor}>
           <ThemeProviderMUI theme={muiTheme}>
             <ThemeProvider theme={theme}>
-              <QueueProvider>{children}</QueueProvider>
+              <QueueProvider>
+                <NotificationsProvider>{children}</NotificationsProvider>
+              </QueueProvider>
             </ThemeProvider>
           </ThemeProviderMUI>
         </PersistGate>

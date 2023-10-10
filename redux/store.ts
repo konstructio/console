@@ -18,6 +18,7 @@ import {
   reactFlowReducer,
   readinessReducer,
   environmentsReducer,
+  notificationsReducer,
 } from './slices';
 
 const rootReducer = combineReducers({
@@ -32,6 +33,7 @@ const rootReducer = combineReducers({
   reactFlow: reactFlowReducer,
   queue: queueReducer,
   environments: environmentsReducer,
+  notifications: notificationsReducer,
 });
 
 const config = getPersistConfig({
@@ -43,6 +45,7 @@ const config = getPersistConfig({
     'installation.values.civo_auth',
     'installation.values.do_auth',
     'installation.values.vultr_auth',
+    'installation.values.google_auth',
     'cluster',
     'api',
     'featureFlags',

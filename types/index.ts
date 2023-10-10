@@ -25,3 +25,9 @@ export interface Row {
 export type NestedKeyOf<T extends object, K = keyof T> = K extends keyof T & (string | number)
   ? `${K}` | (T[K] extends object ? `${K}.${NestedKeyOf<T[K]>}` : never)
   : never;
+
+export type JSONValue = string | number | boolean | JSONObject | JSONValue[];
+
+export interface JSONObject {
+  [x: string]: JSONValue;
+}

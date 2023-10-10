@@ -88,5 +88,8 @@ env:
   ENTERPRISE_API_URL:
     value: "http://kubefirst-kubefirst-api-ee.kubefirst.svc.cluster.local"
 
+extraEnv: []
+extraEnvSecrets: []
+
 global:
   kubefirstVersion: "development"
