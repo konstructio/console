@@ -4,7 +4,6 @@ import { usePathname } from 'next/navigation';
 import ScatterPlotIcon from '@mui/icons-material/ScatterPlot';
 import GridViewOutlinedIcon from '@mui/icons-material/GridViewOutlined';
 import CollectionsOutlinedIcon from '@mui/icons-material/CollectionsOutlined';
-import { useInstallation } from 'hooks/useInstallation';
 
 import KubefirstContent from '../kubefirstContent';
 import NavigationComponent from '../../components/navigation';
@@ -15,6 +14,7 @@ import { useAppSelector } from '../../redux/store';
 import { InstallationType } from '../../types/redux';
 import { GitProvider } from '../../types';
 
+import { useInstallation } from '@/hooks/useInstallation';
 import { selectConfig } from '@/redux/selectors/config.selector';
 import { selectInstallation } from '@/redux/selectors/installation.selector';
 import useFeatureFlag from '@/hooks/useFeatureFlag';

@@ -18,7 +18,7 @@ import {
   VOLCANIC_SAND,
 } from '../../constants/colors';
 
-import styled, { css } from '@/lib/styled-components';
+import styled, { css } from '@/app/lib/styled-components';
 
 export const Menu = styled(Box)`
   position: absolute;

@@ -9,7 +9,7 @@ import Row from '../row';
 import Tag from '../tag';
 import { BLUE_REFLECTION, EXCLUSIVE_PLUM } from '../../constants/colors';
 
-import styled, { css } from '@/lib/styled-components';
+import styled, { css } from '@/app/lib/styled-components';
 
 export const StatusTag = styled(Tag)`
   position: absolute;

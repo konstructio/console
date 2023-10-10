@@ -4,7 +4,7 @@ import NextLink from 'next/link';
 import { textTruncate } from '@/utils/theme';
 import { PASTEL_LIGHT_BLUE } from '@/constants/colors';
 import Typography from '@/components/typography';
-import styled, { css } from '@/lib/styled-components';
+import styled, { css } from '@/app/lib/styled-components';
 
 export const AppConnector = styled.div`
   height: 16px;

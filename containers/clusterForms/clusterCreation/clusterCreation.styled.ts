@@ -1,7 +1,7 @@
-import styled, { css } from '@/lib/styled-components';
-
 import Column from '../../../components/column';
 import Button from '../../../components/button';
+
+import styled, { css } from '@/app/lib/styled-components';
 
 export const AdvancedOptionsButton = styled.button.attrs({ type: 'button' })<{
   expanded?: boolean;

@@ -1,4 +1,4 @@
-import { css } from '@/lib/styled-components';
+import { css } from '@/app/lib/styled-components';
 
 export const textTruncate = (lineCount: number) => css`
   display: -webkit-box;

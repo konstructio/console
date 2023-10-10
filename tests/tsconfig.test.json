@@ -16,7 +16,6 @@
   },
   "paths": {
     "@/*": ["./*"],
-    "@/lib/*": ["app/lib/*"],
   },
   "exclude": ["*config.js", "build", "node_modules", "dist", "src/env-config.js", "tests"]
 }
