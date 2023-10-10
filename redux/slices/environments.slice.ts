@@ -8,7 +8,7 @@ import {
 } from '../thunks/environments.thunk';
 import { EnvCache } from '../../types/redux';
 
-export type EnvMap = Record<ClusterEnvironment['id'], ClusterEnvironment>;
+export type EnvMap = Record<ClusterEnvironment['name'], ClusterEnvironment>;
 export interface EnvironmentsState {
   loading: boolean;
   environments: EnvMap;
@@ -16,6 +16,7 @@ export interface EnvironmentsState {
    * environments cache for environments in use by cluster(s)
    */
   boundEnvironments: EnvCache;
+  error?: string;
 }
 
 export const initialState: EnvironmentsState = {
@@ -34,15 +35,22 @@ const environmentsSlice = createSlice({
     setBoundEnvironments: (state, { payload }: PayloadAction<EnvCache>) => {
       state.boundEnvironments = payload;
     },
+    setEnvironmentError: (state, { payload }: PayloadAction<string>) => {
+      state.error = payload;
+    },
+    clearEnvironmentError: (state) => {
+      state.error = undefined;
+    },
   },
   extraReducers: (builder) => {
     builder
       .addCase(getAllEnvironments.pending, (state) => {
         state.loading = true;
       })
-      .addCase(getAllEnvironments.rejected, (state) => {
+      .addCase(getAllEnvironments.rejected, (state, action) => {
         state.loading = false;
         state.environments = {};
+        state.error = action.error.message;
       })
       .addCase(getAllEnvironments.fulfilled, (state, { payload }) => {
         state.loading = false;
@@ -51,8 +59,9 @@ const environmentsSlice = createSlice({
       .addCase(createEnvironment.pending, (state) => {
         state.loading = true;
       })
-      .addCase(createEnvironment.rejected, (state) => {
+      .addCase(createEnvironment.rejected, (state, action) => {
         state.loading = false;
+        state.error = action.error.message;
       })
       .addCase(createEnvironment.fulfilled, (state, { payload }) => {
         state.loading = false;
@@ -61,16 +70,18 @@ const environmentsSlice = createSlice({
       .addCase(deleteEnvironment.pending, (state) => {
         state.loading = true;
       })
-      .addCase(deleteEnvironment.rejected, (state) => {
+      .addCase(deleteEnvironment.rejected, (state, action) => {
         state.loading = false;
+        state.error = action.error.message;
       })
-      .addCase(deleteEnvironment.fulfilled, (state, { payload: envId }) => {
+      .addCase(deleteEnvironment.fulfilled, (state, { payload: envName }) => {
         state.loading = false;
-        delete state.environments[envId];
+        delete state.environments[envName];
       });
   },
 });
 
-export const { setEnvironments, setBoundEnvironments } = environmentsSlice.actions;
+export const { setEnvironments, setBoundEnvironments, setEnvironmentError, clearEnvironmentError } =
+  environmentsSlice.actions;
 
 export const environmentsReducer = environmentsSlice.reducer;

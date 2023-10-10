@@ -5,7 +5,7 @@ import { mapEnvironmentFromRaw } from './mapEnvironmentFromRaw';
 
 export function createEnvMap(environments: EnvironmentResponse[]): EnvMap {
   return environments.reduce<EnvMap>((acc, curVal) => {
-    acc[curVal._id] = mapEnvironmentFromRaw(curVal);
+    acc[curVal.name] = mapEnvironmentFromRaw(curVal);
     return acc;
   }, {});
 }
