@@ -1,18 +1,23 @@
+'use client';
 import React, { FunctionComponent, useCallback, useEffect, useMemo, useState } from 'react';
-import { useRouter } from 'next/router';
+import { usePathname } from 'next/navigation';
 import ScatterPlotIcon from '@mui/icons-material/ScatterPlot';
 import GridViewOutlinedIcon from '@mui/icons-material/GridViewOutlined';
 import CollectionsOutlinedIcon from '@mui/icons-material/CollectionsOutlined';
-import { useInstallation } from 'hooks/useInstallation';
 
 import KubefirstContent from '../kubefirstContent';
 import NavigationComponent from '../../components/navigation';
 import FlappyKray from '../../components/flappyKray';
-import useFeatureFlag from '../../hooks/useFeatureFlag';
+// import useFeatureFlag from '../../hooks/useFeatureFlag';
 import useModal from '../../hooks/useModal';
 import { useAppSelector } from '../../redux/store';
 import { InstallationType } from '../../types/redux';
 import { GitProvider } from '../../types';
+
+import { useInstallation } from '@/hooks/useInstallation';
+import { selectConfig } from '@/redux/selectors/config.selector';
+import { selectInstallation } from '@/redux/selectors/installation.selector';
+import useFeatureFlag from '@/hooks/useFeatureFlag';
 
 const Navigation: FunctionComponent = () => {
   const [domLoaded, setDomLoaded] = useState<boolean>(false);
@@ -23,14 +28,9 @@ const Navigation: FunctionComponent = () => {
     closeModal: closeModalContent,
   } = useModal();
 
-  const { asPath } = useRouter();
-  const { gitProvider, installationStep, installType, isClusterZero, kubefirstVersion } =
-    useAppSelector(({ config, cluster, installation }) => ({
-      kubefirstVersion: config.kubefirstVersion,
-      isClusterZero: config.isClusterZero,
-      selectedCluster: cluster.selectedCluster,
-      ...installation,
-    }));
+  const asPath = usePathname();
+  const { kubefirstVersion, isClusterZero } = useAppSelector(selectConfig());
+  const { gitProvider, installationStep, installType } = useAppSelector(selectInstallation());
 
   const { isEnabled: isMultiClusterEnabled } = useFeatureFlag('multicluster-management');
 
@@ -45,21 +45,21 @@ const Navigation: FunctionComponent = () => {
       [
         {
           icon: <ScatterPlotIcon />,
-          path: '/cluster-management',
+          path: '/dashboard/cluster-management',
           title: 'Cluster Management',
           isEnabled: isMultiClusterEnabled && !isClusterZero,
         },
         {
           icon: <GridViewOutlinedIcon />,
-          path: '/services',
+          path: '/dashboard/services',
           title: 'Services',
           isEnabled: !isClusterZero,
         },
         {
           icon: <CollectionsOutlinedIcon />,
-          path: '/environments',
+          path: '/dashboard/environments',
           title: 'Environments',
-          isEnabled: true,
+          isEnabled: !isClusterZero,
         },
       ].filter(({ isEnabled }) => isEnabled),
     [isMultiClusterEnabled, isClusterZero],
@@ -71,7 +71,7 @@ const Navigation: FunctionComponent = () => {
         const linkPathname = new URL(route, window?.location?.href).pathname;
 
         // Using URL().pathname to get rid of query and hash
-        const activePathname = new URL(asPath, window?.location?.href).pathname;
+        const activePathname = new URL(asPath as string, window?.location?.href).pathname;
 
         return linkPathname === activePathname;
       }

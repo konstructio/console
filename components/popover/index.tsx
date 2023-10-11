@@ -1,4 +1,5 @@
-import { Popover as PopoverComponent, Typography } from '@mui/material';
+import PopoverComponent from '@mui/material/Popover';
+import Typography from '@mui/material/Typography';
 import React, { FunctionComponent } from 'react';
 
 export interface IPopoverProps {

@@ -1,3 +1,4 @@
+'use client';
 import styled from 'styled-components';
 
 import { LIGHT_GREY } from '../../constants/colors';

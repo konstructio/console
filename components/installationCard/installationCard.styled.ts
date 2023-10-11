@@ -1,7 +1,6 @@
-import styled, { css } from 'styled-components';
-
-import Column from '../column';
-import { PASTEL_LIGHT_BLUE } from '../../constants/colors';
+import Column from '@/components/column';
+import { PASTEL_LIGHT_BLUE } from '@/constants/colors';
+import styled, { css } from '@/app/lib/styled-components';
 
 export const Card = styled(Column)<{ isActive: boolean }>`
   background-color: ${({ theme }) => theme.colors.white};

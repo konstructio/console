@@ -1,5 +1,6 @@
 import React, { FunctionComponent, useCallback, useMemo } from 'react';
-import { Box, CircularProgress } from '@mui/material';
+import Box from '@mui/material/Box';
+import CircularProgress from '@mui/material/CircularProgress';
 
 import Typography from '../typography';
 import { formatDomain } from '../../utils/url/formatDomain';

@@ -1,5 +1,6 @@
+'use client';
 import styled from 'styled-components';
-import { InputAdornment } from '@mui/material';
+import InputAdornment from '@mui/material/InputAdornment';
 
 import { SPUN_PEARL } from '../../constants/colors';
 

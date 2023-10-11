@@ -1,5 +1,5 @@
-import { FormGroup } from '@mui/material';
 import React, { ChangeEvent } from 'react';
+import FormGroup from '@mui/material/FormGroup';
 import { Control, Controller, UseControllerProps, FieldValues } from 'react-hook-form';
 
 import Switch from '../switch';

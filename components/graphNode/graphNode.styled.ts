@@ -1,5 +1,5 @@
-import styled, { css } from 'styled-components';
-import { styled as muiStyled, typographyClasses } from '@mui/material';
+import { styled as muiStyled } from '@mui/material/styles';
+import { typographyClasses } from '@mui/material/Typography';
 import { Handle } from 'reactflow';
 import Image from 'next/image';
 
@@ -8,6 +8,8 @@ import Column from '../column';
 import Row from '../row';
 import Tag from '../tag';
 import { BLUE_REFLECTION, EXCLUSIVE_PLUM } from '../../constants/colors';
+
+import styled, { css } from '@/app/lib/styled-components';
 
 export const StatusTag = styled(Tag)`
   position: absolute;

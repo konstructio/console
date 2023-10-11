@@ -1,7 +1,9 @@
-import styled, { css } from 'styled-components';
-import { FormHelperText as FormHelperTextMui, InputAdornment } from '@mui/material';
+import InputAdornment from '@mui/material/InputAdornment';
+import FormHelperTextMui from '@mui/material/FormHelperText';
 
 import { SPUN_PEARL } from '../../constants/colors';
+
+import styled, { css } from '@/app/lib/styled-components';
 
 export const Container = styled.div<{ isDisabled?: boolean }>`
   width: 100%;

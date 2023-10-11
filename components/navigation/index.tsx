@@ -3,7 +3,7 @@ import Image from 'next/image';
 import HelpIcon from '@mui/icons-material/Help';
 import { BsSlack } from 'react-icons/bs';
 import Link from 'next/link';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 
 import Typography from '../typography';
 import { ECHO_BLUE } from '../../constants/colors';

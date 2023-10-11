@@ -1,5 +1,6 @@
+'use client';
 import styled from 'styled-components';
-import { Box } from '@mui/material';
+import Box from '@mui/material/Box';
 
 export default styled(Box)`
   display: flex;

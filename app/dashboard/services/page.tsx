@@ -1,10 +1,9 @@
+'use client';
 import React, { FunctionComponent, useMemo } from 'react';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 
-import withConfig from '../hoc/withConfig';
-import Services from '../containers/services';
-import { useAppSelector } from '../redux/store';
-export { getServerSideProps } from '../hoc/withConfig';
+import Services from '../../../containers/services';
+import { useAppSelector } from '../../../redux/store';
 
 export interface ServicesPageProps {
   isClusterZero: boolean;
@@ -26,4 +25,4 @@ const ServicesPage: FunctionComponent<ServicesPageProps> = ({ isClusterZero }) =
 
   return hasExistingCluster ? <Services /> : null;
 };
-export default withConfig(ServicesPage);
+export default ServicesPage;

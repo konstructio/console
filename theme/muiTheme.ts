@@ -1,3 +1,4 @@
+'use client';
 import { createTheme } from '@mui/material/styles';
 
 import { DANGER, PRIMARY, WHITE } from '../constants/colors';

@@ -1,9 +1,9 @@
 import NextImage from 'next/image';
-import styled, { css } from 'styled-components';
 
-import Row from '../row';
-import NextLink from '../nextLink';
-import { PASTEL_LIGHT_BLUE, ROCK_BLUE } from '../../constants/colors';
+import styled, { css } from '@/app/lib/styled-components';
+import Row from '@/components/row';
+import NextLink from '@/components/nextLink';
+import { PASTEL_LIGHT_BLUE, ROCK_BLUE } from '@/constants/colors';
 
 export const Card = styled.div`
   border: 1px solid ${PASTEL_LIGHT_BLUE};

@@ -1,4 +1,4 @@
-import styled, { css } from 'styled-components';
+import styled, { css } from '@/app/lib/styled-components';
 
 export const Button = styled.button<{ active?: boolean }>`
   display: flex;

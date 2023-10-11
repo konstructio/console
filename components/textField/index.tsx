@@ -1,6 +1,9 @@
 import React, { FunctionComponent, useMemo } from 'react';
-import { InputLabel, InputProps, InputBase, styled } from '@mui/material';
+import { styled } from '@mui/material/styles';
+import { InputProps } from '@mui/material/Input';
 import ErrorIcon from '@mui/icons-material/Error';
+import InputBase from '@mui/material/InputBase';
+import InputLabel from '@mui/material/InputLabel';
 
 import Typography from '../typography';
 

@@ -38,7 +38,6 @@ Note: You might need an AWS Managament Account
 
 1. The console chart is stored in the [Charts repository](https://github.com/kubefirst/charts)
 
-
 ### Cluster Management (Local mode)
 
 1. Add the following env variable in your `.env` file

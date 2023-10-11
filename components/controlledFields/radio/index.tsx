@@ -1,5 +1,7 @@
 import React from 'react';
-import { FormControlLabel, Radio, RadioGroup } from '@mui/material';
+import RadioGroup from '@mui/material/RadioGroup';
+import Radio from '@mui/material/Radio';
+import FormControlLabel from '@mui/material/FormControlLabel';
 import { Control, Controller, UseControllerProps, FieldValues } from 'react-hook-form';
 
 import Typography from '../../typography';

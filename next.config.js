@@ -1,8 +1,14 @@
+const { join } = require('path');
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
   output: 'standalone',
+  webpack: (config, { isServer }) => {
+    config.resolve.alias['@'] = join(__dirname);
+    return config;
+  },
   images: {
     deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
     imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
@@ -25,9 +31,6 @@ const nextConfig = {
   },
   compiler: {
     styledComponents: true,
-  },
-  experimental: {
-    fontLoaders: [{ loader: '@next/font/google', options: { display: 'auto' } }],
   },
   typescript: {
     // nextjs doees not read the tsconfig.json properly and it's triggering different errors that we can't see using `yarn check-types`

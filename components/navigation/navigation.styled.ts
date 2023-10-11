@@ -1,8 +1,7 @@
-import styled, { css } from 'styled-components';
-
-import Typography from '../../components/typography';
-import { media } from '../../utils/media';
-import { MIDNIGHT_EXPRESS } from '../../constants/colors';
+import Typography from '@/components/typography';
+import { media } from '@/utils/media';
+import { MIDNIGHT_EXPRESS } from '@/constants/colors';
+import styled, { css } from '@/app/lib/styled-components';
 
 export const Container = styled.nav`
   background-color: ${({ theme }) => theme.colors.moonlessMystery};

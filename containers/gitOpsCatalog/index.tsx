@@ -2,7 +2,8 @@ import React, { FunctionComponent, useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import NextLink from 'next/link';
 import sortBy from 'lodash/sortBy';
-import { FormControlLabel, FormGroup } from '@mui/material';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import FormGroup from '@mui/material/FormGroup';
 
 import Checkbox from '../../components/checkbox';
 import Typography from '../../components/typography';
@@ -35,10 +36,14 @@ const gitOpsCatalog: FunctionComponent = () => {
 
   const { appsQueue, selectedCluster } = useAppSelector(({ cluster }) => cluster);
 
-  const gitOpsCatalogApps = useAppSelector(({ cluster }) =>
-    cluster.gitOpsCatalogApps.filter(
-      (app) => !cluster.clusterServices.map((s) => s.name).includes(app.name),
-    ),
+  const { gitOpsCatalogApps, clusterServices } = useAppSelector(({ cluster }) => ({
+    gitOpsCatalogApps: cluster.gitOpsCatalogApps,
+    clusterServices: cluster.clusterServices,
+  }));
+
+  const filteredCatalogApps = useMemo(
+    () => gitOpsCatalogApps.filter((app) => !clusterServices.map((s) => s.name).includes(app.name)),
+    [clusterServices, gitOpsCatalogApps],
   );
 
   const dispatch = useAppDispatch();
@@ -54,14 +59,14 @@ const gitOpsCatalog: FunctionComponent = () => {
 
   const sortedAvailableCategories = useMemo(
     () =>
-      gitOpsCatalogApps &&
-      gitOpsCatalogApps.reduce<AppCategory[]>((previous, current) => {
+      filteredCatalogApps &&
+      filteredCatalogApps.reduce<AppCategory[]>((previous, current) => {
         if (current.category && !previous.includes(current.category)) {
           previous.push(current.category);
         }
         return sortBy(previous);
       }, []),
-    [gitOpsCatalogApps],
+    [filteredCatalogApps],
   );
 
   const onClickCategory = (category: AppCategory) => {
@@ -98,15 +103,15 @@ const gitOpsCatalog: FunctionComponent = () => {
     let apps: GitOpsCatalogApp[] = [];
 
     if (!selectedCategories.length) {
-      apps = gitOpsCatalogApps;
+      apps = filteredCatalogApps;
     } else {
-      apps = gitOpsCatalogApps.filter(
+      apps = filteredCatalogApps.filter(
         ({ category }) => category && selectedCategories.includes(category),
       );
     }
 
     return sortBy(apps, (app) => app.display_name);
-  }, [gitOpsCatalogApps, selectedCategories]);
+  }, [filteredCatalogApps, selectedCategories]);
 
   return (
     <Container>

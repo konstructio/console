@@ -1,7 +1,8 @@
 import React, { FunctionComponent, MouseEvent, useState } from 'react';
 import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
 import VisibilityOffOutlinedIcon from '@mui/icons-material/VisibilityOffOutlined';
-import { IconButton, InputProps } from '@mui/material';
+import IconButton from '@mui/material/IconButton';
+import { InputProps } from '@mui/material/Input';
 
 import TextField from '../textField';
 

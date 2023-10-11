@@ -1,5 +1,5 @@
 import React, { FunctionComponent } from 'react';
-import { CircularProgress } from '@mui/material';
+import CircularProgress from '@mui/material/CircularProgress';
 
 import Button from '../button';
 

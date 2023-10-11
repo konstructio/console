@@ -1,6 +1,6 @@
-import styled, { css } from 'styled-components';
-
 import { CardProps } from '.';
+
+import styled, { css } from '@/app/lib/styled-components';
 
 export const CardContainer = styled.div<CardProps>`
   border: 2px solid ${({ theme }) => theme.colors.pastelLightBlue};

@@ -1,7 +1,8 @@
+'use client';
 import React from 'react';
-import styled from 'styled-components';
 import { Meta, StoryObj } from '@storybook/react';
 import { Controller, useForm } from 'react-hook-form';
+import styled from 'styled-components';
 
 import AutoComplete from './index';
 
