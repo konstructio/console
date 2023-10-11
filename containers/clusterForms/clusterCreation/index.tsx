@@ -1,4 +1,10 @@
-import React, { ComponentPropsWithoutRef, FunctionComponent, useEffect, useMemo } from 'react';
+import React, {
+  ComponentPropsWithoutRef,
+  FunctionComponent,
+  useCallback,
+  useEffect,
+  useMemo,
+} from 'react';
 import { useFormContext } from 'react-hook-form';
 import Box from '@mui/material/Box';
 
@@ -22,6 +28,9 @@ import Modal from '../../../components/modal';
 import useModal from '../../../hooks/useModal';
 import { CreateEnvironmentMenu } from '../../../components/createEnvironmentMenu';
 import LearnMore from '../../../components/learnMore';
+import { createEnvironment } from '../../../redux/thunks/environments.thunk';
+import { noop } from '../../../utils/noop';
+import { clearEnvironmentError } from '../../../redux/slices/environments.slice';
 
 import { Container } from './clusterCreation.styled';
 import { InputContainer } from './advancedOptions/advancedOptions.styled';
@@ -33,13 +42,8 @@ const ClusterCreationForm: FunctionComponent<Omit<ComponentPropsWithoutRef<'div'
 ) => {
   const { isOpen, openModal, closeModal } = useModal(false);
 
-  const {
-    cloudRegions,
-    previouslyUsedClusterNames,
-    draftCluster,
-    environments,
-    boundEnvironments,
-  } = useAppSelector(({ api, environments }) => ({ ...api, ...environments }));
+  const { cloudRegions, previouslyUsedClusterNames, draftCluster, environments, error } =
+    useAppSelector(({ api, environments }) => ({ ...api, ...environments }));
 
   const dispatch = useAppDispatch();
 
@@ -53,10 +57,27 @@ const ClusterCreationForm: FunctionComponent<Omit<ComponentPropsWithoutRef<'div'
 
   const { type } = getValues();
 
-  const handleAddEnvironment = (environment: ClusterEnvironment) => {
-    setValue('environment', environment);
+  const handleAddEnvironment = useCallback(
+    (environment: ClusterEnvironment) => {
+      setValue('environment', environment);
+      dispatch(createEnvironment(environment))
+        .unwrap()
+        .then(() => {
+          closeModal();
+        })
+        .catch(noop);
+    },
+    [dispatch, setValue, closeModal],
+  );
+
+  const clearEnvError = useCallback(() => {
+    dispatch(clearEnvironmentError());
+  }, [dispatch]);
+
+  const handleModalClose = useCallback(() => {
+    clearEnvError();
     closeModal();
-  };
+  }, [clearEnvError, closeModal]);
 
   useEffect(() => {
     const subscription = watch((values) => {
@@ -111,12 +132,14 @@ const ClusterCreationForm: FunctionComponent<Omit<ComponentPropsWithoutRef<'div'
           padding={0}
           isOpen={isOpen}
           styleOverrides={{ width: '100%', maxWidth: '630px' }}
-          onCloseModal={closeModal}
+          onCloseModal={handleModalClose}
         >
           <CreateEnvironmentMenu
             onSubmit={handleAddEnvironment}
             onClose={closeModal}
-            previouslyCreatedEnvironments={boundEnvironments}
+            previouslyCreatedEnvironments={environments}
+            errorMessage={error}
+            onErrorClose={clearEnvError}
           />
         </Modal>
       </>

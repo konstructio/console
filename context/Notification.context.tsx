@@ -39,23 +39,25 @@ export const NotificationsProvider: FunctionComponent<PropsWithChildren> = ({ ch
   return (
     <NotificationsContext.Provider value={null}>
       {children}
-      <Snackbar
-        open={!!displayedMessage}
-        anchorOrigin={displayedMessage?.snackBarOrigin}
-        autoHideDuration={3000}
-        message={displayedMessage?.message}
-        onClose={handleClose}
-      >
-        <Alert
-          variant="filled"
-          severity={displayedMessage?.type}
-          iconMapping={{
-            success: <CheckCircleIcon fontSize="inherit" />,
-          }}
+      {displayedMessage && (
+        <Snackbar
+          open={true}
+          anchorOrigin={displayedMessage.snackBarOrigin}
+          autoHideDuration={3000}
+          message={displayedMessage.message}
+          onClose={handleClose}
         >
-          {displayedMessage?.message}
-        </Alert>
-      </Snackbar>
+          <Alert
+            variant="filled"
+            severity={displayedMessage.type}
+            iconMapping={{
+              success: <CheckCircleIcon fontSize="inherit" />,
+            }}
+          >
+            {displayedMessage.message}
+          </Alert>
+        </Snackbar>
+      )}
     </NotificationsContext.Provider>
   );
 };

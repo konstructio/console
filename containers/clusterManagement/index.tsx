@@ -30,6 +30,7 @@ import {
 import { setPresentedCluster } from '../../redux/slices/api.slice';
 import { useQueue } from '../../hooks/useQueue';
 import { setNotifiedOfBetaPhysicalClusters } from '../../redux/slices/notifications.slice';
+import { getAllEnvironments } from '../../redux/thunks/environments.thunk';
 
 import { CreateClusterFlow } from './createClusterFlow';
 import { Container, Content, Header } from './clusterManagement.styled';
@@ -161,6 +162,7 @@ const ClusterManagement: FunctionComponent = () => {
     if (managementCluster) {
       dispatch(getCloudRegions(managementCluster));
     }
+    dispatch(getAllEnvironments());
   }, [dispatch, managementCluster]);
 
   const tableRef = useRef<HTMLTableSectionElement>(null);

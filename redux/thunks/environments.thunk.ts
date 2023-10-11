@@ -11,46 +11,67 @@ import { createEnvMap } from '../../utils/createEnvMap';
 export const getAllEnvironments = createAsyncThunk<EnvMap, void>(
   'environments/getAllEnvironments',
   async () => {
-    const rawEnvironments = (
-      await axios.get<EnvironmentResponse[]>(
+    try {
+      const { data } = await axios.get<EnvironmentResponse[]>(
         `/api/proxy?${createQueryString('url', `/environment`)}`,
-      )
-    ).data;
+      );
 
-    return createEnvMap(rawEnvironments);
+      return createEnvMap(data);
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        throw error.response?.data.error;
+      } else {
+        throw error;
+      }
+    }
   },
 );
 
 export const createEnvironment = createAsyncThunk<ClusterEnvironment, ClusterEnvironment>(
   'environments/createEnvironment',
   async (environment) => {
-    const newEnv = (
-      await axios.post<EnvironmentResponse>('/api/proxy', {
+    try {
+      const { data } = await axios.post<EnvironmentResponse>('/api/proxy', {
         url: '/environment',
         body: environment,
-      })
-    ).data;
-
-    return mapEnvironmentFromRaw(newEnv);
+      });
+      return mapEnvironmentFromRaw(data);
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        throw error.response?.data.error;
+      } else {
+        throw error;
+      }
+    }
   },
 );
 
-export const deleteEnvironment = createAsyncThunk<ClusterEnvironment['id'], ClusterEnvironment>(
+export const deleteEnvironment = createAsyncThunk<ClusterEnvironment['name'], ClusterEnvironment>(
   'environments/deleteEnvironment',
   async (environment, { dispatch }) => {
-    await axios.delete(`/api/proxy?${createQueryString('url', `/environment/${environment.id}`)}`);
+    try {
+      await axios.delete(
+        `/api/proxy?${createQueryString('url', `/environment/${environment.id}`)}`,
+      );
 
-    dispatch(
-      createNotification({
-        message: `${environment.name} environment successfully deleted.`,
-        type: 'success',
-        snackBarOrigin: {
-          vertical: 'bottom',
-          horizontal: 'right',
-        },
-      }),
-    );
+      dispatch(
+        createNotification({
+          message: `${environment.name} environment successfully deleted.`,
+          type: 'success',
+          snackBarOrigin: {
+            vertical: 'bottom',
+            horizontal: 'right',
+          },
+        }),
+      );
 
-    return environment.id;
+      return environment.name;
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        throw error.response?.data.error;
+      } else {
+        throw error;
+      }
+    }
   },
 );
