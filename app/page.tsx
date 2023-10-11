@@ -10,7 +10,7 @@ export default async function MainPage() {
   const session = await getServerSession<typeof authOptions, Session>(authOptions);
   const isClusterZero = process.env.IS_CLUSTER_ZERO === 'true';
 
-  if (!session) {
+  if (!session && !isClusterZero) {
     return redirect('/auth/signin');
   }
 
