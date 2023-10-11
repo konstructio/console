@@ -12,7 +12,11 @@ import { setClusterQueue } from '../../redux/slices/queue.slice';
 import { createQueryString } from '../../utils/url/formatDomain';
 import { ClusterQueue, ClusterResponse, ClusterStatus, ClusterType } from '../../types/provision';
 import { useAppDispatch, useAppSelector } from '../../redux/store';
-import { setManagementCluster } from '../../redux/slices/api.slice';
+import {
+  setClusterMap,
+  setClusterNameCache,
+  setManagementCluster,
+} from '../../redux/slices/api.slice';
 import { setError } from '../../redux/slices/installation.slice';
 import { mapClusterFromRaw } from '../../utils/mapClustersFromRaw';
 import { setBoundEnvironments } from '../../redux/slices/environments.slice';
@@ -44,9 +48,13 @@ const QueueProvider: FunctionComponent<PropsWithChildren> = ({ children }) => {
             }),
           );
 
-          const { managementCluster, envCache } = mapClusterFromRaw(res.data);
+          const { managementCluster, clusterCache, clusterNameCache, envCache } = mapClusterFromRaw(
+            res.data,
+          );
 
           dispatch(setManagementCluster(managementCluster));
+          dispatch(setClusterMap(clusterCache));
+          dispatch(setClusterNameCache(clusterNameCache));
           dispatch(setBoundEnvironments(envCache));
 
           if (
