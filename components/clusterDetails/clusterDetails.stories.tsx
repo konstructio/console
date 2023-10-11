@@ -15,7 +15,7 @@ export const Default: StoryObj<typeof ClusterDetails> = {
   args: {
     cluster: {
       ...mockClusterConfig,
-      id: '1',
+      clusterId: '1',
       adminEmail: 'derrick@kubeshop.io',
       domainName: 'kubefirst.io',
       dnsProvider: 'civo',

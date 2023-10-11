@@ -17,7 +17,7 @@ export default meta;
 
 const clusters: Cluster[] = [
   {
-    id: '1',
+    clusterId: '1',
     clusterName: 'kuberfirst-mgmt',
     type: ClusterType.MANAGEMENT,
     cloudProvider: InstallationType.AWS,
@@ -36,7 +36,7 @@ const clusters: Cluster[] = [
     },
   },
   {
-    id: '2',
+    clusterId: '2',
     clusterName: 'kuberfirst-worker-1',
     type: ClusterType.WORKLOAD,
     cloudProvider: InstallationType.CIVO,
