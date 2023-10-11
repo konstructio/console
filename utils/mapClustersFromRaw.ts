@@ -4,11 +4,12 @@ import {
   ClusterType,
   WorkloadCluster,
 } from '../types/provision';
-import { EnvCache, InstallationType } from '../types/redux';
+import { ClusterCache, ClusterNameCache, EnvCache, InstallationType } from '../types/redux';
 
 export const mapClusterFromRaw = (cluster: ClusterResponse) => {
   const managementCluster: ManagementCluster = {
-    id: cluster.cluster_id,
+    id: cluster._id,
+    clusterId: cluster.cluster_id,
     clusterName: cluster.cluster_name,
     adminEmail: cluster.alerts_email,
     cloudProvider: cluster.cloud_provider,
@@ -60,13 +61,17 @@ export const mapClusterFromRaw = (cluster: ClusterResponse) => {
     },
   };
 
-  const { envCache, workloadClusters } = [...(cluster.workload_clusters ?? [])].reduce<{
+  const { envCache, workloadClusters, clusterCache, clusterNameCache } = [
+    ...(cluster.workload_clusters ?? []),
+  ].reduce<{
     envCache: EnvCache;
+    clusterCache: ClusterCache;
+    clusterNameCache: ClusterNameCache;
     workloadClusters: WorkloadCluster[];
   }>(
     (acc, curVal) => {
-      acc.workloadClusters.push({
-        id: curVal.cluster_id,
+      const formattedWorkloadCluster: WorkloadCluster = {
+        clusterId: curVal.cluster_id,
         clusterName: curVal.cluster_name,
         cloudRegion: curVal.cloud_region,
         cloudProvider: curVal.cloud_provider as InstallationType,
@@ -91,20 +96,29 @@ export const mapClusterFromRaw = (cluster: ClusterResponse) => {
           gitToken: curVal.git_auth.git_token,
           gitUser: curVal.git_auth.git_username,
         },
-      });
+      };
 
-      if (curVal.environment) {
+      acc.workloadClusters.push(formattedWorkloadCluster);
+
+      if (curVal.environment && curVal.environment.name) {
         acc.envCache[curVal.environment.name] = true;
       }
+
+      acc.clusterCache[curVal.cluster_id] = formattedWorkloadCluster;
+      acc.clusterNameCache[curVal.cluster_name] = true;
       return acc;
     },
-    { envCache: {}, workloadClusters: [] },
+    { clusterCache: {}, clusterNameCache: {}, envCache: {}, workloadClusters: [] },
   );
 
   managementCluster.workloadClusters = workloadClusters;
+  clusterCache[managementCluster.clusterId] = managementCluster;
+  clusterNameCache[cluster.cluster_name] = true;
 
   return {
     managementCluster,
     envCache,
+    clusterCache,
+    clusterNameCache,
   };
 };

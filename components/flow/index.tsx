@@ -27,15 +27,15 @@ interface GraphViewProps {
 
 const GraphView: FunctionComponent<GraphViewProps> = ({ onNodeClick }) => {
   const { nodes, edges } = useAppSelector(({ reactFlow }) => reactFlow);
-  const { managementCluster, presentedCluster, draftCluster } = useAppSelector(({ api }) => api);
+  const { managementCluster, clusterMap, presentedClusterId } = useAppSelector(({ api }) => api);
 
   const dispatch = useAppDispatch();
 
   const { setCenter, fitView, zoomIn, zoomOut } = useReactFlow();
 
   useEffect(() => {
-    if (presentedCluster) {
-      const selectedNode = nodes.find((node) => node.id === presentedCluster.id);
+    if (presentedClusterId) {
+      const selectedNode = nodes.find((node) => node.id === presentedClusterId);
       if (selectedNode) {
         const { position, width, height, id } = selectedNode;
 
@@ -49,15 +49,15 @@ const GraphView: FunctionComponent<GraphViewProps> = ({ onNodeClick }) => {
     } else {
       window.requestAnimationFrame(() => fitView({ duration: 500, padding: 0.2 }));
     }
-  }, [presentedCluster, nodes, setCenter, fitView, dispatch]);
+  }, [presentedClusterId, nodes, setCenter, fitView, dispatch]);
 
   useEffect(() => {
     if (managementCluster) {
-      const [nodes, edges] = generateNodesConfig(managementCluster, draftCluster);
+      const [nodes, edges] = generateNodesConfig(managementCluster, clusterMap);
       dispatch(setNodes(nodes));
       dispatch(setEdges(edges));
     }
-  }, [managementCluster, draftCluster, dispatch]);
+  }, [managementCluster, clusterMap, dispatch]);
 
   return (
     <ReactFlow

@@ -136,10 +136,10 @@ export interface ClusterResponse {
 }
 
 export interface Cluster {
-  id: string;
   adminEmail: string;
   cloudProvider?: InstallationType;
   type: ClusterType;
+  clusterId: string;
   clusterName?: string;
   cloudRegion?: string;
   creationDate?: string;

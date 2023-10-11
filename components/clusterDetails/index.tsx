@@ -4,7 +4,13 @@ import moment from 'moment';
 import Typography from '../../components/typography';
 import Row from '../../components/row';
 import Column from '../../components/column';
-import { Cluster, ClusterStatus, ClusterType, ManagementCluster } from '../../types/provision';
+import {
+  Cluster,
+  ClusterStatus,
+  ClusterType,
+  DraftCluster,
+  ManagementCluster,
+} from '../../types/provision';
 import { GitProvider } from '../../types';
 
 import {
@@ -20,7 +26,7 @@ import {
 } from './clusterDetails.styled';
 
 export interface ClusterDetailsProps extends Omit<ComponentPropsWithoutRef<'div'>, 'key'> {
-  cluster: Cluster;
+  cluster: Cluster | DraftCluster;
   host: ManagementCluster['gitHost'];
   gitOwner: ManagementCluster['gitAuth']['gitOwner'];
 }

@@ -27,7 +27,7 @@ import {
   removeDraftCluster,
   setClusterCreationStep,
 } from '../../redux/slices/api.slice';
-import { setPresentedCluster } from '../../redux/slices/api.slice';
+import { setPresentedClusterId } from '../../redux/slices/api.slice';
 import { useQueue } from '../../hooks/useQueue';
 import { setNotifiedOfBetaPhysicalClusters } from '../../redux/slices/notifications.slice';
 import { getAllEnvironments } from '../../redux/thunks/environments.thunk';
@@ -45,11 +45,11 @@ const ClusterManagement: FunctionComponent = () => {
 
   const {
     managementCluster,
-    draftCluster,
     clusterCreationStep,
-    presentedCluster,
+    presentedClusterId,
     loading,
     notifiedOfBetaPhysicalClusters,
+    clusterMap,
   } = useAppSelector(({ api, queue, notifications }) => ({
     clusterQueue: queue.clusterQueue,
     notifiedOfBetaPhysicalClusters: notifications.notifiedOfBetaPhysicalClusters,
@@ -82,15 +82,15 @@ const ClusterManagement: FunctionComponent = () => {
     } else {
       dispatch(setClusterCreationStep(ClusterCreationStep.CONFIG));
     }
-    dispatch(setPresentedCluster(undefined));
+    dispatch(setPresentedClusterId(undefined));
     closeCreateClusterFlow();
   }, [clusterCreationStep, dispatch, closeCreateClusterFlow]);
 
   const handleDeleteCluster = useCallback(async () => {
-    if (presentedCluster) {
-      await dispatch(deleteCluster(presentedCluster?.id)).unwrap();
+    if (presentedClusterId) {
+      await dispatch(deleteCluster(presentedClusterId)).unwrap();
       addClusterToQueue({
-        id: presentedCluster?.id,
+        id: presentedClusterId,
         clusterName: managementCluster?.clusterName as string,
         status: ClusterStatus.DELETING,
         clusterType: ClusterType.WORKLOAD,
@@ -101,7 +101,7 @@ const ClusterManagement: FunctionComponent = () => {
       handleMenuClose();
     }
   }, [
-    presentedCluster,
+    presentedClusterId,
     dispatch,
     handleGetClusters,
     addClusterToQueue,
@@ -110,25 +110,31 @@ const ClusterManagement: FunctionComponent = () => {
     handleMenuClose,
   ]);
 
-  const handleChange = (event: React.SyntheticEvent, newValue: number) => {
-    setActiveTab(newValue);
-    if (presentedCluster) {
-      dispatch(setPresentedCluster(undefined));
-    }
-  };
+  const handleChange = useCallback(
+    (event: React.SyntheticEvent, newValue: number) => {
+      setActiveTab(newValue);
+      if (presentedClusterId) {
+        dispatch(setPresentedClusterId(undefined));
+      }
+    },
+    [dispatch, presentedClusterId],
+  );
 
   const handleNodeClick = useCallback(
     (cluster: Cluster) => {
-      dispatch(setPresentedCluster(cluster));
+      dispatch(setPresentedClusterId(cluster.clusterId));
       dispatch(setClusterCreationStep(ClusterCreationStep.DETAILS));
       openCreateClusterFlow();
     },
     [dispatch, openCreateClusterFlow],
   );
 
-  const handleMenuButtonClick = (cluster: Cluster) => {
-    dispatch(setPresentedCluster(presentedCluster?.id === cluster.id ? undefined : cluster));
-  };
+  const handleMenuButtonClick = useCallback(
+    (clusterId: Cluster['clusterId']) => {
+      dispatch(setPresentedClusterId(presentedClusterId === clusterId ? undefined : clusterId));
+    },
+    [dispatch, presentedClusterId],
+  );
 
   const handleAddWorkloadCluster = useCallback(() => {
     if (clusterCreationStep === ClusterCreationStep.CONFIG && managementCluster) {
@@ -143,7 +149,7 @@ const ClusterManagement: FunctionComponent = () => {
         .unwrap()
         .then((response) => {
           addClusterToQueue({
-            id: response.cluster_id,
+            id: response.clusterId,
             clusterName: managementCluster?.clusterName as string,
             clusterType: ClusterType.WORKLOAD,
             status: ClusterStatus.PROVISIONING,
@@ -167,11 +173,11 @@ const ClusterManagement: FunctionComponent = () => {
 
   const tableRef = useRef<HTMLTableSectionElement>(null);
 
-  const handleClickOutside = () => {
-    if (presentedCluster && activeTab === MANAGEMENT_TABS.LIST_VIEW) {
-      dispatch(setPresentedCluster(undefined));
+  const handleClickOutside = useCallback(() => {
+    if (presentedClusterId && activeTab === MANAGEMENT_TABS.LIST_VIEW) {
+      dispatch(setPresentedClusterId(undefined));
     }
-  };
+  }, [dispatch, presentedClusterId, activeTab]);
 
   useOnClickOutside(tableRef, handleClickOutside);
 
@@ -210,11 +216,11 @@ const ClusterManagement: FunctionComponent = () => {
           {managementCluster && (
             <ClusterTable
               ref={tableRef}
+              clusters={clusterMap}
               managementCluster={managementCluster}
-              draftCluster={draftCluster}
               onDeleteCluster={openDeleteModal}
               onMenuButtonClick={handleMenuButtonClick}
-              presentedClusterId={presentedCluster?.id}
+              presentedClusterId={presentedClusterId}
             />
           )}
         </TabPanel>
@@ -243,24 +249,24 @@ const ClusterManagement: FunctionComponent = () => {
         }}
       >
         <CreateClusterFlow
-          cluster={presentedCluster}
+          cluster={clusterMap[presentedClusterId ?? '']}
           managementCluster={managementCluster}
           clusterCreationStep={clusterCreationStep}
           onMenuClose={handleMenuClose}
           onClusterDelete={openDeleteModal}
           onSubmit={handleCreateCluster}
-          defaultValues={draftCluster}
+          defaultValues={clusterMap[presentedClusterId ?? '']}
           loading={loading}
           notifiedOfBetaPhysicalClusters={notifiedOfBetaPhysicalClusters}
           onNotificationClose={handleNotificationClose}
         />
       </Drawer>
-      {presentedCluster && (
+      {presentedClusterId && (
         <DeleteCluster
           isOpen={isDeleteModalOpen}
           onClose={closeDeleteModal}
           onDelete={handleDeleteCluster}
-          cluster={presentedCluster}
+          cluster={clusterMap[presentedClusterId]}
         />
       )}
     </Container>

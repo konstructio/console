@@ -23,10 +23,9 @@ import {
   ClusterStatus,
   ClusterType,
   Cluster,
-  WorkloadCluster,
   DraftCluster,
 } from '../../types/provision';
-import { InstallationType } from '../../types/redux';
+import { ClusterCache, InstallationType } from '../../types/redux';
 import Typography from '../../components/typography';
 import { noop } from '../../utils/noop';
 import Tag from '../tag';
@@ -63,23 +62,25 @@ const FORMATTED_CLUSTER_TYPE: Record<ClusterType, { nameLabel: string; typeLabel
   [ClusterType.WORKLOAD_V_CLUSTER]: { nameLabel: 'worker', typeLabel: 'Virtual' },
 };
 
-type ClusterRowProps = Cluster & {
+type ClusterRowProps = {
+  cluster: Cluster | DraftCluster;
   expanded?: boolean;
   onExpanseClick?: () => void;
   onDeleteCluster: () => void;
   presentedClusterId?: string;
-  onMenuButtonClick?: (cluster: Cluster) => void;
+  onMenuButtonClick?: (clusterId: Cluster['clusterId']) => void;
 };
 
 const ClusterRow: FunctionComponent<ClusterRowProps> = ({
+  cluster,
   expanded,
   onExpanseClick = noop,
   onDeleteCluster,
   onMenuButtonClick = noop,
-  ...rest
+  presentedClusterId,
 }) => {
   const {
-    id,
+    clusterId,
     clusterName,
     type,
     cloudProvider,
@@ -89,14 +90,13 @@ const ClusterRow: FunctionComponent<ClusterRowProps> = ({
     status,
     nodeCount,
     environment,
-    presentedClusterId,
-  } = rest;
+  } = cluster;
 
   const cloudLogoSrc = CLOUD_LOGO_OPTIONS[cloudProvider ?? InstallationType.LOCAL];
   const { iconLabel, iconType, bgColor } = CLUSTER_TAG_CONFIG[status ?? ClusterStatus.PROVISIONED];
   const { nameLabel, typeLabel } = FORMATTED_CLUSTER_TYPE[type ?? ClusterType.MANAGEMENT];
 
-  const selected = id === presentedClusterId;
+  const selected = clusterId === presentedClusterId;
 
   return (
     <>
@@ -126,7 +126,7 @@ const ClusterRow: FunctionComponent<ClusterRowProps> = ({
         </StyledTableCell>
         <StyledTableCell selected={selected}>
           <StyledCellText variant="body2">
-            {environment && <Tag text={environment.name} bgColor={environment.color} />}
+            {environment && <Tag text={environment.name ?? ''} bgColor={environment.color} />}
           </StyledCellText>
         </StyledTableCell>
         <StyledTableCell align="left" selected={selected}>
@@ -154,7 +154,7 @@ const ClusterRow: FunctionComponent<ClusterRowProps> = ({
         <StyledTableCell style={{ position: 'relative' }} selected={selected}>
           <IconButton
             aria-label="more info"
-            onClick={() => onMenuButtonClick(rest)}
+            onClick={() => onMenuButtonClick(clusterId)}
             disabled={status === ClusterStatus.DELETED}
           >
             <MoreHorizIcon />
@@ -253,16 +253,16 @@ const ClusterTableHead: FunctionComponent<ClusterTableHeadProps> = ({ orderBy, o
 
 interface ClusterTableProps extends Omit<ComponentPropsWithRef<'tbody'>, 'key'> {
   managementCluster: ManagementCluster;
-  draftCluster?: DraftCluster;
+  clusters: ClusterCache;
   onDeleteCluster: () => void;
-  onMenuButtonClick?: (cluster: Cluster) => void;
+  onMenuButtonClick?: (clusterId: Cluster['clusterId']) => void;
   presentedClusterId?: string;
   customRef?: React.Ref<HTMLTableSectionElement>;
 }
 
 export const ClusterTable: FunctionComponent<ClusterTableProps> = ({
   managementCluster,
-  draftCluster,
+  clusters,
   onDeleteCluster,
   onMenuButtonClick,
   presentedClusterId,
@@ -273,8 +273,6 @@ export const ClusterTable: FunctionComponent<ClusterTableProps> = ({
   const [orderBy, setOrderBy] = useState<NestedKeyOfCluster>('clusterName');
   const [order, setOrder] = useState<Order>('asc');
 
-  const { workloadClusters } = managementCluster;
-
   const handleRequestSort = (property: NestedKeyOfCluster) => {
     const isAsc = orderBy === property && order === 'asc';
     setOrder(isAsc ? 'desc' : 'asc');
@@ -282,19 +280,17 @@ export const ClusterTable: FunctionComponent<ClusterTableProps> = ({
   };
 
   const filteredWorkloadClusters = useMemo(() => {
-    const clustersCopy = [...workloadClusters];
-    if (draftCluster) {
-      clustersCopy.push(draftCluster as WorkloadCluster);
-    }
-
-    return clustersCopy
-      .filter((cluster) => cluster.status !== ClusterStatus.DELETED)
+    return Object.values(clusters)
+      .filter(
+        (cluster) =>
+          cluster.status !== ClusterStatus.DELETED && cluster.type !== ClusterType.MANAGEMENT,
+      )
       .sort((a, b) =>
         order === 'asc'
           ? -descendingComparator(a, b, orderBy)
           : descendingComparator(a, b, orderBy),
       );
-  }, [workloadClusters, draftCluster, order, orderBy]);
+  }, [clusters, order, orderBy]);
 
   return (
     <StyledTableContainer {...rest}>
@@ -302,7 +298,7 @@ export const ClusterTable: FunctionComponent<ClusterTableProps> = ({
         <ClusterTableHead onSort={handleRequestSort} order={order} orderBy={orderBy} />
         <StyledTableBody ref={customRef}>
           <ClusterRow
-            {...managementCluster}
+            cluster={managementCluster}
             onDeleteCluster={onDeleteCluster}
             onMenuButtonClick={onMenuButtonClick}
             expanded={expanded}
@@ -314,7 +310,7 @@ export const ClusterTable: FunctionComponent<ClusterTableProps> = ({
             filteredWorkloadClusters.map((cluster) => (
               <ClusterRow
                 key={cluster.clusterName}
-                {...cluster}
+                cluster={cluster}
                 onDeleteCluster={onDeleteCluster}
                 onMenuButtonClick={onMenuButtonClick}
                 presentedClusterId={presentedClusterId}
