@@ -48,7 +48,7 @@ spec:
             - name: NEXTAUTH_SECRET
               value: {{ $clusterId }}
             - name: NEXTAUTH_URL
-              value: https://console.{{ .Values.domain }}
+              value: https://kubefirst.{{ .Values.domain }}
               {{ .Release.Name }}
             - name: K1_ACCESS_TOKEN
               valueFrom:
