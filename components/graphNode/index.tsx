@@ -8,7 +8,7 @@ import cluster from '../../assets/cluster.svg';
 import clusterAvailable from '../../assets/clusterAvailable.svg';
 import { BUBBLE_GUM_BABY_GIRL } from '../../constants/colors';
 import { CLUSTER_TAG_CONFIG } from '../../constants';
-import { Cluster, ClusterStatus, ClusterType } from '../../types/provision';
+import { Cluster, ClusterStatus, ClusterType, DraftCluster } from '../../types/provision';
 import Typography from '../typography';
 
 import {
@@ -47,24 +47,32 @@ const GRAPH_NODE_CONFIG: Record<
   },
 };
 
-export type CustomGraphNode = Node<Partial<Cluster>>;
+export type CustomGraphNode = Node<Cluster | DraftCluster>;
 
 export const GraphNode: FunctionComponent<NodeProps<Cluster>> = ({
   data,
   isConnectable,
   selected,
 }) => {
-  const { id, status, type, clusterName, cloudProvider, cloudRegion, nodeCount, environment } =
-    data ?? {};
+  const {
+    clusterId,
+    status,
+    type,
+    clusterName,
+    cloudProvider,
+    cloudRegion,
+    nodeCount,
+    environment,
+  } = data ?? {};
 
   const { iconLabel, iconType, bgColor } = CLUSTER_TAG_CONFIG[status ?? ClusterStatus.PROVISIONED];
   const { handle, position, iconSrc } = GRAPH_NODE_CONFIG[type ?? ClusterType.WORKLOAD];
 
-  const draftNode = useMemo(() => id === 'draft', [id]);
+  const draftNode = useMemo(() => clusterId === 'draft', [clusterId]);
   const managementCluster = useMemo(() => type === ClusterType.MANAGEMENT, [type]);
 
   const imageSrc = useMemo(() => {
-    if (status === ClusterStatus.PROVISIONED && id !== 'draft') {
+    if (status === ClusterStatus.PROVISIONED && clusterId !== 'draft') {
       if (type === ClusterType.WORKLOAD) {
         return clusterAvailable;
       } else if (type === ClusterType.WORKLOAD_V_CLUSTER) {
@@ -72,7 +80,7 @@ export const GraphNode: FunctionComponent<NodeProps<Cluster>> = ({
       }
     }
     return iconSrc;
-  }, [iconSrc, status, type, id]);
+  }, [iconSrc, status, type, clusterId]);
 
   return (
     <Container selected={selected} managementCluster={managementCluster}>

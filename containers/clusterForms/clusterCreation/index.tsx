@@ -21,7 +21,7 @@ import {
 import { EXCLUSIVE_PLUM } from '../../../constants/colors';
 import ControlledNumberInput from '../../../components/controlledFields/numberInput';
 import ControlledRadioGroup from '../../../components/controlledFields/radio';
-import { LOWER_KEBAB_CASE_REGEX } from '../../../constants';
+import { LOWER_KEBAB_CASE_REGEX, MIN_NODE_COUNT } from '../../../constants';
 import { updateDraftCluster } from '../../../redux/slices/api.slice';
 import ControlledEnvironmentSelect from '../../../components/controlledFields/environmentSelect';
 import Modal from '../../../components/modal';
@@ -35,15 +35,16 @@ import { clearEnvironmentError } from '../../../redux/slices/environments.slice'
 import { Container } from './clusterCreation.styled';
 import { InputContainer } from './advancedOptions/advancedOptions.styled';
 
-const MIN_NODE_COUNT = 1;
-
 const ClusterCreationForm: FunctionComponent<Omit<ComponentPropsWithoutRef<'div'>, 'key'>> = (
   props,
 ) => {
   const { isOpen, openModal, closeModal } = useModal(false);
 
-  const { cloudRegions, previouslyUsedClusterNames, draftCluster, environments, error } =
-    useAppSelector(({ api, environments }) => ({ ...api, ...environments }));
+  const { cloudRegions, clusterNameCache, clusterMap, environments, error } = useAppSelector(
+    ({ api, environments }) => ({ ...api, ...environments }),
+  );
+
+  const draftCluster = useMemo(() => clusterMap['draft'], [clusterMap]);
 
   const dispatch = useAppDispatch();
 
@@ -157,7 +158,7 @@ const ClusterCreationForm: FunctionComponent<Omit<ComponentPropsWithoutRef<'div'
           },
           validate: {
             previouslyUsedClusterNames: (value) =>
-              !previouslyUsedClusterNames.includes(value as string) ||
+              !clusterNameCache[value as string] ||
               'Please use a unique name that has not been previously provisioned',
           },
         }}

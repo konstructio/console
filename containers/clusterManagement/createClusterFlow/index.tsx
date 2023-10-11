@@ -12,6 +12,7 @@ import {
   Cluster,
   ClusterCreationStep,
   ClusterStatus,
+  DraftCluster,
   ManagementCluster,
   NewWorkloadClusterConfig,
 } from '../../../types/provision';
@@ -31,7 +32,7 @@ const actionButtonText: Record<ClusterCreationStep, string> = {
 };
 
 interface CreateClusterFlowProps {
-  cluster?: Cluster;
+  cluster?: Cluster | DraftCluster;
   managementCluster?: ManagementCluster;
   onClusterDelete: () => void;
   onMenuClose: () => void;
@@ -60,20 +61,23 @@ export const CreateClusterFlow: FunctionComponent<CreateClusterFlowProps> = ({
     mode: 'onChange',
   });
 
+  const {
+    formState: { isValid },
+  } = methods;
+
   const handleClick = useCallback(() => {
     if (clusterCreationStep === ClusterCreationStep.DETAILS) {
       onClusterDelete();
     }
   }, [onClusterDelete, clusterCreationStep]);
 
-  const showingClusterDetails = clusterCreationStep === ClusterCreationStep.DETAILS;
-
-  const {
-    formState: { isValid },
-  } = methods;
-
   const submitButtonDisabled =
     !isValid || loading || cluster?.status === ClusterStatus.PROVISIONING;
+
+  const showingClusterDetails = clusterCreationStep === ClusterCreationStep.DETAILS;
+
+  const showHeadsUpNotification =
+    !notifiedOfBetaPhysicalClusters && clusterCreationStep === ClusterCreationStep.CONFIG;
 
   return (
     <FormProvider {...methods}>
@@ -87,7 +91,7 @@ export const CreateClusterFlow: FunctionComponent<CreateClusterFlowProps> = ({
           </CloseButton>
         </MenuHeader>
         <FormContent>
-          {!notifiedOfBetaPhysicalClusters && <HeadsUpNotification onClose={onNotificationClose} />}
+          {showHeadsUpNotification && <HeadsUpNotification onClose={onNotificationClose} />}
           {clusterCreationStep === ClusterCreationStep.CONFIG && (
             <ClusterCreationForm style={{ flex: 1, margin: '32px 0' }} />
           )}

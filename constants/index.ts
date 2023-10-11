@@ -50,3 +50,5 @@ export const CLUSTER_TAG_CONFIG: Record<
   [ClusterStatus.DELETED]: { iconLabel: 'Deleted', iconType: 'trash', bgColor: 'pink' },
   [ClusterStatus.ERROR]: { iconLabel: 'Unavailable', iconType: 'warning', bgColor: 'light-orange' },
 };
+
+export const MIN_NODE_COUNT = 1;
