@@ -3,23 +3,33 @@ import React from 'next';
 import { signIn } from 'next-auth/react';
 import Image from 'next/image';
 import { useSearchParams } from 'next/navigation';
+import { useMemo } from 'react';
 
 import { Background, Container, ExternalLink, Form, Header, Panel, Title } from './signin.styled';
 
+import Ray from '@/assets/ray.svg';
+import TitleDark from '@/assets/titleDark.svg';
+import Vault from '@/assets/vault.svg';
 import Button from '@/components/button';
 import Typography from '@/components/typography';
 import { VOLCANIC_SAND } from '@/constants/colors';
 
 export default function SignIn() {
   const searchParams = useSearchParams();
-  const callbackUrl = searchParams?.get('callbackUrl');
+  const callbackUrlParam = searchParams?.get('callbackUrl');
+
+  const callbackUrl = useMemo(
+    () =>
+      callbackUrlParam && callbackUrlParam.includes('error') ? location.origin : callbackUrlParam,
+    [callbackUrlParam],
+  );
 
   return (
     <Container>
       <Background>
         <Header>
           <Title variant="h3">Get started with your instant Kubernetes Platforms!</Title>
-          <Image alt="k1-ray-image" src="/static/ray.svg" height={280} width={320} />
+          <Image alt="k1-ray-image" src={Ray} height={280} width={320} />
         </Header>
         <Typography color="white" variant="labelLarge" sx={{ width: '445px', textAlign: 'center' }}>
           By using the Kubefirst platform, you agree to our{' '}
@@ -38,7 +48,7 @@ export default function SignIn() {
       </Background>
       <Panel>
         <Form component="form">
-          <Image alt="k1-image" src={'/static/titleDark.svg'} height={40} width={160} id="ray" />
+          <Image alt="k1-image" src={TitleDark} height={40} width={160} id="ray" />
           <Typography variant="subtitle1" color={VOLCANIC_SAND} sx={{ mt: 10, mb: 4 }}>
             Welcome
           </Typography>
@@ -56,7 +66,7 @@ export default function SignIn() {
               });
             }}
           >
-            <Image src="/static/vault.svg" alt="vault-icon" width={20} height={20} />
+            <Image src={Vault} alt="vault-icon" width={20} height={20} />
             <Typography color={VOLCANIC_SAND} sx={{ ml: 1 }}>
               Log in with Vault
             </Typography>

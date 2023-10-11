@@ -15,7 +15,7 @@ export const metadata = {
     initialScale: 1.0,
   },
   icons: {
-    shortcut: '/static/ray.svg',
+    shortcut: 'https://assets.kubefirst.com/console/ray.svg',
   },
 };
 

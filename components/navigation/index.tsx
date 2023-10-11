@@ -20,6 +20,11 @@ import {
   DocsCard,
 } from './navigation.styled';
 
+import Ray from '@/assets/ray.svg';
+import TitleLogo from '@/assets/titleDark.svg';
+import Learn from '@/assets/learn.png';
+import Controller from '@/assets/controller.png';
+
 const FOOTER_ITEMS = [
   {
     icon: <HelpIcon />,
@@ -62,9 +67,9 @@ const Navigation: FunctionComponent<NavigationProps> = ({
     <Container>
       <div>
         <KubefirstTitle onClick={() => push('/')}>
-          <Image alt="k1-image" src={'/static/ray.svg'} height={40} width={48} id="ray" />
+          <Image alt="k1-image" src={Ray} height={40} width={48} id="ray" />
           {/* Only visible above md breakpoint 👇 */}
-          <Image alt="k1-image" src={'/static/title.svg'} height={40} width={160} id="title" />
+          <Image alt="k1-image" src={TitleLogo} height={40} width={160} id="title" />
           {kubefirstVersion && (
             <KubefirstVersion variant="labelSmall" color={ECHO_BLUE}>
               {`${kubefirstVersion}`}
@@ -89,7 +94,7 @@ const Navigation: FunctionComponent<NavigationProps> = ({
         {isProvisionStep && (
           <>
             <DocsCard onClick={handleOpenContent}>
-              <Image alt="controller-img" src="/static/learn.png" height={80} width={80} />
+              <Image alt="controller-img" src={Learn} height={80} width={80} />
               <Typography variant="subtitle2" color="secondary">
                 Got time? Sit back & learn...
               </Typography>
@@ -98,7 +103,7 @@ const Navigation: FunctionComponent<NavigationProps> = ({
               <Typography variant="subtitle2" color="secondary">
                 Bored? Play flappy K-ray and win stuff!
               </Typography>
-              <Image alt="controller-img" src="/static/controller.png" height={80} width={80} />
+              <Image alt="controller-img" src={Controller} height={80} width={80} />
             </FlappyCard>
           </>
         )}

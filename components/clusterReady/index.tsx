@@ -8,6 +8,8 @@ import Password from '../password';
 
 import { Container, Link, PasswordContainer, Title } from './clusterReady.styled';
 
+import Box from '@/assets/box.svg';
+
 export interface ClusterRunningMessageProps {
   clusterName?: string;
   domainName?: string;
@@ -31,7 +33,7 @@ const ClusterReady: FunctionComponent<ClusterRunningMessageProps> = ({
 
   return (
     <Container>
-      <Image alt="box" src="/static/box.svg" width={170} height={160} />
+      <Image alt="box" src={Box} width={170} height={160} />
       <Title>
         <Typography variant="body1">
           Cluster <strong>{clusterName || '<cluster identifier>'}</strong> is now up and running.
