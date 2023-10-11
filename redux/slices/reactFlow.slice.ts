@@ -12,7 +12,7 @@ import {
 
 import { CustomGraphNode } from '../../components/graphNode';
 
-import { setPresentedCluster } from './api.slice';
+import { setPresentedClusterId } from './api.slice';
 
 export interface ReactFlowState {
   nodes: CustomGraphNode[];
@@ -60,7 +60,7 @@ const reactFlowSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    builder.addCase(setPresentedCluster, (state, { payload }) => {
+    builder.addCase(setPresentedClusterId, (state, { payload }) => {
       if (!payload) {
         state.nodes = state.nodes.map((node) => ({ ...node, selected: false }));
       }

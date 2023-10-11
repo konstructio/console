@@ -19,7 +19,8 @@ import {
   Cluster,
   DraftCluster,
 } from '../../types/provision';
-import { getPreviouslyUsedClusterNames } from '../../utils/getPreviouslyUsedClusterNames';
+import { ClusterCache, ClusterNameCache } from '../../types/redux';
+import { MIN_NODE_COUNT } from '../../constants';
 
 export interface ApiState {
   loading: boolean;
@@ -28,15 +29,15 @@ export interface ApiState {
   isError: boolean;
   lastErrorCondition?: string;
   managementCluster?: ManagementCluster;
-  draftCluster?: DraftCluster;
-  presentedCluster?: Cluster;
+  presentedClusterId?: Cluster['clusterId'];
   completedSteps: Array<{ label: string; order: number }>;
   cloudDomains: Array<string>;
   cloudRegions: Array<string>;
   isAuthenticationValid?: boolean;
   clusterCreationStep: ClusterCreationStep;
   clusterConfig?: NewWorkloadClusterConfig;
-  previouslyUsedClusterNames: string[];
+  clusterMap: ClusterCache;
+  clusterNameCache: ClusterNameCache;
 }
 
 export const initialState: ApiState = {
@@ -45,27 +46,34 @@ export const initialState: ApiState = {
   lastErrorCondition: undefined,
   status: undefined,
   loading: false,
-  presentedCluster: undefined,
+  presentedClusterId: undefined,
   completedSteps: [],
   cloudDomains: [],
   cloudRegions: [],
   isAuthenticationValid: undefined,
   clusterCreationStep: ClusterCreationStep.CONFIG,
-  previouslyUsedClusterNames: [],
+  clusterMap: {},
+  clusterNameCache: {},
 };
 
 const apiSlice = createSlice({
   name: 'api',
   initialState,
   reducers: {
-    setPresentedCluster: (state, { payload }: PayloadAction<ApiState['presentedCluster']>) => {
-      state.presentedCluster = payload;
+    setPresentedClusterId: (state, { payload }: PayloadAction<ApiState['presentedClusterId']>) => {
+      state.presentedClusterId = payload;
     },
     setManagementCluster: (state, { payload }: PayloadAction<ApiState['managementCluster']>) => {
       state.managementCluster = payload;
       state.lastErrorCondition = payload?.lastErrorCondition;
       state.isError = payload?.status === ClusterStatus.ERROR;
       state.isProvisioned = payload?.status === ClusterStatus.PROVISIONED;
+    },
+    setClusterMap: (state, { payload }: PayloadAction<ClusterCache>) => {
+      state.clusterMap = payload;
+    },
+    setClusterNameCache: (state, { payload }: PayloadAction<ClusterNameCache>) => {
+      state.clusterNameCache = payload;
     },
     setCompletedSteps: (state, action) => {
       state.completedSteps = action.payload;
@@ -105,9 +113,10 @@ const apiSlice = createSlice({
         } = state.managementCluster;
 
         const draftCluster: WorkloadCluster = {
-          id: 'draft',
+          clusterId: 'draft',
           clusterName: '',
           type: ClusterType.WORKLOAD_V_CLUSTER,
+          nodeCount: MIN_NODE_COUNT,
           cloudProvider,
           cloudRegion,
           gitProvider,
@@ -117,24 +126,21 @@ const apiSlice = createSlice({
           dnsProvider,
         };
 
-        state.draftCluster = draftCluster;
-        state.presentedCluster = draftCluster;
+        state.clusterMap[draftCluster.clusterId] = draftCluster;
+        state.presentedClusterId = draftCluster.clusterId;
       }
     },
     removeDraftCluster: (state) => {
-      state.draftCluster = undefined;
+      delete state.clusterMap['draft'];
     },
     updateDraftCluster: (state, { payload }: PayloadAction<DraftCluster>) => {
-      state.draftCluster = payload;
-    },
-    addWorkloadCluster: (state, { payload }: PayloadAction<WorkloadCluster>) => {
-      if (state.managementCluster) {
-        state.managementCluster.workloadClusters.push(payload);
-        state.presentedCluster = payload;
+      const currentDraftCluster = state.clusterMap['draft'];
+      if (currentDraftCluster) {
+        state.clusterMap['draft'] = {
+          ...currentDraftCluster,
+          ...payload,
+        };
       }
-    },
-    addToPreviouslyUsedClusterNames: (state, { payload }: PayloadAction<string>) => {
-      state.previouslyUsedClusterNames.push(payload);
     },
   },
   extraReducers: (builder) => {
@@ -158,45 +164,41 @@ const apiSlice = createSlice({
         state.loading = false;
         state.isError = true;
       })
-      .addCase(createWorkloadCluster.fulfilled, (state) => {
+      .addCase(createWorkloadCluster.fulfilled, (state, { payload }) => {
         state.loading = false;
+        delete state.clusterMap['draft'];
+        state.clusterMap[payload.clusterId] = payload;
+        state.presentedClusterId = payload.clusterId;
       })
       .addCase(deleteCluster.pending, (state) => {
-        if (state.managementCluster && state.presentedCluster) {
-          const deletingCluster = state.managementCluster.workloadClusters.find(
-            (cluster) => cluster.id === state.presentedCluster?.id,
-          );
-          if (deletingCluster) {
-            deletingCluster.status = ClusterStatus.DELETING;
-          }
+        if (state.presentedClusterId) {
+          state.clusterMap[state.presentedClusterId].status = ClusterStatus.DELETING;
         }
       })
-      .addCase(getCluster.fulfilled, (state, { payload }: PayloadAction<ManagementCluster>) => {
-        state.loading = false;
-        state.status = payload.status;
-        state.managementCluster = payload;
+      .addCase(
+        getCluster.fulfilled,
+        (state, { payload: { managementCluster, clusterCache, clusterNameCache } }) => {
+          state.loading = false;
+          state.status = managementCluster.status;
+          state.managementCluster = managementCluster;
+          state.clusterMap = clusterCache;
+          state.clusterNameCache = clusterNameCache;
 
-        state.previouslyUsedClusterNames = getPreviouslyUsedClusterNames(payload);
-        state.lastErrorCondition = payload.lastErrorCondition;
-        state.isError = payload.status === ClusterStatus.ERROR;
-        state.isProvisioned = payload.status === ClusterStatus.PROVISIONED;
-      })
-      .addCase(getClusters.fulfilled, (state, { payload }) => {
-        state.loading = false;
-        state.isError = false;
-        state.managementCluster = payload;
-
-        state.previouslyUsedClusterNames = getPreviouslyUsedClusterNames(payload);
-
-        if (state.presentedCluster) {
-          const clusterUpdate = payload.workloadClusters.find(
-            (cluster) => cluster.id === state.presentedCluster?.id,
-          );
-          if (clusterUpdate) {
-            state.presentedCluster = clusterUpdate;
-          }
-        }
-      })
+          state.lastErrorCondition = managementCluster.lastErrorCondition;
+          state.isError = managementCluster.status === ClusterStatus.ERROR;
+          state.isProvisioned = managementCluster.status === ClusterStatus.PROVISIONED;
+        },
+      )
+      .addCase(
+        getClusters.fulfilled,
+        (state, { payload: { managementCluster, clusterCache, clusterNameCache } }) => {
+          state.loading = false;
+          state.isError = false;
+          state.managementCluster = managementCluster;
+          state.clusterMap = clusterCache;
+          state.clusterNameCache = clusterNameCache;
+        },
+      )
       .addCase(getClusters.rejected, (state) => {
         state.loading = false;
         state.isError = true;
@@ -230,10 +232,10 @@ export const {
   createDraftCluster,
   removeDraftCluster,
   updateDraftCluster,
-  setPresentedCluster,
-  addToPreviouslyUsedClusterNames,
+  setPresentedClusterId,
   setManagementCluster,
-  addWorkloadCluster,
+  setClusterMap,
+  setClusterNameCache,
 } = apiSlice.actions;
 
 export const apiReducer = apiSlice.reducer;

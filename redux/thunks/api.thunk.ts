@@ -13,14 +13,10 @@ import {
   Cluster,
   ClusterEnvironment,
 } from '../../types/provision';
+import { ClusterCache, ClusterNameCache } from '../../types/redux';
 import { InstallValues, InstallationType } from '../../types/redux';
 import { TelemetryClickEvent } from '../../types/telemetry';
 import { mapClusterFromRaw } from '../../utils/mapClustersFromRaw';
-import {
-  addToPreviouslyUsedClusterNames,
-  addWorkloadCluster,
-  removeDraftCluster,
-} from '../slices/api.slice';
 import { setBoundEnvironments } from '../../redux/slices/environments.slice';
 
 export const createCluster = createAsyncThunk<
@@ -87,14 +83,16 @@ export const createCluster = createAsyncThunk<
 });
 
 export const createWorkloadCluster = createAsyncThunk<
-  { cluster_id: string },
+  WorkloadCluster,
   void,
   {
     dispatch: AppDispatch;
     state: RootState;
   }
->('api/cluster/createWorkloadCluster', async (_, { dispatch, getState }) => {
-  const { managementCluster, draftCluster } = getState().api;
+>('api/cluster/createWorkloadCluster', async (_, { getState }) => {
+  const { managementCluster, clusterMap } = getState().api;
+
+  const draftCluster = clusterMap['draft'];
 
   if (!managementCluster) {
     throw new Error('missing managament cluster');
@@ -130,21 +128,20 @@ export const createWorkloadCluster = createAsyncThunk<
 
   const updatedCluster: WorkloadCluster = {
     ...draftCluster,
-    id: res.data.cluster_id,
+    clusterId: res.data.cluster_id,
     status: ClusterStatus.PROVISIONING,
     environment: draftCluster.environment as ClusterEnvironment,
   };
 
-  dispatch(removeDraftCluster());
-  dispatch(addWorkloadCluster(updatedCluster));
-  // cast as string ( will be present as clusterName is a required validated field before reaching this call)
-  dispatch(addToPreviouslyUsedClusterNames(updatedCluster.clusterName as string));
-
-  return res.data;
+  return updatedCluster;
 });
 
 export const getCluster = createAsyncThunk<
-  ManagementCluster,
+  {
+    managementCluster: ManagementCluster;
+    clusterCache: ClusterCache;
+    clusterNameCache: ClusterNameCache;
+  },
   ClusterRequestProps,
   {
     dispatch: AppDispatch;
@@ -158,14 +155,20 @@ export const getCluster = createAsyncThunk<
   if ('error' in res) {
     throw res.error;
   }
-  const { managementCluster, envCache } = mapClusterFromRaw(res.data);
+  const { managementCluster, envCache, clusterCache, clusterNameCache } = mapClusterFromRaw(
+    res.data,
+  );
   dispatch(setBoundEnvironments(envCache));
 
-  return managementCluster;
+  return { managementCluster, clusterCache, clusterNameCache };
 });
 
 export const getClusters = createAsyncThunk<
-  ManagementCluster,
+  {
+    managementCluster: ManagementCluster;
+    clusterCache: ClusterCache;
+    clusterNameCache: ClusterNameCache;
+  },
   void,
   {
     dispatch: AppDispatch;
@@ -185,14 +188,16 @@ export const getClusters = createAsyncThunk<
   }
 
   // only process single expected management cluster
-  const { managementCluster, envCache } = mapClusterFromRaw(res.data[0]);
+  const { managementCluster, envCache, clusterCache, clusterNameCache } = mapClusterFromRaw(
+    res.data[0],
+  );
   dispatch(setBoundEnvironments(envCache));
 
-  return managementCluster;
+  return { managementCluster, clusterCache, clusterNameCache };
 });
 
 export const deleteCluster = createAsyncThunk<
-  WorkloadCluster,
+  Cluster['clusterId'],
   string,
   {
     dispatch: AppDispatch;
@@ -202,7 +207,8 @@ export const deleteCluster = createAsyncThunk<
   const {
     api: { managementCluster },
   } = getState();
-  const res = await axios.delete(
+
+  const res = await axios.delete<{ cluster_id: string }>(
     `/api/proxy?${createQueryString(
       'url',
       `/cluster/${managementCluster?.id || 'kubefirst'}/${workloadClusterId}`,
@@ -212,7 +218,8 @@ export const deleteCluster = createAsyncThunk<
   if ('error' in res) {
     throw res.error;
   }
-  return res.data;
+
+  return res.data.cluster_id;
 });
 
 export const getCloudRegions = createAsyncThunk<
