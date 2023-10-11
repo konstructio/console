@@ -20,10 +20,8 @@ const nestJSOAuth: OAuthConfig<User> = {
       scope: 'openid email profile user groups id',
     },
   },
-  token: `
-  https://vault.${process.env.DOMAIN}.com/v1/identity/oidc/provider/kubefirst/token`,
-  issuer: `
-  https://vault.${process.env.DOMAIN}.com/v1/identity/oidc/provider/kubefirst`,
+  token: `https://vault.${process.env.DOMAIN}.com/v1/identity/oidc/provider/kubefirst/token`,
+  issuer: `https://vault.${process.env.DOMAIN}.com/v1/identity/oidc/provider/kubefirst`,
   idToken: true,
   async profile(profile: User): Promise<User> {
     return { ...profile, id: profile.email };
