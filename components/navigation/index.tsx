@@ -21,7 +21,7 @@ import {
 } from './navigation.styled';
 
 import Ray from '@/assets/ray.svg';
-import TitleLogo from '@/assets/titleDark.svg';
+import TitleLogo from '@/assets/title.svg';
 import Learn from '@/assets/learn.png';
 import Controller from '@/assets/controller.png';
 

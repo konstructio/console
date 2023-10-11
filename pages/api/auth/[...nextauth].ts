@@ -13,15 +13,15 @@ const nestJSOAuth: OAuthConfig<User> = {
   name: 'vault',
   type: 'oauth',
   version: '2.0',
-  jwks_endpoint: `https://vault.${process.env.DOMAIN}.com/v1/identity/oidc/provider/kubefirst/.well-known/keys`,
+  jwks_endpoint: `https://vault.${process.env.DOMAIN}/v1/identity/oidc/provider/kubefirst/.well-known/keys`,
   authorization: {
-    url: `https://vault.${process.env.DOMAIN}.com/ui/vault/identity/oidc/provider/kubefirst/authorize`,
+    url: `https://vault.${process.env.DOMAIN}/ui/vault/identity/oidc/provider/kubefirst/authorize`,
     params: {
       scope: 'openid email profile user groups id',
     },
   },
-  token: `https://vault.${process.env.DOMAIN}.com/v1/identity/oidc/provider/kubefirst/token`,
-  issuer: `https://vault.${process.env.DOMAIN}.com/v1/identity/oidc/provider/kubefirst`,
+  token: `https://vault.${process.env.DOMAIN}/v1/identity/oidc/provider/kubefirst/token`,
+  issuer: `https://vault.${process.env.DOMAIN}/v1/identity/oidc/provider/kubefirst`,
   idToken: true,
   async profile(profile: User): Promise<User> {
     return { ...profile, id: profile.email };
