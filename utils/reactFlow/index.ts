@@ -4,9 +4,10 @@ import {
   ManagementCluster,
   ClusterStatus,
   Cluster,
-  WorkloadCluster,
+  ClusterType,
   DraftCluster,
 } from '../../types/provision';
+import { ClusterCache } from '../../types/redux';
 import { CustomGraphNode } from '../../components/graphNode';
 
 const WORKLOAD_CLUSTER_Y_SPACE = 60;
@@ -18,7 +19,7 @@ const NODE_WIDTH = 360;
 export function generateNode(
   id: string,
   position: { x: number; y: number },
-  info: Cluster,
+  info: Cluster | DraftCluster,
   selected = false,
 ): CustomGraphNode {
   return {
@@ -43,18 +44,15 @@ export function generateEdge(id: string, source: string, target: string, animate
 }
 
 export function generateNodesConfig(
-  cluster: ManagementCluster,
-  draftCluster?: DraftCluster,
+  managementCluster: ManagementCluster,
+  clusters: ClusterCache,
 ): [CustomGraphNode[], Edge[]] {
-  const { workloadClusters, ...managementClusterInfo } = cluster;
-  const { id: managementClusterId } = managementClusterInfo;
-  const filteredWorkloadClusters = workloadClusters.filter(
-    (cluster) => cluster.status !== ClusterStatus.DELETED,
-  );
+  const { clusterId: managementClusterId } = managementCluster;
 
-  if (draftCluster) {
-    filteredWorkloadClusters.push(draftCluster as WorkloadCluster);
-  }
+  const filteredWorkloadClusters = Object.values(clusters).filter(
+    (cluster) =>
+      cluster.status !== ClusterStatus.DELETED && cluster.type !== ClusterType.MANAGEMENT,
+  );
 
   const workloadClusterLength = filteredWorkloadClusters.length;
   const spacesBetweenClusterNodes = workloadClusterLength - 1;
@@ -74,7 +72,7 @@ export function generateNodesConfig(
         x: 0,
         y: 0,
       },
-      managementClusterInfo,
+      managementCluster,
     ),
   ];
 
@@ -82,7 +80,7 @@ export function generateNodesConfig(
 
   for (let i = 0; i < workloadClusterLength; i += 1) {
     const workloadCluster = filteredWorkloadClusters[i];
-    const { id: workloadClusterId } = workloadCluster;
+    const { clusterId: workloadClusterId } = workloadCluster;
 
     // if first node place at initial position
     // otherwise add workload node height and space multiplied by index
@@ -91,7 +89,8 @@ export function generateNodesConfig(
       : initialClusterYPosition + (WORKLOAD_CLUSTER_Y_SPACE + WORKLOAD_NODE_HEIGHT) * i;
 
     const animatedEdge =
-      workloadCluster.id === 'draft' || workloadCluster.status === ClusterStatus.PROVISIONING;
+      workloadCluster.clusterId === 'draft' ||
+      workloadCluster.status === ClusterStatus.PROVISIONING;
 
     nodes.push(
       generateNode(
