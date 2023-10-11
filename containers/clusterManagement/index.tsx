@@ -165,19 +165,23 @@ const ClusterManagement: FunctionComponent = () => {
   }, [dispatch]);
 
   useEffect(() => {
+    dispatch(getClusters());
+    dispatch(getAllEnvironments());
+  }, [dispatch]);
+
+  useEffect(() => {
     if (managementCluster) {
       dispatch(getCloudRegions(managementCluster));
     }
-    dispatch(getAllEnvironments());
   }, [dispatch, managementCluster]);
 
   const tableRef = useRef<HTMLTableSectionElement>(null);
 
   const handleClickOutside = useCallback(() => {
-    if (presentedClusterId && activeTab === MANAGEMENT_TABS.LIST_VIEW) {
+    if (presentedClusterId && activeTab === MANAGEMENT_TABS.LIST_VIEW && !isDeleteModalOpen) {
       dispatch(setPresentedClusterId(undefined));
     }
-  }, [dispatch, presentedClusterId, activeTab]);
+  }, [dispatch, presentedClusterId, activeTab, isDeleteModalOpen]);
 
   useOnClickOutside(tableRef, handleClickOutside);
 
