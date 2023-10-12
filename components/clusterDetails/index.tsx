@@ -53,7 +53,7 @@ const ClusterDetails: FunctionComponent<ClusterDetailsProps> = ({
   } = cluster;
 
   const partialPath =
-    gitProvider === GitProvider.GITLAB ? gitOwner : `${host}/${domainName.replace('.', '-')}`;
+    gitProvider === GitProvider.GITLAB ? gitOwner : `${domainName.replace('.', '-')}`;
   const GITHUB_CLUSTER_BASE_LINK = `https://${host}/${partialPath}/gitops/tree`;
 
   const clusterDetailsLink = `/main/registry/clusters/${clusterName}`;

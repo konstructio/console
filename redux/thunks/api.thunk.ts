@@ -111,7 +111,7 @@ export const createWorkloadCluster = createAsyncThunk<
       };
 
   const res = await axios.post<{ cluster_id: string }>(`/api/proxy?target=ee`, {
-    url: `/cluster/${managementCluster?.id}`,
+    url: `/cluster/${managementCluster?.clusterId}`,
     body: {
       cluster_name: draftCluster.clusterName,
       cloud_region: draftCluster.cloudRegion,

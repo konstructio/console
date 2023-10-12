@@ -24,7 +24,7 @@ const Header: FunctionComponent = () => {
   const { managementCluster } = useAppSelector(({ api }) => api);
 
   useEffect(() => {
-    if (managementCluster && managementCluster.id) {
+    if (managementCluster && managementCluster.clusterName) {
       dispatch(setSelectedCluster(managementCluster));
     }
   }, [dispatch, managementCluster]);
