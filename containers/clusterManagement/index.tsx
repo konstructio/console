@@ -165,7 +165,6 @@ const ClusterManagement: FunctionComponent = () => {
   }, [dispatch]);
 
   useEffect(() => {
-    dispatch(getClusters());
     dispatch(getAllEnvironments());
   }, [dispatch]);
 

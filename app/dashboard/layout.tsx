@@ -8,6 +8,7 @@ import Row from '@/components/row';
 import Column from '@/components/column';
 import { useAppDispatch } from '@/redux/store';
 import { getEnvVariables, getFlags } from '@/redux/thunks/config.thunk';
+import { getClusters } from '@/redux/thunks/api.thunk';
 
 const Container = styled(Row)`
   background-color: ${({ theme }) => theme.colors.washMe};
@@ -28,6 +29,7 @@ export default function GetLayout({ children }: PropsWithChildren) {
       setLoadFlags(true);
       dispatch(getFlags());
       dispatch(getEnvVariables());
+      dispatch(getClusters());
     }
   }, [dispatch, loadFlags]);
 
