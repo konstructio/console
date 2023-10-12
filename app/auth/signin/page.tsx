@@ -61,9 +61,13 @@ export default function SignIn() {
             sx={{ mb: 6, width: '100%', minWidth: '100%' }}
             fullWidth
             onClick={() => {
-              signIn('vault', {
-                callbackUrl: callbackUrl || location.origin,
-              });
+              signIn(
+                'vault',
+                {
+                  callbackUrl: callbackUrl || location.origin,
+                },
+                { with: 'userpass' },
+              );
             }}
           >
             <Image src={Vault} alt="vault-icon" width={20} height={20} />
