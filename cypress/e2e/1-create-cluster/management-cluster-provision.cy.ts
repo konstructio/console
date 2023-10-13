@@ -214,25 +214,25 @@ describe('provision management cluster using any git provider, cloud provider, a
       cy.get("[name='useHttps']").check();
     }
 
-    // cy.get('[data-test-id="next-button"]').click(); // create management cluster
-    // // proceed to cluster provision completion page
+    cy.get('[data-test-id="next-button"]').click(); // create management cluster
+    // proceed to cluster provision completion page
 
-    // cy.wait(2000); // give some time to make sure disabled prop is applied to next button
+    cy.wait(2000); // give some time to make sure disabled prop is applied to next button
 
-    // // recursive function to check for enabled next button when provisioning management cluster
-    // function waitForEnabledButton() {
-    //   cy.get('[data-test-id="next-button"]').then((element) => {
-    //     if (!element.prop('disabled')) {
-    //       cy.wrap(element).click();
-    //     } else {
-    //       cy.wait(10000);
-    //       waitForEnabledButton();
-    //     }
-    //   });
-    // }
+    // recursive function to check for enabled next button when provisioning management cluster
+    function waitForEnabledButton() {
+      cy.get('[data-test-id="next-button"]').then((element) => {
+        if (!element.prop('disabled')) {
+          cy.wrap(element).click();
+        } else {
+          cy.wait(10000);
+          waitForEnabledButton();
+        }
+      });
+    }
 
-    // waitForEnabledButton();
+    waitForEnabledButton();
 
-    // cy.get('[data-test-id="launch-console"]').click();
+    cy.get('[data-test-id="launch-console"]').click();
   });
 });
