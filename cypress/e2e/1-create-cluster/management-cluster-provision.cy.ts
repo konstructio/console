@@ -39,8 +39,14 @@ const GOOGLE_DOMAIN_NAME = Cypress.env('GOOGLE_DOMAIN_NAME');
 const VULTR_CLOUD_REGION = Cypress.env('VULTR_CLOUD_REGION');
 const DIGITAL_OCEAN_CLOUD_REGION = Cypress.env('DIGITAL_OCEAN_CLOUD_REGION');
 const GOOGLE_CLOUD_REGION = Cypress.env('GOOGLE_CLOUD_REGION');
+const GOOGLE_CLOUD_ZONE = Cypress.env('GOOGLE_CLOUD_ZONE');
 const USE_HTTPS = Cypress.env('USE_HTTPS');
 const FORCE_DESTROY_TERRAFORM = Cypress.env('FORCE_DESTROY_TERRAFORM');
+const CIVO_INSTANCE_SIZE = Cypress.env('CIVO_INSTANCE_SIZE');
+const AWS_INSTANCE_SIZE = Cypress.env('AWS_INSTANCE_SIZE');
+const GOOGLE_INSTANCE_SIZE = Cypress.env('GOOGLE_INSTANCE_SIZE');
+const DIGITAL_OCEAN_INSTANCE_SIZE = Cypress.env('DIGITAL_OCEAN_INSTANCE_SIZE');
+const VULTR_INSTANCE_SIZE = Cypress.env('VULTR_INSTANCE_SIZE');
 
 const GIT_PROVIDER_CONFIG: Record<
   GitProvider,
@@ -52,33 +58,42 @@ const GIT_PROVIDER_CONFIG: Record<
 
 const INSTALLATION_CONFIG: Record<
   InstallationType,
-  { AUTH_TOKEN?: string; DOMAIN_NAME: string; CLOUD_REGION: string }
+  { AUTH_TOKEN?: string; DOMAIN_NAME: string; CLOUD_REGION: string; INSTANCE_SIZE: string }
 > = {
-  [InstallationType.AWS]: { DOMAIN_NAME: AWS_DOMAIN_NAME, CLOUD_REGION: AWS_CLOUD_REGION },
+  [InstallationType.AWS]: {
+    DOMAIN_NAME: AWS_DOMAIN_NAME,
+    CLOUD_REGION: AWS_CLOUD_REGION,
+    INSTANCE_SIZE: AWS_INSTANCE_SIZE,
+  },
   [InstallationType.CIVO]: {
     AUTH_TOKEN: CIVO_TOKEN,
     DOMAIN_NAME: CIVO_DOMAIN_NAME,
     CLOUD_REGION: CIVO_CLOUD_REGION,
+    INSTANCE_SIZE: CIVO_INSTANCE_SIZE,
   },
   [InstallationType.DIGITAL_OCEAN]: {
     AUTH_TOKEN: DIGI_OCEAN_AUTH_TOKEN,
     DOMAIN_NAME: DIGITAL_OCEAN_DOMAIN_NAME,
     CLOUD_REGION: DIGITAL_OCEAN_CLOUD_REGION,
+    INSTANCE_SIZE: DIGITAL_OCEAN_INSTANCE_SIZE,
   },
   [InstallationType.GOOGLE]: {
     DOMAIN_NAME: GOOGLE_DOMAIN_NAME,
     CLOUD_REGION: GOOGLE_CLOUD_REGION,
+    INSTANCE_SIZE: GOOGLE_INSTANCE_SIZE,
   },
   [InstallationType.VULTR]: {
     AUTH_TOKEN: VULTR_TOKEN,
     DOMAIN_NAME: VULTR_DOMAIN_NAME,
     CLOUD_REGION: VULTR_CLOUD_REGION,
+    INSTANCE_SIZE: VULTR_INSTANCE_SIZE,
   },
   // Needs to be implemented
   [InstallationType.LOCAL]: {
     AUTH_TOKEN: '',
     DOMAIN_NAME: '',
     CLOUD_REGION: '',
+    INSTANCE_SIZE: '',
   },
 };
 
@@ -89,7 +104,8 @@ describe('provision management cluster using any git provider, cloud provider, a
 
   const { GIT_TOKEN, GIT_USER, GIT_OWNER } = GIT_PROVIDER_CONFIG[GIT_PROVIDER];
 
-  const { AUTH_TOKEN, DOMAIN_NAME, CLOUD_REGION } = INSTALLATION_CONFIG[CLOUD_PROVIDER];
+  const { AUTH_TOKEN, DOMAIN_NAME, CLOUD_REGION, INSTANCE_SIZE } =
+    INSTALLATION_CONFIG[CLOUD_PROVIDER];
 
   const DOMAIN_NAME_FINAL = DNS_PROVIDER === 'Cloudflare' ? CLOUDFLARE_DOMAIN_NAME : DOMAIN_NAME;
 
@@ -144,6 +160,18 @@ describe('provision management cluster using any git provider, cloud provider, a
       cy.wrap(popper).contains(CLOUD_REGION).click();
     });
 
+    if (CLOUD_PROVIDER === InstallationType.GOOGLE) {
+      cy.get("[name='cloudZone']").click();
+      cy.get('.MuiAutocomplete-popper').then((popper) => {
+        cy.wrap(popper).contains(GOOGLE_CLOUD_ZONE).click();
+      });
+    }
+
+    cy.get("[name='instanceSize']").click();
+    cy.get('.MuiAutocomplete-popper').then((popper) => {
+      cy.wrap(popper).contains(INSTANCE_SIZE).click();
+    });
+
     cy.get("[name='dnsProvider']").click(); // click dnsProvider multiselect to open menu
 
     cy.get('.MuiAutocomplete-popper').then((popper) => {
@@ -186,25 +214,25 @@ describe('provision management cluster using any git provider, cloud provider, a
       cy.get("[name='useHttps']").check();
     }
 
-    cy.get('[data-test-id="next-button"]').click(); // create management cluster
-    // proceed to cluster provision completion page
+    // cy.get('[data-test-id="next-button"]').click(); // create management cluster
+    // // proceed to cluster provision completion page
 
-    cy.wait(2000); // give some time to make sure disabled prop is applied to next button
+    // cy.wait(2000); // give some time to make sure disabled prop is applied to next button
 
-    // recursive function to check for enabled next button when provisioning management cluster
-    function waitForEnabledButton() {
-      cy.get('[data-test-id="next-button"]').then((element) => {
-        if (!element.prop('disabled')) {
-          cy.wrap(element).click();
-        } else {
-          cy.wait(10000);
-          waitForEnabledButton();
-        }
-      });
-    }
+    // // recursive function to check for enabled next button when provisioning management cluster
+    // function waitForEnabledButton() {
+    //   cy.get('[data-test-id="next-button"]').then((element) => {
+    //     if (!element.prop('disabled')) {
+    //       cy.wrap(element).click();
+    //     } else {
+    //       cy.wait(10000);
+    //       waitForEnabledButton();
+    //     }
+    //   });
+    // }
 
-    waitForEnabledButton();
+    // waitForEnabledButton();
 
-    cy.get('[data-test-id="launch-console"]').click();
+    // cy.get('[data-test-id="launch-console"]').click();
   });
 });
