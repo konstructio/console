@@ -14,8 +14,8 @@ import { CHEFS_HAT, CHILD_OF_LIGHT, SALTBOX_BLUE, VOLCANIC_SAND } from '../../co
 
 export const Menu = styled(Box)`
   position: absolute;
-  top: 60px;
-  left: -110px;
+  top: 40px;
+  left: -130px;
   width: 160px;
   background-color: white;
   border: 1px solid ${CHEFS_HAT};
@@ -30,7 +30,6 @@ export const StyledTableBody = muiStyled(TableBody)(() => ({
 
 export const StyledTableCell = muiStyled(TableCell)(() => ({
   [`&.${tableCellClasses.root}`]: {
-    border: 0,
     borderBottom: '1px solid #F4F4F5',
     backgroundColor: 'white',
   },

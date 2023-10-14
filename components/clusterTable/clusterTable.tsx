@@ -65,6 +65,7 @@ const FORMATTED_CLUSTER_TYPE: Record<ClusterType, { nameLabel: string; typeLabel
 type ClusterRowProps = {
   cluster: Cluster | DraftCluster;
   expanded?: boolean;
+  showExpandButton?: boolean;
   onExpanseClick?: () => void;
   onDeleteCluster: () => void;
   presentedClusterId?: string;
@@ -74,6 +75,7 @@ type ClusterRowProps = {
 const ClusterRow: FunctionComponent<ClusterRowProps> = ({
   cluster,
   expanded,
+  showExpandButton,
   onExpanseClick = noop,
   onDeleteCluster,
   onMenuButtonClick = noop,
@@ -102,7 +104,7 @@ const ClusterRow: FunctionComponent<ClusterRowProps> = ({
     <>
       <StyledTableRow selected={selected}>
         <StyledTableCell align="right" style={{ width: '50px' }} selected={selected}>
-          {type === ClusterType.MANAGEMENT && (
+          {type === ClusterType.MANAGEMENT && showExpandButton && (
             <StyledIconButton
               aria-label="expand row"
               size="small"
@@ -208,7 +210,7 @@ const headCells: HeadCell[] = [
   },
   {
     id: 'nodeCount',
-    label: 'Count',
+    label: 'Nodes',
   },
   {
     id: 'creationDate',
@@ -302,6 +304,7 @@ export const ClusterTable: FunctionComponent<ClusterTableProps> = ({
             onDeleteCluster={onDeleteCluster}
             onMenuButtonClick={onMenuButtonClick}
             expanded={expanded}
+            showExpandButton={!!filteredWorkloadClusters.length}
             onExpanseClick={() => setExpanded(!expanded)}
             presentedClusterId={presentedClusterId}
           />
