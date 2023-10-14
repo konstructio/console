@@ -1,5 +1,5 @@
 'use client';
-import React, { FunctionComponent, useEffect, useState, useCallback } from 'react';
+import React, { FunctionComponent, useEffect, useState, useCallback, useRef } from 'react';
 import styled from 'styled-components';
 import Image from 'next/image';
 
@@ -22,7 +22,9 @@ import EnvironmentsTable from '../../components/environmentsTable';
 import { ClusterEnvironment } from '../../types/provision';
 import DeleteEnvironment from '../../components/deleteEnvironment';
 import { clearEnvironmentError } from '../../redux/slices/environments.slice';
-import { noop } from '../../utils/noop';
+
+import { useOnClickOutside } from '@/hooks/useOnClickOutside';
+import { noop } from '@/utils/noop';
 
 const Environments: FunctionComponent = () => {
   const { isOpen, close, open } = useToggle();
@@ -65,8 +67,8 @@ const Environments: FunctionComponent = () => {
 
   const handleDeleteModal = useCallback(() => {
     setSelectedEnv(undefined);
-    close();
-  }, [close]);
+    closeDeleteEnv();
+  }, [closeDeleteEnv]);
 
   const handleErrorClose = useCallback(() => {
     dispatch(clearEnvironmentError());
@@ -80,6 +82,15 @@ const Environments: FunctionComponent = () => {
   useEffect(() => {
     dispatch(getAllEnvironments());
   }, [dispatch]);
+
+  const ref = useRef<HTMLTableSectionElement>(null);
+
+  useOnClickOutside(ref, () => {
+    if (!isOpen && !deleteEnv) {
+      handleDeleteModal();
+      handleModalClose();
+    }
+  });
 
   return (
     <Column style={{ width: '100%' }}>
@@ -100,7 +111,7 @@ const Environments: FunctionComponent = () => {
 
       {Object.keys(environments).length ? (
         <EnvironmentsTable
-          // ref={tableRef}
+          ref={ref}
           environments={environments}
           onDeleteEnvironment={openDeleteEnv}
           onMenuButtonClick={handleMenuButtonClick}
