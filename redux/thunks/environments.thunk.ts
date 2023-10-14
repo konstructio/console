@@ -12,11 +12,11 @@ export const getAllEnvironments = createAsyncThunk<EnvMap, void>(
   'environments/getAllEnvironments',
   async () => {
     try {
-      const { data } = await axios.get<EnvironmentResponse[]>(
+      const { data } = await axios.get<EnvironmentResponse[] | null>(
         `/api/proxy?${createQueryString('url', `/environment`)}`,
       );
 
-      return createEnvMap(data);
+      return createEnvMap(data ?? []);
     } catch (error) {
       if (axios.isAxiosError(error)) {
         throw error.response?.data.error;
@@ -51,7 +51,7 @@ export const deleteEnvironment = createAsyncThunk<ClusterEnvironment['name'], Cl
   async (environment, { dispatch }) => {
     try {
       await axios.delete(
-        `/api/proxy?${createQueryString('url', `/environment/${environment.id}`)}`,
+        `/api/proxy?${createQueryString('url', `/environment/${environment.name}`)}`,
       );
 
       dispatch(
