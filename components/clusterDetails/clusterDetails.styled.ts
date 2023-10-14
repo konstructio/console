@@ -11,6 +11,7 @@ import {
   CHEFS_HAT,
   DR_WHITE,
   EXCLUSIVE_PLUM,
+  PRIMARY,
   TRUE_BLUE,
   VOLCANIC_SAND,
 } from '../../constants/colors';
@@ -39,9 +40,7 @@ export const InfoIcon = styled(InfoOutlinedIcon)`
 
 export const Link = styled.a`
   display: inline-flex;
-  a {
-    color: ${TRUE_BLUE};
-  }
+  color: ${PRIMARY};
 `;
 
 export const RowInfo = styled(RowComponent)`

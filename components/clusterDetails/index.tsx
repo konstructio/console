@@ -11,7 +11,6 @@ import {
   DraftCluster,
   ManagementCluster,
 } from '../../types/provision';
-import { GitProvider } from '../../types';
 
 import {
   Container,
@@ -52,11 +51,9 @@ const ClusterDetails: FunctionComponent<ClusterDetailsProps> = ({
     gitAuth: { gitUser } = {},
   } = cluster;
 
-  const partialPath =
-    gitProvider === GitProvider.GITLAB ? gitOwner : `${domainName.replace('.', '-')}`;
-  const GITHUB_CLUSTER_BASE_LINK = `https://${host}/${partialPath}/gitops/tree`;
+  const CLUSTER_REPO_BASE_LINK = `https://${host}/${gitOwner}`;
 
-  const clusterDetailsLink = `/main/registry/clusters/${clusterName}`;
+  const presentedLink = `/gitops/tree/main/registry/clusters/${clusterName}`;
 
   return (
     <Container {...rest}>
@@ -72,15 +69,17 @@ const ClusterDetails: FunctionComponent<ClusterDetailsProps> = ({
               </Typography>
               <Typography variant="body2">
                 Provisioning details:{' '}
-                <Link href={GITHUB_CLUSTER_BASE_LINK + clusterDetailsLink}>
-                  {clusterDetailsLink}
+                <Link target="_blank" href={CLUSTER_REPO_BASE_LINK + presentedLink}>
+                  {presentedLink}
                 </Link>
               </Typography>
             </>
           ) : (
             <Typography>
               Cluster details:{' '}
-              <Link href={GITHUB_CLUSTER_BASE_LINK + clusterDetailsLink}>{clusterDetailsLink}</Link>{' '}
+              <Link target="_blank" href={CLUSTER_REPO_BASE_LINK + presentedLink}>
+                {presentedLink}
+              </Link>{' '}
             </Typography>
           )}
         </Column>
