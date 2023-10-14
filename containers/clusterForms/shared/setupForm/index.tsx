@@ -187,17 +187,19 @@ const SetupForm: FunctionComponent = () => {
         rules={{ required: true }}
         options={cloudDomains && formatDomains(cloudDomains)}
       />
-      <ControlledTextField
-        control={control}
-        name="subDomain"
-        label="Subdomain name"
-        defaultValue={values?.subDomain}
-        rules={{
-          maxLength: 25,
-        }}
-        onErrorText={errors.subDomain?.message}
-        helperText={subDomainHelperText}
-      />
+      {isCloudFlareSelected && (
+        <ControlledTextField
+          control={control}
+          name="subDomain"
+          label="Subdomain name"
+          defaultValue={values?.subDomain}
+          rules={{
+            maxLength: 25,
+          }}
+          onErrorText={errors.subDomain?.message}
+          helperText={subDomainHelperText}
+        />
+      )}
       <ControlledTextField
         control={control}
         name="clusterName"

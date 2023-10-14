@@ -160,7 +160,7 @@ describe('provision management cluster using any git provider, cloud provider, a
       cy.wrap(popper).contains(DOMAIN_NAME_FINAL).click();
     });
 
-    if (SUB_DOMAIN) {
+    if (DNS_PROVIDER === 'Cloudflare' && SUB_DOMAIN) {
       cy.get("[name='subDomain']").type(SUB_DOMAIN);
     }
 
