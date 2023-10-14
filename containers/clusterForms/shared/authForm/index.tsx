@@ -37,6 +37,9 @@ import { setGitProvider } from '../../../../redux/slices/installation.slice';
 
 import { FormContainer, GitContainer, GitUserField, GitUserFieldInput } from './authForm.styled';
 
+import Tooltip from '@/components/tooltip';
+import Row from '@/components/row';
+
 const AuthForm: FunctionComponent = () => {
   const [isGitRequested, setIsGitRequested] = useState<boolean>();
   const [gitUserName, setGitUserName] = useState<string>();
@@ -159,6 +162,8 @@ const AuthForm: FunctionComponent = () => {
     };
   }, [dispatch, gitErrorLabel, isGitHub]);
 
+  const showTooltip = useMemo(() => (gitUserName?.length ?? 0) > 22, [gitUserName]);
+
   return (
     <>
       {isMarketplace && (
@@ -183,27 +188,38 @@ const AuthForm: FunctionComponent = () => {
         </div>
       )}
       <FormContainer isVisible={!isMarketplace || (isMarketplace && isGitSelected)}>
-        <ControlledPassword
-          control={control}
-          name="gitToken"
-          label={`${gitLabel} personal access token`}
-          required
-          rules={{
-            required: true,
-          }}
-          error={isGitRequested && !isTokenValid}
-          onBlur={handleGitTokenBlur}
-          onChange={handleOnChangeToken}
-          onErrorText="Invalid token."
-        />
-        <GitUserField data-test-id="gitUser">
-          <Typography
-            variant="labelLarge"
-            sx={{ display: 'flex', gap: '4px' }}
-            color={EXCLUSIVE_PLUM}
-          >{`Username associated with ${gitLabel} token`}</Typography>
-          <GitUserFieldInput>{gitUserName}</GitUserFieldInput>
-        </GitUserField>
+        <Row style={{ justifyContent: 'space-between' }}>
+          <Row style={{ width: '432px' }}>
+            <ControlledPassword
+              control={control}
+              name="gitToken"
+              label={`${gitLabel} personal access token`}
+              required
+              rules={{
+                required: true,
+              }}
+              error={isGitRequested && !isTokenValid}
+              onBlur={handleGitTokenBlur}
+              onChange={handleOnChangeToken}
+              onErrorText="Invalid token."
+            />
+          </Row>
+          <GitUserField data-test-id="gitUser" style={{ width: '216px' }}>
+            <Typography
+              variant="labelLarge"
+              sx={{ display: 'flex', gap: '4px' }}
+              color={EXCLUSIVE_PLUM}
+            >{`${gitLabel} username`}</Typography>
+            {showTooltip ? (
+              <Tooltip title={gitUserName}>
+                <GitUserFieldInput>{gitUserName}</GitUserFieldInput>
+              </Tooltip>
+            ) : (
+              <GitUserFieldInput>{gitUserName}</GitUserFieldInput>
+            )}
+          </GitUserField>
+        </Row>
+
         {isGitHub ? (
           <ControlledAutocomplete
             control={control}

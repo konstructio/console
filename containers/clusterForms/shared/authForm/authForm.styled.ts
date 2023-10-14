@@ -42,4 +42,10 @@ export const GitUserFieldInput = styled.div`
   height: 20px;
   margin-top: 8px;
   padding: 8px 12px;
+  overflow: ellipsis;
+  display: inline-block;
+  width: 192px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 `;
