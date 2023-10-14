@@ -206,9 +206,6 @@ const Select: FunctionComponent<ISelectProps> = ({
           <Typography variant="body2">{label}</Typography>
         </MenuItem>
       ))}
-      <MenuItem disableRipple>
-        <Typography variant="body2">Nice</Typography>
-      </MenuItem>
     </SelectMUI>
   </Container>
 );

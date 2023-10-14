@@ -8,29 +8,31 @@ import React, {
 import { useFormContext } from 'react-hook-form';
 import Box from '@mui/material/Box';
 
-import ControlledAutocomplete from '../../../components/controlledFields/AutoComplete';
-import ControlledTextField from '../../../components/controlledFields/TextField';
-import { useAppDispatch, useAppSelector } from '../../../redux/store';
-import ControlledSelect from '../../../components/controlledFields/Select';
-import Typography from '../../../components/typography';
+import ControlledAutocomplete from '@/components/controlledFields/AutoComplete';
+import ControlledTextField from '@/components/controlledFields/TextField';
+import { useAppDispatch, useAppSelector } from '@/redux/store';
+import ControlledSelect from '@/components/controlledFields/Select';
+import Typography from '@/components/typography';
+import { ClusterType, NewWorkloadClusterConfig, ClusterEnvironment } from '@/types/provision';
+import { EXCLUSIVE_PLUM } from '@/constants/colors';
+import ControlledNumberInput from '@/components/controlledFields/numberInput';
+import ControlledRadioGroup from '@/components/controlledFields/radio';
 import {
-  ClusterType,
-  NewWorkloadClusterConfig,
-  ClusterEnvironment,
-} from '../../../types/provision';
-import { EXCLUSIVE_PLUM } from '../../../constants/colors';
-import ControlledNumberInput from '../../../components/controlledFields/numberInput';
-import ControlledRadioGroup from '../../../components/controlledFields/radio';
-import { LOWER_KEBAB_CASE_REGEX, MIN_NODE_COUNT } from '../../../constants';
-import { updateDraftCluster } from '../../../redux/slices/api.slice';
-import ControlledEnvironmentSelect from '../../../components/controlledFields/environmentSelect';
-import Modal from '../../../components/modal';
-import useModal from '../../../hooks/useModal';
-import { CreateEnvironmentMenu } from '../../../components/createEnvironmentMenu';
-import LearnMore from '../../../components/learnMore';
-import { createEnvironment } from '../../../redux/thunks/environments.thunk';
-import { noop } from '../../../utils/noop';
-import { clearEnvironmentError } from '../../../redux/slices/environments.slice';
+  AWS_WORKLOAD_CLUSTER_OPTIONS,
+  LOWER_KEBAB_CASE_REGEX,
+  MIN_NODE_COUNT,
+  WORKLOAD_CLUSTER_OPTIONS,
+} from '@/constants';
+import { updateDraftCluster } from '@/redux/slices/api.slice';
+import ControlledEnvironmentSelect from '@/components/controlledFields/environmentSelect';
+import Modal from '@/components/modal';
+import useModal from '@/hooks/useModal';
+import { CreateEnvironmentMenu } from '@/components/createEnvironmentMenu';
+import LearnMore from '@/components/learnMore';
+import { createEnvironment } from '@/redux/thunks/environments.thunk';
+import { noop } from '@/utils/noop';
+import { clearEnvironmentError } from '@/redux/slices/environments.slice';
+import { InstallationType } from '@/types/redux';
 
 import { Container } from './clusterCreation.styled';
 import { InputContainer } from './advancedOptions/advancedOptions.styled';
@@ -40,11 +42,8 @@ const ClusterCreationForm: FunctionComponent<Omit<ComponentPropsWithoutRef<'div'
 ) => {
   const { isOpen, openModal, closeModal } = useModal(false);
 
-  const { cloudRegions, clusterNameCache, clusterMap, environments, error } = useAppSelector(
-    ({ api, environments }) => ({ ...api, ...environments }),
-  );
-
-  const draftCluster = useMemo(() => clusterMap['draft'], [clusterMap]);
+  const { managementCluster, cloudRegions, clusterNameCache, clusterMap, environments, error } =
+    useAppSelector(({ api, environments }) => ({ ...api, ...environments }));
 
   const dispatch = useAppDispatch();
 
@@ -80,6 +79,18 @@ const ClusterCreationForm: FunctionComponent<Omit<ComponentPropsWithoutRef<'div'
     closeModal();
   }, [clearEnvError, closeModal]);
 
+  const draftCluster = useMemo(() => clusterMap['draft'], [clusterMap]);
+
+  const isVCluster = useMemo(() => type === ClusterType.WORKLOAD_V_CLUSTER, [type]);
+
+  const clusterOptions = useMemo(
+    () =>
+      managementCluster?.cloudProvider === InstallationType.AWS
+        ? AWS_WORKLOAD_CLUSTER_OPTIONS
+        : WORKLOAD_CLUSTER_OPTIONS,
+    [managementCluster],
+  );
+
   useEffect(() => {
     const subscription = watch((values) => {
       if (draftCluster) {
@@ -89,8 +100,6 @@ const ClusterCreationForm: FunctionComponent<Omit<ComponentPropsWithoutRef<'div'
 
     return () => subscription.unsubscribe();
   }, [watch, dispatch, draftCluster]);
-
-  const isVCluster = useMemo(() => type === ClusterType.WORKLOAD_V_CLUSTER, [type]);
 
   return (
     <Container {...props}>
@@ -104,11 +113,8 @@ const ClusterCreationForm: FunctionComponent<Omit<ComponentPropsWithoutRef<'div'
           rules={{
             required: false,
           }}
-          options={[
-            { label: 'Virtual', value: ClusterType.WORKLOAD_V_CLUSTER },
-            { label: 'Physical', value: ClusterType.WORKLOAD },
-          ]}
-          defaultValue={draftCluster?.type}
+          options={clusterOptions}
+          defaultValue={type}
           onChange={(clusterType) =>
             setValue('type', clusterType as ClusterType, { shouldValidate: true })
           }

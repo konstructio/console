@@ -1,5 +1,5 @@
 import { TagColor, TagIconOption } from '../components/tag';
-import { ClusterStatus } from '../types/provision';
+import { ClusterStatus, ClusterType } from '../types/provision';
 
 export const AWS_REGIONS = [
   { label: 'US East (Ohio) (us-east-2)', value: 'us-east-2' },
@@ -52,3 +52,10 @@ export const CLUSTER_TAG_CONFIG: Record<
 };
 
 export const MIN_NODE_COUNT = 1;
+
+export const WORKLOAD_CLUSTER_OPTIONS = [
+  { label: 'Virtual', value: ClusterType.WORKLOAD_V_CLUSTER },
+  { label: 'Physical', value: ClusterType.WORKLOAD },
+];
+
+export const AWS_WORKLOAD_CLUSTER_OPTIONS = [{ label: 'Physical', value: ClusterType.WORKLOAD }];

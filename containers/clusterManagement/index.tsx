@@ -34,6 +34,7 @@ import { getAllEnvironments } from '../../redux/thunks/environments.thunk';
 
 import { CreateClusterFlow } from './createClusterFlow';
 import { Container, Content, Header } from './clusterManagement.styled';
+import { InstallationType } from '@/types/redux';
 
 enum MANAGEMENT_TABS {
   LIST_VIEW = 0,
@@ -178,6 +179,14 @@ const ClusterManagement: FunctionComponent = () => {
 
   const isListView = useMemo(() => activeTab === MANAGEMENT_TABS.LIST_VIEW, [activeTab]);
 
+  const defaultClusterType = useMemo(
+    () =>
+      managementCluster?.cloudProvider === InstallationType.AWS
+        ? ClusterType.WORKLOAD
+        : ClusterType.WORKLOAD_V_CLUSTER,
+    [managementCluster],
+  );
+
   const handleClickOutside = useCallback(() => {
     if (presentedClusterId && isListView && !createClusterFlowOpen && !isDeleteModalOpen) {
       dispatch(setPresentedClusterId(undefined));
@@ -260,7 +269,7 @@ const ClusterManagement: FunctionComponent = () => {
           onMenuClose={handleMenuClose}
           onClusterDelete={openDeleteModal}
           onSubmit={handleCreateCluster}
-          defaultValues={clusterMap[presentedClusterId ?? '']}
+          defaultValues={{ type: defaultClusterType }}
           loading={loading}
           notifiedOfBetaPhysicalClusters={notifiedOfBetaPhysicalClusters}
           onNotificationClose={handleNotificationClose}
