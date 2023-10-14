@@ -42,7 +42,7 @@ const MyButton = styled.button<{ selected?: boolean }>`
   border-radius: 50%;
   cursor: pointer;
 
-  :hover {
+  &:hover {
     color: ${PRIMARY};
     background-color: ${MAGNOLIA};
   }
@@ -79,32 +79,34 @@ const EnvironmentRow: FunctionComponent<EnvironmentRowProps> = ({
           {moment(+creationDate).format('DD MMM YYYY HH:MM:SS')}
         </StyledCellText>
       </StyledTableCell>
-      <StyledTableCell style={{ position: 'relative' }}>
-        <MyButton
-          aria-label="more info"
-          onClick={() => onMenuButtonClick(environment)}
-          selected={selected}
-        >
-          <MoreHorizIcon />
-        </MyButton>
-        {selected && (
-          <Menu>
-            <List>
-              {/* <ListItem disablePadding>
-                <ListItemButton onClick={onEditEnvironment}>
-                  <Typography variant="body2">Edit</Typography>
-                </ListItemButton>
-              </ListItem> */}
-              <ListItem disablePadding>
-                <ListItemButton onClick={onDeleteEnvironment}>
-                  <Typography variant="body2" style={{ color: `${FIRE_BRICK}` }}>
-                    Delete environment
-                  </Typography>
-                </ListItemButton>
-              </ListItem>
-            </List>
-          </Menu>
-        )}
+      <StyledTableCell>
+        <div style={{ position: 'relative' }}>
+          <MyButton
+            aria-label="more info"
+            onClick={() => onMenuButtonClick(environment)}
+            selected={selected}
+          >
+            <MoreHorizIcon />
+          </MyButton>
+          {selected && (
+            <Menu>
+              <List>
+                {/* <ListItem disablePadding>
+                  <ListItemButton onClick={onEditEnvironment}>
+                    <Typography variant="body2">Edit</Typography>
+                  </ListItemButton>
+                </ListItem> */}
+                <ListItem disablePadding>
+                  <ListItemButton onClick={onDeleteEnvironment}>
+                    <Typography variant="body2" style={{ color: `${FIRE_BRICK}` }}>
+                      Delete environment
+                    </Typography>
+                  </ListItemButton>
+                </ListItem>
+              </List>
+            </Menu>
+          )}
+        </div>
       </StyledTableCell>
     </StyledTableRow>
   );

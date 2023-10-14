@@ -49,7 +49,7 @@ export const StyledIconButton = styled(IconButton)<{ expanded?: boolean }>`
 
 export const StyledTableBody = muiStyled(TableBody)(() => ({
   [`&.${tableBodyClasses.root}`]: {
-    borderRadius: '20px',
+    borderRadius: '4px',
     boxShadow: `0 0 0 2px ${PASTEL_LIGHT_BLUE}`,
   },
 }));
@@ -80,16 +80,16 @@ export const StyledTableRow = muiStyled(TableRow)<{ selected?: boolean }>(() => 
     backgroundColor: 'transparent',
   },
   ['&:first-child td:first-child']: {
-    borderTopLeftRadius: '20px',
+    borderTopLeftRadius: '4px',
   },
   ['&:first-child td:last-child']: {
-    borderTopRightRadius: '20px',
+    borderTopRightRadius: '4px',
   },
   ['&:last-child td:first-child']: {
-    borderBottomLeftRadius: '20px',
+    borderBottomLeftRadius: '4px',
   },
   ['&:last-child td:last-child']: {
-    borderBottomRightRadius: '20px',
+    borderBottomRightRadius: '4px',
   },
 }));
 
