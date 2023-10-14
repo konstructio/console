@@ -1,5 +1,5 @@
 'use client';
-import React, { FunctionComponent, useCallback, useEffect, useRef, useState } from 'react';
+import React, { FunctionComponent, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import Box from '@mui/material/Box';
 import Tabs from '@mui/material/Tabs';
 
@@ -176,11 +176,13 @@ const ClusterManagement: FunctionComponent = () => {
 
   const tableRef = useRef<HTMLTableSectionElement>(null);
 
+  const isListView = useMemo(() => activeTab === MANAGEMENT_TABS.LIST_VIEW, [activeTab]);
+
   const handleClickOutside = useCallback(() => {
-    if (presentedClusterId && activeTab === MANAGEMENT_TABS.LIST_VIEW && !isDeleteModalOpen) {
+    if (presentedClusterId && isListView && !createClusterFlowOpen && !isDeleteModalOpen) {
       dispatch(setPresentedClusterId(undefined));
     }
-  }, [dispatch, presentedClusterId, activeTab, isDeleteModalOpen]);
+  }, [dispatch, presentedClusterId, isListView, isDeleteModalOpen, createClusterFlowOpen]);
 
   useOnClickOutside(tableRef, handleClickOutside);
 
