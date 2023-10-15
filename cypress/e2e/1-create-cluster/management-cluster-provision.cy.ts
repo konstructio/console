@@ -100,7 +100,7 @@ describe('provision management cluster using any git provider, cloud provider, a
     cy.get('[data-test-id="next-button"]').click();
 
     cy.get('[data-test-id="form-section"]').contains('Now, let’s get you authenticated');
-    cy.get("[name='gitToken']").type(GIT_TOKEN, { log: false });
+    cy.get("[name='gitToken']").type(GIT_TOKEN, { log: false, delay: 0 });
 
     cy.get('[data-test-id="gitUser"]').contains(GIT_USER);
     cy.get("[name='gitOwner']").click();
@@ -110,17 +110,18 @@ describe('provision management cluster using any git provider, cloud provider, a
     });
 
     if (CLOUD_PROVIDER === InstallationType.AWS) {
-      cy.get("[name='aws_auth.access_key_id']").type(AWS_ACCESS_KEY_ID, { log: false });
-      cy.get("[name='aws_auth.secret_access_key']").type(AWS_SECRET_KEY, { log: false });
-      cy.get("[name='aws_auth.session_token']").type(AWS_SESSION_TOKEN, { log: false });
+      cy.get("[name='aws_auth.access_key_id']").type(AWS_ACCESS_KEY_ID, { log: false, delay: 0 });
+      cy.get("[name='aws_auth.secret_access_key']").type(AWS_SECRET_KEY, { log: false, delay: 0 });
+      cy.get("[name='aws_auth.session_token']").type(AWS_SESSION_TOKEN, { log: false, delay: 0 });
     }
 
     if (CLOUD_PROVIDER === InstallationType.GOOGLE) {
       cy.get("[name='google_auth.key_file']").type(GOOGLE_KEY_FILE, {
         log: false,
         parseSpecialCharSequences: false,
+        delay: 0,
       });
-      cy.get("[name='google_auth.project_id']").type(GOOGLE_PROJECT_ID, { log: false });
+      cy.get("[name='google_auth.project_id']").type(GOOGLE_PROJECT_ID, { log: false, delay: 0 });
     }
 
     if (
@@ -128,17 +129,20 @@ describe('provision management cluster using any git provider, cloud provider, a
       CLOUD_PROVIDER !== InstallationType.GOOGLE &&
       CLOUD_PROVIDER !== InstallationType.DIGITAL_OCEAN
     ) {
-      cy.get(`[name='${CLOUD_PROVIDER}_auth.token']`).type(AUTH_TOKEN, { log: false });
+      cy.get(`[name='${CLOUD_PROVIDER}_auth.token']`).type(AUTH_TOKEN, { log: false, delay: 0 });
     }
 
     if (CLOUD_PROVIDER === InstallationType.DIGITAL_OCEAN) {
-      cy.get("[name='do_auth.token']").type(AUTH_TOKEN, { log: false });
-      cy.get("[name='do_auth.spaces_key']").type(DIGI_OCEAN_SPACES_KEY, { log: false });
-      cy.get("[name='do_auth.spaces_secret']").type(DIGI_OCEAN_SPACES_SECRET, { log: false });
+      cy.get("[name='do_auth.token']").type(AUTH_TOKEN, { log: false, delay: 0 });
+      cy.get("[name='do_auth.spaces_key']").type(DIGI_OCEAN_SPACES_KEY, { log: false, delay: 0 });
+      cy.get("[name='do_auth.spaces_secret']").type(DIGI_OCEAN_SPACES_SECRET, {
+        log: false,
+        delay: 0,
+      });
     }
 
     cy.get('[data-test-id="next-button"]').click();
-    cy.get("[name='alertsEmail']").type(ALERTS_EMAIL);
+    cy.get("[name='alertsEmail']").type(ALERTS_EMAIL, { delay: 0 });
     cy.get("[name='cloudRegion']").click(); // click cloudRegion multiselect to open menu
     cy.get('.MuiAutocomplete-popper').then((popper) => {
       cy.wrap(popper).contains(CLOUD_REGION).click();
@@ -151,8 +155,11 @@ describe('provision management cluster using any git provider, cloud provider, a
     });
 
     if (DNS_PROVIDER === 'Cloudflare') {
-      cy.get("[name='cloudflareToken']").type(CLOUDFLARE_TOKEN, { log: false });
-      cy.get("[name='cloudflareOriginCaIssuerKey']").type(CLOUDFLARE_ORIGIN_CA_KEY, { log: false });
+      cy.get("[name='cloudflareToken']").type(CLOUDFLARE_TOKEN, { log: false, delay: 0 });
+      cy.get("[name='cloudflareOriginCaIssuerKey']").type(CLOUDFLARE_ORIGIN_CA_KEY, {
+        log: false,
+        delay: 0,
+      });
     }
 
     cy.get("[name='domainName']").click(); // click domainName multiselect to open menu
@@ -161,10 +168,10 @@ describe('provision management cluster using any git provider, cloud provider, a
     });
 
     if (DNS_PROVIDER === 'Cloudflare' && SUB_DOMAIN) {
-      cy.get("[name='subDomain']").type(SUB_DOMAIN);
+      cy.get("[name='subDomain']").type(SUB_DOMAIN, { delay: 0 });
     }
 
-    cy.get("[name='clusterName']").type(CLUSTER_NAME + RANDOM_TWO_CHARACTERS);
+    cy.get("[name='clusterName']").type(CLUSTER_NAME + RANDOM_TWO_CHARACTERS, { delay: 0 });
 
     if (CLOUD_PROVIDER === InstallationType.GOOGLE && FORCE_DESTROY_TERRAFORM) {
       // default set to true. this is an controlled input wrapped by a label so it does
@@ -175,7 +182,7 @@ describe('provision management cluster using any git provider, cloud provider, a
     cy.get("[name='advancedOptions']").click(); // click advanced options button
 
     if (GITOPS_TEMPLATE_BRANCH) {
-      cy.get("[name='gitopsTemplateBranch']").type(GITOPS_TEMPLATE_BRANCH);
+      cy.get("[name='gitopsTemplateBranch']").type(GITOPS_TEMPLATE_BRANCH, { delay: 0 });
     }
 
     if (CLOUD_PROVIDER === InstallationType.AWS) {
