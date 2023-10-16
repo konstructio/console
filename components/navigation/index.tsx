@@ -105,10 +105,10 @@ const Navigation: FunctionComponent<NavigationProps> = ({
             <Title variant="body1">Kubefirst channel</Title>
           </MenuItem>
         </BreakpointTooltip>
-        <BreakpointTooltip title="Flappy K ray" placement="right-end">
+        <BreakpointTooltip title="Flappy K-ray" placement="right-end">
           <MenuItem onClick={handleOpenGame}>
             <VideogameAssetOutlinedIcon />
-            <Title variant="body1">Flappy K ray</Title>
+            <Title variant="body1">Flappy K-ray</Title>
           </MenuItem>
         </BreakpointTooltip>
       </FooterContainer>
