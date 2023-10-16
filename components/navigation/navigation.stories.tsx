@@ -32,7 +32,6 @@ export const Default: StoryObj<typeof Navigation> = {
     handleIsActiveItem: () => true,
     handleOpenContent: noop,
     handleOpenGame: noop,
-    isProvisionStep: false,
     kubefirstVersion: 'v1.0.0',
     routes: [],
   },

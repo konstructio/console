@@ -1,11 +1,11 @@
 import React, { FunctionComponent, ReactNode } from 'react';
 import Image from 'next/image';
-import HelpIcon from '@mui/icons-material/Help';
+import HelpOutlineOutlinedIcon from '@mui/icons-material/HelpOutlineOutlined';
+import VideogameAssetOutlinedIcon from '@mui/icons-material/VideogameAssetOutlined';
 import { BsSlack } from 'react-icons/bs';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
-import Typography from '../typography';
 import { ECHO_BLUE } from '../../constants/colors';
 
 import {
@@ -16,18 +16,16 @@ import {
   KubefirstVersion,
   MenuItem,
   Title,
-  FlappyCard,
-  DocsCard,
+  BreakpointTooltip,
 } from './navigation.styled';
 
 import Ray from '@/assets/ray.svg';
 import TitleLogo from '@/assets/title.svg';
-import Learn from '@/assets/learn.png';
-import Controller from '@/assets/controller.png';
+import Youtube from '@/assets/youtube.svg';
 
 const FOOTER_ITEMS = [
   {
-    icon: <HelpIcon />,
+    icon: <HelpOutlineOutlinedIcon />,
     path: 'https://docs.kubefirst.io',
     title: 'Documentation',
   },
@@ -43,7 +41,6 @@ export interface NavigationProps {
   handleIsActiveItem: (path: string) => boolean;
   handleOpenContent: () => void;
   handleOpenGame: () => void;
-  isProvisionStep: boolean;
   kubefirstVersion?: string;
   routes: Array<{
     icon: ReactNode;
@@ -58,7 +55,6 @@ const Navigation: FunctionComponent<NavigationProps> = ({
   handleIsActiveItem,
   handleOpenContent,
   handleOpenGame,
-  isProvisionStep,
   kubefirstVersion,
   routes,
 }) => {
@@ -81,40 +77,40 @@ const Navigation: FunctionComponent<NavigationProps> = ({
             {routes &&
               routes.map(({ icon, path, title }) => (
                 <Link href={path} key={path}>
-                  <MenuItem isActive={handleIsActiveItem(path)}>
-                    {icon}
-                    <Title variant="body1">{title}</Title>
-                  </MenuItem>
+                  <BreakpointTooltip title={title} placement="right-end">
+                    <MenuItem isActive={handleIsActiveItem(path)}>
+                      {icon}
+                      <Title variant="body1">{title}</Title>
+                    </MenuItem>
+                  </BreakpointTooltip>
                 </Link>
               ))}
           </MenuContainer>
         )}
       </div>
       <FooterContainer>
-        {isProvisionStep && (
-          <>
-            <DocsCard onClick={handleOpenContent}>
-              <Image alt="controller-img" src={Learn} height={80} width={80} />
-              <Typography variant="subtitle2" color="secondary">
-                Got time? Sit back & learn...
-              </Typography>
-            </DocsCard>
-            <FlappyCard onClick={handleOpenGame}>
-              <Typography variant="subtitle2" color="secondary">
-                Bored? Play flappy K-ray and win stuff!
-              </Typography>
-              <Image alt="controller-img" src={Controller} height={80} width={80} />
-            </FlappyCard>
-          </>
-        )}
         {FOOTER_ITEMS.map(({ icon, path, title }) => (
           <Link href={path} key={path} target="_blank">
-            <MenuItem>
-              {icon}
-              <Title variant="body1">{title}</Title>
-            </MenuItem>
+            <BreakpointTooltip title={title} placement="right-end">
+              <MenuItem>
+                {icon}
+                <Title variant="body1">{title}</Title>
+              </MenuItem>
+            </BreakpointTooltip>
           </Link>
         ))}
+        <BreakpointTooltip title="Kubefirst channel" placement="right-end">
+          <MenuItem onClick={handleOpenContent}>
+            <Image src={Youtube} alt="youtube" />
+            <Title variant="body1">Kubefirst channel</Title>
+          </MenuItem>
+        </BreakpointTooltip>
+        <BreakpointTooltip title="Flappy K ray" placement="right-end">
+          <MenuItem onClick={handleOpenGame}>
+            <VideogameAssetOutlinedIcon />
+            <Title variant="body1">Flappy K ray</Title>
+          </MenuItem>
+        </BreakpointTooltip>
       </FooterContainer>
     </Container>
   );

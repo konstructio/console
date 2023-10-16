@@ -1,7 +1,10 @@
-import Typography from '@/components/typography';
-import { media } from '@/utils/media';
-import { MIDNIGHT_EXPRESS } from '@/constants/colors';
+import { styled as muiStyled } from '@mui/material';
+
 import styled, { css } from '@/app/lib/styled-components';
+import Typography from '@/components/typography';
+import { MIDNIGHT_EXPRESS } from '@/constants/colors';
+import { media } from '@/utils/media';
+import Tooltip from '@/components/tooltip';
 
 export const Container = styled.nav`
   background-color: ${({ theme }) => theme.colors.moonlessMystery};
@@ -14,7 +17,6 @@ export const Container = styled.nav`
   transition: width 0.5s ease;
 
   ${media.greaterThan('md')`
-    overflow-y: auto;
     width: 304px;
   `}
 `;
@@ -137,18 +139,10 @@ export const RouterCard = styled.div`
   `}
 `;
 
-export const DocsCard = styled(RouterCard)`
-  border: 2px solid;
-  border-image-slice: 1;
-  border-image-source: linear-gradient(90deg, #7aa5e2 0%, #d0bae9 50%, #8851c8 100%);
-  border-width: 2px;
-  gap: 10px;
-  margin: 24px 24px 0 24px;
-`;
-
-export const FlappyCard = styled(RouterCard)`
-  background: linear-gradient(180deg, rgba(136, 81, 200, 0.6) 0%, rgba(129, 226, 180, 0.6) 100%);
-  margin: 24px 24px 40px 24px;
-`;
-
 export const ContentCard = styled.div``;
+
+export const BreakpointTooltip = muiStyled(Tooltip)(() => ({
+  '@media (min-width: 1024px)': {
+    display: 'none',
+  },
+}));
