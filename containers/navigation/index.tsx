@@ -11,12 +11,8 @@ import FlappyKray from '../../components/flappyKray';
 // import useFeatureFlag from '../../hooks/useFeatureFlag';
 import useModal from '../../hooks/useModal';
 import { useAppSelector } from '../../redux/store';
-import { InstallationType } from '../../types/redux';
-import { GitProvider } from '../../types';
 
-import { useInstallation } from '@/hooks/useInstallation';
 import { selectConfig } from '@/redux/selectors/config.selector';
-import { selectInstallation } from '@/redux/selectors/installation.selector';
 import useFeatureFlag from '@/hooks/useFeatureFlag';
 
 const Navigation: FunctionComponent = () => {
@@ -30,15 +26,8 @@ const Navigation: FunctionComponent = () => {
 
   const asPath = usePathname();
   const { kubefirstVersion, isClusterZero } = useAppSelector(selectConfig());
-  const { gitProvider, installationStep, installType } = useAppSelector(selectInstallation());
 
   const { isEnabled: isMultiClusterEnabled } = useFeatureFlag('multicluster-management');
-
-  const { isProvisionStep } = useInstallation(
-    installType as InstallationType,
-    gitProvider as GitProvider,
-    installationStep,
-  );
 
   const routes = useMemo(
     () =>
@@ -94,7 +83,6 @@ const Navigation: FunctionComponent = () => {
         handleIsActiveItem={handleIsActiveItem}
         handleOpenGame={openModal}
         handleOpenContent={openModalContent}
-        isProvisionStep={isProvisionStep}
       />
       {isOpen && <FlappyKray isOpen closeModal={closeModal} />}
       {isModalContentOpen && (
