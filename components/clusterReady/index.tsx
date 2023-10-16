@@ -52,7 +52,7 @@ const ClusterReady: FunctionComponent<ClusterRunningMessageProps> = ({
       </PasswordContainer>
       <Button variant="contained" color="primary" data-test-id="launch-console">
         <Link
-          href={`https://kubefirst.${domainName}/services`}
+          href={`https://kubefirst.${domainName}/`}
           target="_blank"
           onClick={onOpenConsole}
         >
