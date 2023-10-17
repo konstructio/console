@@ -17,12 +17,7 @@ import { ClusterType, NewWorkloadClusterConfig, ClusterEnvironment } from '@/typ
 import { EXCLUSIVE_PLUM } from '@/constants/colors';
 import ControlledNumberInput from '@/components/controlledFields/numberInput';
 import ControlledRadioGroup from '@/components/controlledFields/radio';
-import {
-  AWS_WORKLOAD_CLUSTER_OPTIONS,
-  LOWER_KEBAB_CASE_REGEX,
-  MIN_NODE_COUNT,
-  WORKLOAD_CLUSTER_OPTIONS,
-} from '@/constants';
+import { LOWER_KEBAB_CASE_REGEX, MIN_NODE_COUNT, WORKLOAD_CLUSTER_OPTIONS } from '@/constants';
 import { updateDraftCluster } from '@/redux/slices/api.slice';
 import ControlledEnvironmentSelect from '@/components/controlledFields/environmentSelect';
 import Modal from '@/components/modal';
@@ -36,6 +31,7 @@ import { InstallationType } from '@/types/redux';
 
 import { Container } from './clusterCreation.styled';
 import { InputContainer } from './advancedOptions/advancedOptions.styled';
+import useFeatureFlag from '@/hooks/useFeatureFlag';
 
 const ClusterCreationForm: FunctionComponent<Omit<ComponentPropsWithoutRef<'div'>, 'key'>> = (
   props,
@@ -44,6 +40,10 @@ const ClusterCreationForm: FunctionComponent<Omit<ComponentPropsWithoutRef<'div'
 
   const { managementCluster, cloudRegions, clusterNameCache, clusterMap, environments, error } =
     useAppSelector(({ api, environments }) => ({ ...api, ...environments }));
+
+  const { isEnabled: canProvisionAWSPhysicalClusters } = useFeatureFlag(
+    'canProvisionAwsPhysicalClusters',
+  );
 
   const dispatch = useAppDispatch();
 
@@ -85,10 +85,11 @@ const ClusterCreationForm: FunctionComponent<Omit<ComponentPropsWithoutRef<'div'
 
   const clusterOptions = useMemo(
     () =>
-      managementCluster?.cloudProvider === InstallationType.AWS
-        ? AWS_WORKLOAD_CLUSTER_OPTIONS
-        : WORKLOAD_CLUSTER_OPTIONS,
-    [managementCluster],
+      managementCluster?.cloudProvider !== InstallationType.AWS ||
+      (managementCluster?.cloudProvider === InstallationType.AWS && canProvisionAWSPhysicalClusters)
+        ? WORKLOAD_CLUSTER_OPTIONS
+        : WORKLOAD_CLUSTER_OPTIONS.filter((option) => option.value !== ClusterType.WORKLOAD),
+    [managementCluster, canProvisionAWSPhysicalClusters],
   );
 
   useEffect(() => {

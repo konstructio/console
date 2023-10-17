@@ -51,11 +51,7 @@ const ClusterReady: FunctionComponent<ClusterRunningMessageProps> = ({
         </CopyToClipboard>
       </PasswordContainer>
       <Button variant="contained" color="primary" data-test-id="launch-console">
-        <Link
-          href={`https://kubefirst.${domainName}/`}
-          target="_blank"
-          onClick={onOpenConsole}
-        >
+        <Link href={`https://kubefirst.${domainName}/`} target="_blank" onClick={onOpenConsole}>
           Open kubefirst console
         </Link>
       </Button>
