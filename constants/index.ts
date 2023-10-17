@@ -54,8 +54,6 @@ export const CLUSTER_TAG_CONFIG: Record<
 export const MIN_NODE_COUNT = 1;
 
 export const WORKLOAD_CLUSTER_OPTIONS = [
-  { label: 'Virtual', value: ClusterType.WORKLOAD_V_CLUSTER },
   { label: 'Physical', value: ClusterType.WORKLOAD },
+  { label: 'Virtual', value: ClusterType.WORKLOAD_V_CLUSTER },
 ];
-
-export const AWS_WORKLOAD_CLUSTER_OPTIONS = [{ label: 'Physical', value: ClusterType.WORKLOAD }];

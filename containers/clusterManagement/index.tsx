@@ -34,7 +34,9 @@ import { getAllEnvironments } from '../../redux/thunks/environments.thunk';
 
 import { CreateClusterFlow } from './createClusterFlow';
 import { Container, Content, Header } from './clusterManagement.styled';
+
 import { InstallationType } from '@/types/redux';
+import useFeatureFlag from '@/hooks/useFeatureFlag';
 
 enum MANAGEMENT_TABS {
   LIST_VIEW = 0,
@@ -58,6 +60,10 @@ const ClusterManagement: FunctionComponent = () => {
   }));
 
   const { addClusterToQueue } = useQueue();
+
+  const { isEnabled: canProvisionAWSPhysicalClusters } = useFeatureFlag(
+    'canProvisionAwsPhysicalClusters',
+  );
 
   const {
     isOpen: createClusterFlowOpen,
@@ -181,10 +187,12 @@ const ClusterManagement: FunctionComponent = () => {
 
   const defaultClusterType = useMemo(
     () =>
-      managementCluster?.cloudProvider === InstallationType.AWS
+      (managementCluster?.cloudProvider === InstallationType.AWS &&
+        canProvisionAWSPhysicalClusters) ||
+      managementCluster?.cloudProvider !== InstallationType.AWS
         ? ClusterType.WORKLOAD
         : ClusterType.WORKLOAD_V_CLUSTER,
-    [managementCluster],
+    [managementCluster, canProvisionAWSPhysicalClusters],
   );
 
   const handleClickOutside = useCallback(() => {
