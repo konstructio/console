@@ -8,6 +8,7 @@ import List from '@mui/material/List';
 import TableSortLabel from '@mui/material/TableSortLabel';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
+import { ClickAwayListener } from '@mui/material';
 import moment from 'moment';
 
 import { ECHO_BLUE, FIRE_BRICK, MAGNOLIA, PRIMARY, SALTBOX_BLUE } from '../../constants/colors';
@@ -28,6 +29,8 @@ import {
   StyledTableContainer,
   StyledTable,
 } from './environmentsTable.styled';
+
+import useToggle from '@/hooks/useToggle';
 
 const MyButton = styled.button<{ selected?: boolean }>`
   display: flex;
@@ -50,9 +53,7 @@ const MyButton = styled.button<{ selected?: boolean }>`
 
 interface EnvironmentRowProps {
   environment: ClusterEnvironment;
-  onDeleteEnvironment: () => void;
-  onMenuButtonClick: (env: ClusterEnvironment) => void;
-  selected?: boolean;
+  onDeleteEnvironment: (envId: string) => void;
   // onEditEnvironment: () => void;
 }
 
@@ -60,10 +61,10 @@ const EnvironmentRow: FunctionComponent<EnvironmentRowProps> = ({
   environment,
   onDeleteEnvironment,
   // onEditEnvironment,
-  onMenuButtonClick,
-  selected,
 }) => {
-  const { name, description, color, creationDate } = environment;
+  const { id, name, description, color, creationDate } = environment;
+  const { isOpen, close, toggle } = useToggle();
+
   return (
     <StyledTableRow>
       <StyledTableCell scope="row">
@@ -81,30 +82,28 @@ const EnvironmentRow: FunctionComponent<EnvironmentRowProps> = ({
       </StyledTableCell>
       <StyledTableCell>
         <div style={{ position: 'relative' }}>
-          <MyButton
-            aria-label="more info"
-            onClick={() => onMenuButtonClick(environment)}
-            selected={selected}
-          >
+          <MyButton aria-label="more info" onClick={toggle} selected={isOpen}>
             <MoreHorizIcon />
           </MyButton>
-          {selected && (
-            <Menu>
-              <List>
-                {/* <ListItem disablePadding>
+          {isOpen && (
+            <ClickAwayListener onClickAway={close}>
+              <Menu>
+                <List>
+                  {/* <ListItem disablePadding>
                   <ListItemButton onClick={onEditEnvironment}>
                     <Typography variant="body2">Edit</Typography>
                   </ListItemButton>
                 </ListItem> */}
-                <ListItem disablePadding>
-                  <ListItemButton onClick={onDeleteEnvironment}>
-                    <Typography variant="body2" style={{ color: `${FIRE_BRICK}` }}>
-                      Delete environment
-                    </Typography>
-                  </ListItemButton>
-                </ListItem>
-              </List>
-            </Menu>
+                  <ListItem disablePadding>
+                    <ListItemButton onClick={() => onDeleteEnvironment(id)}>
+                      <Typography variant="body2" style={{ color: `${FIRE_BRICK}` }}>
+                        Delete environment
+                      </Typography>
+                    </ListItemButton>
+                  </ListItem>
+                </List>
+              </Menu>
+            </ClickAwayListener>
           )}
         </div>
       </StyledTableCell>
@@ -180,19 +179,15 @@ const EnvironmentTableHead: FunctionComponent<EnvironmentTableHeadProps> = ({
 
 interface EnvironmentsTableProps extends Omit<ComponentPropsWithRef<'tbody'>, 'key'> {
   environments: EnvMap;
-  selectedEnvironment?: ClusterEnvironment;
-  onDeleteEnvironment: () => void;
-  onMenuButtonClick: (env: ClusterEnvironment) => void;
+  onDeleteEnvironment: (envId: string) => void;
   customRef?: React.Ref<HTMLTableSectionElement>;
   // onEditEnvironment: () => void;
 }
 
 export const EnvironmentsTable: FunctionComponent<EnvironmentsTableProps> = ({
   environments,
-  selectedEnvironment,
   onDeleteEnvironment,
   // onEditEnvironment,
-  onMenuButtonClick,
   customRef,
 }) => {
   const [orderBy, setOrderBy] = useState<EnvKey>('creationDate');
@@ -221,8 +216,6 @@ export const EnvironmentsTable: FunctionComponent<EnvironmentsTableProps> = ({
               environment={environment}
               onDeleteEnvironment={onDeleteEnvironment}
               // onEditEnvironment={onEditEnvironment}
-              onMenuButtonClick={onMenuButtonClick}
-              selected={environment.name === selectedEnvironment?.name}
             />
           ))}
         </StyledTableBody>
