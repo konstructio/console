@@ -46,12 +46,12 @@ export const createEnvironment = createAsyncThunk<ClusterEnvironment, ClusterEnv
   },
 );
 
-export const deleteEnvironment = createAsyncThunk<ClusterEnvironment['name'], ClusterEnvironment>(
+export const deleteEnvironment = createAsyncThunk<ClusterEnvironment['id'], ClusterEnvironment>(
   'environments/deleteEnvironment',
   async (environment, { dispatch }) => {
     try {
       await axios.delete(
-        `/api/proxy?${createQueryString('url', `/environment/${environment.name}`)}`,
+        `/api/proxy?${createQueryString('url', `/environment/${environment.id}`)}`,
       );
 
       dispatch(
@@ -65,7 +65,7 @@ export const deleteEnvironment = createAsyncThunk<ClusterEnvironment['name'], Cl
         }),
       );
 
-      return environment.name;
+      return environment.id;
     } catch (error) {
       if (axios.isAxiosError(error)) {
         throw error.response?.data.error;
