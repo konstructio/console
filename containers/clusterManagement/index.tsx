@@ -206,6 +206,10 @@ const ClusterManagement: FunctionComponent = () => {
     }
   };
 
+  const handleClusterEdit = useCallback(() => {
+    // TODO: Implement edit for cluster environment
+  }, []);
+
   const handleNotificationClose = useCallback(() => {
     dispatch(setNotifiedOfBetaPhysicalClusters(true));
   }, [dispatch]);
@@ -310,6 +314,7 @@ const ClusterManagement: FunctionComponent = () => {
           loading={loading}
           notifiedOfBetaPhysicalClusters={notifiedOfBetaPhysicalClusters}
           onNotificationClose={handleNotificationClose}
+          onClusterEdit={handleClusterEdit}
         />
       </Drawer>
       {presentedClusterId && (

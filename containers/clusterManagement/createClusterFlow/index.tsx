@@ -1,11 +1,15 @@
 import React, { FunctionComponent, useCallback } from 'react';
 import CloseIcon from '@mui/icons-material/Close';
 import CircularProgress from '@mui/material/CircularProgress';
+import MoreHoriz from '@mui/icons-material/MoreHoriz';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemButton from '@mui/material/ListItemButton';
+import { ClickAwayListener } from '@mui/base/ClickAwayListener';
 import { FormProvider, useForm } from 'react-hook-form';
 
-import Typography from '../../../components/typography';
 import Button from '../../../components/button';
-import { SALTBOX_BLUE } from '../../../constants/colors';
+import { FIRE_BRICK, SALTBOX_BLUE } from '../../../constants/colors';
 import ClusterCreationForm from '../../../containers/clusterForms/clusterCreation';
 import ClusterDetails from '../../../components/clusterDetails';
 import {
@@ -18,23 +22,22 @@ import {
 } from '../../../types/provision';
 import HeadsUpNotification from '../../../components/headsUpNotification';
 
-import {
-  CloseButton,
-  ClusterMenuFooter,
-  Form,
-  FormContent,
-  MenuHeader,
-} from './createClusterFlow.styled';
+import { CloseButton, Form, FormContent, Menu, MenuHeader } from './createClusterFlow.styled';
+
+import Row from '@/components/row';
+import Typography from '@/components/typography';
+import useToggle from '@/hooks/useToggle';
 
 const actionButtonText: Record<ClusterCreationStep, string> = {
   [ClusterCreationStep.CONFIG]: 'Create cluster',
-  [ClusterCreationStep.DETAILS]: 'Delete cluster',
+  [ClusterCreationStep.DETAILS]: 'Edit',
 };
 
 interface CreateClusterFlowProps {
   cluster?: Cluster | DraftCluster;
   managementCluster?: ManagementCluster;
   onClusterDelete: () => void;
+  onClusterEdit: () => void;
   onMenuClose: () => void;
   onSubmit: () => void;
   clusterCreationStep: ClusterCreationStep;
@@ -47,6 +50,7 @@ interface CreateClusterFlowProps {
 export const CreateClusterFlow: FunctionComponent<CreateClusterFlowProps> = ({
   cluster,
   onClusterDelete,
+  onClusterEdit,
   onMenuClose,
   onSubmit,
   clusterCreationStep,
@@ -56,6 +60,8 @@ export const CreateClusterFlow: FunctionComponent<CreateClusterFlowProps> = ({
   notifiedOfBetaPhysicalClusters,
   onNotificationClose,
 }) => {
+  const { isOpen, close, toggle } = useToggle();
+
   const methods = useForm<NewWorkloadClusterConfig>({
     defaultValues,
     mode: 'onChange',
@@ -67,9 +73,9 @@ export const CreateClusterFlow: FunctionComponent<CreateClusterFlowProps> = ({
 
   const handleClick = useCallback(() => {
     if (clusterCreationStep === ClusterCreationStep.DETAILS) {
-      onClusterDelete();
+      onClusterEdit();
     }
-  }, [onClusterDelete, clusterCreationStep]);
+  }, [onClusterEdit, clusterCreationStep]);
 
   const submitButtonDisabled =
     !isValid || loading || cluster?.status === ClusterStatus.PROVISIONING;
@@ -83,12 +89,50 @@ export const CreateClusterFlow: FunctionComponent<CreateClusterFlowProps> = ({
     <FormProvider {...methods}>
       <Form onSubmit={methods.handleSubmit(onSubmit)}>
         <MenuHeader>
-          <Typography variant="subtitle2" data-test-id="menu-title">
-            {showingClusterDetails ? cluster?.clusterName : 'Create workload cluster'}
-          </Typography>
           <CloseButton onClick={onMenuClose} type="button">
             <CloseIcon htmlColor={SALTBOX_BLUE} />
           </CloseButton>
+          <Row style={{ gap: '16px' }}>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={handleClick}
+              disabled={submitButtonDisabled}
+              type="submit"
+              data-test-id="workload-cluster-create-details"
+            >
+              {loading && <CircularProgress size={20} sx={{ mr: '8px' }} />}
+              {actionButtonText[clusterCreationStep]}
+            </Button>
+            {showingClusterDetails && (
+              <Row>
+                <Button
+                  variant="outlined"
+                  color="primary"
+                  type="button"
+                  data-test-id="workload-cluster-edit"
+                  onClick={toggle}
+                >
+                  <MoreHoriz />
+                </Button>
+                {isOpen && (
+                  <ClickAwayListener onClickAway={close}>
+                    <Menu>
+                      <List>
+                        <ListItem disablePadding>
+                          <ListItemButton onClick={onClusterDelete}>
+                            <Typography variant="body2" style={{ color: `${FIRE_BRICK}` }}>
+                              Delete cluster
+                            </Typography>
+                          </ListItemButton>
+                        </ListItem>
+                      </List>
+                    </Menu>
+                  </ClickAwayListener>
+                )}
+              </Row>
+            )}
+          </Row>
         </MenuHeader>
         <FormContent>
           {showHeadsUpNotification && <HeadsUpNotification onClose={onNotificationClose} />}
@@ -104,22 +148,6 @@ export const CreateClusterFlow: FunctionComponent<CreateClusterFlowProps> = ({
             />
           )}
         </FormContent>
-        <ClusterMenuFooter reverseButtonOrder={showingClusterDetails}>
-          <Button variant="outlined" color="primary" onClick={onMenuClose} type="button">
-            Close
-          </Button>
-          <Button
-            variant="contained"
-            color={showingClusterDetails ? 'error' : 'primary'}
-            onClick={handleClick}
-            disabled={submitButtonDisabled}
-            type="submit"
-            data-test-id="workload-cluster-create-details"
-          >
-            {loading && <CircularProgress size={20} sx={{ mr: '8px' }} />}
-            {actionButtonText[clusterCreationStep]}
-          </Button>
-        </ClusterMenuFooter>
       </Form>
     </FormProvider>
   );
