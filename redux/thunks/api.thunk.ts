@@ -2,8 +2,7 @@ import axios from 'axios';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { sortBy } from 'lodash';
 
-import { AppDispatch, RootState } from '../store';
-import { createQueryString } from '../../utils/url/formatDomain';
+import { AppDispatch, RootState } from '@/redux/store';
 import {
   ManagementCluster,
   ClusterRequestProps,
@@ -12,12 +11,13 @@ import {
   ClusterResponse,
   Cluster,
   ClusterEnvironment,
-} from '../../types/provision';
-import { ClusterCache, ClusterNameCache } from '../../types/redux';
-import { InstallValues, InstallationType } from '../../types/redux';
-import { TelemetryClickEvent } from '../../types/telemetry';
-import { mapClusterFromRaw } from '../../utils/mapClustersFromRaw';
-import { setBoundEnvironments } from '../../redux/slices/environments.slice';
+} from '@/types/provision';
+import { createQueryString } from '@/utils/url/formatDomain';
+import { ClusterCache, ClusterNameCache } from '@/types/redux';
+import { InstallValues, InstallationType } from '@/types/redux';
+import { TelemetryClickEvent } from '@/types/telemetry';
+import { mapClusterFromRaw } from '@/utils/mapClustersFromRaw';
+import { setBoundEnvironments } from '@/redux/slices/environments.slice';
 
 export const createCluster = createAsyncThunk<
   ManagementCluster,
@@ -272,6 +272,54 @@ export const getCloudDomains = createAsyncThunk<
     throw res.error;
   }
   return sortBy(res.data.domains);
+});
+
+export const getInstanceSizes = createAsyncThunk<
+  string[],
+  { region: string; zone?: string },
+  {
+    dispatch: AppDispatch;
+    state: RootState;
+  }
+>('api/getInstanceSizes', async ({ region, zone }, { getState }) => {
+  const {
+    installation: { installType, values },
+  } = getState();
+
+  const { data } = await axios.post<{ instance_sizes: string[] }>('/api/proxy', {
+    url: `/instance-sizes/${installType}`,
+    body: {
+      ...values,
+      cloud_region: region,
+      cloud_zone: zone,
+    },
+  });
+
+  return data.instance_sizes;
+});
+
+// currently only needed for google install type
+export const getRegionZones = createAsyncThunk<
+  string[],
+  string,
+  {
+    dispatch: AppDispatch;
+    state: RootState;
+  }
+>('api/getRegionZones', async (region, { getState }) => {
+  const {
+    installation: { values },
+  } = getState();
+
+  const { data } = await axios.post<{ zones: string[] }>('/api/proxy', {
+    url: '/zones',
+    body: {
+      ...values,
+      cloud_region: region,
+    },
+  });
+
+  return data.zones;
 });
 
 export const resetClusterProgress = createAsyncThunk<
