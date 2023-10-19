@@ -25,7 +25,7 @@ const AWS_SESSION_TOKEN = Cypress.env('AWS_SESSION_TOKEN');
 const AWS_CLOUD_REGION = Cypress.env('AWS_CLOUD_REGION');
 const IMAGE_REPO = Cypress.env('IMAGE_REPO');
 const GOOGLE_PROJECT_ID = Cypress.env('GOOGLE_PROJECT_ID');
-const GOOGLE_KEY_FILE = Cypress.env('GOOGLE_KEY_FILE');
+const GOOGLE_APPLICATION_CREDENTIALS = Cypress.env('GOOGLE_APPLICATION_CREDENTIALS');
 const DIGI_OCEAN_AUTH_TOKEN = Cypress.env('DIGI_OCEAN_AUTH_TOKEN');
 const DIGI_OCEAN_SPACES_KEY = Cypress.env('DIGI_OCEAN_SPACES_KEY');
 const DIGI_OCEAN_SPACES_SECRET = Cypress.env('DIGI_OCEAN_SPACES_SECRET');
@@ -116,7 +116,7 @@ describe('provision management cluster using any git provider, cloud provider, a
     }
 
     if (CLOUD_PROVIDER === InstallationType.GOOGLE) {
-      cy.get("[name='google_auth.key_file']").type(GOOGLE_KEY_FILE, {
+      cy.get("[name='google_auth.key_file']").type(GOOGLE_APPLICATION_CREDENTIALS, {
         log: false,
         parseSpecialCharSequences: false,
         delay: 0,

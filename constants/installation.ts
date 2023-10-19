@@ -78,7 +78,7 @@ export const INFO_INSTALLATION_TYPES: Record<InstallationType, Record<number, In
       description: [
         'Create a <a href="https://cloud.google.com/" target="_blank">Google cloud account</a> in which you are the owner.',
         'Have a <a href="https://cloud.google.com/dns/docs/overview" target="_blank">publicly routable DNS</a> available.',
-        'Use the <a href="https://cloud.google.com/docs/authentication/application-default-credentials#GAC" target="_blank">GOOGLE_APPLICATIONS_CREDENTIALS</a> environment variable to provide the location credentials JSON file.',
+        'Use the <a href="https://cloud.google.com/docs/authentication/application-default-credentials#GAC" target="_blank">GOOGLE_APPLICATION_CREDENTIALS</a> environment variable to provide the location credentials JSON file.',
       ],
     },
   },
@@ -145,7 +145,7 @@ export const INFO_MARKETPLACE_INSTALLATION_TYPES: Record<
       description: [
         'Create a <a href="https://cloud.google.com/" target="_blank">Google cloud account</a> in which you are the owner.',
         'Have a <a href="https://cloud.google.com/dns/docs/overview" target="_blank">publicly routable DNS</a> available.',
-        'Use the <a href="https://cloud.google.com/docs/authentication/application-default-credentials#GAC" target="_blank">GOOGLE_APPLICATIONS_CREDENTIALS</a> environment variable to provide the location credentials JSON file.',
+        'Use the <a href="https://cloud.google.com/docs/authentication/application-default-credentials#GAC" target="_blank">GOOGLE_APPLICATION_CREDENTIALS</a> environment variable to provide the location credentials JSON file.',
       ],
     },
   },
