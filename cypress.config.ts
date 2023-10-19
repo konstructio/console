@@ -1,6 +1,6 @@
-import { defineConfig } from "cypress";
-import * as dotenv from "dotenv";
-import { createRandomTwoCharacters } from "utils/createRandomTwoCharacters";
+import { defineConfig } from 'cypress';
+import * as dotenv from 'dotenv';
+import { createRandomTwoCharacters } from 'utils/createRandomTwoCharacters';
 
 dotenv.config();
 
