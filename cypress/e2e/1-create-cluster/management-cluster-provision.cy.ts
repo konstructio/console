@@ -47,6 +47,7 @@ const AWS_INSTANCE_SIZE = Cypress.env('AWS_INSTANCE_SIZE');
 const GOOGLE_INSTANCE_SIZE = Cypress.env('GOOGLE_INSTANCE_SIZE');
 const DIGITAL_OCEAN_INSTANCE_SIZE = Cypress.env('DIGITAL_OCEAN_INSTANCE_SIZE');
 const VULTR_INSTANCE_SIZE = Cypress.env('VULTR_INSTANCE_SIZE');
+const SHOW_GOOGLE_KEY_FILE = Cypress.env('SHOW_GOOGLE_KEY_FILE');
 
 const GIT_PROVIDER_CONFIG: Record<
   GitProvider,
@@ -132,6 +133,12 @@ describe('provision management cluster using any git provider, cloud provider, a
     }
 
     if (CLOUD_PROVIDER === InstallationType.GOOGLE) {
+      // default set to true. this is an controlled input wrapped by a label so it does
+      // not act like a checkbox for cypress (hence no check/uncheck call)
+      if (SHOW_GOOGLE_KEY_FILE === 'false') {
+        cy.get('[data-test-id="showGoogleKeyFile"]').type('false');
+      }
+
       cy.get("[name='google_auth.key_file']").type(GOOGLE_APPLICATION_CREDENTIALS, {
         log: false,
         parseSpecialCharSequences: false,

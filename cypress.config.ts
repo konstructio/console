@@ -57,6 +57,7 @@ export default defineConfig({
     GOOGLE_INSTANCE_SIZE: process.env.GOOGLE_INSTANCE_SIZE,
     DIGITAL_OCEAN_INSTANCE_SIZE: process.env.DIGITAL_OCEAN_INSTANCE_SIZE,
     VULTR_INSTANCE_SIZE: process.env.VULTR_INSTANCE_SIZE,
+    SHOW_GOOGLE_KEY_FILE: process.env.SHOW_GOOGLE_KEY_FILE,
   },
 
   viewportWidth: 1440,
