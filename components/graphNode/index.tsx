@@ -104,7 +104,7 @@ export const GraphNode: FunctionComponent<NodeProps<Cluster>> = ({
       </MainContainerInfo>
       <StatusTag
         text={draftNode ? 'DRAFT' : iconLabel}
-        bgColor={draftNode ? 'grey' : bgColor}
+        bgColor={draftNode ? 'gray' : bgColor}
         icon={!draftNode ? iconType : undefined}
       />
       <NodeHandle

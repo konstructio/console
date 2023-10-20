@@ -4,14 +4,14 @@ export const mockEnvironmentsResponse: EnvironmentResponse[] = [
   {
     _id: 'one',
     name: 'development',
-    color: 'sky-blue',
+    color: 'light blue',
     description: 'Dedicated development environment to develop, play around and iterate.',
     creation_timestamp: '1696281521463',
   },
   {
     _id: 'two',
     name: 'staging',
-    color: 'yellow',
+    color: 'gold',
     description: 'For testing and validating code before release.',
     creation_timestamp: '1696281569574',
   },

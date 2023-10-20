@@ -23,18 +23,18 @@ import {
 export const CATEGORY_COLOR_CONFIG: Record<AppCategory, TagColor> = {
   [AppCategory.APP_MANAGEMENT]: 'purple',
   [AppCategory.ARCHITECTURE]: 'pink',
-  [AppCategory.CI_CD]: 'yellow',
+  [AppCategory.CI_CD]: 'gold',
   [AppCategory.DATABASE]: 'indigo',
-  [AppCategory.FIN_OPS]: 'light-blue',
-  [AppCategory.INFRASTRUCTURE]: 'grey',
+  [AppCategory.FIN_OPS]: 'light blue',
+  [AppCategory.INFRASTRUCTURE]: 'gray',
   [AppCategory.MONITORING]: 'emerald',
   [AppCategory.OBSERVABIILITY]: 'light-orange',
   [AppCategory.SECURITY]: 'dark-sky-blue',
   [AppCategory.STORAGE]: 'green',
-  [AppCategory.TESTING]: 'neon-green',
-  [AppCategory.QUEUEING]: 'sky-blue',
-  [AppCategory.KUBESHOP]: 'sky-blue',
-  [AppCategory.APPLICATIONS]: 'sky-blue',
+  [AppCategory.TESTING]: 'lime',
+  [AppCategory.QUEUEING]: 'light blue',
+  [AppCategory.KUBESHOP]: 'light blue',
+  [AppCategory.APPLICATIONS]: 'light blue',
 };
 
 export type GitOpsCatalogCardProps = PropsWithChildren<GitOpsCatalogApp> & {
