@@ -16,7 +16,7 @@ const ControlledTagSelectWithHooks = () => {
   const {
     control,
     formState: { errors },
-  } = useForm<{ labelColor: TagColor }>({ defaultValues: { labelColor: 'grey' }, mode: 'onBlur' });
+  } = useForm<{ labelColor: TagColor }>({ defaultValues: { labelColor: 'gray' }, mode: 'onBlur' });
 
   return (
     <ControlledTagSelect
