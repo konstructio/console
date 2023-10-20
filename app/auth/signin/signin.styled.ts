@@ -7,6 +7,7 @@ import Typography from '../../../components/typography';
 
 import { CELERY_MOUSSE } from '@/constants/colors';
 import { media } from '@/utils/media';
+import Column from '@/components/column';
 
 export const Background = styled.div`
   align-items: center;
@@ -34,6 +35,11 @@ export const Container = styled.div`
   display: flex;
   height: 100%;
   width: 100%;
+`;
+
+export const Content = styled(Column)`
+  align-items: center;
+  justify-content: center;
 `;
 
 export const Form = styled(Box)`

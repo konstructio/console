@@ -4,9 +4,9 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import styled from 'styled-components';
 
-import Typography from '../components/typography';
-import NotFoundIcon from '../assets/404.svg';
-import Button from '../components/button';
+import Typography from '@/components/typography';
+import NotFoundIcon from '@/assets/404.svg';
+import Button from '@/components/button';
 
 const Container = styled.div`
   align-items: center;
