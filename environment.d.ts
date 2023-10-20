@@ -6,6 +6,7 @@ declare namespace NodeJS {
     readonly DISABLE_TELEMETRY: string;
     readonly INSTALL_METHOD: string;
     readonly IS_CLUSTER_ZERO: string;
+    readonly DISABLE_AUTH: string;
     readonly KUBEFIRST_VERSION: string;
     readonly POSTHOG_KEY: string;
     readonly CLIENT_ID: string;

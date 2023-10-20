@@ -3,6 +3,7 @@ export interface Flags {
 }
 
 export interface EnvironmentVariables {
+  disableAuth?: boolean;
   disableTelemetry?: boolean;
   isClusterZero: boolean;
   kubefirstVersion?: string;

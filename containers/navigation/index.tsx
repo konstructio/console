@@ -14,6 +14,7 @@ import { useAppSelector } from '../../redux/store';
 
 import { selectConfig } from '@/redux/selectors/config.selector';
 import useFeatureFlag from '@/hooks/useFeatureFlag';
+import { selectCluster } from '@/redux/selectors/cluster.selector';
 
 const Navigation: FunctionComponent = () => {
   const [domLoaded, setDomLoaded] = useState<boolean>(false);
@@ -26,6 +27,7 @@ const Navigation: FunctionComponent = () => {
 
   const asPath = usePathname();
   const { kubefirstVersion, isClusterZero } = useAppSelector(selectConfig());
+  const { selectedCluster } = useAppSelector(selectCluster());
 
   const { isEnabled: isMultiClusterEnabled } = useFeatureFlag('multicluster-management');
 
@@ -36,7 +38,8 @@ const Navigation: FunctionComponent = () => {
           icon: <ScatterPlotIcon />,
           path: '/dashboard/cluster-management',
           title: 'Cluster Management',
-          isEnabled: isMultiClusterEnabled && !isClusterZero,
+          isEnabled:
+            isMultiClusterEnabled && !isClusterZero && selectedCluster?.cloudProvider !== 'k3d',
         },
         {
           icon: <GridViewOutlinedIcon />,
@@ -48,10 +51,10 @@ const Navigation: FunctionComponent = () => {
           icon: <CollectionsOutlinedIcon />,
           path: '/dashboard/environments',
           title: 'Environments',
-          isEnabled: !isClusterZero,
+          isEnabled: !isClusterZero && selectedCluster?.cloudProvider !== 'k3d',
         },
       ].filter(({ isEnabled }) => isEnabled),
-    [isMultiClusterEnabled, isClusterZero],
+    [isMultiClusterEnabled, isClusterZero, selectedCluster?.cloudProvider],
   );
 
   const handleIsActiveItem = useCallback(

@@ -5,6 +5,7 @@ import { getEnvVariables } from '../thunks/config.thunk';
 import { EnvironmentVariables } from '@/types/config';
 
 export interface ConfigState {
+  isAuthDisabled: boolean;
   isTelemetryDisabled: boolean;
   isClusterZero: boolean;
   kubefirstVersion?: string;
@@ -13,6 +14,7 @@ export interface ConfigState {
 }
 
 export const initialState: ConfigState = {
+  isAuthDisabled: false,
   isTelemetryDisabled: false,
   isClusterZero: false,
   isLoading: false,
@@ -44,6 +46,7 @@ const configSlice = createSlice({
           state.installMethod = payload.installMethod;
           state.isTelemetryDisabled = !!payload.disableTelemetry;
           state.kubefirstVersion = payload.kubefirstVersion;
+          state.isAuthDisabled = !!payload.disableAuth;
         },
       )
       .addCase(getEnvVariables.rejected, (state) => {

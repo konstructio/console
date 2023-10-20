@@ -2,9 +2,21 @@
 import styled from 'styled-components';
 import Button from '@mui/material/Button';
 
-import { EXCLUSIVE_PLUM, LIGHT_GREY } from '../../constants/colors';
+import {
+  DR_WHITE,
+  EXCLUSIVE_PLUM,
+  LIGHT_GREY,
+  PASTEL_LIGHT_BLUE,
+  VOLCANIC_SAND,
+} from '../../constants/colors';
 
-export const Container = styled.div<{ disabled?: boolean }>`
+export const Container = styled.div<{ disabled?: boolean; fullWidth?: boolean }>`
+  ${({ fullWidth }) =>
+    fullWidth &&
+    `
+    width: 100%;
+  `}
+
   ${({ disabled }) =>
     disabled &&
     `
@@ -31,6 +43,24 @@ export const SecondaryButton = styled(Button)`
   box-shadow: none !important;
   &:hover {
     background-color: ${({ theme }) => theme.colors.magnolia} !important;
+  }
+  ${({ disabled }) =>
+    disabled &&
+    `
+    border-color: ${EXCLUSIVE_PLUM} !important;
+    color: ${EXCLUSIVE_PLUM} !important;
+    cursor: not-allowed !important;
+  `}
+`;
+
+export const SecondaryDarkButton = styled(Button)`
+  border: 1px solid !important;
+  box-shadow: none !important;
+  border-color: ${PASTEL_LIGHT_BLUE} !important;
+  color: ${VOLCANIC_SAND} !important;
+
+  &:hover {
+    background-color: ${DR_WHITE} !important;
   }
   ${({ disabled }) =>
     disabled &&

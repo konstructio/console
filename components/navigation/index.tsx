@@ -6,8 +6,6 @@ import { BsSlack } from 'react-icons/bs';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
-import { ECHO_BLUE } from '../../constants/colors';
-
 import {
   Container,
   FooterContainer,
@@ -19,6 +17,7 @@ import {
   BreakpointTooltip,
 } from './navigation.styled';
 
+import { ECHO_BLUE } from '@/constants/colors';
 import Ray from '@/assets/ray.svg';
 import TitleLogo from '@/assets/title.svg';
 import Youtube from '@/assets/youtube.svg';
