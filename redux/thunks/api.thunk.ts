@@ -211,7 +211,7 @@ export const deleteCluster = createAsyncThunk<
   const res = await axios.delete<{ cluster_id: string }>(
     `/api/proxy?${createQueryString(
       'url',
-      `/cluster/${managementCluster?.id || 'kubefirst'}/${workloadClusterId}`,
+      `/cluster/${managementCluster?.clusterId || 'kubefirst'}/${workloadClusterId}`,
     )}&target=ee`,
   );
 

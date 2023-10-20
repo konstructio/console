@@ -37,6 +37,7 @@ import { Container, Content, Header } from './clusterManagement.styled';
 
 import { InstallationType } from '@/types/redux';
 import useFeatureFlag from '@/hooks/useFeatureFlag';
+import { removeClusterFromQueue } from '@/redux/slices/queue.slice';
 
 enum MANAGEMENT_TABS {
   LIST_VIEW = 0,
@@ -47,6 +48,7 @@ const ClusterManagement: FunctionComponent = () => {
   const [activeTab, setActiveTab] = useState(MANAGEMENT_TABS.LIST_VIEW);
 
   const {
+    clusterQueue,
     managementCluster,
     clusterCreationStep,
     presentedClusterId,
@@ -132,29 +134,23 @@ const ClusterManagement: FunctionComponent = () => {
     closeCreateClusterFlow();
   }, [clusterCreationStep, dispatch, closeCreateClusterFlow]);
 
-  const handleDeleteCluster = useCallback(async () => {
+  const handleDeleteCluster = () => {
     if (presentedClusterId) {
-      await dispatch(deleteCluster(presentedClusterId)).unwrap();
-      addClusterToQueue({
-        id: presentedClusterId,
-        clusterName: managementCluster?.clusterName as string,
-        status: ClusterStatus.DELETING,
-        clusterType: ClusterType.WORKLOAD,
-        callback: handleGetClusters,
-      });
-
-      closeDeleteModal();
-      handleMenuClose();
+      dispatch(deleteCluster(presentedClusterId))
+        .unwrap()
+        .then(() => {
+          addClusterToQueue({
+            id: presentedClusterId,
+            clusterName: managementCluster?.clusterName as string,
+            status: ClusterStatus.DELETING,
+            clusterType: ClusterType.WORKLOAD,
+            callback: handleGetClusters,
+          });
+          closeDeleteModal();
+          handleMenuClose();
+        });
     }
-  }, [
-    presentedClusterId,
-    dispatch,
-    handleGetClusters,
-    addClusterToQueue,
-    managementCluster?.clusterName,
-    closeDeleteModal,
-    handleMenuClose,
-  ]);
+  };
 
   const handleChange = useCallback(
     (event: React.SyntheticEvent, newValue: number) => {
@@ -219,6 +215,15 @@ const ClusterManagement: FunctionComponent = () => {
       dispatch(getCloudRegions(managementCluster));
     }
   }, [dispatch, managementCluster]);
+
+  useEffect(() => {
+    const deletedClusters = Object.values(clusterQueue).filter(
+      (cluster) => cluster.status === ClusterStatus.DELETED,
+    );
+    if (deletedClusters.length) {
+      deletedClusters.forEach((cluster) => dispatch(removeClusterFromQueue(cluster.id)));
+    }
+  }, [clusterQueue, dispatch]);
 
   const tableRef = useRef<HTMLTableSectionElement>(null);
 
