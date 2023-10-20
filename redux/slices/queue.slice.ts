@@ -1,4 +1,4 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 
 import { ClusterQueue } from '../../types/provision';
 
@@ -21,9 +21,14 @@ const queueSlice = createSlice({
     setClusterQueue: (state, action) => {
       state.clusterQueue = action.payload;
     },
+    removeClusterFromQueue: (state, { payload }: PayloadAction<string>) => {
+      if (state.clusterQueue[payload]) {
+        delete state.clusterQueue[payload];
+      }
+    },
   },
 });
 
-export const { setClusterQueue } = queueSlice.actions;
+export const { setClusterQueue, removeClusterFromQueue } = queueSlice.actions;
 
 export const queueReducer = queueSlice.reducer;

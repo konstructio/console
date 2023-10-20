@@ -8,7 +8,7 @@ import React, {
 } from 'react';
 import axios from 'axios';
 
-import { setClusterQueue } from '../../redux/slices/queue.slice';
+import { removeClusterFromQueue, setClusterQueue } from '../../redux/slices/queue.slice';
 import { createQueryString } from '../../utils/url/formatDomain';
 import { ClusterQueue, ClusterResponse, ClusterStatus, ClusterType } from '../../types/provision';
 import { useAppDispatch, useAppSelector } from '../../redux/store';
@@ -90,6 +90,10 @@ const QueueProvider: FunctionComponent<PropsWithChildren> = ({ children }) => {
           clearInterval(queue[id]);
         }
 
+        if (status === ClusterStatus.PROVISIONED) {
+          dispatch(removeClusterFromQueue(id));
+        }
+
         if (status === ClusterStatus.DELETED) {
           dispatch(
             createNotification({
@@ -101,6 +105,7 @@ const QueueProvider: FunctionComponent<PropsWithChildren> = ({ children }) => {
               },
             }),
           );
+          dispatch(removeClusterFromQueue(id));
         }
       }, 10000);
     },
@@ -129,7 +134,7 @@ const QueueProvider: FunctionComponent<PropsWithChildren> = ({ children }) => {
           queue[clusterId] = getClusterInterval(clusterQueue[clusterId]);
         }
       });
-  }, [clusterQueue, getClusterInterval, queue]);
+  }, [clusterQueue, getClusterInterval, queue, dispatch]);
 
   return (
     <QueueContext.Provider
