@@ -38,8 +38,8 @@ export const StyledLabel = muiStyled(Typography)(
 `,
 );
 
-export const StyledTextArea = muiStyled(TextareaAutosize)<{ error?: boolean }>(
-  ({ theme, error }) => `
+export const StyledTextArea = muiStyled(TextareaAutosize)<{ error?: boolean; hideValue?: boolean }>(
+  ({ theme, error, hideValue }) => `
   width: calc(100% - ${error ? '47px' : '24px'});
   border-radius: 4px;
   padding: ${error ? '8px 35px 8px 12px' : '8px 12px'};
@@ -52,6 +52,9 @@ export const StyledTextArea = muiStyled(TextareaAutosize)<{ error?: boolean }>(
   &:focus {
     border-color: ${error ? theme.palette.error.main : theme.palette.primary.main};
   }
+  text-security: ${hideValue ? 'disc' : 'none'};
+  -webkit-text-security: ${hideValue ? 'disc' : 'none'};
+  -moz-text-security: ${hideValue ? 'disc' : 'none'};
 `,
 );
 

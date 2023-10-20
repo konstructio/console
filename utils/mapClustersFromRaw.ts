@@ -83,7 +83,7 @@ export const mapClusterFromRaw = (cluster: ClusterResponse) => {
           id: curVal.environment?._id ?? '',
           name: curVal.environment?.name ?? '',
           creationDate: curVal.environment?.creation_timestamp ?? '',
-          color: curVal.environment?.color ?? 'grey',
+          color: curVal.environment?.color ?? 'gray',
         },
         status: curVal.status,
         type: curVal.cluster_type as ClusterType,

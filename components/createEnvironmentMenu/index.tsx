@@ -6,7 +6,7 @@ import { Alert } from '@mui/material';
 import Typography from '../typography';
 import Button from '../button';
 import { SALTBOX_BLUE } from '../../constants/colors';
-import { TAG_COLOR_OPTIONS } from '../tag';
+import { TagColor } from '../tag';
 import ControlledTextField from '../controlledFields/TextField';
 import ControlledTagSelect from '../controlledFields/tagSelect';
 import ControlledTextArea from '../controlledFields/textArea';
@@ -14,6 +14,17 @@ import { ClusterEnvironment } from '../../types/provision';
 import { EnvMap } from '../../redux/slices/environments.slice';
 
 import { CloseButton, Content, Footer, Header, Root } from './createEnvironmentMenu.styled';
+
+const ENVIRONMENT_MENU_COLOR_OPTIONS: TagColor[] = [
+  'gray',
+  'cyan',
+  'gold',
+  'green',
+  'light blue',
+  'lime',
+  'pink',
+  'purple',
+];
 
 interface CreateEnvironmentMenuProps
   extends Omit<ComponentPropsWithoutRef<'form'>, 'onSubmit' | 'key'> {
@@ -36,7 +47,7 @@ export const CreateEnvironmentMenu: FunctionComponent<CreateEnvironmentMenuProps
     control,
     handleSubmit,
     formState: { isValid, errors },
-  } = useForm<ClusterEnvironment>({ mode: 'onBlur', defaultValues: { color: 'grey' } });
+  } = useForm<ClusterEnvironment>({ mode: 'onBlur', defaultValues: { color: 'gray' } });
 
   return (
     <Root {...rest} onSubmit={handleSubmit(onSubmit)}>
@@ -86,7 +97,7 @@ export const CreateEnvironmentMenu: FunctionComponent<CreateEnvironmentMenuProps
             label="Label color"
             required
             rules={{ required: 'Label color is required' }}
-            options={TAG_COLOR_OPTIONS}
+            options={ENVIRONMENT_MENU_COLOR_OPTIONS}
             control={control}
             onErrorText={errors.color?.message as string}
           />

@@ -1,6 +1,14 @@
-import React, { ChangeEvent, FunctionComponent, useEffect, useMemo, useState } from 'react';
+import React, {
+  ChangeEvent,
+  FunctionComponent,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 import debounce from 'lodash/debounce';
 import { useFormContext } from 'react-hook-form';
+import { FormControlLabel } from '@mui/material';
 
 import { Required } from '../../../../components/textField/textField.styled';
 import GitProviderButton from '../../../../components/gitProviderButton';
@@ -15,7 +23,7 @@ import { useAppDispatch, useAppSelector } from '../../../../redux/store';
 import { GIT_PROVIDERS, GitProvider } from '../../../../types';
 import { InstallValues, InstallationType } from '../../../../types/redux/index';
 import { FormStep } from '../../../../constants/installation';
-import { EXCLUSIVE_PLUM } from '../../../../constants/colors';
+import { EXCLUSIVE_PLUM, VOLCANIC_SAND } from '../../../../constants/colors';
 import {
   getGitHubOrgRepositories,
   getGitHubOrgTeams,
@@ -39,10 +47,13 @@ import { FormContainer, GitContainer, GitUserField, GitUserFieldInput } from './
 
 import Tooltip from '@/components/tooltip';
 import Row from '@/components/row';
+import CheckBoxWithRef from '@/components/checkbox';
+import Column from '@/components/column';
 
 const AuthForm: FunctionComponent = () => {
   const [isGitRequested, setIsGitRequested] = useState<boolean>();
   const [gitUserName, setGitUserName] = useState<string>();
+  const [showGoogleKeyFile, setShowGoogleKeyFile] = useState(true);
 
   const dispatch = useAppDispatch();
 
@@ -150,6 +161,10 @@ const AuthForm: FunctionComponent = () => {
     dispatch(setGitProvider(provider));
   };
 
+  const handleCheckbox = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    setShowGoogleKeyFile(e.target.checked);
+  }, []);
+
   useEffect(() => {
     if (githubUser?.login || gitlabUser?.name) {
       setGitUserName(githubUser?.login || gitlabUser?.name);
@@ -250,16 +265,30 @@ const AuthForm: FunctionComponent = () => {
         )}
         {installationType === InstallationType.GOOGLE && (
           <>
-            <ControlledTextArea
-              control={control}
-              name="google_auth.key_file"
-              label="Google Cloud key file"
-              rules={{ required: 'key file is required' }}
-              required
-              minRows={14}
-              onErrorText={errors.google_auth?.key_file?.message}
-              textAreaStyleOverrides={{ maxHeight: '266px' }}
-            />
+            <Column style={{ gap: '10px' }}>
+              <ControlledTextArea
+                control={control}
+                name="google_auth.key_file"
+                label="Google Cloud key file"
+                rules={{ required: 'key file is required' }}
+                required
+                minRows={14}
+                onErrorText={errors.google_auth?.key_file?.message}
+                textAreaStyleOverrides={{ maxHeight: '266px' }}
+                hideValue={!showGoogleKeyFile}
+              />
+
+              <FormControlLabel
+                data-test-id="showGoogleKeyFile"
+                control={<CheckBoxWithRef checked={showGoogleKeyFile} onChange={handleCheckbox} />}
+                label={
+                  <Typography variant="body2" sx={{ ml: '8px' }} color={VOLCANIC_SAND}>
+                    Show key file
+                  </Typography>
+                }
+                sx={{ ml: '16px' }}
+              />
+            </Column>
 
             <ControlledTextField
               control={control}
