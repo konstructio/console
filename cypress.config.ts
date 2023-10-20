@@ -32,7 +32,7 @@ export default defineConfig({
     AWS_SESSION_TOKEN: process.env.AWS_SESSION_TOKEN,
     IMAGE_REPO: process.env.IMAGE_REPO,
     CLOUD_PROVIDER: process.env.CLOUD_PROVIDER,
-    GOOGLE_KEY_FILE: process.env.GOOGLE_KEY_FILE,
+    GOOGLE_APPLICATION_CREDENTIALS: process.env.GOOGLE_APPLICATION_CREDENTIALS,
     GOOGLE_PROJECT_ID: process.env.GOOGLE_PROJECT_ID,
     DIGI_OCEAN_AUTH_TOKEN: process.env.DIGI_OCEAN_AUTH_TOKEN,
     DIGI_OCEAN_SPACES_KEY: process.env.DIGI_OCEAN_SPACES_KEY,
@@ -49,9 +49,22 @@ export default defineConfig({
     GOOGLE_CLOUD_REGION: process.env.GOOGLE_CLOUD_REGION,
     AWS_CLOUD_REGION: process.env.AWS_CLOUD_REGION,
     USE_HTTPS: process.env.USE_HTTPS,
+    IS_CLUSTER_ZERO: process.env.IS_CLUSTER_ZERO,
     FORCE_DESTROY_TERRAFORM: process.env.FORCE_DESTROY_TERRAFORM,
+    GOOGLE_CLOUD_ZONE: process.env.GOOGLE_CLOUD_ZONE,
+    CIVO_INSTANCE_SIZE: process.env.CIVO_INSTANCE_SIZE,
+    AWS_INSTANCE_SIZE: process.env.AWS_INSTANCE_SIZE,
+    GOOGLE_INSTANCE_SIZE: process.env.GOOGLE_INSTANCE_SIZE,
+    DIGITAL_OCEAN_INSTANCE_SIZE: process.env.DIGITAL_OCEAN_INSTANCE_SIZE,
+    VULTR_INSTANCE_SIZE: process.env.VULTR_INSTANCE_SIZE,
   },
 
   viewportWidth: 1440,
   viewportHeight: 900,
+
+  e2e: {
+    setupNodeEvents(on, config) {
+      // implement node event listeners here
+    },
+  },
 });

@@ -44,6 +44,15 @@ const ClusterCreationForm: FunctionComponent<Omit<ComponentPropsWithoutRef<'div'
   const { isEnabled: canProvisionAWSPhysicalClusters } = useFeatureFlag(
     'canProvisionAwsPhysicalClusters',
   );
+  const { isEnabled: canProvisionGCPPhysicalClusters } = useFeatureFlag(
+    'canProvisionGCPPhysicalClusters',
+  );
+  const { isEnabled: canProvisionDOPhysicalClusters } = useFeatureFlag(
+    'canProvisionDOPhysicalClusters',
+  );
+  const { isEnabled: canProvisionVultrPhysicalClusters } = useFeatureFlag(
+    'canProvisionVultrPhysicalClusters',
+  );
 
   const dispatch = useAppDispatch();
 
@@ -83,14 +92,35 @@ const ClusterCreationForm: FunctionComponent<Omit<ComponentPropsWithoutRef<'div'
 
   const isVCluster = useMemo(() => type === ClusterType.WORKLOAD_V_CLUSTER, [type]);
 
-  const clusterOptions = useMemo(
-    () =>
-      managementCluster?.cloudProvider !== InstallationType.AWS ||
-      (managementCluster?.cloudProvider === InstallationType.AWS && canProvisionAWSPhysicalClusters)
-        ? WORKLOAD_CLUSTER_OPTIONS
-        : WORKLOAD_CLUSTER_OPTIONS.filter((option) => option.value !== ClusterType.WORKLOAD),
-    [managementCluster, canProvisionAWSPhysicalClusters],
+  // check if user has permission to provision physical clusters based on cloud provider,
+  // otherwise default to true if no feature flag check
+  const physicalClustersPermission = useMemo(
+    (): Record<InstallationType, boolean> => ({
+      [InstallationType.AWS]: canProvisionAWSPhysicalClusters,
+      [InstallationType.DIGITAL_OCEAN]: canProvisionDOPhysicalClusters,
+      [InstallationType.GOOGLE]: canProvisionGCPPhysicalClusters,
+      [InstallationType.VULTR]: canProvisionVultrPhysicalClusters,
+      [InstallationType.CIVO]: true,
+      [InstallationType.LOCAL]: true,
+    }),
+    [
+      canProvisionAWSPhysicalClusters,
+      canProvisionDOPhysicalClusters,
+      canProvisionGCPPhysicalClusters,
+      canProvisionVultrPhysicalClusters,
+    ],
   );
+
+  const clusterOptions = useMemo(() => {
+    if (
+      managementCluster &&
+      managementCluster.cloudProvider &&
+      physicalClustersPermission[managementCluster.cloudProvider]
+    ) {
+      return WORKLOAD_CLUSTER_OPTIONS;
+    }
+    return WORKLOAD_CLUSTER_OPTIONS.filter((option) => option.value !== ClusterType.WORKLOAD);
+  }, [managementCluster, physicalClustersPermission]);
 
   useEffect(() => {
     const subscription = watch((values) => {

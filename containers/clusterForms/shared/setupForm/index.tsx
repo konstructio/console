@@ -8,23 +8,25 @@ import React, {
   useState,
 } from 'react';
 import { useFormContext } from 'react-hook-form';
+import { Box } from '@mui/material';
 import styled from 'styled-components';
 import { capitalize } from 'lodash';
 
-import { setInstallationStep } from '../../../../redux/slices/installation.slice';
-import { clearDomains } from '../../../../redux/slices/api.slice';
-import ControlledPassword from '../../../../components/controlledFields/Password';
-import { useAppDispatch, useAppSelector } from '../../../../redux/store';
-import { getCloudDomains } from '../../../../redux/thunks/api.thunk';
-import ControlledTextField from '../../../../components/controlledFields/TextField';
-import ControlledAutocomplete from '../../../../components/controlledFields/AutoComplete';
-import Column from '../../../../components/column';
-import Typography from '../../../../components/typography';
-import ControlledCheckbox from '../../../../components/controlledFields/checkbox';
-import { EMAIL_REGEX, LOWER_KEBAB_CASE_REGEX } from '../../../../constants';
-import { InstallValues, InstallationType } from '../../../../types/redux';
-import { EXCLUSIVE_PLUM } from '../../../../constants/colors';
-import { BISCAY } from '../../../../constants/colors';
+import { setInstallationStep } from '@/redux/slices/installation.slice';
+import { clearDomains } from '@/redux/slices/api.slice';
+import { useAppDispatch, useAppSelector } from '@/redux/store';
+import ControlledPassword from '@/components/controlledFields/Password';
+import { getCloudDomains, getInstanceSizes, getRegionZones } from '@/redux/thunks/api.thunk';
+import ControlledTextField from '@/components/controlledFields/TextField';
+import ControlledAutocomplete from '@/components/controlledFields/AutoComplete';
+import Column from '@/components/column';
+import Typography from '@/components/typography';
+import ControlledCheckbox from '@/components/controlledFields/checkbox';
+import { EMAIL_REGEX, LOWER_KEBAB_CASE_REGEX, MIN_NODE_COUNT } from '@/constants';
+import { InstallValues, InstallationType } from '@/types/redux';
+import { EXCLUSIVE_PLUM } from '@/constants/colors';
+import { BISCAY } from '@/constants/colors';
+import ControlledNumberInput from '@/components/controlledFields/numberInput';
 
 const CLOUD_REGION_LABELS: Record<InstallationType, string | null> = {
   [InstallationType.AWS]: 'Cloud region',
@@ -32,7 +34,7 @@ const CLOUD_REGION_LABELS: Record<InstallationType, string | null> = {
   [InstallationType.DIGITAL_OCEAN]: 'Datacenter region',
   [InstallationType.VULTR]: 'Cloud location',
   [InstallationType.LOCAL]: null,
-  [InstallationType.GOOGLE]: 'Cloud zone',
+  [InstallationType.GOOGLE]: 'Cloud region',
 };
 
 const SetupForm: FunctionComponent = () => {
@@ -50,15 +52,18 @@ const SetupForm: FunctionComponent = () => {
 
   const subDomainHelperText = !subDomain ? '' : `${subDomain}.${domainName}`;
 
-  const { cloudDomains, cloudRegions, installationStep, installType, values } = useAppSelector(
-    ({ api, installation }) => ({
-      cloudDomains: api.cloudDomains,
-      cloudRegions: api.cloudRegions,
-      installationStep: installation.installationStep,
-      installType: installation.installType,
-      values: installation.values,
-    }),
-  );
+  const {
+    cloudDomains,
+    cloudRegions,
+    cloudZones,
+    instanceSizes,
+    installationStep,
+    installType,
+    values,
+  } = useAppSelector(({ api, installation }) => ({
+    ...api,
+    ...installation,
+  }));
 
   const cloudRegionLabel = useMemo(
     () =>
@@ -73,9 +78,20 @@ const SetupForm: FunctionComponent = () => {
     }
   }, [dispatch, installationStep, values?.gitToken]);
 
-  const handleRegionOnSelect = async (region: string) => {
+  const handleRegionOnSelect = (region: string) => {
     setSelectedRegion(region);
-    dispatch(getCloudDomains({ region }));
+    // if using google hold off on grabbing instances
+    // since it requires the zone as well
+    if (installType === InstallationType.GOOGLE) {
+      dispatch(getRegionZones(region));
+    } else {
+      dispatch(getInstanceSizes({ region }));
+      dispatch(getCloudDomains({ region }));
+    }
+  };
+
+  const handleZoneSelect = (zone: string) => {
+    dispatch(getInstanceSizes({ region: selectedRegion, zone }));
   };
 
   const formatDomains = (domains: Array<string>) => {
@@ -141,6 +157,40 @@ const SetupForm: FunctionComponent = () => {
         options={cloudRegions && cloudRegions.map((region) => ({ label: region, value: region }))}
         onChange={handleRegionOnSelect}
       />
+      {installType === InstallationType.GOOGLE && (
+        <ControlledAutocomplete
+          control={control}
+          name="cloudZone"
+          label="Cloud zone"
+          defaultValue={values?.cloudZone}
+          required
+          rules={{ required: true }}
+          options={cloudZones.map((zone) => ({
+            label: zone,
+            value: zone,
+          }))}
+          onChange={handleZoneSelect}
+        />
+      )}
+      <ControlledAutocomplete
+        control={control}
+        name="instanceSize"
+        label="Instance size"
+        rules={{ required: true }}
+        options={instanceSizes.map((instanceSize) => ({
+          label: instanceSize,
+          value: instanceSize,
+        }))}
+        defaultValue={values?.instanceSize}
+      />
+      <Box sx={{ width: 136 }}>
+        <ControlledNumberInput
+          label="Number of nodes"
+          control={control}
+          name="nodeCount"
+          numberInputProps={{ min: MIN_NODE_COUNT }}
+        />
+      </Box>
       <ControlledAutocomplete
         control={control}
         name="dnsProvider"

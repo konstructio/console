@@ -8,6 +8,8 @@ import {
   getCloudRegions,
   getCluster,
   getClusters,
+  getInstanceSizes,
+  getRegionZones,
 } from '../thunks/api.thunk';
 import {
   ManagementCluster,
@@ -33,6 +35,8 @@ export interface ApiState {
   completedSteps: Array<{ label: string; order: number }>;
   cloudDomains: Array<string>;
   cloudRegions: Array<string>;
+  cloudZones: string[];
+  instanceSizes: string[];
   isAuthenticationValid?: boolean;
   clusterCreationStep: ClusterCreationStep;
   clusterConfig?: NewWorkloadClusterConfig;
@@ -50,6 +54,8 @@ export const initialState: ApiState = {
   completedSteps: [],
   cloudDomains: [],
   cloudRegions: [],
+  cloudZones: [],
+  instanceSizes: [],
   isAuthenticationValid: undefined,
   clusterCreationStep: ClusterCreationStep.CONFIG,
   clusterMap: {},
@@ -218,6 +224,28 @@ const apiSlice = createSlice({
       .addCase(getCloudRegions.rejected, (state) => {
         state.isAuthenticationValid = false;
         state.loading = false;
+      })
+      .addCase(getInstanceSizes.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(getInstanceSizes.fulfilled, (state, { payload }) => {
+        state.instanceSizes = payload;
+        state.loading = false;
+      })
+      .addCase(getInstanceSizes.rejected, (state) => {
+        state.loading = false;
+        state.instanceSizes = [];
+      })
+      .addCase(getRegionZones.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(getRegionZones.fulfilled, (state, { payload }) => {
+        state.cloudZones = payload;
+        state.loading = false;
+      })
+      .addCase(getRegionZones.rejected, (state) => {
+        state.loading = false;
+        state.cloudZones = [];
       });
   },
 });

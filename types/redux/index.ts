@@ -46,6 +46,9 @@ export interface ClusterValues extends AuthValues {
   domainName?: string;
   clusterName?: string;
   forceDestroyTerraform?: boolean;
+  instanceSize?: string;
+  cloudZone?: string;
+  nodeCount?: number;
 }
 
 export interface AwsInstallValues {

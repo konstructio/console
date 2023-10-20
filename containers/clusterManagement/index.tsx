@@ -64,6 +64,45 @@ const ClusterManagement: FunctionComponent = () => {
   const { isEnabled: canProvisionAWSPhysicalClusters } = useFeatureFlag(
     'canProvisionAwsPhysicalClusters',
   );
+  const { isEnabled: canProvisionGCPPhysicalClusters } = useFeatureFlag(
+    'canProvisionGCPPhysicalClusters',
+  );
+  const { isEnabled: canProvisionDOPhysicalClusters } = useFeatureFlag(
+    'canProvisionDOPhysicalClusters',
+  );
+  const { isEnabled: canProvisionVultrPhysicalClusters } = useFeatureFlag(
+    'canProvisionVultrPhysicalClusters',
+  );
+
+  // check if user has permission to provision physical clusters based on cloud provider,
+  // otherwise default to true if no feature flag check
+  const physicalClustersPermission = useMemo(
+    (): Record<InstallationType, boolean> => ({
+      [InstallationType.AWS]: canProvisionAWSPhysicalClusters,
+      [InstallationType.DIGITAL_OCEAN]: canProvisionDOPhysicalClusters,
+      [InstallationType.GOOGLE]: canProvisionGCPPhysicalClusters,
+      [InstallationType.VULTR]: canProvisionVultrPhysicalClusters,
+      [InstallationType.CIVO]: true,
+      [InstallationType.LOCAL]: true,
+    }),
+    [
+      canProvisionAWSPhysicalClusters,
+      canProvisionDOPhysicalClusters,
+      canProvisionGCPPhysicalClusters,
+      canProvisionVultrPhysicalClusters,
+    ],
+  );
+
+  const defaultClusterType = useMemo(() => {
+    if (
+      managementCluster &&
+      managementCluster.cloudProvider &&
+      physicalClustersPermission[managementCluster.cloudProvider]
+    ) {
+      return ClusterType.WORKLOAD;
+    }
+    return ClusterType.WORKLOAD_V_CLUSTER;
+  }, [managementCluster, physicalClustersPermission]);
 
   const {
     isOpen: createClusterFlowOpen,
@@ -184,16 +223,6 @@ const ClusterManagement: FunctionComponent = () => {
   const tableRef = useRef<HTMLTableSectionElement>(null);
 
   const isListView = useMemo(() => activeTab === MANAGEMENT_TABS.LIST_VIEW, [activeTab]);
-
-  const defaultClusterType = useMemo(
-    () =>
-      (managementCluster?.cloudProvider === InstallationType.AWS &&
-        canProvisionAWSPhysicalClusters) ||
-      managementCluster?.cloudProvider !== InstallationType.AWS
-        ? ClusterType.WORKLOAD
-        : ClusterType.WORKLOAD_V_CLUSTER,
-    [managementCluster, canProvisionAWSPhysicalClusters],
-  );
 
   const handleClickOutside = useCallback(() => {
     if (presentedClusterId && isListView && !createClusterFlowOpen && !isDeleteModalOpen) {

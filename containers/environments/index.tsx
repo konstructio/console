@@ -1,5 +1,5 @@
 'use client';
-import React, { FunctionComponent, useEffect, useState, useCallback, useRef } from 'react';
+import React, { FunctionComponent, useEffect, useState, useCallback } from 'react';
 import styled from 'styled-components';
 import Image from 'next/image';
 
@@ -23,12 +23,10 @@ import { ClusterEnvironment } from '../../types/provision';
 import DeleteEnvironment from '../../components/deleteEnvironment';
 import { clearEnvironmentError } from '../../redux/slices/environments.slice';
 
-import { useOnClickOutside } from '@/hooks/useOnClickOutside';
 import { noop } from '@/utils/noop';
 
 const Environments: FunctionComponent = () => {
   const { isOpen, close, open } = useToggle();
-  const { isOpen: deleteEnv, close: closeDeleteEnv, open: openDeleteEnv } = useToggle();
 
   const [selectedEnv, setSelectedEnv] = useState<ClusterEnvironment>();
 
@@ -36,10 +34,6 @@ const Environments: FunctionComponent = () => {
     ({ environments }) => environments,
   );
   const dispatch = useAppDispatch();
-
-  const handleMenuButtonClick = useCallback((env: ClusterEnvironment) => {
-    setSelectedEnv((curEnv) => (curEnv?.name === env.name ? undefined : env));
-  }, []);
 
   const handleAddEnvironment = useCallback(
     (env: ClusterEnvironment) => {
@@ -59,16 +53,14 @@ const Environments: FunctionComponent = () => {
         .unwrap()
         .then(() => {
           setSelectedEnv(undefined);
-          closeDeleteEnv();
         })
         .catch(noop);
     }
-  }, [selectedEnv, dispatch, closeDeleteEnv]);
+  }, [selectedEnv, dispatch]);
 
   const handleDeleteModal = useCallback(() => {
     setSelectedEnv(undefined);
-    closeDeleteEnv();
-  }, [closeDeleteEnv]);
+  }, []);
 
   const handleErrorClose = useCallback(() => {
     dispatch(clearEnvironmentError());
@@ -79,18 +71,18 @@ const Environments: FunctionComponent = () => {
     close();
   }, [dispatch, close]);
 
+  const handleDeleteEnv = useCallback(
+    (id: string) => {
+      if (environments[id]) {
+        setSelectedEnv(environments[id]);
+      }
+    },
+    [environments],
+  );
+
   useEffect(() => {
     dispatch(getAllEnvironments());
   }, [dispatch]);
-
-  const ref = useRef<HTMLTableSectionElement>(null);
-
-  useOnClickOutside(ref, () => {
-    if (!isOpen && !deleteEnv) {
-      handleDeleteModal();
-      handleModalClose();
-    }
-  });
 
   return (
     <Column style={{ width: '100%' }}>
@@ -111,11 +103,8 @@ const Environments: FunctionComponent = () => {
 
       {Object.keys(environments).length ? (
         <EnvironmentsTable
-          ref={ref}
           environments={environments}
-          onDeleteEnvironment={openDeleteEnv}
-          onMenuButtonClick={handleMenuButtonClick}
-          selectedEnvironment={selectedEnv}
+          onDeleteEnvironment={handleDeleteEnv}
           // onEditEnvironment={noop}
         />
       ) : (
@@ -145,7 +134,7 @@ const Environments: FunctionComponent = () => {
       </Modal>
       {selectedEnv && (
         <DeleteEnvironment
-          isOpen={deleteEnv}
+          isOpen={!!selectedEnv}
           environment={selectedEnv}
           boundToCluster={boundEnvironments[selectedEnv.name]}
           onClose={handleDeleteModal}

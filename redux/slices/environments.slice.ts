@@ -74,9 +74,9 @@ const environmentsSlice = createSlice({
         state.loading = false;
         state.error = action.error.message;
       })
-      .addCase(deleteEnvironment.fulfilled, (state, { payload: envName }) => {
+      .addCase(deleteEnvironment.fulfilled, (state, { payload: envId }) => {
         state.loading = false;
-        delete state.environments[envName];
+        delete state.environments[envId];
       });
   },
 });
