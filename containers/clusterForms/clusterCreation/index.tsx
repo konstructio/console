@@ -8,6 +8,9 @@ import React, {
 import { useFormContext } from 'react-hook-form';
 import Box from '@mui/material/Box';
 
+import { Container } from './clusterCreation.styled';
+import { InputContainer } from './advancedOptions/advancedOptions.styled';
+
 import ControlledAutocomplete from '@/components/controlledFields/AutoComplete';
 import ControlledTextField from '@/components/controlledFields/TextField';
 import { useAppDispatch, useAppSelector } from '@/redux/store';
@@ -28,9 +31,6 @@ import { createEnvironment } from '@/redux/thunks/environments.thunk';
 import { noop } from '@/utils/noop';
 import { clearEnvironmentError } from '@/redux/slices/environments.slice';
 import { InstallationType } from '@/types/redux';
-
-import { Container } from './clusterCreation.styled';
-import { InputContainer } from './advancedOptions/advancedOptions.styled';
 import useFeatureFlag from '@/hooks/useFeatureFlag';
 
 const ClusterCreationForm: FunctionComponent<Omit<ComponentPropsWithoutRef<'div'>, 'key'>> = (
