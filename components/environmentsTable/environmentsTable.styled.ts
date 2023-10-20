@@ -10,7 +10,13 @@ import { typographyClasses } from '@mui/material/Typography';
 
 import Row from '../row';
 import Typography from '../typography';
-import { CHEFS_HAT, CHILD_OF_LIGHT, SALTBOX_BLUE, VOLCANIC_SAND } from '../../constants/colors';
+import {
+  CHEFS_DARK_HAT,
+  CHEFS_HAT,
+  CHILD_OF_LIGHT,
+  SALTBOX_BLUE,
+  VOLCANIC_SAND,
+} from '../../constants/colors';
 
 export const Menu = styled(Box)`
   position: absolute;
@@ -30,7 +36,7 @@ export const StyledTableBody = muiStyled(TableBody)(() => ({
 
 export const StyledTableCell = muiStyled(TableCell)(() => ({
   [`&.${tableCellClasses.root}`]: {
-    borderBottom: '1px solid #F4F4F5',
+    borderBottom: `1px solid  ${CHEFS_DARK_HAT}`,
     backgroundColor: 'white',
   },
 }));
