@@ -13,5 +13,6 @@ export const Default: StoryObj<typeof TextArea> = {
     label: 'Description',
     helperText: 'Nice',
     error: true,
+    hideValue: false,
   },
 };

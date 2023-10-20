@@ -19,6 +19,7 @@ interface TextAreaProps extends TextareaAutosizeProps {
   helperText?: string;
   required?: boolean;
   textAreaStyleOverrides?: React.CSSProperties;
+  hideValue?: boolean;
 }
 
 export const TextArea: FunctionComponent<TextAreaProps> = ({
