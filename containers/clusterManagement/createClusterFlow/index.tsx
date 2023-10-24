@@ -27,6 +27,7 @@ import { CloseButton, Form, FormContent, Menu, MenuHeader } from './createCluste
 import Row from '@/components/row';
 import Typography from '@/components/typography';
 import useToggle from '@/hooks/useToggle';
+import { EnvMap } from '@/redux/slices/environments.slice';
 
 const actionButtonText: Record<ClusterCreationStep, string> = {
   [ClusterCreationStep.CONFIG]: 'Create cluster',
@@ -45,6 +46,7 @@ interface CreateClusterFlowProps {
   loading: boolean;
   notifiedOfBetaPhysicalClusters: boolean;
   onNotificationClose: () => void;
+  environments: EnvMap;
 }
 
 export const CreateClusterFlow: FunctionComponent<CreateClusterFlowProps> = ({
@@ -59,6 +61,7 @@ export const CreateClusterFlow: FunctionComponent<CreateClusterFlowProps> = ({
   loading,
   notifiedOfBetaPhysicalClusters,
   onNotificationClose,
+  environments,
 }) => {
   const { isOpen, close, toggle } = useToggle();
 
@@ -144,6 +147,7 @@ export const CreateClusterFlow: FunctionComponent<CreateClusterFlowProps> = ({
               cluster={cluster}
               host={managementCluster?.gitHost as string}
               gitOwner={managementCluster?.gitAuth.gitOwner}
+              environments={environments}
               style={{ marginTop: '24px' }}
             />
           )}

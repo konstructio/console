@@ -27,17 +27,20 @@ import {
 } from '@/types/provision';
 import Tag from '@/components/tag';
 import { BISCAY, VOLCANIC_SAND } from '@/constants/colors';
+import { EnvMap } from '@/redux/slices/environments.slice';
 
 export interface ClusterDetailsProps extends Omit<ComponentPropsWithoutRef<'div'>, 'key'> {
   cluster: Cluster | DraftCluster;
   host: ManagementCluster['gitHost'];
   gitOwner: ManagementCluster['gitAuth']['gitOwner'];
+  environments: EnvMap;
 }
 
 const ClusterDetails: FunctionComponent<ClusterDetailsProps> = ({
   cluster,
   host,
   gitOwner,
+  environments,
   ...rest
 }) => {
   const {
@@ -60,18 +63,18 @@ const ClusterDetails: FunctionComponent<ClusterDetailsProps> = ({
 
   const presentedLink = `/registry/clusters/${clusterName}`;
 
+  const { name, color, description } = environments[environment?.id ?? ''] ?? {};
+
   return (
     <Container {...rest}>
       <EnvInfo>
         <Typography variant="subtitle1" color={BISCAY}>
           {clusterName}
         </Typography>
-        {environment && environment.name && (
-          <Tag text={environment.name} bgColor={environment.color} />
-        )}
-        {environment?.description && (
+        {name && color && <Tag text={name} bgColor={color} />}
+        {description && (
           <Typography variant="body2" color={VOLCANIC_SAND}>
-            {environment.description}
+            {description}
           </Typography>
         )}
         <StatusContainer>

@@ -53,10 +53,12 @@ const ClusterManagement: FunctionComponent = () => {
     loading,
     notifiedOfBetaPhysicalClusters,
     clusterMap,
-  } = useAppSelector(({ api, queue, notifications }) => ({
+    environments,
+  } = useAppSelector(({ api, queue, notifications, environments }) => ({
     clusterQueue: queue.clusterQueue,
     notifiedOfBetaPhysicalClusters: notifications.notifiedOfBetaPhysicalClusters,
     ...api,
+    ...environments,
   }));
 
   const { addClusterToQueue } = useQueue();
@@ -315,6 +317,7 @@ const ClusterManagement: FunctionComponent = () => {
           notifiedOfBetaPhysicalClusters={notifiedOfBetaPhysicalClusters}
           onNotificationClose={handleNotificationClose}
           onClusterEdit={handleClusterEdit}
+          environments={environments}
         />
       </Drawer>
       {presentedClusterId && (
