@@ -14,7 +14,6 @@ import {
 } from '../../redux/thunks/api.thunk';
 import { Cluster, ClusterCreationStep, ClusterStatus, ClusterType } from '../../types/provision';
 import useToggle from '../../hooks/useToggle';
-import Drawer from '../../components/drawer';
 import useModal from '../../hooks/useModal';
 import DeleteCluster from '../../components/deleteCluster';
 import TabPanel, { Tab, a11yProps } from '../../components/tab';
