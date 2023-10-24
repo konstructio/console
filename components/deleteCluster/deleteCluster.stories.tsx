@@ -60,7 +60,7 @@ const DeleteClusterWithHooks: FunctionComponent<DeleteClusterProps> = (props) =>
   const [open, setOpen] = useState(true);
   return (
     <>
-      <DeleteCluster {...props} isOpen={open} onClose={() => setOpen(false)} onDelete={noop} />
+      <DeleteCluster {...props} isOpen={open} onCloseModal={() => setOpen(false)} onDelete={noop} />
       <Button variant="contained" color="primary" onClick={() => setOpen(!open)}>
         {open ? 'Close' : 'Open'}
       </Button>

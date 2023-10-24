@@ -1,10 +1,13 @@
 'use client';
 import Link from 'next/link';
 import styled from 'styled-components';
+import { styled as muiStyled } from '@mui/material';
 
 import Typography from '../../components/typography';
 import Column from '../../components/column';
 import Row from '../../components/row';
+
+import Drawer from '@/components/drawer';
 
 export const Container = styled(Column)`
   flex: 1;
@@ -35,3 +38,17 @@ export const LearnMoreLink = styled(Link)`
   color: ${({ theme }) => theme.colors.primary};
   text-decoration: none;
 `;
+
+export const StyledDrawer = muiStyled(Drawer)(() => ({
+  '&.MuiDrawer-root': {
+    '.MuiBackdrop-root': {
+      backgroundColor: 'transparent',
+    },
+  },
+  '.MuiDrawer-paper': {
+    top: '65px',
+    boxShadow: '0px 2px 4px rgba(100, 116, 139, 0.16)',
+    width: '684px',
+    height: 'calc(100% - 65px)',
+  },
+}));
