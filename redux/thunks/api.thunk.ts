@@ -236,7 +236,7 @@ export const getCloudRegions = createAsyncThunk<
 
   const res = await axios.post<{ regions: Array<string> }>('/api/proxy', {
     url: `/region/${installType || (values as Cluster).cloudProvider}`,
-    body: installType === InstallationType.AWS ? { ...values, cloud_region: 'us-east-1' } : values,
+    body: values,
   });
 
   if ('error' in res) {

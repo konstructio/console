@@ -1,6 +1,8 @@
 import { TagColor, TagIconOption } from '../components/tag';
 import { ClusterStatus, ClusterType } from '../types/provision';
 
+import { InstallationType } from '@/types/redux';
+
 export const AWS_REGIONS = [
   { label: 'US East (Ohio) (us-east-2)', value: 'us-east-2' },
   { label: 'US East (N. Virginia) (us-east-1)', value: 'us-east-1' },
@@ -52,8 +54,21 @@ export const CLUSTER_TAG_CONFIG: Record<
 };
 
 export const MIN_NODE_COUNT = 1;
+export const SUGGESTED_WORKLOAD_NODE_COUNT = 2;
 
 export const WORKLOAD_CLUSTER_OPTIONS = [
   { label: 'Physical', value: ClusterType.WORKLOAD },
   { label: 'Virtual', value: ClusterType.WORKLOAD_V_CLUSTER },
 ];
+
+export const DEFAULT_CLOUD_INSTANCE_SIZES: Record<
+  InstallationType,
+  { instanceSize: string; nodeCount: number }
+> = {
+  [InstallationType.AWS]: { instanceSize: 'm5.large', nodeCount: 6 },
+  [InstallationType.CIVO]: { instanceSize: 'Medium - Standard', nodeCount: 6 },
+  [InstallationType.DIGITAL_OCEAN]: { instanceSize: 's-4vcpu-8gb', nodeCount: 4 },
+  [InstallationType.GOOGLE]: { instanceSize: 'e2-medium', nodeCount: 3 },
+  [InstallationType.VULTR]: { instanceSize: 'vc2-4c-8gb', nodeCount: 5 },
+  [InstallationType.LOCAL]: { instanceSize: '', nodeCount: 3 },
+};

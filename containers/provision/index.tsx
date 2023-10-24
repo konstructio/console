@@ -27,7 +27,7 @@ import {
 import { useInstallation } from '../../hooks/useInstallation';
 import { InstallValues, InstallationType } from '../../types/redux';
 import { GitProvider } from '../../types';
-import { AUTHENTICATION_ERROR_MSG } from '../../constants';
+import { AUTHENTICATION_ERROR_MSG, DEFAULT_CLOUD_INSTANCE_SIZES } from '../../constants';
 import { useQueue } from '../../hooks/useQueue';
 import { ClusterStatus, ClusterType } from '../../types/provision';
 
@@ -71,8 +71,15 @@ const Provision: FunctionComponent = () => {
       installationStep,
       !!isMarketplace,
     );
+
+  const { instanceSize, nodeCount } =
+    DEFAULT_CLOUD_INSTANCE_SIZES[installType ?? InstallationType.LOCAL];
   const methods = useForm<InstallValues>({
     mode: 'onChange',
+    defaultValues: {
+      instanceSize,
+      nodeCount,
+    },
   });
   const {
     formState: { isValid: isFormValid },

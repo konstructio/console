@@ -19,7 +19,12 @@ const ControlledNumberInputWithHooks = () => {
   });
   return (
     <form onSubmit={() => action('onSubmit')}>
-      <ControlledNumberInput label="Number of nodes" name="numberOfNodes" control={control} />
+      <ControlledNumberInput
+        numberInputProps={{ defaultValue: 3 }}
+        label="Number of nodes"
+        name="numberOfNodes"
+        control={control}
+      />
       <button type="submit">Submit</button>
     </form>
   );
