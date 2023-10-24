@@ -179,6 +179,7 @@ const SetupForm: FunctionComponent = () => {
         control={control}
         name="instanceSize"
         label="Instance size"
+        required
         rules={{ required: true }}
         options={instanceSizes.map((instanceSize) => ({
           label: instanceSize,
