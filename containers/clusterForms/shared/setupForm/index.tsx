@@ -44,11 +44,14 @@ const SetupForm: FunctionComponent = () => {
   const {
     control,
     setValue,
+    getValues,
     formState: { errors },
     watch,
   } = useFormContext<InstallValues>();
 
   const [domainName, subDomain] = watch(['domainName', 'subDomain']);
+
+  const { instanceSize, nodeCount } = getValues();
 
   const subDomainHelperText = !subDomain ? '' : `${subDomain}.${domainName}`;
 
@@ -176,19 +179,20 @@ const SetupForm: FunctionComponent = () => {
         control={control}
         name="instanceSize"
         label="Instance size"
+        required
         rules={{ required: true }}
         options={instanceSizes.map((instanceSize) => ({
           label: instanceSize,
           value: instanceSize,
         }))}
-        defaultValue={values?.instanceSize}
+        defaultValue={instanceSize}
       />
       <Box sx={{ width: 136 }}>
         <ControlledNumberInput
           label="Number of nodes"
           control={control}
           name="nodeCount"
-          numberInputProps={{ min: MIN_NODE_COUNT }}
+          numberInputProps={{ min: MIN_NODE_COUNT, defaultValue: nodeCount }}
         />
       </Box>
       <ControlledAutocomplete

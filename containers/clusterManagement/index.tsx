@@ -1,5 +1,5 @@
 'use client';
-import React, { FunctionComponent, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, { FunctionComponent, useCallback, useEffect, useMemo, useState } from 'react';
 import Box from '@mui/material/Box';
 import Tabs from '@mui/material/Tabs';
 
@@ -14,9 +14,7 @@ import {
 } from '../../redux/thunks/api.thunk';
 import { Cluster, ClusterCreationStep, ClusterStatus, ClusterType } from '../../types/provision';
 import useToggle from '../../hooks/useToggle';
-import Drawer from '../../components/drawer';
 import useModal from '../../hooks/useModal';
-import { useOnClickOutside } from '../../hooks/useOnClickOutside';
 import DeleteCluster from '../../components/deleteCluster';
 import TabPanel, { Tab, a11yProps } from '../../components/tab';
 import { BISCAY, SALTBOX_BLUE } from '../../constants/colors';
@@ -33,7 +31,7 @@ import { setNotifiedOfBetaPhysicalClusters } from '../../redux/slices/notificati
 import { getAllEnvironments } from '../../redux/thunks/environments.thunk';
 
 import { CreateClusterFlow } from './createClusterFlow';
-import { Container, Content, Header } from './clusterManagement.styled';
+import { Container, Content, Header, StyledDrawer } from './clusterManagement.styled';
 
 import { InstallationType } from '@/types/redux';
 import useFeatureFlag from '@/hooks/useFeatureFlag';
@@ -171,13 +169,6 @@ const ClusterManagement: FunctionComponent = () => {
     [dispatch, openCreateClusterFlow],
   );
 
-  const handleMenuButtonClick = useCallback(
-    (clusterId: Cluster['clusterId']) => {
-      dispatch(setPresentedClusterId(presentedClusterId === clusterId ? undefined : clusterId));
-    },
-    [dispatch, presentedClusterId],
-  );
-
   const handleAddWorkloadCluster = useCallback(() => {
     if (clusterCreationStep === ClusterCreationStep.CONFIG && managementCluster) {
       dispatch(createDraftCluster());
@@ -206,6 +197,14 @@ const ClusterManagement: FunctionComponent = () => {
     dispatch(setNotifiedOfBetaPhysicalClusters(true));
   }, [dispatch]);
 
+  const handleDeleteMenuClick = useCallback(
+    (id: string) => {
+      dispatch(setPresentedClusterId(id));
+      openDeleteModal();
+    },
+    [dispatch, openDeleteModal],
+  );
+
   useEffect(() => {
     dispatch(getAllEnvironments());
   }, [dispatch]);
@@ -224,18 +223,6 @@ const ClusterManagement: FunctionComponent = () => {
       deletedClusters.forEach((cluster) => dispatch(removeClusterFromQueue(cluster.id)));
     }
   }, [clusterQueue, dispatch]);
-
-  const tableRef = useRef<HTMLTableSectionElement>(null);
-
-  const isListView = useMemo(() => activeTab === MANAGEMENT_TABS.LIST_VIEW, [activeTab]);
-
-  const handleClickOutside = useCallback(() => {
-    if (presentedClusterId && isListView && !createClusterFlowOpen && !isDeleteModalOpen) {
-      dispatch(setPresentedClusterId(undefined));
-    }
-  }, [dispatch, presentedClusterId, isListView, isDeleteModalOpen, createClusterFlowOpen]);
-
-  useOnClickOutside(tableRef, handleClickOutside);
 
   return (
     <Container>
@@ -271,12 +258,9 @@ const ClusterManagement: FunctionComponent = () => {
         <TabPanel value={activeTab} index={MANAGEMENT_TABS.LIST_VIEW}>
           {managementCluster && (
             <ClusterTable
-              ref={tableRef}
               clusters={clusterMap}
               managementCluster={managementCluster}
-              onDeleteCluster={openDeleteModal}
-              onMenuButtonClick={handleMenuButtonClick}
-              presentedClusterId={presentedClusterId}
+              onDeleteCluster={handleDeleteMenuClick}
             />
           )}
         </TabPanel>
@@ -284,26 +268,7 @@ const ClusterManagement: FunctionComponent = () => {
           <Flow onNodeClick={handleNodeClick} />
         </TabPanel>
       </Content>
-      <Drawer
-        open={createClusterFlowOpen}
-        onClose={handleMenuClose}
-        anchor="right"
-        PaperProps={{
-          sx: {
-            top: '65px',
-            boxShadow: '0px 2px 4px rgba(100, 116, 139, 0.16)',
-            width: '684px',
-            height: 'calc(100% - 65px)',
-          },
-        }}
-        sx={{
-          '&.MuiDrawer-root': {
-            '.MuiBackdrop-root': {
-              backgroundColor: 'transparent',
-            },
-          },
-        }}
-      >
+      <StyledDrawer open={createClusterFlowOpen} onClose={handleMenuClose} anchor="right">
         <CreateClusterFlow
           cluster={clusterMap[presentedClusterId ?? '']}
           managementCluster={managementCluster}
@@ -316,11 +281,11 @@ const ClusterManagement: FunctionComponent = () => {
           notifiedOfBetaPhysicalClusters={notifiedOfBetaPhysicalClusters}
           onNotificationClose={handleNotificationClose}
         />
-      </Drawer>
+      </StyledDrawer>
       {presentedClusterId && (
         <DeleteCluster
           isOpen={isDeleteModalOpen}
-          onClose={closeDeleteModal}
+          onCloseModal={closeDeleteModal}
           onDelete={handleDeleteCluster}
           cluster={clusterMap[presentedClusterId]}
         />

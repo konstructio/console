@@ -22,7 +22,7 @@ const NumberInput = forwardRef<HTMLLabelElement | null, NumberInputProps>(functi
   { label, onChange = noop, inputProps = {}, ...rest },
   ref,
 ) {
-  const [value, setValue] = useState(Number(inputProps.min ?? 0));
+  const [value, setValue] = useState(Number(inputProps.defaultValue ?? 0));
   return (
     <Root {...rest} ref={ref}>
       {label && (
