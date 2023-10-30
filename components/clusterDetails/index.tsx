@@ -53,6 +53,8 @@ const ClusterDetails: FunctionComponent<ClusterDetailsProps> = ({
 
   const CLUSTER_REPO_BASE_LINK = `https://${host}/${gitOwner}`;
 
+  const ARGO_CD_LINK = `https://argocd.${domainName}/applications/clusters`;
+
   const presentedLink = `/gitops/tree/main/registry/clusters/${clusterName}`;
 
   return (
@@ -68,19 +70,33 @@ const ClusterDetails: FunctionComponent<ClusterDetailsProps> = ({
                 The cluster has been registered and will be synced
               </Typography>
               <Typography variant="body2">
-                Provisioning details:{' '}
+                Clusters in ArgoCD:{' '}
+                <Link target="_blank" href={ARGO_CD_LINK}>
+                  {ARGO_CD_LINK}
+                </Link>
+              </Typography>
+              <Typography variant="body2">
+                Cluster configurations:{' '}
                 <Link target="_blank" href={CLUSTER_REPO_BASE_LINK + presentedLink}>
                   {presentedLink}
                 </Link>
               </Typography>
             </>
           ) : (
-            <Typography>
-              Cluster details:{' '}
-              <Link target="_blank" href={CLUSTER_REPO_BASE_LINK + presentedLink}>
-                {presentedLink}
-              </Link>{' '}
-            </Typography>
+            <>
+              <Typography variant="body2">
+                Clusters in ArgoCD:{' '}
+                <Link target="_blank" href={ARGO_CD_LINK}>
+                  {ARGO_CD_LINK}
+                </Link>
+              </Typography>
+              <Typography>
+                Cluster configurations:{' '}
+                <Link target="_blank" href={CLUSTER_REPO_BASE_LINK + presentedLink}>
+                  {presentedLink}
+                </Link>{' '}
+              </Typography>
+            </>
           )}
         </Column>
       </StatusContainer>
