@@ -14,9 +14,13 @@ import { InputContainer } from './advancedOptions/advancedOptions.styled';
 import ControlledAutocomplete from '@/components/controlledFields/AutoComplete';
 import ControlledTextField from '@/components/controlledFields/TextField';
 import { useAppDispatch, useAppSelector } from '@/redux/store';
-import ControlledSelect from '@/components/controlledFields/Select';
 import Typography from '@/components/typography';
-import { ClusterType, NewWorkloadClusterConfig, ClusterEnvironment } from '@/types/provision';
+import {
+  ClusterType,
+  NewWorkloadClusterConfig,
+  ClusterEnvironment,
+  ManagementCluster,
+} from '@/types/provision';
 import { EXCLUSIVE_PLUM } from '@/constants/colors';
 import ControlledNumberInput from '@/components/controlledFields/numberInput';
 import ControlledRadioGroup from '@/components/controlledFields/radio';
@@ -32,14 +36,28 @@ import { noop } from '@/utils/noop';
 import { clearEnvironmentError } from '@/redux/slices/environments.slice';
 import { InstallationType } from '@/types/redux';
 import useFeatureFlag from '@/hooks/useFeatureFlag';
+import {
+  getCloudDomains,
+  getCloudRegions,
+  getInstanceSizes,
+  getRegionZones,
+} from '@/redux/thunks/api.thunk';
 
 const ClusterCreationForm: FunctionComponent<Omit<ComponentPropsWithoutRef<'div'>, 'key'>> = (
   props,
 ) => {
   const { isOpen, openModal, closeModal } = useModal(false);
 
-  const { managementCluster, cloudRegions, clusterNameCache, clusterMap, environments, error } =
-    useAppSelector(({ api, environments }) => ({ ...api, ...environments }));
+  const {
+    managementCluster,
+    cloudRegions,
+    cloudZones,
+    clusterNameCache,
+    clusterMap,
+    environments,
+    instanceSizes,
+    error,
+  } = useAppSelector(({ api, environments }) => ({ ...api, ...environments }));
 
   const { isEnabled: canProvisionAWSPhysicalClusters } = useFeatureFlag(
     'canProvisionAwsPhysicalClusters',
@@ -64,7 +82,7 @@ const ClusterCreationForm: FunctionComponent<Omit<ComponentPropsWithoutRef<'div'
     formState: { errors },
   } = useFormContext<NewWorkloadClusterConfig>();
 
-  const { type } = getValues();
+  const { type, instanceSize } = getValues();
 
   const handleAddEnvironment = useCallback(
     (environment: ClusterEnvironment) => {
@@ -87,6 +105,51 @@ const ClusterCreationForm: FunctionComponent<Omit<ComponentPropsWithoutRef<'div'
     clearEnvError();
     closeModal();
   }, [clearEnvError, closeModal]);
+
+  const handleRegionOnSelect = (region: string) => {
+    // if using google hold off on grabbing instances
+    // since it requires the zone as well
+    if (managementCluster) {
+      const { key, value } = getCloudProviderAuth(managementCluster);
+      if (managementCluster?.cloudProvider === InstallationType.GOOGLE) {
+        dispatch(
+          getRegionZones({
+            region,
+            values: { [`${key}_auth`]: value },
+          }),
+        );
+      } else {
+        dispatch(
+          getInstanceSizes({
+            installType: managementCluster?.cloudProvider,
+            region,
+            values: { [`${key}_auth`]: value },
+          }),
+        );
+        dispatch(
+          getCloudDomains({
+            installType: managementCluster?.cloudProvider,
+            region,
+          }),
+        );
+      }
+    }
+  };
+
+  const handleZoneSelect = (zone: string) => {
+    const { cloudRegion } = getValues();
+    if (managementCluster && cloudRegion) {
+      const { key, value } = getCloudProviderAuth(managementCluster);
+      dispatch(
+        getInstanceSizes({
+          installType: managementCluster?.cloudProvider,
+          region: cloudRegion,
+          zone,
+          values: { [`${key}_auth`]: value },
+        }),
+      );
+    }
+  };
 
   const draftCluster = useMemo(() => clusterMap['draft'], [clusterMap]);
 
@@ -131,6 +194,26 @@ const ClusterCreationForm: FunctionComponent<Omit<ComponentPropsWithoutRef<'div'
 
     return () => subscription.unsubscribe();
   }, [watch, dispatch, draftCluster]);
+
+  useEffect(() => {
+    if (managementCluster) {
+      dispatch(
+        getCloudRegions({
+          values: managementCluster,
+          installType: managementCluster.cloudProvider,
+        }),
+      );
+    }
+  }, [dispatch, managementCluster]);
+
+  function getCloudProviderAuth(managamentCluster: ManagementCluster): {
+    key?: string;
+    value?: unknown;
+  } {
+    const installType = managamentCluster.cloudProvider;
+    const key = installType === InstallationType.DIGITAL_OCEAN ? 'do' : installType;
+    return { key, value: key ? managamentCluster[`${key}_auth`] : undefined };
+  }
 
   return (
     <Container {...props}>
@@ -214,19 +297,34 @@ const ClusterCreationForm: FunctionComponent<Omit<ComponentPropsWithoutRef<'div'
             options={
               cloudRegions && cloudRegions.map((region) => ({ label: region, value: region }))
             }
+            onChange={handleRegionOnSelect}
           />
-          <ControlledSelect
+          {managementCluster?.cloudProvider === InstallationType.GOOGLE && (
+            <ControlledAutocomplete
+              control={control}
+              name="cloudZone"
+              label="Cloud zone"
+              required
+              rules={{ required: true }}
+              options={cloudZones.map((zone) => ({
+                label: zone,
+                value: zone,
+              }))}
+              onChange={handleZoneSelect}
+            />
+          )}
+
+          <ControlledAutocomplete
             control={control}
             name="instanceSize"
             label="Instance size"
+            required
             rules={{ required: true }}
-            options={[
-              {
-                value: '8 CPU Cores / 64 GB RAM / 120 GB NvME storage / 8 TB Data Transfer',
-                label: '8 CPU Cores / 64 GB RAM / 120 GB NvME storage / 8 TB Data Transfer',
-              },
-            ]}
-            defaultValue={draftCluster?.instanceSize}
+            options={instanceSizes.map((instanceSize) => ({
+              label: instanceSize,
+              value: instanceSize,
+            }))}
+            defaultValue={instanceSize}
           />
         </>
       )}

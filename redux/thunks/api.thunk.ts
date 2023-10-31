@@ -46,6 +46,8 @@ export const createCluster = createAsyncThunk<
     ecr: values?.imageRepository === 'ecr',
     type: 'mgmt',
     force_destroy: values?.forceDestroyTerraform,
+    node_type: values?.instanceSize,
+    node_count: values?.nodeCount,
     git_auth: {
       git_owner: values?.gitOwner,
       git_token: values?.gitToken,
@@ -115,7 +117,7 @@ export const createWorkloadCluster = createAsyncThunk<
     body: {
       cluster_name: draftCluster.clusterName,
       cloud_region: draftCluster.cloudRegion,
-      instance_size: draftCluster.instanceSize,
+      node_type: draftCluster.instanceSize,
       node_count: draftCluster.nodeCount,
       environment: clusterEnvironment,
       cluster_type: draftCluster.type,
@@ -224,16 +226,12 @@ export const deleteCluster = createAsyncThunk<
 
 export const getCloudRegions = createAsyncThunk<
   Array<string>,
-  InstallValues | Cluster,
+  { values: InstallValues | Cluster; installType?: InstallationType },
   {
     dispatch: AppDispatch;
     state: RootState;
   }
->('api/getCloudRegions', async (values, { getState }) => {
-  const {
-    installation: { installType },
-  } = getState();
-
+>('api/getCloudRegions', async ({ values, installType }) => {
   const res = await axios.post<{ regions: Array<string> }>('/api/proxy', {
     url: `/region/${installType || (values as Cluster).cloudProvider}`,
     body: installType === InstallationType.AWS ? { ...values, cloud_region: 'us-east-1' } : values,
@@ -247,16 +245,17 @@ export const getCloudRegions = createAsyncThunk<
 
 export const getCloudDomains = createAsyncThunk<
   Array<string>,
-  { region: string; cloudflareToken?: string },
+  {
+    region: string;
+    installType?: InstallationType;
+    values?: InstallValues;
+    cloudflareToken?: string;
+  },
   {
     dispatch: AppDispatch;
     state: RootState;
   }
->('api/getCloudDomains', async ({ cloudflareToken, region }, { getState }) => {
-  const {
-    installation: { values, installType },
-  } = getState();
-
+>('api/getCloudDomains', async ({ cloudflareToken, installType, values, region }) => {
   const res = await axios.post<{ domains: Array<string> }>('/api/proxy', {
     url: `/domain/${cloudflareToken ? 'cloudflare' : installType}`,
     body: {
@@ -276,16 +275,12 @@ export const getCloudDomains = createAsyncThunk<
 
 export const getInstanceSizes = createAsyncThunk<
   string[],
-  { region: string; zone?: string },
+  { region: string; installType?: InstallationType; values?: InstallValues; zone?: string },
   {
     dispatch: AppDispatch;
     state: RootState;
   }
->('api/getInstanceSizes', async ({ region, zone }, { getState }) => {
-  const {
-    installation: { installType, values },
-  } = getState();
-
+>('api/getInstanceSizes', async ({ region, installType, values, zone }) => {
   const { data } = await axios.post<{ instance_sizes: string[] }>('/api/proxy', {
     url: `/instance-sizes/${installType}`,
     body: {
@@ -301,16 +296,12 @@ export const getInstanceSizes = createAsyncThunk<
 // currently only needed for google install type
 export const getRegionZones = createAsyncThunk<
   string[],
-  string,
+  { region: string; values?: InstallValues },
   {
     dispatch: AppDispatch;
     state: RootState;
   }
->('api/getRegionZones', async (region, { getState }) => {
-  const {
-    installation: { values },
-  } = getState();
-
+>('api/getRegionZones', async ({ region, values }) => {
   const { data } = await axios.post<{ zones: string[] }>('/api/proxy', {
     url: '/zones',
     body: {

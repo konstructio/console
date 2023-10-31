@@ -65,6 +65,7 @@ export interface ClusterResponse {
   git_provider: string;
   git_host: string;
   git_user: string;
+  node_type: string;
   workload_clusters?: {
     admin_email: string;
     cloud_provider: string;
@@ -83,7 +84,7 @@ export interface ClusterResponse {
       git_username?: string;
     };
     instance_size: string;
-    machine_type: string;
+    node_type: string;
     node_count: number;
     status: ClusterStatus;
   }[];
@@ -132,6 +133,10 @@ export interface ClusterResponse {
   };
   vultr_auth?: {
     token: string;
+  };
+  google_auth?: {
+    key_file?: string;
+    project_id?: string;
   };
 }
 

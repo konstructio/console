@@ -211,7 +211,12 @@ const ClusterManagement: FunctionComponent = () => {
 
   useEffect(() => {
     if (managementCluster) {
-      dispatch(getCloudRegions(managementCluster));
+      dispatch(
+        getCloudRegions({
+          values: managementCluster,
+          installType: managementCluster.cloudProvider,
+        }),
+      );
     }
   }, [dispatch, managementCluster]);
 
