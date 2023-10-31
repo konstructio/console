@@ -1,8 +1,8 @@
-FROM node:18-alpine AS base
+FROM node:18 AS base
 
 FROM base AS deps
-RUN apk add --no-cache libc6-compat
-RUN apk add --no-cache python3 make g++
+# RUN apk add --no-cache libc6-compat
+# RUN apk add --no-cache python3 make g++
 RUN npm i -g node-gyp
 WORKDIR /app
 
