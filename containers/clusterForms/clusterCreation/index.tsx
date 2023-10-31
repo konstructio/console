@@ -82,7 +82,7 @@ const ClusterCreationForm: FunctionComponent<Omit<ComponentPropsWithoutRef<'div'
     formState: { errors },
   } = useFormContext<NewWorkloadClusterConfig>();
 
-  const { type, instanceSize } = getValues();
+  const { type, instanceSize, cloudRegion } = getValues();
 
   const handleAddEnvironment = useCallback(
     (environment: ClusterEnvironment) => {
@@ -106,35 +106,38 @@ const ClusterCreationForm: FunctionComponent<Omit<ComponentPropsWithoutRef<'div'
     closeModal();
   }, [clearEnvError, closeModal]);
 
-  const handleRegionOnSelect = (region: string) => {
-    // if using google hold off on grabbing instances
-    // since it requires the zone as well
-    if (managementCluster) {
-      const { key, value } = getCloudProviderAuth(managementCluster);
-      if (managementCluster?.cloudProvider === InstallationType.GOOGLE) {
-        dispatch(
-          getRegionZones({
-            region,
-            values: { [`${key}_auth`]: value },
-          }),
-        );
-      } else {
-        dispatch(
-          getInstanceSizes({
-            installType: managementCluster?.cloudProvider,
-            region,
-            values: { [`${key}_auth`]: value },
-          }),
-        );
-        dispatch(
-          getCloudDomains({
-            installType: managementCluster?.cloudProvider,
-            region,
-          }),
-        );
+  const handleRegionOnSelect = useCallback(
+    (region: string) => {
+      // if using google hold off on grabbing instances
+      // since it requires the zone as well
+      if (managementCluster) {
+        const { key, value } = getCloudProviderAuth(managementCluster);
+        if (managementCluster?.cloudProvider === InstallationType.GOOGLE) {
+          dispatch(
+            getRegionZones({
+              region,
+              values: { [`${key}_auth`]: value },
+            }),
+          );
+        } else {
+          dispatch(
+            getInstanceSizes({
+              installType: managementCluster?.cloudProvider,
+              region,
+              values: { [`${key}_auth`]: value },
+            }),
+          );
+          dispatch(
+            getCloudDomains({
+              installType: managementCluster?.cloudProvider,
+              region,
+            }),
+          );
+        }
       }
-    }
-  };
+    },
+    [dispatch, managementCluster],
+  );
 
   const handleZoneSelect = (zone: string) => {
     const { cloudRegion } = getValues();
@@ -205,6 +208,12 @@ const ClusterCreationForm: FunctionComponent<Omit<ComponentPropsWithoutRef<'div'
       );
     }
   }, [dispatch, managementCluster]);
+
+  useEffect(() => {
+    if (cloudRegion) {
+      handleRegionOnSelect(cloudRegion);
+    }
+  }, [cloudRegion, handleRegionOnSelect]);
 
   function getCloudProviderAuth(managamentCluster: ManagementCluster): {
     key?: string;
