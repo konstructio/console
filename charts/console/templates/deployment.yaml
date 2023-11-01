@@ -47,6 +47,8 @@ spec:
               value: {{ .Values.domain }}
             - name: NEXTAUTH_SECRET
               value: {{ $clusterId }}
+            - name: HOSTNAME
+              value: "0.0.0.0"
             - name: NEXTAUTH_URL
               value: https://kubefirst.{{ .Values.domain }}
             - name: K1_ACCESS_TOKEN
