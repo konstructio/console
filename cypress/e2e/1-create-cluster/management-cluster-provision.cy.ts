@@ -118,6 +118,8 @@ describe('provision management cluster using any git provider, cloud provider, a
 
     cy.get('[data-test-id="form-section"]').contains('Now, let’s get you authenticated');
     cy.get("[name='gitToken']").type(GIT_TOKEN, { log: false, delay: 0 });
+    // triggerring blur for gitToken
+    cy.get('[data-test-id="gitUser"]').click();
 
     cy.get('[data-test-id="gitUser"]').contains(GIT_USER);
     cy.get("[name='gitOwner']").click();

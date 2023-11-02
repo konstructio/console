@@ -1,12 +1,4 @@
-import React, {
-  ChangeEvent,
-  FunctionComponent,
-  useCallback,
-  useEffect,
-  useMemo,
-  useState,
-} from 'react';
-import debounce from 'lodash/debounce';
+import React, { FunctionComponent, useCallback, useEffect, useMemo, useState } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { FormControlLabel } from '@mui/material';
 
@@ -96,51 +88,31 @@ const AuthForm: FunctionComponent = () => {
 
   const validateGitOwner = async (gitOwner: string) => {
     dispatch(setGitOwner(gitOwner));
-    await dispatch(clearUserError());
+    dispatch(clearUserError());
 
     if (gitOwner) {
       if (isGitHub) {
         await dispatch(getGitHubOrgRepositories({ token, organization: gitOwner })).unwrap();
-        await dispatch(getGitHubOrgTeams({ token, organization: gitOwner })).unwrap();
+        await dispatch(getGitHubOrgTeams({ token, organization: gitOwner }));
       } else {
-        await dispatch(getGitLabProjects({ token, group: gitOwner }));
+        await dispatch(getGitLabProjects({ token, group: gitOwner })).unwrap();
         await dispatch(getGitLabSubgroups({ token, group: gitOwner }));
       }
     }
   };
 
   const handleGitTokenBlur = async (token: string) => {
-    await dispatch(clearUserError());
-    await dispatch(setToken(token));
-
-    try {
-      if (isGitHub) {
-        await dispatch(getGithubUser(token)).unwrap();
-        await dispatch(getGithubUserOrganizations(token)).unwrap();
-      } else {
-        await dispatch(getGitlabUser(token)).unwrap();
-        await dispatch(getGitlabGroups(token)).unwrap();
-      }
-    } catch (error) {
-      // error processed in redux state
-    }
-
+    dispatch(setToken(token));
     setIsGitRequested(true);
-  };
 
-  const gitTokenDebounce = debounce((token) => handleGitTokenBlur(token), 1000);
-  const handleOnChangeToken = async ({
-    target,
-  }: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { value } = target;
-
-    if (isTokenValid) {
-      setGitUserName('');
-      await dispatch(clearGitState());
-    }
-
-    if (value) {
-      gitTokenDebounce(value);
+    if (isGitHub) {
+      // only care about return of getGithubUser as if it fails will exit and not run getGithubUserOrganizations
+      await dispatch(getGithubUser(token)).unwrap();
+      await dispatch(getGithubUserOrganizations(token));
+    } else {
+      // only care about return of getGitlabUser as if it fails will exit and not run getGitlabGroups
+      await dispatch(getGitlabUser(token)).unwrap();
+      await dispatch(getGitlabGroups(token));
     }
   };
 
@@ -148,14 +120,9 @@ const AuthForm: FunctionComponent = () => {
 
   const isMarketplace = useMemo(() => installMethod?.includes('marketplace'), [installMethod]);
 
-  const gitErrorLabel = useMemo(
-    () => (isGitHub ? 'GitHub organization' : 'GitLab group'),
-    [isGitHub],
-  );
-
   const handleGitProviderChange = (provider: GitProvider) => {
     setGitUserName('');
-    reset && reset({ gitToken: '', gitOwner: '' });
+    reset({ gitToken: '', gitOwner: '' });
     dispatch(clearGitState());
     dispatch(setIsGitSelected(true));
     dispatch(setGitProvider(provider));
@@ -175,7 +142,7 @@ const AuthForm: FunctionComponent = () => {
     return () => {
       dispatch(clearUserError());
     };
-  }, [dispatch, gitErrorLabel, isGitHub]);
+  }, [dispatch]);
 
   const showTooltip = useMemo(() => (gitUserName?.length ?? 0) > 22, [gitUserName]);
 
@@ -213,9 +180,8 @@ const AuthForm: FunctionComponent = () => {
               rules={{
                 required: true,
               }}
-              error={isGitRequested && !isTokenValid}
+              error={isGitRequested && !gitStateLoading && !isTokenValid}
               onBlur={handleGitTokenBlur}
-              onChange={handleOnChangeToken}
               onErrorText="Invalid token."
             />
           </Row>
