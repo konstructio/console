@@ -68,26 +68,21 @@ const gitSlice = createSlice({
   extraReducers: (builder) => {
     builder
       /* GitHub */
+      .addCase(getGithubUser.pending, (state) => {
+        state.isLoading = true;
+      })
       .addCase(getGithubUser.fulfilled, (state, action) => {
         state.githubUser = action.payload;
         state.isTokenValid = true;
       })
-      .addCase(getGithubUser.rejected, (state, action) => {
+      .addCase(getGithubUser.rejected, (state) => {
         state.isTokenValid = false;
-
-        if (action.error.message) {
-          state.errors.push('Failed to get user');
-        }
       })
       .addCase(getGithubUserOrganizations.pending, (state) => {
         state.isLoading = true;
       })
-      .addCase(getGithubUserOrganizations.rejected, (state, action) => {
+      .addCase(getGithubUserOrganizations.rejected, (state) => {
         state.isLoading = false;
-
-        if (action.error.message) {
-          state.errors.push('Failed to get users organizations');
-        }
       })
       .addCase(getGithubUserOrganizations.fulfilled, (state, action) => {
         state.githubUserOrganizations = action.payload.sort((a, b) =>
@@ -120,23 +115,21 @@ const gitSlice = createSlice({
         }
       })
       /* GitLab */
+      .addCase(getGitlabUser.pending, (state) => {
+        state.isLoading = true;
+      })
       .addCase(getGitlabUser.fulfilled, (state, action) => {
         state.gitlabUser = action.payload;
         state.isTokenValid = true;
       })
-      .addCase(getGitlabUser.rejected, (state, action) => {
-        if (action.error.message) {
-          state.errors.push('Failed to get user');
-        }
+      .addCase(getGitlabUser.rejected, (state) => {
+        state.isTokenValid = false;
       })
       .addCase(getGitlabGroups.pending, (state) => {
         state.isLoading = true;
       })
-      .addCase(getGitlabGroups.rejected, (state, action) => {
+      .addCase(getGitlabGroups.rejected, (state) => {
         state.isLoading = false;
-        if (action.error.message) {
-          state.errors.push('Failed to get user groups');
-        }
       })
       .addCase(getGitlabGroups.fulfilled, (state, action) => {
         state.gitlabGroups = action.payload.sort((a, b) => a.name.localeCompare(b.name));
