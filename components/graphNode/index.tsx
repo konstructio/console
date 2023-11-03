@@ -106,6 +106,7 @@ export const GraphNode: FunctionComponent<NodeProps<Cluster>> = ({
         text={draftNode ? 'DRAFT' : iconLabel}
         bgColor={draftNode ? 'gray' : bgColor}
         icon={!draftNode ? iconType : undefined}
+        spinImage={status === ClusterStatus.PROVISIONING}
       />
       <NodeHandle
         type={handle}
