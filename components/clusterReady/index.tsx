@@ -40,7 +40,7 @@ const ClusterReady: FunctionComponent<ClusterRunningMessageProps> = ({
         </Typography>
       </Title>
       <Typography variant="body2">
-        Copy this k-bot password and log into the kubefirst console UI.
+        Copy the kbot user password and log into the kubefirst console UI.
       </Typography>
       <PasswordContainer>
         <Password value={kbotPassword} sx={{ width: '398px' }} />

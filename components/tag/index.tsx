@@ -62,6 +62,7 @@ export interface TagProps {
   icon?: TagIconOption;
   removable?: boolean;
   onRemoval?: (tagText: string) => void;
+  spinImage?: boolean;
 }
 
 const Tag: FunctionComponent<TagProps> = ({
@@ -70,13 +71,16 @@ const Tag: FunctionComponent<TagProps> = ({
   removable,
   bgColor,
   onRemoval = noop,
+  spinImage,
   ...rest
 }) => {
   // fallback for passing invalid color in case you happent to not expand/ignore the type.
   const { bg, textColor } = TAG_COLOR_MAP[bgColor ?? 'none'] || TAG_COLOR_MAP['none'];
   return (
     <TagContainer bg={bg} textColor={textColor} {...rest}>
-      {icon && <IconImage src={TAG_ICON_OPTONS[icon]} alt={icon} width={16} height={16} />}
+      {icon && (
+        <IconImage src={TAG_ICON_OPTONS[icon]} alt={icon} width={16} height={16} spin={spinImage} />
+      )}
       <Typography variant="body3" sx={{ textTransform: 'initial' }}>
         {text}
       </Typography>
