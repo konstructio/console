@@ -47,6 +47,7 @@ const TagWithHooks = () => {
 export const Default: StoryObj<typeof Tag> = {
   args: {
     text: 'Tag',
+    spinImage: false,
   },
 };
 
