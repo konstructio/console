@@ -8,7 +8,7 @@ import Tooltip from '../tooltip';
 
 import { CopyButton } from './copyText.styled';
 
-interface CopyTextProps extends ComponentPropsWithoutRef<'div'> {
+interface CopyTextProps extends ComponentPropsWithoutRef<'span'> {
   textToCopy: string;
 }
 
@@ -21,15 +21,15 @@ const CopyText: FunctionComponent<CopyTextProps> = ({ textToCopy, ...rest }) => 
     setTimeout(() => setCopyLabel('Copy'), 2000);
   };
   return (
-    <div {...rest}>
+    <span {...rest}>
       <Tooltip title={copyLabel} placement="top">
         <CopyToClipboard text={textToCopy} onCopy={handleOnCopy}>
           <CopyButton>
-            <Typography>{textToCopy}</Typography>
+            <Typography variant="body2">{textToCopy}</Typography>
           </CopyButton>
         </CopyToClipboard>
       </Tooltip>
-    </div>
+    </span>
   );
 };
 
