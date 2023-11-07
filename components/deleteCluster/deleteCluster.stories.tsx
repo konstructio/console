@@ -37,7 +37,7 @@ const clusters: Cluster[] = [
   },
   {
     clusterId: '2',
-    clusterName: 'kuberfirst-worker-1',
+    clusterName: 'kuberfirst-worker-one',
     type: ClusterType.WORKLOAD,
     cloudProvider: InstallationType.CIVO,
     cloudRegion: 'ap-southeast-1',
