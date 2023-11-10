@@ -129,7 +129,6 @@ const QueueProvider: FunctionComponent<PropsWithChildren> = ({ children }) => {
           !queue[clusterId] &&
           [ClusterStatus.DELETING, ClusterStatus.PROVISIONING].includes(status)
         ) {
-          console.log('should be added');
           queue[clusterId] = getClusterInterval(clusterQueue[clusterId]);
         }
       });
