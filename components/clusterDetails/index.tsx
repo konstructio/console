@@ -13,7 +13,13 @@ import {
 
 import Typography from '@/components/typography';
 import Column from '@/components/column';
-import { Cluster, ClusterType, DraftCluster, ManagementCluster } from '@/types/provision';
+import {
+  Cluster,
+  ClusterStatus,
+  ClusterType,
+  DraftCluster,
+  ManagementCluster,
+} from '@/types/provision';
 import StatusIndicator from '@/components/statusIndicator';
 import { BISCAY, VOLCANIC_SAND } from '@/constants/colors';
 import Tag from '@/components/tag';
@@ -42,10 +48,11 @@ const ClusterDetails: FunctionComponent<ClusterDetailsProps> = ({
     instanceSize,
     environment,
     type,
+    status,
     gitAuth: { gitUser } = {},
   } = cluster;
 
-  const [available, setAvailable] = useState(false);
+  const [available, setAvailable] = useState(status === ClusterStatus.PROVISIONED ?? false);
 
   useEffect(() => {
     setTimeout(() => setAvailable(true), 10000);
@@ -122,10 +129,12 @@ const ClusterDetails: FunctionComponent<ClusterDetailsProps> = ({
             <StyledLabel variant="labelLarge">Cloud region</StyledLabel>
             <StyledValue variant="body2">{cloudRegion}</StyledValue>
           </ColumnInfo>
-          <ColumnInfo>
-            <StyledLabel variant="labelLarge">Number of nodes</StyledLabel>
-            <StyledValue variant="body2">{nodeCount}</StyledValue>
-          </ColumnInfo>
+          {type !== ClusterType.WORKLOAD_V_CLUSTER && (
+            <ColumnInfo>
+              <StyledLabel variant="labelLarge">Number of nodes</StyledLabel>
+              <StyledValue variant="body2">{nodeCount}</StyledValue>
+            </ColumnInfo>
+          )}
         </RowInfo>
 
         {/* Fifth Row */}
