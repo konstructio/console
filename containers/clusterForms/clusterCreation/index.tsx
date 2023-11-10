@@ -229,16 +229,16 @@ const ClusterCreationForm: FunctionComponent<Omit<ComponentPropsWithoutRef<'div'
             ]}
             defaultValue={draftCluster?.instanceSize}
           />
+          <Box sx={{ width: 136 }}>
+            <ControlledNumberInput
+              label="Number of nodes"
+              control={control}
+              name="nodeCount"
+              numberInputProps={{ min: MIN_NODE_COUNT }}
+            />
+          </Box>
         </>
       )}
-      <Box sx={{ width: 136 }}>
-        <ControlledNumberInput
-          label="Number of nodes"
-          control={control}
-          name="nodeCount"
-          numberInputProps={{ min: MIN_NODE_COUNT }}
-        />
-      </Box>
     </Container>
   );
 };
