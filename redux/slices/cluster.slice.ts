@@ -4,9 +4,9 @@ import {
   getClusterServices,
   getGitOpsCatalogApps,
   installGitOpsApp,
-} from '../../redux/thunks/cluster.thunk';
-import { ManagementCluster, ClusterServices, WorkloadCluster } from '../../types/provision';
-import { GitOpsCatalogApp } from '../../types/gitOpsCatalog';
+} from '@/redux/thunks/cluster.thunk';
+import { ManagementCluster, ClusterServices, WorkloadCluster } from '@/types/provision';
+import { GitOpsCatalogApp } from '@/types/gitOpsCatalog';
 
 export interface ConfigState {
   selectedCluster?: ManagementCluster | WorkloadCluster;
