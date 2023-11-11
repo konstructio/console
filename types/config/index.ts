@@ -9,3 +9,8 @@ export interface EnvironmentVariables {
   kubefirstVersion?: string;
   installMethod?: string;
 }
+
+export enum ClusterManagementTab {
+  LIST_VIEW = 0,
+  GRAPH_VIEW = 1,
+}
