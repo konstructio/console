@@ -31,7 +31,13 @@ import { setNotifiedOfBetaPhysicalClusters } from '../../redux/slices/notificati
 import { getAllEnvironments } from '../../redux/thunks/environments.thunk';
 
 import { CreateClusterFlow } from './createClusterFlow';
-import { Container, Content, Header, StyledDrawer } from './clusterManagement.styled';
+import {
+  Container,
+  Content,
+  Header,
+  LeftContainer,
+  StyledDrawer,
+} from './clusterManagement.styled';
 
 import { InstallationType } from '@/types/redux';
 import useFeatureFlag from '@/hooks/useFeatureFlag';
@@ -229,29 +235,32 @@ const ClusterManagement: FunctionComponent = () => {
   return (
     <Container>
       <Header>
-        <Box sx={{ width: 'fit-content', marginLeft: '39px' }}>
-          <Tabs value={clusterManagementTab} onChange={handleChange} indicatorColor="primary">
-            <Tab
-              color={tabColor}
-              label={<Typography variant="buttonSmall">List view</Typography>}
-              {...a11yProps(ClusterManagementTab.LIST_VIEW)}
-              sx={{ textTransform: 'initial', mr: 3 }}
-            />
+        <LeftContainer>
+          <Typography variant="subtitle1">Clusters</Typography>
+          <Box>
+            <Tabs value={clusterManagementTab} onChange={handleChange} indicatorColor="primary">
+              <Tab
+                color={tabColor}
+                label={<Typography variant="buttonSmall">Graph view</Typography>}
+                {...a11yProps(ClusterManagementTab.GRAPH_VIEW)}
+                sx={{ textTransform: 'initial', marginRight: '24px' }}
+              />
+              <Tab
+                color={tabColor}
+                label={<Typography variant="buttonSmall">List view</Typography>}
+                {...a11yProps(ClusterManagementTab.LIST_VIEW)}
+                sx={{ textTransform: 'initial', marginRight: 0 }}
+              />
+            </Tabs>
+          </Box>
+        </LeftContainer>
 
-            <Tab
-              color={tabColor}
-              label={<Typography variant="buttonSmall">Graph view</Typography>}
-              {...a11yProps(ClusterManagementTab.GRAPH_VIEW)}
-              sx={{ textTransform: 'initial' }}
-            />
-          </Tabs>
-        </Box>
         <Button
           color="primary"
           variant="contained"
-          style={{ marginRight: '24px' }}
           onClick={handleAddWorkloadCluster}
           data-test-id="add-workload-cluster"
+          sx={{ marginRight: '24px' }}
         >
           Add workload cluster
         </Button>
