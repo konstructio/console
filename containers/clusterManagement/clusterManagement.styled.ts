@@ -42,6 +42,7 @@ export const LearnMoreLink = styled(Link)`
 export const LeftContainer = styled(Row)`
   align-items: center;
   margin-left: 24px;
+  gap: 42px;
 `;
 
 export const StyledDrawer = muiStyled(Drawer)(() => ({
