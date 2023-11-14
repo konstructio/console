@@ -19,7 +19,7 @@ export const initialState: ConfigState = {
   isTelemetryDisabled: false,
   isClusterZero: false,
   isLoading: false,
-  clusterManagementTab: ClusterManagementTab.LIST_VIEW,
+  clusterManagementTab: ClusterManagementTab.GRAPH_VIEW,
 };
 
 const configSlice = createSlice({

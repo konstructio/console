@@ -11,6 +11,6 @@ export interface EnvironmentVariables {
 }
 
 export enum ClusterManagementTab {
-  LIST_VIEW = 0,
-  GRAPH_VIEW = 1,
+  GRAPH_VIEW = 0,
+  LIST_VIEW = 1,
 }
