@@ -28,8 +28,8 @@ export const Description = styled(Typography)`
 export const Header = styled(Row)`
   color: ${({ theme }) => theme.colors.volcanicSand};
   height: 70px;
-  justify-content: space-between;
   align-items: center;
+  justify-content: space-between;
   background-color: white;
   border-top: 1px solid #e2e8f0;
 `;
@@ -37,6 +37,12 @@ export const Header = styled(Row)`
 export const LearnMoreLink = styled(Link)`
   color: ${({ theme }) => theme.colors.primary};
   text-decoration: none;
+`;
+
+export const LeftContainer = styled(Row)`
+  align-items: center;
+  margin-left: 24px;
+  gap: 42px;
 `;
 
 export const StyledDrawer = muiStyled(Drawer)(() => ({

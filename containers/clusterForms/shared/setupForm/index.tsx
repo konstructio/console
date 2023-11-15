@@ -26,7 +26,7 @@ import {
   EMAIL_REGEX,
   LOWER_KEBAB_CASE_REGEX,
   MIN_NODE_COUNT,
-  NON_NUMERIC_FIRST_CHAR_REGEX,
+  FIRST_CHAR_ALPHABETICAL,
 } from '@/constants';
 import { InstallValues, InstallationType } from '@/types/redux';
 import { EXCLUSIVE_PLUM } from '@/constants/colors';
@@ -297,7 +297,7 @@ const SetupForm: FunctionComponent = () => {
             civoClusterName: (value) => {
               if (installType === InstallationType.CIVO) {
                 return (
-                  (typeof value === 'string' && NON_NUMERIC_FIRST_CHAR_REGEX.test(value)) ||
+                  (typeof value === 'string' && FIRST_CHAR_ALPHABETICAL.test(value)) ||
                   'Name must not begin with a numerical character'
                 );
               }
