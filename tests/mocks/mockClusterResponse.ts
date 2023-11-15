@@ -19,6 +19,7 @@ export const mockClusterResponse: ClusterResponse = {
   git_provider: 'github',
   git_host: 'github.com',
   git_user: 'D-B-Hawk',
+  node_type: '',
   workload_clusters: [
     {
       admin_email: 'derrick@kubeshop.io',
@@ -45,7 +46,7 @@ export const mockClusterResponse: ClusterResponse = {
         git_token: 'superSecretToken',
         git_username: 'D-B-Hawk',
       },
-      machine_type: 'super',
+      node_type: 'super',
     },
     {
       admin_email: 'derrick@kubeshop.io',
@@ -72,7 +73,7 @@ export const mockClusterResponse: ClusterResponse = {
         git_token: 'superSecretToken',
         git_username: 'D-B-Hawk',
       },
-      machine_type: 'super',
+      node_type: 'super',
     },
     {
       admin_email: 'derrick@kubeshop.io',
@@ -99,7 +100,7 @@ export const mockClusterResponse: ClusterResponse = {
         git_token: 'superSecretToken',
         git_username: 'D-B-Hawk',
       },
-      machine_type: 'super',
+      node_type: 'super',
     },
     {
       admin_email: 'derrick@kubeshop.io',
@@ -126,7 +127,7 @@ export const mockClusterResponse: ClusterResponse = {
         git_token: 'superSecretToken',
         git_username: 'D-B-Hawk',
       },
-      machine_type: 'super',
+      node_type: 'super',
     },
   ],
   git_auth: {

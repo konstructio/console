@@ -36,6 +36,7 @@ export const mapClusterFromRaw = (cluster: ClusterResponse) => {
     civo_auth: cluster?.civo_auth,
     do_auth: cluster?.do_auth,
     vultr_auth: cluster?.vultr_auth,
+    google_auth: cluster?.google_auth,
     workloadClusters: [],
     vaultAuth: {
       kbotPassword: cluster.vault_auth?.kbot_password,

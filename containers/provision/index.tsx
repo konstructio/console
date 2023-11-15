@@ -135,8 +135,9 @@ const Provision: FunctionComponent = () => {
   }, [dispatch, installationStep, isProvisioned]);
 
   const handleNextButtonClick = async () => {
+    const values = getValues();
     if (isAuthStep) {
-      await dispatch(getCloudRegions(getValues()));
+      await dispatch(getCloudRegions({ values, installType }));
     } else {
       handleGoNext();
     }

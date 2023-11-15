@@ -15,6 +15,7 @@ export interface AdvancedOptions extends GitValues {
   cloudflareOriginCaIssuerKey?: string;
   subDomain?: string;
   imageRepository?: ImageRepository;
+  cloudZone?: string;
 }
 
 export interface AuthValues {

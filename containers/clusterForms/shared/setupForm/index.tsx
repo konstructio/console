@@ -91,16 +91,33 @@ const SetupForm: FunctionComponent = () => {
     setSelectedRegion(region);
     // if using google hold off on grabbing instances
     // since it requires the zone as well
+
     if (installType === InstallationType.GOOGLE) {
-      dispatch(getRegionZones(region));
+      dispatch(
+        getRegionZones({
+          region,
+          values,
+        }),
+      );
     } else {
-      dispatch(getInstanceSizes({ region }));
-      dispatch(getCloudDomains({ region }));
+      dispatch(
+        getInstanceSizes({
+          installType,
+          region,
+          values,
+        }),
+      );
+      dispatch(
+        getCloudDomains({
+          installType,
+          region,
+        }),
+      );
     }
   };
 
   const handleZoneSelect = (zone: string) => {
-    dispatch(getInstanceSizes({ region: selectedRegion, zone }));
+    dispatch(getInstanceSizes({ installType, region: selectedRegion, zone, values }));
   };
 
   const formatDomains = (domains: Array<string>) => {
