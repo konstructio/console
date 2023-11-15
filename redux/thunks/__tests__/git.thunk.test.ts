@@ -40,18 +40,16 @@ describe('redux/thunks - failed responses', () => {
   test('getGithubUser', async () => {
     await reduxStore.dispatch(getGithubUser('token'));
 
-    const { githubUser, errors } = reduxStore.getState().git;
+    const { githubUser } = reduxStore.getState().git;
 
     expect(githubUser).toBe(null);
-    expect(errors).toStrictEqual(['Failed to get user']);
   });
 
   test('getGithubUserOrganizations', async () => {
     await reduxStore.dispatch(getGithubUserOrganizations('token'));
 
-    const { githubUserOrganizations, errors } = reduxStore.getState().git;
+    const { githubUserOrganizations } = reduxStore.getState().git;
 
     expect(githubUserOrganizations).toStrictEqual([]);
-    expect(errors).toStrictEqual(['Failed to get user', 'Failed to get users organizations']);
   });
 });

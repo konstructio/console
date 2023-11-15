@@ -3,6 +3,7 @@ import {
   ManagementCluster,
   ClusterType,
   WorkloadCluster,
+  ClusterStatus,
 } from '../types/provision';
 import { ClusterCache, ClusterNameCache, EnvCache, InstallationType } from '../types/redux';
 
@@ -101,7 +102,11 @@ export const mapClusterFromRaw = (cluster: ClusterResponse) => {
 
       acc.workloadClusters.push(formattedWorkloadCluster);
 
-      if (curVal.environment && curVal.environment.name) {
+      if (
+        curVal.environment &&
+        curVal.environment.name &&
+        curVal.status !== ClusterStatus.DELETED
+      ) {
         acc.envCache[curVal.environment.name] = true;
       }
 

@@ -74,6 +74,7 @@ const Provision: FunctionComponent = () => {
 
   const { instanceSize, nodeCount } =
     DEFAULT_CLOUD_INSTANCE_SIZES[installType ?? InstallationType.LOCAL];
+
   const methods = useForm<InstallValues>({
     mode: 'onChange',
     defaultValues: {
@@ -186,8 +187,9 @@ const Provision: FunctionComponent = () => {
       );
     }
 
-    await dispatch(clearError());
-    await dispatch(clearClusterState());
+    dispatch(clearError());
+    dispatch(clearClusterState());
+
     await dispatch(createCluster())
       .unwrap()
       .then(() => {

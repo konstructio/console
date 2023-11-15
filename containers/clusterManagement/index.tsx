@@ -1,5 +1,5 @@
 'use client';
-import React, { FunctionComponent, useCallback, useEffect, useMemo, useState } from 'react';
+import React, { FunctionComponent, useCallback, useEffect, useMemo } from 'react';
 import Box from '@mui/material/Box';
 import Tabs from '@mui/material/Tabs';
 
@@ -31,20 +31,21 @@ import { setNotifiedOfBetaPhysicalClusters } from '../../redux/slices/notificati
 import { getAllEnvironments } from '../../redux/thunks/environments.thunk';
 
 import { CreateClusterFlow } from './createClusterFlow';
-import { Container, Content, Header, StyledDrawer } from './clusterManagement.styled';
+import {
+  Container,
+  Content,
+  Header,
+  LeftContainer,
+  StyledDrawer,
+} from './clusterManagement.styled';
 
 import { InstallationType } from '@/types/redux';
 import useFeatureFlag from '@/hooks/useFeatureFlag';
 import { removeClusterFromQueue } from '@/redux/slices/queue.slice';
-
-enum MANAGEMENT_TABS {
-  LIST_VIEW = 0,
-  GRAPH_VIEW = 1,
-}
+import { setClusterManagamentTab } from '@/redux/slices/config.slice';
+import { ClusterManagementTab } from '@/types/config';
 
 const ClusterManagement: FunctionComponent = () => {
-  const [activeTab, setActiveTab] = useState(MANAGEMENT_TABS.LIST_VIEW);
-
   const {
     clusterQueue,
     managementCluster,
@@ -53,9 +54,11 @@ const ClusterManagement: FunctionComponent = () => {
     loading,
     notifiedOfBetaPhysicalClusters,
     clusterMap,
-  } = useAppSelector(({ api, queue, notifications }) => ({
+    clusterManagementTab,
+  } = useAppSelector(({ api, queue, notifications, config }) => ({
     clusterQueue: queue.clusterQueue,
     notifiedOfBetaPhysicalClusters: notifications.notifiedOfBetaPhysicalClusters,
+    clusterManagementTab: config.clusterManagementTab,
     ...api,
   }));
 
@@ -151,8 +154,8 @@ const ClusterManagement: FunctionComponent = () => {
   };
 
   const handleChange = useCallback(
-    (event: React.SyntheticEvent, newValue: number) => {
-      setActiveTab(newValue);
+    (event: React.SyntheticEvent, tabIndex: number) => {
+      dispatch(setClusterManagamentTab(tabIndex));
       if (presentedClusterId) {
         dispatch(setPresentedClusterId(undefined));
       }
@@ -205,6 +208,11 @@ const ClusterManagement: FunctionComponent = () => {
     [dispatch, openDeleteModal],
   );
 
+  const tabColor = useMemo(
+    () => (clusterManagementTab === ClusterManagementTab.LIST_VIEW ? BISCAY : SALTBOX_BLUE),
+    [clusterManagementTab],
+  );
+
   useEffect(() => {
     dispatch(getAllEnvironments());
   }, [dispatch]);
@@ -232,35 +240,38 @@ const ClusterManagement: FunctionComponent = () => {
   return (
     <Container>
       <Header>
-        <Box sx={{ width: 'fit-content', marginLeft: '39px' }}>
-          <Tabs value={activeTab} onChange={handleChange} indicatorColor="primary">
-            <Tab
-              color={activeTab === MANAGEMENT_TABS.LIST_VIEW ? BISCAY : SALTBOX_BLUE}
-              label={<Typography variant="buttonSmall">List view</Typography>}
-              {...a11yProps(MANAGEMENT_TABS.LIST_VIEW)}
-              sx={{ textTransform: 'initial', mr: 3 }}
-            />
+        <LeftContainer>
+          <Typography variant="subtitle1">Clusters</Typography>
+          <Box>
+            <Tabs value={clusterManagementTab} onChange={handleChange} indicatorColor="primary">
+              <Tab
+                color={tabColor}
+                label={<Typography variant="buttonSmall">Graph view</Typography>}
+                {...a11yProps(ClusterManagementTab.GRAPH_VIEW)}
+                sx={{ textTransform: 'initial', marginRight: '24px' }}
+              />
+              <Tab
+                color={tabColor}
+                label={<Typography variant="buttonSmall">List view</Typography>}
+                {...a11yProps(ClusterManagementTab.LIST_VIEW)}
+                sx={{ textTransform: 'initial', marginRight: 0 }}
+              />
+            </Tabs>
+          </Box>
+        </LeftContainer>
 
-            <Tab
-              color={activeTab === MANAGEMENT_TABS.GRAPH_VIEW ? BISCAY : SALTBOX_BLUE}
-              label={<Typography variant="buttonSmall">Graph view</Typography>}
-              {...a11yProps(MANAGEMENT_TABS.GRAPH_VIEW)}
-              sx={{ textTransform: 'initial' }}
-            />
-          </Tabs>
-        </Box>
         <Button
           color="primary"
           variant="contained"
-          style={{ marginRight: '24px' }}
           onClick={handleAddWorkloadCluster}
           data-test-id="add-workload-cluster"
+          sx={{ marginRight: '24px' }}
         >
           Add workload cluster
         </Button>
       </Header>
       <Content>
-        <TabPanel value={activeTab} index={MANAGEMENT_TABS.LIST_VIEW}>
+        <TabPanel value={clusterManagementTab} index={ClusterManagementTab.LIST_VIEW}>
           {managementCluster && (
             <ClusterTable
               clusters={clusterMap}
@@ -269,7 +280,7 @@ const ClusterManagement: FunctionComponent = () => {
             />
           )}
         </TabPanel>
-        <TabPanel value={activeTab} index={MANAGEMENT_TABS.GRAPH_VIEW}>
+        <TabPanel value={clusterManagementTab} index={ClusterManagementTab.GRAPH_VIEW}>
           <Flow onNodeClick={handleNodeClick} />
         </TabPanel>
       </Content>

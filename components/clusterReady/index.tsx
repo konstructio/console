@@ -40,7 +40,7 @@ const ClusterReady: FunctionComponent<ClusterRunningMessageProps> = ({
         </Typography>
       </Title>
       <Typography variant="body2">
-        Copy this k-bot password and log into the kubefirst console UI.
+        Copy the kbot user password and log into the kubefirst console UI.
       </Typography>
       <PasswordContainer>
         <Password value={kbotPassword} sx={{ width: '398px' }} />
@@ -50,11 +50,11 @@ const ClusterReady: FunctionComponent<ClusterRunningMessageProps> = ({
           </Button>
         </CopyToClipboard>
       </PasswordContainer>
-      <Button variant="contained" color="primary" data-test-id="launch-console">
-        <Link href={`https://kubefirst.${domainName}/`} target="_blank" onClick={onOpenConsole}>
+      <Link href={`https://kubefirst.${domainName}/`} target="_blank" onClick={onOpenConsole}>
+        <Button variant="contained" color="primary" data-test-id="launch-console">
           Open kubefirst console
-        </Link>
-      </Button>
+        </Button>
+      </Link>
     </Container>
   );
 };

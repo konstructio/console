@@ -1,20 +1,12 @@
 'use client';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { styled as muiStyled } from '@mui/material/styles';
 import { typographyClasses } from '@mui/material/Typography';
-import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 
-import ColumnComponent from '../column';
-import RowComponent from '../row';
-import Typography from '../typography';
-import {
-  CHEFS_HAT,
-  DR_WHITE,
-  EXCLUSIVE_PLUM,
-  PRIMARY,
-  TRUE_BLUE,
-  VOLCANIC_SAND,
-} from '../../constants/colors';
+import ColumnComponent from '@/components/column';
+import RowComponent from '@/components/row';
+import Typography from '@/components/typography';
+import { EXCLUSIVE_PLUM, PRIMARY, SPUN_PEARL, VOLCANIC_SAND } from '@/constants/colors';
 
 export const Container = styled(ColumnComponent)`
   width: 100%;
@@ -32,10 +24,20 @@ export const ColumnInfo = styled(ColumnComponent)`
   justify-content: space-between;
 `;
 
-export const InfoIcon = styled(InfoOutlinedIcon)`
-  color: ${TRUE_BLUE};
-  height: 20px;
-  width: 20px;
+export const ExternalLink = styled.a.attrs({
+  target: '_blank',
+  rel: 'noreferrer',
+})<{ available?: boolean }>`
+  font-size: 14px;
+  text-decoration: none;
+  color: ${({ available }) => (available ? PRIMARY : SPUN_PEARL)};
+  cursor: pointer;
+
+  ${({ available }) =>
+    !available &&
+    css`
+      pointer-events: none;
+    `}
 `;
 
 export const Link = styled.a`
@@ -45,14 +47,6 @@ export const Link = styled.a`
 
 export const RowInfo = styled(RowComponent)`
   gap: 156px;
-`;
-
-export const StatusContainer = styled(RowComponent)`
-  gap: 8px;
-  padding: 16px;
-  background-color: ${DR_WHITE};
-  border: 1px solid ${CHEFS_HAT};
-  border-radius: 4px;
 `;
 
 export const StyledLabel = muiStyled(Typography)(() => ({

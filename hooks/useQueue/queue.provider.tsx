@@ -38,6 +38,15 @@ const QueueProvider: FunctionComponent<PropsWithChildren> = ({ children }) => {
           `/api/proxy?${createQueryString('url', `/cluster/${clusterName || 'kubefirst'}`)}`,
         );
 
+        const { managementCluster, clusterCache, clusterNameCache, envCache } = mapClusterFromRaw(
+          res.data,
+        );
+
+        dispatch(setManagementCluster(managementCluster));
+        dispatch(setClusterMap(clusterCache));
+        dispatch(setClusterNameCache(clusterNameCache));
+        dispatch(setBoundEnvironments(envCache));
+
         if (clusterType === ClusterType.MANAGEMENT) {
           const { status } = res.data || {};
 
@@ -48,18 +57,7 @@ const QueueProvider: FunctionComponent<PropsWithChildren> = ({ children }) => {
             }),
           );
 
-          const { managementCluster, clusterCache, clusterNameCache, envCache } = mapClusterFromRaw(
-            res.data,
-          );
-
-          dispatch(setManagementCluster(managementCluster));
-          dispatch(setClusterMap(clusterCache));
-          dispatch(setClusterNameCache(clusterNameCache));
-          dispatch(setBoundEnvironments(envCache));
-
-          if (
-            ![ClusterStatus.DELETING, ClusterStatus.PROVISIONING].includes(status as ClusterStatus)
-          ) {
+          if (![ClusterStatus.DELETING, ClusterStatus.PROVISIONING].includes(status)) {
             incomingClusterQueue.callback && incomingClusterQueue.callback();
             clearInterval(queue[id]);
           }

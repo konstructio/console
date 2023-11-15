@@ -1,16 +1,5 @@
-import React, { ComponentPropsWithoutRef, FunctionComponent } from 'react';
+import React, { ComponentPropsWithoutRef, FunctionComponent, useEffect, useState } from 'react';
 import moment from 'moment';
-
-import Typography from '../../components/typography';
-import Row from '../../components/row';
-import Column from '../../components/column';
-import {
-  Cluster,
-  ClusterStatus,
-  ClusterType,
-  DraftCluster,
-  ManagementCluster,
-} from '../../types/provision';
 
 import {
   Container,
@@ -19,10 +8,21 @@ import {
   RowInfo,
   StyledLabel,
   StyledValue,
-  InfoIcon,
-  Link,
-  StatusContainer,
+  ExternalLink,
 } from './clusterDetails.styled';
+
+import Typography from '@/components/typography';
+import Column from '@/components/column';
+import {
+  Cluster,
+  ClusterStatus,
+  ClusterType,
+  DraftCluster,
+  ManagementCluster,
+} from '@/types/provision';
+import StatusIndicator from '@/components/statusIndicator';
+import { BISCAY, VOLCANIC_SAND } from '@/constants/colors';
+import Tag from '@/components/tag';
 
 export interface ClusterDetailsProps extends Omit<ComponentPropsWithoutRef<'div'>, 'key'> {
   cluster: Cluster | DraftCluster;
@@ -37,8 +37,8 @@ const ClusterDetails: FunctionComponent<ClusterDetailsProps> = ({
   ...rest
 }) => {
   const {
-    clusterName,
     adminEmail,
+    clusterName,
     cloudProvider,
     cloudRegion,
     creationDate,
@@ -46,60 +46,44 @@ const ClusterDetails: FunctionComponent<ClusterDetailsProps> = ({
     gitProvider,
     nodeCount,
     instanceSize,
-    status,
+    environment,
     type,
+    status,
     gitAuth: { gitUser } = {},
   } = cluster;
 
-  const CLUSTER_REPO_BASE_LINK = `https://${host}/${gitOwner}`;
+  const [available, setAvailable] = useState(status === ClusterStatus.PROVISIONED ?? false);
 
-  const ARGO_CD_LINK = `https://argocd.${domainName}/applications/clusters`;
-
-  const presentedLink = `/gitops/tree/main/registry/clusters/${clusterName}`;
+  useEffect(() => {
+    setTimeout(() => setAvailable(true), 10000);
+  });
 
   return (
     <Container {...rest}>
-      <StatusContainer>
-        <Row>
-          <InfoIcon />
-        </Row>
-        <Column>
-          {status !== ClusterStatus.PROVISIONING ? (
-            <>
-              <Typography variant="body2">
-                The cluster has been registered and will be synced
-              </Typography>
-              <Typography variant="body2">
-                Clusters in ArgoCD:{' '}
-                <Link target="_blank" href={ARGO_CD_LINK}>
-                  {ARGO_CD_LINK}
-                </Link>
-              </Typography>
-              <Typography variant="body2">
-                Cluster configurations:{' '}
-                <Link target="_blank" href={CLUSTER_REPO_BASE_LINK + presentedLink}>
-                  {presentedLink}
-                </Link>
-              </Typography>
-            </>
-          ) : (
-            <>
-              <Typography variant="body2">
-                Clusters in ArgoCD:{' '}
-                <Link target="_blank" href={ARGO_CD_LINK}>
-                  {ARGO_CD_LINK}
-                </Link>
-              </Typography>
-              <Typography>
-                Cluster configurations:{' '}
-                <Link target="_blank" href={CLUSTER_REPO_BASE_LINK + presentedLink}>
-                  {presentedLink}
-                </Link>{' '}
-              </Typography>
-            </>
-          )}
+      <Column style={{ gap: '8px' }}>
+        <Typography variant="subtitle1" color={BISCAY}>
+          {clusterName}
+        </Typography>
+        {environment?.name && <Tag text={environment.name} bgColor={environment.color} />}
+        {environment?.description && (
+          <Typography variant="body2" color={VOLCANIC_SAND}>
+            {environment.description}
+          </Typography>
+        )}
+        <Column style={{ gap: '4px' }}>
+          <StatusIndicator available>
+            <ExternalLink href={`https://argocd.${domainName}/applications/clusters`} available>
+              View your Argo CD Clusters
+            </ExternalLink>
+          </StatusIndicator>
+          <StatusIndicator available={available}>
+            <ExternalLink href={`https://${host}/${gitOwner}`} available={available}>
+              View your {gitProvider} cluster configuration
+            </ExternalLink>
+          </StatusIndicator>
         </Column>
-      </StatusContainer>
+      </Column>
+
       <Content>
         {/* Top Row */}
         <RowInfo>
@@ -145,10 +129,12 @@ const ClusterDetails: FunctionComponent<ClusterDetailsProps> = ({
             <StyledLabel variant="labelLarge">Cloud region</StyledLabel>
             <StyledValue variant="body2">{cloudRegion}</StyledValue>
           </ColumnInfo>
-          <ColumnInfo>
-            <StyledLabel variant="labelLarge">Number of nodes</StyledLabel>
-            <StyledValue variant="body2">{nodeCount}</StyledValue>
-          </ColumnInfo>
+          {type !== ClusterType.WORKLOAD_V_CLUSTER && (
+            <ColumnInfo>
+              <StyledLabel variant="labelLarge">Number of nodes</StyledLabel>
+              <StyledValue variant="body2">{nodeCount}</StyledValue>
+            </ColumnInfo>
+          )}
         </RowInfo>
 
         {/* Fifth Row */}

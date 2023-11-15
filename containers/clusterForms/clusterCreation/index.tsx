@@ -283,11 +283,12 @@ const ClusterCreationForm: FunctionComponent<Omit<ComponentPropsWithoutRef<'div'
           required: 'Cluster name is required',
           pattern: {
             value: LOWER_KEBAB_CASE_REGEX,
-            message: 'Please use lower kebab case for cluster name',
+            message:
+              'Name must only contain lowercase alphanumeric characters and dashes, and begin and end with a lowercase alphanumeric character.',
           },
           validate: {
             previouslyUsedClusterNames: (value) =>
-              !clusterNameCache[value as string] ||
+              (typeof value === 'string' && !clusterNameCache[value]) ||
               'Please use a unique name that has not been previously provisioned',
           },
         }}
@@ -335,16 +336,16 @@ const ClusterCreationForm: FunctionComponent<Omit<ComponentPropsWithoutRef<'div'
             }))}
             defaultValue={instanceSize}
           />
+          <Box sx={{ width: 136 }}>
+            <ControlledNumberInput
+              label="Number of nodes"
+              control={control}
+              name="nodeCount"
+              numberInputProps={{ min: MIN_NODE_COUNT }}
+            />
+          </Box>
         </>
       )}
-      <Box sx={{ width: 136 }}>
-        <ControlledNumberInput
-          label="Number of nodes"
-          control={control}
-          name="nodeCount"
-          numberInputProps={{ min: MIN_NODE_COUNT }}
-        />
-      </Box>
     </Container>
   );
 };

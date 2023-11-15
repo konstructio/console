@@ -150,7 +150,12 @@ const ClusterRow: FunctionComponent<ClusterRowProps> = ({
           <StyledCellText variant="body2">{gitUser}</StyledCellText>
         </StyledTableCell>
         <StyledTableCell selected={isOpen}>
-          <StyledTag text={iconLabel} bgColor={bgColor} icon={iconType} />
+          <StyledTag
+            text={iconLabel}
+            bgColor={bgColor}
+            icon={iconType}
+            spinImage={status === ClusterStatus.PROVISIONING}
+          />
         </StyledTableCell>
         <StyledTableCell style={{ position: 'relative' }} selected={isOpen}>
           <IconButton

@@ -1,11 +1,26 @@
 'use client';
-import styled from 'styled-components';
+import styled, { css, keyframes } from 'styled-components';
 import Image from 'next/image';
 
 import Row from '../row/';
 
-export const IconImage = styled(Image)`
+const spinAnimation = keyframes`
+  from {
+    transform:rotate(0deg);
+  }
+  to {
+    transform:rotate(360deg);
+  }
+`;
+
+export const IconImage = styled(Image)<{ spin?: boolean }>`
   margin-right: 4px;
+
+  ${({ spin }) =>
+    spin &&
+    css`
+      animation: ${spinAnimation} 1s ease infinite;
+    `}
 `;
 
 export const RemovalButton = styled.button`

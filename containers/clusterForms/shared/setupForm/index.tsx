@@ -22,7 +22,12 @@ import ControlledAutocomplete from '@/components/controlledFields/AutoComplete';
 import Column from '@/components/column';
 import Typography from '@/components/typography';
 import ControlledCheckbox from '@/components/controlledFields/checkbox';
-import { EMAIL_REGEX, LOWER_KEBAB_CASE_REGEX, MIN_NODE_COUNT } from '@/constants';
+import {
+  EMAIL_REGEX,
+  LOWER_KEBAB_CASE_REGEX,
+  MIN_NODE_COUNT,
+  FIRST_CHAR_ALPHABETICAL,
+} from '@/constants';
 import { InstallValues, InstallationType } from '@/types/redux';
 import { EXCLUSIVE_PLUM } from '@/constants/colors';
 import { BISCAY } from '@/constants/colors';
@@ -63,6 +68,7 @@ const SetupForm: FunctionComponent = () => {
     installationStep,
     installType,
     values,
+    clusterNameCache,
   } = useAppSelector(({ api, installation }) => ({
     ...api,
     ...installation,
@@ -278,10 +284,25 @@ const SetupForm: FunctionComponent = () => {
         defaultValue={values?.clusterName}
         rules={{
           maxLength: 25,
-          required: true,
+          required: 'Cluster name is required',
           pattern: {
             value: LOWER_KEBAB_CASE_REGEX,
-            message: 'Please use lower kebab case for cluster name',
+            message:
+              'Name must only contain lowercase alphanumeric characters and dashes, and begin and end with a lowercase alphanumeric character.',
+          },
+          validate: {
+            previouslyUsedClusterNames: (value) =>
+              (typeof value === 'string' && !clusterNameCache[value]) ||
+              'Please use a unique name that has not been previously provisioned',
+            civoClusterName: (value) => {
+              if (installType === InstallationType.CIVO) {
+                return (
+                  (typeof value === 'string' && FIRST_CHAR_ALPHABETICAL.test(value)) ||
+                  'Name must not begin with a numerical character'
+                );
+              }
+              return true;
+            },
           },
         }}
         onErrorText={errors.clusterName?.message}

@@ -93,7 +93,7 @@ const Environments: FunctionComponent = () => {
             withoutDivider
             description="Define and add you environments."
             linkTitle="Learn more"
-            href=""
+            href="https://docs.kubefirst.io/civo/quick-start/cluster-management"
           />
         </HeadingContainer>
         <Button variant="contained" color="primary" onClick={open}>

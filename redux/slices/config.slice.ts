@@ -2,7 +2,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 import { getEnvVariables } from '../thunks/config.thunk';
 
-import { EnvironmentVariables } from '@/types/config';
+import { ClusterManagementTab, EnvironmentVariables } from '@/types/config';
 
 export interface ConfigState {
   isAuthDisabled: boolean;
@@ -11,6 +11,7 @@ export interface ConfigState {
   kubefirstVersion?: string;
   installMethod?: string;
   isLoading: boolean;
+  clusterManagementTab: ClusterManagementTab;
 }
 
 export const initialState: ConfigState = {
@@ -18,6 +19,7 @@ export const initialState: ConfigState = {
   isTelemetryDisabled: false,
   isClusterZero: false,
   isLoading: false,
+  clusterManagementTab: ClusterManagementTab.GRAPH_VIEW,
 };
 
 const configSlice = createSlice({
@@ -31,6 +33,9 @@ const configSlice = createSlice({
       state.kubefirstVersion = kubefirstVersion;
       state.isClusterZero = isClusterZero;
       state.installMethod = installMethod;
+    },
+    setClusterManagamentTab: (state, { payload }: PayloadAction<ClusterManagementTab>) => {
+      state.clusterManagementTab = payload;
     },
   },
   extraReducers: (builder) => {
@@ -55,6 +60,6 @@ const configSlice = createSlice({
   },
 });
 
-export const { setConfigValues } = configSlice.actions;
+export const { setConfigValues, setClusterManagamentTab } = configSlice.actions;
 
 export const configReducer = configSlice.reducer;
