@@ -15,14 +15,12 @@ import {
   ManagementCluster,
   ClusterCreationStep,
   ClusterStatus,
-  ClusterType,
   NewWorkloadClusterConfig,
   WorkloadCluster,
   Cluster,
   DraftCluster,
 } from '../../types/provision';
 import { ClusterCache, ClusterNameCache } from '../../types/redux';
-import { MIN_NODE_COUNT } from '../../constants';
 
 export interface ApiState {
   loading: boolean;
@@ -106,35 +104,9 @@ const apiSlice = createSlice({
     setClusterConfig: (state, { payload }: PayloadAction<NewWorkloadClusterConfig>) => {
       state.clusterConfig = payload;
     },
-    createDraftCluster: (state) => {
-      if (state.managementCluster) {
-        const {
-          gitProvider,
-          cloudProvider,
-          domainName,
-          adminEmail,
-          gitAuth,
-          dnsProvider,
-          cloudRegion,
-        } = state.managementCluster;
-
-        const draftCluster: WorkloadCluster = {
-          clusterId: 'draft',
-          clusterName: '',
-          type: ClusterType.WORKLOAD_V_CLUSTER,
-          nodeCount: MIN_NODE_COUNT,
-          cloudProvider,
-          cloudRegion,
-          gitProvider,
-          domainName,
-          gitAuth,
-          adminEmail,
-          dnsProvider,
-        };
-
-        state.clusterMap[draftCluster.clusterId] = draftCluster;
-        state.presentedClusterId = draftCluster.clusterId;
-      }
+    createDraftCluster: (state, { payload }: PayloadAction<WorkloadCluster>) => {
+      state.clusterMap[payload.clusterId] = payload;
+      state.presentedClusterId = payload.clusterId;
     },
     removeDraftCluster: (state) => {
       delete state.clusterMap['draft'];

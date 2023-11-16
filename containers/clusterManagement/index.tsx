@@ -12,7 +12,13 @@ import {
   getCloudRegions,
   getClusters,
 } from '../../redux/thunks/api.thunk';
-import { Cluster, ClusterCreationStep, ClusterStatus, ClusterType } from '../../types/provision';
+import {
+  Cluster,
+  ClusterCreationStep,
+  ClusterStatus,
+  ClusterType,
+  WorkloadCluster,
+} from '../../types/provision';
 import useToggle from '../../hooks/useToggle';
 import useModal from '../../hooks/useModal';
 import DeleteCluster from '../../components/deleteCluster';
@@ -40,10 +46,10 @@ import {
 } from './clusterManagement.styled';
 
 import { InstallationType } from '@/types/redux';
-import useFeatureFlag from '@/hooks/useFeatureFlag';
 import { removeClusterFromQueue } from '@/redux/slices/queue.slice';
 import { setClusterManagamentTab } from '@/redux/slices/config.slice';
 import { ClusterManagementTab } from '@/types/config';
+import { SUGGESTED_WORKLOAD_NODE_COUNT } from '@/constants';
 
 const ClusterManagement: FunctionComponent = () => {
   const {
@@ -55,36 +61,28 @@ const ClusterManagement: FunctionComponent = () => {
     notifiedOfBetaPhysicalClusters,
     clusterMap,
     clusterManagementTab,
-  } = useAppSelector(({ api, queue, notifications, config }) => ({
+    canProvisionAWSPhysicalClusters,
+    canProvisionGCPPhysicalClusters,
+    canProvisionDOPhysicalClusters,
+    canProvisionVultrPhysicalClusters,
+  } = useAppSelector(({ api, queue, notifications, config, featureFlags }) => ({
     clusterQueue: queue.clusterQueue,
     notifiedOfBetaPhysicalClusters: notifications.notifiedOfBetaPhysicalClusters,
     clusterManagementTab: config.clusterManagementTab,
     ...api,
+    ...featureFlags.flags,
   }));
 
   const { addClusterToQueue } = useQueue();
-
-  const { isEnabled: canProvisionAWSPhysicalClusters } = useFeatureFlag(
-    'canProvisionAwsPhysicalClusters',
-  );
-  const { isEnabled: canProvisionGCPPhysicalClusters } = useFeatureFlag(
-    'canProvisionGCPPhysicalClusters',
-  );
-  const { isEnabled: canProvisionDOPhysicalClusters } = useFeatureFlag(
-    'canProvisionDOPhysicalClusters',
-  );
-  const { isEnabled: canProvisionVultrPhysicalClusters } = useFeatureFlag(
-    'canProvisionVultrPhysicalClusters',
-  );
 
   // check if user has permission to provision physical clusters based on cloud provider,
   // otherwise default to true if no feature flag check
   const physicalClustersPermission = useMemo(
     (): Record<InstallationType, boolean> => ({
-      [InstallationType.AWS]: canProvisionAWSPhysicalClusters,
-      [InstallationType.DIGITAL_OCEAN]: canProvisionDOPhysicalClusters,
-      [InstallationType.GOOGLE]: canProvisionGCPPhysicalClusters,
-      [InstallationType.VULTR]: canProvisionVultrPhysicalClusters,
+      [InstallationType.AWS]: !!canProvisionAWSPhysicalClusters,
+      [InstallationType.DIGITAL_OCEAN]: !!canProvisionDOPhysicalClusters,
+      [InstallationType.GOOGLE]: !!canProvisionGCPPhysicalClusters,
+      [InstallationType.VULTR]: !!canProvisionVultrPhysicalClusters,
       [InstallationType.CIVO]: true,
       [InstallationType.LOCAL]: true,
     }),
@@ -174,10 +172,34 @@ const ClusterManagement: FunctionComponent = () => {
 
   const handleAddWorkloadCluster = useCallback(() => {
     if (clusterCreationStep === ClusterCreationStep.CONFIG && managementCluster) {
-      dispatch(createDraftCluster());
+      const {
+        gitProvider,
+        cloudProvider,
+        domainName,
+        adminEmail,
+        gitAuth,
+        dnsProvider,
+        cloudRegion,
+      } = managementCluster;
+
+      const draftCluster: WorkloadCluster = {
+        clusterId: 'draft',
+        clusterName: '',
+        type: defaultClusterType,
+        nodeCount: SUGGESTED_WORKLOAD_NODE_COUNT,
+        cloudProvider,
+        cloudRegion,
+        gitProvider,
+        domainName,
+        gitAuth,
+        adminEmail,
+        dnsProvider,
+      };
+
+      dispatch(createDraftCluster(draftCluster));
     }
     openCreateClusterFlow();
-  }, [managementCluster, dispatch, openCreateClusterFlow, clusterCreationStep]);
+  }, [managementCluster, dispatch, openCreateClusterFlow, clusterCreationStep, defaultClusterType]);
 
   const handleCreateCluster = () => {
     if (clusterCreationStep !== ClusterCreationStep.DETAILS) {

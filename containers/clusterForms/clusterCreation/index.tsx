@@ -24,7 +24,12 @@ import {
 import { EXCLUSIVE_PLUM } from '@/constants/colors';
 import ControlledNumberInput from '@/components/controlledFields/numberInput';
 import ControlledRadioGroup from '@/components/controlledFields/radio';
-import { LOWER_KEBAB_CASE_REGEX, MIN_NODE_COUNT, WORKLOAD_CLUSTER_OPTIONS } from '@/constants';
+import {
+  LOWER_KEBAB_CASE_REGEX,
+  MIN_NODE_COUNT,
+  SUGGESTED_WORKLOAD_NODE_COUNT,
+  WORKLOAD_CLUSTER_OPTIONS,
+} from '@/constants';
 import { updateDraftCluster } from '@/redux/slices/api.slice';
 import ControlledEnvironmentSelect from '@/components/controlledFields/environmentSelect';
 import Modal from '@/components/modal';
@@ -341,7 +346,10 @@ const ClusterCreationForm: FunctionComponent<Omit<ComponentPropsWithoutRef<'div'
               label="Number of nodes"
               control={control}
               name="nodeCount"
-              numberInputProps={{ min: MIN_NODE_COUNT }}
+              numberInputProps={{
+                min: MIN_NODE_COUNT,
+                defaultValue: SUGGESTED_WORKLOAD_NODE_COUNT,
+              }}
             />
           </Box>
         </>
