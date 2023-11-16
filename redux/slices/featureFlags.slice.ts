@@ -4,7 +4,7 @@ import { getFlags } from '@/redux/thunks/config.thunk';
 import { Flags } from '@/types/config';
 
 export interface FeatureFlagsState {
-  flags?: Record<string, string | boolean>;
+  flags: Flags;
   isLoading: boolean;
 }
 
@@ -24,7 +24,10 @@ const featureFlagsSlice = createSlice({
       })
       .addCase(getFlags.fulfilled, (state, { payload }: PayloadAction<Flags>) => {
         state.isLoading = false;
-        state.flags = payload.flags;
+        state.flags = {
+          ...state.flags,
+          ...payload,
+        };
       })
       .addCase(getFlags.rejected, (state) => {
         state.isLoading = false;
