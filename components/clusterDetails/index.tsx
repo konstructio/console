@@ -73,7 +73,7 @@ const ClusterDetails: FunctionComponent<ClusterDetailsProps> = ({
         <Column style={{ gap: '4px' }}>
           <StatusIndicator available>
             <ExternalLink href={`https://argocd.${domainName}/applications/clusters`} available>
-              View your Argo CD Clusters
+              View your Argo CD clusters
             </ExternalLink>
           </StatusIndicator>
           <StatusIndicator available={available}>
@@ -138,16 +138,15 @@ const ClusterDetails: FunctionComponent<ClusterDetailsProps> = ({
         </RowInfo>
 
         {/* Fifth Row */}
-        {type !== ClusterType.MANAGEMENT && (
-          <RowInfo>
-            <ColumnInfo>
-              <StyledLabel variant="labelLarge">Instance size</StyledLabel>
-              <StyledValue variant="body2" style={{ width: '100%' }}>
-                {instanceSize}
-              </StyledValue>
-            </ColumnInfo>
-          </RowInfo>
-        )}
+
+        <RowInfo>
+          <ColumnInfo>
+            <StyledLabel variant="labelLarge">Instance size</StyledLabel>
+            <StyledValue variant="body2" style={{ width: '100%' }}>
+              {instanceSize}
+            </StyledValue>
+          </ColumnInfo>
+        </RowInfo>
       </Content>
     </Container>
   );
