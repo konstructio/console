@@ -87,34 +87,27 @@ const SetupForm: FunctionComponent = () => {
     }
   }, [dispatch, installationStep, values?.gitToken]);
 
-  const handleRegionOnSelect = (region: string) => {
-    setSelectedRegion(region);
-    // if using google hold off on grabbing instances
-    // since it requires the zone as well
+  const handleRegionOnSelect = useCallback(
+    (region: string) => {
+      setSelectedRegion(region);
+      // if using google hold off on grabbing instances
+      // since it requires the zone as well
 
-    if (installType === InstallationType.GOOGLE) {
-      dispatch(
-        getRegionZones({
-          region,
-          values,
-        }),
-      );
-    } else {
-      dispatch(
-        getInstanceSizes({
-          installType,
-          region,
-          values,
-        }),
-      );
-      dispatch(
-        getCloudDomains({
-          installType,
-          region,
-        }),
-      );
-    }
-  };
+      if (installType === InstallationType.GOOGLE) {
+        dispatch(
+          getRegionZones({
+            region,
+            values,
+          }),
+        );
+      } else {
+        const funcArgs = { installType, region, values };
+        dispatch(getInstanceSizes(funcArgs));
+        dispatch(getCloudDomains(funcArgs));
+      }
+    },
+    [dispatch, installType, values],
+  );
 
   const handleZoneSelect = (zone: string) => {
     dispatch(getInstanceSizes({ installType, region: selectedRegion, zone, values }));
