@@ -137,7 +137,9 @@ const ClusterRow: FunctionComponent<ClusterRowProps> = ({
           <StyledCellText variant="body2">{cloudRegion}</StyledCellText>
         </StyledTableCell>
         <StyledTableCell align="center" selected={isOpen}>
-          <StyledCellText variant="body2">{nodeCount}</StyledCellText>
+          {type !== ClusterType.WORKLOAD_V_CLUSTER && (
+            <StyledCellText variant="body2">{nodeCount}</StyledCellText>
+          )}
         </StyledTableCell>
         <StyledTableCell selected={isOpen}>
           {creationDate && (

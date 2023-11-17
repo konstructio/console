@@ -1,5 +1,13 @@
 export interface Flags {
-  flags?: Record<string, string | boolean>;
+  'canProvisionDOPhysicalClusters'?: boolean;
+  'canProvisionVultrPhysicalClusters'?: boolean;
+  'canProvisionGCPPhysicalClusters'?: boolean;
+  'canProvisionAWSPhysicalClusters'?: boolean;
+  'multicluster-management'?: boolean;
+  'gitops-catalog'?: boolean;
+  'cluster-provisioning'?: boolean;
+  'cluster-management'?: boolean;
+  'marketplace'?: boolean;
 }
 
 export interface EnvironmentVariables {
