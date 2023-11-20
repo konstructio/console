@@ -79,8 +79,8 @@ export const mapClusterFromRaw = (cluster: ClusterResponse) => {
         cloudRegion: curVal.cloud_region,
         cloudProvider: curVal.cloud_provider as InstallationType,
         dnsProvider: curVal.dns_provider,
-        instanceSize: curVal.instance_size,
         nodeCount: curVal.node_count,
+        instanceSize: curVal.node_type,
         creationDate: curVal.creation_timestamp,
         environment: {
           id: curVal.environment?._id ?? '',
