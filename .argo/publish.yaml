@@ -171,9 +171,9 @@ spec:
                 - name: appName
                   value: 'gitops-template'
                 - name: commitMessage
-                  value: 'set next macro chart for kubefirst - {{steps.output-macro-chart-version.outputs.result}}'
+                  value: 'set next macro chart for kubefirst - {{steps.output-macro-chart-version.outputs.repo-source}}'
                 - name: nextChartVersion
-                  value: "{{steps.output-macro-chart-version.outputs.result}}"
+                  value: "{{steps.output-macro-chart-version.outputs.repo-source}}"
         - - name: pull-sign-commit-push-gitops
             templateRef:
               name: cwft-git
@@ -187,8 +187,8 @@ spec:
                 - name: appName
                   value: 'gitops'
                 - name: commitMessage
-                  value: 'set next macro chart for kubefirst - {{steps.output-macro-chart-version.outputs.result}}'
+                  value: 'set next macro chart for kubefirst - {{steps.output-macro-chart-version.outputs.repo-source}}'
                 - name: chartVersion
-                  value: "{{steps.output-macro-chart-version.outputs.result}}"
+                  value: "{{steps.output-macro-chart-version.outputs.repo-source}}"
                 - name: environment
                   value: "development"
