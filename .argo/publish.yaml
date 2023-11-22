@@ -126,7 +126,7 @@ spec:
                   value: charts # sets workingDir
                 - name: chartDir
                   value: 'charts/kubefirst'
-        - - name: output-next-chart-version
+        - - name: output-current-chart-version
             templateRef:
               name: cwft-helm
               template: output-macro-chart-version
@@ -141,7 +141,7 @@ spec:
                 - name: chartDir
                   value: "charts/kubefirst"
                 - name: version
-                  value: "next"
+                  value: "current"
         - - name: pull-commit-push-charts
             templateRef:
               name: cwft-git
@@ -171,9 +171,9 @@ spec:
                 - name: appName
                   value: 'gitops-template'
                 - name: commitMessage
-                  value: 'set next macro chart for kubefirst - {{steps.output-next-chart-version.outputs.result}}'
+                  value: 'set next macro chart for kubefirst - {{steps.output-current-chart-version.outputs.result}}'
                 - name: nextChartVersion
-                  value: "{{steps.output-next-chart-version.outputs.result}}"
+                  value: "{{steps.output-current-chart-version.outputs.result}}"
         - - name: pull-sign-commit-push-gitops
             templateRef:
               name: cwft-git
@@ -187,8 +187,8 @@ spec:
                 - name: appName
                   value: 'gitops'
                 - name: commitMessage
-                  value: 'set next macro chart for kubefirst - {{steps.output-next-chart-version.outputs.result}}'
+                  value: 'set next macro chart for kubefirst - {{steps.output-current-chart-version.outputs.result}}'
                 - name: chartVersion
-                  value: "{{steps.output-next-chart-version.outputs.result}}"
+                  value: "{{steps.output-current-chart-version.outputs.result}}"
                 - name: environment
                   value: "development"
