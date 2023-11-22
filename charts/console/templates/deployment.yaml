@@ -50,7 +50,7 @@ spec:
             - name: HOSTNAME
               value: "0.0.0.0"
             - name: NEXTAUTH_URL
-              value: https://kubefirst.{{ .Values.domain }}
+              value: "{{ .Values.authURL | default (printf "http://kubefirst.%s" (.Values.domain )) }}"
             - name: K1_ACCESS_TOKEN
               valueFrom:
                 secretKeyRef:
