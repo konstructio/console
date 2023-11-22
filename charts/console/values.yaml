@@ -93,3 +93,4 @@ extraEnvSecrets: []
 
 global:
   kubefirstVersion: "development"
+domain: "example.com"
