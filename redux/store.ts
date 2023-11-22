@@ -19,6 +19,7 @@ import {
   readinessReducer,
   environmentsReducer,
   notificationsReducer,
+  settingsReducer,
 } from './slices';
 
 const rootReducer = combineReducers({
@@ -34,6 +35,7 @@ const rootReducer = combineReducers({
   queue: queueReducer,
   environments: environmentsReducer,
   notifications: notificationsReducer,
+  settings: settingsReducer,
 });
 
 const config = getPersistConfig({
@@ -48,6 +50,7 @@ const config = getPersistConfig({
     'installation.values.google_auth',
     'cluster',
     'api',
+    'settings',
     'featureFlags',
     'git',
     'config.isAuthDisabled',

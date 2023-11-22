@@ -1,5 +1,5 @@
 import React, { useState, FunctionComponent, useMemo, ComponentPropsWithRef } from 'react';
-import { ClickAwayListener } from '@mui/material';
+import ClickAwayListener from '@mui/material/ClickAwayListener';
 import TableHead from '@mui/material/TableHead';
 import IconButton from '@mui/material/IconButton';
 import List from '@mui/material/List';

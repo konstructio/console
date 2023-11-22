@@ -4,11 +4,11 @@ import { usePathname } from 'next/navigation';
 import ScatterPlotIcon from '@mui/icons-material/ScatterPlot';
 import GridViewOutlinedIcon from '@mui/icons-material/GridViewOutlined';
 import CollectionsOutlinedIcon from '@mui/icons-material/CollectionsOutlined';
+import ReceiptLongIcon from '@mui/icons-material/ReceiptLong';
 
 import KubefirstContent from '../kubefirstContent';
 import NavigationComponent from '../../components/navigation';
 import FlappyKray from '../../components/flappyKray';
-// import useFeatureFlag from '../../hooks/useFeatureFlag';
 import useModal from '../../hooks/useModal';
 import { useAppSelector } from '../../redux/store';
 
@@ -51,6 +51,14 @@ const Navigation: FunctionComponent = () => {
           icon: <CollectionsOutlinedIcon />,
           path: '/dashboard/environments',
           title: 'Environments',
+          isEnabled: !isClusterZero && selectedCluster?.cloudProvider !== 'k3d',
+        },
+        {
+          icon: <ReceiptLongIcon />,
+          path: '/settings/subscription',
+          title: 'Subscription',
+          group: 'Admin settings',
+          groupOrder: 2,
           isEnabled: !isClusterZero && selectedCluster?.cloudProvider !== 'k3d',
         },
       ].filter(({ isEnabled }) => isEnabled),

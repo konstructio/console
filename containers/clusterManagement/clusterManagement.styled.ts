@@ -1,7 +1,7 @@
 'use client';
 import Link from 'next/link';
 import styled from 'styled-components';
-import { styled as muiStyled } from '@mui/material';
+import { styled as muiStyled } from '@mui/material/styles';
 
 import Typography from '../../components/typography';
 import Column from '../../components/column';

@@ -33,7 +33,6 @@ export const FooterContainer = styled.div`
 `;
 
 export const MenuContainer = styled.div`
-  align-items: center;
   display: flex;
   flex-direction: column;
   gap: 10px;
