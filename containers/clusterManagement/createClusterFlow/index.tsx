@@ -26,9 +26,6 @@ import {
   MenuHeader,
 } from './createClusterFlow.styled';
 
-import { InstallationType } from '@/types/redux';
-import { DEFAULT_CLOUD_INSTANCE_SIZES } from '@/constants';
-
 const actionButtonText: Record<ClusterCreationStep, string> = {
   [ClusterCreationStep.CONFIG]: 'Create cluster',
   [ClusterCreationStep.DETAILS]: 'Delete cluster',
@@ -59,14 +56,8 @@ export const CreateClusterFlow: FunctionComponent<CreateClusterFlowProps> = ({
   notifiedOfBetaPhysicalClusters,
   onNotificationClose,
 }) => {
-  const { instanceSize } =
-    DEFAULT_CLOUD_INSTANCE_SIZES[managementCluster?.cloudProvider ?? InstallationType.LOCAL];
-
   const methods = useForm<NewWorkloadClusterConfig>({
-    defaultValues: {
-      ...defaultValues,
-      instanceSize,
-    },
+    defaultValues,
     mode: 'onChange',
   });
 
