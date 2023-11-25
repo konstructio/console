@@ -1,12 +1,12 @@
 import { makeStore } from '../../store';
-import { mockFailedResponse, mockSuccessResponse } from '../../../utils/mock';
+import { mockGithubUserFailedResponse, mockGithubUserSuccessResponse } from '../../../utils/mock';
 import { getGithubUser, getGithubUserOrganizations } from '../git.thunk';
 import { mockGithubUser } from '../../../tests/mocks/mockGithubUser';
 import { mockGithubUserOrganizations } from '../../../tests/mocks/mockGithubUserOrganizations';
 
-describe('redux/thunks - successful responses', () => {
+describe('redux/thunks/git - successful responses', () => {
   beforeAll(() => {
-    mockSuccessResponse();
+    mockGithubUserSuccessResponse();
   });
 
   const reduxStore = makeStore();
@@ -30,9 +30,9 @@ describe('redux/thunks - successful responses', () => {
   });
 });
 
-describe('redux/thunks - failed responses', () => {
+describe('redux/thunks/git - failed responses', () => {
   beforeAll(() => {
-    mockFailedResponse();
+    mockGithubUserFailedResponse();
   });
 
   const reduxStore = makeStore();
