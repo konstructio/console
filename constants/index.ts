@@ -48,7 +48,7 @@ export const CLUSTER_TAG_CONFIG: Record<
   [ClusterStatus.PROVISIONING]: {
     iconLabel: 'Provisioning',
     iconType: 'auto-renew',
-    bgColor: 'light blue',
+    bgColor: 'dark-sky-blue',
   },
   [ClusterStatus.DELETING]: { iconLabel: 'Deleting', iconType: 'trash', bgColor: 'pink' },
   [ClusterStatus.DELETED]: { iconLabel: 'Deleted', iconType: 'trash', bgColor: 'pink' },
