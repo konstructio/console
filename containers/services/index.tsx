@@ -17,6 +17,8 @@ import { BISCAY, SALTBOX_BLUE, VOLCANIC_SAND } from '../../constants/colors';
 
 import { Container, Content, Header, LearnMoreLink, ServicesContainer } from './services.styled';
 
+import { FeatureFlag } from '@/types/config';
+
 enum SERVICES_TABS {
   PROVISIONED = 0,
   GITOPS_CATALOG = 1,
@@ -26,7 +28,7 @@ const Services: FunctionComponent = () => {
   const [activeTab, setActiveTab] = useState<number>(0);
   const router = useRouter();
 
-  const { isEnabled: isGitOpsCatalogEnabled } = useFeatureFlag('gitops-catalog');
+  const { isEnabled: isGitOpsCatalogEnabled } = useFeatureFlag(FeatureFlag.GITOPS_CATALOG);
 
   const dispatch = useAppDispatch();
   const { clusterServices, isTelemetryDisabled, selectedCluster } = useAppSelector(
