@@ -47,6 +47,7 @@ import {
   getInstanceSizes,
   getRegionZones,
 } from '@/redux/thunks/api.thunk';
+import { FeatureFlag } from '@/types/config';
 
 const ClusterCreationForm: FunctionComponent<Omit<ComponentPropsWithoutRef<'div'>, 'key'>> = (
   props,
@@ -65,16 +66,16 @@ const ClusterCreationForm: FunctionComponent<Omit<ComponentPropsWithoutRef<'div'
   } = useAppSelector(({ api, environments }) => ({ ...api, ...environments }));
 
   const { isEnabled: canProvisionAWSPhysicalClusters } = useFeatureFlag(
-    'canProvisionAwsPhysicalClusters',
+    FeatureFlag.PROVISION_AWS_PYHS_CLUSTERS,
   );
   const { isEnabled: canProvisionGCPPhysicalClusters } = useFeatureFlag(
-    'canProvisionGCPPhysicalClusters',
+    FeatureFlag.PROVISION_GCP_PYHS_CLUSTERS,
   );
   const { isEnabled: canProvisionDOPhysicalClusters } = useFeatureFlag(
-    'canProvisionDOPhysicalClusters',
+    FeatureFlag.PROVISION_DO_PYHS_CLUSTERS,
   );
   const { isEnabled: canProvisionVultrPhysicalClusters } = useFeatureFlag(
-    'canProvisionVultrPhysicalClusters',
+    FeatureFlag.PROVISION_VULTR_PYHS_CLUSTERS,
   );
 
   const dispatch = useAppDispatch();
