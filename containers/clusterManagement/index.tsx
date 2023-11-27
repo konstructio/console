@@ -49,7 +49,7 @@ import { InstallationType } from '@/types/redux';
 import { removeClusterFromQueue } from '@/redux/slices/queue.slice';
 import { setClusterManagamentTab } from '@/redux/slices/config.slice';
 import { ClusterManagementTab } from '@/types/config';
-import { SUGGESTED_WORKLOAD_NODE_COUNT } from '@/constants';
+import { DEFAULT_CLOUD_INSTANCE_SIZES, SUGGESTED_WORKLOAD_NODE_COUNT } from '@/constants';
 
 const ClusterManagement: FunctionComponent = () => {
   const {
@@ -104,6 +104,14 @@ const ClusterManagement: FunctionComponent = () => {
     }
     return ClusterType.WORKLOAD_V_CLUSTER;
   }, [managementCluster, physicalClustersPermission]);
+
+  const tabColor = useMemo(
+    () => (clusterManagementTab === ClusterManagementTab.LIST_VIEW ? BISCAY : SALTBOX_BLUE),
+    [clusterManagementTab],
+  );
+
+  const { instanceSize } =
+    DEFAULT_CLOUD_INSTANCE_SIZES[managementCluster?.cloudProvider ?? InstallationType.LOCAL];
 
   const {
     isOpen: createClusterFlowOpen,
@@ -209,7 +217,7 @@ const ClusterManagement: FunctionComponent = () => {
           addClusterToQueue({
             id: response.clusterId,
             clusterName: managementCluster?.clusterName as string,
-            clusterType: ClusterType.WORKLOAD,
+            clusterType: response.type,
             status: ClusterStatus.PROVISIONING,
             callback: handleGetClusters,
           });
@@ -228,11 +236,6 @@ const ClusterManagement: FunctionComponent = () => {
       openDeleteModal();
     },
     [dispatch, openDeleteModal],
-  );
-
-  const tabColor = useMemo(
-    () => (clusterManagementTab === ClusterManagementTab.LIST_VIEW ? BISCAY : SALTBOX_BLUE),
-    [clusterManagementTab],
   );
 
   useEffect(() => {
@@ -314,7 +317,11 @@ const ClusterManagement: FunctionComponent = () => {
           onMenuClose={handleMenuClose}
           onClusterDelete={openDeleteModal}
           onSubmit={handleCreateCluster}
-          defaultValues={{ type: defaultClusterType }}
+          defaultValues={{
+            type: defaultClusterType,
+            nodeCount: SUGGESTED_WORKLOAD_NODE_COUNT,
+            instanceSize,
+          }}
           loading={loading}
           notifiedOfBetaPhysicalClusters={notifiedOfBetaPhysicalClusters}
           onNotificationClose={handleNotificationClose}

@@ -19,6 +19,7 @@ import {
   readinessReducer,
   environmentsReducer,
   notificationsReducer,
+  licenseReducer,
 } from './slices';
 
 const rootReducer = combineReducers({
@@ -34,6 +35,7 @@ const rootReducer = combineReducers({
   queue: queueReducer,
   environments: environmentsReducer,
   notifications: notificationsReducer,
+  license: licenseReducer,
 });
 
 const config = getPersistConfig({
