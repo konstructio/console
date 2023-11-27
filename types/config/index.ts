@@ -1,13 +1,13 @@
-export interface Flags {
-  'canProvisionDOPhysicalClusters'?: boolean;
-  'canProvisionVultrPhysicalClusters'?: boolean;
-  'canProvisionGCPPhysicalClusters'?: boolean;
-  'canProvisionAWSPhysicalClusters'?: boolean;
-  'multicluster-management'?: boolean;
-  'gitops-catalog'?: boolean;
-  'cluster-provisioning'?: boolean;
-  'cluster-management'?: boolean;
-  'marketplace'?: boolean;
+export enum FeatureFlag {
+  PROVISION_DO_PYHS_CLUSTERS = 'canProvisionDOPhysicalClusters',
+  PROVISION_VULTR_PYHS_CLUSTERS = 'canProvisionVultrPhysicalClusters',
+  PROVISION_GCP_PYHS_CLUSTERS = 'canProvisionGCPPhysicalClusters',
+  PROVISION_AWS_PYHS_CLUSTERS = 'canProvisionAWSPhysicalClusters',
+  MULTICLUSTER_MANAGEMENT = 'multicluster-management',
+  GITOPS_CATALOG = 'gitops-catalog',
+  CLUSTER_PROVISIONING = 'cluster-provisioning',
+  CLUSTER_MANAGEMENT = 'cluster-managament',
+  MARKETPLACE = 'marketplace',
 }
 
 export interface EnvironmentVariables {

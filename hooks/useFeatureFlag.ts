@@ -2,14 +2,17 @@ import { useCallback, useMemo } from 'react';
 
 import { useAppSelector } from '@/redux/store';
 import { selectFeatureFlags } from '@/redux/selectors/featureFlags.selector';
+import { FeatureFlag } from '@/types/config';
 
-const useFeatureFlag = (flagName = '') => {
+const useFeatureFlag = (flagName?: FeatureFlag) => {
   const { flags } = useAppSelector(selectFeatureFlags());
 
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
-  // improper ts error saying flags cannot be indexed by type string
-  const flag = useMemo(() => !!flags[flagName], [flagName, flags]);
+  const flag = useMemo(() => {
+    if (flagName) {
+      return flags[flagName];
+    }
+    return false;
+  }, [flagName, flags]);
 
   const isFeatureEnabled = useCallback(() => {
     return flag;
