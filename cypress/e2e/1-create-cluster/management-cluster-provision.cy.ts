@@ -1,5 +1,6 @@
 import { InstallationType } from '../../../types/redux';
 import { GitProvider } from '../../../types';
+import { exactWordRegex } from '../../../utils/exactWordRegex';
 
 const GIT_PROVIDER = Cypress.env('GIT_PROVIDER');
 const CLOUD_PROVIDER = Cypress.env('CLOUD_PROVIDER');
@@ -201,7 +202,7 @@ describe('provision management cluster using any git provider, cloud provider, a
 
     cy.get("[name='domainName']").click(); // click domainName multiselect to open menu
     cy.get('.MuiAutocomplete-popper').then((popper) => {
-      cy.wrap(popper).contains(DOMAIN_NAME_FINAL).click();
+      cy.wrap(popper).contains(exactWordRegex(DOMAIN_NAME_FINAL)).click();
     });
 
     if (DNS_PROVIDER === 'Cloudflare' && SUB_DOMAIN) {
