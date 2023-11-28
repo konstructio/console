@@ -15,6 +15,8 @@ import { useAppSelector } from '../../redux/store';
 import { selectConfig } from '@/redux/selectors/config.selector';
 import useFeatureFlag from '@/hooks/useFeatureFlag';
 import { selectCluster } from '@/redux/selectors/cluster.selector';
+import { InstallationType } from '@/types/redux';
+import { FeatureFlag } from '@/types/config';
 
 const Navigation: FunctionComponent = () => {
   const [domLoaded, setDomLoaded] = useState<boolean>(false);
@@ -29,7 +31,7 @@ const Navigation: FunctionComponent = () => {
   const { kubefirstVersion, isClusterZero } = useAppSelector(selectConfig());
   const { selectedCluster } = useAppSelector(selectCluster());
 
-  const { isEnabled: isMultiClusterEnabled } = useFeatureFlag('multicluster-management');
+  const { isEnabled: isMultiClusterEnabled } = useFeatureFlag(FeatureFlag.MULTICLUSTER_MANAGEMENT);
 
   const routes = useMemo(
     () =>
@@ -39,7 +41,9 @@ const Navigation: FunctionComponent = () => {
           path: '/dashboard/cluster-management',
           title: 'Cluster Management',
           isEnabled:
-            isMultiClusterEnabled && !isClusterZero && selectedCluster?.cloudProvider !== 'k3d',
+            isMultiClusterEnabled &&
+            !isClusterZero &&
+            selectedCluster?.cloudProvider !== InstallationType.LOCAL,
         },
         {
           icon: <GridViewOutlinedIcon />,
@@ -51,7 +55,7 @@ const Navigation: FunctionComponent = () => {
           icon: <CollectionsOutlinedIcon />,
           path: '/dashboard/environments',
           title: 'Environments',
-          isEnabled: !isClusterZero && selectedCluster?.cloudProvider !== 'k3d',
+          isEnabled: !isClusterZero && selectedCluster?.cloudProvider !== InstallationType.LOCAL,
         },
         {
           icon: <ReceiptLongIcon />,

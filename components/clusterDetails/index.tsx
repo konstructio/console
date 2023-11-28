@@ -73,7 +73,7 @@ const ClusterDetails: FunctionComponent<ClusterDetailsProps> = ({
         <Column style={{ gap: '4px' }}>
           <StatusIndicator available>
             <ExternalLink href={`https://argocd.${domainName}/applications/clusters`} available>
-              View your Argo CD Clusters
+              View your Argo CD clusters
             </ExternalLink>
           </StatusIndicator>
           <StatusIndicator available={available}>
@@ -102,7 +102,7 @@ const ClusterDetails: FunctionComponent<ClusterDetailsProps> = ({
           <ColumnInfo>
             <StyledLabel variant="labelLarge">Created</StyledLabel>
             <StyledValue variant="body2" data-test-id="creation-date">
-              {creationDate && moment(+creationDate).format('DD MMM YYYY, HH:mm:ss')}
+              {creationDate && moment(+creationDate).format('DD MMM YYYY, HH:MM:SS')}
             </StyledValue>
           </ColumnInfo>
           <ColumnInfo>
@@ -138,16 +138,15 @@ const ClusterDetails: FunctionComponent<ClusterDetailsProps> = ({
         </RowInfo>
 
         {/* Fifth Row */}
-        {type !== ClusterType.MANAGEMENT && (
-          <RowInfo>
-            <ColumnInfo>
-              <StyledLabel variant="labelLarge">Instance size</StyledLabel>
-              <StyledValue variant="body2" style={{ width: '100%' }}>
-                {instanceSize}
-              </StyledValue>
-            </ColumnInfo>
-          </RowInfo>
-        )}
+
+        <RowInfo>
+          <ColumnInfo>
+            <StyledLabel variant="labelLarge">Instance size</StyledLabel>
+            <StyledValue variant="body2" style={{ width: '100%' }}>
+              {instanceSize}
+            </StyledValue>
+          </ColumnInfo>
+        </RowInfo>
       </Content>
     </Container>
   );

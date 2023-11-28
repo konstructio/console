@@ -93,7 +93,7 @@ export const GraphNode: FunctionComponent<NodeProps<Cluster>> = ({
               <Typography variant="body3">{cloudRegion}</Typography>
             </LabelContainer>
           )}
-          {nodeCount && type !== ClusterType.WORKLOAD_V_CLUSTER && (
+          {!!nodeCount && type !== ClusterType.WORKLOAD_V_CLUSTER && (
             <LabelContainer>
               <Nodes>NODES:</Nodes>
               <Typography variant="body3">{nodeCount}</Typography>

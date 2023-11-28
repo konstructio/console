@@ -48,7 +48,7 @@ export const CLUSTER_TAG_CONFIG: Record<
   [ClusterStatus.PROVISIONING]: {
     iconLabel: 'Provisioning',
     iconType: 'auto-renew',
-    bgColor: 'light blue',
+    bgColor: 'dark-sky-blue',
   },
   [ClusterStatus.DELETING]: { iconLabel: 'Deleting', iconType: 'trash', bgColor: 'pink' },
   [ClusterStatus.DELETED]: { iconLabel: 'Deleted', iconType: 'trash', bgColor: 'pink' },
@@ -68,8 +68,8 @@ export const DEFAULT_CLOUD_INSTANCE_SIZES: Record<
   { instanceSize: string; nodeCount: number }
 > = {
   [InstallationType.AWS]: { instanceSize: 'm5.large', nodeCount: 6 },
-  [InstallationType.CIVO]: { instanceSize: 'Medium - Standard', nodeCount: 6 },
-  [InstallationType.DIGITAL_OCEAN]: { instanceSize: 'Professional XS', nodeCount: 4 },
+  [InstallationType.CIVO]: { instanceSize: 'g3.large', nodeCount: 6 },
+  [InstallationType.DIGITAL_OCEAN]: { instanceSize: 's-4vcpu-8gb', nodeCount: 4 },
   [InstallationType.GOOGLE]: { instanceSize: 'e2-medium', nodeCount: 3 },
   [InstallationType.VULTR]: { instanceSize: 'vc2-4c-8gb', nodeCount: 5 },
   [InstallationType.LOCAL]: { instanceSize: '', nodeCount: 3 },

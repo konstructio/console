@@ -66,6 +66,7 @@ export interface ClusterResponse {
   git_host: string;
   git_user: string;
   node_type: string;
+  node_count: number;
   workload_clusters?: {
     admin_email: string;
     cloud_provider: string;

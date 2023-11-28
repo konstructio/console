@@ -20,6 +20,7 @@ import {
   environmentsReducer,
   notificationsReducer,
   settingsReducer,
+  licenseReducer,
 } from './slices';
 
 const rootReducer = combineReducers({
@@ -36,6 +37,7 @@ const rootReducer = combineReducers({
   environments: environmentsReducer,
   notifications: notificationsReducer,
   settings: settingsReducer,
+  license: licenseReducer,
 });
 
 const config = getPersistConfig({

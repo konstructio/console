@@ -24,12 +24,7 @@ import {
 import { EXCLUSIVE_PLUM } from '@/constants/colors';
 import ControlledNumberInput from '@/components/controlledFields/numberInput';
 import ControlledRadioGroup from '@/components/controlledFields/radio';
-import {
-  LOWER_KEBAB_CASE_REGEX,
-  MIN_NODE_COUNT,
-  SUGGESTED_WORKLOAD_NODE_COUNT,
-  WORKLOAD_CLUSTER_OPTIONS,
-} from '@/constants';
+import { LOWER_KEBAB_CASE_REGEX, MIN_NODE_COUNT, WORKLOAD_CLUSTER_OPTIONS } from '@/constants';
 import { updateDraftCluster } from '@/redux/slices/api.slice';
 import ControlledEnvironmentSelect from '@/components/controlledFields/environmentSelect';
 import Modal from '@/components/modal';
@@ -40,7 +35,6 @@ import { createEnvironment } from '@/redux/thunks/environments.thunk';
 import { noop } from '@/utils/noop';
 import { clearEnvironmentError } from '@/redux/slices/environments.slice';
 import { InstallationType } from '@/types/redux';
-import useFeatureFlag from '@/hooks/useFeatureFlag';
 import {
   getCloudDomains,
   getCloudRegions,
@@ -64,19 +58,6 @@ const ClusterCreationForm: FunctionComponent<Omit<ComponentPropsWithoutRef<'div'
     error,
   } = useAppSelector(({ api, environments }) => ({ ...api, ...environments }));
 
-  const { isEnabled: canProvisionAWSPhysicalClusters } = useFeatureFlag(
-    'canProvisionAwsPhysicalClusters',
-  );
-  const { isEnabled: canProvisionGCPPhysicalClusters } = useFeatureFlag(
-    'canProvisionGCPPhysicalClusters',
-  );
-  const { isEnabled: canProvisionDOPhysicalClusters } = useFeatureFlag(
-    'canProvisionDOPhysicalClusters',
-  );
-  const { isEnabled: canProvisionVultrPhysicalClusters } = useFeatureFlag(
-    'canProvisionVultrPhysicalClusters',
-  );
-
   const dispatch = useAppDispatch();
 
   const {
@@ -87,7 +68,7 @@ const ClusterCreationForm: FunctionComponent<Omit<ComponentPropsWithoutRef<'div'
     formState: { errors },
   } = useFormContext<NewWorkloadClusterConfig>();
 
-  const { type, instanceSize, cloudRegion } = getValues();
+  const { type, nodeCount, instanceSize, cloudRegion } = getValues();
 
   const handleAddEnvironment = useCallback(
     (environment: ClusterEnvironment) => {
@@ -163,35 +144,12 @@ const ClusterCreationForm: FunctionComponent<Omit<ComponentPropsWithoutRef<'div'
 
   const isVCluster = useMemo(() => type === ClusterType.WORKLOAD_V_CLUSTER, [type]);
 
-  // check if user has permission to provision physical clusters based on cloud provider,
-  // otherwise default to true if no feature flag check
-  const physicalClustersPermission = useMemo(
-    (): Record<InstallationType, boolean> => ({
-      [InstallationType.AWS]: canProvisionAWSPhysicalClusters,
-      [InstallationType.DIGITAL_OCEAN]: canProvisionDOPhysicalClusters,
-      [InstallationType.GOOGLE]: canProvisionGCPPhysicalClusters,
-      [InstallationType.VULTR]: canProvisionVultrPhysicalClusters,
-      [InstallationType.CIVO]: true,
-      [InstallationType.LOCAL]: true,
-    }),
-    [
-      canProvisionAWSPhysicalClusters,
-      canProvisionDOPhysicalClusters,
-      canProvisionGCPPhysicalClusters,
-      canProvisionVultrPhysicalClusters,
-    ],
-  );
-
   const clusterOptions = useMemo(() => {
-    if (
-      managementCluster &&
-      managementCluster.cloudProvider &&
-      physicalClustersPermission[managementCluster.cloudProvider]
-    ) {
+    if (type === ClusterType.WORKLOAD) {
       return WORKLOAD_CLUSTER_OPTIONS;
     }
     return WORKLOAD_CLUSTER_OPTIONS.filter((option) => option.value !== ClusterType.WORKLOAD);
-  }, [managementCluster, physicalClustersPermission]);
+  }, [type]);
 
   useEffect(() => {
     const subscription = watch((values) => {
@@ -348,7 +306,7 @@ const ClusterCreationForm: FunctionComponent<Omit<ComponentPropsWithoutRef<'div'
               name="nodeCount"
               numberInputProps={{
                 min: MIN_NODE_COUNT,
-                defaultValue: SUGGESTED_WORKLOAD_NODE_COUNT,
+                defaultValue: nodeCount,
               }}
             />
           </Box>
