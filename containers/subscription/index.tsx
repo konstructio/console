@@ -23,6 +23,7 @@ import Typography from '@/components/typography';
 import { setActiveTab } from '@/redux/slices/settings.slice';
 import { SettingsTab } from '@/constants/setttings';
 import { Product } from '@/types/product';
+import { activateLicenseKey } from '@/redux/thunks/license.thunk';
 
 interface SubscriptionProps {
   products: Array<Product>;
@@ -30,12 +31,16 @@ interface SubscriptionProps {
 
 const Subscription: FunctionComponent<SubscriptionProps> = ({ products }) => {
   const dispatch = useAppDispatch();
-  const licenses = [{ key: '1234-1234-1234-1234' }];
+  const licenses = [];
 
   const { activeTab, isLoading } = useAppSelector(({ settings }) => settings);
 
   const handleOnChangeTab = (event: React.SyntheticEvent, tabIndex: number) => {
     dispatch(setActiveTab(tabIndex));
+  };
+
+  const handleActivateLicense = () => {
+    dispatch(activateLicenseKey('0e5ba61e-88b3-11ee-b9d1-0242ac120002'));
   };
 
   return (
@@ -66,7 +71,6 @@ const Subscription: FunctionComponent<SubscriptionProps> = ({ products }) => {
             label="License key"
             name="licenseName"
             required
-            value={licenses[0].key}
             fullWidth
             data-test-id="license-key"
           />
@@ -78,7 +82,7 @@ const Subscription: FunctionComponent<SubscriptionProps> = ({ products }) => {
             linkTitle="your license key"
             withoutDivider
           />
-          <Button variant="contained" color="primary">
+          <Button variant="contained" color="primary" onClick={handleActivateLicense}>
             {isLoading && <CircularProgress size={20} sx={{ mr: '8px' }} />}
             Activate
           </Button>
