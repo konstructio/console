@@ -8,6 +8,8 @@ import React, {
 import { useFormContext } from 'react-hook-form';
 import Box from '@mui/material/Box';
 
+import { usePhysicalClustersPermissions } from '../../../hooks/usePhysicalClustersPermission';
+
 import { Container } from './clusterCreation.styled';
 import { InputContainer } from './advancedOptions/advancedOptions.styled';
 
@@ -140,16 +142,18 @@ const ClusterCreationForm: FunctionComponent<Omit<ComponentPropsWithoutRef<'div'
     }
   };
 
+  const { hasPermissions } = usePhysicalClustersPermissions(managementCluster?.cloudProvider);
+
   const draftCluster = useMemo(() => clusterMap['draft'], [clusterMap]);
 
   const isVCluster = useMemo(() => type === ClusterType.WORKLOAD_V_CLUSTER, [type]);
 
   const clusterOptions = useMemo(() => {
-    if (type === ClusterType.WORKLOAD) {
+    if (hasPermissions) {
       return WORKLOAD_CLUSTER_OPTIONS;
     }
     return WORKLOAD_CLUSTER_OPTIONS.filter((option) => option.value !== ClusterType.WORKLOAD);
-  }, [type]);
+  }, [hasPermissions]);
 
   useEffect(() => {
     const subscription = watch((values) => {
