@@ -237,6 +237,5 @@ export interface ClusterQueue {
   clusterType: ClusterType;
   id: string;
   status: ClusterStatus;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  callback: any;
+  callback: () => void;
 }
