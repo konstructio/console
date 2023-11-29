@@ -213,14 +213,17 @@ const ClusterManagement: FunctionComponent = () => {
     if (clusterCreationStep !== ClusterCreationStep.DETAILS) {
       dispatch(createWorkloadCluster())
         .unwrap()
-        .then((response) => {
+        .then((clusterId) => {
+          const { type } = clusterMap[clusterId];
+
           addClusterToQueue({
-            id: response.clusterId,
+            id: clusterId,
             clusterName: managementCluster?.clusterName as string,
-            clusterType: response.type,
+            clusterType: type,
             status: ClusterStatus.PROVISIONING,
             callback: handleGetClusters,
           });
+
           dispatch(setClusterCreationStep(clusterCreationStep + 1));
         });
     }
