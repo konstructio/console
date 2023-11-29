@@ -35,6 +35,7 @@ import { setPresentedClusterId } from '../../redux/slices/api.slice';
 import { useQueue } from '../../hooks/useQueue';
 import { setNotifiedOfBetaPhysicalClusters } from '../../redux/slices/notifications.slice';
 import { getAllEnvironments } from '../../redux/thunks/environments.thunk';
+import { usePhysicalClustersPermissions } from '../../hooks/usePhysicalClustersPermission';
 
 import { CreateClusterFlow } from './createClusterFlow';
 import {
@@ -61,10 +62,6 @@ const ClusterManagement: FunctionComponent = () => {
     notifiedOfBetaPhysicalClusters,
     clusterMap,
     clusterManagementTab,
-    canProvisionAWSPhysicalClusters,
-    canProvisionGCPPhysicalClusters,
-    canProvisionDOPhysicalClusters,
-    canProvisionVultrPhysicalClusters,
   } = useAppSelector(({ api, queue, notifications, config, featureFlags }) => ({
     clusterQueue: queue.clusterQueue,
     notifiedOfBetaPhysicalClusters: notifications.notifiedOfBetaPhysicalClusters,
@@ -75,35 +72,14 @@ const ClusterManagement: FunctionComponent = () => {
 
   const { addClusterToQueue } = useQueue();
 
-  // check if user has permission to provision physical clusters based on cloud provider,
-  // otherwise default to true if no feature flag check
-  const physicalClustersPermission = useMemo(
-    (): Record<InstallationType, boolean> => ({
-      [InstallationType.AWS]: !!canProvisionAWSPhysicalClusters,
-      [InstallationType.DIGITAL_OCEAN]: !!canProvisionDOPhysicalClusters,
-      [InstallationType.GOOGLE]: !!canProvisionGCPPhysicalClusters,
-      [InstallationType.VULTR]: !!canProvisionVultrPhysicalClusters,
-      [InstallationType.CIVO]: true,
-      [InstallationType.LOCAL]: true,
-    }),
-    [
-      canProvisionAWSPhysicalClusters,
-      canProvisionDOPhysicalClusters,
-      canProvisionGCPPhysicalClusters,
-      canProvisionVultrPhysicalClusters,
-    ],
-  );
+  const { hasPermissions } = usePhysicalClustersPermissions(managementCluster?.cloudProvider);
 
   const defaultClusterType = useMemo(() => {
-    if (
-      managementCluster &&
-      managementCluster.cloudProvider &&
-      physicalClustersPermission[managementCluster.cloudProvider]
-    ) {
+    if (managementCluster && managementCluster.cloudProvider && hasPermissions) {
       return ClusterType.WORKLOAD;
     }
     return ClusterType.WORKLOAD_V_CLUSTER;
-  }, [managementCluster, physicalClustersPermission]);
+  }, [managementCluster, hasPermissions]);
 
   const tabColor = useMemo(
     () => (clusterManagementTab === ClusterManagementTab.LIST_VIEW ? BISCAY : SALTBOX_BLUE),
