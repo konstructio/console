@@ -10,13 +10,13 @@ describe('redux/thunks/license', () => {
   const reduxStore = makeStore();
 
   beforeEach(() => {
+    mock.reset();
     reduxStore.dispatch(setLicense(undefined));
   });
 
   const mock = new MockAdapter(axios);
 
   test('getLicenseKey - successful response', async () => {
-    mock.reset();
     mock.onGet().reply(200, mockUserLicense);
     const { payload } = await reduxStore.dispatch(getLicenseKey());
 
@@ -27,7 +27,6 @@ describe('redux/thunks/license', () => {
   });
 
   test('getLicenseKey - unsuccessful response', async () => {
-    mock.reset();
     mock.onGet().reply(400);
     const { payload } = await reduxStore.dispatch(getLicenseKey());
 
