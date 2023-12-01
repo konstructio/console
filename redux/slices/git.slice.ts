@@ -127,6 +127,7 @@ const gitSlice = createSlice({
         state.isLoading = true;
       })
       .addCase(getGitHubOrgTeams.fulfilled, (state, { payload: organizationTeams }) => {
+        state.isLoading = false;
         const kubefirstTeams = organizationTeams.filter(({ name }) =>
           KUBEFIRST_TEAMS.includes(name),
         );
@@ -177,6 +178,7 @@ const gitSlice = createSlice({
         state.isLoading = true;
       })
       .addCase(getGitLabProjects.fulfilled, (state, { payload: groupProjects }) => {
+        state.isLoading = false;
         const kubefirstRepos = groupProjects.filter(({ name }) =>
           KUBEFIRST_REPOSITORIES.includes(name),
         );
@@ -200,6 +202,7 @@ const gitSlice = createSlice({
         state.isLoading = true;
       })
       .addCase(getGitLabSubgroups.fulfilled, (state, { payload: gitlabSubgroups }) => {
+        state.isLoading = false;
         const kubefirstTeams = gitlabSubgroups.filter(({ name }) => KUBEFIRST_TEAMS.includes(name));
 
         if (kubefirstTeams.length) {
