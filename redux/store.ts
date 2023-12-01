@@ -20,7 +20,7 @@ import {
   environmentsReducer,
   notificationsReducer,
   settingsReducer,
-  licenseReducer,
+  subscriptionReducer,
 } from './slices';
 
 const rootReducer = combineReducers({
@@ -37,7 +37,7 @@ const rootReducer = combineReducers({
   environments: environmentsReducer,
   notifications: notificationsReducer,
   settings: settingsReducer,
-  license: licenseReducer,
+  subscription: subscriptionReducer,
 });
 
 const config = getPersistConfig({
@@ -52,7 +52,6 @@ const config = getPersistConfig({
     'installation.values.google_auth',
     'cluster',
     'api',
-    'settings',
     'featureFlags',
     'git',
     'config.isAuthDisabled',
@@ -64,6 +63,7 @@ const config = getPersistConfig({
     'internalApi',
     'readiness',
     'environments',
+    'subscription',
   ],
   rootReducer,
 });

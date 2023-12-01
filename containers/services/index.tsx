@@ -18,6 +18,7 @@ import { BISCAY, SALTBOX_BLUE, VOLCANIC_SAND } from '../../constants/colors';
 import { Container, Content, Header, LearnMoreLink, ServicesContainer } from './services.styled';
 
 import { FeatureFlag } from '@/types/config';
+import usePaywall from '@/hooks/usePaywall';
 
 enum SERVICES_TABS {
   PROVISIONED = 0,
@@ -29,6 +30,9 @@ const Services: FunctionComponent = () => {
   const router = useRouter();
 
   const { isEnabled: isGitOpsCatalogEnabled } = useFeatureFlag(FeatureFlag.GITOPS_CATALOG);
+  const { canUseFeature } = usePaywall();
+
+  const canUseGitOps = canUseFeature('customizeGitOpsCatalog');
 
   const dispatch = useAppDispatch();
   const { clusterServices, isTelemetryDisabled, selectedCluster } = useAppSelector(
@@ -91,7 +95,7 @@ const Services: FunctionComponent = () => {
       <Header>
         <Typography variant="h6">Services Overview</Typography>
       </Header>
-      {isGitOpsCatalogEnabled ? (
+      {isGitOpsCatalogEnabled && canUseGitOps ? (
         <>
           <Box sx={{ width: 'fit-content', mb: 4 }}>
             <Tabs value={activeTab} onChange={handleChange} indicatorColor="primary">

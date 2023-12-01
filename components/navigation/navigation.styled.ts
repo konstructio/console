@@ -18,6 +18,7 @@ export const Container = styled.nav`
 
   ${media.greaterThan('md')`
     width: 304px;
+    overflow: auto;
   `}
 `;
 

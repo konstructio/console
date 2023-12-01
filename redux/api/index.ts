@@ -1,7 +1,7 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/dist/query/react';
 import { HYDRATE } from 'next-redux-wrapper';
 
-import { ReadinessData } from '../../pages/api/readiness';
+import { ReadinessData } from '@/pages/api/readiness';
 
 export const consoleApi = createApi({
   reducerPath: 'internalApi',

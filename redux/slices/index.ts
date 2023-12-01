@@ -10,4 +10,4 @@ export { queueReducer } from './queue.slice';
 export { environmentsReducer } from './environments.slice';
 export { notificationsReducer } from './notifications.slice';
 export { settingsReducer } from './settings.slice';
-export { licenseReducer } from './license.slice';
+export { subscriptionReducer } from './subscription.slice';

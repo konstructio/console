@@ -26,13 +26,14 @@ const configSlice = createSlice({
   name: 'config',
   initialState,
   reducers: {
-    setConfigValues: (state, action: PayloadAction<ConfigState>) => {
-      const { isClusterZero, installMethod, isTelemetryDisabled, kubefirstVersion } =
+    setConfigValues: (state, action: PayloadAction<EnvironmentVariables>) => {
+      const { isClusterZero, installMethod, disableTelemetry, kubefirstVersion, disableAuth } =
         action.payload;
-      state.isTelemetryDisabled = isTelemetryDisabled;
+      state.isTelemetryDisabled = !!disableTelemetry;
       state.kubefirstVersion = kubefirstVersion;
       state.isClusterZero = isClusterZero;
       state.installMethod = installMethod;
+      state.isAuthDisabled = !!disableAuth;
     },
     setClusterManagamentTab: (state, { payload }: PayloadAction<ClusterManagementTab>) => {
       state.clusterManagementTab = payload;
