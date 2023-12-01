@@ -128,7 +128,7 @@ const SetupForm: FunctionComponent = () => {
   }: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { value } = target;
 
-    dispatch(getCloudDomains({ region: selectedRegion, cloudflareToken: value }));
+    dispatch(getCloudDomains({ region: selectedRegion, cloudflareToken: value, values }));
   };
 
   const handleDnsProviderOnChange = (value: string) => {
@@ -136,11 +136,11 @@ const SetupForm: FunctionComponent = () => {
     setIsCloudFlareSelected(isCloudflare);
 
     if (!isCloudflare) {
-      dispatch(getCloudDomains({ region: selectedRegion }));
-      setValue && setValue('cloudflareToken', '');
+      dispatch(getCloudDomains({ region: selectedRegion, installType, values }));
+      setValue('cloudflareToken', '');
     } else {
       dispatch(clearDomains());
-      setValue && setValue('domainName', '');
+      setValue('domainName', '');
     }
   };
 
