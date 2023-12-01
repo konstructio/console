@@ -1,4 +1,10 @@
-import React, { ComponentPropsWithoutRef, FunctionComponent, useEffect, useState } from 'react';
+import React, {
+  ComponentPropsWithoutRef,
+  FunctionComponent,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 import moment from 'moment';
 
 import {
@@ -43,6 +49,7 @@ const ClusterDetails: FunctionComponent<ClusterDetailsProps> = ({
     cloudRegion,
     creationDate,
     domainName,
+    subDomainName,
     gitProvider,
     nodeCount,
     instanceSize,
@@ -58,6 +65,11 @@ const ClusterDetails: FunctionComponent<ClusterDetailsProps> = ({
     setTimeout(() => setAvailable(true), 10000);
   });
 
+  const fullDomainName = useMemo(
+    () => (subDomainName ? `${subDomainName}.${domainName}` : domainName),
+    [subDomainName, domainName],
+  );
+
   return (
     <Container {...rest}>
       <Column style={{ gap: '8px' }}>
@@ -72,7 +84,7 @@ const ClusterDetails: FunctionComponent<ClusterDetailsProps> = ({
         )}
         <Column style={{ gap: '4px' }}>
           <StatusIndicator available>
-            <ExternalLink href={`https://argocd.${domainName}/applications/clusters`} available>
+            <ExternalLink href={`https://argocd.${fullDomainName}/applications/clusters`} available>
               View your Argo CD clusters
             </ExternalLink>
           </StatusIndicator>

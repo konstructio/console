@@ -220,6 +220,7 @@ const apiSlice = createSlice({
         state.responseError = action.error.message;
       })
       .addCase(getCloudDomains.fulfilled, (state, { payload }: PayloadAction<Array<string>>) => {
+        state.loading = false;
         state.cloudDomains = sortBy(payload);
       })
       .addCase(getCloudRegions.pending, (state) => {
