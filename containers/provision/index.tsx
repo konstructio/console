@@ -18,24 +18,18 @@ import {
 } from '../../redux/slices/installation.slice';
 import { clearClusterState, clearValidation } from '../../redux/slices/api.slice';
 import { useAppDispatch, useAppSelector } from '../../redux/store';
-import {
-  createCluster,
-  getCloudRegions,
-  getCluster,
-  resetClusterProgress,
-} from '../../redux/thunks/api.thunk';
+import { createCluster, getCloudRegions, resetClusterProgress } from '../../redux/thunks/api.thunk';
 import { useInstallation } from '../../hooks/useInstallation';
 import { InstallValues, InstallationType } from '../../types/redux';
 import { GitProvider } from '../../types';
 import { AUTHENTICATION_ERROR_MSG, DEFAULT_CLOUD_INSTANCE_SIZES } from '../../constants';
 import { useQueue } from '../../hooks/useQueue';
-import { ClusterStatus, ClusterType } from '../../types/provision';
 
 import { AdvancedOptionsContainer, ErrorContainer, Form, FormContent } from './provision.styled';
 
 const Provision: FunctionComponent = () => {
   const dispatch = useAppDispatch();
-  const { addClusterToQueue, deleteFromClusterToQueue } = useQueue();
+  const { deleteClusterFromQueue } = useQueue();
 
   const {
     authErrors,
@@ -156,7 +150,7 @@ const Provision: FunctionComponent = () => {
     }
 
     if (isValid) {
-      await dispatch(setInstallValues(values));
+      dispatch(setInstallValues(values));
 
       if (isSetupStep) {
         try {
@@ -171,18 +165,12 @@ const Provision: FunctionComponent = () => {
     }
   };
 
-  const handleGetCluster = useCallback(async () => {
-    const values = getValues();
-
-    values && dispatch(getCluster(values));
-  }, [dispatch, getValues]);
-
   const provisionCluster = useCallback(async () => {
     const values = getValues();
 
     if (error) {
       await dispatch(resetClusterProgress());
-      deleteFromClusterToQueue(
+      deleteClusterFromQueue(
         (values.clusterName as string) || (installValues?.clusterName as string),
       );
     }
@@ -190,26 +178,8 @@ const Provision: FunctionComponent = () => {
     dispatch(clearError());
     dispatch(clearClusterState());
 
-    await dispatch(createCluster())
-      .unwrap()
-      .then(() => {
-        addClusterToQueue({
-          clusterName: (values.clusterName as string) || (installValues?.clusterName as string),
-          id: (values.clusterName as string) || (installValues?.clusterName as string),
-          clusterType: ClusterType.MANAGEMENT,
-          status: ClusterStatus.PROVISIONING,
-          callback: handleGetCluster,
-        });
-      });
-  }, [
-    addClusterToQueue,
-    deleteFromClusterToQueue,
-    dispatch,
-    error,
-    getValues,
-    handleGetCluster,
-    installValues?.clusterName,
-  ]);
+    await dispatch(createCluster());
+  }, [deleteClusterFromQueue, dispatch, error, getValues, installValues?.clusterName]);
 
   const form = useMemo(() => {
     if (installationStep === 0 && !isMarketplace) {

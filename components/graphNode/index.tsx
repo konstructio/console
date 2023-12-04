@@ -7,7 +7,7 @@ import vClusterAvailable from '../../assets/vClusterAvailable.svg';
 import cluster from '../../assets/cluster.svg';
 import clusterAvailable from '../../assets/clusterAvailable.svg';
 import { BUBBLE_GUM_BABY_GIRL } from '../../constants/colors';
-import { CLUSTER_TAG_CONFIG } from '../../constants';
+import { CLUSTER_TAG_CONFIG, RESERVED_DRAFT_CLUSTER_NAME } from '../../constants';
 import { Cluster, ClusterStatus, ClusterType, DraftCluster } from '../../types/provision';
 import Typography from '../typography';
 
@@ -68,11 +68,11 @@ export const GraphNode: FunctionComponent<NodeProps<Cluster>> = ({
   const { iconLabel, iconType, bgColor } = CLUSTER_TAG_CONFIG[status ?? ClusterStatus.PROVISIONED];
   const { handle, position, iconSrc } = GRAPH_NODE_CONFIG[type ?? ClusterType.WORKLOAD];
 
-  const draftNode = useMemo(() => clusterId === 'draft', [clusterId]);
+  const draftNode = useMemo(() => clusterId === RESERVED_DRAFT_CLUSTER_NAME, [clusterId]);
   const managementCluster = useMemo(() => type === ClusterType.MANAGEMENT, [type]);
 
   const imageSrc = useMemo(() => {
-    if (status === ClusterStatus.PROVISIONED && clusterId !== 'draft') {
+    if (status === ClusterStatus.PROVISIONED && !draftNode) {
       if (type === ClusterType.WORKLOAD) {
         return clusterAvailable;
       } else if (type === ClusterType.WORKLOAD_V_CLUSTER) {
@@ -80,7 +80,7 @@ export const GraphNode: FunctionComponent<NodeProps<Cluster>> = ({
       }
     }
     return iconSrc;
-  }, [iconSrc, status, type, clusterId]);
+  }, [iconSrc, status, type, draftNode]);
 
   return (
     <Container selected={selected} managementCluster={managementCluster}>

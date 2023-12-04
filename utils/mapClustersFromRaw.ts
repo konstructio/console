@@ -5,7 +5,7 @@ import {
   WorkloadCluster,
   ClusterStatus,
 } from '../types/provision';
-import { ClusterCache, ClusterNameCache, EnvCache, InstallationType } from '../types/redux';
+import { ClusterCache, EnvCache, InstallationType } from '../types/redux';
 
 export const mapClusterFromRaw = (cluster: ClusterResponse) => {
   const managementCluster: ManagementCluster = {
@@ -64,12 +64,11 @@ export const mapClusterFromRaw = (cluster: ClusterResponse) => {
     },
   };
 
-  const { envCache, workloadClusters, clusterCache, clusterNameCache } = [
+  const { envCache, workloadClusters, clusterCache } = [
     ...(cluster.workload_clusters ?? []),
   ].reduce<{
     envCache: EnvCache;
     clusterCache: ClusterCache;
-    clusterNameCache: ClusterNameCache;
     workloadClusters: WorkloadCluster[];
   }>(
     (acc, curVal) => {
@@ -91,7 +90,7 @@ export const mapClusterFromRaw = (cluster: ClusterResponse) => {
         status: curVal.status,
         type: curVal.cluster_type as ClusterType,
         domainName: curVal.domain_name,
-        subDomainName: curVal.subdomain_name,
+        subDomainName: cluster.subdomain_name, // take subdomain from management since we do not story it on the workload cluster
         gitProvider: cluster.git_provider,
         adminEmail: cluster.alerts_email,
         gitAuth: {
@@ -111,21 +110,18 @@ export const mapClusterFromRaw = (cluster: ClusterResponse) => {
         acc.envCache[curVal.environment.name] = true;
       }
 
-      acc.clusterCache[curVal.cluster_id] = formattedWorkloadCluster;
-      acc.clusterNameCache[curVal.cluster_name] = true;
+      acc.clusterCache[curVal.cluster_name] = formattedWorkloadCluster;
       return acc;
     },
-    { clusterCache: {}, clusterNameCache: {}, envCache: {}, workloadClusters: [] },
+    { clusterCache: {}, envCache: {}, workloadClusters: [] },
   );
 
   managementCluster.workloadClusters = workloadClusters;
-  clusterCache[managementCluster.clusterId] = managementCluster;
-  clusterNameCache[cluster.cluster_name] = true;
+  clusterCache[managementCluster.clusterName] = managementCluster;
 
   return {
     managementCluster,
     envCache,
     clusterCache,
-    clusterNameCache,
   };
 };

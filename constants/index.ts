@@ -74,3 +74,5 @@ export const DEFAULT_CLOUD_INSTANCE_SIZES: Record<
   [InstallationType.VULTR]: { instanceSize: 'vc2-4c-8gb', nodeCount: 5 },
   [InstallationType.LOCAL]: { instanceSize: '', nodeCount: 3 },
 };
+
+export const RESERVED_DRAFT_CLUSTER_NAME = 'draft';

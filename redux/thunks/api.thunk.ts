@@ -3,23 +3,24 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 
 import { AppDispatch, RootState } from '@/redux/store';
 import {
-  ManagementCluster,
-  ClusterRequestProps,
   ClusterResponse,
   Cluster,
   ImageRepository,
   ClusterType,
+  ClusterStatus,
+  ClusterEnvironment,
+  WorkloadCluster,
+  ClusterQueue,
 } from '@/types/provision';
 import { createQueryString } from '@/utils/url/formatDomain';
-import { ClusterCache, ClusterNameCache } from '@/types/redux';
 import { InstallValues, InstallationType } from '@/types/redux';
 import { TelemetryClickEvent } from '@/types/telemetry';
 import { mapClusterFromRaw } from '@/utils/mapClustersFromRaw';
-import { setBoundEnvironments } from '@/redux/slices/environments.slice';
 import { GitProtocol } from '@/types';
+import { RESERVED_DRAFT_CLUSTER_NAME } from '@/constants';
 
 export const createCluster = createAsyncThunk<
-  void,
+  ClusterQueue,
   void,
   {
     dispatch: AppDispatch;
@@ -73,13 +74,15 @@ export const createCluster = createAsyncThunk<
   };
 
   await axios.post<{ message: string }>('/api/proxy', {
-    url: `/cluster/${values?.clusterName || 'kubefirst'}`,
+    url: `/cluster/${values?.clusterName}`,
     body: params,
   });
+
+  return { clusterName: values?.clusterName as string, status: ClusterStatus.PROVISIONING };
 });
 
 export const createWorkloadCluster = createAsyncThunk<
-  string,
+  WorkloadCluster,
   void,
   {
     dispatch: AppDispatch;
@@ -88,7 +91,7 @@ export const createWorkloadCluster = createAsyncThunk<
 >('api/cluster/createWorkloadCluster', async (_, { getState }) => {
   const { managementCluster, clusterMap } = getState().api;
 
-  const draftCluster = clusterMap['draft'];
+  const draftCluster = clusterMap[RESERVED_DRAFT_CLUSTER_NAME];
 
   if (!managementCluster) {
     throw new Error('missing management cluster');
@@ -120,44 +123,24 @@ export const createWorkloadCluster = createAsyncThunk<
     })
   ).data;
 
-  return cluster_id;
-});
+  const provisioningWorkloadCluster: WorkloadCluster = {
+    ...draftCluster,
+    clusterId: cluster_id,
+    status: ClusterStatus.PROVISIONING,
+    environment: draftCluster.environment as ClusterEnvironment,
+  };
 
-export const getCluster = createAsyncThunk<
-  {
-    managementCluster: ManagementCluster;
-    clusterCache: ClusterCache;
-    clusterNameCache: ClusterNameCache;
-  },
-  ClusterRequestProps,
-  {
-    dispatch: AppDispatch;
-    state: RootState;
-  }
->('api/cluster/get', async ({ clusterName }, { dispatch }) => {
-  const { data } = await axios.get<ClusterResponse>(
-    `/api/proxy?${createQueryString('url', `/cluster/${clusterName || 'kubefirst'}`)}`,
-  );
-
-  const { managementCluster, envCache, clusterCache, clusterNameCache } = mapClusterFromRaw(data);
-
-  dispatch(setBoundEnvironments(envCache));
-
-  return { managementCluster, clusterCache, clusterNameCache };
+  return provisioningWorkloadCluster;
 });
 
 export const getClusters = createAsyncThunk<
-  {
-    managementCluster: ManagementCluster;
-    clusterCache: ClusterCache;
-    clusterNameCache: ClusterNameCache;
-  },
+  ReturnType<typeof mapClusterFromRaw>,
   void,
   {
     dispatch: AppDispatch;
     state: RootState;
   }
->('api/cluster/getClusters', async (_, { dispatch }) => {
+>('api/cluster/getClusters', async () => {
   const res = await axios.get<ClusterResponse[]>(
     `/api/proxy?${createQueryString('url', `/cluster`)}`,
   );
@@ -167,34 +150,34 @@ export const getClusters = createAsyncThunk<
   }
 
   // only process single expected management cluster
-  const { managementCluster, envCache, clusterCache, clusterNameCache } = mapClusterFromRaw(
-    res.data[0],
-  );
-
-  dispatch(setBoundEnvironments(envCache));
-
-  return { managementCluster, clusterCache, clusterNameCache };
+  return mapClusterFromRaw(res.data[0]);
 });
 
 export const deleteCluster = createAsyncThunk<
-  void,
-  string,
+  ClusterQueue,
+  Cluster['clusterName'],
   {
     dispatch: AppDispatch;
     state: RootState;
   }
->('api/cluster/delete', async (workloadClusterId, { getState }) => {
+>('api/cluster/delete', async (clusterName, { getState }) => {
   const {
-    api: { managementCluster },
+    api: { managementCluster, clusterMap },
   } = getState();
 
+  const { clusterId } = clusterMap[clusterName];
+
   // returned cluster_id is unused at this time.
-  await axios.delete<{ cluster_id: string }>(
-    `/api/proxy?${createQueryString(
-      'url',
-      `/cluster/${managementCluster?.clusterId || 'kubefirst'}/${workloadClusterId}`,
-    )}&target=ee`,
-  );
+  if (managementCluster) {
+    await axios.delete<{ cluster_id: string }>(
+      `/api/proxy?${createQueryString(
+        'url',
+        `/cluster/${managementCluster.clusterId}/${clusterId}`,
+      )}&target=ee`,
+    );
+  }
+
+  return { clusterName, status: ClusterStatus.DELETING };
 });
 
 export const getCloudRegions = createAsyncThunk<

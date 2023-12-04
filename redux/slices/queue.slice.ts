@@ -1,9 +1,11 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 
 import { ClusterQueue } from '../../types/provision';
+import { createCluster, createWorkloadCluster, deleteCluster } from '../thunks/api.thunk';
+import { Cluster } from '../../types/provision';
 
 export type Queue = {
-  [key: string]: ClusterQueue;
+  [x: Cluster['clusterName']]: ClusterQueue;
 };
 
 export interface QueueState {
@@ -26,6 +28,18 @@ const queueSlice = createSlice({
         delete state.clusterQueue[payload];
       }
     },
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(createCluster.fulfilled, (state, { payload: { clusterName, status } }) => {
+        state.clusterQueue[clusterName] = { clusterName, status };
+      })
+      .addCase(createWorkloadCluster.fulfilled, (state, { payload: { clusterName, status } }) => {
+        state.clusterQueue[clusterName] = { clusterName, status };
+      })
+      .addCase(deleteCluster.fulfilled, (state, { payload: { clusterName, status } }) => {
+        state.clusterQueue[clusterName] = { clusterName, status };
+      });
   },
 });
 

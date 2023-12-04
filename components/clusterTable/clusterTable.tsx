@@ -70,7 +70,7 @@ type ClusterRowProps = {
   expanded?: boolean;
   showExpandButton?: boolean;
   onExpanseClick?: () => void;
-  onDeleteCluster: (clusterId: string) => void;
+  onDeleteCluster: (clusterName: string) => void;
 };
 
 const ClusterRow: FunctionComponent<ClusterRowProps> = ({
@@ -83,7 +83,6 @@ const ClusterRow: FunctionComponent<ClusterRowProps> = ({
   const { isOpen, close, toggle } = useToggle();
 
   const {
-    clusterId,
     clusterName,
     type,
     cloudProvider,
@@ -172,7 +171,7 @@ const ClusterRow: FunctionComponent<ClusterRowProps> = ({
               <Menu>
                 <List>
                   <ListItem disablePadding>
-                    <ListItemButton onClick={() => onDeleteCluster(clusterId)}>
+                    <ListItemButton onClick={() => onDeleteCluster(clusterName)}>
                       <Typography variant="body2" style={{ color: `${FIRE_BRICK}` }}>
                         Delete cluster
                       </Typography>
@@ -264,7 +263,7 @@ const ClusterTableHead: FunctionComponent<ClusterTableHeadProps> = ({ orderBy, o
 interface ClusterTableProps extends Omit<ComponentPropsWithRef<'tbody'>, 'key'> {
   managementCluster: ManagementCluster;
   clusters: ClusterCache;
-  onDeleteCluster: (clusterId: string) => void;
+  onDeleteCluster: (clusterName: string) => void;
   customRef?: React.Ref<HTMLTableSectionElement>;
 }
 

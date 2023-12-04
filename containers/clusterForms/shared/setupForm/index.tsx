@@ -68,7 +68,7 @@ const SetupForm: FunctionComponent = () => {
     installationStep,
     installType,
     values,
-    clusterNameCache,
+    clusterMap,
   } = useAppSelector(({ api, installation }) => ({
     ...api,
     ...installation,
@@ -285,7 +285,7 @@ const SetupForm: FunctionComponent = () => {
           },
           validate: {
             previouslyUsedClusterNames: (value) =>
-              (typeof value === 'string' && !clusterNameCache[value]) ||
+              (typeof value === 'string' && !clusterMap[value]) ||
               'Please use a unique name that has not been previously provisioned',
             civoClusterName: (value) => {
               if (installType === InstallationType.CIVO) {
