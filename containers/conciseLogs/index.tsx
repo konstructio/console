@@ -18,12 +18,12 @@ import {
 } from './conciseLogs.styled';
 
 const ESTIMATED_TIMES_BY_CLOUD: Record<InstallationType, number> = {
-  [InstallationType.LOCAL]: 5,
-  [InstallationType.AWS]: 35,
-  [InstallationType.CIVO]: 10,
-  [InstallationType.DIGITAL_OCEAN]: 7,
-  [InstallationType.VULTR]: 10,
-  [InstallationType.GOOGLE]: 15,
+  [InstallationType.LOCAL]: 7,
+  [InstallationType.AWS]: 40,
+  [InstallationType.CIVO]: 15,
+  [InstallationType.DIGITAL_OCEAN]: 35,
+  [InstallationType.VULTR]: 25,
+  [InstallationType.GOOGLE]: 25,
 };
 export interface ConciseLogsProps {
   completedSteps: Array<{ label: string; order: number }>;
