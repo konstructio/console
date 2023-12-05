@@ -1,6 +1,7 @@
-import { InstallationType } from '../../../types/redux';
-import { GitProvider } from '../../../types';
-import { exactWordRegex } from '../../../utils/exactWordRegex';
+import { InstallationType } from '@/types/redux';
+import { GitProvider } from '@/types';
+import { exactWordRegex } from '@/utils/exactWordRegex';
+import { isGitProvider, isInstallationType } from '@/utils/types';
 
 const GIT_PROVIDER = Cypress.env('GIT_PROVIDER');
 const CLOUD_PROVIDER = Cypress.env('CLOUD_PROVIDER');
@@ -104,6 +105,14 @@ describe('provision management cluster using any git provider, cloud provider, a
     cy.openConsole();
   });
 
+  if (!isGitProvider(GIT_PROVIDER)) {
+    throw new Error('supplied GIT_PROVIDER is not a valid value');
+  }
+
+  if (!isInstallationType(CLOUD_PROVIDER)) {
+    throw new Error('supplied CLOUD_PROVIDER is not a valid value');
+  }
+
   const { GIT_TOKEN, GIT_USER, GIT_OWNER } = GIT_PROVIDER_CONFIG[GIT_PROVIDER];
 
   const { AUTH_TOKEN, DOMAIN_NAME, CLOUD_REGION, INSTANCE_SIZE } =
@@ -155,10 +164,17 @@ describe('provision management cluster using any git provider, cloud provider, a
       CLOUD_PROVIDER !== InstallationType.GOOGLE &&
       CLOUD_PROVIDER !== InstallationType.DIGITAL_OCEAN
     ) {
+      if (!AUTH_TOKEN) {
+        throw new Error(`must supply auth token for ${CLOUD_PROVIDER}`);
+      }
       cy.get(`[name='${CLOUD_PROVIDER}_auth.token']`).type(AUTH_TOKEN, { log: false, delay: 0 });
     }
 
     if (CLOUD_PROVIDER === InstallationType.DIGITAL_OCEAN) {
+      if (!AUTH_TOKEN) {
+        throw new Error(`must supply auth token for ${CLOUD_PROVIDER}`);
+      }
+
       cy.get("[name='do_auth.token']").type(AUTH_TOKEN, { log: false, delay: 0 });
       cy.get("[name='do_auth.spaces_key']").type(DIGI_OCEAN_SPACES_KEY, { log: false, delay: 0 });
       cy.get("[name='do_auth.spaces_secret']").type(DIGI_OCEAN_SPACES_SECRET, {
@@ -253,3 +269,7 @@ describe('provision management cluster using any git provider, cloud provider, a
     cy.get('[data-test-id="launch-console"]').click();
   });
 });
+
+// workaround for typescript throwing --isolateModules error
+// more info => https://github.com/vercel/next.js/commit/5bd155e22032185c1b3f821793db7292d1ff68cd
+export {};
