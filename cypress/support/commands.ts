@@ -40,3 +40,7 @@ Cypress.Commands.add('openConsole', () => {
   cy.log('Env', Cypress.env());
   cy.visit(Cypress.env('CONSOLE_BASE_URL'));
 });
+
+// workaround for typescript throwing --isolateModules error
+// more info => https://github.com/vercel/next.js/commit/5bd155e22032185c1b3f821793db7292d1ff68cd
+export {};
