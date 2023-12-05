@@ -1,7 +1,7 @@
 import { Meta, StoryObj } from '@storybook/react';
 
 import { mockClusterConfig } from '../../tests/mocks/mockClusterConfig';
-import { ClusterType } from '../../types/provision';
+import { ClusterStatus, ClusterType } from '../../types/provision';
 
 import ClusterDetails from '.';
 
@@ -16,6 +16,8 @@ export const Default: StoryObj<typeof ClusterDetails> = {
     cluster: {
       ...mockClusterConfig,
       clusterId: '1',
+      status: ClusterStatus.PROVISIONED,
+      clusterName: 'man-cluster-1',
       adminEmail: 'derrick@kubeshop.io',
       domainName: 'kubefirst.io',
       dnsProvider: 'civo',

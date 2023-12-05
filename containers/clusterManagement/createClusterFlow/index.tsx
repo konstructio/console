@@ -26,6 +26,8 @@ import {
   MenuHeader,
 } from './createClusterFlow.styled';
 
+import { RESERVED_DRAFT_CLUSTER_NAME } from '@/constants';
+
 const actionButtonText: Record<ClusterCreationStep, string> = {
   [ClusterCreationStep.CONFIG]: 'Create cluster',
   [ClusterCreationStep.DETAILS]: 'Delete cluster',
@@ -72,7 +74,10 @@ export const CreateClusterFlow: FunctionComponent<CreateClusterFlowProps> = ({
   }, [onClusterDelete, clusterCreationStep]);
 
   const submitButtonDisabled =
-    !isValid || loading || cluster?.status === ClusterStatus.PROVISIONING;
+    !isValid ||
+    loading ||
+    (cluster?.clusterId !== RESERVED_DRAFT_CLUSTER_NAME &&
+      cluster?.status === ClusterStatus.PROVISIONING);
 
   const showingClusterDetails = clusterCreationStep === ClusterCreationStep.DETAILS;
 
@@ -92,10 +97,8 @@ export const CreateClusterFlow: FunctionComponent<CreateClusterFlowProps> = ({
         </MenuHeader>
         <FormContent>
           {showHeadsUpNotification && <HeadsUpNotification onClose={onNotificationClose} />}
-          {clusterCreationStep === ClusterCreationStep.CONFIG && (
-            <ClusterCreationForm style={{ flex: 1, margin: '32px 0' }} />
-          )}
-          {clusterCreationStep === ClusterCreationStep.DETAILS && cluster && (
+          {!showingClusterDetails && <ClusterCreationForm style={{ flex: 1, margin: '32px 0' }} />}
+          {showingClusterDetails && cluster && (
             <ClusterDetails
               cluster={cluster}
               host={managementCluster?.gitHost as string}

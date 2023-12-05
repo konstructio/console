@@ -1,7 +1,7 @@
 import React, { type FunctionComponent, useEffect } from 'react';
 import ReactFlow, { NodeTypes, ReactFlowProvider, useReactFlow } from 'reactflow';
 
-import { GraphNode } from '../graphNode';
+import { CustomGraphNode, GraphNode } from '../graphNode';
 import { useAppDispatch, useAppSelector } from '../../redux/store';
 import {
   onConnect,
@@ -17,6 +17,8 @@ import { Cluster } from '../../types/provision';
 
 import CustomReactFlowControls from './controls';
 
+import { RESERVED_DRAFT_CLUSTER_NAME } from '@/constants';
+
 const nodeTypes: NodeTypes = {
   custom: GraphNode,
 };
@@ -27,15 +29,24 @@ interface GraphViewProps {
 
 const GraphView: FunctionComponent<GraphViewProps> = ({ onNodeClick }) => {
   const { nodes, edges } = useAppSelector(({ reactFlow }) => reactFlow);
-  const { managementCluster, clusterMap, presentedClusterId } = useAppSelector(({ api }) => api);
+  const { managementCluster, clusterMap, presentedClusterName } = useAppSelector(({ api }) => api);
 
   const dispatch = useAppDispatch();
 
   const { setCenter, fitView, zoomIn, zoomOut } = useReactFlow();
 
   useEffect(() => {
-    if (presentedClusterId) {
-      const selectedNode = nodes.find((node) => node.id === presentedClusterId);
+    if (presentedClusterName) {
+      let selectedNode: CustomGraphNode | undefined;
+      // with clusterMap being indexed by clusterName
+      // if the clusterName is selected by name it will
+      // cause the selected styles to cease on change
+      // so opting to select cluster by id
+      if (presentedClusterName === RESERVED_DRAFT_CLUSTER_NAME) {
+        selectedNode = nodes.find((node) => node.id === presentedClusterName);
+      } else {
+        selectedNode = nodes.find((node) => node.data.clusterName === presentedClusterName);
+      }
       if (selectedNode) {
         const { position, width, height, id } = selectedNode;
 
@@ -49,7 +60,7 @@ const GraphView: FunctionComponent<GraphViewProps> = ({ onNodeClick }) => {
     } else {
       window.requestAnimationFrame(() => fitView({ duration: 500, padding: 0.2 }));
     }
-  }, [presentedClusterId, nodes, setCenter, fitView, dispatch]);
+  }, [presentedClusterName, nodes, setCenter, fitView, dispatch]);
 
   useEffect(() => {
     if (managementCluster) {

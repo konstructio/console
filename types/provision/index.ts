@@ -146,7 +146,7 @@ export interface Cluster {
   cloudProvider?: InstallationType;
   type: ClusterType;
   clusterId: string;
-  clusterName?: string;
+  clusterName: string;
   cloudRegion?: string;
   creationDate?: string;
   domainName: string;
@@ -156,7 +156,7 @@ export interface Cluster {
   gitProvider: string;
   instanceSize?: string;
   nodeCount?: number;
-  status?: ClusterStatus;
+  status: ClusterStatus;
   gitAuth: {
     gitOwner?: string;
     gitToken?: string;
@@ -165,7 +165,6 @@ export interface Cluster {
 }
 
 export interface ManagementCluster extends Cluster, Row {
-  status?: ClusterStatus;
   lastErrorCondition: string;
   workloadClusters: WorkloadCluster[];
   gitHost: string;
@@ -234,8 +233,5 @@ export interface ClusterServices {
 
 export interface ClusterQueue {
   clusterName: string;
-  clusterType: ClusterType;
-  id: string;
   status: ClusterStatus;
-  callback: () => void;
 }

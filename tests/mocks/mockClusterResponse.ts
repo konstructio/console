@@ -81,7 +81,7 @@ export const mockClusterResponse: ClusterResponse = {
       cloud_provider: InstallationType.LOCAL,
       domain_name: 'kgetpods.biz',
       subdomain_name: '',
-      cluster_id: 'draft',
+      cluster_id: 'three',
       creation_timestamp: '1693932566',
       dns_provider: 'civo',
       cluster_name: 'worker-3',

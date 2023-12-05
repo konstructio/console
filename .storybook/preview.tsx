@@ -7,11 +7,7 @@ import { ThemeProvider } from 'styled-components';
 import { makeStore } from '../redux/store';
 import { muiTheme } from '../theme/muiTheme';
 import { theme } from '../theme';
-import {
-  setClusterMap,
-  setClusterNameCache,
-  setManagementCluster,
-} from '../redux/slices/api.slice';
+import { setClusterMap, setManagementCluster } from '../redux/slices/api.slice';
 import { mapClusterFromRaw } from '../utils/mapClustersFromRaw';
 import { mockClusterResponse } from '../tests/mocks/mockClusterResponse';
 import { setBoundEnvironments } from '../redux/slices/environments.slice';
@@ -39,12 +35,10 @@ export const parameters = {
 
 const store = makeStore();
 
-const { managementCluster, clusterCache, clusterNameCache, envCache } =
-  mapClusterFromRaw(mockClusterResponse);
+const { managementCluster, clusterCache, envCache } = mapClusterFromRaw(mockClusterResponse);
 
 store.dispatch(setManagementCluster(managementCluster));
 store.dispatch(setClusterMap(clusterCache));
-store.dispatch(setClusterNameCache(clusterNameCache));
 store.dispatch(setBoundEnvironments(envCache));
 
 export const decorators = [

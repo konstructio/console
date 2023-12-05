@@ -9,7 +9,6 @@ import {
   deleteCluster,
   getCloudDomains,
   getCloudRegions,
-  getCluster,
   getClusters,
   getInstanceSizes,
   getRegionZones,
@@ -20,10 +19,11 @@ import {
   clearResponseError,
   setClusterMap,
   setManagementCluster,
-  setPresentedClusterId,
+  setPresentedClusterName,
 } from '../../slices/api.slice';
-import { ClusterStatus } from '../../../types/provision';
+import { ClusterCreationStep, ClusterStatus } from '../../../types/provision';
 import { ClusterCache } from '../../../types/redux';
+import { RESERVED_DRAFT_CLUSTER_NAME } from '../../../constants';
 
 describe('redux/thunks/api', () => {
   const reduxStore = makeStore();
@@ -89,7 +89,7 @@ describe('redux/thunks/api', () => {
     const { workloadClusters } = managementCluster;
 
     const mockClusterCache: ClusterCache = {
-      draft: workloadClusters[0],
+      [RESERVED_DRAFT_CLUSTER_NAME]: workloadClusters[0],
     };
 
     reduxStore.dispatch(setManagementCluster(managementCluster));
@@ -97,40 +97,23 @@ describe('redux/thunks/api', () => {
 
     await reduxStore.dispatch(createWorkloadCluster());
 
-    const { isError, managementCluster: manCluster, clusterMap } = reduxStore.getState().api;
+    const {
+      isError,
+      responseError,
+      managementCluster: manCluster,
+      clusterMap,
+      clusterCreationStep,
+    } = reduxStore.getState().api;
 
-    const provisioningCluster = clusterMap[mockCreatedClusterId];
+    const provisioningCluster = clusterMap[workloadClusters[0].clusterName];
 
+    expect(responseError).toBe(undefined);
     expect(isError).toBe(false);
     expect(manCluster).toStrictEqual(managementCluster);
     expect(provisioningCluster).toBeDefined();
     expect(provisioningCluster.clusterId).toStrictEqual(mockCreatedClusterId);
     expect(provisioningCluster.status).toStrictEqual(ClusterStatus.PROVISIONING);
-  });
-
-  test('getCluster - successful response', async () => {
-    mock.onGet().reply(200, mockClusterResponse);
-
-    const mockResult = mapClusterFromRaw(mockClusterResponse);
-
-    await reduxStore.dispatch(getCluster({})); // no need to pass getClusterArgs since i am mocking response
-
-    const { managementCluster, clusterMap, clusterNameCache } = reduxStore.getState().api;
-    const { boundEnvironments } = reduxStore.getState().environments;
-
-    expect(managementCluster).toStrictEqual(mockResult.managementCluster);
-    expect(clusterMap).toStrictEqual(mockResult.clusterCache);
-    expect(clusterNameCache).toStrictEqual(mockResult.clusterNameCache);
-    expect(boundEnvironments).toStrictEqual(mockResult.envCache);
-  });
-
-  test('getCluster - unsuccessful response', async () => {
-    mock.onGet().reply(400);
-    await reduxStore.dispatch(getCluster({})); // no need to pass getClusterArgs since i am mocking response
-
-    const { responseError } = reduxStore.getState().api;
-
-    expect(responseError).toBe('Request failed with status code 400');
+    expect(clusterCreationStep).toStrictEqual(ClusterCreationStep.DETAILS);
   });
 
   test('getClusters - successful response', async () => {
@@ -140,12 +123,11 @@ describe('redux/thunks/api', () => {
 
     await reduxStore.dispatch(getClusters());
 
-    const { managementCluster, clusterMap, clusterNameCache } = reduxStore.getState().api;
+    const { managementCluster, clusterMap } = reduxStore.getState().api;
     const { boundEnvironments } = reduxStore.getState().environments;
 
     expect(managementCluster).toStrictEqual(mockResult.managementCluster);
     expect(clusterMap).toStrictEqual(mockResult.clusterCache);
-    expect(clusterNameCache).toStrictEqual(mockResult.clusterNameCache);
     expect(boundEnvironments).toStrictEqual(mockResult.envCache);
   });
 
@@ -170,10 +152,18 @@ describe('redux/thunks/api', () => {
   });
 
   test('deleteCluster - unsuccessful response', async () => {
+    mock.onGet().reply(200, [mockClusterResponse]);
     mock.onDelete().reply(400);
 
-    reduxStore.dispatch(setPresentedClusterId(undefined));
-    await reduxStore.dispatch(deleteCluster('id'));
+    const {
+      managementCluster: { workloadClusters },
+    } = mapClusterFromRaw(mockClusterResponse);
+
+    const [{ clusterName }] = workloadClusters;
+
+    await reduxStore.dispatch(getClusters());
+    reduxStore.dispatch(setPresentedClusterName(undefined));
+    await reduxStore.dispatch(deleteCluster(clusterName));
 
     const { isError, responseError } = reduxStore.getState().api;
 

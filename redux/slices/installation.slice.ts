@@ -2,6 +2,9 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 import { InstallationType, InstallValues } from '../../types/redux';
 import { GitProvider } from '../../types';
+import { getClusters } from '../thunks/api.thunk';
+
+import { ClusterStatus } from '@/types/provision';
 
 export interface InstallationState {
   values?: InstallValues;
@@ -48,6 +51,23 @@ const installationSlice = createSlice({
       state.error = undefined;
       state.errorDetails = undefined;
     },
+  },
+  extraReducers: (builder) => {
+    builder.addCase(
+      getClusters.fulfilled,
+      (
+        state,
+        {
+          payload: {
+            managementCluster: { status, lastErrorCondition },
+          },
+        },
+      ) => {
+        if (status === ClusterStatus.ERROR) {
+          state.error = lastErrorCondition;
+        }
+      },
+    );
   },
 });
 
