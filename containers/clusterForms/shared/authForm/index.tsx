@@ -45,7 +45,7 @@ import Column from '@/components/column';
 const AuthForm: FunctionComponent = () => {
   const [isGitRequested, setIsGitRequested] = useState<boolean>();
   const [gitUserName, setGitUserName] = useState<string>();
-  const [showGoogleKeyFile, setShowGoogleKeyFile] = useState(true);
+  const [showGoogleKeyFile, setShowGoogleKeyFile] = useState(false);
 
   const dispatch = useAppDispatch();
 
