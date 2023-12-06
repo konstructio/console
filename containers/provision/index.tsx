@@ -18,7 +18,7 @@ import {
 } from '../../redux/slices/installation.slice';
 import { clearClusterState, clearValidation } from '../../redux/slices/api.slice';
 import { useAppDispatch, useAppSelector } from '../../redux/store';
-import { createCluster, getCloudRegions, resetClusterProgress } from '../../redux/thunks/api.thunk';
+import { createCluster, resetClusterProgress } from '../../redux/thunks/api.thunk';
 import { useInstallation } from '../../hooks/useInstallation';
 import { InstallValues, InstallationType } from '../../types/redux';
 import { GitProvider } from '../../types';
@@ -66,8 +66,10 @@ const Provision: FunctionComponent = () => {
       !!isMarketplace,
     );
 
-  const { instanceSize, nodeCount } =
-    DEFAULT_CLOUD_INSTANCE_SIZES[installType ?? InstallationType.LOCAL];
+  const { instanceSize, nodeCount } = useMemo(
+    () => DEFAULT_CLOUD_INSTANCE_SIZES[installType ?? InstallationType.LOCAL],
+    [installType],
+  );
 
   const methods = useForm<InstallValues>({
     mode: 'onChange',
@@ -76,9 +78,11 @@ const Provision: FunctionComponent = () => {
       nodeCount,
     },
   });
+
   const {
     formState: { isValid: isFormValid },
     getValues,
+    setValue,
     trigger,
     handleSubmit,
   } = methods;
@@ -126,27 +130,25 @@ const Provision: FunctionComponent = () => {
     if (isProvisioned) {
       dispatch(clearClusterState());
     }
-  }, [dispatch, installationStep, isProvisioned]);
-
-  const handleNextButtonClick = async () => {
-    const values = getValues();
-    if (isAuthStep) {
-      await dispatch(getCloudRegions({ values, installType }));
-    } else {
-      handleGoNext();
-    }
-  };
+    trigger();
+  }, [dispatch, installationStep, isProvisioned, trigger]);
 
   const handleBackButtonClick = useCallback(() => {
     dispatch(clearValidation());
     dispatch(clearError());
+
     dispatch(setInstallationStep(installationStep - 1));
     trigger();
   }, [dispatch, installationStep, trigger]);
 
   const onSubmit = async (values: InstallValues) => {
     if (installationStep === 0 && !isMarketplace) {
-      return handleNextButtonClick();
+      // reset and pass suggested instance size and nodeCount
+      // so if user does change install type/cloud provider
+      // the correct defaults will be present
+      setValue('instanceSize', instanceSize);
+      setValue('nodeCount', nodeCount);
+      return handleGoNext();
     }
 
     if (isValid) {
@@ -155,12 +157,12 @@ const Provision: FunctionComponent = () => {
       if (isSetupStep) {
         try {
           await provisionCluster();
-          handleNextButtonClick();
+          handleGoNext();
         } catch (error) {
           //todo: error handling to be defined
         }
       } else {
-        handleNextButtonClick();
+        handleGoNext();
       }
     }
   };
