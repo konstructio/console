@@ -1,12 +1,5 @@
 'use client';
-import React, {
-  ChangeEvent,
-  FunctionComponent,
-  useCallback,
-  useEffect,
-  useMemo,
-  useState,
-} from 'react';
+import React, { FunctionComponent, useCallback, useEffect, useMemo, useState } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { Box } from '@mui/material';
 import styled from 'styled-components';
@@ -16,7 +9,12 @@ import { setInstallationStep } from '@/redux/slices/installation.slice';
 import { clearDomains } from '@/redux/slices/api.slice';
 import { useAppDispatch, useAppSelector } from '@/redux/store';
 import ControlledPassword from '@/components/controlledFields/Password';
-import { getCloudDomains, getInstanceSizes, getRegionZones } from '@/redux/thunks/api.thunk';
+import {
+  getCloudDomains,
+  getCloudRegions,
+  getInstanceSizes,
+  getRegionZones,
+} from '@/redux/thunks/api.thunk';
 import ControlledTextField from '@/components/controlledFields/TextField';
 import ControlledAutocomplete from '@/components/controlledFields/AutoComplete';
 import Column from '@/components/column';
@@ -43,22 +41,8 @@ const CLOUD_REGION_LABELS: Record<InstallationType, string | null> = {
 };
 
 const SetupForm: FunctionComponent = () => {
-  const [isCloudFlareSelected, setIsCloudFlareSelected] = useState<boolean>(false);
   const [selectedRegion, setSelectedRegion] = useState<string>('');
   const dispatch = useAppDispatch();
-  const {
-    control,
-    setValue,
-    getValues,
-    formState: { errors },
-    watch,
-  } = useFormContext<InstallValues>();
-
-  const [domainName, subDomain] = watch(['domainName', 'subDomain']);
-
-  const { instanceSize, nodeCount } = getValues();
-
-  const subDomainHelperText = !subDomain ? '' : `${subDomain}.${domainName}`;
 
   const {
     cloudDomains,
@@ -74,6 +58,29 @@ const SetupForm: FunctionComponent = () => {
     ...installation,
   }));
 
+  const {
+    control,
+    setValue,
+    getValues,
+    trigger,
+    formState: { errors },
+    watch,
+  } = useFormContext<InstallValues>();
+
+  const [domainName, subDomain, dnsProvider, cloudRegion, cloudflareToken, cloudZone] = watch([
+    'domainName',
+    'subDomain',
+    'dnsProvider',
+    'cloudRegion',
+    'cloudflareToken',
+    'cloudZone',
+  ]);
+
+  const { instanceSize, nodeCount } = getValues();
+
+  const subDomainHelperText = !subDomain ? '' : `${subDomain}.${domainName}`;
+  const isCloudflareSelected = useMemo(() => dnsProvider === 'cloudflare', [dnsProvider]);
+
   const cloudRegionLabel = useMemo(
     () =>
       CLOUD_REGION_LABELS[installType as InstallationType] ||
@@ -87,7 +94,7 @@ const SetupForm: FunctionComponent = () => {
     }
   }, [dispatch, installationStep, values?.gitToken]);
 
-  const handleRegionOnSelect = useCallback(
+  const handleRegionChange = useCallback(
     (region: string) => {
       setSelectedRegion(region);
       // if using google hold off on grabbing instances
@@ -101,17 +108,20 @@ const SetupForm: FunctionComponent = () => {
           }),
         );
       } else {
-        const funcArgs = { installType, region, values };
-        dispatch(getInstanceSizes(funcArgs));
-        dispatch(getCloudDomains(funcArgs));
+        dispatch(getInstanceSizes({ installType, region, values }));
       }
     },
     [dispatch, installType, values],
   );
 
-  const handleZoneSelect = (zone: string) => {
-    dispatch(getInstanceSizes({ installType, region: selectedRegion, zone, values }));
-  };
+  const handleZoneSelect = useCallback(
+    (zone: string) => {
+      if (cloudRegion) {
+        dispatch(getInstanceSizes({ installType, region: cloudRegion, zone, values }));
+      }
+    },
+    [dispatch, installType, cloudRegion, values],
+  );
 
   const formatDomains = (domains: Array<string>) => {
     return domains.map((domain) => {
@@ -123,30 +133,60 @@ const SetupForm: FunctionComponent = () => {
     });
   };
 
-  const handleCloudfareToken = ({
-    target,
-  }: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { value } = target;
+  const handleCloudfareToken = useCallback(
+    (cloudflareToken: string) => {
+      dispatch(getCloudDomains({ region: selectedRegion, cloudflareToken, values }));
+    },
+    [dispatch, selectedRegion, values],
+  );
 
-    dispatch(getCloudDomains({ region: selectedRegion, cloudflareToken: value, values }));
-  };
-
-  const handleDnsProviderOnChange = (value: string) => {
-    const isCloudflare = value === 'cloudflare';
-    setIsCloudFlareSelected(isCloudflare);
-
-    if (!isCloudflare) {
-      dispatch(getCloudDomains({ region: selectedRegion, installType, values }));
+  const handleDnsProviderChange = useCallback(() => {
+    if (isCloudflareSelected) {
+      if (cloudflareToken) {
+        handleCloudfareToken(cloudflareToken);
+      } else {
+        dispatch(clearDomains());
+      }
+    } else if (cloudRegion) {
+      dispatch(getCloudDomains({ region: cloudRegion, installType, values }));
       setValue('cloudflareToken', '');
-    } else {
-      dispatch(clearDomains());
       setValue('domainName', '');
     }
-  };
+  }, [
+    dispatch,
+    installType,
+    values,
+    isCloudflareSelected,
+    cloudflareToken,
+    handleCloudfareToken,
+    cloudRegion,
+    setValue,
+  ]);
+
+  useEffect(() => {
+    if (cloudRegion) {
+      handleRegionChange(cloudRegion);
+    }
+  }, [cloudRegion, handleRegionChange]);
+
+  useEffect(() => {
+    if (dnsProvider) {
+      handleDnsProviderChange();
+    }
+  }, [dnsProvider, handleDnsProviderChange]);
+
+  useEffect(() => {
+    if (cloudZone) {
+      handleZoneSelect(cloudZone);
+    }
+  }, [cloudZone, handleZoneSelect]);
 
   useEffect(() => {
     checkAuth();
-  }, [checkAuth]);
+    if (installType && values) {
+      dispatch(getCloudRegions({ installType, values }));
+    }
+  }, [checkAuth, dispatch, installType, values, trigger]);
 
   return (
     <>
@@ -174,7 +214,6 @@ const SetupForm: FunctionComponent = () => {
         required
         rules={{ required: true }}
         options={cloudRegions && cloudRegions.map((region) => ({ label: region, value: region }))}
-        onChange={handleRegionOnSelect}
       />
       {installType === InstallationType.GOOGLE && (
         <ControlledAutocomplete
@@ -188,7 +227,6 @@ const SetupForm: FunctionComponent = () => {
             label: zone,
             value: zone,
           }))}
-          onChange={handleZoneSelect}
         />
       )}
       <ControlledAutocomplete
@@ -222,9 +260,8 @@ const SetupForm: FunctionComponent = () => {
           { label: capitalize(installType as string), value: installType as string },
           { label: 'Cloudflare', value: 'cloudflare' },
         ]}
-        onChange={handleDnsProviderOnChange}
       />
-      {isCloudFlareSelected && (
+      {isCloudflareSelected && (
         <>
           <ControlledPassword
             control={control}
@@ -257,7 +294,7 @@ const SetupForm: FunctionComponent = () => {
         rules={{ required: true }}
         options={cloudDomains && formatDomains(cloudDomains)}
       />
-      {isCloudFlareSelected && (
+      {isCloudflareSelected && (
         <ControlledTextField
           control={control}
           name="subDomain"

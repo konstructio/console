@@ -68,7 +68,7 @@ export const DEFAULT_CLOUD_INSTANCE_SIZES: Record<
   { instanceSize: string; nodeCount: number }
 > = {
   [InstallationType.AWS]: { instanceSize: 'm5.large', nodeCount: 6 },
-  [InstallationType.CIVO]: { instanceSize: 'g3.large', nodeCount: 6 },
+  [InstallationType.CIVO]: { instanceSize: 'g3.k3s.large', nodeCount: 6 },
   [InstallationType.DIGITAL_OCEAN]: { instanceSize: 's-4vcpu-8gb', nodeCount: 4 },
   [InstallationType.GOOGLE]: { instanceSize: 'e2-medium', nodeCount: 3 },
   [InstallationType.VULTR]: { instanceSize: 'vc2-4c-8gb', nodeCount: 5 },
