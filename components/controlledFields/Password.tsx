@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useState } from 'react';
+import React, { useState } from 'react';
 import { Control, Controller, FieldValues, UseControllerProps } from 'react-hook-form';
 
 import Password from '../password/index';
@@ -15,7 +15,7 @@ export interface ControlledTextFieldProps<T extends FieldValues> extends UseCont
   error?: boolean;
   onErrorText?: string;
   onBlur?: (value: string) => void;
-  onChange?: (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
+  onChange?: (value: string) => void;
 }
 
 function ControlledPassword<T extends FieldValues>({
@@ -47,7 +47,7 @@ function ControlledPassword<T extends FieldValues>({
           }}
           onChange={(event) => {
             field.onChange(event);
-            onChange && onChange(event);
+            onChange && onChange(event.target.value);
           }}
           inputRef={field.ref}
           fullWidth
