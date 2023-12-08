@@ -17,7 +17,7 @@ import QueueContext from './queue.context';
 import { getClusters } from '@/redux/thunks/api.thunk';
 
 const QueueProvider: FunctionComponent<PropsWithChildren> = ({ children }) => {
-  const { clusterQueue } = useAppSelector(({ queue }) => ({ ...queue }));
+  const { clusterQueue, clusterMap } = useAppSelector(({ queue, api }) => ({ ...queue, ...api }));
   const dispatch = useAppDispatch();
 
   const queue: { [key: string]: NodeJS.Timer } = useMemo(() => ({}), []);
@@ -79,7 +79,9 @@ const QueueProvider: FunctionComponent<PropsWithChildren> = ({ children }) => {
   };
 
   useEffect(() => {
-    Object.values(clusterQueue).forEach(({ clusterName, status }) => {
+    // Look inside of clusterMap as well for the workload clusters that have been provisioned
+    // during the during the creation of the management cluster.
+    Object.values({ ...clusterQueue, ...clusterMap }).forEach(({ clusterName, status }) => {
       if (
         !queue[clusterName] &&
         [ClusterStatus.DELETING, ClusterStatus.PROVISIONING].includes(status)
@@ -90,7 +92,7 @@ const QueueProvider: FunctionComponent<PropsWithChildren> = ({ children }) => {
         dispatch(removeClusterFromQueue(clusterName));
       }
     });
-  }, [clusterQueue, getClusterInterval, queue, dispatch]);
+  }, [clusterQueue, getClusterInterval, queue, dispatch, clusterMap]);
 
   return (
     <QueueContext.Provider
