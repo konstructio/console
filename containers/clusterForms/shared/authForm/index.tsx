@@ -41,6 +41,7 @@ import Tooltip from '@/components/tooltip';
 import Row from '@/components/row';
 import CheckBoxWithRef from '@/components/checkbox';
 import Column from '@/components/column';
+import { hasProjectId } from '@/utils/hasProjectId';
 
 const AuthForm: FunctionComponent = () => {
   const [isGitRequested, setIsGitRequested] = useState<boolean>();
@@ -80,9 +81,12 @@ const AuthForm: FunctionComponent = () => {
   const {
     control,
     reset,
+    watch,
     setValue,
     formState: { errors },
   } = useFormContext<InstallValues>();
+
+  const googleKeyFile = watch('google_auth.key_file');
 
   const isGitHub = useMemo(() => gitProvider === GitProvider.GITHUB, [gitProvider]);
 
@@ -143,6 +147,21 @@ const AuthForm: FunctionComponent = () => {
       dispatch(clearUserError());
     };
   }, [dispatch]);
+
+  useEffect(() => {
+    if (googleKeyFile) {
+      try {
+        const keyFile = JSON.parse(googleKeyFile);
+        if (hasProjectId(keyFile)) {
+          setValue('google_auth.project_id', keyFile.project_id);
+        } else {
+          setValue('google_auth.project_id', '');
+        }
+      } catch (error) {
+        setValue('google_auth.project_id', '');
+      }
+    }
+  }, [googleKeyFile, setValue]);
 
   const showTooltip = useMemo(() => (gitUserName?.length ?? 0) > 22, [gitUserName]);
 
