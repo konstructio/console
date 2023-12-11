@@ -7,7 +7,7 @@ import { selectFeatureFlags } from '@/redux/selectors/featureFlags.selector';
 export function usePhysicalClustersPermissions(installationType?: InstallationType) {
   const {
     flags: {
-      canProvisionAWSPhysicalClusters,
+      canProvisionAwsPhysicalClusters,
       canProvisionDOPhysicalClusters,
       canProvisionGCPPhysicalClusters,
       canProvisionVultrPhysicalClusters,
@@ -18,7 +18,7 @@ export function usePhysicalClustersPermissions(installationType?: InstallationTy
   // otherwise default to true if no feature flag check
   const physicalClustersPermission = useMemo(
     (): Record<InstallationType, boolean> => ({
-      [InstallationType.AWS]: canProvisionAWSPhysicalClusters,
+      [InstallationType.AWS]: canProvisionAwsPhysicalClusters,
       [InstallationType.DIGITAL_OCEAN]: canProvisionDOPhysicalClusters,
       [InstallationType.GOOGLE]: canProvisionGCPPhysicalClusters,
       [InstallationType.VULTR]: canProvisionVultrPhysicalClusters,
@@ -26,7 +26,7 @@ export function usePhysicalClustersPermissions(installationType?: InstallationTy
       [InstallationType.LOCAL]: true,
     }),
     [
-      canProvisionAWSPhysicalClusters,
+      canProvisionAwsPhysicalClusters,
       canProvisionDOPhysicalClusters,
       canProvisionGCPPhysicalClusters,
       canProvisionVultrPhysicalClusters,
