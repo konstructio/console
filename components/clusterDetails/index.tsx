@@ -28,6 +28,7 @@ import {
 } from '@/types/provision';
 import StatusIndicator from '@/components/statusIndicator';
 import { BISCAY, VOLCANIC_SAND } from '@/constants/colors';
+import { CLOUD_PROVIDER_DISPLAY_NAME, GIT_PROVIDER_DISPLAY_NAME } from '@/constants';
 import Tag from '@/components/tag';
 
 export interface ClusterDetailsProps extends Omit<ComponentPropsWithoutRef<'div'>, 'key'> {
@@ -130,11 +131,11 @@ const ClusterDetails: FunctionComponent<ClusterDetailsProps> = ({
         <RowInfo>
           <ColumnInfo>
             <StyledLabel variant="labelLarge">GIT provider</StyledLabel>
-            <StyledValue variant="body2">{gitProvider}</StyledValue>
+            <StyledValue variant="body2">{GIT_PROVIDER_DISPLAY_NAME[gitProvider]}</StyledValue>
           </ColumnInfo>
           <ColumnInfo>
             <StyledLabel variant="labelLarge">Cloud provider</StyledLabel>
-            <StyledValue variant="body2">{cloudProvider}</StyledValue>
+            <StyledValue variant="body2">{CLOUD_PROVIDER_DISPLAY_NAME[cloudProvider]}</StyledValue>
           </ColumnInfo>
         </RowInfo>
 
@@ -158,7 +159,7 @@ const ClusterDetails: FunctionComponent<ClusterDetailsProps> = ({
           <ColumnInfo>
             <StyledLabel variant="labelLarge">Instance size</StyledLabel>
             <StyledValue variant="body2" style={{ width: '100%' }}>
-              {instanceSize}
+              {instanceSize?.toUpperCase()}
             </StyledValue>
           </ColumnInfo>
         </RowInfo>

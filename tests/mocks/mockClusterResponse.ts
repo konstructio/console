@@ -1,5 +1,6 @@
-import { ClusterResponse, ClusterStatus, ClusterType } from '../../types/provision';
-import { InstallationType } from '../../types/redux';
+import { GitProvider } from '@/types';
+import { ClusterResponse, ClusterStatus, ClusterType } from '@/types/provision';
+import { InstallationType } from '@/types/redux';
 
 export const mockClusterResponse: ClusterResponse = {
   _id: '64c2ec0b057c0e84e1738aaa',
@@ -16,7 +17,7 @@ export const mockClusterResponse: ClusterResponse = {
   domain_name: 'k-ray.space',
   subdomain_name: '',
   dns_provider: 'civo',
-  git_provider: 'github',
+  git_provider: GitProvider.GITHUB,
   git_host: 'github.com',
   git_user: 'D-B-Hawk',
   node_type: 'g3.large',
