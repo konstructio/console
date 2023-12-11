@@ -1,4 +1,4 @@
-import { Row } from '../';
+import { GitProvider, Row } from '../';
 import { AdvancedOptions, InstallationType } from '../redux';
 import { TagColor } from '../../components/tag';
 
@@ -62,7 +62,7 @@ export interface ClusterResponse {
   cluster_id: string;
   cluster_type: ClusterType.MANAGEMENT;
   alerts_email: string;
-  git_provider: string;
+  git_provider: GitProvider;
   git_host: string;
   git_user: string;
   node_type: string;
@@ -153,7 +153,7 @@ export interface Cluster {
   subDomainName?: string;
   dnsProvider: string;
   environment?: ClusterEnvironment;
-  gitProvider: string;
+  gitProvider: GitProvider;
   instanceSize?: string;
   nodeCount?: number;
   status: ClusterStatus;

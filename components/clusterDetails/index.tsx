@@ -28,6 +28,7 @@ import {
 } from '@/types/provision';
 import StatusIndicator from '@/components/statusIndicator';
 import { BISCAY, VOLCANIC_SAND } from '@/constants/colors';
+import { GIT_PROVIDER_DISPLAY_NAME } from '@/constants';
 import Tag from '@/components/tag';
 
 export interface ClusterDetailsProps extends Omit<ComponentPropsWithoutRef<'div'>, 'key'> {
@@ -130,7 +131,7 @@ const ClusterDetails: FunctionComponent<ClusterDetailsProps> = ({
         <RowInfo>
           <ColumnInfo>
             <StyledLabel variant="labelLarge">GIT provider</StyledLabel>
-            <StyledValue variant="body2">{gitProvider}</StyledValue>
+            <StyledValue variant="body2">{GIT_PROVIDER_DISPLAY_NAME[gitProvider]}</StyledValue>
           </ColumnInfo>
           <ColumnInfo>
             <StyledLabel variant="labelLarge">Cloud provider</StyledLabel>

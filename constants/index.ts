@@ -1,3 +1,4 @@
+import { GitProvider } from '@/types';
 import { TagColor, TagIconOption } from '../components/tag';
 import { ClusterStatus, ClusterType } from '../types/provision';
 
@@ -76,3 +77,8 @@ export const DEFAULT_CLOUD_INSTANCE_SIZES: Record<
 };
 
 export const RESERVED_DRAFT_CLUSTER_NAME = 'draft';
+
+export const GIT_PROVIDER_DISPLAY_NAME: Record<GitProvider, string> = {
+  [GitProvider.GITHUB]: 'GitHub',
+  [GitProvider.GITLAB]: 'GitLab',
+};

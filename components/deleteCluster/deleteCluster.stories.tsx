@@ -1,12 +1,13 @@
 import React, { FunctionComponent, useState } from 'react';
 import { Meta, StoryObj } from '@storybook/react';
 
-import Button from '../button';
-import { noop } from '../../utils/noop';
-import { Cluster, ClusterStatus, ClusterType } from '../../types/provision';
-import { InstallationType } from '../../types/redux';
-
 import DeleteCluster, { DeleteClusterProps } from '.';
+
+import Button from '@/components/button';
+import { noop } from '@/utils/noop';
+import { Cluster, ClusterStatus, ClusterType } from '@/types/provision';
+import { InstallationType } from '@/types/redux';
+import { GitProvider } from '@/types';
 
 const meta: Meta<typeof DeleteCluster> = {
   title: 'Components/DeleteCluster',
@@ -25,7 +26,7 @@ const clusters: Cluster[] = [
     creationDate: '05 Apr 2023, 12:24:56',
     status: ClusterStatus.PROVISIONED,
     adminEmail: 'admin@mycompany.com',
-    gitProvider: 'Github',
+    gitProvider: GitProvider.GITHUB,
     domainName: 'yourdomain.com',
     dnsProvider: 'civo',
     nodeCount: 2,
@@ -44,7 +45,7 @@ const clusters: Cluster[] = [
     creationDate: '05 Apr 2023, 12:24:56',
     status: ClusterStatus.ERROR,
     adminEmail: 'admin@mycompany.com',
-    gitProvider: 'Github',
+    gitProvider: GitProvider.GITHUB,
     domainName: 'yourdomain.com',
     dnsProvider: 'civo',
     nodeCount: 2,
