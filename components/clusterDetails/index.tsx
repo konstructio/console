@@ -28,7 +28,7 @@ import {
 } from '@/types/provision';
 import StatusIndicator from '@/components/statusIndicator';
 import { BISCAY, VOLCANIC_SAND } from '@/constants/colors';
-import { GIT_PROVIDER_DISPLAY_NAME } from '@/constants';
+import { CLOUD_PROVIDER_DISPLAY_NAME, GIT_PROVIDER_DISPLAY_NAME } from '@/constants';
 import Tag from '@/components/tag';
 
 export interface ClusterDetailsProps extends Omit<ComponentPropsWithoutRef<'div'>, 'key'> {
@@ -135,7 +135,7 @@ const ClusterDetails: FunctionComponent<ClusterDetailsProps> = ({
           </ColumnInfo>
           <ColumnInfo>
             <StyledLabel variant="labelLarge">Cloud provider</StyledLabel>
-            <StyledValue variant="body2">{cloudProvider}</StyledValue>
+            <StyledValue variant="body2">{CLOUD_PROVIDER_DISPLAY_NAME[cloudProvider]}</StyledValue>
           </ColumnInfo>
         </RowInfo>
 

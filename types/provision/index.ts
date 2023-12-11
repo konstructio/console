@@ -69,10 +69,10 @@ export interface ClusterResponse {
   node_count: number;
   workload_clusters?: {
     admin_email: string;
-    cloud_provider: string;
+    cloud_provider: InstallationType;
     cluster_id: string;
     cluster_name: string;
-    cluster_type: string;
+    cluster_type: ClusterType;
     cloud_region: string;
     creation_timestamp: string;
     domain_name: string;
@@ -143,7 +143,7 @@ export interface ClusterResponse {
 
 export interface Cluster {
   adminEmail: string;
-  cloudProvider?: InstallationType;
+  cloudProvider: InstallationType;
   type: ClusterType;
   clusterId: string;
   clusterName: string;

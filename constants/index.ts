@@ -82,3 +82,12 @@ export const GIT_PROVIDER_DISPLAY_NAME: Record<GitProvider, string> = {
   [GitProvider.GITHUB]: 'GitHub',
   [GitProvider.GITLAB]: 'GitLab',
 };
+
+export const CLOUD_PROVIDER_DISPLAY_NAME: Record<InstallationType, string> = {
+  [InstallationType.AWS]: 'AWS',
+  [InstallationType.CIVO]: 'Civo',
+  [InstallationType.DIGITAL_OCEAN]: 'DigitalOcean',
+  [InstallationType.GOOGLE]: 'Google',
+  [InstallationType.VULTR]: 'Vultr',
+  [InstallationType.LOCAL]: 'K3D',
+};
