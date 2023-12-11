@@ -89,7 +89,10 @@ const ClusterDetails: FunctionComponent<ClusterDetailsProps> = ({
             </ExternalLink>
           </StatusIndicator>
           <StatusIndicator available={available}>
-            <ExternalLink href={`https://${host}/${gitOwner}`} available={available}>
+            <ExternalLink
+              href={`https://${host}/${gitOwner}/gitops/tree/main/registry/clusters/${clusterName}`}
+              available={available}
+            >
               View your {gitProvider} cluster configuration
             </ExternalLink>
           </StatusIndicator>
