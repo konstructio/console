@@ -159,7 +159,7 @@ const ClusterDetails: FunctionComponent<ClusterDetailsProps> = ({
           <ColumnInfo>
             <StyledLabel variant="labelLarge">Instance size</StyledLabel>
             <StyledValue variant="body2" style={{ width: '100%' }}>
-              {instanceSize}
+              {instanceSize?.toUpperCase()}
             </StyledValue>
           </ColumnInfo>
         </RowInfo>

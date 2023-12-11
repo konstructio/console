@@ -1,8 +1,7 @@
-import { GitProvider } from '@/types';
-import { TagColor, TagIconOption } from '../components/tag';
-import { ClusterStatus, ClusterType } from '../types/provision';
-
+import { TagColor, TagIconOption } from '@/components/tag';
+import { ClusterStatus, ClusterType } from '@/types/provision';
 import { InstallationType } from '@/types/redux';
+import { GitProvider } from '@/types';
 
 export const AWS_REGIONS = [
   { label: 'US East (Ohio) (us-east-2)', value: 'us-east-2' },
