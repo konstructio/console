@@ -64,7 +64,7 @@ const PROVIDER_OPTIONS: Record<
 
     height: 50,
     width: 50,
-    beta: true,
+    beta: false,
   },
   [InstallationType.VULTR]: {
     logoSrc: vultrLogo,
