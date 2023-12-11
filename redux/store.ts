@@ -20,6 +20,7 @@ import {
   environmentsReducer,
   notificationsReducer,
   licenseReducer,
+  digitalOceanReducer,
 } from './slices';
 
 const rootReducer = combineReducers({
@@ -36,6 +37,7 @@ const rootReducer = combineReducers({
   environments: environmentsReducer,
   notifications: notificationsReducer,
   license: licenseReducer,
+  digitalOcean: digitalOceanReducer,
 });
 
 const config = getPersistConfig({

@@ -1,14 +1,14 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { GitLabGroup, GitLabProject, GitLabUser } from 'types/gitlab';
 
-import { githubApi } from '../../services/github';
-import { gitlabApi } from '../../services/gitlab';
+import { GitLabGroup, GitLabProject, GitLabUser } from '@/types/gitlab';
 import {
   GithubOrganizationRepos,
   GithubOrganizationTeams,
   GithubUser,
   GithubUserOrganization,
-} from '../../types/github';
+} from '@/types/github';
+import { gitlabApi } from '@/services/gitlab';
+import { githubApi } from '@/services/github';
 
 export const getGithubUser = createAsyncThunk<GithubUser, string>(
   'git/getGithubUser',
