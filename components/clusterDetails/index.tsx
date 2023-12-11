@@ -104,7 +104,7 @@ const ClusterDetails: FunctionComponent<ClusterDetailsProps> = ({
         <RowInfo>
           <ColumnInfo>
             <StyledLabel variant="labelLarge">Cluster domain name</StyledLabel>
-            <StyledValue variant="body2">{domainName}</StyledValue>
+            <StyledValue variant="body2">{fullDomainName}</StyledValue>
           </ColumnInfo>
           <ColumnInfo>
             <StyledLabel variant="labelLarge">Alerts email</StyledLabel>
