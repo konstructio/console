@@ -53,9 +53,11 @@ const SetupForm: FunctionComponent = () => {
     installType,
     values,
     clusterMap,
-  } = useAppSelector(({ api, installation }) => ({
+    showCloudflareCaIssuerField,
+  } = useAppSelector(({ api, installation, featureFlags }) => ({
     ...api,
     ...installation,
+    showCloudflareCaIssuerField: featureFlags.flags.showCloudflareCaIssuerField,
   }));
 
   const {
@@ -274,15 +276,17 @@ const SetupForm: FunctionComponent = () => {
             onErrorText="Invalid token."
             onChange={handleCloudfareToken}
           />
-          <ControlledPassword
-            control={control}
-            name="cloudflareOriginCaIssuerKey"
-            label="Cloudflare origin ca issuer key"
-            rules={{
-              required: false,
-            }}
-            onErrorText="Invalid issuer key"
-          />
+          {showCloudflareCaIssuerField && (
+            <ControlledPassword
+              control={control}
+              name="cloudflareOriginCaIssuerKey"
+              label="Cloudflare origin ca issuer key"
+              rules={{
+                required: false,
+              }}
+              onErrorText="Invalid issuer key"
+            />
+          )}
         </>
       )}
       <ControlledAutocomplete
