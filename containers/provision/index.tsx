@@ -36,8 +36,14 @@ import {
 import LearnMore from '@/components/learnMore';
 
 const FOOTER_LINKS_INFO: Record<number, { linkTitle: string; href: string }> = {
-  1: { linkTitle: 'authentication', href: '#' },
-  2: { linkTitle: 'configuring your cluster', href: '#' },
+  1: {
+    linkTitle: 'authentication',
+    href: 'https://docs.kubefirst.io/do/quick-start/install/cli/#github-prerequisites',
+  },
+  2: {
+    linkTitle: 'configuring your cluster',
+    href: 'https://docs.kubefirst.io/do/quick-start/install/ui#step-2-install-your-kubefirst-management-cluster',
+  },
 };
 
 const Provision: FunctionComponent = () => {
@@ -234,7 +240,7 @@ const Provision: FunctionComponent = () => {
               showAdvancedOptions ? (
                 <FormFooter>
                   <LearnMore
-                    href=""
+                    href="https://docs.kubefirst.io/do/explore/gitops#using-your-own-gitops-template-repository-fork "
                     linkTitle="Customizing the GitOps template"
                     description="Learn more about"
                   />
