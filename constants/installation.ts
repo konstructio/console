@@ -58,6 +58,7 @@ export const INFO_INSTALLATION_TYPES: Record<InstallationType, Record<number, In
         'Create a <a href="https://cloud.digitalocean.com/registrations/new" target="_blank">DigitalOcean account</a>.',
         'Add your <a href="https://docs.digitalocean.com/products/networking/dns/how-to/add-domains/" target="_blank">domain name</a>.',
         'Create a personal <a href="https://docs.digitalocean.com/reference/api/create-personal-access-token" target="_blank">access token</a>.',
+        'Generate Spaces <a href="https://docs.digitalocean.com/products/spaces/how-to/manage-access/#access-keys" target="_blank">access key</a>.',
       ],
     },
   },
