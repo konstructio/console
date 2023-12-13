@@ -6,7 +6,6 @@ import { Required } from '../../../../components/textField/textField.styled';
 import GitProviderButton from '../../../../components/gitProviderButton';
 import Typography from '../../../../components/typography';
 import { useInstallation } from '../../../../hooks/useInstallation';
-// import LearnMore from '../../../../components/learnMore';
 import ControlledPassword from '../../../../components/controlledFields/Password';
 import ControlledAutocomplete from '../../../../components/controlledFields/AutoComplete';
 import ControlledTextArea from '../../../../components/controlledFields/textArea';
@@ -206,8 +205,8 @@ const AuthForm: FunctionComponent = () => {
         </div>
       )}
       <FormContainer isVisible={!isMarketplace || (isMarketplace && isGitSelected)}>
-        <Row style={{ justifyContent: 'space-between' }}>
-          <Row style={{ width: '432px' }}>
+        <Row style={{ justifyContent: 'space-between', gap: '24px' }}>
+          <Row style={{ width: '100%' }}>
             <ControlledPassword
               control={control}
               name="gitToken"
@@ -338,7 +337,6 @@ const AuthForm: FunctionComponent = () => {
           ),
         )}
       </FormContainer>
-      {/* <LearnMore description="Learn more about" href="" linkTitle="authentication" /> */}
     </>
   );
 };

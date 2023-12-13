@@ -3,7 +3,6 @@ import { useFormContext } from 'react-hook-form';
 
 import ControlledTextField from '../../../../components/controlledFields/TextField';
 import ControlledPassword from '../../../../components/controlledFields/Password';
-// import LearnMore from '../../../../components/learnMore';
 import { InstallValues } from '../../../../types/redux';
 
 export const LocalSetupForm: FunctionComponent = () => {
@@ -32,7 +31,6 @@ export const LocalSetupForm: FunctionComponent = () => {
         rules={{ required: false }}
         label="GitOps template branch"
       />
-      {/* <LearnMore description="Learn more about" href="" linkTitle="configuring your cluster" /> */}
     </>
   );
 };

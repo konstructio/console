@@ -29,7 +29,6 @@ const AdvancedOptions: FunctionComponent = () => {
         description="Learn more about"
         href=""
         linkTitle="customizing the GitOps template"
-        withoutDivider
       />
       <ControlledTextField
         control={control}

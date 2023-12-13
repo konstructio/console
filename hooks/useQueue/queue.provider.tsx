@@ -15,6 +15,7 @@ import { createNotification } from '../../redux/slices/notifications.slice';
 import QueueContext from './queue.context';
 
 import { getClusters } from '@/redux/thunks/api.thunk';
+import { RESERVED_DRAFT_CLUSTER_NAME } from '@/constants';
 
 const QueueProvider: FunctionComponent<PropsWithChildren> = ({ children }) => {
   const { clusterQueue, clusterMap } = useAppSelector(({ queue, api }) => ({ ...queue, ...api }));
@@ -81,8 +82,11 @@ const QueueProvider: FunctionComponent<PropsWithChildren> = ({ children }) => {
   useEffect(() => {
     // Look inside of clusterMap as well for the workload clusters that have been provisioned
     // during the during the creation of the management cluster.
+    // omit draft cluster that is a part of the clusterMap during provisioning of a
+    // new workload cluster
     Object.values({ ...clusterQueue, ...clusterMap }).forEach(({ clusterName, status }) => {
       if (
+        clusterName !== RESERVED_DRAFT_CLUSTER_NAME &&
         !queue[clusterName] &&
         [ClusterStatus.DELETING, ClusterStatus.PROVISIONING].includes(status)
       ) {

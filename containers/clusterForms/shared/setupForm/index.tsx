@@ -312,6 +312,7 @@ const SetupForm: FunctionComponent = () => {
         name="clusterName"
         label="Cluster name"
         defaultValue={values?.clusterName}
+        required
         rules={{
           maxLength: 25,
           required: 'Cluster name is required',
@@ -336,7 +337,6 @@ const SetupForm: FunctionComponent = () => {
           },
         }}
         onErrorText={errors.clusterName?.message}
-        required
       />
       {installType === InstallationType.GOOGLE && (
         <CheckBoxContainer>
@@ -354,7 +354,6 @@ const SetupForm: FunctionComponent = () => {
           />
         </CheckBoxContainer>
       )}
-      {/* <LearnMore description="Learn more about" href="" linkTitle="configuring your cluster" /> */}
     </>
   );
 };

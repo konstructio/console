@@ -24,6 +24,7 @@ import DeleteEnvironment from '../../components/deleteEnvironment';
 import { clearEnvironmentError } from '../../redux/slices/environments.slice';
 
 import { noop } from '@/utils/noop';
+import { VOLCANIC_SAND } from '@/constants/colors';
 
 const Environments: FunctionComponent = () => {
   const { isOpen, close, open } = useToggle();
@@ -90,7 +91,6 @@ const Environments: FunctionComponent = () => {
         <HeadingContainer>
           <Typography variant="h6">Environments</Typography>
           <LearnMore
-            withoutDivider
             description="Define and add you environments."
             linkTitle="Learn more"
             href="https://docs.kubefirst.io/civo/quick-start/cluster-management"
@@ -155,6 +155,10 @@ const Header = styled(Row)`
 
 const HeadingContainer = styled(Column)`
   gap: 8px;
+
+  ${LearnMore} {
+    color: ${VOLCANIC_SAND};
+  }
 `;
 
 const DisplayContainer = styled(Column)`

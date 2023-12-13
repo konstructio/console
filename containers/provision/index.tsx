@@ -1,5 +1,5 @@
 'use client';
-import React, { FunctionComponent, useCallback, useEffect, useMemo } from 'react';
+import React, { FunctionComponent, useCallback, useEffect, useMemo, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 
 import InstallationStepContainer from '../../components/installationStepContainer';
@@ -25,9 +25,23 @@ import { GitProvider } from '../../types';
 import { AUTHENTICATION_ERROR_MSG, DEFAULT_CLOUD_INSTANCE_SIZES } from '../../constants';
 import { useQueue } from '../../hooks/useQueue';
 
-import { AdvancedOptionsContainer, ErrorContainer, Form, FormContent } from './provision.styled';
+import {
+  AdvancedOptionsContainer,
+  ErrorContainer,
+  Form,
+  FormContent,
+  FormFooter,
+} from './provision.styled';
+
+import LearnMore from '@/components/learnMore';
+
+const FOOTER_LINKS_INFO: Record<number, { linkTitle: string; href: string }> = {
+  1: { linkTitle: 'authentication', href: '#' },
+  2: { linkTitle: 'configuring your cluster', href: '#' },
+};
 
 const Provision: FunctionComponent = () => {
+  const [showAdvancedOptions, setShowAdvancedOptions] = useState(false);
   const dispatch = useAppDispatch();
   const { deleteClusterFromQueue } = useQueue();
 
@@ -183,6 +197,8 @@ const Provision: FunctionComponent = () => {
     await dispatch(createCluster());
   }, [deleteClusterFromQueue, dispatch, error, getValues, installValues?.clusterName]);
 
+  const { linkTitle = '', href = '#' } = FOOTER_LINKS_INFO[installationStep] ?? {};
+
   const form = useMemo(() => {
     if (installationStep === 0 && !isMarketplace) {
       return <InstallationsSelection />;
@@ -190,7 +206,16 @@ const Provision: FunctionComponent = () => {
 
     return (
       <>
-        <FormContent hasInfo={hasInfo} isLastStep={isLastStep} isProvisionStep={isProvisionStep}>
+        <FormContent
+          hasInfo={hasInfo}
+          isLastStep={isLastStep}
+          isProvisionStep={isProvisionStep}
+          footerContent={
+            <FormFooter>
+              <LearnMore href={href} linkTitle={linkTitle} description="Learn more about" />
+            </FormFooter>
+          }
+        >
           {error || authErrors.length ? (
             <ErrorContainer>
               <ErrorBanner error={error || authErrors} />
@@ -204,8 +229,23 @@ const Provision: FunctionComponent = () => {
           <FormFlow currentStep={isMarketplace ? installationStep + 1 : installationStep} />
         </FormContent>
         {isSetupStep && installType && ![InstallationType.LOCAL].includes(installType) && (
-          <AdvancedOptionsContainer>
-            <AdvancedOptions />
+          <AdvancedOptionsContainer
+            footerContent={
+              showAdvancedOptions ? (
+                <FormFooter>
+                  <LearnMore
+                    href=""
+                    linkTitle="Customizing the GitOps template"
+                    description="Learn more about"
+                  />
+                </FormFooter>
+              ) : null
+            }
+          >
+            <AdvancedOptions
+              advancedOptionsChecked={showAdvancedOptions}
+              onAdvancedOptionsChange={(checked) => setShowAdvancedOptions(checked)}
+            />
           </AdvancedOptionsContainer>
         )}
       </>
@@ -221,6 +261,9 @@ const Provision: FunctionComponent = () => {
     provisionCluster,
     isSetupStep,
     installType,
+    showAdvancedOptions,
+    linkTitle,
+    href,
   ]);
 
   useEffect(() => {

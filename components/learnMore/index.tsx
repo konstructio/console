@@ -1,18 +1,18 @@
-import React, { ComponentPropsWithoutRef, FunctionComponent } from 'react';
-import Divider from '@mui/material/Divider';
+import React, { FunctionComponent } from 'react';
 import styled from 'styled-components';
 
 import NextLink from '../../components/nextLink';
 import { InstallationType } from '../../types/redux';
+import { ITypographyProps, Variant } from '../typography';
 
 import { Text } from './learnMore.styled';
 
-export interface LearnMoreProps extends ComponentPropsWithoutRef<'div'> {
+export interface LearnMoreProps extends Omit<ITypographyProps, 'variant' | 'children'> {
   description: string;
   href: string;
   linkTitle: string;
   installType?: InstallationType;
-  withoutDivider?: boolean;
+  variant?: Variant;
 }
 
 const LearnMore: FunctionComponent<LearnMoreProps> = ({
@@ -20,7 +20,7 @@ const LearnMore: FunctionComponent<LearnMoreProps> = ({
   href,
   installType,
   linkTitle,
-  withoutDivider,
+  variant = 'labelLarge',
   ...rest
 }) => {
   const docsDomainLink = `https://docs.kubefirst.io/${
@@ -30,21 +30,17 @@ const LearnMore: FunctionComponent<LearnMoreProps> = ({
   }`;
 
   return (
-    <div {...rest}>
-      {!withoutDivider && <Divider sx={{ m: '-20px', p: '8px 0' }} />}
-      <Text variant="labelLarge">
-        {description}{' '}
-        <NextLink
-          href={
-            href ||
-            `${docsDomainLink}/explore/gitops#using-your-own-gitops-template-repository-fork`
-          }
-          target="_blank"
-        >
-          {linkTitle}
-        </NextLink>
-      </Text>
-    </div>
+    <Text variant={variant} {...rest}>
+      {description}{' '}
+      <NextLink
+        href={
+          href || `${docsDomainLink}/explore/gitops#using-your-own-gitops-template-repository-fork`
+        }
+        target="_blank"
+      >
+        {linkTitle}
+      </NextLink>
+    </Text>
   );
 };
 
