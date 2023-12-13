@@ -8,6 +8,7 @@ export enum FeatureFlag {
   CLUSTER_PROVISIONING = 'cluster-provisioning',
   CLUSTER_MANAGEMENT = 'cluster-managament',
   MARKETPLACE = 'marketplace',
+  SHOW_CLOUDFLARE_CA_ISSUER = 'showCloudflareCaIssuerField',
 }
 
 export interface EnvironmentVariables {
