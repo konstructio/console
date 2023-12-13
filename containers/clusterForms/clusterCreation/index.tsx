@@ -231,7 +231,6 @@ const ClusterCreationForm: FunctionComponent<Omit<ComponentPropsWithoutRef<'div'
           href="https://docs.kubefirst.io/civo/quick-start/cluster-management "
           description="A partitioned space in your management cluster."
           linkTitle="Learn More"
-          withoutDivider
         />
       </InputContainer>
       <>
