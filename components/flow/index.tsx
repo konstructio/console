@@ -13,7 +13,6 @@ import {
 } from '../../redux/slices/reactFlow.slice';
 import 'reactflow/dist/style.css';
 import { generateNodesConfig } from '../../utils/reactFlow';
-import { Cluster } from '../../types/provision';
 
 import CustomReactFlowControls from './controls';
 
@@ -24,7 +23,7 @@ const nodeTypes: NodeTypes = {
 };
 
 interface GraphViewProps {
-  onNodeClick: (cluster: Cluster) => void;
+  onNodeClick: (clusterName: string) => void;
 }
 
 const GraphView: FunctionComponent<GraphViewProps> = ({ onNodeClick }) => {
@@ -77,7 +76,7 @@ const GraphView: FunctionComponent<GraphViewProps> = ({ onNodeClick }) => {
       onNodesChange={(changes) => dispatch(onNodesChange(changes))}
       onEdgesChange={(changes) => dispatch(onEdgesChange(changes))}
       onConnect={(connection) => dispatch(onConnect(connection))}
-      onNodeClick={(_, node) => onNodeClick(node.data)}
+      onNodeClick={(_, node) => onNodeClick(node.data.clusterName)}
       nodeTypes={nodeTypes}
       fitView
     >
