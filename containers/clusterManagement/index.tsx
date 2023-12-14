@@ -65,6 +65,8 @@ const ClusterManagement: FunctionComponent = () => {
     ...featureFlags.flags,
   }));
 
+  const dispatch = useAppDispatch();
+
   const { hasPermissions } = usePhysicalClustersPermissions(managementCluster?.cloudProvider);
 
   const defaultClusterType = useMemo(() => {
@@ -99,8 +101,6 @@ const ClusterManagement: FunctionComponent = () => {
     closeModal: closeDeleteModal,
   } = useModal();
 
-  const dispatch = useAppDispatch();
-
   const handleMenuClose = useCallback(() => {
     if (clusterCreationStep === ClusterCreationStep.CONFIG) {
       dispatch(removeDraftCluster());
@@ -132,9 +132,9 @@ const ClusterManagement: FunctionComponent = () => {
     [dispatch, presentedClusterName],
   );
 
-  const handleNodeClick = useCallback(
-    (cluster: Cluster) => {
-      dispatch(setPresentedClusterName(cluster.clusterName));
+  const handleClusterSelect = useCallback(
+    (clusterName: string) => {
+      dispatch(setPresentedClusterName(clusterName));
       dispatch(setClusterCreationStep(ClusterCreationStep.DETAILS));
       openCreateClusterFlow();
     },
@@ -191,6 +191,11 @@ const ClusterManagement: FunctionComponent = () => {
     [dispatch, openDeleteModal],
   );
 
+  const handleDeleteMenuClose = useCallback(() => {
+    dispatch(setPresentedClusterName(undefined));
+    closeDeleteModal();
+  }, [dispatch, closeDeleteModal]);
+
   return (
     <Container>
       <Header>
@@ -231,11 +236,13 @@ const ClusterManagement: FunctionComponent = () => {
               clusters={clusterMap}
               managementCluster={managementCluster}
               onDeleteCluster={handleDeleteMenuClick}
+              selectedClusterName={presentedCluster?.clusterName}
+              onClusterRowSelected={handleClusterSelect}
             />
           )}
         </TabPanel>
         <TabPanel value={clusterManagementTab} index={ClusterManagementTab.GRAPH_VIEW}>
-          <Flow onNodeClick={handleNodeClick} />
+          <Flow onNodeClick={handleClusterSelect} />
         </TabPanel>
       </Content>
       <StyledDrawer open={createClusterFlowOpen} onClose={handleMenuClose} anchor="right">
@@ -259,7 +266,7 @@ const ClusterManagement: FunctionComponent = () => {
       {!!presentedCluster && (
         <DeleteCluster
           isOpen={isDeleteModalOpen}
-          onCloseModal={closeDeleteModal}
+          onCloseModal={handleDeleteMenuClose}
           onDelete={handleDeleteCluster}
           cluster={presentedCluster}
         />

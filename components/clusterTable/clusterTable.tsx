@@ -1,4 +1,11 @@
-import React, { useState, FunctionComponent, useMemo, ComponentPropsWithRef } from 'react';
+import React, {
+  useState,
+  FunctionComponent,
+  useMemo,
+  ComponentPropsWithRef,
+  useCallback,
+  MouseEvent,
+} from 'react';
 import { ClickAwayListener } from '@mui/material';
 import TableHead from '@mui/material/TableHead';
 import IconButton from '@mui/material/IconButton';
@@ -71,6 +78,8 @@ type ClusterRowProps = {
   showExpandButton?: boolean;
   onExpanseClick?: () => void;
   onDeleteCluster: (clusterName: string) => void;
+  onClusterRowSelected: (clusterName: string) => void;
+  selected?: boolean;
 };
 
 const ClusterRow: FunctionComponent<ClusterRowProps> = ({
@@ -79,6 +88,8 @@ const ClusterRow: FunctionComponent<ClusterRowProps> = ({
   showExpandButton,
   onExpanseClick = noop,
   onDeleteCluster,
+  onClusterRowSelected,
+  selected,
 }) => {
   const { isOpen, close, toggle } = useToggle();
 
@@ -98,92 +109,108 @@ const ClusterRow: FunctionComponent<ClusterRowProps> = ({
   const { iconLabel, iconType, bgColor } = CLUSTER_TAG_CONFIG[status ?? ClusterStatus.PROVISIONED];
   const { nameLabel, typeLabel } = FORMATTED_CLUSTER_TYPE[type ?? ClusterType.MANAGEMENT];
 
+  const highlighted = useMemo(() => selected || isOpen, [selected, isOpen]);
+
+  const handleClick = useCallback(
+    (e: MouseEvent<HTMLButtonElement>) => {
+      e.stopPropagation();
+      toggle();
+    },
+    [toggle],
+  );
+
+  const handleListItemClick = useCallback(
+    (e: MouseEvent<HTMLDivElement>) => {
+      e.stopPropagation();
+      onDeleteCluster(clusterName);
+    },
+    [onDeleteCluster, clusterName],
+  );
+
   return (
-    <>
-      <StyledTableRow selected={isOpen}>
-        <StyledTableCell align="right" style={{ width: '50px' }} selected={isOpen}>
-          {type === ClusterType.MANAGEMENT && showExpandButton && (
-            <StyledIconButton
-              aria-label="expand row"
-              size="small"
-              onClick={onExpanseClick}
-              expanded={expanded}
-            >
-              <KeyboardArrowDownIcon />
-            </StyledIconButton>
-          )}
-        </StyledTableCell>
-        <StyledTableCell scope="row" selected={isOpen}>
-          <StyledCellText variant="body2" style={{ fontWeight: 500 }}>
-            {clusterName}
-          </StyledCellText>
-          <StyledCellText variant="body2" style={{ color: DODGER_BLUE }}>
-            {nameLabel}
-          </StyledCellText>
-        </StyledTableCell>
-        <StyledTableCell selected={isOpen}>
-          <StyledCellText variant="body2">{typeLabel}</StyledCellText>
-        </StyledTableCell>
-        <StyledTableCell selected={isOpen}>
-          <StyledCellText variant="body2">
-            {environment && <Tag text={environment.name ?? ''} bgColor={environment.color} />}
-          </StyledCellText>
-        </StyledTableCell>
-        <StyledTableCell align="left" selected={isOpen}>
-          <Image src={cloudLogoSrc} height={18} width={30} alt={cloudProvider ?? ''} />
-        </StyledTableCell>
-        <StyledTableCell selected={isOpen}>
-          <StyledCellText variant="body2">{cloudRegion}</StyledCellText>
-        </StyledTableCell>
-        <StyledTableCell align="center" selected={isOpen}>
-          {type !== ClusterType.WORKLOAD_V_CLUSTER && (
-            <StyledCellText variant="body2">{nodeCount}</StyledCellText>
-          )}
-        </StyledTableCell>
-        <StyledTableCell selected={isOpen}>
-          {creationDate && (
-            <StyledCellText variant="body2">
-              {moment(+creationDate).format('DD MMM YYYY, HH:MM:SS')}
-            </StyledCellText>
-          )}
-        </StyledTableCell>
-        <StyledTableCell selected={isOpen}>
-          <StyledCellText variant="body2">{gitUser}</StyledCellText>
-        </StyledTableCell>
-        <StyledTableCell selected={isOpen}>
-          <StyledTag
-            text={iconLabel}
-            bgColor={bgColor}
-            icon={iconType}
-            spinImage={status === ClusterStatus.PROVISIONING}
-          />
-        </StyledTableCell>
-        <StyledTableCell style={{ position: 'relative' }} selected={isOpen}>
-          <IconButton
-            aria-label="more info"
-            onClick={toggle}
-            disabled={status === ClusterStatus.DELETED}
+    <StyledTableRow selected={highlighted} onClick={() => onClusterRowSelected(clusterName)}>
+      <StyledTableCell align="right" style={{ width: '50px' }} selected={highlighted}>
+        {type === ClusterType.MANAGEMENT && showExpandButton && (
+          <StyledIconButton
+            aria-label="expand row"
+            size="small"
+            onClick={onExpanseClick}
+            expanded={expanded}
           >
-            <MoreHorizIcon />
-          </IconButton>
-          {isOpen && (
-            <ClickAwayListener onClickAway={close}>
-              <Menu>
-                <List>
-                  <ListItem disablePadding>
-                    <ListItemButton onClick={() => onDeleteCluster(clusterName)}>
-                      <Typography variant="body2" style={{ color: `${FIRE_BRICK}` }}>
-                        Delete cluster
-                      </Typography>
-                    </ListItemButton>
-                  </ListItem>
-                </List>
-              </Menu>
-            </ClickAwayListener>
-          )}
-        </StyledTableCell>
-      </StyledTableRow>
-    </>
+            <KeyboardArrowDownIcon />
+          </StyledIconButton>
+        )}
+      </StyledTableCell>
+      <StyledTableCell scope="row" selected={highlighted}>
+        <StyledCellText variant="body2" style={{ fontWeight: 500 }}>
+          {clusterName}
+        </StyledCellText>
+        <StyledCellText variant="body2" style={{ color: DODGER_BLUE }}>
+          {nameLabel}
+        </StyledCellText>
+      </StyledTableCell>
+      <StyledTableCell selected={highlighted}>
+        <StyledCellText variant="body2">{typeLabel}</StyledCellText>
+      </StyledTableCell>
+      <StyledTableCell selected={highlighted}>
+        <StyledCellText variant="body2">
+          {environment && <Tag text={environment.name ?? ''} bgColor={environment.color} />}
+        </StyledCellText>
+      </StyledTableCell>
+      <StyledTableCell align="left" selected={highlighted}>
+        <Image src={cloudLogoSrc} height={18} width={30} alt={cloudProvider ?? ''} />
+      </StyledTableCell>
+      <StyledTableCell selected={highlighted}>
+        <StyledCellText variant="body2">{cloudRegion}</StyledCellText>
+      </StyledTableCell>
+      <StyledTableCell align="center" selected={highlighted}>
+        {type !== ClusterType.WORKLOAD_V_CLUSTER && (
+          <StyledCellText variant="body2">{nodeCount}</StyledCellText>
+        )}
+      </StyledTableCell>
+      <StyledTableCell selected={highlighted}>
+        {creationDate && (
+          <StyledCellText variant="body2">
+            {moment(+creationDate).format('DD MMM YYYY, HH:MM:SS')}
+          </StyledCellText>
+        )}
+      </StyledTableCell>
+      <StyledTableCell selected={highlighted}>
+        <StyledCellText variant="body2">{gitUser}</StyledCellText>
+      </StyledTableCell>
+      <StyledTableCell selected={highlighted}>
+        <StyledTag
+          text={iconLabel}
+          bgColor={bgColor}
+          icon={iconType}
+          spinImage={status === ClusterStatus.PROVISIONING}
+        />
+      </StyledTableCell>
+      <StyledTableCell style={{ position: 'relative' }} selected={highlighted}>
+        <IconButton
+          aria-label="more info"
+          onClick={handleClick}
+          disabled={status === ClusterStatus.DELETED}
+        >
+          <MoreHorizIcon />
+        </IconButton>
+        {isOpen && (
+          <ClickAwayListener onClickAway={close}>
+            <Menu>
+              <List>
+                <ListItem disablePadding>
+                  <ListItemButton onClick={handleListItemClick}>
+                    <Typography variant="body2" style={{ color: `${FIRE_BRICK}` }}>
+                      Delete cluster
+                    </Typography>
+                  </ListItemButton>
+                </ListItem>
+              </List>
+            </Menu>
+          </ClickAwayListener>
+        )}
+      </StyledTableCell>
+    </StyledTableRow>
   );
 };
 
@@ -265,12 +292,16 @@ interface ClusterTableProps extends Omit<ComponentPropsWithRef<'tbody'>, 'key'> 
   clusters: ClusterCache;
   onDeleteCluster: (clusterName: string) => void;
   customRef?: React.Ref<HTMLTableSectionElement>;
+  selectedClusterName?: string;
+  onClusterRowSelected: (clusterName: string) => void;
 }
 
 export const ClusterTable: FunctionComponent<ClusterTableProps> = ({
   managementCluster,
   clusters,
   onDeleteCluster,
+  selectedClusterName,
+  onClusterRowSelected,
   ...rest
 }) => {
   const [expanded, setExpanded] = useState(true);
@@ -307,6 +338,8 @@ export const ClusterTable: FunctionComponent<ClusterTableProps> = ({
             expanded={expanded}
             showExpandButton={!!filteredWorkloadClusters.length}
             onExpanseClick={() => setExpanded(!expanded)}
+            selected={selectedClusterName === managementCluster.clusterName}
+            onClusterRowSelected={onClusterRowSelected}
           />
 
           {expanded &&
@@ -315,6 +348,8 @@ export const ClusterTable: FunctionComponent<ClusterTableProps> = ({
                 key={cluster.clusterName}
                 cluster={cluster}
                 onDeleteCluster={onDeleteCluster}
+                selected={selectedClusterName === cluster.clusterName}
+                onClusterRowSelected={onClusterRowSelected}
               />
             ))}
         </StyledTableBody>
