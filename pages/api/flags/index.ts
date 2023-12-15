@@ -11,10 +11,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
   let flags: Record<string, string | boolean> = {};
   try {
     const client = new PostHog(POSTHOG_KEY || 'phc_N4K5yJQsiIDBRK3X6rfrZlldK5uf2u1vgvlB82RADKn');
-
     client.identify({
       distinctId: KUBEFIRST_VERSION,
-      properties: { version: KUBEFIRST_VERSION },
+      properties: {
+        version: KUBEFIRST_VERSION,
+        flatVersion: parseInt(KUBEFIRST_VERSION.replace('v', '').replaceAll('.', ''), 10),
+      },
     });
 
     flags = (await client.getAllFlags(KUBEFIRST_VERSION)) as Record<string, string | boolean>;
