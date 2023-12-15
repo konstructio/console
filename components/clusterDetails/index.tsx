@@ -130,7 +130,7 @@ const ClusterDetails: FunctionComponent<ClusterDetailsProps> = ({
         {/* Third Row */}
         <RowInfo>
           <ColumnInfo>
-            <StyledLabel variant="labelLarge">GIT provider</StyledLabel>
+            <StyledLabel variant="labelLarge">Git provider</StyledLabel>
             <StyledValue variant="body2">{GIT_PROVIDER_DISPLAY_NAME[gitProvider]}</StyledValue>
           </ColumnInfo>
           <ColumnInfo>
