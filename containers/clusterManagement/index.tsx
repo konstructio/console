@@ -3,33 +3,6 @@ import React, { FunctionComponent, useCallback, useMemo } from 'react';
 import Box from '@mui/material/Box';
 import Tabs from '@mui/material/Tabs';
 
-import Button from '../../components/button';
-import Typography from '../../components/typography';
-import { useAppDispatch, useAppSelector } from '../../redux/store';
-import { createWorkloadCluster, deleteCluster } from '../../redux/thunks/api.thunk';
-import {
-  Cluster,
-  ClusterCreationStep,
-  ClusterStatus,
-  ClusterType,
-  WorkloadCluster,
-} from '../../types/provision';
-import useToggle from '../../hooks/useToggle';
-import useModal from '../../hooks/useModal';
-import DeleteCluster from '../../components/deleteCluster';
-import TabPanel, { Tab, a11yProps } from '../../components/tab';
-import { BISCAY, SALTBOX_BLUE } from '../../constants/colors';
-import { Flow } from '../../components/flow';
-import ClusterTable from '../../components/clusterTable/clusterTable';
-import {
-  createDraftCluster,
-  removeDraftCluster,
-  setClusterCreationStep,
-} from '../../redux/slices/api.slice';
-import { setPresentedClusterName } from '../../redux/slices/api.slice';
-import { setNotifiedOfBetaPhysicalClusters } from '../../redux/slices/notifications.slice';
-import { usePhysicalClustersPermissions } from '../../hooks/usePhysicalClustersPermission';
-
 import { CreateClusterFlow } from './createClusterFlow';
 import {
   Container,
@@ -39,6 +12,31 @@ import {
   StyledDrawer,
 } from './clusterManagement.styled';
 
+import Button from '@/components/button';
+import Typography from '@/components/typography';
+import { useAppDispatch, useAppSelector } from '@/redux/store';
+import { createWorkloadCluster, deleteCluster } from '@/redux/thunks/api.thunk';
+import {
+  ClusterCreationStep,
+  ClusterStatus,
+  ClusterType,
+  WorkloadCluster,
+} from '@/types/provision';
+import useToggle from '@/hooks/useToggle';
+import useModal from '@/hooks/useModal';
+import DeleteCluster from '@/components/deleteCluster';
+import TabPanel, { Tab, a11yProps } from '@/components/tab';
+import { BISCAY, SALTBOX_BLUE } from '@/constants/colors';
+import { Flow } from '@/components/flow';
+import ClusterTable from '@/components/clusterTable/clusterTable';
+import {
+  createDraftCluster,
+  removeDraftCluster,
+  setClusterCreationStep,
+} from '@/redux/slices/api.slice';
+import { setPresentedClusterName } from '@/redux/slices/api.slice';
+import { setNotifiedOfBetaPhysicalClusters } from '@/redux/slices/notifications.slice';
+import { usePhysicalClustersPermissions } from '@/hooks/usePhysicalClustersPermission';
 import { InstallationType } from '@/types/redux';
 import { setClusterManagamentTab } from '@/redux/slices/config.slice';
 import { ClusterManagementTab } from '@/types/config';
@@ -191,11 +189,6 @@ const ClusterManagement: FunctionComponent = () => {
     [dispatch, openDeleteModal],
   );
 
-  const handleDeleteMenuClose = useCallback(() => {
-    dispatch(setPresentedClusterName(undefined));
-    closeDeleteModal();
-  }, [dispatch, closeDeleteModal]);
-
   return (
     <Container>
       <Header>
@@ -266,7 +259,7 @@ const ClusterManagement: FunctionComponent = () => {
       {!!presentedCluster && (
         <DeleteCluster
           isOpen={isDeleteModalOpen}
-          onCloseModal={handleDeleteMenuClose}
+          onCloseModal={closeDeleteModal}
           onDelete={handleDeleteCluster}
           cluster={presentedCluster}
         />

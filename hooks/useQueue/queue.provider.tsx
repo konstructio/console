@@ -84,7 +84,20 @@ const QueueProvider: FunctionComponent<PropsWithChildren> = ({ children }) => {
     // during the during the creation of the management cluster.
     // omit draft cluster that is a part of the clusterMap during provisioning of a
     // new workload cluster
-    Object.values({ ...clusterQueue, ...clusterMap }).forEach(({ clusterName, status }) => {
+    Object.values(clusterMap).forEach(({ clusterId, clusterName, status }) => {
+      if (
+        clusterId !== RESERVED_DRAFT_CLUSTER_NAME &&
+        !queue[clusterName] &&
+        [ClusterStatus.DELETING, ClusterStatus.PROVISIONING].includes(status)
+      ) {
+        queue[clusterName] = getClusterInterval({ clusterName, status });
+      }
+      if (status === ClusterStatus.DELETED) {
+        dispatch(removeClusterFromQueue(clusterName));
+      }
+    });
+
+    Object.values(clusterQueue).forEach(({ clusterName, status }) => {
       if (
         clusterName !== RESERVED_DRAFT_CLUSTER_NAME &&
         !queue[clusterName] &&

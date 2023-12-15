@@ -38,6 +38,10 @@ export const ExternalLink = styled.a.attrs({
     css`
       pointer-events: none;
     `}
+
+  &:hover {
+    text-decoration: underline;
+  }
 `;
 
 export const Link = styled.a`
