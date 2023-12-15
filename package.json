@@ -117,7 +117,8 @@
     "node": ">=18"
   },
   "resolutions": {
-    "styled-components": "^5"
+    "styled-components": "^5",
+    "jackspeak": "2.1.1"
   },
   "volta": {
     "node": "18.18.0",
