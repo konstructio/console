@@ -5,7 +5,7 @@
   "scripts": {
     "check-types": "tsc -p tsconfig.json",
     "dev": "next dev",
-    "build": "next build",
+    "build": "NODE_ENV=production next build",
     "build:start": "next start",
     "start": "next start",
     "lint": "next lint && eslint './**/*.{js,jsx,ts,tsx}'",
@@ -39,7 +39,7 @@
     "instantsearch.js": "^4.56.7",
     "lodash": "^4.17.21",
     "moment": "^2.29.4",
-    "next": "^13.5.4",
+    "next": "13.5.6",
     "next-auth": "^4.23.2",
     "next-redux-wrapper": "^8.0.0",
     "posthog-node": "^3.2.0",
