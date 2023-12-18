@@ -23,7 +23,7 @@ import {
   ClusterEnvironment,
   ManagementCluster,
 } from '@/types/provision';
-import { EXCLUSIVE_PLUM } from '@/constants/colors';
+import { BISCAY, EXCLUSIVE_PLUM } from '@/constants/colors';
 import ControlledNumberInput from '@/components/controlledFields/numberInput';
 import ControlledRadioGroup from '@/components/controlledFields/radio';
 import {
@@ -211,6 +211,9 @@ const ClusterCreationForm: FunctionComponent<Omit<ComponentPropsWithoutRef<'div'
 
   return (
     <Container {...props}>
+      <Typography variant="subtitle1" color={BISCAY}>
+        Create workload cluster
+      </Typography>
       <InputContainer>
         <Typography variant="labelLarge" color={EXCLUSIVE_PLUM}>
           Cluster type
@@ -223,9 +226,7 @@ const ClusterCreationForm: FunctionComponent<Omit<ComponentPropsWithoutRef<'div'
           }}
           options={clusterOptions}
           defaultValue={type}
-          onChange={(clusterType) =>
-            setValue('type', clusterType as ClusterType, { shouldValidate: true })
-          }
+          onChange={(clusterType) => setValue('type', clusterType as ClusterType)}
         />
         <LearnMore
           href="https://docs.kubefirst.io/civo/quick-start/cluster-management "
@@ -262,6 +263,7 @@ const ClusterCreationForm: FunctionComponent<Omit<ComponentPropsWithoutRef<'div'
         name="clusterName"
         defaultValue={clusterName}
         label="Cluster name"
+        required
         rules={{
           maxLength: 25,
           required: 'Cluster name is required',
@@ -280,7 +282,6 @@ const ClusterCreationForm: FunctionComponent<Omit<ComponentPropsWithoutRef<'div'
           },
         }}
         onErrorText={errors.clusterName?.message}
-        required
       />
       {!isVCluster && (
         <>

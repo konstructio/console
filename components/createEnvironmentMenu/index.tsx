@@ -1,4 +1,4 @@
-import React, { ComponentPropsWithoutRef, FunctionComponent } from 'react';
+import React, { ComponentPropsWithoutRef, FormEvent, FunctionComponent, useCallback } from 'react';
 import { useForm } from 'react-hook-form';
 import CloseIcon from '@mui/icons-material/Close';
 import { Alert } from '@mui/material';
@@ -49,8 +49,18 @@ export const CreateEnvironmentMenu: FunctionComponent<CreateEnvironmentMenuProps
     formState: { isValid, errors },
   } = useForm<ClusterEnvironment>({ mode: 'onBlur', defaultValues: { color: 'gray' } });
 
+  const handleFormSubmit = useCallback(
+    (e: FormEvent<HTMLFormElement>) => {
+      // stop propogation of form event because this form is
+      // "nested" in the create workload cluster menu
+      e.stopPropagation();
+      handleSubmit(onSubmit)(e);
+    },
+    [handleSubmit, onSubmit],
+  );
+
   return (
-    <Root {...rest} onSubmit={handleSubmit(onSubmit)}>
+    <Root {...rest} onSubmit={handleFormSubmit}>
       <Header>
         <Typography variant="h6">Create new environment</Typography>
         <CloseButton type="button" onClick={onClose}>
