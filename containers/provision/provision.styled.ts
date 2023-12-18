@@ -5,11 +5,17 @@ import styled from 'styled-components';
 import FormContainer from '../../components/formContainer';
 import { media } from '../../utils/media';
 
+import { FormContent as Content } from '@/components/formContainer/formContainer.styled';
+import { LIGHT_GREY } from '@/constants/colors';
+import Row from '@/components/row';
+
 export const AdvancedOptionsContainer = styled(FormContainer)`
-  background-color: ${({ theme }) => theme.colors.white};
-  gap: 32px;
   margin: 16px 0;
   width: calc(100% - 80px);
+
+  ${Content} {
+    gap: 32px;
+  }
 
   ${media.greaterThan<{ hasInfo: boolean }>('lg')`
     width: 1024px;
@@ -19,6 +25,11 @@ export const AdvancedOptionsContainer = styled(FormContainer)`
 export const Form = styled(Box)<BoxProps>`
   height: 100%;
   overflow: auto;
+`;
+
+export const FormFooter = styled(Row)`
+  border-top: 1px solid ${LIGHT_GREY};
+  padding: 20px;
 `;
 
 export const ErrorContainer = styled.div`
@@ -34,8 +45,10 @@ export const FormContent = styled(FormContainer)<{
 }>`
   background-color: ${({ isLastStep, theme }) => (isLastStep ? 'transparent' : theme.colors.white)};
   box-shadow: ${({ isProvisionStep, isLastStep }) => (isLastStep || isProvisionStep) && 'none'};
-  gap: 32px;
-  width: calc(100% - 80px);
+
+  ${Content} {
+    gap: 32px;
+  }
 
   ${({ hasInfo }) =>
     hasInfo &&

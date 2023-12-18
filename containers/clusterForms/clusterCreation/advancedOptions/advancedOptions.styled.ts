@@ -10,8 +10,9 @@ export const InputContainer = styled(Column)`
     margin-left: 8px;
   }
 
-  ${LearnMore} {
-    margin-left: 37px;
+  & ${LearnMore} {
+    margin-left: 40px;
+    color: ${EXCLUSIVE_PLUM};
 
     span,
     a {

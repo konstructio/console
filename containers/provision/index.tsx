@@ -1,5 +1,5 @@
 'use client';
-import React, { FunctionComponent, useCallback, useEffect, useMemo } from 'react';
+import React, { FunctionComponent, useCallback, useEffect, useMemo, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 
 import InstallationStepContainer from '../../components/installationStepContainer';
@@ -18,24 +18,38 @@ import {
 } from '../../redux/slices/installation.slice';
 import { clearClusterState, clearValidation } from '../../redux/slices/api.slice';
 import { useAppDispatch, useAppSelector } from '../../redux/store';
-import {
-  createCluster,
-  getCloudRegions,
-  getCluster,
-  resetClusterProgress,
-} from '../../redux/thunks/api.thunk';
+import { createCluster, resetClusterProgress } from '../../redux/thunks/api.thunk';
 import { useInstallation } from '../../hooks/useInstallation';
 import { InstallValues, InstallationType } from '../../types/redux';
 import { GitProvider } from '../../types';
 import { AUTHENTICATION_ERROR_MSG, DEFAULT_CLOUD_INSTANCE_SIZES } from '../../constants';
 import { useQueue } from '../../hooks/useQueue';
-import { ClusterStatus, ClusterType } from '../../types/provision';
 
-import { AdvancedOptionsContainer, ErrorContainer, Form, FormContent } from './provision.styled';
+import {
+  AdvancedOptionsContainer,
+  ErrorContainer,
+  Form,
+  FormContent,
+  FormFooter,
+} from './provision.styled';
+
+import LearnMore from '@/components/learnMore';
+
+const FOOTER_LINKS_INFO: Record<number, { linkTitle: string; href: string }> = {
+  1: {
+    linkTitle: 'authentication',
+    href: 'https://docs.kubefirst.io/do/quick-start/install/cli/#github-prerequisites',
+  },
+  2: {
+    linkTitle: 'configuring your cluster',
+    href: 'https://docs.kubefirst.io/do/quick-start/install/ui#step-2-install-your-kubefirst-management-cluster',
+  },
+};
 
 const Provision: FunctionComponent = () => {
+  const [showAdvancedOptions, setShowAdvancedOptions] = useState(false);
   const dispatch = useAppDispatch();
-  const { addClusterToQueue, deleteFromClusterToQueue } = useQueue();
+  const { deleteClusterFromQueue } = useQueue();
 
   const {
     authErrors,
@@ -72,8 +86,10 @@ const Provision: FunctionComponent = () => {
       !!isMarketplace,
     );
 
-  const { instanceSize, nodeCount } =
-    DEFAULT_CLOUD_INSTANCE_SIZES[installType ?? InstallationType.LOCAL];
+  const { instanceSize, nodeCount } = useMemo(
+    () => DEFAULT_CLOUD_INSTANCE_SIZES[installType ?? InstallationType.LOCAL],
+    [installType],
+  );
 
   const methods = useForm<InstallValues>({
     mode: 'onChange',
@@ -82,9 +98,11 @@ const Provision: FunctionComponent = () => {
       nodeCount,
     },
   });
+
   const {
     formState: { isValid: isFormValid },
     getValues,
+    setValue,
     trigger,
     handleSubmit,
   } = methods;
@@ -132,57 +150,49 @@ const Provision: FunctionComponent = () => {
     if (isProvisioned) {
       dispatch(clearClusterState());
     }
-  }, [dispatch, installationStep, isProvisioned]);
-
-  const handleNextButtonClick = async () => {
-    const values = getValues();
-    if (isAuthStep) {
-      await dispatch(getCloudRegions({ values, installType }));
-    } else {
-      handleGoNext();
-    }
-  };
+    trigger();
+  }, [dispatch, installationStep, isProvisioned, trigger]);
 
   const handleBackButtonClick = useCallback(() => {
     dispatch(clearValidation());
     dispatch(clearError());
+
     dispatch(setInstallationStep(installationStep - 1));
     trigger();
   }, [dispatch, installationStep, trigger]);
 
   const onSubmit = async (values: InstallValues) => {
     if (installationStep === 0 && !isMarketplace) {
-      return handleNextButtonClick();
+      // reset and pass suggested instance size and nodeCount
+      // so if user does change install type/cloud provider
+      // the correct defaults will be present
+      setValue('instanceSize', instanceSize);
+      setValue('nodeCount', nodeCount);
+      return handleGoNext();
     }
 
     if (isValid) {
-      await dispatch(setInstallValues(values));
+      dispatch(setInstallValues(values));
 
       if (isSetupStep) {
         try {
           await provisionCluster();
-          handleNextButtonClick();
+          handleGoNext();
         } catch (error) {
           //todo: error handling to be defined
         }
       } else {
-        handleNextButtonClick();
+        handleGoNext();
       }
     }
   };
-
-  const handleGetCluster = useCallback(async () => {
-    const values = getValues();
-
-    values && dispatch(getCluster(values));
-  }, [dispatch, getValues]);
 
   const provisionCluster = useCallback(async () => {
     const values = getValues();
 
     if (error) {
       await dispatch(resetClusterProgress());
-      deleteFromClusterToQueue(
+      deleteClusterFromQueue(
         (values.clusterName as string) || (installValues?.clusterName as string),
       );
     }
@@ -190,26 +200,10 @@ const Provision: FunctionComponent = () => {
     dispatch(clearError());
     dispatch(clearClusterState());
 
-    await dispatch(createCluster())
-      .unwrap()
-      .then(() => {
-        addClusterToQueue({
-          clusterName: (values.clusterName as string) || (installValues?.clusterName as string),
-          id: (values.clusterName as string) || (installValues?.clusterName as string),
-          clusterType: ClusterType.MANAGEMENT,
-          status: ClusterStatus.PROVISIONING,
-          callback: handleGetCluster,
-        });
-      });
-  }, [
-    addClusterToQueue,
-    deleteFromClusterToQueue,
-    dispatch,
-    error,
-    getValues,
-    handleGetCluster,
-    installValues?.clusterName,
-  ]);
+    await dispatch(createCluster());
+  }, [deleteClusterFromQueue, dispatch, error, getValues, installValues?.clusterName]);
+
+  const { linkTitle = '', href = '#' } = FOOTER_LINKS_INFO[installationStep] ?? {};
 
   const form = useMemo(() => {
     if (installationStep === 0 && !isMarketplace) {
@@ -218,7 +212,16 @@ const Provision: FunctionComponent = () => {
 
     return (
       <>
-        <FormContent hasInfo={hasInfo} isLastStep={isLastStep} isProvisionStep={isProvisionStep}>
+        <FormContent
+          hasInfo={hasInfo}
+          isLastStep={isLastStep}
+          isProvisionStep={isProvisionStep}
+          footerContent={
+            <FormFooter>
+              <LearnMore href={href} linkTitle={linkTitle} description="Learn more about" />
+            </FormFooter>
+          }
+        >
           {error || authErrors.length ? (
             <ErrorContainer>
               <ErrorBanner error={error || authErrors} />
@@ -232,8 +235,23 @@ const Provision: FunctionComponent = () => {
           <FormFlow currentStep={isMarketplace ? installationStep + 1 : installationStep} />
         </FormContent>
         {isSetupStep && installType && ![InstallationType.LOCAL].includes(installType) && (
-          <AdvancedOptionsContainer>
-            <AdvancedOptions />
+          <AdvancedOptionsContainer
+            footerContent={
+              showAdvancedOptions ? (
+                <FormFooter>
+                  <LearnMore
+                    href="https://docs.kubefirst.io/do/explore/gitops#using-your-own-gitops-template-repository-fork "
+                    linkTitle="Customizing the GitOps template"
+                    description="Learn more about"
+                  />
+                </FormFooter>
+              ) : null
+            }
+          >
+            <AdvancedOptions
+              advancedOptionsChecked={showAdvancedOptions}
+              onAdvancedOptionsChange={(checked) => setShowAdvancedOptions(checked)}
+            />
           </AdvancedOptionsContainer>
         )}
       </>
@@ -249,6 +267,9 @@ const Provision: FunctionComponent = () => {
     provisionCluster,
     isSetupStep,
     installType,
+    showAdvancedOptions,
+    linkTitle,
+    href,
   ]);
 
   useEffect(() => {

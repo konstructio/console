@@ -7,6 +7,7 @@ import {
   getAllEnvironments,
 } from '../thunks/environments.thunk';
 import { EnvCache } from '../../types/redux';
+import { getClusters } from '../thunks/api.thunk';
 
 export type EnvMap = Record<ClusterEnvironment['name'], ClusterEnvironment>;
 export interface EnvironmentsState {
@@ -77,6 +78,9 @@ const environmentsSlice = createSlice({
       .addCase(deleteEnvironment.fulfilled, (state, { payload: envId }) => {
         state.loading = false;
         delete state.environments[envId];
+      })
+      .addCase(getClusters.fulfilled, (state, { payload: { envCache } }) => {
+        state.boundEnvironments = envCache;
       });
   },
 });

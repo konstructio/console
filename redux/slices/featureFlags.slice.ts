@@ -19,6 +19,7 @@ export const initialState: FeatureFlagsState = {
     [FeatureFlag.PROVISION_DO_PYHS_CLUSTERS]: false,
     [FeatureFlag.PROVISION_GCP_PYHS_CLUSTERS]: false,
     [FeatureFlag.PROVISION_VULTR_PYHS_CLUSTERS]: false,
+    [FeatureFlag.SHOW_CLOUDFLARE_CA_ISSUER]: false,
   },
   isLoading: false,
 };

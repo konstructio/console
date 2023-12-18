@@ -1,26 +1,26 @@
 import axios from 'axios';
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { sortBy } from 'lodash';
 
 import { AppDispatch, RootState } from '@/redux/store';
 import {
-  ManagementCluster,
-  ClusterRequestProps,
-  ClusterStatus,
-  WorkloadCluster,
   ClusterResponse,
   Cluster,
+  ImageRepository,
+  ClusterType,
+  ClusterStatus,
   ClusterEnvironment,
+  WorkloadCluster,
+  ClusterQueue,
 } from '@/types/provision';
 import { createQueryString } from '@/utils/url/formatDomain';
-import { ClusterCache, ClusterNameCache } from '@/types/redux';
 import { InstallValues, InstallationType } from '@/types/redux';
 import { TelemetryClickEvent } from '@/types/telemetry';
 import { mapClusterFromRaw } from '@/utils/mapClustersFromRaw';
-import { setBoundEnvironments } from '@/redux/slices/environments.slice';
+import { GitProtocol } from '@/types';
+import { RESERVED_DRAFT_CLUSTER_NAME } from '@/constants';
 
 export const createCluster = createAsyncThunk<
-  ManagementCluster,
+  ClusterQueue,
   void,
   {
     dispatch: AppDispatch;
@@ -41,10 +41,10 @@ export const createCluster = createAsyncThunk<
     git_provider: gitProvider,
     gitops_template_url: values?.gitopsTemplateUrl,
     gitops_template_branch: values?.gitopsTemplateBranch,
-    git_protocol: values?.useHttps ? 'https' : 'ssh',
+    git_protocol: values?.useHttps ? GitProtocol.HTTPS : GitProtocol.SSH,
     dns_provider: values?.dnsProvider,
-    ecr: values?.imageRepository === 'ecr',
-    type: 'mgmt',
+    ecr: values?.imageRepository === ImageRepository.ECR,
+    type: ClusterType.MANAGEMENT,
     force_destroy: values?.forceDestroyTerraform,
     node_type: values?.instanceSize,
     node_count: values?.nodeCount,
@@ -73,15 +73,12 @@ export const createCluster = createAsyncThunk<
     },
   };
 
-  const res = await axios.post<ManagementCluster>('/api/proxy', {
-    url: `/cluster/${values?.clusterName || 'kubefirst'}`,
+  await axios.post<{ message: string }>('/api/proxy', {
+    url: `/cluster/${values?.clusterName}`,
     body: params,
   });
 
-  if ('error' in res) {
-    throw res.error;
-  }
-  return res.data;
+  return { clusterName: values?.clusterName as string, status: ClusterStatus.PROVISIONING };
 });
 
 export const createWorkloadCluster = createAsyncThunk<
@@ -94,10 +91,10 @@ export const createWorkloadCluster = createAsyncThunk<
 >('api/cluster/createWorkloadCluster', async (_, { getState }) => {
   const { managementCluster, clusterMap } = getState().api;
 
-  const draftCluster = clusterMap['draft'];
+  const draftCluster = clusterMap[RESERVED_DRAFT_CLUSTER_NAME];
 
   if (!managementCluster) {
-    throw new Error('missing managament cluster');
+    throw new Error('missing management cluster');
   }
 
   if (!draftCluster) {
@@ -112,116 +109,75 @@ export const createWorkloadCluster = createAsyncThunk<
         description: draftCluster.environment?.description,
       };
 
-  const res = await axios.post<{ cluster_id: string }>(`/api/proxy?target=ee`, {
-    url: `/cluster/${managementCluster?.clusterId}`,
-    body: {
-      cluster_name: draftCluster.clusterName,
-      cloud_region: draftCluster.cloudRegion,
-      node_type: draftCluster.instanceSize,
-      node_count: draftCluster.nodeCount,
-      environment: clusterEnvironment,
-      cluster_type: draftCluster.type,
-    },
-  });
+  const { cluster_id } = (
+    await axios.post<{ cluster_id: string }>(`/api/proxy?target=ee`, {
+      url: `/cluster/${managementCluster?.clusterId}`,
+      body: {
+        cluster_name: draftCluster.clusterName,
+        cloud_region: draftCluster.cloudRegion,
+        node_type: draftCluster.instanceSize,
+        node_count: draftCluster.nodeCount,
+        environment: clusterEnvironment,
+        cluster_type: draftCluster.type,
+      },
+    })
+  ).data;
 
-  if ('error' in res) {
-    throw res.error;
-  }
-
-  const updatedCluster: WorkloadCluster = {
+  const provisioningWorkloadCluster: WorkloadCluster = {
     ...draftCluster,
-    clusterId: res.data.cluster_id,
+    clusterId: cluster_id,
     status: ClusterStatus.PROVISIONING,
     environment: draftCluster.environment as ClusterEnvironment,
   };
 
-  return updatedCluster;
-});
-
-export const getCluster = createAsyncThunk<
-  {
-    managementCluster: ManagementCluster;
-    clusterCache: ClusterCache;
-    clusterNameCache: ClusterNameCache;
-  },
-  ClusterRequestProps,
-  {
-    dispatch: AppDispatch;
-    state: RootState;
-  }
->('api/cluster/get', async ({ clusterName }, { dispatch }) => {
-  const res = await axios.get(
-    `/api/proxy?${createQueryString('url', `/cluster/${clusterName || 'kubefirst'}`)}`,
-  );
-
-  if ('error' in res) {
-    throw res.error;
-  }
-  const { managementCluster, envCache, clusterCache, clusterNameCache } = mapClusterFromRaw(
-    res.data,
-  );
-  dispatch(setBoundEnvironments(envCache));
-
-  return { managementCluster, clusterCache, clusterNameCache };
+  return provisioningWorkloadCluster;
 });
 
 export const getClusters = createAsyncThunk<
-  {
-    managementCluster: ManagementCluster;
-    clusterCache: ClusterCache;
-    clusterNameCache: ClusterNameCache;
-  },
+  ReturnType<typeof mapClusterFromRaw>,
   void,
   {
     dispatch: AppDispatch;
     state: RootState;
   }
->('api/cluster/getClusters', async (_, { dispatch }) => {
+>('api/cluster/getClusters', async () => {
   const res = await axios.get<ClusterResponse[]>(
     `/api/proxy?${createQueryString('url', `/cluster`)}`,
   );
 
-  if ('error' in res) {
-    throw res.error;
-  }
-
-  if (!res.data) {
+  if (!res.data || !res.data.length) {
     throw new Error('No clusters found');
   }
 
   // only process single expected management cluster
-  const { managementCluster, envCache, clusterCache, clusterNameCache } = mapClusterFromRaw(
-    res.data[0],
-  );
-  dispatch(setBoundEnvironments(envCache));
-
-  return { managementCluster, clusterCache, clusterNameCache };
+  return mapClusterFromRaw(res.data[0]);
 });
 
 export const deleteCluster = createAsyncThunk<
-  Cluster['clusterId'],
-  string,
+  ClusterQueue,
+  Cluster['clusterName'],
   {
     dispatch: AppDispatch;
     state: RootState;
   }
->('api/cluster/delete', async (workloadClusterId, { getState }) => {
+>('api/cluster/delete', async (clusterName, { getState }) => {
   const {
-    api: { managementCluster },
+    api: { managementCluster, clusterMap },
   } = getState();
 
-  const res = await axios.delete<{ cluster_id: string }>(
-    `/api/proxy?${createQueryString(
-      'url',
-      `/cluster/${managementCluster?.clusterId || 'kubefirst'}/${workloadClusterId}`,
-    )}&target=ee`,
-  );
+  const { clusterId } = clusterMap[clusterName];
 
-  if ('error' in res) {
-    throw res.error;
+  // returned cluster_id is unused at this time.
+  if (managementCluster) {
+    await axios.delete<{ cluster_id: string }>(
+      `/api/proxy?${createQueryString(
+        'url',
+        `/cluster/${managementCluster.clusterId}/${clusterId}`,
+      )}&target=ee`,
+    );
   }
 
-  return res.data.cluster_id;
+  return { clusterName, status: ClusterStatus.DELETING };
 });
 
 export const getCloudRegions = createAsyncThunk<
@@ -232,15 +188,15 @@ export const getCloudRegions = createAsyncThunk<
     state: RootState;
   }
 >('api/getCloudRegions', async ({ values, installType }) => {
-  const res = await axios.post<{ regions: Array<string> }>('/api/proxy', {
-    url: `/region/${installType || (values as Cluster).cloudProvider}`,
-    body: installType === InstallationType.AWS ? { ...values, cloud_region: 'us-east-1' } : values,
-  });
+  const { regions } = (
+    await axios.post<{ regions: Array<string> }>('/api/proxy', {
+      url: `/region/${installType || (values as Cluster).cloudProvider}`,
+      body:
+        installType === InstallationType.AWS ? { ...values, cloud_region: 'us-east-1' } : values,
+    })
+  ).data;
 
-  if ('error' in res) {
-    throw res.error;
-  }
-  return sortBy(res.data.regions);
+  return regions;
 });
 
 export const getCloudDomains = createAsyncThunk<
@@ -256,21 +212,20 @@ export const getCloudDomains = createAsyncThunk<
     state: RootState;
   }
 >('api/getCloudDomains', async ({ cloudflareToken, installType, values, region }) => {
-  const res = await axios.post<{ domains: Array<string> }>('/api/proxy', {
-    url: `/domain/${cloudflareToken ? 'cloudflare' : installType}`,
-    body: {
-      ...values,
-      cloud_region: region,
-      cloudflare_auth: {
-        api_token: cloudflareToken,
+  const { domains } = (
+    await axios.post<{ domains: Array<string> }>('/api/proxy', {
+      url: `/domain/${cloudflareToken ? 'cloudflare' : installType}`,
+      body: {
+        ...values,
+        cloud_region: region,
+        cloudflare_auth: {
+          api_token: cloudflareToken,
+        },
       },
-    },
-  });
+    })
+  ).data;
 
-  if ('error' in res) {
-    throw res.error;
-  }
-  return sortBy(res.data.domains);
+  return domains;
 });
 
 export const getInstanceSizes = createAsyncThunk<
@@ -281,16 +236,18 @@ export const getInstanceSizes = createAsyncThunk<
     state: RootState;
   }
 >('api/getInstanceSizes', async ({ region, installType, values, zone }) => {
-  const { data } = await axios.post<{ instance_sizes: string[] }>('/api/proxy', {
-    url: `/instance-sizes/${installType}`,
-    body: {
-      ...values,
-      cloud_region: region,
-      cloud_zone: zone,
-    },
-  });
+  const { instance_sizes } = (
+    await axios.post<{ instance_sizes: string[] }>('/api/proxy', {
+      url: `/instance-sizes/${installType}`,
+      body: {
+        ...values,
+        cloud_region: region,
+        cloud_zone: zone,
+      },
+    })
+  ).data;
 
-  return data.instance_sizes;
+  return instance_sizes;
 });
 
 // currently only needed for google install type
@@ -302,15 +259,17 @@ export const getRegionZones = createAsyncThunk<
     state: RootState;
   }
 >('api/getRegionZones', async ({ region, values }) => {
-  const { data } = await axios.post<{ zones: string[] }>('/api/proxy', {
-    url: '/zones',
-    body: {
-      ...values,
-      cloud_region: region,
-    },
-  });
+  const { zones } = (
+    await axios.post<{ zones: string[] }>('/api/proxy', {
+      url: '/zones',
+      body: {
+        ...values,
+        cloud_region: region,
+      },
+    })
+  ).data;
 
-  return data.zones;
+  return zones;
 });
 
 export const resetClusterProgress = createAsyncThunk<
@@ -325,13 +284,9 @@ export const resetClusterProgress = createAsyncThunk<
     installation: { values },
   } = getState();
 
-  const res = await axios.post<{ regions: Array<string> }>('/api/proxy', {
+  await axios.post<{ regions: Array<string> }>('/api/proxy', {
     url: `/cluster/${values?.clusterName}/reset_progress`,
   });
-
-  if ('error' in res) {
-    throw res.error;
-  }
 });
 
 export const sendTelemetryEvent = createAsyncThunk<
@@ -345,12 +300,9 @@ export const sendTelemetryEvent = createAsyncThunk<
   const {
     cluster: { selectedCluster },
   } = getState();
-  const res = await axios.post('/api/proxy', {
+
+  await axios.post('/api/proxy', {
     url: `/telemetry/${selectedCluster?.clusterName}`,
     body,
   });
-
-  if ('error' in res) {
-    throw res.error;
-  }
 });

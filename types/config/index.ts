@@ -2,12 +2,13 @@ export enum FeatureFlag {
   PROVISION_DO_PYHS_CLUSTERS = 'canProvisionDOPhysicalClusters',
   PROVISION_VULTR_PYHS_CLUSTERS = 'canProvisionVultrPhysicalClusters',
   PROVISION_GCP_PYHS_CLUSTERS = 'canProvisionGCPPhysicalClusters',
-  PROVISION_AWS_PYHS_CLUSTERS = 'canProvisionAWSPhysicalClusters',
+  PROVISION_AWS_PYHS_CLUSTERS = 'canProvisionAwsPhysicalClusters',
   MULTICLUSTER_MANAGEMENT = 'multicluster-management',
   GITOPS_CATALOG = 'gitops-catalog',
   CLUSTER_PROVISIONING = 'cluster-provisioning',
   CLUSTER_MANAGEMENT = 'cluster-managament',
   MARKETPLACE = 'marketplace',
+  SHOW_CLOUDFLARE_CA_ISSUER = 'showCloudflareCaIssuerField',
 }
 
 export interface EnvironmentVariables {

@@ -14,9 +14,8 @@ export default meta;
 export const Default: StoryObj<typeof LearnMore> = {
   args: {
     description: 'Learn more about',
-    href: '',
+    href: '#',
     linkTitle: 'configuring your cluster',
     installType: InstallationType.AWS,
-    withoutDivider: true,
   },
 };

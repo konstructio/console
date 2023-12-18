@@ -1,6 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-import { GithubUser, GithubUserOrganization } from '../../types/github/index';
 import {
   getGithubUser,
   getGithubUserOrganizations,
@@ -10,9 +9,12 @@ import {
   getGitlabUser,
   getGitLabSubgroups,
   getGitLabProjects,
-} from '../thunks/git.thunk';
-import { GitLabGroup, GitLabUser } from '../../types/gitlab';
-import { KUBEFIRST_REPOSITORIES, KUBEFIRST_TEAMS } from '../../constants';
+} from '@/redux/thunks/git.thunk';
+import { GithubUser, GithubUserOrganization } from '@/types/github';
+import { GitLabGroup, GitLabUser } from '@/types/gitlab';
+import { KUBEFIRST_REPOSITORIES, KUBEFIRST_TEAMS } from '@/constants';
+import { createGitOrgErrorMessage } from '@/utils/createGitOrgErrorMessage';
+import { GitProvider } from '@/types';
 
 export interface GitState {
   githubUser: GithubUser | null;
@@ -22,6 +24,7 @@ export interface GitState {
   isLoading: boolean;
   isTokenValid: boolean;
   errors: Array<string>;
+  responseError?: string;
   token?: string;
   gitOwner?: string;
   isGitSelected?: boolean;
@@ -59,10 +62,14 @@ const gitSlice = createSlice({
       state.isLoading = false;
       state.isTokenValid = false;
       state.errors = [];
+      state.responseError = undefined;
       state.token = undefined;
     },
     setIsGitSelected: (state, action) => {
       state.isGitSelected = action.payload;
+    },
+    clearResponseError: (state) => {
+      state.responseError = undefined;
     },
   },
   extraReducers: (builder) => {
@@ -75,14 +82,17 @@ const gitSlice = createSlice({
         state.githubUser = action.payload;
         state.isTokenValid = true;
       })
-      .addCase(getGithubUser.rejected, (state) => {
+      .addCase(getGithubUser.rejected, (state, action) => {
         state.isTokenValid = false;
+        state.responseError = action.error.message;
       })
       .addCase(getGithubUserOrganizations.pending, (state) => {
         state.isLoading = true;
       })
-      .addCase(getGithubUserOrganizations.rejected, (state) => {
+      .addCase(getGithubUserOrganizations.rejected, (state, action) => {
         state.isLoading = false;
+        state.isTokenValid = false;
+        state.responseError = action.error.message;
       })
       .addCase(getGithubUserOrganizations.fulfilled, (state, action) => {
         state.githubUserOrganizations = action.payload.sort((a, b) =>
@@ -91,77 +101,135 @@ const gitSlice = createSlice({
         state.isLoading = false;
         state.isTokenValid = true;
       })
+      .addCase(getGitHubOrgRepositories.pending, (state) => {
+        state.isLoading = true;
+      })
       .addCase(getGitHubOrgRepositories.fulfilled, (state, { payload: organizationRepos }) => {
         const kubefirstRepos = organizationRepos.filter(({ name }) =>
           KUBEFIRST_REPOSITORIES.includes(name),
         );
         if (kubefirstRepos.length) {
-          state.errors
-            .push(`GitHub organization <a href="https://github.com/${state.gitOwner}" target="_blank"><strong>${state.gitOwner}</strong></a>
-             already has repositories named either <strong>gitops</strong> and/or <strong>metaphor</strong>.
-             Please remove or rename to continue.`);
+          state.errors.push(
+            createGitOrgErrorMessage({
+              git: GitProvider.GITHUB,
+              type: 'repo',
+              gitOwner: state.gitOwner,
+            }),
+          );
         }
       })
+      .addCase(getGitHubOrgRepositories.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isTokenValid = false;
+        state.responseError = action.error.message;
+      })
+      .addCase(getGitHubOrgTeams.pending, (state) => {
+        state.isLoading = true;
+      })
       .addCase(getGitHubOrgTeams.fulfilled, (state, { payload: organizationTeams }) => {
+        state.isLoading = false;
         const kubefirstTeams = organizationTeams.filter(({ name }) =>
           KUBEFIRST_TEAMS.includes(name),
         );
 
         if (kubefirstTeams.length) {
-          state.errors
-            .push(`GitHub organization <a href="https://github.com/${state.gitOwner}" target="_blank"><strong>${state.gitOwner}</strong></a> 
-            already has teams named <strong>admins</strong> and/or <strong>developers</strong>. 
-            Please remove or rename them to continue.`);
+          state.errors.push(
+            createGitOrgErrorMessage({
+              git: GitProvider.GITHUB,
+              type: 'team',
+              gitOwner: state.gitOwner,
+            }),
+          );
         }
+      })
+      .addCase(getGitHubOrgTeams.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isTokenValid = false;
+        state.responseError = action.error.message;
       })
       /* GitLab */
       .addCase(getGitlabUser.pending, (state) => {
         state.isLoading = true;
       })
       .addCase(getGitlabUser.fulfilled, (state, action) => {
+        state.isLoading = false;
         state.gitlabUser = action.payload;
         state.isTokenValid = true;
       })
-      .addCase(getGitlabUser.rejected, (state) => {
+      .addCase(getGitlabUser.rejected, (state, action) => {
+        state.isLoading = false;
         state.isTokenValid = false;
+        state.responseError = action.error.message;
       })
       .addCase(getGitlabGroups.pending, (state) => {
         state.isLoading = true;
       })
-      .addCase(getGitlabGroups.rejected, (state) => {
+      .addCase(getGitlabGroups.rejected, (state, action) => {
         state.isLoading = false;
+        state.isTokenValid = false;
+        state.responseError = action.error.message;
       })
       .addCase(getGitlabGroups.fulfilled, (state, action) => {
         state.gitlabGroups = action.payload.sort((a, b) => a.name.localeCompare(b.name));
         state.isLoading = false;
         state.isTokenValid = true;
       })
+      .addCase(getGitLabProjects.pending, (state) => {
+        state.isLoading = true;
+      })
       .addCase(getGitLabProjects.fulfilled, (state, { payload: groupProjects }) => {
+        state.isLoading = false;
         const kubefirstRepos = groupProjects.filter(({ name }) =>
           KUBEFIRST_REPOSITORIES.includes(name),
         );
 
         if (kubefirstRepos.length) {
-          state.errors.push(`
-            GitLab organization <a href="https://gitlab.com/${state.gitOwner}" target="_blank"><strong>${state.gitOwner}</strong></a>
-            already has repositories named either <strong>gitops</strong> and <strong>metaphor</strong>.
-          Please remove or rename to continue.`);
+          state.errors.push(
+            createGitOrgErrorMessage({
+              git: GitProvider.GITLAB,
+              type: 'repo',
+              gitOwner: state.gitOwner,
+            }),
+          );
         }
       })
+      .addCase(getGitLabProjects.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isTokenValid = false;
+        state.responseError = action.error.message;
+      })
+      .addCase(getGitLabSubgroups.pending, (state) => {
+        state.isLoading = true;
+      })
       .addCase(getGitLabSubgroups.fulfilled, (state, { payload: gitlabSubgroups }) => {
+        state.isLoading = false;
         const kubefirstTeams = gitlabSubgroups.filter(({ name }) => KUBEFIRST_TEAMS.includes(name));
 
         if (kubefirstTeams.length) {
-          state.errors.push(`
-            GitLab organization <a href="https://gitlab.com/${state.gitOwner}" target="_blank"><strong>${state.gitOwner}</strong></a>
-            already has teams named <strong>admins</strong> or <strong>developers</strong>. 
-            Please remove or rename them to continue.`);
+          state.errors.push(
+            createGitOrgErrorMessage({
+              git: GitProvider.GITLAB,
+              type: 'team',
+              gitOwner: state.gitOwner,
+            }),
+          );
         }
+      })
+      .addCase(getGitLabSubgroups.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isTokenValid = false;
+        state.responseError = action.error.message;
       });
   },
 });
 
-export const { clearGitState, clearUserError, setIsGitSelected, setGitOwner, setToken } =
-  gitSlice.actions;
+export const {
+  clearGitState,
+  clearUserError,
+  setIsGitSelected,
+  setGitOwner,
+  setToken,
+  clearResponseError,
+} = gitSlice.actions;
 
 export const gitReducer = gitSlice.reducer;

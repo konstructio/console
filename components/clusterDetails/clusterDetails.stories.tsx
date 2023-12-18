@@ -1,9 +1,11 @@
 import { Meta, StoryObj } from '@storybook/react';
 
-import { mockClusterConfig } from '../../tests/mocks/mockClusterConfig';
-import { ClusterType } from '../../types/provision';
-
 import ClusterDetails from '.';
+
+import { mockClusterConfig } from '@/tests/mocks/mockClusterConfig';
+import { ClusterStatus, ClusterType } from '@/types/provision';
+import { GitProvider } from '@/types';
+import { InstallationType } from '@/types/redux';
 
 const meta: Meta<typeof ClusterDetails> = {
   component: ClusterDetails,
@@ -16,10 +18,13 @@ export const Default: StoryObj<typeof ClusterDetails> = {
     cluster: {
       ...mockClusterConfig,
       clusterId: '1',
+      status: ClusterStatus.PROVISIONED,
+      clusterName: 'man-cluster-1',
+      cloudProvider: InstallationType.CIVO,
       adminEmail: 'derrick@kubeshop.io',
       domainName: 'kubefirst.io',
       dnsProvider: 'civo',
-      gitProvider: 'Github',
+      gitProvider: GitProvider.GITHUB,
       gitAuth: {
         gitOwner: 'D-B-Hawk',
         gitToken: 'kray',

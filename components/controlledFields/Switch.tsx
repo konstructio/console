@@ -1,13 +1,13 @@
-import React, { ChangeEvent } from 'react';
+import React from 'react';
 import FormGroup from '@mui/material/FormGroup';
 import { Control, Controller, UseControllerProps, FieldValues } from 'react-hook-form';
 
 import Switch from '../switch';
 
-export interface ControlledTextFieldProps<T extends FieldValues> extends UseControllerProps<T> {
+export interface ControlledSwitchProps<T extends FieldValues> extends UseControllerProps<T> {
   control: Control<T>;
   required?: boolean;
-  onChange: (e: ChangeEvent<HTMLInputElement>) => void;
+  onChange: (checked: boolean) => void;
   rules: {
     required: boolean;
     pattern?: RegExp;
@@ -19,7 +19,7 @@ function ControlledSwitch<T extends FieldValues>({
   onChange,
   required,
   ...props
-}: ControlledTextFieldProps<T>) {
+}: ControlledSwitchProps<T>) {
   return (
     <Controller
       {...props}

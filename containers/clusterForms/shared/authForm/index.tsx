@@ -6,7 +6,6 @@ import { Required } from '../../../../components/textField/textField.styled';
 import GitProviderButton from '../../../../components/gitProviderButton';
 import Typography from '../../../../components/typography';
 import { useInstallation } from '../../../../hooks/useInstallation';
-// import LearnMore from '../../../../components/learnMore';
 import ControlledPassword from '../../../../components/controlledFields/Password';
 import ControlledAutocomplete from '../../../../components/controlledFields/AutoComplete';
 import ControlledTextArea from '../../../../components/controlledFields/textArea';
@@ -41,11 +40,13 @@ import Tooltip from '@/components/tooltip';
 import Row from '@/components/row';
 import CheckBoxWithRef from '@/components/checkbox';
 import Column from '@/components/column';
+import { hasProjectId } from '@/utils/hasProjectId';
+import { getDigitalOceanUser } from '@/redux/thunks/digitalOcean.thunk';
 
 const AuthForm: FunctionComponent = () => {
   const [isGitRequested, setIsGitRequested] = useState<boolean>();
   const [gitUserName, setGitUserName] = useState<string>();
-  const [showGoogleKeyFile, setShowGoogleKeyFile] = useState(true);
+  const [showGoogleKeyFile, setShowGoogleKeyFile] = useState(false);
 
   const dispatch = useAppDispatch();
 
@@ -55,13 +56,16 @@ const AuthForm: FunctionComponent = () => {
     githubUserOrganizations,
     gitlabUser,
     gitlabGroups,
+    doUser,
+    doStateLoading,
+    doTokenValid,
     gitStateLoading,
     installationType,
     isGitSelected,
     isTokenValid,
     installMethod,
     token = '',
-  } = useAppSelector(({ config, installation, git }) => ({
+  } = useAppSelector(({ config, installation, git, digitalOcean }) => ({
     currentStep: installation.installationStep,
     installationType: installation.installType,
     gitProvider: installation.gitProvider,
@@ -69,6 +73,7 @@ const AuthForm: FunctionComponent = () => {
     gitStateLoading: git.isLoading,
     installMethod: config.installMethod,
     ...git,
+    ...digitalOcean,
   }));
 
   const { apiKeyInfo } = useInstallation(
@@ -80,9 +85,12 @@ const AuthForm: FunctionComponent = () => {
   const {
     control,
     reset,
+    watch,
     setValue,
     formState: { errors },
   } = useFormContext<InstallValues>();
+
+  const [googleKeyFile, doToken] = watch(['google_auth.key_file', 'do_auth.token']);
 
   const isGitHub = useMemo(() => gitProvider === GitProvider.GITHUB, [gitProvider]);
 
@@ -116,10 +124,6 @@ const AuthForm: FunctionComponent = () => {
     }
   };
 
-  const gitLabel = useMemo(() => (isGitHub ? 'GitHub' : 'GitLab'), [isGitHub]);
-
-  const isMarketplace = useMemo(() => installMethod?.includes('marketplace'), [installMethod]);
-
   const handleGitProviderChange = (provider: GitProvider) => {
     setGitUserName('');
     reset({ gitToken: '', gitOwner: '' });
@@ -132,6 +136,22 @@ const AuthForm: FunctionComponent = () => {
     setShowGoogleKeyFile(e.target.checked);
   }, []);
 
+  const validateDoToken = useCallback(
+    (token: string) => {
+      dispatch(getDigitalOceanUser(token));
+    },
+    [dispatch],
+  );
+
+  const gitLabel = useMemo(() => (isGitHub ? 'GitHub' : 'GitLab'), [isGitHub]);
+
+  const isMarketplace = useMemo(() => installMethod?.includes('marketplace'), [installMethod]);
+
+  const isDigitalOcean = useMemo(
+    () => installationType === InstallationType.DIGITAL_OCEAN,
+    [installationType],
+  );
+
   useEffect(() => {
     if (githubUser?.login || gitlabUser?.name) {
       setGitUserName(githubUser?.login || gitlabUser?.name);
@@ -143,6 +163,21 @@ const AuthForm: FunctionComponent = () => {
       dispatch(clearUserError());
     };
   }, [dispatch]);
+
+  useEffect(() => {
+    if (googleKeyFile) {
+      try {
+        const keyFile = JSON.parse(googleKeyFile);
+        if (hasProjectId(keyFile)) {
+          setValue('google_auth.project_id', keyFile.project_id);
+        } else {
+          setValue('google_auth.project_id', '');
+        }
+      } catch (error) {
+        setValue('google_auth.project_id', '');
+      }
+    }
+  }, [googleKeyFile, setValue]);
 
   const showTooltip = useMemo(() => (gitUserName?.length ?? 0) > 22, [gitUserName]);
 
@@ -170,8 +205,8 @@ const AuthForm: FunctionComponent = () => {
         </div>
       )}
       <FormContainer isVisible={!isMarketplace || (isMarketplace && isGitSelected)}>
-        <Row style={{ justifyContent: 'space-between' }}>
-          <Row style={{ width: '432px' }}>
+        <Row style={{ justifyContent: 'space-between', gap: '24px' }}>
+          <Row style={{ width: '100%' }}>
             <ControlledPassword
               control={control}
               name="gitToken"
@@ -267,23 +302,41 @@ const AuthForm: FunctionComponent = () => {
             />
           </>
         )}
-        {apiKeyInfo?.fieldKeys.map(({ label, name, helperText }) => (
-          <ControlledPassword
-            key={name}
-            control={control}
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            //@ts-ignore
-            name={`${apiKeyInfo.authKey}.${name}`}
-            label={label}
-            helperText={helperText}
-            required
-            rules={{
-              required: true,
-            }}
-          />
-        ))}
+        {apiKeyInfo?.fieldKeys.map(({ label, name, helperText }) =>
+          isDigitalOcean && name === 'token' ? (
+            <ControlledPassword
+              key={name}
+              control={control}
+              // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+              //@ts-ignore
+              name={`${apiKeyInfo.authKey}.${name}`}
+              label={label}
+              helperText={helperText}
+              required
+              rules={{
+                required: true,
+              }}
+              onChange={validateDoToken}
+              error={!!doToken && !doUser && !doStateLoading && !doTokenValid}
+              onErrorText="Invalid Token"
+            />
+          ) : (
+            <ControlledPassword
+              key={name}
+              control={control}
+              // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+              //@ts-ignore
+              name={`${apiKeyInfo.authKey}.${name}`}
+              label={label}
+              helperText={helperText}
+              required
+              rules={{
+                required: true,
+              }}
+            />
+          ),
+        )}
       </FormContainer>
-      {/* <LearnMore description="Learn more about" href="" linkTitle="authentication" /> */}
     </>
   );
 };

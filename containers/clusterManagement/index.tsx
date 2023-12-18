@@ -1,40 +1,7 @@
 'use client';
-import React, { FunctionComponent, useCallback, useEffect, useMemo } from 'react';
+import React, { FunctionComponent, useCallback, useMemo } from 'react';
 import Box from '@mui/material/Box';
 import Tabs from '@mui/material/Tabs';
-
-import Button from '../../components/button';
-import Typography from '../../components/typography';
-import { useAppDispatch, useAppSelector } from '../../redux/store';
-import {
-  createWorkloadCluster,
-  deleteCluster,
-  getCloudRegions,
-  getClusters,
-} from '../../redux/thunks/api.thunk';
-import {
-  Cluster,
-  ClusterCreationStep,
-  ClusterStatus,
-  ClusterType,
-  WorkloadCluster,
-} from '../../types/provision';
-import useToggle from '../../hooks/useToggle';
-import useModal from '../../hooks/useModal';
-import DeleteCluster from '../../components/deleteCluster';
-import TabPanel, { Tab, a11yProps } from '../../components/tab';
-import { BISCAY, SALTBOX_BLUE } from '../../constants/colors';
-import { Flow } from '../../components/flow';
-import ClusterTable from '../../components/clusterTable/clusterTable';
-import {
-  createDraftCluster,
-  removeDraftCluster,
-  setClusterCreationStep,
-} from '../../redux/slices/api.slice';
-import { setPresentedClusterId } from '../../redux/slices/api.slice';
-import { useQueue } from '../../hooks/useQueue';
-import { setNotifiedOfBetaPhysicalClusters } from '../../redux/slices/notifications.slice';
-import { getAllEnvironments } from '../../redux/thunks/environments.thunk';
 
 import { CreateClusterFlow } from './createClusterFlow';
 import {
@@ -45,26 +12,49 @@ import {
   StyledDrawer,
 } from './clusterManagement.styled';
 
+import Button from '@/components/button';
+import Typography from '@/components/typography';
+import { useAppDispatch, useAppSelector } from '@/redux/store';
+import { createWorkloadCluster, deleteCluster } from '@/redux/thunks/api.thunk';
+import {
+  ClusterCreationStep,
+  ClusterStatus,
+  ClusterType,
+  WorkloadCluster,
+} from '@/types/provision';
+import useToggle from '@/hooks/useToggle';
+import useModal from '@/hooks/useModal';
+import DeleteCluster from '@/components/deleteCluster';
+import TabPanel, { Tab, a11yProps } from '@/components/tab';
+import { BISCAY, SALTBOX_BLUE } from '@/constants/colors';
+import { Flow } from '@/components/flow';
+import ClusterTable from '@/components/clusterTable/clusterTable';
+import {
+  createDraftCluster,
+  removeDraftCluster,
+  setClusterCreationStep,
+} from '@/redux/slices/api.slice';
+import { setPresentedClusterName } from '@/redux/slices/api.slice';
+import { setNotifiedOfBetaPhysicalClusters } from '@/redux/slices/notifications.slice';
+import { usePhysicalClustersPermissions } from '@/hooks/usePhysicalClustersPermission';
 import { InstallationType } from '@/types/redux';
-import { removeClusterFromQueue } from '@/redux/slices/queue.slice';
 import { setClusterManagamentTab } from '@/redux/slices/config.slice';
 import { ClusterManagementTab } from '@/types/config';
-import { DEFAULT_CLOUD_INSTANCE_SIZES, SUGGESTED_WORKLOAD_NODE_COUNT } from '@/constants';
+import {
+  DEFAULT_CLOUD_INSTANCE_SIZES,
+  RESERVED_DRAFT_CLUSTER_NAME,
+  SUGGESTED_WORKLOAD_NODE_COUNT,
+} from '@/constants';
 
 const ClusterManagement: FunctionComponent = () => {
   const {
-    clusterQueue,
     managementCluster,
     clusterCreationStep,
-    presentedClusterId,
+    presentedClusterName,
     loading,
     notifiedOfBetaPhysicalClusters,
     clusterMap,
     clusterManagementTab,
-    canProvisionAWSPhysicalClusters,
-    canProvisionGCPPhysicalClusters,
-    canProvisionDOPhysicalClusters,
-    canProvisionVultrPhysicalClusters,
   } = useAppSelector(({ api, queue, notifications, config, featureFlags }) => ({
     clusterQueue: queue.clusterQueue,
     notifiedOfBetaPhysicalClusters: notifications.notifiedOfBetaPhysicalClusters,
@@ -73,37 +63,16 @@ const ClusterManagement: FunctionComponent = () => {
     ...featureFlags.flags,
   }));
 
-  const { addClusterToQueue } = useQueue();
+  const dispatch = useAppDispatch();
 
-  // check if user has permission to provision physical clusters based on cloud provider,
-  // otherwise default to true if no feature flag check
-  const physicalClustersPermission = useMemo(
-    (): Record<InstallationType, boolean> => ({
-      [InstallationType.AWS]: !!canProvisionAWSPhysicalClusters,
-      [InstallationType.DIGITAL_OCEAN]: !!canProvisionDOPhysicalClusters,
-      [InstallationType.GOOGLE]: !!canProvisionGCPPhysicalClusters,
-      [InstallationType.VULTR]: !!canProvisionVultrPhysicalClusters,
-      [InstallationType.CIVO]: true,
-      [InstallationType.LOCAL]: true,
-    }),
-    [
-      canProvisionAWSPhysicalClusters,
-      canProvisionDOPhysicalClusters,
-      canProvisionGCPPhysicalClusters,
-      canProvisionVultrPhysicalClusters,
-    ],
-  );
+  const { hasPermissions } = usePhysicalClustersPermissions(managementCluster?.cloudProvider);
 
   const defaultClusterType = useMemo(() => {
-    if (
-      managementCluster &&
-      managementCluster.cloudProvider &&
-      physicalClustersPermission[managementCluster.cloudProvider]
-    ) {
+    if (managementCluster && managementCluster.cloudProvider && hasPermissions) {
       return ClusterType.WORKLOAD;
     }
     return ClusterType.WORKLOAD_V_CLUSTER;
-  }, [managementCluster, physicalClustersPermission]);
+  }, [managementCluster, hasPermissions]);
 
   const tabColor = useMemo(
     () => (clusterManagementTab === ClusterManagementTab.LIST_VIEW ? BISCAY : SALTBOX_BLUE),
@@ -112,6 +81,11 @@ const ClusterManagement: FunctionComponent = () => {
 
   const { instanceSize } =
     DEFAULT_CLOUD_INSTANCE_SIZES[managementCluster?.cloudProvider ?? InstallationType.LOCAL];
+
+  const presentedCluster = useMemo(
+    () => clusterMap[presentedClusterName ?? ''],
+    [clusterMap, presentedClusterName],
+  );
 
   const {
     isOpen: createClusterFlowOpen,
@@ -125,53 +99,40 @@ const ClusterManagement: FunctionComponent = () => {
     closeModal: closeDeleteModal,
   } = useModal();
 
-  const dispatch = useAppDispatch();
-
-  const handleGetClusters = useCallback(async (): Promise<void> => {
-    await dispatch(getClusters());
-  }, [dispatch]);
-
   const handleMenuClose = useCallback(() => {
     if (clusterCreationStep === ClusterCreationStep.CONFIG) {
       dispatch(removeDraftCluster());
     } else {
       dispatch(setClusterCreationStep(ClusterCreationStep.CONFIG));
     }
-    dispatch(setPresentedClusterId(undefined));
+    dispatch(setPresentedClusterName(undefined));
     closeCreateClusterFlow();
   }, [clusterCreationStep, dispatch, closeCreateClusterFlow]);
 
-  const handleDeleteCluster = () => {
-    if (presentedClusterId) {
-      dispatch(deleteCluster(presentedClusterId))
+  const handleDeleteCluster = useCallback(() => {
+    if (presentedClusterName) {
+      dispatch(deleteCluster(presentedClusterName))
         .unwrap()
         .then(() => {
-          addClusterToQueue({
-            id: presentedClusterId,
-            clusterName: managementCluster?.clusterName as string,
-            status: ClusterStatus.DELETING,
-            clusterType: ClusterType.WORKLOAD,
-            callback: handleGetClusters,
-          });
           closeDeleteModal();
           handleMenuClose();
         });
     }
-  };
+  }, [dispatch, presentedClusterName, closeDeleteModal, handleMenuClose]);
 
   const handleChange = useCallback(
     (event: React.SyntheticEvent, tabIndex: number) => {
       dispatch(setClusterManagamentTab(tabIndex));
-      if (presentedClusterId) {
-        dispatch(setPresentedClusterId(undefined));
+      if (presentedClusterName) {
+        dispatch(setPresentedClusterName(undefined));
       }
     },
-    [dispatch, presentedClusterId],
+    [dispatch, presentedClusterName],
   );
 
-  const handleNodeClick = useCallback(
-    (cluster: Cluster) => {
-      dispatch(setPresentedClusterId(cluster.clusterId));
+  const handleClusterSelect = useCallback(
+    (clusterName: string) => {
+      dispatch(setPresentedClusterName(clusterName));
       dispatch(setClusterCreationStep(ClusterCreationStep.DETAILS));
       openCreateClusterFlow();
     },
@@ -191,8 +152,9 @@ const ClusterManagement: FunctionComponent = () => {
       } = managementCluster;
 
       const draftCluster: WorkloadCluster = {
-        clusterId: 'draft',
-        clusterName: '',
+        clusterId: RESERVED_DRAFT_CLUSTER_NAME,
+        clusterName: RESERVED_DRAFT_CLUSTER_NAME,
+        status: ClusterStatus.PROVISIONING,
         type: defaultClusterType,
         nodeCount: SUGGESTED_WORKLOAD_NODE_COUNT,
         cloudProvider,
@@ -211,18 +173,7 @@ const ClusterManagement: FunctionComponent = () => {
 
   const handleCreateCluster = () => {
     if (clusterCreationStep !== ClusterCreationStep.DETAILS) {
-      dispatch(createWorkloadCluster())
-        .unwrap()
-        .then((response) => {
-          addClusterToQueue({
-            id: response.clusterId,
-            clusterName: managementCluster?.clusterName as string,
-            clusterType: response.type,
-            status: ClusterStatus.PROVISIONING,
-            callback: handleGetClusters,
-          });
-          dispatch(setClusterCreationStep(clusterCreationStep + 1));
-        });
+      dispatch(createWorkloadCluster());
     }
   };
 
@@ -231,36 +182,12 @@ const ClusterManagement: FunctionComponent = () => {
   }, [dispatch]);
 
   const handleDeleteMenuClick = useCallback(
-    (id: string) => {
-      dispatch(setPresentedClusterId(id));
+    (clusterName: string) => {
+      dispatch(setPresentedClusterName(clusterName));
       openDeleteModal();
     },
     [dispatch, openDeleteModal],
   );
-
-  useEffect(() => {
-    dispatch(getAllEnvironments());
-  }, [dispatch]);
-
-  useEffect(() => {
-    if (managementCluster) {
-      dispatch(
-        getCloudRegions({
-          values: managementCluster,
-          installType: managementCluster.cloudProvider,
-        }),
-      );
-    }
-  }, [dispatch, managementCluster]);
-
-  useEffect(() => {
-    const deletedClusters = Object.values(clusterQueue).filter(
-      (cluster) => cluster.status === ClusterStatus.DELETED,
-    );
-    if (deletedClusters.length) {
-      deletedClusters.forEach((cluster) => dispatch(removeClusterFromQueue(cluster.id)));
-    }
-  }, [clusterQueue, dispatch]);
 
   return (
     <Container>
@@ -302,16 +229,18 @@ const ClusterManagement: FunctionComponent = () => {
               clusters={clusterMap}
               managementCluster={managementCluster}
               onDeleteCluster={handleDeleteMenuClick}
+              selectedClusterName={presentedCluster?.clusterName}
+              onClusterRowSelected={handleClusterSelect}
             />
           )}
         </TabPanel>
         <TabPanel value={clusterManagementTab} index={ClusterManagementTab.GRAPH_VIEW}>
-          <Flow onNodeClick={handleNodeClick} />
+          <Flow onNodeClick={handleClusterSelect} />
         </TabPanel>
       </Content>
       <StyledDrawer open={createClusterFlowOpen} onClose={handleMenuClose} anchor="right">
         <CreateClusterFlow
-          cluster={clusterMap[presentedClusterId ?? '']}
+          cluster={presentedCluster}
           managementCluster={managementCluster}
           clusterCreationStep={clusterCreationStep}
           onMenuClose={handleMenuClose}
@@ -327,12 +256,12 @@ const ClusterManagement: FunctionComponent = () => {
           onNotificationClose={handleNotificationClose}
         />
       </StyledDrawer>
-      {presentedClusterId && (
+      {!!presentedCluster && (
         <DeleteCluster
           isOpen={isDeleteModalOpen}
           onCloseModal={closeDeleteModal}
           onDelete={handleDeleteCluster}
-          cluster={clusterMap[presentedClusterId]}
+          cluster={presentedCluster}
         />
       )}
     </Container>

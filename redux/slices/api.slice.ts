@@ -1,4 +1,5 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
+import { sortBy } from 'lodash';
 
 import {
   createCluster,
@@ -6,7 +7,6 @@ import {
   deleteCluster,
   getCloudDomains,
   getCloudRegions,
-  getCluster,
   getClusters,
   getInstanceSizes,
   getRegionZones,
@@ -20,16 +20,19 @@ import {
   Cluster,
   DraftCluster,
 } from '../../types/provision';
-import { ClusterCache, ClusterNameCache } from '../../types/redux';
+import { ClusterCache } from '../../types/redux';
+
+import { RESERVED_DRAFT_CLUSTER_NAME } from '@/constants';
 
 export interface ApiState {
   loading: boolean;
   status?: ClusterStatus;
   isProvisioned: boolean;
   isError: boolean;
+  responseError?: string;
   lastErrorCondition?: string;
   managementCluster?: ManagementCluster;
-  presentedClusterId?: Cluster['clusterId'];
+  presentedClusterName?: Cluster['clusterName'];
   completedSteps: Array<{ label: string; order: number }>;
   cloudDomains: Array<string>;
   cloudRegions: Array<string>;
@@ -39,7 +42,6 @@ export interface ApiState {
   clusterCreationStep: ClusterCreationStep;
   clusterConfig?: NewWorkloadClusterConfig;
   clusterMap: ClusterCache;
-  clusterNameCache: ClusterNameCache;
 }
 
 export const initialState: ApiState = {
@@ -48,7 +50,7 @@ export const initialState: ApiState = {
   lastErrorCondition: undefined,
   status: undefined,
   loading: false,
-  presentedClusterId: undefined,
+  presentedClusterName: undefined,
   completedSteps: [],
   cloudDomains: [],
   cloudRegions: [],
@@ -57,15 +59,17 @@ export const initialState: ApiState = {
   isAuthenticationValid: undefined,
   clusterCreationStep: ClusterCreationStep.CONFIG,
   clusterMap: {},
-  clusterNameCache: {},
 };
 
 const apiSlice = createSlice({
   name: 'api',
   initialState,
   reducers: {
-    setPresentedClusterId: (state, { payload }: PayloadAction<ApiState['presentedClusterId']>) => {
-      state.presentedClusterId = payload;
+    setPresentedClusterName: (
+      state,
+      { payload }: PayloadAction<ApiState['presentedClusterName']>,
+    ) => {
+      state.presentedClusterName = payload;
     },
     setManagementCluster: (state, { payload }: PayloadAction<ApiState['managementCluster']>) => {
       state.managementCluster = payload;
@@ -75,9 +79,6 @@ const apiSlice = createSlice({
     },
     setClusterMap: (state, { payload }: PayloadAction<ClusterCache>) => {
       state.clusterMap = payload;
-    },
-    setClusterNameCache: (state, { payload }: PayloadAction<ClusterNameCache>) => {
-      state.clusterNameCache = payload;
     },
     setCompletedSteps: (state, action) => {
       state.completedSteps = action.payload;
@@ -106,19 +107,22 @@ const apiSlice = createSlice({
     },
     createDraftCluster: (state, { payload }: PayloadAction<WorkloadCluster>) => {
       state.clusterMap[payload.clusterId] = payload;
-      state.presentedClusterId = payload.clusterId;
+      state.presentedClusterName = payload.clusterName;
     },
     removeDraftCluster: (state) => {
-      delete state.clusterMap['draft'];
+      delete state.clusterMap[RESERVED_DRAFT_CLUSTER_NAME];
     },
     updateDraftCluster: (state, { payload }: PayloadAction<DraftCluster>) => {
-      const currentDraftCluster = state.clusterMap['draft'];
+      const currentDraftCluster = state.clusterMap[RESERVED_DRAFT_CLUSTER_NAME];
       if (currentDraftCluster) {
-        state.clusterMap['draft'] = {
+        state.clusterMap[RESERVED_DRAFT_CLUSTER_NAME] = {
           ...currentDraftCluster,
           ...payload,
         };
       }
+    },
+    clearResponseError: (state) => {
+      state.responseError = undefined;
     },
   },
   extraReducers: (builder) => {
@@ -126,70 +130,75 @@ const apiSlice = createSlice({
       .addCase(createCluster.pending, (state) => {
         state.loading = true;
       })
-      .addCase(createCluster.fulfilled, (state, { payload }) => {
+      .addCase(createCluster.fulfilled, (state) => {
         state.loading = false;
-        state.status = payload.status;
-        state.managementCluster = payload;
       })
-      .addCase(createCluster.rejected, (state) => {
+      .addCase(createCluster.rejected, (state, action) => {
         state.loading = false;
         state.isError = true;
+        state.responseError = action.error.message;
       })
       .addCase(createWorkloadCluster.pending, (state) => {
         state.loading = true;
       })
-      .addCase(createWorkloadCluster.rejected, (state) => {
+      .addCase(createWorkloadCluster.rejected, (state, action) => {
         state.loading = false;
         state.isError = true;
+        state.responseError = action.error.message;
       })
       .addCase(createWorkloadCluster.fulfilled, (state, { payload }) => {
         state.loading = false;
-        delete state.clusterMap['draft'];
-        state.clusterMap[payload.clusterId] = payload;
-        state.presentedClusterId = payload.clusterId;
+
+        state.presentedClusterName = payload.clusterName;
+        state.clusterMap[payload.clusterName] = payload;
+        delete state.clusterMap[RESERVED_DRAFT_CLUSTER_NAME];
+
+        state.clusterCreationStep = ClusterCreationStep.DETAILS;
       })
       .addCase(deleteCluster.pending, (state) => {
-        if (state.presentedClusterId) {
-          state.clusterMap[state.presentedClusterId].status = ClusterStatus.DELETING;
+        if (state.presentedClusterName) {
+          state.clusterMap[state.presentedClusterName].status = ClusterStatus.DELETING;
         }
       })
-      .addCase(
-        getCluster.fulfilled,
-        (state, { payload: { managementCluster, clusterCache, clusterNameCache } }) => {
-          state.loading = false;
-          state.status = managementCluster.status;
-          state.managementCluster = managementCluster;
-          state.clusterMap = clusterCache;
-          state.clusterNameCache = clusterNameCache;
-
-          state.lastErrorCondition = managementCluster.lastErrorCondition;
-          state.isError = managementCluster.status === ClusterStatus.ERROR;
-          state.isProvisioned = managementCluster.status === ClusterStatus.PROVISIONED;
-        },
-      )
-      .addCase(
-        getClusters.fulfilled,
-        (state, { payload: { managementCluster, clusterCache, clusterNameCache } }) => {
-          state.loading = false;
-          state.isError = false;
-          state.managementCluster = managementCluster;
-          state.clusterMap = clusterCache;
-          state.clusterNameCache = clusterNameCache;
-        },
-      )
-      .addCase(getClusters.rejected, (state) => {
+      .addCase(deleteCluster.fulfilled, (state) => {
+        state.loading = false;
+      })
+      .addCase(deleteCluster.rejected, (state, action) => {
         state.loading = false;
         state.isError = true;
+        state.responseError = action.error.message;
+      })
+      .addCase(getClusters.fulfilled, (state, { payload: { managementCluster, clusterCache } }) => {
+        state.loading = false;
+        state.managementCluster = managementCluster;
+        state.clusterMap = { ...state.clusterMap, ...clusterCache };
+
+        state.lastErrorCondition = managementCluster.lastErrorCondition;
+        state.isError = managementCluster.status === ClusterStatus.ERROR;
+        state.isProvisioned = managementCluster.status === ClusterStatus.PROVISIONED;
+      })
+      .addCase(getClusters.rejected, (state, action) => {
+        state.loading = false;
+        state.isError = true;
+        state.responseError = action.error.message;
         state.managementCluster = undefined;
       })
+      .addCase(getCloudDomains.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(getCloudDomains.rejected, (state, action) => {
+        state.loading = false;
+        state.responseError = action.error.message;
+      })
       .addCase(getCloudDomains.fulfilled, (state, { payload }: PayloadAction<Array<string>>) => {
-        state.cloudDomains = payload;
+        state.loading = false;
+        state.cloudDomains = sortBy(payload);
       })
       .addCase(getCloudRegions.pending, (state) => {
         state.loading = true;
       })
       .addCase(getCloudRegions.fulfilled, (state, { payload }: PayloadAction<Array<string>>) => {
-        state.cloudRegions = payload;
+        state.cloudRegions = sortBy(payload);
         state.isAuthenticationValid = true;
         state.loading = false;
       })
@@ -204,9 +213,10 @@ const apiSlice = createSlice({
         state.instanceSizes = payload;
         state.loading = false;
       })
-      .addCase(getInstanceSizes.rejected, (state) => {
+      .addCase(getInstanceSizes.rejected, (state, action) => {
         state.loading = false;
         state.instanceSizes = [];
+        state.responseError = action.error.message;
       })
       .addCase(getRegionZones.pending, (state) => {
         state.loading = true;
@@ -215,9 +225,10 @@ const apiSlice = createSlice({
         state.cloudZones = payload;
         state.loading = false;
       })
-      .addCase(getRegionZones.rejected, (state) => {
+      .addCase(getRegionZones.rejected, (state, action) => {
         state.loading = false;
         state.cloudZones = [];
+        state.responseError = action.error.message;
       });
   },
 });
@@ -232,10 +243,10 @@ export const {
   createDraftCluster,
   removeDraftCluster,
   updateDraftCluster,
-  setPresentedClusterId,
+  setPresentedClusterName,
   setManagementCluster,
   setClusterMap,
-  setClusterNameCache,
+  clearResponseError,
 } = apiSlice.actions;
 
 export const apiReducer = apiSlice.reducer;

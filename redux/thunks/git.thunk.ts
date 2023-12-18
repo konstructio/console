@@ -1,14 +1,14 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { GitLabGroup, GitLabProject, GitLabUser } from 'types/gitlab';
 
-import { githubApi } from '../../services/github';
-import { gitlabApi } from '../../services/gitlab';
+import { GitLabGroup, GitLabProject, GitLabUser } from '@/types/gitlab';
 import {
   GithubOrganizationRepos,
   GithubOrganizationTeams,
   GithubUser,
   GithubUserOrganization,
-} from '../../types/github';
+} from '@/types/github';
+import { gitlabApi } from '@/services/gitlab';
+import { githubApi } from '@/services/github';
 
 export const getGithubUser = createAsyncThunk<GithubUser, string>(
   'git/getGithubUser',
@@ -90,18 +90,18 @@ export const getGitlabGroups = createAsyncThunk<GitLabGroup[], string>(
   },
 );
 
-export const getGitLabSubgroups = createAsyncThunk<
-  GitLabProject[],
-  { token: string; group: string }
->('git/getGitLabSubgroups', async ({ token, group }) => {
-  return (
-    await gitlabApi.get<GitLabProject[]>(`/groups/${group}/subgroups?per_page=100`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    })
-  ).data;
-});
+export const getGitLabSubgroups = createAsyncThunk<GitLabGroup[], { token: string; group: string }>(
+  'git/getGitLabSubgroups',
+  async ({ token, group }) => {
+    return (
+      await gitlabApi.get<GitLabGroup[]>(`/groups/${group}/subgroups?per_page=100`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+    ).data;
+  },
+);
 
 export const getGitLabProjects = createAsyncThunk<
   GitLabProject[],

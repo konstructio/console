@@ -8,6 +8,8 @@ import React, {
 import { useFormContext } from 'react-hook-form';
 import Box from '@mui/material/Box';
 
+import { usePhysicalClustersPermissions } from '../../../hooks/usePhysicalClustersPermission';
+
 import { Container } from './clusterCreation.styled';
 import { InputContainer } from './advancedOptions/advancedOptions.styled';
 
@@ -24,14 +26,19 @@ import {
 import { EXCLUSIVE_PLUM } from '@/constants/colors';
 import ControlledNumberInput from '@/components/controlledFields/numberInput';
 import ControlledRadioGroup from '@/components/controlledFields/radio';
-import { LOWER_KEBAB_CASE_REGEX, MIN_NODE_COUNT, WORKLOAD_CLUSTER_OPTIONS } from '@/constants';
+import {
+  LOWER_KEBAB_CASE_REGEX,
+  MIN_NODE_COUNT,
+  RESERVED_DRAFT_CLUSTER_NAME,
+  WORKLOAD_CLUSTER_OPTIONS,
+} from '@/constants';
 import { updateDraftCluster } from '@/redux/slices/api.slice';
 import ControlledEnvironmentSelect from '@/components/controlledFields/environmentSelect';
 import Modal from '@/components/modal';
 import useModal from '@/hooks/useModal';
 import { CreateEnvironmentMenu } from '@/components/createEnvironmentMenu';
 import LearnMore from '@/components/learnMore';
-import { createEnvironment } from '@/redux/thunks/environments.thunk';
+import { createEnvironment, getAllEnvironments } from '@/redux/thunks/environments.thunk';
 import { noop } from '@/utils/noop';
 import { clearEnvironmentError } from '@/redux/slices/environments.slice';
 import { InstallationType } from '@/types/redux';
@@ -51,7 +58,6 @@ const ClusterCreationForm: FunctionComponent<Omit<ComponentPropsWithoutRef<'div'
     managementCluster,
     cloudRegions,
     cloudZones,
-    clusterNameCache,
     clusterMap,
     environments,
     instanceSizes,
@@ -68,7 +74,7 @@ const ClusterCreationForm: FunctionComponent<Omit<ComponentPropsWithoutRef<'div'
     formState: { errors },
   } = useFormContext<NewWorkloadClusterConfig>();
 
-  const { type, nodeCount, instanceSize, cloudRegion } = getValues();
+  const { type, nodeCount, instanceSize, cloudRegion, clusterName } = getValues();
 
   const handleAddEnvironment = useCallback(
     (environment: ClusterEnvironment) => {
@@ -140,16 +146,18 @@ const ClusterCreationForm: FunctionComponent<Omit<ComponentPropsWithoutRef<'div'
     }
   };
 
-  const draftCluster = useMemo(() => clusterMap['draft'], [clusterMap]);
+  const { hasPermissions } = usePhysicalClustersPermissions(managementCluster?.cloudProvider);
+
+  const draftCluster = useMemo(() => clusterMap[RESERVED_DRAFT_CLUSTER_NAME], [clusterMap]);
 
   const isVCluster = useMemo(() => type === ClusterType.WORKLOAD_V_CLUSTER, [type]);
 
   const clusterOptions = useMemo(() => {
-    if (type === ClusterType.WORKLOAD) {
+    if (hasPermissions) {
       return WORKLOAD_CLUSTER_OPTIONS;
     }
     return WORKLOAD_CLUSTER_OPTIONS.filter((option) => option.value !== ClusterType.WORKLOAD);
-  }, [type]);
+  }, [hasPermissions]);
 
   useEffect(() => {
     const subscription = watch((values) => {
@@ -169,14 +177,28 @@ const ClusterCreationForm: FunctionComponent<Omit<ComponentPropsWithoutRef<'div'
           installType: managementCluster.cloudProvider,
         }),
       );
+      dispatch(getAllEnvironments());
     }
-  }, [dispatch, managementCluster]);
+    // i do not want to get cloud regions every time management cluster updates
+    // initial load and hard refresh is sufficient.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dispatch]);
 
   useEffect(() => {
-    if (cloudRegion) {
-      handleRegionOnSelect(cloudRegion);
+    if (cloudRegion && managementCluster) {
+      const { key, value } = getCloudProviderAuth(managementCluster);
+      dispatch(
+        getInstanceSizes({
+          installType: managementCluster?.cloudProvider,
+          region: cloudRegion,
+          values: { [`${key}_auth`]: value },
+        }),
+      );
     }
-  }, [cloudRegion, handleRegionOnSelect]);
+    // i do not want to get instance sizes every time management cluster updates
+    // initial load/hard refresh/cloudRegion update is sufficient.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [cloudRegion]);
 
   function getCloudProviderAuth(managamentCluster: ManagementCluster): {
     key?: string;
@@ -209,7 +231,6 @@ const ClusterCreationForm: FunctionComponent<Omit<ComponentPropsWithoutRef<'div'
           href="https://docs.kubefirst.io/civo/quick-start/cluster-management "
           description="A partitioned space in your management cluster."
           linkTitle="Learn More"
-          withoutDivider
         />
       </InputContainer>
       <>
@@ -239,7 +260,7 @@ const ClusterCreationForm: FunctionComponent<Omit<ComponentPropsWithoutRef<'div'
       <ControlledTextField
         control={control}
         name="clusterName"
-        defaultValue={draftCluster?.clusterName}
+        defaultValue={clusterName}
         label="Cluster name"
         rules={{
           maxLength: 25,
@@ -251,8 +272,11 @@ const ClusterCreationForm: FunctionComponent<Omit<ComponentPropsWithoutRef<'div'
           },
           validate: {
             previouslyUsedClusterNames: (value) =>
-              (typeof value === 'string' && !clusterNameCache[value]) ||
+              (typeof value === 'string' && !clusterMap[value]) ||
               'Please use a unique name that has not been previously provisioned',
+            reservedClusterName: (value) =>
+              (typeof value === 'string' && value !== RESERVED_DRAFT_CLUSTER_NAME) ||
+              'Please use a cluster name that is not reserved',
           },
         }}
         onErrorText={errors.clusterName?.message}

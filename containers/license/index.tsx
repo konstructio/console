@@ -1,6 +1,6 @@
 import React, { FunctionComponent, useMemo } from 'react';
 import { Box, CircularProgress } from '@mui/material';
-import { Field, FieldValues, useFormContext } from 'react-hook-form';
+import { FieldValues, useFormContext } from 'react-hook-form';
 
 import { BottomFormContainer, FormContainer, UList } from './license.styled';
 
@@ -61,12 +61,7 @@ const License: FunctionComponent<LicenseProps> = ({ handleActivateLicense }) => 
         )}
       </FormContainer>
       <BottomFormContainer>
-        <LearnMore
-          href=""
-          description="Learn more about"
-          linkTitle="your license key"
-          withoutDivider
-        />
+        <LearnMore href="" description="Learn more about" linkTitle="your license key" />
         <Button type="submit" variant="contained" color="primary" disabled={!isValid}>
           {isLoading && <CircularProgress size={20} sx={{ mr: '8px' }} />}
           {hasLicenseKey ? 'Update' : 'Activate'}
@@ -74,7 +69,7 @@ const License: FunctionComponent<LicenseProps> = ({ handleActivateLicense }) => 
       </BottomFormContainer>
       {hasLicenseKey && (
         <>
-          <FormContainer sx={{ mt: 4 }}>
+          <FormContainer>
             <Typography variant="subtitle2" color={VOLCANIC_SAND} sx={{ mb: 1 }}>
               Cancel my subscription
             </Typography>
@@ -97,7 +92,6 @@ const License: FunctionComponent<LicenseProps> = ({ handleActivateLicense }) => 
               href=""
               description="If you’re having any issues with kubefirst, "
               linkTitle="please reach out to us."
-              withoutDivider
             />
             <Button variant="contained" color="error" onClick={() => console.log('todo')}>
               {isLoading && <CircularProgress size={20} sx={{ mr: '8px' }} />}

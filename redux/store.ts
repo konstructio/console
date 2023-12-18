@@ -21,6 +21,7 @@ import {
   notificationsReducer,
   settingsReducer,
   subscriptionReducer,
+  digitalOceanReducer,
 } from './slices';
 
 const rootReducer = combineReducers({
@@ -38,6 +39,7 @@ const rootReducer = combineReducers({
   notifications: notificationsReducer,
   settings: settingsReducer,
   subscription: subscriptionReducer,
+  digitalOcean: digitalOceanReducer,
 });
 
 const config = getPersistConfig({

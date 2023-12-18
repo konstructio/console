@@ -11,6 +11,7 @@ describe('redux/thunks/license', () => {
   const reduxStore = makeStore();
 
   beforeEach(() => {
+    mock.reset();
     reduxStore.dispatch(setLicense(undefined));
   });
 

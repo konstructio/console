@@ -1,4 +1,4 @@
-import { Row } from '../';
+import { GitProvider, Row } from '../';
 import { AdvancedOptions, InstallationType } from '../redux';
 import { TagColor } from '../../components/tag';
 
@@ -62,17 +62,17 @@ export interface ClusterResponse {
   cluster_id: string;
   cluster_type: ClusterType.MANAGEMENT;
   alerts_email: string;
-  git_provider: string;
+  git_provider: GitProvider;
   git_host: string;
   git_user: string;
   node_type: string;
   node_count: number;
   workload_clusters?: {
     admin_email: string;
-    cloud_provider: string;
+    cloud_provider: InstallationType;
     cluster_id: string;
     cluster_name: string;
-    cluster_type: string;
+    cluster_type: ClusterType;
     cloud_region: string;
     creation_timestamp: string;
     domain_name: string;
@@ -143,20 +143,20 @@ export interface ClusterResponse {
 
 export interface Cluster {
   adminEmail: string;
-  cloudProvider?: InstallationType;
+  cloudProvider: InstallationType;
   type: ClusterType;
   clusterId: string;
-  clusterName?: string;
+  clusterName: string;
   cloudRegion?: string;
   creationDate?: string;
   domainName: string;
   subDomainName?: string;
   dnsProvider: string;
   environment?: ClusterEnvironment;
-  gitProvider: string;
+  gitProvider: GitProvider;
   instanceSize?: string;
   nodeCount?: number;
-  status?: ClusterStatus;
+  status: ClusterStatus;
   gitAuth: {
     gitOwner?: string;
     gitToken?: string;
@@ -165,7 +165,6 @@ export interface Cluster {
 }
 
 export interface ManagementCluster extends Cluster, Row {
-  status?: ClusterStatus;
   lastErrorCondition: string;
   workloadClusters: WorkloadCluster[];
   gitHost: string;
@@ -234,9 +233,5 @@ export interface ClusterServices {
 
 export interface ClusterQueue {
   clusterName: string;
-  clusterType: ClusterType;
-  id: string;
   status: ClusterStatus;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  callback: any;
 }

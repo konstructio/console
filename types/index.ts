@@ -31,3 +31,8 @@ export type JSONValue = string | number | boolean | JSONObject | JSONValue[];
 export interface JSONObject {
   [x: string]: JSONValue;
 }
+
+export enum GitProtocol {
+  HTTPS = 'https',
+  SSH = 'ssh',
+}

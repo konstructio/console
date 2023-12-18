@@ -2,11 +2,16 @@
 import { createContext } from 'react';
 
 import { ClusterQueue } from '@/types/provision';
+import { noop } from '@/utils/noop';
 
-export interface QueueContenxtProps {
+export interface QueueContextProps {
   addClusterToQueue: (clusterQueue: ClusterQueue) => void;
-  deleteFromClusterToQueue: (clusterId: string) => void;
+  deleteClusterFromQueue: (clusterId: string) => void;
 }
 
-const QueueContext = createContext<QueueContenxtProps>({} as QueueContenxtProps);
+const QueueContext = createContext<QueueContextProps>({
+  addClusterToQueue: noop,
+  deleteClusterFromQueue: noop,
+});
+
 export default QueueContext;

@@ -10,6 +10,8 @@ import {
 import { ClusterCache } from '../../types/redux';
 import { CustomGraphNode } from '../../components/graphNode';
 
+import { RESERVED_DRAFT_CLUSTER_NAME } from '@/constants';
+
 const WORKLOAD_CLUSTER_Y_SPACE = 60;
 const WORKLOAD_CLUSTER_X_SPACE = 250;
 const WORKLOAD_NODE_HEIGHT = 128;
@@ -89,7 +91,7 @@ export function generateNodesConfig(
       : initialClusterYPosition + (WORKLOAD_CLUSTER_Y_SPACE + WORKLOAD_NODE_HEIGHT) * i;
 
     const animatedEdge =
-      workloadCluster.clusterId === 'draft' ||
+      workloadCluster.clusterId === RESERVED_DRAFT_CLUSTER_NAME ||
       workloadCluster.status === ClusterStatus.PROVISIONING;
 
     nodes.push(

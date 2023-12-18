@@ -1,4 +1,10 @@
-import React, { ComponentPropsWithoutRef, FunctionComponent, useEffect, useState } from 'react';
+import React, {
+  ComponentPropsWithoutRef,
+  FunctionComponent,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 import moment from 'moment';
 
 import {
@@ -22,6 +28,7 @@ import {
 } from '@/types/provision';
 import StatusIndicator from '@/components/statusIndicator';
 import { BISCAY, VOLCANIC_SAND } from '@/constants/colors';
+import { CLOUD_PROVIDER_DISPLAY_NAME, GIT_PROVIDER_DISPLAY_NAME } from '@/constants';
 import Tag from '@/components/tag';
 
 export interface ClusterDetailsProps extends Omit<ComponentPropsWithoutRef<'div'>, 'key'> {
@@ -43,6 +50,7 @@ const ClusterDetails: FunctionComponent<ClusterDetailsProps> = ({
     cloudRegion,
     creationDate,
     domainName,
+    subDomainName,
     gitProvider,
     nodeCount,
     instanceSize,
@@ -58,6 +66,11 @@ const ClusterDetails: FunctionComponent<ClusterDetailsProps> = ({
     setTimeout(() => setAvailable(true), 10000);
   });
 
+  const fullDomainName = useMemo(
+    () => (subDomainName ? `${subDomainName}.${domainName}` : domainName),
+    [subDomainName, domainName],
+  );
+
   return (
     <Container {...rest}>
       <Column style={{ gap: '8px' }}>
@@ -72,12 +85,15 @@ const ClusterDetails: FunctionComponent<ClusterDetailsProps> = ({
         )}
         <Column style={{ gap: '4px' }}>
           <StatusIndicator available>
-            <ExternalLink href={`https://argocd.${domainName}/applications/clusters`} available>
+            <ExternalLink href={`https://argocd.${fullDomainName}/applications/clusters`} available>
               View your Argo CD clusters
             </ExternalLink>
           </StatusIndicator>
           <StatusIndicator available={available}>
-            <ExternalLink href={`https://${host}/${gitOwner}`} available={available}>
+            <ExternalLink
+              href={`https://${host}/${gitOwner}/gitops/tree/main/registry/clusters/${clusterName}`}
+              available={available}
+            >
               View your {gitProvider} cluster configuration
             </ExternalLink>
           </StatusIndicator>
@@ -89,7 +105,7 @@ const ClusterDetails: FunctionComponent<ClusterDetailsProps> = ({
         <RowInfo>
           <ColumnInfo>
             <StyledLabel variant="labelLarge">Cluster domain name</StyledLabel>
-            <StyledValue variant="body2">{domainName}</StyledValue>
+            <StyledValue variant="body2">{fullDomainName}</StyledValue>
           </ColumnInfo>
           <ColumnInfo>
             <StyledLabel variant="labelLarge">Alerts email</StyledLabel>
@@ -114,12 +130,12 @@ const ClusterDetails: FunctionComponent<ClusterDetailsProps> = ({
         {/* Third Row */}
         <RowInfo>
           <ColumnInfo>
-            <StyledLabel variant="labelLarge">GIT provider</StyledLabel>
-            <StyledValue variant="body2">{gitProvider}</StyledValue>
+            <StyledLabel variant="labelLarge">Git provider</StyledLabel>
+            <StyledValue variant="body2">{GIT_PROVIDER_DISPLAY_NAME[gitProvider]}</StyledValue>
           </ColumnInfo>
           <ColumnInfo>
             <StyledLabel variant="labelLarge">Cloud provider</StyledLabel>
-            <StyledValue variant="body2">{cloudProvider}</StyledValue>
+            <StyledValue variant="body2">{CLOUD_PROVIDER_DISPLAY_NAME[cloudProvider]}</StyledValue>
           </ColumnInfo>
         </RowInfo>
 
@@ -143,7 +159,7 @@ const ClusterDetails: FunctionComponent<ClusterDetailsProps> = ({
           <ColumnInfo>
             <StyledLabel variant="labelLarge">Instance size</StyledLabel>
             <StyledValue variant="body2" style={{ width: '100%' }}>
-              {instanceSize}
+              {instanceSize?.toUpperCase()}
             </StyledValue>
           </ColumnInfo>
         </RowInfo>
