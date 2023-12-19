@@ -18,7 +18,7 @@ export async function validateLicense() {
   }
 }
 
-export async function getFeatureFlas() {
+export async function getFeatureFlags() {
   const result = await axios.get<{ flags: Record<FeatureFlag, boolean> }>(`${BASE_URL}/api/flags`);
 
   if ('error' in result) {
