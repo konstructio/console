@@ -7,10 +7,6 @@ export interface ControlledTextFieldProps<T extends FieldValues> extends UseCont
   label: string;
   required?: boolean;
   control: Control<T>;
-  rules: {
-    required: boolean;
-    pattern?: RegExp;
-  };
   helperText?: string;
   error?: boolean;
   onErrorText?: string;
