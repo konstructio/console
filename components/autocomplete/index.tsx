@@ -22,6 +22,7 @@ export interface IAutocompleteProps extends ControllerRenderProps<FieldValues> {
   disabled?: boolean;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   filterOptions?: (options: any[]) => any[];
+  onClick?: () => void;
 }
 
 const AutocompleteComponent: FunctionComponent<IAutocompleteProps> = ({
@@ -35,6 +36,7 @@ const AutocompleteComponent: FunctionComponent<IAutocompleteProps> = ({
   sx,
   filterOptions,
   disabled,
+  onClick,
   ...props
 }) => {
   // Unfortunately MaterialUI doesn't not update the dom state when no options are available
@@ -75,6 +77,7 @@ const AutocompleteComponent: FunctionComponent<IAutocompleteProps> = ({
           value={value}
           {...params}
           label={label}
+          onClick={onClick}
         />
       )}
     />
