@@ -9,7 +9,7 @@ const useFeatureFlag = (flagName?: FeatureFlag) => {
 
   const flag = useMemo(() => {
     if (flagName) {
-      return flags[flagName];
+      return flags && flags[flagName];
     }
     return false;
   }, [flagName, flags]);
