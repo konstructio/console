@@ -102,7 +102,7 @@ export const CreateClusterFlow: FunctionComponent<CreateClusterFlowProps> = ({
             <Row>
               <Button
                 variant="outlined"
-                color="primary"
+                color="secondary"
                 type="button"
                 data-test-id="workload-cluster-edit"
                 onClick={toggle}

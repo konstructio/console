@@ -217,9 +217,11 @@ const Provision: FunctionComponent = () => {
           isLastStep={isLastStep}
           isProvisionStep={isProvisionStep}
           footerContent={
-            <FormFooter>
-              <LearnMore href={href} linkTitle={linkTitle} description="Learn more about" />
-            </FormFooter>
+            isAuthStep || isSetupStep ? (
+              <FormFooter>
+                <LearnMore href={href} linkTitle={linkTitle} description="Learn more about" />
+              </FormFooter>
+            ) : null
           }
         >
           {error || authErrors.length ? (
@@ -266,6 +268,7 @@ const Provision: FunctionComponent = () => {
     authErrors,
     provisionCluster,
     isSetupStep,
+    isAuthStep,
     installType,
     showAdvancedOptions,
     linkTitle,
@@ -299,7 +302,7 @@ const Provision: FunctionComponent = () => {
           }
           onBackButtonClick={handleBackButtonClick}
           nextButtonText={isSetupStep ? 'Create cluster' : 'Next'}
-          nextButtonDisabled={!isValid}
+          // nextButtonDisabled={!isValid}
           hasInfo={hasInfo}
           isLoading={isLoading}
           isProvisionStep={isProvisionStep}
