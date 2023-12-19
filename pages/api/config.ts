@@ -15,6 +15,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse<Config
     IS_CLUSTER_ZERO = '',
     KUBEFIRST_VERSION = '',
     POSTHOG_KEY = '',
+    SAAS_URL = '',
   } = process.env;
 
   res.status(200).json({
@@ -26,6 +27,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse<Config
     isClusterZero: IS_CLUSTER_ZERO === 'true',
     kubefirstVersion: KUBEFIRST_VERSION,
     installMethod: INSTALL_METHOD,
+    saasURL: SAAS_URL,
     POSTHOG_KEY,
   });
 }

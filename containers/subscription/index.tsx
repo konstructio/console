@@ -3,6 +3,7 @@ import React, { FunctionComponent, useEffect, useMemo } from 'react';
 import Box from '@mui/material/Box';
 import Tabs from '@mui/material/Tabs';
 import { FormProvider, useForm } from 'react-hook-form';
+import { useRouter } from 'next/navigation';
 
 import Plans from '../plans';
 import License from '../license';
@@ -24,10 +25,12 @@ interface SubscriptionProps {
 
 const Subscription: FunctionComponent<SubscriptionProps> = ({ plans }) => {
   const dispatch = useAppDispatch();
+  const { push } = useRouter();
 
-  const { activeTab, license } = useAppSelector(({ settings, subscription }) => ({
+  const { activeTab, license, saasURL } = useAppSelector(({ settings, subscription, config }) => ({
     activeTab: settings.activeTab,
     license: subscription.license,
+    saasURL: config.saasURL,
   }));
 
   const methods = useForm<{ licenseKey: string }>({
@@ -48,6 +51,10 @@ const Subscription: FunctionComponent<SubscriptionProps> = ({ plans }) => {
 
   const handleActivateLicense = (licenseKey: string) => {
     dispatch(activateLicenseKey(licenseKey)).then(() => dispatch(validateLicenseKey()));
+  };
+
+  const handleRedirectToSaas = (plan: string) => {
+    push(`${saasURL}?plan=${plan}`);
   };
 
   const hasLicenseKey = useMemo<boolean>(() => !!license?.licenseKey, [license?.licenseKey]);
@@ -93,7 +100,7 @@ const Subscription: FunctionComponent<SubscriptionProps> = ({ plans }) => {
                 plan={plan}
                 hideButton={currentPlanIndex > index}
                 isActive={license?.plan?.name === plan.name}
-                onClick={() => console.log(plan)}
+                onClick={() => handleRedirectToSaas(plan.name)}
               />
             ))}
           </PlansContainer>
