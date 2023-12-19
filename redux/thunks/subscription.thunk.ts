@@ -1,6 +1,8 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
+import { RootState } from '../store';
+
 import { License } from '@/types/subscription';
 
 export const validateLicenseKey = createAsyncThunk<License>(
@@ -18,20 +20,25 @@ export const validateLicenseKey = createAsyncThunk<License>(
   },
 );
 
-export const activateLicenseKey = createAsyncThunk<License, string>(
-  'subscription/activateLicenseKey',
-  async (licenseKey) => {
-    const result = await axios.post<License>('/api/proxy?target=ee', {
-      url: `/subscription/yor8bq/activateCluster`,
-      body: {
-        licenseKey,
-      },
-    });
+export const activateLicenseKey = createAsyncThunk<
+  License,
+  string,
+  {
+    state: RootState;
+  }
+>('subscription/activateLicenseKey', async (licenseKey, { getState }) => {
+  const { managementCluster } = getState().api;
 
-    if ('error' in result) {
-      throw result.error;
-    }
+  const result = await axios.post<License>('/api/proxy?target=ee', {
+    url: `/subscription/${managementCluster?.clusterId}/activateCluster`,
+    body: {
+      licenseKey,
+    },
+  });
 
-    return result.data;
-  },
-);
+  if ('error' in result) {
+    throw result.error;
+  }
+
+  return result.data;
+});

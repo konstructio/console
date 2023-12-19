@@ -16,7 +16,7 @@ async function getProductPlans() {
 }
 
 export default async function Page() {
-  const products = await getProductPlans();
+  const plans = await getProductPlans();
 
-  return <Subscription products={products} />;
+  return <Subscription plans={plans} />;
 }

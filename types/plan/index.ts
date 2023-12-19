@@ -1,4 +1,4 @@
-export interface Product {
+export interface Plan {
   id: string;
   object: string;
   active: true;

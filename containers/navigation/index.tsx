@@ -32,6 +32,7 @@ const Navigation: FunctionComponent = () => {
   const { selectedCluster } = useAppSelector(selectCluster());
 
   const { isEnabled: isMultiClusterEnabled } = useFeatureFlag(FeatureFlag.MULTICLUSTER_MANAGEMENT);
+  const { isEnabled: isSubscriptionEnabled } = useFeatureFlag(FeatureFlag.SAAS_SUBSCRIPTION);
 
   const routes = useMemo(
     () =>
@@ -63,10 +64,10 @@ const Navigation: FunctionComponent = () => {
           title: 'Subscription',
           group: 'Admin settings',
           groupOrder: 2,
-          isEnabled: !isClusterZero && selectedCluster?.cloudProvider !== 'k3d',
+          isEnabled: !isClusterZero && isSubscriptionEnabled,
         },
       ].filter(({ isEnabled }) => isEnabled),
-    [isMultiClusterEnabled, isClusterZero, selectedCluster?.cloudProvider],
+    [isMultiClusterEnabled, isClusterZero, selectedCluster?.cloudProvider, isSubscriptionEnabled],
   );
 
   const handleIsActiveItem = useCallback(

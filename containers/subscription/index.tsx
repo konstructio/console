@@ -15,14 +15,14 @@ import { useAppDispatch, useAppSelector } from '@/redux/store';
 import Typography from '@/components/typography';
 import { setActiveTab } from '@/redux/slices/settings.slice';
 import { SettingsTab } from '@/constants/setttings';
-import { Product } from '@/types/product';
+import { Plan } from '@/types/plan';
 import { activateLicenseKey, validateLicenseKey } from '@/redux/thunks/subscription.thunk';
 
 interface SubscriptionProps {
-  products: Array<Product>;
+  plans: Array<Plan>;
 }
 
-const Subscription: FunctionComponent<SubscriptionProps> = ({ products }) => {
+const Subscription: FunctionComponent<SubscriptionProps> = ({ plans }) => {
   const dispatch = useAppDispatch();
 
   const { activeTab, license } = useAppSelector(({ settings, subscription }) => ({
@@ -36,6 +36,11 @@ const Subscription: FunctionComponent<SubscriptionProps> = ({ products }) => {
       licenseKey: license?.licenseKey || '',
     },
   });
+
+  const currentPlanIndex = useMemo(
+    () => plans.findIndex(({ name }) => name === license?.plan?.name),
+    [license, plans],
+  );
 
   const handleOnChangeTab = (event: React.SyntheticEvent, tabIndex: number) => {
     dispatch(setActiveTab(tabIndex));
@@ -75,7 +80,6 @@ const Subscription: FunctionComponent<SubscriptionProps> = ({ products }) => {
             />
           </Tabs>
         </Box>
-
         <TabPanel value={activeTab} index={SettingsTab.LICENSE_KEY}>
           <FormProvider {...methods}>
             <License handleActivateLicense={handleActivateLicense} />
@@ -83,12 +87,13 @@ const Subscription: FunctionComponent<SubscriptionProps> = ({ products }) => {
         </TabPanel>
         <TabPanel value={activeTab} index={SettingsTab.PLANS}>
           <PlansContainer>
-            {products.map((product) => (
+            {plans.map((plan, index) => (
               <Plans
-                key={product.id}
-                product={product}
-                isActive={license?.plan?.name === product.name}
-                onClick={() => console.log(product)}
+                key={plan.id}
+                plan={plan}
+                hideButton={currentPlanIndex > index}
+                isActive={license?.plan?.name === plan.name}
+                onClick={() => console.log(plan)}
               />
             ))}
           </PlansContainer>

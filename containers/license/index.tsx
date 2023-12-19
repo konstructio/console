@@ -31,7 +31,22 @@ const License: FunctionComponent<LicenseProps> = ({ handleActivateLicense }) => 
   };
   return (
     <Box component="form" onSubmit={handleSubmit(onSubmit)}>
-      <FormContainer>
+      <FormContainer
+        footerContent={
+          <BottomFormContainer>
+            <LearnMore href="" description="Learn more about" linkTitle="your license key" />
+            <Button
+              type="submit"
+              variant="contained"
+              color="primary"
+              disabled={!isValid && !hasLicenseKey}
+            >
+              {isLoading && <CircularProgress size={20} sx={{ mr: '8px' }} />}
+              {hasLicenseKey ? 'Update' : 'Activate'}
+            </Button>
+          </BottomFormContainer>
+        }
+      >
         {hasLicenseKey ? (
           <>
             <Typography
@@ -60,16 +75,24 @@ const License: FunctionComponent<LicenseProps> = ({ handleActivateLicense }) => 
           />
         )}
       </FormContainer>
-      <BottomFormContainer>
-        <LearnMore href="" description="Learn more about" linkTitle="your license key" />
-        <Button type="submit" variant="contained" color="primary" disabled={!isValid}>
-          {isLoading && <CircularProgress size={20} sx={{ mr: '8px' }} />}
-          {hasLicenseKey ? 'Update' : 'Activate'}
-        </Button>
-      </BottomFormContainer>
       {hasLicenseKey && (
         <>
-          <FormContainer>
+          <FormContainer
+            hasMargin
+            footerContent={
+              <BottomFormContainer>
+                <LearnMore
+                  href=""
+                  description="If you’re having any issues with kubefirst, "
+                  linkTitle="please reach out to us."
+                />
+                <Button variant="contained" color="error">
+                  {isLoading && <CircularProgress size={20} sx={{ mr: '8px' }} />}
+                  Cancel subscription
+                </Button>
+              </BottomFormContainer>
+            }
+          >
             <Typography variant="subtitle2" color={VOLCANIC_SAND} sx={{ mb: 1 }}>
               Cancel my subscription
             </Typography>
@@ -87,17 +110,6 @@ const License: FunctionComponent<LicenseProps> = ({ handleActivateLicense }) => 
               </UList>
             </Typography>
           </FormContainer>
-          <BottomFormContainer>
-            <LearnMore
-              href=""
-              description="If you’re having any issues with kubefirst, "
-              linkTitle="please reach out to us."
-            />
-            <Button variant="contained" color="error" onClick={() => console.log('todo')}>
-              {isLoading && <CircularProgress size={20} sx={{ mr: '8px' }} />}
-              Cancel subscription
-            </Button>
-          </BottomFormContainer>
         </>
       )}
     </Box>
