@@ -7,11 +7,11 @@ const BASE_URL = process.env.NEXTAUTH_URL;
 
 export async function validateLicense() {
   try {
-    const result = await axios.post<License>(`${BASE_URL}/api/proxy?target=ee`, {
-      url: `/subscription/validate`,
-    });
-
-    return result?.data;
+    return (
+      await axios.post<License>(`${BASE_URL}/api/proxy?target=ee`, {
+        url: `/subscription/validate`,
+      })
+    ).data;
   } catch (error) {
     // supressing error. license not found
     return {} as License;
@@ -19,23 +19,24 @@ export async function validateLicense() {
 }
 
 export async function getFeatureFlags() {
-  const result = await axios.get<{ flags: Record<FeatureFlag, boolean> }>(`${BASE_URL}/api/flags`);
-
-  if ('error' in result) {
+  try {
+    return (await axios.get<{ flags: Record<FeatureFlag, boolean> }>(`${BASE_URL}/api/flags`)).data
+      .flags;
+  } catch (error) {
+    // supressing error to avoid ssr crashes
     // eslint-disable-next-line no-console
-    console.log('Failed to fetch flags', result.error);
+    console.log('unable to get feature flags');
+    return {} as Record<FeatureFlag, boolean>;
   }
-
-  return result.data.flags;
 }
 
 export async function getEnvVars() {
-  const result = await axios.get<EnvironmentVariables>(`${BASE_URL}/api/config`);
-
-  if ('error' in result) {
+  try {
+    return (await axios.get<EnvironmentVariables>(`${BASE_URL}/api/config`)).data;
+  } catch (error) {
+    // supressing error to avoid ssr crashes
     // eslint-disable-next-line no-console
-    console.log('Failed to fetch configs', result.error);
+    console.log('unable to get environment variables from server');
+    return {} as EnvironmentVariables;
   }
-
-  return result.data;
 }

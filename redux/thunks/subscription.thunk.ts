@@ -8,15 +8,11 @@ import { License } from '@/types/subscription';
 export const validateLicenseKey = createAsyncThunk<License>(
   'subscription/validateLicenseKey',
   async () => {
-    const result = await axios.post<License>('/api/proxy?target=ee', {
-      url: `/subscription/validate`,
-    });
-
-    if ('error' in result) {
-      throw result.error;
-    }
-
-    return result.data;
+    return (
+      await axios.post<License>('/api/proxy?target=ee', {
+        url: `/subscription/validate`,
+      })
+    ).data;
   },
 );
 
@@ -29,16 +25,12 @@ export const activateLicenseKey = createAsyncThunk<
 >('subscription/activateLicenseKey', async (licenseKey, { getState }) => {
   const { managementCluster } = getState().api;
 
-  const result = await axios.post<License>('/api/proxy?target=ee', {
-    url: `/subscription/${managementCluster?.clusterId}/activateCluster`,
-    body: {
-      licenseKey,
-    },
-  });
-
-  if ('error' in result) {
-    throw result.error;
-  }
-
-  return result.data;
+  return (
+    await axios.post<License>('/api/proxy?target=ee', {
+      url: `/subscription/${managementCluster?.clusterId}/activateCluster`,
+      body: {
+        licenseKey,
+      },
+    })
+  ).data;
 });
