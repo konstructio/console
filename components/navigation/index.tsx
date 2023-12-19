@@ -1,10 +1,12 @@
-import React, { FunctionComponent, ReactNode } from 'react';
+import React, { FunctionComponent, ReactNode, useMemo } from 'react';
 import Image from 'next/image';
 import HelpOutlineOutlinedIcon from '@mui/icons-material/HelpOutlineOutlined';
 import VideogameAssetOutlinedIcon from '@mui/icons-material/VideogameAssetOutlined';
 import { BsSlack } from 'react-icons/bs';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import groupBy from 'lodash/groupBy';
+import { sortBy } from 'lodash';
 
 import {
   Container,
@@ -42,6 +44,8 @@ export interface NavigationProps {
   handleOpenGame: () => void;
   kubefirstVersion?: string;
   routes: Array<{
+    group?: string;
+    groupOrder?: number;
     icon: ReactNode;
     path: string;
     title: string;
@@ -58,6 +62,16 @@ const Navigation: FunctionComponent<NavigationProps> = ({
   routes,
 }) => {
   const { push } = useRouter();
+
+  const routesFilteredByGroup = useMemo(
+    () =>
+      sortBy(
+        groupBy(routes, ({ group }) => group),
+        'groupOrder',
+      ),
+    [routes],
+  );
+
   return (
     <Container>
       <div>
@@ -73,17 +87,29 @@ const Navigation: FunctionComponent<NavigationProps> = ({
         </KubefirstTitle>
         {domLoaded && (
           <MenuContainer>
-            {routes &&
-              routes.map(({ icon, path, title }) => (
-                <Link href={path} key={path}>
-                  <BreakpointTooltip title={title} placement="right-end">
-                    <MenuItem isActive={handleIsActiveItem(path)}>
-                      {icon}
-                      <Title variant="body1">{title}</Title>
-                    </MenuItem>
-                  </BreakpointTooltip>
-                </Link>
-              ))}
+            {routesFilteredByGroup &&
+              Object.values(routesFilteredByGroup).map((value) => {
+                const key = value[0].group;
+                return (
+                  <>
+                    {key && (
+                      <Title variant="labelMedium" color="white" sx={{ pl: 2, m: 1 }}>
+                        {key}
+                      </Title>
+                    )}
+                    {value.map(({ icon, path, title }) => (
+                      <Link href={path} key={path}>
+                        <BreakpointTooltip title={title} placement="right-end">
+                          <MenuItem isActive={handleIsActiveItem(path)}>
+                            {icon}
+                            <Title variant="body1">{title}</Title>
+                          </MenuItem>
+                        </BreakpointTooltip>
+                      </Link>
+                    ))}
+                  </>
+                );
+              })}
           </MenuContainer>
         )}
       </div>

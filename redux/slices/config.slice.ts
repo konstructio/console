@@ -12,6 +12,7 @@ export interface ConfigState {
   installMethod?: string;
   isLoading: boolean;
   clusterManagementTab: ClusterManagementTab;
+  saasURL?: string;
 }
 
 export const initialState: ConfigState = {
@@ -19,6 +20,7 @@ export const initialState: ConfigState = {
   isTelemetryDisabled: false,
   isClusterZero: false,
   isLoading: false,
+  saasURL: '',
   clusterManagementTab: ClusterManagementTab.GRAPH_VIEW,
 };
 
@@ -26,13 +28,22 @@ const configSlice = createSlice({
   name: 'config',
   initialState,
   reducers: {
-    setConfigValues: (state, action: PayloadAction<ConfigState>) => {
-      const { isClusterZero, installMethod, isTelemetryDisabled, kubefirstVersion } =
-        action.payload;
-      state.isTelemetryDisabled = isTelemetryDisabled;
+    setConfigValues: (state, action: PayloadAction<EnvironmentVariables>) => {
+      const {
+        isClusterZero,
+        installMethod,
+        disableTelemetry,
+        kubefirstVersion,
+        disableAuth,
+        saasURL,
+      } = action.payload;
+
+      state.isTelemetryDisabled = !!disableTelemetry;
       state.kubefirstVersion = kubefirstVersion;
       state.isClusterZero = isClusterZero;
       state.installMethod = installMethod;
+      state.isAuthDisabled = !!disableAuth;
+      state.saasURL = saasURL;
     },
     setClusterManagamentTab: (state, { payload }: PayloadAction<ClusterManagementTab>) => {
       state.clusterManagementTab = payload;

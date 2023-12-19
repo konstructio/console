@@ -1,7 +1,7 @@
 'use client';
 import React, { FunctionComponent, useCallback, useEffect, useMemo, useState } from 'react';
 import { useFormContext } from 'react-hook-form';
-import { Box } from '@mui/material';
+import Box from '@mui/material/Box';
 import styled from 'styled-components';
 import { capitalize } from 'lodash';
 

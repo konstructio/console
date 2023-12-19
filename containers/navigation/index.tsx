@@ -4,11 +4,11 @@ import { usePathname } from 'next/navigation';
 import ScatterPlotIcon from '@mui/icons-material/ScatterPlot';
 import GridViewOutlinedIcon from '@mui/icons-material/GridViewOutlined';
 import CollectionsOutlinedIcon from '@mui/icons-material/CollectionsOutlined';
+import ReceiptLongIcon from '@mui/icons-material/ReceiptLong';
 
 import KubefirstContent from '../kubefirstContent';
 import NavigationComponent from '../../components/navigation';
 import FlappyKray from '../../components/flappyKray';
-// import useFeatureFlag from '../../hooks/useFeatureFlag';
 import useModal from '../../hooks/useModal';
 import { useAppSelector } from '../../redux/store';
 
@@ -32,6 +32,7 @@ const Navigation: FunctionComponent = () => {
   const { selectedCluster } = useAppSelector(selectCluster());
 
   const { isEnabled: isMultiClusterEnabled } = useFeatureFlag(FeatureFlag.MULTICLUSTER_MANAGEMENT);
+  const { isEnabled: isSubscriptionEnabled } = useFeatureFlag(FeatureFlag.SAAS_SUBSCRIPTION);
 
   const routes = useMemo(
     () =>
@@ -57,8 +58,16 @@ const Navigation: FunctionComponent = () => {
           title: 'Environments',
           isEnabled: !isClusterZero && selectedCluster?.cloudProvider !== InstallationType.LOCAL,
         },
+        {
+          icon: <ReceiptLongIcon />,
+          path: '/settings/subscription',
+          title: 'Subscription',
+          group: 'Admin settings',
+          groupOrder: 2,
+          isEnabled: !isClusterZero && isSubscriptionEnabled,
+        },
       ].filter(({ isEnabled }) => isEnabled),
-    [isMultiClusterEnabled, isClusterZero, selectedCluster?.cloudProvider],
+    [isMultiClusterEnabled, isClusterZero, selectedCluster?.cloudProvider, isSubscriptionEnabled],
   );
 
   const handleIsActiveItem = useCallback(

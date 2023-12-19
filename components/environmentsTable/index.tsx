@@ -8,7 +8,7 @@ import List from '@mui/material/List';
 import TableSortLabel from '@mui/material/TableSortLabel';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
-import { ClickAwayListener } from '@mui/material';
+import ClickAwayListener from '@mui/material/ClickAwayListener';
 import moment from 'moment';
 
 import { ECHO_BLUE, FIRE_BRICK, MAGNOLIA, PRIMARY, SALTBOX_BLUE } from '../../constants/colors';

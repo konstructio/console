@@ -9,5 +9,6 @@ export { reactFlowReducer } from './reactFlow.slice';
 export { queueReducer } from './queue.slice';
 export { environmentsReducer } from './environments.slice';
 export { notificationsReducer } from './notifications.slice';
-export { licenseReducer } from './license.slice';
+export { settingsReducer } from './settings.slice';
+export { subscriptionReducer } from './subscription.slice';
 export { digitalOceanReducer } from './digitalOcean.slice';

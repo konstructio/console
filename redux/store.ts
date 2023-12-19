@@ -19,7 +19,8 @@ import {
   readinessReducer,
   environmentsReducer,
   notificationsReducer,
-  licenseReducer,
+  settingsReducer,
+  subscriptionReducer,
   digitalOceanReducer,
 } from './slices';
 
@@ -36,7 +37,8 @@ const rootReducer = combineReducers({
   queue: queueReducer,
   environments: environmentsReducer,
   notifications: notificationsReducer,
-  license: licenseReducer,
+  settings: settingsReducer,
+  subscription: subscriptionReducer,
   digitalOcean: digitalOceanReducer,
 });
 
@@ -63,6 +65,7 @@ const config = getPersistConfig({
     'internalApi',
     'readiness',
     'environments',
+    'subscription',
   ],
   rootReducer,
 });

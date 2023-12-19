@@ -18,6 +18,7 @@ export const Container = styled.nav`
 
   ${media.greaterThan('md')`
     width: 304px;
+    overflow: auto;
   `}
 `;
 
@@ -33,7 +34,6 @@ export const FooterContainer = styled.div`
 `;
 
 export const MenuContainer = styled.div`
-  align-items: center;
   display: flex;
   flex-direction: column;
   gap: 10px;

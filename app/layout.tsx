@@ -3,8 +3,8 @@ import { getServerSession } from 'next-auth/next';
 import { Session } from 'next-auth';
 
 import { Providers } from '@/app/lib/providers';
-import { authOptions } from '@/pages/api/auth/[...nextauth]';
 import StyledComponentsRegistry from '@/app/lib/registry';
+import { authOptions } from '@/pages/api/auth/[...nextauth]';
 
 import '../styles/globals.css';
 

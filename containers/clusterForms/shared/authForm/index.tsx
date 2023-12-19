@@ -1,6 +1,6 @@
 import React, { FunctionComponent, useCallback, useEffect, useMemo, useState } from 'react';
 import { useFormContext } from 'react-hook-form';
-import { FormControlLabel } from '@mui/material';
+import FormControlLabel from '@mui/material/FormControlLabel';
 
 import { Required } from '../../../../components/textField/textField.styled';
 import GitProviderButton from '../../../../components/gitProviderButton';

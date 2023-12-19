@@ -1,7 +1,7 @@
 import React, { ComponentPropsWithoutRef, FormEvent, FunctionComponent, useCallback } from 'react';
 import { useForm } from 'react-hook-form';
 import CloseIcon from '@mui/icons-material/Close';
-import { Alert } from '@mui/material';
+import Alert from '@mui/material/Alert';
 
 import Typography from '../typography';
 import Button from '../button';
