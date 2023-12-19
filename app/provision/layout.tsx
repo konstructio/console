@@ -9,6 +9,8 @@ export default async function Page({ children }: PropsWithChildren) {
   const envVariables = await getEnvVars();
   const featureFlags = await getFeatureFlags();
 
+  console.log('provisioning configs', envVariables, featureFlags);
+
   return (
     <Layout license={license} envVariables={envVariables} featureFlags={featureFlags}>
       {children}
