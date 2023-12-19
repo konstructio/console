@@ -44,9 +44,6 @@ const gitSlice = createSlice({
   name: 'git',
   initialState,
   reducers: {
-    setToken: (state, action) => {
-      state.token = action.payload;
-    },
     setGitOwner: (state, action) => {
       state.gitOwner = action.payload;
     },
@@ -77,13 +74,19 @@ const gitSlice = createSlice({
       /* GitHub */
       .addCase(getGithubUser.pending, (state) => {
         state.isLoading = true;
+        state.errors = [];
       })
       .addCase(getGithubUser.fulfilled, (state, action) => {
+        state.token = action.meta.arg;
         state.githubUser = action.payload;
+        state.isLoading = false;
         state.isTokenValid = true;
       })
       .addCase(getGithubUser.rejected, (state, action) => {
         state.isTokenValid = false;
+        state.isLoading = false;
+        state.githubUser = null;
+        state.githubUserOrganizations = [];
         state.responseError = action.error.message;
       })
       .addCase(getGithubUserOrganizations.pending, (state) => {
@@ -104,20 +107,24 @@ const gitSlice = createSlice({
       .addCase(getGitHubOrgRepositories.pending, (state) => {
         state.isLoading = true;
       })
-      .addCase(getGitHubOrgRepositories.fulfilled, (state, { payload: organizationRepos }) => {
-        const kubefirstRepos = organizationRepos.filter(({ name }) =>
-          KUBEFIRST_REPOSITORIES.includes(name),
-        );
-        if (kubefirstRepos.length) {
-          state.errors.push(
-            createGitOrgErrorMessage({
-              git: GitProvider.GITHUB,
-              type: 'repo',
-              gitOwner: state.gitOwner,
-            }),
+      .addCase(
+        getGitHubOrgRepositories.fulfilled,
+        (state, { meta, payload: organizationRepos }) => {
+          state.gitOwner = meta.arg.organization;
+          const kubefirstRepos = organizationRepos.filter(({ name }) =>
+            KUBEFIRST_REPOSITORIES.includes(name),
           );
-        }
-      })
+          if (kubefirstRepos.length) {
+            state.errors.push(
+              createGitOrgErrorMessage({
+                git: GitProvider.GITHUB,
+                type: 'repo',
+                gitOwner: meta.arg.organization,
+              }),
+            );
+          }
+        },
+      )
       .addCase(getGitHubOrgRepositories.rejected, (state, action) => {
         state.isLoading = false;
         state.isTokenValid = false;
@@ -152,6 +159,7 @@ const gitSlice = createSlice({
         state.isLoading = true;
       })
       .addCase(getGitlabUser.fulfilled, (state, action) => {
+        state.token = action.meta.arg;
         state.isLoading = false;
         state.gitlabUser = action.payload;
         state.isTokenValid = true;
@@ -159,6 +167,8 @@ const gitSlice = createSlice({
       .addCase(getGitlabUser.rejected, (state, action) => {
         state.isLoading = false;
         state.isTokenValid = false;
+        state.gitlabUser = null;
+        state.gitlabGroups = [];
         state.responseError = action.error.message;
       })
       .addCase(getGitlabGroups.pending, (state) => {
@@ -177,7 +187,8 @@ const gitSlice = createSlice({
       .addCase(getGitLabProjects.pending, (state) => {
         state.isLoading = true;
       })
-      .addCase(getGitLabProjects.fulfilled, (state, { payload: groupProjects }) => {
+      .addCase(getGitLabProjects.fulfilled, (state, { meta, payload: groupProjects }) => {
+        state.gitOwner = meta.arg.group;
         state.isLoading = false;
         const kubefirstRepos = groupProjects.filter(({ name }) =>
           KUBEFIRST_REPOSITORIES.includes(name),
@@ -188,7 +199,7 @@ const gitSlice = createSlice({
             createGitOrgErrorMessage({
               git: GitProvider.GITLAB,
               type: 'repo',
-              gitOwner: state.gitOwner,
+              gitOwner: meta.arg.group,
             }),
           );
         }
@@ -223,13 +234,7 @@ const gitSlice = createSlice({
   },
 });
 
-export const {
-  clearGitState,
-  clearUserError,
-  setIsGitSelected,
-  setGitOwner,
-  setToken,
-  clearResponseError,
-} = gitSlice.actions;
+export const { clearGitState, clearUserError, setIsGitSelected, clearResponseError, setGitOwner } =
+  gitSlice.actions;
 
 export const gitReducer = gitSlice.reducer;
