@@ -48,11 +48,13 @@ describe('redux/thunks/git', () => {
 
   test('getGithubUser - successful responses', async () => {
     githubMock.onGet().reply(200, mockGithubUser);
-    await reduxStore.dispatch(getGithubUser('token'));
+    const githubToken = 'token';
+    await reduxStore.dispatch(getGithubUser(githubToken));
 
-    const { githubUser, isTokenValid } = reduxStore.getState().git;
+    const { githubUser, token, isTokenValid } = reduxStore.getState().git;
 
     expect(githubUser).toStrictEqual(mockGithubUser);
+    expect(token).toStrictEqual(githubToken);
     expect(isTokenValid).toStrictEqual(true);
   });
 
@@ -179,11 +181,13 @@ describe('redux/thunks/git', () => {
 
   test('getGitlabUser - successful responses', async () => {
     gitlabMock.onGet().reply(200, mockGitlabUser);
-    await reduxStore.dispatch(getGitlabUser('token'));
+    const gitlabToken = 'token';
+    await reduxStore.dispatch(getGitlabUser(gitlabToken));
 
-    const { gitlabUser, isTokenValid } = reduxStore.getState().git;
+    const { gitlabUser, token, isTokenValid } = reduxStore.getState().git;
 
     expect(gitlabUser).toStrictEqual(mockGitlabUser);
+    expect(token).toStrictEqual(gitlabToken);
     expect(isTokenValid).toStrictEqual(true);
   });
 

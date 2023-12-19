@@ -19,6 +19,7 @@ export interface ControlledTextFieldProps<T extends FieldValues> extends UseCont
   filterOptions?: (options: any[]) => any[];
   onChange?: (value: string) => void;
   options: Array<{ value: string; label: string }>;
+  onClick?: () => void;
 }
 
 function ControlledAutocomplete<T extends FieldValues>({
@@ -32,6 +33,7 @@ function ControlledAutocomplete<T extends FieldValues>({
   disabled,
   placeholder,
   loading,
+  onClick,
   ...props
 }: ControlledTextFieldProps<T>) {
   const [isBlur, setIsBlur] = useState(false);
@@ -62,6 +64,7 @@ function ControlledAutocomplete<T extends FieldValues>({
           options={options}
           label={label}
           error={isBlur && error !== undefined}
+          onClick={onClick}
         />
       )}
     />

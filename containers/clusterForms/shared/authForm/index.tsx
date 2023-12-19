@@ -26,9 +26,7 @@ import {
   getGitlabUser,
 } from '../../../../redux/thunks/git.thunk';
 import {
-  setToken,
   clearUserError,
-  setGitOwner,
   clearGitState,
   setIsGitSelected,
 } from '../../../../redux/slices/git.slice';
@@ -42,10 +40,9 @@ import CheckBoxWithRef from '@/components/checkbox';
 import Column from '@/components/column';
 import { hasProjectId } from '@/utils/hasProjectId';
 import { getDigitalOceanUser } from '@/redux/thunks/digitalOcean.thunk';
+import { GIT_PROVIDER_DISPLAY_NAME } from '@/constants';
 
 const AuthForm: FunctionComponent = () => {
-  const [isGitRequested, setIsGitRequested] = useState<boolean>();
-  const [gitUserName, setGitUserName] = useState<string>();
   const [showGoogleKeyFile, setShowGoogleKeyFile] = useState(false);
 
   const dispatch = useAppDispatch();
@@ -62,7 +59,6 @@ const AuthForm: FunctionComponent = () => {
     gitStateLoading,
     installationType,
     isGitSelected,
-    isTokenValid,
     installMethod,
     token = '',
   } = useAppSelector(({ config, installation, git, digitalOcean }) => ({
@@ -85,8 +81,12 @@ const AuthForm: FunctionComponent = () => {
   const {
     control,
     reset,
+    resetField,
     watch,
     setValue,
+    setError,
+    clearErrors,
+    trigger,
     formState: { errors },
   } = useFormContext<InstallValues>();
 
@@ -94,38 +94,45 @@ const AuthForm: FunctionComponent = () => {
 
   const isGitHub = useMemo(() => gitProvider === GitProvider.GITHUB, [gitProvider]);
 
-  const validateGitOwner = async (gitOwner: string) => {
-    dispatch(setGitOwner(gitOwner));
-    dispatch(clearUserError());
-
-    if (gitOwner) {
-      if (isGitHub) {
-        await dispatch(getGitHubOrgRepositories({ token, organization: gitOwner })).unwrap();
-        await dispatch(getGitHubOrgTeams({ token, organization: gitOwner }));
-      } else {
-        await dispatch(getGitLabProjects({ token, group: gitOwner })).unwrap();
-        await dispatch(getGitLabSubgroups({ token, group: gitOwner }));
+  const validateGitOwner = useCallback(
+    async (gitOwner: string) => {
+      if (gitOwner) {
+        if (isGitHub) {
+          await dispatch(getGitHubOrgRepositories({ token, organization: gitOwner })).unwrap();
+          await dispatch(getGitHubOrgTeams({ token, organization: gitOwner }));
+        } else {
+          await dispatch(getGitLabProjects({ token, group: gitOwner })).unwrap();
+          await dispatch(getGitLabSubgroups({ token, group: gitOwner }));
+        }
       }
-    }
-  };
+    },
+    [isGitHub, dispatch, token],
+  );
 
-  const handleGitTokenBlur = async (token: string) => {
-    dispatch(setToken(token));
-    setIsGitRequested(true);
-
-    if (isGitHub) {
-      // only care about return of getGithubUser as if it fails will exit and not run getGithubUserOrganizations
-      await dispatch(getGithubUser(token)).unwrap();
-      await dispatch(getGithubUserOrganizations(token));
-    } else {
-      // only care about return of getGitlabUser as if it fails will exit and not run getGitlabGroups
-      await dispatch(getGitlabUser(token)).unwrap();
-      await dispatch(getGitlabGroups(token));
-    }
-  };
+  const handleGitToken = useCallback(
+    async (token: string) => {
+      if (token) {
+        try {
+          if (isGitHub) {
+            // only care about return of getGithubUser as if it fails will exit and not run getGithubUserOrganizations
+            await dispatch(getGithubUser(token)).unwrap();
+            await dispatch(getGithubUserOrganizations(token));
+          } else {
+            // only care about return of getGitlabUser as if it fails will exit and not run getGitlabGroups
+            await dispatch(getGitlabUser(token)).unwrap();
+            await dispatch(getGitlabGroups(token));
+          }
+          clearErrors('gitToken');
+          resetField('gitOwner');
+        } catch (error) {
+          setError('gitToken', { type: 'validate', message: 'Please enter a valid token.' });
+        }
+      }
+    },
+    [isGitHub, dispatch, setError, clearErrors, resetField],
+  );
 
   const handleGitProviderChange = (provider: GitProvider) => {
-    setGitUserName('');
     reset({ gitToken: '', gitOwner: '' });
     dispatch(clearGitState());
     dispatch(setIsGitSelected(true));
@@ -143,7 +150,10 @@ const AuthForm: FunctionComponent = () => {
     [dispatch],
   );
 
-  const gitLabel = useMemo(() => (isGitHub ? 'GitHub' : 'GitLab'), [isGitHub]);
+  const gitLabel = useMemo(
+    () => GIT_PROVIDER_DISPLAY_NAME[gitProvider as GitProvider],
+    [gitProvider],
+  );
 
   const isMarketplace = useMemo(() => installMethod?.includes('marketplace'), [installMethod]);
 
@@ -152,11 +162,10 @@ const AuthForm: FunctionComponent = () => {
     [installationType],
   );
 
-  useEffect(() => {
-    if (githubUser?.login || gitlabUser?.name) {
-      setGitUserName(githubUser?.login || gitlabUser?.name);
-    }
-  }, [dispatch, githubUser, gitlabUser, setValue]);
+  const gitUserName = useMemo(
+    () => githubUser?.login || gitlabUser?.name,
+    [githubUser, gitlabUser],
+  );
 
   useEffect(() => {
     return () => {
@@ -213,11 +222,10 @@ const AuthForm: FunctionComponent = () => {
               label={`${gitLabel} personal access token`}
               required
               rules={{
-                required: true,
+                required: 'Required.',
               }}
-              error={isGitRequested && !gitStateLoading && !isTokenValid}
-              onBlur={handleGitTokenBlur}
-              onErrorText="Invalid token."
+              onBlur={handleGitToken}
+              onErrorText={errors.gitToken?.message}
             />
           </Row>
           <GitUserField data-test-id="gitUser" style={{ width: '216px' }}>
@@ -248,7 +256,8 @@ const AuthForm: FunctionComponent = () => {
               githubUserOrganizations.map(({ login }) => ({ label: login, value: login }))
             }
             loading={gitStateLoading}
-            label="GitHub organization name"
+            label={`${gitLabel} organization name`}
+            onClick={() => trigger('gitToken', { shouldFocus: true })}
           />
         ) : (
           <ControlledAutocomplete
@@ -261,7 +270,8 @@ const AuthForm: FunctionComponent = () => {
               gitlabGroups && gitlabGroups.map(({ name, path }) => ({ label: name, value: path }))
             }
             loading={gitStateLoading}
-            label="GitLab group name"
+            label={`${gitLabel} group name`}
+            onClick={() => trigger('gitToken', { shouldFocus: true })}
           />
         )}
         {installationType === InstallationType.GOOGLE && (
