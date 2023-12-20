@@ -280,12 +280,10 @@ export const resetClusterProgress = createAsyncThunk<
     state: RootState;
   }
 >('api/resetClusterProgress', async (_, { getState }) => {
-  const {
-    installation: { values },
-  } = getState();
+  const { managementCluster } = getState().api;
 
   await axios.post<{ regions: Array<string> }>('/api/proxy', {
-    url: `/cluster/${values?.clusterName}/reset_progress`,
+    url: `/cluster/${managementCluster?.clusterName}/reset_progress`,
   });
 });
 

@@ -75,7 +75,10 @@ const QueueProvider: FunctionComponent<PropsWithChildren> = ({ children }) => {
   const deleteClusterFromQueue = (clusterName: string) => {
     const { [clusterName]: clusterToDelete, ...rest } = clusterQueue;
 
-    delete queue[clusterToDelete.clusterName];
+    if (clusterToDelete) {
+      delete queue[clusterToDelete.clusterName];
+    }
+
     dispatch(setClusterQueue(rest));
   };
 
