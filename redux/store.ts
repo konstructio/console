@@ -72,7 +72,7 @@ const config = getPersistConfig({
 
 export const makeStore = () =>
   configureStore({
-    devTools: true,
+    devTools: process.env.NODE_ENV === 'development',
     reducer: persistReducer(config, rootReducer),
     middleware: (getDefaultMiddleware) =>
       getDefaultMiddleware({

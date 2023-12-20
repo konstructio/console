@@ -4,15 +4,11 @@ import { PostHog } from 'posthog-node';
 import { License } from '@/types/subscription';
 import { EnvironmentVariables, FeatureFlag } from '@/types/config';
 
-const BASE_URL = process.env.NEXTAUTH_URL;
+const { ENTERPRISE_API_URL } = process.env;
 
 export async function validateLicense() {
   try {
-    return (
-      await axios.post<License>(`${BASE_URL}/api/proxy?target=ee`, {
-        url: `/subscription/validate`,
-      })
-    ).data;
+    return (await axios.post<License>(`${ENTERPRISE_API_URL}/api/v1/subscription/validate`)).data;
   } catch (error) {
     // supressing error. license not found
     return {} as License;
