@@ -1,33 +1,13 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 
-type Configs = {
-  [key: string]: string | boolean;
-};
+import { getEnvVars } from '@/app/lib/common';
+import { EnvironmentVariables } from '@/types/config';
 
-export default function handler(req: NextApiRequest, res: NextApiResponse<Configs>) {
-  const {
-    API_URL = '',
-    CLUSTER_ID = '',
-    CLUSTER_TYPE = '',
-    DISABLE_AUTH = '',
-    DISABLE_TELEMETRY = '',
-    INSTALL_METHOD = '',
-    IS_CLUSTER_ZERO = '',
-    KUBEFIRST_VERSION = '',
-    POSTHOG_KEY = '',
-    SAAS_URL = '',
-  } = process.env;
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse<EnvironmentVariables>,
+) {
+  const config = await getEnvVars();
 
-  res.status(200).json({
-    API_URL,
-    CLUSTER_ID,
-    CLUSTER_TYPE,
-    disableAuth: DISABLE_AUTH === 'true',
-    disableTelemetry: DISABLE_TELEMETRY === 'true',
-    isClusterZero: IS_CLUSTER_ZERO === 'true',
-    kubefirstVersion: KUBEFIRST_VERSION,
-    installMethod: INSTALL_METHOD,
-    saasURL: SAAS_URL,
-    POSTHOG_KEY,
-  });
+  res.status(200).json(config);
 }

@@ -20,8 +20,10 @@ const License: FunctionComponent<LicenseProps> = ({ handleActivateLicense }) => 
 
   const hasLicenseKey = useMemo<boolean>(() => !!license?.licenseKey, [license?.licenseKey]);
 
-  const formattedLicenseKey = useMemo<string>(
-    () => `${license?.licenseKey.slice(0, 4).toUpperCase()}************************************`,
+  const formattedLicenseKey = useMemo<string | undefined>(
+    () =>
+      license?.licenseKey &&
+      `${license?.licenseKey.slice(0, 4).toUpperCase()}************************************`,
     [license?.licenseKey],
   );
 
