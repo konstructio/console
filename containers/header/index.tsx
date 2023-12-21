@@ -44,7 +44,7 @@ const Header: FunctionComponent<HeaderProps> = ({ handleOpenFlappy, handleOpenKu
   const { isOpen: isHelpMenuOpen, open, close } = useToggle();
   const { isOpen: isProfileMenuOpen, open: openProfileMenu, close: closeProfileMenu } = useToggle();
 
-  const { data: session, update } = useSession();
+  const { data: session } = useSession();
   const { managementCluster } = useAppSelector(({ api }) => api);
   const { isEnabled: isSubscriptionEnabled } = useFeatureFlag(FeatureFlag.SAAS_SUBSCRIPTION);
 
