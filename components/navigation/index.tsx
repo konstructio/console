@@ -19,6 +19,7 @@ import {
   BreakpointTooltip,
 } from './navigation.styled';
 
+import { noop } from '@/utils/noop';
 import { ECHO_BLUE } from '@/constants/colors';
 import Ray from '@/assets/ray.svg';
 import TitleLogo from '@/assets/title.svg';
@@ -29,19 +30,22 @@ const FOOTER_ITEMS = [
     icon: <HelpOutlineOutlinedIcon />,
     path: 'https://docs.kubefirst.io',
     title: 'Documentation',
+    color: '',
   },
   {
     icon: <BsSlack size={24} />,
     path: 'https://kubefirst.io/slack',
     title: 'Slack',
+    color: '',
   },
 ];
 
 export interface NavigationProps {
   domLoaded: boolean;
   handleIsActiveItem: (path: string) => boolean;
-  handleOpenContent: () => void;
-  handleOpenGame: () => void;
+  handleOpenContent: typeof noop;
+  handleOpenGame: typeof noop;
+  isSubscriptionEnabled: boolean;
   kubefirstVersion?: string;
   routes: Array<{
     group?: string;
@@ -51,6 +55,12 @@ export interface NavigationProps {
     title: string;
     isEnabled: boolean;
   }>;
+  footerItems?: Array<{
+    icon: ReactNode;
+    path: string;
+    title: string;
+    color?: string;
+  }>;
 }
 
 const Navigation: FunctionComponent<NavigationProps> = ({
@@ -58,8 +68,10 @@ const Navigation: FunctionComponent<NavigationProps> = ({
   handleIsActiveItem,
   handleOpenContent,
   handleOpenGame,
+  isSubscriptionEnabled,
   kubefirstVersion,
   routes,
+  footerItems = FOOTER_ITEMS,
 }) => {
   const { push } = useRouter();
 
@@ -114,28 +126,34 @@ const Navigation: FunctionComponent<NavigationProps> = ({
         )}
       </div>
       <FooterContainer>
-        {FOOTER_ITEMS.map(({ icon, path, title }) => (
-          <Link href={path} key={path} target="_blank">
+        {footerItems.map(({ icon, path, title, color }) => (
+          <Link href={path} key={path} target={path.includes('http') ? '_blank' : '_self'}>
             <BreakpointTooltip title={title} placement="right-end">
               <MenuItem>
                 {icon}
-                <Title variant="body1">{title}</Title>
+                <Title variant="body1" color={color}>
+                  {title}
+                </Title>
               </MenuItem>
             </BreakpointTooltip>
           </Link>
         ))}
-        <BreakpointTooltip title="Kubefirst channel" placement="right-end">
-          <MenuItem onClick={handleOpenContent}>
-            <Image src={Youtube} alt="youtube" />
-            <Title variant="body1">Kubefirst channel</Title>
-          </MenuItem>
-        </BreakpointTooltip>
-        <BreakpointTooltip title="Flappy K-ray" placement="right-end">
-          <MenuItem onClick={handleOpenGame}>
-            <VideogameAssetOutlinedIcon />
-            <Title variant="body1">Flappy K-ray</Title>
-          </MenuItem>
-        </BreakpointTooltip>
+        {!isSubscriptionEnabled && (
+          <>
+            <BreakpointTooltip title="Kubefirst channel" placement="right-end">
+              <MenuItem onClick={handleOpenContent}>
+                <Image src={Youtube} alt="youtube" />
+                <Title variant="body1">Kubefirst channel</Title>
+              </MenuItem>
+            </BreakpointTooltip>
+            <BreakpointTooltip title="Flappy K-ray" placement="right-end">
+              <MenuItem onClick={handleOpenGame}>
+                <VideogameAssetOutlinedIcon />
+                <Title variant="body1">Flappy K-ray</Title>
+              </MenuItem>
+            </BreakpointTooltip>
+          </>
+        )}
       </FooterContainer>
     </Container>
   );

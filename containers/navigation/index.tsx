@@ -5,27 +5,29 @@ import ScatterPlotIcon from '@mui/icons-material/ScatterPlot';
 import GridViewOutlinedIcon from '@mui/icons-material/GridViewOutlined';
 import CollectionsOutlinedIcon from '@mui/icons-material/CollectionsOutlined';
 import ReceiptLongIcon from '@mui/icons-material/ReceiptLong';
+import StarBorderOutlinedIcon from '@mui/icons-material/StarBorderOutlined';
 
-import KubefirstContent from '../kubefirstContent';
 import NavigationComponent from '../../components/navigation';
-import FlappyKray from '../../components/flappyKray';
-import useModal from '../../hooks/useModal';
 import { useAppSelector } from '../../redux/store';
 
+import { noop } from '@/utils/noop';
 import { selectConfig } from '@/redux/selectors/config.selector';
 import useFeatureFlag from '@/hooks/useFeatureFlag';
 import { selectCluster } from '@/redux/selectors/cluster.selector';
 import { InstallationType } from '@/types/redux';
 import { FeatureFlag } from '@/types/config';
+import { ASMANI_SKY } from '@/constants/colors';
 
-const Navigation: FunctionComponent = () => {
+export interface NavigationProps {
+  handleOpenFlappy: typeof noop;
+  handleOpenKubefirstModal: typeof noop;
+}
+
+const Navigation: FunctionComponent<NavigationProps> = ({
+  handleOpenFlappy,
+  handleOpenKubefirstModal,
+}) => {
   const [domLoaded, setDomLoaded] = useState<boolean>(false);
-  const { isOpen, openModal, closeModal } = useModal();
-  const {
-    isOpen: isModalContentOpen,
-    openModal: openModalContent,
-    closeModal: closeModalContent,
-  } = useModal();
 
   const asPath = usePathname();
   const { kubefirstVersion, isClusterZero } = useAppSelector(selectConfig());
@@ -70,6 +72,21 @@ const Navigation: FunctionComponent = () => {
     [isMultiClusterEnabled, isClusterZero, selectedCluster?.cloudProvider, isSubscriptionEnabled],
   );
 
+  const footerItems = useMemo(
+    () =>
+      isSubscriptionEnabled
+        ? [
+            {
+              icon: <StarBorderOutlinedIcon htmlColor={ASMANI_SKY} />,
+              path: '/settings/subscription',
+              title: 'Upgrade to Pro',
+              color: ASMANI_SKY,
+            },
+          ]
+        : undefined,
+    [isSubscriptionEnabled],
+  );
+
   const handleIsActiveItem = useCallback(
     (route: string) => {
       if (typeof window !== 'undefined') {
@@ -97,13 +114,11 @@ const Navigation: FunctionComponent = () => {
         kubefirstVersion={kubefirstVersion}
         routes={routes}
         handleIsActiveItem={handleIsActiveItem}
-        handleOpenGame={openModal}
-        handleOpenContent={openModalContent}
+        handleOpenGame={handleOpenFlappy}
+        handleOpenContent={handleOpenKubefirstModal}
+        footerItems={footerItems}
+        isSubscriptionEnabled={isSubscriptionEnabled}
       />
-      {isOpen && <FlappyKray isOpen closeModal={closeModal} />}
-      {isModalContentOpen && (
-        <KubefirstContent isOpen={isModalContentOpen} closeModal={closeModalContent} />
-      )}
     </>
   );
 };
