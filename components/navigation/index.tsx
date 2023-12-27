@@ -1,8 +1,6 @@
 import React, { FunctionComponent, ReactNode, useMemo } from 'react';
 import Image from 'next/image';
-import HelpOutlineOutlinedIcon from '@mui/icons-material/HelpOutlineOutlined';
 import VideogameAssetOutlinedIcon from '@mui/icons-material/VideogameAssetOutlined';
-import { BsSlack } from 'react-icons/bs';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import groupBy from 'lodash/groupBy';
@@ -25,21 +23,12 @@ import Ray from '@/assets/ray.svg';
 import TitleLogo from '@/assets/title.svg';
 import Youtube from '@/assets/youtube.svg';
 
-const FOOTER_ITEMS = [
-  {
-    icon: <HelpOutlineOutlinedIcon />,
-    path: 'https://docs.kubefirst.io',
-    title: 'Documentation',
-    color: '',
-  },
-  {
-    icon: <BsSlack size={24} />,
-    path: 'https://kubefirst.io/slack',
-    title: 'Slack',
-    color: '',
-  },
-];
-
+export interface FooterItem {
+  icon: ReactNode;
+  path: string;
+  title: string;
+  color?: string;
+}
 export interface NavigationProps {
   domLoaded: boolean;
   handleIsActiveItem: (path: string) => boolean;
@@ -55,12 +44,7 @@ export interface NavigationProps {
     title: string;
     isEnabled: boolean;
   }>;
-  footerItems?: Array<{
-    icon: ReactNode;
-    path: string;
-    title: string;
-    color?: string;
-  }>;
+  footerItems?: Array<FooterItem>;
 }
 
 const Navigation: FunctionComponent<NavigationProps> = ({
@@ -71,7 +55,7 @@ const Navigation: FunctionComponent<NavigationProps> = ({
   isSubscriptionEnabled,
   kubefirstVersion,
   routes,
-  footerItems = FOOTER_ITEMS,
+  footerItems,
 }) => {
   const { push } = useRouter();
 
@@ -126,18 +110,19 @@ const Navigation: FunctionComponent<NavigationProps> = ({
         )}
       </div>
       <FooterContainer>
-        {footerItems.map(({ icon, path, title, color }) => (
-          <Link href={path} key={path} target={path.includes('http') ? '_blank' : '_self'}>
-            <BreakpointTooltip title={title} placement="right-end">
-              <MenuItem>
-                {icon}
-                <Title variant="body1" color={color}>
-                  {title}
-                </Title>
-              </MenuItem>
-            </BreakpointTooltip>
-          </Link>
-        ))}
+        {footerItems &&
+          footerItems.map(({ icon, path, title, color }) => (
+            <Link href={path} key={path} target={path.includes('http') ? '_blank' : '_self'}>
+              <BreakpointTooltip title={title} placement="right-end">
+                <MenuItem>
+                  {icon}
+                  <Title variant="body1" color={color}>
+                    {title}
+                  </Title>
+                </MenuItem>
+              </BreakpointTooltip>
+            </Link>
+          ))}
         {!isSubscriptionEnabled && (
           <>
             <BreakpointTooltip title="Kubefirst channel" placement="right-end">

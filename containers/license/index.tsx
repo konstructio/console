@@ -13,9 +13,13 @@ import ControlledPassword from '@/components/controlledFields/Password';
 
 export interface LicenseProps {
   handleActivateLicense: (licenseKey: string) => void;
+  handleCancelSubscription: () => void;
 }
 
-const License: FunctionComponent<LicenseProps> = ({ handleActivateLicense }) => {
+const License: FunctionComponent<LicenseProps> = ({
+  handleActivateLicense,
+  handleCancelSubscription,
+}) => {
   const { isLoading, license, error } = useAppSelector(({ subscription }) => subscription);
 
   const hasLicenseKey = useMemo<boolean>(() => !!license?.licenseKey, [license?.licenseKey]);
@@ -91,7 +95,7 @@ const License: FunctionComponent<LicenseProps> = ({ handleActivateLicense }) => 
                   description="If you’re having any issues with kubefirst, "
                   linkTitle="please reach out to us."
                 />
-                <Button variant="contained" color="error">
+                <Button variant="contained" color="error" onClick={handleCancelSubscription}>
                   {isLoading && <CircularProgress size={20} sx={{ mr: '8px' }} />}
                   Cancel subscription
                 </Button>

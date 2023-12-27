@@ -1,13 +1,15 @@
 'use client';
 import React, { FunctionComponent, useCallback, useEffect, useMemo, useState } from 'react';
 import { usePathname } from 'next/navigation';
+import { BsSlack } from 'react-icons/bs';
 import ScatterPlotIcon from '@mui/icons-material/ScatterPlot';
 import GridViewOutlinedIcon from '@mui/icons-material/GridViewOutlined';
 import CollectionsOutlinedIcon from '@mui/icons-material/CollectionsOutlined';
 import ReceiptLongIcon from '@mui/icons-material/ReceiptLong';
+import HelpOutlineOutlinedIcon from '@mui/icons-material/HelpOutlineOutlined';
 import StarBorderOutlinedIcon from '@mui/icons-material/StarBorderOutlined';
 
-import NavigationComponent from '../../components/navigation';
+import NavigationComponent, { FooterItem } from '../../components/navigation';
 import { useAppSelector } from '../../redux/store';
 
 import { noop } from '@/utils/noop';
@@ -32,6 +34,7 @@ const Navigation: FunctionComponent<NavigationProps> = ({
   const asPath = usePathname();
   const { kubefirstVersion, isClusterZero } = useAppSelector(selectConfig());
   const { selectedCluster } = useAppSelector(selectCluster());
+  const license = useAppSelector(({ subscription }) => subscription.license);
 
   const { isEnabled: isMultiClusterEnabled } = useFeatureFlag(FeatureFlag.MULTICLUSTER_MANAGEMENT);
   const { isEnabled: isSubscriptionEnabled } = useFeatureFlag(FeatureFlag.SAAS_SUBSCRIPTION);
@@ -75,7 +78,7 @@ const Navigation: FunctionComponent<NavigationProps> = ({
   const footerItems = useMemo(
     () =>
       isSubscriptionEnabled
-        ? [
+        ? !license?.licenseKey && [
             {
               icon: <StarBorderOutlinedIcon htmlColor={ASMANI_SKY} />,
               path: '/settings/subscription',
@@ -83,8 +86,21 @@ const Navigation: FunctionComponent<NavigationProps> = ({
               color: ASMANI_SKY,
             },
           ]
-        : undefined,
-    [isSubscriptionEnabled],
+        : [
+            {
+              icon: <HelpOutlineOutlinedIcon />,
+              path: 'https://docs.kubefirst.io',
+              title: 'Documentation',
+              color: '',
+            },
+            {
+              icon: <BsSlack size={24} />,
+              path: 'https://kubefirst.io/slack',
+              title: 'Slack',
+              color: '',
+            },
+          ],
+    [isSubscriptionEnabled, license?.licenseKey],
   );
 
   const handleIsActiveItem = useCallback(
@@ -116,7 +132,7 @@ const Navigation: FunctionComponent<NavigationProps> = ({
         handleIsActiveItem={handleIsActiveItem}
         handleOpenGame={handleOpenFlappy}
         handleOpenContent={handleOpenKubefirstModal}
-        footerItems={footerItems}
+        footerItems={footerItems as Array<FooterItem>}
         isSubscriptionEnabled={isSubscriptionEnabled}
       />
     </>
