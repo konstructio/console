@@ -7,6 +7,7 @@ import { useRouter } from 'next/navigation';
 
 import Plans from '../plans';
 import License from '../license';
+import CancelSubscription from '../cancelSubscription';
 
 import { Container, PlansContainer } from './subscription.styled';
 
@@ -18,6 +19,7 @@ import { setActiveTab } from '@/redux/slices/settings.slice';
 import { SettingsTab } from '@/constants/setttings';
 import { Plan } from '@/types/plan';
 import { activateLicenseKey, validateLicenseKey } from '@/redux/thunks/subscription.thunk';
+import useModal from '@/hooks/useModal';
 
 interface SubscriptionProps {
   plans: Array<Plan>;
@@ -25,6 +27,7 @@ interface SubscriptionProps {
 
 const Subscription: FunctionComponent<SubscriptionProps> = ({ plans }) => {
   const dispatch = useAppDispatch();
+  const { isOpen, closeModal, openModal } = useModal();
   const { push } = useRouter();
 
   const { activeTab, license, saasURL } = useAppSelector(({ settings, subscription, config }) => ({
@@ -89,7 +92,10 @@ const Subscription: FunctionComponent<SubscriptionProps> = ({ plans }) => {
         </Box>
         <TabPanel value={activeTab} index={SettingsTab.LICENSE_KEY}>
           <FormProvider {...methods}>
-            <License handleActivateLicense={handleActivateLicense} />
+            <License
+              handleActivateLicense={handleActivateLicense}
+              handleCancelSubscription={openModal}
+            />
           </FormProvider>
         </TabPanel>
         <TabPanel value={activeTab} index={SettingsTab.PLANS}>
@@ -106,6 +112,7 @@ const Subscription: FunctionComponent<SubscriptionProps> = ({ plans }) => {
           </PlansContainer>
         </TabPanel>
       </>
+      <CancelSubscription isOpen={isOpen} closeModal={closeModal} />
     </Container>
   );
 };

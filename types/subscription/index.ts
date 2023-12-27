@@ -35,3 +35,13 @@ export interface Cluster {
   deletedAt: Date;
   createdAt: Date;
 }
+
+export interface CancelSubscriptionFields {
+  projectIsComplete: boolean;
+  kubefirstIsTooExpensive: boolean;
+  kubefirstIsDifficult: boolean;
+  didnotUsePaidPlan: boolean;
+  didnotProviderFunctionality: boolean;
+  other: boolean;
+  description: string;
+}

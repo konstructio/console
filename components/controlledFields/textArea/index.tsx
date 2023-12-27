@@ -1,5 +1,6 @@
 import React from 'react';
 import { Control, Controller, FieldValues, UseControllerProps } from 'react-hook-form';
+import { SxProps } from '@mui/material';
 
 import TextAreaWithRef from '../../textArea/';
 
@@ -12,6 +13,7 @@ export interface ControlledTextAreaProps<T extends FieldValues> extends UseContr
   minRows?: string | number;
   textAreaStyleOverrides?: React.CSSProperties;
   hideValue?: boolean;
+  sx?: SxProps;
 }
 
 function ControlledTextArea<T extends FieldValues>({
@@ -24,6 +26,7 @@ function ControlledTextArea<T extends FieldValues>({
       render={({ field, fieldState: { error } }) => (
         <TextAreaWithRef
           {...field}
+          sx={props.sx}
           required={props.required}
           label={label}
           error={!!error}

@@ -1,6 +1,7 @@
 import React, { FunctionComponent } from 'react';
 import InputLabel from '@mui/material/InputLabel';
 import { TextareaAutosizeProps } from '@mui/base/TextareaAutosize';
+import { SxProps } from '@mui/material';
 
 import { Required } from '../textField/textField.styled';
 
@@ -20,6 +21,7 @@ interface TextAreaProps extends TextareaAutosizeProps {
   required?: boolean;
   textAreaStyleOverrides?: React.CSSProperties;
   hideValue?: boolean;
+  sx?: SxProps;
 }
 
 export const TextArea: FunctionComponent<TextAreaProps> = ({
