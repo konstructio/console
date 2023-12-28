@@ -8,6 +8,7 @@ import CollectionsOutlinedIcon from '@mui/icons-material/CollectionsOutlined';
 import ReceiptLongIcon from '@mui/icons-material/ReceiptLong';
 import HelpOutlineOutlinedIcon from '@mui/icons-material/HelpOutlineOutlined';
 import StarBorderOutlinedIcon from '@mui/icons-material/StarBorderOutlined';
+import AppsIcon from '@mui/icons-material/Apps';
 
 import NavigationComponent, { FooterItem } from '../../components/navigation';
 import { useAppSelector } from '../../redux/store';
@@ -61,6 +62,12 @@ const Navigation: FunctionComponent<NavigationProps> = ({
           icon: <CollectionsOutlinedIcon />,
           path: '/dashboard/environments',
           title: 'Environments',
+          isEnabled: !isClusterZero && selectedCluster?.cloudProvider !== InstallationType.LOCAL,
+        },
+        {
+          icon: <AppsIcon />,
+          path: '/dashboard/repositories',
+          title: 'Repositories',
           isEnabled: !isClusterZero && selectedCluster?.cloudProvider !== InstallationType.LOCAL,
         },
         {

@@ -22,6 +22,7 @@ import {
   settingsReducer,
   subscriptionReducer,
   digitalOceanReducer,
+  repositoryReducer,
 } from './slices';
 
 const rootReducer = combineReducers({
@@ -40,6 +41,7 @@ const rootReducer = combineReducers({
   settings: settingsReducer,
   subscription: subscriptionReducer,
   digitalOcean: digitalOceanReducer,
+  repository: repositoryReducer,
 });
 
 const config = getPersistConfig({

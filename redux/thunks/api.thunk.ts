@@ -18,6 +18,7 @@ import { TelemetryClickEvent } from '@/types/telemetry';
 import { mapClusterFromRaw } from '@/utils/mapClustersFromRaw';
 import { GitProtocol } from '@/types';
 import { RESERVED_DRAFT_CLUSTER_NAME } from '@/constants';
+import { ArgoWorkflowTemplate } from '@/types/argoWorkflows';
 
 export const createCluster = createAsyncThunk<
   ClusterQueue,

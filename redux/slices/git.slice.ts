@@ -9,8 +9,9 @@ import {
   getGitlabUser,
   getGitLabSubgroups,
   getGitLabProjects,
+  getRepositories,
 } from '@/redux/thunks/git.thunk';
-import { GithubUser, GithubUserOrganization } from '@/types/github';
+import { GithubOrganizationRepos, GithubUser, GithubUserOrganization } from '@/types/github';
 import { GitLabGroup, GitLabUser } from '@/types/gitlab';
 import { KUBEFIRST_REPOSITORIES, KUBEFIRST_TEAMS } from '@/constants';
 import { createGitOrgErrorMessage } from '@/utils/createGitOrgErrorMessage';
@@ -28,6 +29,7 @@ export interface GitState {
   token?: string;
   gitOwner?: string;
   isGitSelected?: boolean;
+  repositories: Array<GithubOrganizationRepos>;
 }
 
 export const initialState: GitState = {
@@ -38,6 +40,7 @@ export const initialState: GitState = {
   isLoading: false,
   isTokenValid: false,
   errors: [],
+  repositories: [],
 };
 
 const gitSlice = createSlice({
@@ -230,6 +233,16 @@ const gitSlice = createSlice({
         state.isLoading = false;
         state.isTokenValid = false;
         state.responseError = action.error.message;
+      })
+      .addCase(getRepositories.pending, (state) => {
+        state.isLoading = false;
+      })
+      .addCase(getRepositories.fulfilled, (state, { payload }) => {
+        state.isLoading = false;
+        state.repositories = payload;
+      })
+      .addCase(getRepositories.rejected, (state) => {
+        state.isLoading = false;
       });
   },
 });

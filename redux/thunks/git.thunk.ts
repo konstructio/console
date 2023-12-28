@@ -51,6 +51,21 @@ export const getGitHubOrgRepositories = createAsyncThunk<
   ).data;
 });
 
+export const getRepositories = createAsyncThunk<
+  GithubOrganizationRepos[],
+  { token: string; organization: string }
+>('git/getRepositories', async ({ token, organization }) => {
+  return (
+    await githubApi.get<GithubOrganizationRepos[]>(`/orgs/${organization}/repos?per_page=100`, {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Accept': 'application/vnd.github+json',
+        'X-GitHub-Api-Version': '2022-11-28',
+      },
+    })
+  ).data;
+});
+
 export const getGitHubOrgTeams = createAsyncThunk<
   GithubOrganizationTeams[],
   { token: string; organization: string }

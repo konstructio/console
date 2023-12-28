@@ -12,3 +12,4 @@ export { notificationsReducer } from './notifications.slice';
 export { settingsReducer } from './settings.slice';
 export { subscriptionReducer } from './subscription.slice';
 export { digitalOceanReducer } from './digitalOcean.slice';
+export { repositoryReducer } from './repository.slice';
