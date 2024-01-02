@@ -73,8 +73,8 @@ export enum InstallationType {
   AWS = 'aws',
   CIVO = 'civo',
   DIGITAL_OCEAN = 'digitalocean',
-  VULTR = 'vultr',
   GOOGLE = 'google',
+  VULTR = 'vultr',
 }
 
 export enum InstallMethod {
