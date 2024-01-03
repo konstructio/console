@@ -58,12 +58,11 @@ const License: FunctionComponent<LicenseProps> = ({
           </BottomFormContainer>
         }
       >
+        <Typography variant="subtitle2" color={VOLCANIC_SAND} sx={{ mb: 1 }}>{`You are on a ${
+          license?.plan?.name || 'Community'
+        } Plan`}</Typography>
         {hasLicenseKey ? (
           <>
-            <Typography
-              variant="subtitle2"
-              color={VOLCANIC_SAND}
-            >{`You are on a ${license?.plan.name} Plan`}</Typography>
             <Typography variant="labelLarge" color={EXCLUSIVE_PLUM} sx={{ mt: 1, mb: 1 }}>
               License key
             </Typography>
