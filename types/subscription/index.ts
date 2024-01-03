@@ -1,3 +1,9 @@
+export enum SaasPlans {
+  Community = 'Community',
+  Pro = 'Pro',
+  Enterprise = 'Enterprise',
+}
+
 export interface License {
   id: string;
   plan: Plan;

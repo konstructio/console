@@ -20,6 +20,7 @@ import { SettingsTab } from '@/constants/setttings';
 import { Plan } from '@/types/plan';
 import { activateLicenseKey, validateLicenseKey } from '@/redux/thunks/subscription.thunk';
 import useModal from '@/hooks/useModal';
+import { SaasPlans } from '@/types/subscription';
 
 interface SubscriptionProps {
   plans: Array<Plan>;
@@ -58,6 +59,14 @@ const Subscription: FunctionComponent<SubscriptionProps> = ({ plans }) => {
 
   const handleRedirectToSaas = (plan: string) => {
     push(`${saasURL}?plan=${plan}`);
+  };
+
+  const isActivePlan = (plan: string): boolean => {
+    if (!license?.licenseKey && plan === SaasPlans.Community) {
+      return true;
+    }
+
+    return license?.plan?.name === plan;
   };
 
   const hasLicenseKey = useMemo<boolean>(() => !!license?.licenseKey, [license?.licenseKey]);
@@ -105,7 +114,7 @@ const Subscription: FunctionComponent<SubscriptionProps> = ({ plans }) => {
                 key={plan.id}
                 plan={plan}
                 hideButton={currentPlanIndex > index}
-                isActive={license?.plan?.name === plan.name}
+                isActive={isActivePlan(plan.name)}
                 onClick={() => handleRedirectToSaas(plan.name)}
               />
             ))}
