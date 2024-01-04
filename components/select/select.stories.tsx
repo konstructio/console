@@ -3,7 +3,7 @@ import { Meta, StoryObj } from '@storybook/react';
 
 import { TAG_COLOR_OPTIONS } from '../tag';
 
-import SelectComponent, { EnvironmentSelectWithRef, TagSelectWithRef } from './index';
+import SelectComponent, { TagSelectWithRef } from './index';
 
 const meta: Meta<typeof SelectComponent> = {
   title: 'Form Elements/Select',
@@ -38,15 +38,5 @@ export const TagSelect: StoryObj<typeof TagSelectWithRef> = {
     placeholder: 'Select',
     required: true,
     options: TAG_COLOR_OPTIONS,
-  },
-};
-
-export const EnvironmentSelect: StoryObj<typeof EnvironmentSelectWithRef> = {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  render: ({ key, ...args }) => <EnvironmentSelectWithRef {...args} />,
-  args: {
-    label: 'Environment cluster will host',
-    required: true,
-    options: [{ id: 'one', creationDate: 'now', name: 'development', color: 'dark-sky-blue' }],
   },
 };
