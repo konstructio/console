@@ -35,7 +35,7 @@ const TagWithHooks = () => {
         <Tag
           key={tag}
           removable
-          onRemoval={handleTagRemoval}
+          onDelete={() => handleTagRemoval(tag)}
           text={tag}
           bgColor={sample(TAG_COLOR_OPTIONS)}
         />
