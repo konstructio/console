@@ -1,13 +1,31 @@
 import React, { ForwardedRef, FunctionComponent, useMemo } from 'react';
 import CircularProgress from '@mui/material/CircularProgress';
+import AddIcon from '@mui/icons-material/Add';
 import AutocompleteMUI from '@mui/material/Autocomplete';
 import { SxProps } from '@mui/system';
 import { ControllerRenderProps, FieldValues } from 'react-hook-form';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import { InputLabel } from '@mui/material';
 
 import TextField from '../textField';
+import Column from '../column';
+import Typography from '../typography';
+import { Required } from '../textField/textField.styled';
+import Row from '../row';
+import Tag from '../tag';
 
-import { InputAdornmentContainer } from './autocomplete.styled';
+import { AutoTextField, InputAdornmentContainer, Label, MenuItem } from './autocomplete.styled';
+
+import { ClusterEnvironment } from '@/types/provision';
+import { noop } from '@/utils/noop';
+import { ROYAL_PURPLE } from '@/constants/colors';
+
+const NEW_ENV: ClusterEnvironment = {
+  id: 'create env',
+  name: 'create env',
+  color: 'cyan',
+  creationDate: 'now',
+};
 
 export interface IAutocompleteProps extends ControllerRenderProps<FieldValues> {
   label: string;
@@ -61,6 +79,7 @@ const AutocompleteComponent: FunctionComponent<IAutocompleteProps> = ({
       isOptionEqualToValue={(option: string, value: string) => option === value}
       renderInput={(params) => (
         <TextField
+          {...params}
           ref={params.InputProps.ref}
           required={required}
           placeholder={placeholder}
@@ -75,7 +94,6 @@ const AutocompleteComponent: FunctionComponent<IAutocompleteProps> = ({
             </InputAdornmentContainer>
           }
           value={value}
-          {...params}
           label={label}
           onClick={onClick}
         />
@@ -84,8 +102,103 @@ const AutocompleteComponent: FunctionComponent<IAutocompleteProps> = ({
   );
 };
 
+export interface AutocompleteTagsProps
+  extends Omit<IAutocompleteProps, 'options' | 'filterOptions'> {
+  options: ClusterEnvironment[];
+  onTagDelete: () => void;
+  onChange: (value?: ClusterEnvironment) => void;
+  createEnvironment?: boolean;
+  onAddNewEnvironment?: () => void;
+}
+
+const AutocompleteTagsComponent: FunctionComponent<AutocompleteTagsProps> = ({
+  options,
+  value,
+  onChange,
+  onTagDelete,
+  onAddNewEnvironment = noop,
+  required,
+  disabled,
+  createEnvironment,
+  label,
+}) => {
+  return (
+    <AutocompleteMUI
+      multiple
+      fullWidth
+      options={createEnvironment ? [NEW_ENV, ...options] : options}
+      value={value ? (value.name !== NEW_ENV.name ? [value] : []) : []}
+      getOptionLabel={(option) => option.name}
+      onChange={(_, options) => {
+        const [option] = options.reverse();
+        onChange(option?.name !== NEW_ENV.name ? option : undefined);
+      }}
+      isOptionEqualToValue={(option: ClusterEnvironment) => {
+        return option.name === value?.name;
+      }}
+      popupIcon={<KeyboardArrowDownIcon />}
+      ListboxProps={{
+        style: {
+          maxHeight: '210px',
+        },
+      }}
+      renderInput={(params) => (
+        <Column style={{ gap: '4px' }}>
+          <InputLabel disabled={disabled}>
+            <Label variant="labelLarge">
+              {label} {required && <Required>*</Required>}
+            </Label>
+          </InputLabel>
+          <AutoTextField {...params} hiddenLabel size="small" />
+        </Column>
+      )}
+      renderOption={({ onClick = noop, ...rest }, option) => {
+        const createNewEnvironment = option.name === NEW_ENV.name;
+        return (
+          <MenuItem
+            {...rest}
+            disableRipple
+            onClick={(e) => {
+              if (createNewEnvironment) {
+                onAddNewEnvironment();
+              }
+              onClick(e);
+            }}
+          >
+            {createNewEnvironment ? (
+              <Row style={{ gap: '4px', alignItems: 'center' }}>
+                <AddIcon sx={{ height: 20, width: 20, color: ROYAL_PURPLE }} />
+                <Typography variant="body3" sx={{ color: ROYAL_PURPLE }}>
+                  New environment
+                </Typography>
+              </Row>
+            ) : (
+              <Tag text={option.name} bgColor={option.color} />
+            )}
+          </MenuItem>
+        );
+      }}
+      renderTags={(tags) =>
+        tags.map((option, index) => (
+          <Tag
+            key={index}
+            removable
+            text={option.name}
+            bgColor={option.color}
+            onDelete={onTagDelete}
+          />
+        ))
+      }
+    />
+  );
+};
+
 const Autocomplete = React.forwardRef<unknown, IAutocompleteProps>((props, ref) => {
   return <AutocompleteComponent inputRef={ref} {...props} />;
+});
+
+export const AutocompleteTags = React.forwardRef<unknown, AutocompleteTagsProps>((props, ref) => {
+  return <AutocompleteTagsComponent inputRef={ref} {...props} />;
 });
 
 export default Autocomplete;
