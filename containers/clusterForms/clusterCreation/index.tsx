@@ -38,7 +38,6 @@ import Modal from '@/components/modal';
 import useModal from '@/hooks/useModal';
 import usePaywall from '@/hooks/usePaywall';
 import { CreateEnvironmentMenu } from '@/components/createEnvironmentMenu';
-import LearnMore from '@/components/learnMore';
 import { createEnvironment, getAllEnvironments } from '@/redux/thunks/environments.thunk';
 import { noop } from '@/utils/noop';
 import { clearEnvironmentError } from '@/redux/slices/environments.slice';
@@ -234,11 +233,6 @@ const ClusterCreationForm: FunctionComponent<Omit<ComponentPropsWithoutRef<'div'
           options={clusterOptions}
           defaultValue={type}
           onChange={(clusterType) => setValue('type', clusterType as ClusterType)}
-        />
-        <LearnMore
-          href="https://docs.kubefirst.io/civo/quick-start/cluster-management "
-          description="A partitioned space in your management cluster."
-          linkTitle="Learn More"
         />
       </InputContainer>
       <>

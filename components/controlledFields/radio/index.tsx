@@ -4,8 +4,12 @@ import Radio from '@mui/material/Radio';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import { Control, Controller, UseControllerProps, FieldValues } from 'react-hook-form';
 
-import Typography from '../../typography';
-import { VOLCANIC_SAND } from '../../../constants/colors';
+import { Container, InfoIcon } from './radio.styled';
+
+import Typography from '@/components/typography';
+import { VOLCANIC_SAND } from '@/constants/colors';
+import Row from '@/components/row';
+import Tooltip from '@/components/tooltip';
 
 export interface ControlledRadioGroupProps<T extends FieldValues> extends UseControllerProps<T> {
   control: Control<T>;
@@ -14,7 +18,7 @@ export interface ControlledRadioGroupProps<T extends FieldValues> extends UseCon
     required: boolean;
     pattern?: RegExp;
   };
-  options: Array<{ label: string; value: string }>;
+  options: Array<{ label: string; value: string; tooltipInfo?: string }>;
   onChange?: (value: string) => void;
   inLine?: boolean;
 }
@@ -38,7 +42,7 @@ function ControlledRadioGroup<T extends FieldValues>({
           name={name}
           sx={{ display: 'flex', flexDirection: inLine ? 'row' : 'column' }}
         >
-          {options.map(({ label, value }) => (
+          {options.map(({ label, value, tooltipInfo }) => (
             <FormControlLabel
               key={label}
               value={value}
@@ -56,9 +60,18 @@ function ControlledRadioGroup<T extends FieldValues>({
                 />
               }
               label={
-                <Typography variant="body2" color={VOLCANIC_SAND}>
-                  {label}
-                </Typography>
+                <Container>
+                  <Typography variant="body2" color={VOLCANIC_SAND}>
+                    {label}
+                  </Typography>
+                  {tooltipInfo && (
+                    <Tooltip placement="top" title={tooltipInfo} maxWidth="280px" whiteSpace="wrap">
+                      <Row style={{ alignItems: 'center' }}>
+                        <InfoIcon />
+                      </Row>
+                    </Tooltip>
+                  )}
+                </Container>
               }
             />
           ))}

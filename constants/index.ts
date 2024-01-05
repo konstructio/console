@@ -60,7 +60,15 @@ export const SUGGESTED_WORKLOAD_NODE_COUNT = 2;
 
 export const WORKLOAD_CLUSTER_OPTIONS = [
   { label: 'Physical', value: ClusterType.WORKLOAD },
-  { label: 'Virtual', value: ClusterType.WORKLOAD_V_CLUSTER },
+  {
+    label: 'Virtual',
+    value: ClusterType.WORKLOAD_V_CLUSTER,
+    tooltipInfo: `A virtual cluster is a partitioned space in your
+                  management cluster. Please ensure your 
+                  management cluster has enough resources 
+                  to accommodate the number of vClusters 
+                  you wish to provision.`,
+  },
 ];
 
 export const DEFAULT_CLOUD_INSTANCE_SIZES: Record<
