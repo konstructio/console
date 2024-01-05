@@ -5,7 +5,7 @@ import LearnMore from '../../../../components/learnMore';
 import Typography from '../../../../components/typography';
 import Checkbox from '../../../../components/controlledFields/checkbox';
 import ControlledTextField from '../../../../components/controlledFields/TextField';
-import ControlledAutocomplete from '../../../../components/controlledFields/AutoComplete';
+import ControlledAutocomplete from '../../../../components/controlledFields/autoComplete/AutoComplete';
 import ControlledRadioGroup from '../../../../components/controlledFields/radio/';
 import { useAppSelector } from '../../../../redux/store';
 import { ImageRepository, NewWorkloadClusterConfig } from '../../../../types/provision';

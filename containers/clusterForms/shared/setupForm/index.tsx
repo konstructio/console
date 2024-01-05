@@ -16,7 +16,7 @@ import {
   getRegionZones,
 } from '@/redux/thunks/api.thunk';
 import ControlledTextField from '@/components/controlledFields/TextField';
-import ControlledAutocomplete from '@/components/controlledFields/AutoComplete';
+import ControlledAutocomplete from '@/components/controlledFields/autoComplete/AutoComplete';
 import Column from '@/components/column';
 import Typography from '@/components/typography';
 import ControlledCheckbox from '@/components/controlledFields/checkbox';

@@ -61,7 +61,7 @@ export interface TagProps {
   bgColor?: TagColor;
   icon?: TagIconOption;
   removable?: boolean;
-  onRemoval?: (tagText: string) => void;
+  onDelete?: () => void;
   spinImage?: boolean;
 }
 
@@ -70,7 +70,7 @@ const Tag: FunctionComponent<TagProps> = ({
   icon,
   removable,
   bgColor,
-  onRemoval = noop,
+  onDelete = noop,
   spinImage,
   ...rest
 }) => {
@@ -85,7 +85,7 @@ const Tag: FunctionComponent<TagProps> = ({
         {text}
       </Typography>
       {removable && (
-        <RemovalButton onClick={() => onRemoval(text)}>
+        <RemovalButton onClick={onDelete}>
           <CloseIcon />
         </RemovalButton>
       )}

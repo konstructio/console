@@ -13,7 +13,7 @@ import { usePhysicalClustersPermissions } from '../../../hooks/usePhysicalCluste
 import { Container } from './clusterCreation.styled';
 import { InputContainer } from './advancedOptions/advancedOptions.styled';
 
-import ControlledAutocomplete from '@/components/controlledFields/AutoComplete';
+import ControlledAutocomplete from '@/components/controlledFields/autoComplete/AutoComplete';
 import ControlledTextField from '@/components/controlledFields/TextField';
 import { useAppDispatch, useAppSelector } from '@/redux/store';
 import Typography from '@/components/typography';
@@ -33,7 +33,6 @@ import {
   WORKLOAD_CLUSTER_OPTIONS,
 } from '@/constants';
 import { updateDraftCluster } from '@/redux/slices/api.slice';
-import ControlledEnvironmentSelect from '@/components/controlledFields/environmentSelect';
 import Modal from '@/components/modal';
 import useModal from '@/hooks/useModal';
 import usePaywall from '@/hooks/usePaywall';
@@ -48,6 +47,7 @@ import {
   getInstanceSizes,
   getRegionZones,
 } from '@/redux/thunks/api.thunk';
+import ControlledTagsAutocomplete from '@/components/controlledFields/autoComplete/TagsAutoComplete';
 
 const ClusterCreationForm: FunctionComponent<Omit<ComponentPropsWithoutRef<'div'>, 'key'>> = (
   props,
@@ -147,6 +147,17 @@ const ClusterCreationForm: FunctionComponent<Omit<ComponentPropsWithoutRef<'div'
     }
   };
 
+  const handleEnvChange = useCallback(
+    (env?: ClusterEnvironment) => {
+      setValue('environment', env);
+    },
+    [setValue],
+  );
+
+  const handleTagDelete = useCallback(() => {
+    setValue('environment', undefined);
+  }, [setValue]);
+
   const { hasPermissions } = usePhysicalClustersPermissions(managementCluster?.cloudProvider);
 
   const canCreatePhysicalCluster = useMemo(
@@ -236,12 +247,14 @@ const ClusterCreationForm: FunctionComponent<Omit<ComponentPropsWithoutRef<'div'
         />
       </InputContainer>
       <>
-        <ControlledEnvironmentSelect
+        <ControlledTagsAutocomplete
+          createEnvironment
           control={control}
           name="environment"
           label="Environment cluster will host"
-          onErrorText={errors.environment?.message}
           options={Object.values(environments)}
+          onChange={handleEnvChange}
+          onTagDelete={handleTagDelete}
           onAddNewEnvironment={openModal}
         />
         <Modal

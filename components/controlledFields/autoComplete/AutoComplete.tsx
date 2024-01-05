@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { Control, Controller, FieldValues, UseControllerProps } from 'react-hook-form';
 
-import Autocomplete from '../autocomplete/index';
+import Autocomplete from '../../autocomplete/index';
 
-export interface ControlledTextFieldProps<T extends FieldValues> extends UseControllerProps<T> {
+export interface ControlledAutocompleteProps<T extends FieldValues> extends UseControllerProps<T> {
   label: string;
   required?: boolean;
   control: Control<T>;
@@ -35,7 +35,7 @@ function ControlledAutocomplete<T extends FieldValues>({
   loading,
   onClick,
   ...props
-}: ControlledTextFieldProps<T>) {
+}: ControlledAutocompleteProps<T>) {
   const [isBlur, setIsBlur] = useState(false);
 
   return (

@@ -2,7 +2,6 @@ import React, { FunctionComponent } from 'react';
 import { styled } from '@mui/material/styles';
 import InputBase from '@mui/material/InputBase';
 import InputLabel from '@mui/material/InputLabel';
-import AddIcon from '@mui/icons-material/Add';
 import SelectMUI, { SelectProps } from '@mui/material/Select';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import MenuItem from '@mui/material/MenuItem';
@@ -10,10 +9,8 @@ import MenuItem from '@mui/material/MenuItem';
 import Typography from '../typography';
 import { Required } from '../textField/textField.styled';
 import Tag, { TagColor } from '../tag';
-import { DOLPHIN, LIGHT_GREY, LINK_WATER, ROYAL_PURPLE, WHITE_SMOKE } from '../../constants/colors';
+import { DOLPHIN, LIGHT_GREY, LINK_WATER } from '../../constants/colors';
 import { StyledFormHelperText } from '../textArea/textArea.styled';
-import Row from '../row';
-import { ClusterEnvironment } from '../../types/provision';
 
 import { Container } from './select.styled';
 
@@ -57,84 +54,6 @@ export const Input = styled(InputBase)(({ theme, error }) => ({
     },
   },
 }));
-
-interface EnvironmentSelectProps extends SelectProps<ClusterEnvironment> {
-  options?: ClusterEnvironment[];
-  helperText?: string;
-  error?: boolean;
-  onAddNewEnvironment: () => void;
-}
-
-const EnvironmentSelect: FunctionComponent<EnvironmentSelectProps> = ({
-  label,
-  required,
-  options = [],
-  helperText,
-  error,
-  onAddNewEnvironment,
-  ...props
-}) => {
-  return (
-    <Container>
-      <InputLabel sx={{ marginBottom: '8px' }}>
-        <Typography variant="labelLarge" sx={{ display: 'flex', gap: '4px' }}>
-          {label} {required && <Required>*</Required>}
-        </Typography>
-      </InputLabel>
-      <SelectMUI
-        {...props}
-        IconComponent={KeyboardArrowDownIcon}
-        fullWidth
-        required={required}
-        input={<Input error={error} sx={{ height: '36px' }} />}
-        MenuProps={MenuProps}
-        displayEmpty
-        sx={{ width: '100%' }}
-        renderValue={(value) => {
-          if (value) {
-            return <Tag text={value.name} bgColor={value.color} />;
-          }
-          if (props.value) {
-            return <Tag text={props.value.name} bgColor={props.value.color} />;
-          }
-        }}
-      >
-        <MenuItem
-          disableRipple
-          onClick={onAddNewEnvironment}
-          sx={{
-            '&.MuiMenuItem-root.Mui-selected': {
-              'backgroundColor': 'white',
-              '&:hover': { backgroundColor: `${WHITE_SMOKE}` },
-            },
-          }}
-        >
-          <Row style={{ gap: '4px', alignItems: 'center' }}>
-            <AddIcon sx={{ height: 20, width: 20, color: ROYAL_PURPLE }} />
-            <Typography variant="body3" sx={{ color: ROYAL_PURPLE }}>
-              New environment
-            </Typography>
-          </Row>
-        </MenuItem>
-        {!!options.length && (
-          <MenuItem value="" disableRipple>
-            <Typography variant="body3" sx={{ color: ROYAL_PURPLE, marginLeft: '3px' }}>
-              None
-            </Typography>
-          </MenuItem>
-        )}
-        {options.map((option) => (
-          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-          //@ts-ignore
-          <MenuItem key={option.environmentName} value={option} disableRipple>
-            <Tag text={option.name} bgColor={option.color} />
-          </MenuItem>
-        ))}
-      </SelectMUI>
-      {helperText && <StyledFormHelperText error={error}>{helperText}</StyledFormHelperText>}
-    </Container>
-  );
-};
 
 interface TagSelectProps extends Omit<SelectProps<TagColor>, 'key'> {
   options: readonly string[];
@@ -233,11 +152,5 @@ const SelectWithRef = React.forwardRef<unknown, ISelectProps>((props, ref) => {
 export const TagSelectWithRef = React.forwardRef<unknown, TagSelectProps>((props, ref) => {
   return <TagSelect inputRef={ref} {...props} />;
 });
-
-export const EnvironmentSelectWithRef = React.forwardRef<unknown, EnvironmentSelectProps>(
-  (props, ref) => {
-    return <EnvironmentSelect inputRef={ref} {...props} />;
-  },
-);
 
 export default SelectWithRef;

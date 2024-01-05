@@ -7,7 +7,7 @@ import GitProviderButton from '../../../../components/gitProviderButton';
 import Typography from '../../../../components/typography';
 import { useInstallation } from '../../../../hooks/useInstallation';
 import ControlledPassword from '../../../../components/controlledFields/Password';
-import ControlledAutocomplete from '../../../../components/controlledFields/AutoComplete';
+import ControlledAutocomplete from '../../../../components/controlledFields/autoComplete/AutoComplete';
 import ControlledTextArea from '../../../../components/controlledFields/textArea';
 import ControlledTextField from '../../../../components/controlledFields/TextField';
 import { useAppDispatch, useAppSelector } from '../../../../redux/store';
