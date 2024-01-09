@@ -11,7 +11,7 @@ export const selectHasLicenseKey = () =>
 export const selectSubscriptionPlan = () =>
   createSelector(subscriptionSelector, ({ license }) => license?.plan?.name);
 
-export const selectUpgrateLicenseDefinition = () =>
+export const selectUpgradeLicenseDefinition = () =>
   createSelector(subscriptionSelector, ({ license }) => {
     if (license?.plan?.name === SaasPlans.Pro) {
       return {

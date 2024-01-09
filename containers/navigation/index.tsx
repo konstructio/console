@@ -78,11 +78,11 @@ const Navigation: FunctionComponent<NavigationProps> = ({
 
   const nextLicenseUpgradeTitle = useMemo<string | undefined>(() => {
     if (!license?.licenseKey) {
-      return 'Upgrate to Pro';
+      return 'Upgrade to Pro';
     }
 
     if (license?.plan?.name === SaasPlans.Pro) {
-      return 'Upgrate to Enterprise';
+      return 'Upgrade to Enterprise';
     }
 
     return undefined;

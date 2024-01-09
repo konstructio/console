@@ -47,7 +47,7 @@ import {
 } from '@/constants';
 import usePaywall from '@/hooks/usePaywall';
 import UpgradeModal from '@/components/upgradeModal';
-import { selectUpgrateLicenseDefinition } from '@/redux/selectors/subscription.selector';
+import { selectUpgradeLicenseDefinition } from '@/redux/selectors/subscription.selector';
 
 const ClusterManagement: FunctionComponent = () => {
   const {
@@ -67,7 +67,7 @@ const ClusterManagement: FunctionComponent = () => {
   }));
 
   const dispatch = useAppDispatch();
-  const upgrateLicenseDefinition = useAppSelector(selectUpgrateLicenseDefinition());
+  const upgradeLicenseDefinition = useAppSelector(selectUpgradeLicenseDefinition());
 
   const {
     isOpen: isUpgradeModalOpen,
@@ -290,9 +290,9 @@ const ClusterManagement: FunctionComponent = () => {
       {isUpgradeModalOpen && (
         <UpgradeModal
           isOpen={isUpgradeModalOpen}
-          clusterLimitText={upgrateLicenseDefinition?.text as string}
-          clusterLimitDescription={upgrateLicenseDefinition?.description as string}
-          ctaText={upgrateLicenseDefinition?.ctaText as string}
+          clusterLimitText={upgradeLicenseDefinition?.text as string}
+          clusterLimitDescription={upgradeLicenseDefinition?.description as string}
+          ctaText={upgradeLicenseDefinition?.ctaText as string}
           closeModal={closeUpgradeModal}
         />
       )}
