@@ -35,7 +35,6 @@ import {
 import { updateDraftCluster } from '@/redux/slices/api.slice';
 import Modal from '@/components/modal';
 import useModal from '@/hooks/useModal';
-import usePaywall from '@/hooks/usePaywall';
 import { CreateEnvironmentMenu } from '@/components/createEnvironmentMenu';
 import { createEnvironment, getAllEnvironments } from '@/redux/thunks/environments.thunk';
 import { noop } from '@/utils/noop';
@@ -53,7 +52,6 @@ const ClusterCreationForm: FunctionComponent<Omit<ComponentPropsWithoutRef<'div'
   props,
 ) => {
   const { isOpen, openModal, closeModal } = useModal(false);
-  const { canUseFeature } = usePaywall();
 
   const {
     managementCluster,
@@ -160,21 +158,16 @@ const ClusterCreationForm: FunctionComponent<Omit<ComponentPropsWithoutRef<'div'
 
   const { hasPermissions } = usePhysicalClustersPermissions(managementCluster?.cloudProvider);
 
-  const canCreatePhysicalCluster = useMemo(
-    () => hasPermissions && canUseFeature('physicalClusters'),
-    [canUseFeature, hasPermissions],
-  );
-
   const draftCluster = useMemo(() => clusterMap[RESERVED_DRAFT_CLUSTER_NAME], [clusterMap]);
 
   const isVCluster = useMemo(() => type === ClusterType.WORKLOAD_V_CLUSTER, [type]);
 
   const clusterOptions = useMemo(() => {
-    if (canCreatePhysicalCluster) {
+    if (hasPermissions) {
       return WORKLOAD_CLUSTER_OPTIONS;
     }
     return WORKLOAD_CLUSTER_OPTIONS.filter((option) => option.value !== ClusterType.WORKLOAD);
-  }, [canCreatePhysicalCluster]);
+  }, [hasPermissions]);
 
   useEffect(() => {
     const subscription = watch((values) => {

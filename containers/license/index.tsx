@@ -10,6 +10,7 @@ import LearnMore from '@/components/learnMore';
 import Typography from '@/components/typography';
 import { useAppSelector } from '@/redux/store';
 import ControlledPassword from '@/components/controlledFields/Password';
+import { selectHasLicenseKey } from '@/redux/selectors/subscription.selector';
 
 export interface LicenseProps {
   handleActivateLicense: (licenseKey: string) => void;
@@ -22,7 +23,7 @@ const License: FunctionComponent<LicenseProps> = ({
 }) => {
   const { isLoading, license, error } = useAppSelector(({ subscription }) => subscription);
 
-  const hasLicenseKey = useMemo<boolean>(() => !!license?.licenseKey, [license?.licenseKey]);
+  const hasLicenseKey = useAppSelector(selectHasLicenseKey());
 
   const formattedLicenseKey = useMemo<string | undefined>(
     () =>

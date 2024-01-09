@@ -45,6 +45,9 @@ import {
   RESERVED_DRAFT_CLUSTER_NAME,
   SUGGESTED_WORKLOAD_NODE_COUNT,
 } from '@/constants';
+import usePaywall from '@/hooks/usePaywall';
+import UpgradeModal from '@/components/upgradeModal';
+import { selectUpgradeLicenseDefinition } from '@/redux/selectors/subscription.selector';
 
 const ClusterManagement: FunctionComponent = () => {
   const {
@@ -64,8 +67,15 @@ const ClusterManagement: FunctionComponent = () => {
   }));
 
   const dispatch = useAppDispatch();
+  const upgradeLicenseDefinition = useAppSelector(selectUpgradeLicenseDefinition());
 
+  const {
+    isOpen: isUpgradeModalOpen,
+    openModal: openUpgradeModal,
+    closeModal: closeUpgradeModal,
+  } = useModal();
   const { hasPermissions } = usePhysicalClustersPermissions(managementCluster?.cloudProvider);
+  const { canUseFeature } = usePaywall();
 
   const defaultClusterType = useMemo(() => {
     if (managementCluster && managementCluster.cloudProvider && hasPermissions) {
@@ -172,6 +182,19 @@ const ClusterManagement: FunctionComponent = () => {
   }, [managementCluster, dispatch, openCreateClusterFlow, clusterCreationStep, defaultClusterType]);
 
   const handleCreateCluster = () => {
+    const draftCluster = clusterMap[RESERVED_DRAFT_CLUSTER_NAME];
+
+    if (
+      draftCluster?.type === ClusterType.WORKLOAD &&
+      clusterCreationStep !== ClusterCreationStep.DETAILS
+    ) {
+      const canCreatePhysicalClusters = canUseFeature('physicalClusters');
+
+      if (!canCreatePhysicalClusters) {
+        return openUpgradeModal();
+      }
+    }
+
     if (clusterCreationStep !== ClusterCreationStep.DETAILS) {
       dispatch(createWorkloadCluster());
     }
@@ -262,6 +285,15 @@ const ClusterManagement: FunctionComponent = () => {
           onCloseModal={closeDeleteModal}
           onDelete={handleDeleteCluster}
           cluster={presentedCluster}
+        />
+      )}
+      {isUpgradeModalOpen && (
+        <UpgradeModal
+          isOpen={isUpgradeModalOpen}
+          clusterLimitText={upgradeLicenseDefinition?.text as string}
+          clusterLimitDescription={upgradeLicenseDefinition?.description as string}
+          ctaText={upgradeLicenseDefinition?.ctaText as string}
+          closeModal={closeUpgradeModal}
         />
       )}
     </Container>

@@ -1,4 +1,11 @@
 export enum SettingsTab {
-  LICENSE_KEY = 0,
-  PLANS = 1,
+  BILLING = 0,
+  LICENSE_KEY = 1,
+  PLANS = 2,
 }
+
+export const SettingsTabMap: { [key: string]: number } = {
+  billing: 0,
+  license: 1,
+  plans: 2,
+};
