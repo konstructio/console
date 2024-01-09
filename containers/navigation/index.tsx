@@ -19,6 +19,7 @@ import { selectCluster } from '@/redux/selectors/cluster.selector';
 import { InstallationType } from '@/types/redux';
 import { FeatureFlag } from '@/types/config';
 import { ASMANI_SKY } from '@/constants/colors';
+import { SaasPlans } from '@/types/subscription';
 
 export interface NavigationProps {
   handleOpenFlappy: typeof noop;
@@ -75,14 +76,26 @@ const Navigation: FunctionComponent<NavigationProps> = ({
     [isMultiClusterEnabled, isClusterZero, selectedCluster?.cloudProvider, isSubscriptionEnabled],
   );
 
+  const nextLicenseUpgradeTitle = useMemo<string | undefined>(() => {
+    if (!license?.licenseKey) {
+      return 'Upgrate to Pro';
+    }
+
+    if (license?.plan?.name === SaasPlans.Pro) {
+      return 'Upgrate to Enterprise';
+    }
+
+    return undefined;
+  }, [license?.licenseKey, license?.plan?.name]);
+
   const footerItems = useMemo(
     () =>
       isSubscriptionEnabled
-        ? !license?.licenseKey && [
+        ? nextLicenseUpgradeTitle && [
             {
               icon: <StarBorderOutlinedIcon htmlColor={ASMANI_SKY} />,
-              path: '/settings/subscription',
-              title: 'Upgrade to Pro',
+              path: '/settings/subscription/plans',
+              title: nextLicenseUpgradeTitle,
               color: ASMANI_SKY,
             },
           ]
@@ -100,7 +113,7 @@ const Navigation: FunctionComponent<NavigationProps> = ({
               color: '',
             },
           ],
-    [isSubscriptionEnabled, license?.licenseKey],
+    [isSubscriptionEnabled, nextLicenseUpgradeTitle],
   );
 
   const handleIsActiveItem = useCallback(

@@ -3,7 +3,7 @@ import { useMemo } from 'react';
 import { useAppSelector } from '@/redux/store';
 import { ClusterType } from '@/types/provision';
 
-const CLUSTERS_LIMIT: { [key: string]: number } = { ['Pro']: 3, ['Enterprise']: 1000 };
+export const CLUSTERS_LIMIT: { [key: string]: number } = { ['Pro']: 10, ['Enterprise']: 1000 };
 
 export default function usePaywall() {
   const { license, plan } = useAppSelector(({ subscription }) => ({

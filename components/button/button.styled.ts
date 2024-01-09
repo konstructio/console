@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import Button from '@mui/material/Button';
 
 import {
+  ASMANI_SKY,
   DR_WHITE,
   EXCLUSIVE_PLUM,
   LIGHT_GREY,
@@ -102,5 +103,16 @@ export const TextButton = styled(Button)`
   &:hover {
     color: ${({ theme }) => theme.colors.primary} !important;
     background-color: ${({ theme }) => theme.colors.magnolia};
+  }
+`;
+
+export const SubscriptionButton = styled(Button)`
+  background-color: inherit;
+  box-shadow: none !important;
+  color: ${ASMANI_SKY} !important;
+  border-color: ${ASMANI_SKY} !important;
+
+  &:hover {
+    color: ${ASMANI_SKY} !important;
   }
 `;

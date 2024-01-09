@@ -9,6 +9,7 @@ import {
   ErrorButton,
   InfoButton,
   TextButton,
+  SubscriptionButton,
 } from './button.styled';
 
 const BUTTONS_MAP = {
@@ -18,10 +19,11 @@ const BUTTONS_MAP = {
   ['error']: ErrorButton,
   ['info']: InfoButton,
   ['text']: TextButton,
+  ['subscription']: SubscriptionButton,
 };
 
 export interface IButtonProps extends Omit<ButtonProps, 'key'> {
-  color: 'primary' | 'secondary' | 'secondaryDark' | 'error' | 'info' | 'text';
+  color: 'primary' | 'secondary' | 'secondaryDark' | 'error' | 'info' | 'text' | 'subscription';
 }
 
 const Button: FunctionComponent<IButtonProps> = ({

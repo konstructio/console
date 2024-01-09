@@ -1,16 +1,22 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-import { License } from '@/types/subscription';
-import { activateLicenseKey, validateLicenseKey } from '@/redux/thunks/subscription.thunk';
+import { ClusterUsage, License } from '@/types/subscription';
+import {
+  activateLicenseKey,
+  getClusterUsage,
+  validateLicenseKey,
+} from '@/redux/thunks/subscription.thunk';
 
 export interface LicenseState {
   license?: License;
   isLoading: boolean;
+  clusterUsageList: Array<ClusterUsage>;
   error?: string;
 }
 
 export const initialState: LicenseState = {
   isLoading: false,
+  clusterUsageList: [],
 };
 
 const subscriptionSlice = createSlice({
@@ -44,6 +50,17 @@ const subscriptionSlice = createSlice({
         state.isLoading = false;
         state.error =
           'Please enter a valid license key. If this error persists please reach out to the kubefirst team.';
+      })
+      .addCase(getClusterUsage.fulfilled, (state, { payload }) => {
+        state.isLoading = false;
+        state.clusterUsageList = payload;
+      })
+      .addCase(getClusterUsage.pending, (state) => {
+        state.isLoading = true;
+        state.error = undefined;
+      })
+      .addCase(getClusterUsage.rejected, (state) => {
+        state.isLoading = false;
       });
   },
 });

@@ -51,3 +51,13 @@ export interface CancelSubscriptionFields {
   other: boolean;
   description: string;
 }
+
+export interface ClusterUsage {
+  clusterName: string;
+  clusterID: string;
+  clusterType: string;
+  createdAt: Date;
+  deletedAt: Date;
+  hours: number;
+  total: number;
+}
