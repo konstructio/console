@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 
 export interface IUseModal {
   isOpen: boolean;
@@ -8,10 +8,16 @@ export interface IUseModal {
 
 const useModal = (defaultState = false): IUseModal => {
   const [isOpen, setIsOpen] = useState(defaultState);
+
   const openModal = useCallback(() => {
     setIsOpen(true);
   }, []);
+
   const closeModal = useCallback(() => setIsOpen(false), []);
+
+  useEffect(() => {
+    setIsOpen(defaultState);
+  }, [defaultState]);
 
   return { isOpen, openModal, closeModal };
 };
