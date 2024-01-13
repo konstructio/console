@@ -1,7 +1,8 @@
 'use client';
-import React, { FunctionComponent, useCallback, useMemo } from 'react';
+import React, { FunctionComponent, useCallback, useEffect, useMemo, useState } from 'react';
 import Box from '@mui/material/Box';
 import Tabs from '@mui/material/Tabs';
+import Joyride, { ACTIONS, CallBackProps } from 'react-joyride';
 
 import { CreateClusterFlow } from './createClusterFlow';
 import {
@@ -26,7 +27,7 @@ import useToggle from '@/hooks/useToggle';
 import useModal from '@/hooks/useModal';
 import DeleteCluster from '@/components/deleteCluster';
 import TabPanel, { Tab, a11yProps } from '@/components/tab';
-import { BISCAY, SALTBOX_BLUE } from '@/constants/colors';
+import { BISCAY, MIDNIGHT_EXPRESS, SALTBOX_BLUE } from '@/constants/colors';
 import { Flow } from '@/components/flow';
 import ClusterTable from '@/components/clusterTable/clusterTable';
 import {
@@ -45,6 +46,10 @@ import {
   RESERVED_DRAFT_CLUSTER_NAME,
   SUGGESTED_WORKLOAD_NODE_COUNT,
 } from '@/constants';
+import TourModal from '@/components/tourModal';
+import JoyrideTooltip from '@/components/joyrideTooltip';
+import { JOYRIDE_STEPS } from '@/constants/joyride';
+import { getClusterTourStatus, updateClusterTourStatus } from '@/redux/thunks/settings.thunk';
 
 const ClusterManagement: FunctionComponent = () => {
   const {
@@ -55,13 +60,18 @@ const ClusterManagement: FunctionComponent = () => {
     notifiedOfBetaPhysicalClusters,
     clusterMap,
     clusterManagementTab,
-  } = useAppSelector(({ api, queue, notifications, config, featureFlags }) => ({
+    takenConsoleTour,
+  } = useAppSelector(({ api, queue, notifications, config, featureFlags, settings }) => ({
     clusterQueue: queue.clusterQueue,
     notifiedOfBetaPhysicalClusters: notifications.notifiedOfBetaPhysicalClusters,
     clusterManagementTab: config.clusterManagementTab,
     ...api,
     ...featureFlags.flags,
+    ...settings,
   }));
+
+  const { isOpen, closeModal } = useModal(!takenConsoleTour);
+  const [startTour, setStartTour] = useState(false);
 
   const dispatch = useAppDispatch();
 
@@ -121,7 +131,7 @@ const ClusterManagement: FunctionComponent = () => {
   }, [dispatch, presentedClusterName, closeDeleteModal, handleMenuClose]);
 
   const handleChange = useCallback(
-    (event: React.SyntheticEvent, tabIndex: number) => {
+    (_: React.SyntheticEvent, tabIndex: number) => {
       dispatch(setClusterManagamentTab(tabIndex));
       if (presentedClusterName) {
         dispatch(setPresentedClusterName(undefined));
@@ -189,6 +199,37 @@ const ClusterManagement: FunctionComponent = () => {
     [dispatch, openDeleteModal],
   );
 
+  const handleTakeTour = useCallback(() => {
+    closeModal();
+    setStartTour(true);
+  }, [closeModal]);
+
+  const handleTourSkip = useCallback(() => {
+    closeModal();
+    if (managementCluster) {
+      dispatch(
+        updateClusterTourStatus({ clusterName: managementCluster.clusterName, takenTour: true }),
+      );
+    }
+  }, [closeModal, dispatch, managementCluster]);
+
+  const handleJoyrideCallback = useCallback(
+    ({ action }: CallBackProps) => {
+      if (action === ACTIONS.RESET && managementCluster) {
+        dispatch(
+          updateClusterTourStatus({ clusterName: managementCluster.clusterName, takenTour: true }),
+        );
+      }
+    },
+    [dispatch, managementCluster],
+  );
+
+  useEffect(() => {
+    if (managementCluster) {
+      dispatch(getClusterTourStatus(managementCluster.clusterName));
+    }
+  }, [dispatch, managementCluster]);
+
   return (
     <Container>
       <Header>
@@ -235,6 +276,25 @@ const ClusterManagement: FunctionComponent = () => {
           )}
         </TabPanel>
         <TabPanel value={clusterManagementTab} index={ClusterManagementTab.GRAPH_VIEW}>
+          <Joyride
+            steps={JOYRIDE_STEPS}
+            run={startTour}
+            tooltipComponent={JoyrideTooltip}
+            callback={handleJoyrideCallback}
+            continuous
+            styles={{
+              options: {
+                arrowColor: MIDNIGHT_EXPRESS,
+              },
+            }}
+          />
+          <TourModal
+            isOpen={isOpen}
+            onCloseModal={handleTourSkip}
+            onSkip={handleTourSkip}
+            onTakeTour={handleTakeTour}
+            styleOverrides={{ width: '500px', padding: 0 }}
+          />
           <Flow onNodeClick={handleClusterSelect} />
         </TabPanel>
       </Content>
