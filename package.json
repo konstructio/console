@@ -50,6 +50,7 @@
     "react-icons": "^4.4.0",
     "react-instantsearch": "^7.0.2",
     "react-instantsearch-hooks-web": "^6.44.0",
+    "react-joyride": "^2.7.2",
     "react-redux": "^8.0.5",
     "reactflow": "^11.7.4",
     "redux-deep-persist": "^1.0.7",
