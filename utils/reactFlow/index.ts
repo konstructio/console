@@ -23,6 +23,7 @@ export function generateNode(
   position: { x: number; y: number },
   info: Cluster | DraftCluster,
   selected = false,
+  className?: string,
 ): CustomGraphNode {
   return {
     id,
@@ -31,6 +32,7 @@ export function generateNode(
     position,
     draggable: false,
     selected,
+    className,
   };
 }
 
@@ -75,6 +77,8 @@ export function generateNodesConfig(
         y: 0,
       },
       managementCluster,
+      false,
+      'management-cluster',
     ),
   ];
 
@@ -99,6 +103,8 @@ export function generateNodesConfig(
         workloadClusterId,
         { x: WORKLOAD_CLUSTER_X_SPACE + NODE_WIDTH, y: nodeYPosition },
         workloadCluster,
+        false,
+        `workload-cluster-${i + 1}`,
       ),
     );
 
