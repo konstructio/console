@@ -11,6 +11,15 @@ export const selectHasLicenseKey = () =>
 export const selectSubscriptionPlan = () =>
   createSelector(subscriptionSelector, ({ license }) => license?.plan?.name);
 
+export const selectIsLicenseActive = () =>
+  createSelector(subscriptionSelector, ({ license }) => !!license?.isActive);
+
+export const selectPendingInvoice = () =>
+  createSelector(
+    subscriptionSelector,
+    ({ license }) => license?.invoices && license?.invoices.find(({ status }) => status === 'open'),
+  );
+
 export const selectUpgradeLicenseDefinition = () =>
   createSelector(subscriptionSelector, ({ license }) => {
     if (license?.plan?.name === SaasPlans.Pro) {
@@ -18,14 +27,6 @@ export const selectUpgradeLicenseDefinition = () =>
         text: 'You’ve reached the 10 physical clusters limit.',
         description: 'Upgrade to an Enterprise plan to provision the number of clusters you need.',
         ctaText: 'Contact us to upgrade',
-      };
-    }
-
-    if (!license?.licenseKey) {
-      return {
-        text: `You don't have a license key`,
-        description: 'Get a Pro plan to provision up to 10 clusters.',
-        ctaText: 'Get started',
       };
     }
   });

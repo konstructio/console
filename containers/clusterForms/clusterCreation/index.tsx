@@ -7,6 +7,7 @@ import React, {
 } from 'react';
 import { useFormContext } from 'react-hook-form';
 import Box from '@mui/material/Box';
+import StarBorderOutlinedIcon from '@mui/icons-material/StarBorderOutlined';
 
 import { usePhysicalClustersPermissions } from '../../../hooks/usePhysicalClustersPermission';
 
@@ -23,7 +24,7 @@ import {
   ClusterEnvironment,
   ManagementCluster,
 } from '@/types/provision';
-import { BISCAY, EXCLUSIVE_PLUM } from '@/constants/colors';
+import { ASMANI_SKY, BISCAY, EXCLUSIVE_PLUM } from '@/constants/colors';
 import ControlledNumberInput from '@/components/controlledFields/numberInput';
 import ControlledRadioGroup from '@/components/controlledFields/radio';
 import {
@@ -47,6 +48,8 @@ import {
   getRegionZones,
 } from '@/redux/thunks/api.thunk';
 import ControlledTagsAutocomplete from '@/components/controlledFields/autoComplete/TagsAutoComplete';
+import { selectHasLicenseKey } from '@/redux/selectors/subscription.selector';
+import Tag from '@/components/tag';
 
 const ClusterCreationForm: FunctionComponent<Omit<ComponentPropsWithoutRef<'div'>, 'key'>> = (
   props,
@@ -62,6 +65,7 @@ const ClusterCreationForm: FunctionComponent<Omit<ComponentPropsWithoutRef<'div'
     instanceSizes,
     error,
   } = useAppSelector(({ api, environments }) => ({ ...api, ...environments }));
+  const hasLicenseKey = useAppSelector(selectHasLicenseKey());
 
   const dispatch = useAppDispatch();
 
@@ -162,12 +166,41 @@ const ClusterCreationForm: FunctionComponent<Omit<ComponentPropsWithoutRef<'div'
 
   const isVCluster = useMemo(() => type === ClusterType.WORKLOAD_V_CLUSTER, [type]);
 
+  const handleRedirect = () => {
+    return window.open(`${location.origin}/settings/subscription/plans`, '_blank');
+  };
+
   const clusterOptions = useMemo(() => {
+    let clusterTypes;
     if (hasPermissions) {
-      return WORKLOAD_CLUSTER_OPTIONS;
+      clusterTypes = WORKLOAD_CLUSTER_OPTIONS;
+    } else {
+      clusterTypes = WORKLOAD_CLUSTER_OPTIONS.filter(
+        (option) => option.value !== ClusterType.WORKLOAD,
+      );
     }
-    return WORKLOAD_CLUSTER_OPTIONS.filter((option) => option.value !== ClusterType.WORKLOAD);
-  }, [hasPermissions]);
+
+    return hasLicenseKey
+      ? clusterTypes
+      : clusterTypes.map((option) => {
+          if (option.value === ClusterType.WORKLOAD) {
+            return {
+              ...option,
+              isDisabled: true,
+              tag: (
+                <Tag
+                  onClick={handleRedirect}
+                  text="Upgrade to use this feature"
+                  bgColor="mistery"
+                  iconComponent={<StarBorderOutlinedIcon htmlColor={ASMANI_SKY} fontSize="small" />}
+                />
+              ),
+            };
+          }
+
+          return option;
+        });
+  }, [hasLicenseKey, hasPermissions]);
 
   useEffect(() => {
     const subscription = watch((values) => {
