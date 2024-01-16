@@ -48,7 +48,10 @@ import {
   getRegionZones,
 } from '@/redux/thunks/api.thunk';
 import ControlledTagsAutocomplete from '@/components/controlledFields/autoComplete/TagsAutoComplete';
-import { selectHasLicenseKey } from '@/redux/selectors/subscription.selector';
+import {
+  selectHasLicenseKey,
+  selectIsLicenseActive,
+} from '@/redux/selectors/subscription.selector';
 import Tag from '@/components/tag';
 
 const ClusterCreationForm: FunctionComponent<Omit<ComponentPropsWithoutRef<'div'>, 'key'>> = (
@@ -66,6 +69,7 @@ const ClusterCreationForm: FunctionComponent<Omit<ComponentPropsWithoutRef<'div'
     error,
   } = useAppSelector(({ api, environments }) => ({ ...api, ...environments }));
   const hasLicenseKey = useAppSelector(selectHasLicenseKey());
+  const isLicenseActive = useAppSelector(selectIsLicenseActive());
 
   const dispatch = useAppDispatch();
 
@@ -180,7 +184,7 @@ const ClusterCreationForm: FunctionComponent<Omit<ComponentPropsWithoutRef<'div'
       );
     }
 
-    return hasLicenseKey
+    return hasLicenseKey && isLicenseActive
       ? clusterTypes
       : clusterTypes.map((option) => {
           if (option.value === ClusterType.WORKLOAD) {
@@ -200,7 +204,7 @@ const ClusterCreationForm: FunctionComponent<Omit<ComponentPropsWithoutRef<'div'
 
           return option;
         });
-  }, [hasLicenseKey, hasPermissions]);
+  }, [hasLicenseKey, hasPermissions, isLicenseActive]);
 
   useEffect(() => {
     const subscription = watch((values) => {
