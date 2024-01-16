@@ -62,6 +62,7 @@ export const BUBBLE_GUM_BABY_GIRL = '#D452E7';
 export const LAVENDER = '#818CF8';
 export const CELERY_MOUSSE = '#D1FF96';
 export const ASWAD_BLACK = '#18181B';
+export const RED_VITALITY = '#991B1B';
 
 export const ANSI_COLORS = {
   black: '\x1b[30m',

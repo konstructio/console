@@ -12,7 +12,7 @@ export default function usePaywall() {
   }));
 
   const canUseFeature = (featureCode: string) => {
-    if (license?.plan) {
+    if (license?.plan && license?.isActive) {
       if (featureCode == 'physicalClusters') {
         const clusterLimit = CLUSTERS_LIMIT[plan as string];
 

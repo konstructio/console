@@ -10,7 +10,7 @@ import { noop } from '../../utils/noop';
 
 import { TagContainer, IconImage, RemovalButton } from './tag.styled';
 
-import { CHEFS_DARK_HAT, EXCLUSIVE_PLUM } from '@/constants/colors';
+import { ASMANI_SKY, CHEFS_DARK_HAT, EXCLUSIVE_PLUM, MOONLESS_MYTERY } from '@/constants/colors';
 
 export const TAG_COLOR_OPTIONS = [
   'gray',
@@ -26,6 +26,7 @@ export const TAG_COLOR_OPTIONS = [
   'indigo',
   'light-orange',
   'dark-sky-blue',
+  'mistery',
 ] as const;
 
 export const TAG_ICON_OPTONS = {
@@ -38,7 +39,8 @@ export const TAG_ICON_OPTONS = {
 export type TagColor = (typeof TAG_COLOR_OPTIONS)[number];
 
 const TAG_COLOR_MAP: Record<TagColor | 'none', { bg: string; textColor: string }> = {
-  'gray': { bg: `${CHEFS_DARK_HAT}`, textColor: `${EXCLUSIVE_PLUM}` },
+  'mistery': { bg: MOONLESS_MYTERY, textColor: ASMANI_SKY },
+  'gray': { bg: CHEFS_DARK_HAT, textColor: EXCLUSIVE_PLUM },
   'cyan': { bg: '#ecfeff', textColor: '#0e7490' },
   'gold': { bg: '#fef9c3', textColor: '#a16207' },
   'green': { bg: '#dcfce7', textColor: '#15803d' },
@@ -51,7 +53,7 @@ const TAG_COLOR_MAP: Record<TagColor | 'none', { bg: string; textColor: string }
   'light-orange': { bg: '#fef3c7', textColor: '#d97706' },
   'dark-sky-blue': { bg: '#dbeafe', textColor: '#1d4ed8' },
   'emerald': { bg: '#ecfdf5', textColor: '#047857' },
-  'none': { bg: 'transparent', textColor: `${EXCLUSIVE_PLUM}` },
+  'none': { bg: 'transparent', textColor: EXCLUSIVE_PLUM },
 };
 
 export type TagIconOption = keyof typeof TAG_ICON_OPTONS;
@@ -60,16 +62,20 @@ export interface TagProps {
   text: string;
   bgColor?: TagColor;
   icon?: TagIconOption;
+  iconComponent?: React.ReactNode;
   removable?: boolean;
   onDelete?: () => void;
   spinImage?: boolean;
+  onClick?: () => void;
 }
 
 const Tag: FunctionComponent<TagProps> = ({
   text,
   icon,
+  iconComponent,
   removable,
   bgColor,
+  onClick,
   onDelete = noop,
   spinImage,
   ...rest
@@ -77,11 +83,20 @@ const Tag: FunctionComponent<TagProps> = ({
   // fallback for passing invalid color in case you happent to not expand/ignore the type.
   const { bg, textColor } = TAG_COLOR_MAP[bgColor ?? 'none'] || TAG_COLOR_MAP['none'];
   return (
-    <TagContainer bg={bg} textColor={textColor} {...rest}>
+    <TagContainer bg={bg} textColor={textColor} {...rest} onClick={onClick}>
       {icon && (
         <IconImage src={TAG_ICON_OPTONS[icon]} alt={icon} width={16} height={16} spin={spinImage} />
       )}
-      <Typography variant="body3" sx={{ textTransform: 'initial' }}>
+      <Typography
+        variant="body3"
+        sx={{
+          textTransform: 'initial',
+          display: 'flex',
+          alignItems: 'center',
+          gap: 1,
+        }}
+      >
+        {iconComponent && iconComponent}
         {text}
       </Typography>
       {removable && (
