@@ -3,7 +3,7 @@ import axios from 'axios';
 
 import { RootState } from '../store';
 
-import { ClusterUsage, License } from '@/types/subscription';
+import { ClusterUsage, License, UserRequest } from '@/types/subscription';
 
 export const validateLicenseKey = createAsyncThunk<License>(
   'subscription/validateLicenseKey',
@@ -47,6 +47,23 @@ export const getClusterUsage = createAsyncThunk<
       url: `/subscription/clusterUsage`,
       body: {
         licenseKey,
+      },
+    })
+  ).data;
+});
+
+export const createUserRequest = createAsyncThunk<
+  void,
+  UserRequest,
+  {
+    state: RootState;
+  }
+>('subscription/createUserRequest', async (userRequest) => {
+  return (
+    await axios.post('/api/proxy?target=ee', {
+      url: '/subscription/user-request',
+      body: {
+        ...userRequest,
       },
     })
   ).data;

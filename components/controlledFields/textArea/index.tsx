@@ -13,6 +13,7 @@ export interface ControlledTextAreaProps<T extends FieldValues> extends UseContr
   minRows?: string | number;
   textAreaStyleOverrides?: React.CSSProperties;
   hideValue?: boolean;
+  placeholder?: string;
   sx?: SxProps;
 }
 
@@ -34,6 +35,7 @@ function ControlledTextArea<T extends FieldValues>({
           minRows={props.minRows}
           textAreaStyleOverrides={props.textAreaStyleOverrides}
           hideValue={props.hideValue}
+          placeholder={props.placeholder}
         />
       )}
     />

@@ -1,4 +1,4 @@
-import React, { FunctionComponent } from 'react';
+import React, { FunctionComponent, useEffect, useState } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { Divider } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
@@ -12,14 +12,14 @@ import {
 } from './cancelSubscriptionForm.styled';
 
 import Typography from '@/components/typography';
-import { SALTBOX_BLUE, VOLCANIC_SAND } from '@/constants/colors';
+import { BISCAY, SALTBOX_BLUE, VOLCANIC_SAND } from '@/constants/colors';
 import ControlledCheckbox from '@/components/controlledFields/checkbox';
 import Button from '@/components/button';
-import { CancelSubscriptionFields } from '@/types/subscription';
+import { CancelSubscriptionFields, UserRequest } from '@/types/subscription';
 import ControlledTextArea from '@/components/controlledFields/textArea';
 import { Required } from '@/components/textField/textField.styled';
 
-const CANCEL_SUBSCRIPTION_OPTIONS = [
+export const CANCEL_SUBSCRIPTION_OPTIONS = [
   {
     name: 'projectIsComplete',
     label: 'The project I was working on is now complete',
@@ -37,7 +37,7 @@ const CANCEL_SUBSCRIPTION_OPTIONS = [
     label: 'I didn’t use the paid plan features',
   },
   {
-    name: 'didnotProviderFunctionality',
+    name: 'didnotProvideFunctionality',
     label: 'kubefirst didn’t provide the functionality I needed',
   },
   {
@@ -48,27 +48,48 @@ const CANCEL_SUBSCRIPTION_OPTIONS = [
 
 export interface CancelSubscriptionFormProps {
   closeModal: () => void;
-  handleCancelSubscription: () => void;
+  handleCancelSubscription: (userRequest: UserRequest) => void;
 }
 
 const CancelSubscriptionForm: FunctionComponent<CancelSubscriptionFormProps> = ({
   closeModal,
   handleCancelSubscription,
 }) => {
-  const {
-    control,
-    handleSubmit,
-    formState: { isValid },
-  } = useFormContext<CancelSubscriptionFields>();
+  const [hasSelectedOption, setHasSelectedOption] = useState<boolean>(false);
+  const { control, handleSubmit, watch, reset } = useFormContext<CancelSubscriptionFields>();
 
-  const onSubmit = async () => {
-    handleCancelSubscription();
+  const onSubmit = async ({ description, ...rest }: CancelSubscriptionFields) => {
+    const reasons = Object.keys(rest)
+      .filter((key) => rest && !!rest[key as never])
+      .map((reason) => {
+        return CANCEL_SUBSCRIPTION_OPTIONS.find(({ name }) => name === reason)?.label;
+      })
+      .join(', ');
+
+    const requestData: UserRequest = {
+      requestData: JSON.stringify({ message: description, reason: reasons }),
+      type: 'cancel',
+    };
+
+    handleCancelSubscription(requestData);
+    reset();
   };
+
+  useEffect(() => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const subscription = watch(({ description, ...rest }) => {
+      setHasSelectedOption([...Object.values(rest)].includes(true));
+    });
+
+    return () => subscription.unsubscribe();
+  }, [watch]);
 
   return (
     <Container component="form" onSubmit={handleSubmit(onSubmit)}>
       <Header>
-        <Typography variant="h6">Cancel my subscription</Typography>
+        <Typography variant="h6" color={BISCAY}>
+          Cancel my subscription
+        </Typography>
         <CloseIcon style={{ margin: 0, color: SALTBOX_BLUE }} onClick={closeModal} />
       </Header>
       <Divider />
@@ -109,7 +130,7 @@ const CancelSubscriptionForm: FunctionComponent<CancelSubscriptionFormProps> = (
         <Button color="secondary" variant="outlined" onClick={closeModal}>
           Cancel
         </Button>
-        <Button color="error" variant="contained" type="submit" disabled={!isValid}>
+        <Button color="error" variant="contained" type="submit" disabled={!hasSelectedOption}>
           Cancel subscription
         </Button>
       </Footer>

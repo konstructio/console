@@ -5,8 +5,10 @@ import CancelSubscriptionForm from './cancelSubscriptionForm';
 import CancelSubscriptionConfirmation from './cancelSubscriptionConfirmation';
 
 import useStep from '@/hooks/useStep';
-import { CancelSubscriptionFields } from '@/types/subscription';
+import { CancelSubscriptionFields, UserRequest } from '@/types/subscription';
 import Modal from '@/components/modal';
+import { useAppDispatch } from '@/redux/store';
+import { createUserRequest, validateLicenseKey } from '@/redux/thunks/subscription.thunk';
 
 export enum MODAL_STEP {
   FORM = 0,
@@ -20,14 +22,21 @@ export interface CancelSubscriptionProps {
 
 const CancelSubscription: FunctionComponent<CancelSubscriptionProps> = ({ isOpen, closeModal }) => {
   const { currentStep, goToNext, goTo } = useStep();
+  const dispatch = useAppDispatch();
 
   const methods = useForm<CancelSubscriptionFields>({
     mode: 'onChange',
   });
 
-  const handleCancelSubscription = useCallback(() => {
-    goToNext();
-  }, [goToNext]);
+  const handleCancelSubscription = useCallback(
+    (userRequest: UserRequest) => {
+      dispatch(createUserRequest(userRequest)).then(() => {
+        goToNext();
+        dispatch(validateLicenseKey());
+      });
+    },
+    [dispatch, goToNext],
+  );
 
   const handleClose = useCallback(() => {
     closeModal();

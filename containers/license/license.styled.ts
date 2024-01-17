@@ -36,3 +36,14 @@ export const BottomFormContainer = styled(FormContainer)<{ hasMargin: boolean }>
 export const UList = styled.ul`
   padding-left: 20px;
 `;
+
+export const CancelContainer = styled.div`
+  align-items: flex-start;
+  background: #fff7ed;
+  border: 1px solid #ffedd5;
+  border-radius: 4px;
+  display: flex;
+  gap: 8px;
+  margin-bottom: 8px;
+  padding: 16px;
+`;

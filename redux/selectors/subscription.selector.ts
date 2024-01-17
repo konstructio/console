@@ -30,3 +30,10 @@ export const selectUpgradeLicenseDefinition = () =>
       };
     }
   });
+
+export const selectRequestByType = (requestType: string) =>
+  createSelector(
+    subscriptionSelector,
+    ({ license }) =>
+      license?.requests && license?.requests.find(({ type }) => type === requestType),
+  );

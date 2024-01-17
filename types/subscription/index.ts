@@ -24,6 +24,7 @@ export interface License {
   created_at: Date;
   clusters: Cluster[];
   invoices: Invoice[];
+  requests: UserRequest[];
 }
 
 export interface Plan {
@@ -57,9 +58,16 @@ export interface CancelSubscriptionFields {
   kubefirstIsTooExpensive: boolean;
   kubefirstIsDifficult: boolean;
   didnotUsePaidPlan: boolean;
-  didnotProviderFunctionality: boolean;
+  didnotProvideFunctionality: boolean;
   other: boolean;
   description: string;
+}
+
+export interface ContactUsFields {
+  firstName: string;
+  lastName: string;
+  email: string;
+  message: string;
 }
 
 export interface ClusterUsage {
@@ -76,4 +84,11 @@ export interface Invoice {
   id: string;
   hosted_invoice_url: string;
   status: string;
+}
+
+export interface UserRequest {
+  createdAt?: string;
+  id?: string;
+  type: string;
+  requestData: string;
 }

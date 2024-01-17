@@ -6,7 +6,7 @@ export const Container = styled.div<{ backgroundColor: string }>`
   display: flex;
   gap: 16px;
   padding: 15px;
-  z-index: 10000;
+  z-index: 1201;
 `;
 
 export const Close = styled(CloseIcon)`

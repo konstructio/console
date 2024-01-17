@@ -8,6 +8,7 @@ import Plans from '../plans';
 import License from '../license';
 import CancelSubscription from '../cancelSubscription';
 import Billing from '../billing';
+import ContactUs from '../contactUsModal';
 
 import { Container, PlansContainer } from './subscription.styled';
 
@@ -31,6 +32,11 @@ interface SubscriptionProps {
 const Subscription: FunctionComponent<SubscriptionProps> = ({ activeTabParam, plans }) => {
   const dispatch = useAppDispatch();
   const { isOpen, closeModal, openModal } = useModal();
+  const {
+    isOpen: isContactUsModalOpen,
+    closeModal: closeContactUsModal,
+    openModal: openContactUsModal,
+  } = useModal();
 
   const { activeTab, license, saasURL } = useAppSelector(({ settings, subscription, config }) => ({
     activeTab: settings.activeTab,
@@ -59,7 +65,11 @@ const Subscription: FunctionComponent<SubscriptionProps> = ({ activeTabParam, pl
   };
 
   const handleRedirectToSaas = (plan: string) => {
-    window.open(`${saasURL}?plan=${plan}`, '_blank');
+    if (plan === SaasPlans.Enterprise && hasLicenseKey) {
+      openContactUsModal();
+    } else {
+      window.open(`${saasURL}?plan=${plan}`, '_blank');
+    }
   };
 
   const isActivePlan = (plan: string): boolean => {
@@ -134,6 +144,7 @@ const Subscription: FunctionComponent<SubscriptionProps> = ({ activeTabParam, pl
         </TabPanel>
       </>
       <CancelSubscription isOpen={isOpen} closeModal={closeModal} />
+      <ContactUs isOpen={isContactUsModalOpen} closeModal={closeContactUsModal} />
     </Container>
   );
 };
