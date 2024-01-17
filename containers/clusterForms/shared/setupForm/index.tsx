@@ -142,40 +142,29 @@ const SetupForm: FunctionComponent = () => {
     [dispatch, selectedRegion, values],
   );
 
-  const handleDnsProviderChange = useCallback(() => {
-    if (isCloudflareSelected) {
-      if (cloudflareToken) {
-        handleCloudfareToken(cloudflareToken);
-      } else {
-        dispatch(clearDomains());
+  const handleDnsProviderChange = useCallback(
+    (dnsProvider: string) => {
+      if (dnsProvider === 'cloudflare') {
+        if (cloudflareToken) {
+          handleCloudfareToken(cloudflareToken);
+        } else {
+          dispatch(clearDomains());
+          setValue('domainName', '');
+        }
+      } else if (cloudRegion) {
+        dispatch(getCloudDomains({ region: cloudRegion, installType, values }));
+        setValue('cloudflareToken', '');
+        setValue('domainName', '');
       }
-    } else if (cloudRegion) {
-      dispatch(getCloudDomains({ region: cloudRegion, installType, values }));
-      setValue('cloudflareToken', '');
-      setValue('domainName', '');
-    }
-  }, [
-    dispatch,
-    installType,
-    values,
-    isCloudflareSelected,
-    cloudflareToken,
-    handleCloudfareToken,
-    cloudRegion,
-    setValue,
-  ]);
+    },
+    [dispatch, installType, values, cloudflareToken, handleCloudfareToken, cloudRegion, setValue],
+  );
 
   useEffect(() => {
     if (cloudRegion) {
       handleRegionChange(cloudRegion);
     }
   }, [cloudRegion, handleRegionChange]);
-
-  useEffect(() => {
-    if (dnsProvider) {
-      handleDnsProviderChange();
-    }
-  }, [dnsProvider, handleDnsProviderChange]);
 
   useEffect(() => {
     if (cloudZone) {
@@ -262,6 +251,7 @@ const SetupForm: FunctionComponent = () => {
           { label: capitalize(installType as string), value: installType as string },
           { label: 'Cloudflare', value: 'cloudflare' },
         ]}
+        onChange={handleDnsProviderChange}
       />
       {isCloudflareSelected && (
         <>
