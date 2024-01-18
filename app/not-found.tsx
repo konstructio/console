@@ -3,26 +3,33 @@ import React, { FunctionComponent } from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import styled from 'styled-components';
+import { styled as muiStyled } from '@mui/material';
 
 import Typography from '@/components/typography';
 import NotFoundIcon from '@/assets/404.svg';
 import Button from '@/components/button';
+import { VOLCANIC_SAND } from '@/constants/colors';
+import Column from '@/components/column';
 
-const Container = styled.div`
+const Container = styled(Column)`
   align-items: center;
-  display: flex;
-  flex-direction: column;
-  height: 100%;
   justify-content: center;
+  height: 100%;
   width: 100%;
+
+  img {
+    margin-bottom: 40px;
+  }
 `;
 
-const Description = styled(Typography)`
-  color: ${({ theme }) => theme.colors.volcanicSand};
+const Description = muiStyled(Typography)(
+  () => `
+  color: ${VOLCANIC_SAND};
   text-align: center;
   margin: 24px 0;
   width: 340px;
-`;
+`,
+);
 
 const NotFound: FunctionComponent = () => {
   const { push } = useRouter();
@@ -33,7 +40,7 @@ const NotFound: FunctionComponent = () => {
 
   return (
     <Container>
-      <Image alt="not-found" src={NotFoundIcon} style={{ marginBottom: 40 }} />
+      <Image alt="not-found" src={NotFoundIcon} />
       <Typography variant="h4">Page not found</Typography>
       <Description variant="body2">
         The page you are trying to access is unavailable, has been deleted or doesn’t exist.

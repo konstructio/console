@@ -36,7 +36,7 @@ export const RemovalButton = styled.button`
 export const TagContainer = styled(Row)<{ bg?: string; textColor?: string }>`
   align-items: flex-end;
   border-radius: 4px;
-  padding: 4px;
+  padding: 4px 8px;
   text-transform: capitalize;
   background-color: ${({ bg }) => bg};
   color: ${({ textColor }) => textColor};

@@ -133,6 +133,7 @@ declare module '@mui/material/Button' {
   interface ButtonPropsColorOverrides {
     text: true;
     secondaryDark: true;
+    subscription: true;
   }
 }
 

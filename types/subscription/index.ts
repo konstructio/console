@@ -4,9 +4,18 @@ export enum SaasPlans {
   Enterprise = 'Enterprise',
 }
 
+export enum LicenseStatus {
+  Active = 'active',
+  UpToDate = 'up-todate',
+  PaymentFailed = 'payment-failed',
+  PaymentActionRequired = 'payment-action-required',
+}
+
 export interface License {
   id: string;
   plan: Plan;
+  isActive: boolean;
+  status: LicenseStatus;
   /**
    * Price id from stripe
    */
@@ -14,6 +23,7 @@ export interface License {
   licenseKey: string;
   created_at: Date;
   clusters: Cluster[];
+  invoices: Invoice[];
 }
 
 export interface Plan {
@@ -50,4 +60,20 @@ export interface CancelSubscriptionFields {
   didnotProviderFunctionality: boolean;
   other: boolean;
   description: string;
+}
+
+export interface ClusterUsage {
+  clusterName: string;
+  clusterID: string;
+  clusterType: string;
+  createdAt: Date;
+  deletedAt: Date;
+  hours: number;
+  total: number;
+}
+
+export interface Invoice {
+  id: string;
+  hosted_invoice_url: string;
+  status: string;
 }

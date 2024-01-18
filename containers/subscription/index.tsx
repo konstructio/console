@@ -3,11 +3,11 @@ import React, { FunctionComponent, useEffect, useMemo } from 'react';
 import Box from '@mui/material/Box';
 import Tabs from '@mui/material/Tabs';
 import { FormProvider, useForm } from 'react-hook-form';
-import { useRouter } from 'next/navigation';
 
 import Plans from '../plans';
 import License from '../license';
 import CancelSubscription from '../cancelSubscription';
+import Billing from '../billing';
 
 import { Container, PlansContainer } from './subscription.styled';
 
@@ -16,20 +16,21 @@ import { BISCAY, VOLCANIC_SAND } from '@/constants/colors';
 import { useAppDispatch, useAppSelector } from '@/redux/store';
 import Typography from '@/components/typography';
 import { setActiveTab } from '@/redux/slices/settings.slice';
-import { SettingsTab } from '@/constants/setttings';
+import { SettingsTab, SettingsTabMap } from '@/constants/setttings';
 import { Plan } from '@/types/plan';
 import { activateLicenseKey, validateLicenseKey } from '@/redux/thunks/subscription.thunk';
 import useModal from '@/hooks/useModal';
 import { SaasPlans } from '@/types/subscription';
+import { selectHasLicenseKey } from '@/redux/selectors/subscription.selector';
 
 interface SubscriptionProps {
+  activeTabParam?: string;
   plans: Array<Plan>;
 }
 
-const Subscription: FunctionComponent<SubscriptionProps> = ({ plans }) => {
+const Subscription: FunctionComponent<SubscriptionProps> = ({ activeTabParam, plans }) => {
   const dispatch = useAppDispatch();
   const { isOpen, closeModal, openModal } = useModal();
-  const { push } = useRouter();
 
   const { activeTab, license, saasURL } = useAppSelector(({ settings, subscription, config }) => ({
     activeTab: settings.activeTab,
@@ -58,7 +59,7 @@ const Subscription: FunctionComponent<SubscriptionProps> = ({ plans }) => {
   };
 
   const handleRedirectToSaas = (plan: string) => {
-    push(`${saasURL}?plan=${plan}`);
+    window.open(`${saasURL}?plan=${plan}`, '_blank');
   };
 
   const isActivePlan = (plan: string): boolean => {
@@ -69,13 +70,15 @@ const Subscription: FunctionComponent<SubscriptionProps> = ({ plans }) => {
     return license?.plan?.name === plan;
   };
 
-  const hasLicenseKey = useMemo<boolean>(() => !!license?.licenseKey, [license?.licenseKey]);
+  const hasLicenseKey = useAppSelector(selectHasLicenseKey());
 
   useEffect(() => {
-    if (hasLicenseKey) {
+    if (activeTabParam) {
+      dispatch(setActiveTab(SettingsTabMap[activeTabParam]));
+    } else if (hasLicenseKey) {
       dispatch(setActiveTab(SettingsTab.LICENSE_KEY));
     }
-  }, [dispatch, hasLicenseKey]);
+  }, [activeTabParam, dispatch, hasLicenseKey]);
 
   return (
     <Container>
@@ -85,6 +88,12 @@ const Subscription: FunctionComponent<SubscriptionProps> = ({ plans }) => {
       <>
         <Box sx={{ mb: 3 }}>
           <Tabs value={activeTab} onChange={handleOnChangeTab} indicatorColor="primary">
+            <Tab
+              color={activeTab === SettingsTab.BILLING ? BISCAY : undefined}
+              label={<Typography variant="buttonSmall">Billing</Typography>}
+              {...a11yProps(SettingsTab.BILLING)}
+              sx={{ textTransform: 'initial', marginRight: '24px' }}
+            />
             <Tab
               color={activeTab === SettingsTab.LICENSE_KEY ? BISCAY : undefined}
               label={<Typography variant="buttonSmall">License key</Typography>}
@@ -99,6 +108,9 @@ const Subscription: FunctionComponent<SubscriptionProps> = ({ plans }) => {
             />
           </Tabs>
         </Box>
+        <TabPanel value={activeTab} index={SettingsTab.BILLING}>
+          <Billing />
+        </TabPanel>
         <TabPanel value={activeTab} index={SettingsTab.LICENSE_KEY}>
           <FormProvider {...methods}>
             <License

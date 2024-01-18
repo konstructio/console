@@ -8,12 +8,14 @@ export interface SettingsState {
   isLoading: boolean;
   activeTab: number;
   takenConsoleTour: boolean;
+  isBannerOpen: boolean;
 }
 
 export const initialState: SettingsState = {
   isLoading: false,
   activeTab: SettingsTab.PLANS,
   takenConsoleTour: false,
+  isBannerOpen: false,
 };
 
 const settingsSlice = createSlice({
@@ -22,6 +24,9 @@ const settingsSlice = createSlice({
   reducers: {
     setActiveTab: (state, { payload }: PayloadAction<number>) => {
       state.activeTab = payload;
+    },
+    setIsBannerOpen: (state, { payload }: PayloadAction<boolean>) => {
+      state.isBannerOpen = payload;
     },
   },
   extraReducers: (builder) => {
@@ -39,6 +44,6 @@ const settingsSlice = createSlice({
   },
 });
 
-export const { setActiveTab } = settingsSlice.actions;
+export const { setActiveTab, setIsBannerOpen } = settingsSlice.actions;
 
 export const settingsReducer = settingsSlice.reducer;

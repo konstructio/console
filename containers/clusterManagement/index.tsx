@@ -36,7 +36,6 @@ import {
   setClusterCreationStep,
 } from '@/redux/slices/api.slice';
 import { setPresentedClusterName } from '@/redux/slices/api.slice';
-import { setNotifiedOfBetaPhysicalClusters } from '@/redux/slices/notifications.slice';
 import { usePhysicalClustersPermissions } from '@/hooks/usePhysicalClustersPermission';
 import { InstallationType } from '@/types/redux';
 import { setClusterManagamentTab } from '@/redux/slices/config.slice';
@@ -50,20 +49,22 @@ import TourModal from '@/components/tourModal';
 import JoyrideTooltip from '@/components/joyrideTooltip';
 import { JOYRIDE_STEPS } from '@/constants/joyride';
 import { getClusterTourStatus, updateClusterTourStatus } from '@/redux/thunks/settings.thunk';
+import usePaywall from '@/hooks/usePaywall';
+import UpgradeModal from '@/components/upgradeModal';
+import { selectUpgradeLicenseDefinition } from '@/redux/selectors/subscription.selector';
 
 const ClusterManagement: FunctionComponent = () => {
   const {
-    managementCluster,
     clusterCreationStep,
+    clusterManagementTab,
+    clusterMap,
+    isBannerOpen,
+    managementCluster,
     presentedClusterName,
     loading,
-    notifiedOfBetaPhysicalClusters,
-    clusterMap,
-    clusterManagementTab,
     takenConsoleTour,
-  } = useAppSelector(({ api, queue, notifications, config, featureFlags, settings }) => ({
+  } = useAppSelector(({ api, queue, config, featureFlags, settings }) => ({
     clusterQueue: queue.clusterQueue,
-    notifiedOfBetaPhysicalClusters: notifications.notifiedOfBetaPhysicalClusters,
     clusterManagementTab: config.clusterManagementTab,
     ...api,
     ...featureFlags.flags,
@@ -74,15 +75,27 @@ const ClusterManagement: FunctionComponent = () => {
   const [startTour, setStartTour] = useState(false);
 
   const dispatch = useAppDispatch();
+  const upgradeLicenseDefinition = useAppSelector(selectUpgradeLicenseDefinition());
 
+  const {
+    isOpen: isUpgradeModalOpen,
+    openModal: openUpgradeModal,
+    closeModal: closeUpgradeModal,
+  } = useModal();
   const { hasPermissions } = usePhysicalClustersPermissions(managementCluster?.cloudProvider);
+  const { canUseFeature } = usePaywall();
 
   const defaultClusterType = useMemo(() => {
-    if (managementCluster && managementCluster.cloudProvider && hasPermissions) {
+    if (
+      managementCluster &&
+      managementCluster.cloudProvider &&
+      hasPermissions &&
+      canUseFeature('physicalClusters')
+    ) {
       return ClusterType.WORKLOAD;
     }
     return ClusterType.WORKLOAD_V_CLUSTER;
-  }, [managementCluster, hasPermissions]);
+  }, [managementCluster, hasPermissions, canUseFeature]);
 
   const tabColor = useMemo(
     () => (clusterManagementTab === ClusterManagementTab.LIST_VIEW ? BISCAY : SALTBOX_BLUE),
@@ -182,14 +195,23 @@ const ClusterManagement: FunctionComponent = () => {
   }, [managementCluster, dispatch, openCreateClusterFlow, clusterCreationStep, defaultClusterType]);
 
   const handleCreateCluster = () => {
+    const draftCluster = clusterMap[RESERVED_DRAFT_CLUSTER_NAME];
+
+    if (
+      draftCluster?.type === ClusterType.WORKLOAD &&
+      clusterCreationStep !== ClusterCreationStep.DETAILS
+    ) {
+      const canCreatePhysicalClusters = canUseFeature('physicalClusters');
+
+      if (!canCreatePhysicalClusters) {
+        return openUpgradeModal();
+      }
+    }
+
     if (clusterCreationStep !== ClusterCreationStep.DETAILS) {
       dispatch(createWorkloadCluster());
     }
   };
-
-  const handleNotificationClose = useCallback(() => {
-    dispatch(setNotifiedOfBetaPhysicalClusters(true));
-  }, [dispatch]);
 
   const handleDeleteMenuClick = useCallback(
     (clusterName: string) => {
@@ -298,7 +320,12 @@ const ClusterManagement: FunctionComponent = () => {
           <Flow onNodeClick={handleClusterSelect} />
         </TabPanel>
       </Content>
-      <StyledDrawer open={createClusterFlowOpen} onClose={handleMenuClose} anchor="right">
+      <StyledDrawer
+        open={createClusterFlowOpen}
+        onClose={handleMenuClose}
+        anchor="right"
+        isBannerOpen={isBannerOpen}
+      >
         <CreateClusterFlow
           cluster={presentedCluster}
           managementCluster={managementCluster}
@@ -312,8 +339,6 @@ const ClusterManagement: FunctionComponent = () => {
             instanceSize,
           }}
           loading={loading}
-          notifiedOfBetaPhysicalClusters={notifiedOfBetaPhysicalClusters}
-          onNotificationClose={handleNotificationClose}
         />
       </StyledDrawer>
       {!!presentedCluster && (
@@ -322,6 +347,15 @@ const ClusterManagement: FunctionComponent = () => {
           onCloseModal={closeDeleteModal}
           onDelete={handleDeleteCluster}
           cluster={presentedCluster}
+        />
+      )}
+      {isUpgradeModalOpen && (
+        <UpgradeModal
+          isOpen={isUpgradeModalOpen}
+          clusterLimitText={upgradeLicenseDefinition?.text as string}
+          clusterLimitDescription={upgradeLicenseDefinition?.description as string}
+          ctaText={upgradeLicenseDefinition?.ctaText as string}
+          closeModal={closeUpgradeModal}
         />
       )}
     </Container>

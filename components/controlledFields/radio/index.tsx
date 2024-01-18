@@ -11,6 +11,14 @@ import { VOLCANIC_SAND } from '@/constants/colors';
 import Row from '@/components/row';
 import Tooltip from '@/components/tooltip';
 
+export type RadioOptionsType = Array<{
+  label: string;
+  value: string;
+  isDisabled?: boolean;
+  tooltipInfo?: string;
+  tag?: React.ReactNode;
+}>;
+
 export interface ControlledRadioGroupProps<T extends FieldValues> extends UseControllerProps<T> {
   control: Control<T>;
   required?: boolean;
@@ -18,7 +26,7 @@ export interface ControlledRadioGroupProps<T extends FieldValues> extends UseCon
     required: boolean;
     pattern?: RegExp;
   };
-  options: Array<{ label: string; value: string; tooltipInfo?: string }>;
+  options: RadioOptionsType;
   onChange?: (value: string) => void;
   inLine?: boolean;
 }
@@ -42,7 +50,7 @@ function ControlledRadioGroup<T extends FieldValues>({
           name={name}
           sx={{ display: 'flex', flexDirection: inLine ? 'row' : 'column' }}
         >
-          {options.map(({ label, value, tooltipInfo }) => (
+          {options.map(({ label, isDisabled = false, tag: Tag, value, tooltipInfo }) => (
             <FormControlLabel
               key={label}
               value={value}
@@ -53,6 +61,7 @@ function ControlledRadioGroup<T extends FieldValues>({
                   required={required}
                   inputRef={field.ref}
                   value={value}
+                  disabled={isDisabled}
                   onChange={(e) => {
                     onChange && onChange(e.target.value);
                     field.onChange(e);
@@ -61,8 +70,22 @@ function ControlledRadioGroup<T extends FieldValues>({
               }
               label={
                 <Container>
-                  <Typography variant="body2" color={VOLCANIC_SAND}>
+                  <Typography
+                    variant="body2"
+                    color={VOLCANIC_SAND}
+                    sx={
+                      Tag
+                        ? {
+                            alignItems: 'center',
+                            cursor: 'pointer',
+                            display: 'flex',
+                            gap: 2,
+                          }
+                        : undefined
+                    }
+                  >
                     {label}
+                    {Tag}
                   </Typography>
                   {tooltipInfo && (
                     <Tooltip placement="top" title={tooltipInfo} maxWidth="280px" whiteSpace="wrap">

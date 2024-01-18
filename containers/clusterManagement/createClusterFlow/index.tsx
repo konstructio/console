@@ -21,7 +21,6 @@ import {
   ManagementCluster,
   NewWorkloadClusterConfig,
 } from '@/types/provision';
-import HeadsUpNotification from '@/components/headsUpNotification';
 import { RESERVED_DRAFT_CLUSTER_NAME } from '@/constants';
 import useToggle from '@/hooks/useToggle';
 import Row from '@/components/row';
@@ -36,8 +35,6 @@ interface CreateClusterFlowProps {
   clusterCreationStep: ClusterCreationStep;
   defaultValues?: NewWorkloadClusterConfig;
   loading: boolean;
-  notifiedOfBetaPhysicalClusters: boolean;
-  onNotificationClose: () => void;
 }
 
 export const CreateClusterFlow: FunctionComponent<CreateClusterFlowProps> = ({
@@ -49,8 +46,6 @@ export const CreateClusterFlow: FunctionComponent<CreateClusterFlowProps> = ({
   defaultValues,
   managementCluster,
   loading,
-  notifiedOfBetaPhysicalClusters,
-  onNotificationClose,
 }) => {
   const { isOpen, close, toggle } = useToggle();
 
@@ -76,9 +71,6 @@ export const CreateClusterFlow: FunctionComponent<CreateClusterFlowProps> = ({
       cluster?.status === ClusterStatus.PROVISIONING);
 
   const showingClusterDetails = clusterCreationStep === ClusterCreationStep.DETAILS;
-
-  const showHeadsUpNotification =
-    !notifiedOfBetaPhysicalClusters && clusterCreationStep === ClusterCreationStep.CONFIG;
 
   return (
     <FormProvider {...methods}>
@@ -128,7 +120,6 @@ export const CreateClusterFlow: FunctionComponent<CreateClusterFlowProps> = ({
           )}
         </MenuHeader>
         <FormContent>
-          {showHeadsUpNotification && <HeadsUpNotification onClose={onNotificationClose} />}
           {!showingClusterDetails && <ClusterCreationForm style={{ flex: 1, margin: '32px 0' }} />}
           {showingClusterDetails && cluster && (
             <ClusterDetails
