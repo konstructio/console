@@ -302,7 +302,7 @@ const Provision: FunctionComponent = () => {
           }
           onBackButtonClick={handleBackButtonClick}
           nextButtonText={isSetupStep ? 'Create cluster' : 'Next'}
-          // nextButtonDisabled={!isValid}
+          nextButtonDisabled={!isValid}
           hasInfo={hasInfo}
           isLoading={isLoading}
           isProvisionStep={isProvisionStep}
