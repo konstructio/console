@@ -16,7 +16,7 @@ export function createGitOrgErrorMessage(args: {
 
   const gitStringAddition = args.git === GitProvider.GITHUB ? 'Hub' : 'Lab';
 
-  return `Git${gitStringAddition} organization <a href="https://github.com/${args.gitOwner}" target="_blank"><strong>${args.gitOwner}</strong></a>
+  return `Git${gitStringAddition} organization <a href="https://${args.git}.com/${args.gitOwner}" target="_blank"><strong>${args.gitOwner}</strong></a>
   already has ${str1} named either <strong>${str2}</strong> and/or <strong>${str3}</strong>.
   Please remove or rename to continue.`;
 }
