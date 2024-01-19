@@ -10,6 +10,7 @@ export const Container = styled.div`
   height: 448px;
   max-height: 450px;
   padding: 24px;
+  overflow: scroll;
 `;
 
 export const EstimatedTime = styled.div`

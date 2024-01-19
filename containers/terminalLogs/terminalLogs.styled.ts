@@ -66,6 +66,13 @@ export const TerminalView = styled.div`
     border-radius: 4px;
   }
 
+  & .xterm-screen {
+    height: 100% !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    overflow-x: scroll;
+  }
+
   & span:not([class]) {
     color: white;
   }

@@ -81,6 +81,7 @@ const TerminalLogs: FunctionComponent = () => {
       const terminal = new XTerminal({
         convertEol: true,
         cols: 105,
+        rows: 5000,
         disableStdin: true,
         logLevel: 'off',
         scrollback: 5000,
