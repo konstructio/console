@@ -6,7 +6,7 @@ import { Container, Footer } from './cancelSubscriptionConfirmation.styled';
 
 import Cancel from '@/assets/cancel.svg';
 import Typography from '@/components/typography';
-import { VOLCANIC_SAND } from '@/constants/colors';
+import { BISCAY, VOLCANIC_SAND } from '@/constants/colors';
 import Button from '@/components/button';
 
 export interface CancelSubscriptionConfirmationProps {
@@ -19,7 +19,7 @@ const CancelSubscriptionConfirmation: FunctionComponent<CancelSubscriptionConfir
   return (
     <>
       <Container>
-        <Typography variant="h6" sx={{ mb: 3 }}>
+        <Typography variant="h6" sx={{ mb: 3 }} color={BISCAY}>
           We’re sorry to see you go!
         </Typography>
         <Image alt="cancel-image" src={Cancel} />

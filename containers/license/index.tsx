@@ -1,16 +1,18 @@
 import React, { FunctionComponent, useMemo } from 'react';
+import moment from 'moment';
 import { Box, CircularProgress } from '@mui/material';
 import { FieldValues, useFormContext } from 'react-hook-form';
+import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 
-import { BottomFormContainer, FormContainer, UList } from './license.styled';
+import { BottomFormContainer, CancelContainer, FormContainer, UList } from './license.styled';
 
-import { EXCLUSIVE_PLUM, VOLCANIC_SAND } from '@/constants/colors';
+import { COAL_MINE, EXCLUSIVE_PLUM, ORANGEALICIOUS, VOLCANIC_SAND } from '@/constants/colors';
 import Button from '@/components/button';
 import LearnMore from '@/components/learnMore';
 import Typography from '@/components/typography';
 import { useAppSelector } from '@/redux/store';
 import ControlledPassword from '@/components/controlledFields/Password';
-import { selectHasLicenseKey } from '@/redux/selectors/subscription.selector';
+import { selectHasLicenseKey, selectRequestByType } from '@/redux/selectors/subscription.selector';
 
 export interface LicenseProps {
   handleActivateLicense: (licenseKey: string) => void;
@@ -24,6 +26,7 @@ const License: FunctionComponent<LicenseProps> = ({
   const { isLoading, license, error } = useAppSelector(({ subscription }) => subscription);
 
   const hasLicenseKey = useAppSelector(selectHasLicenseKey());
+  const cancelRequest = useAppSelector(selectRequestByType('cancel'));
 
   const formattedLicenseKey = useMemo<string | undefined>(
     () =>
@@ -41,21 +44,19 @@ const License: FunctionComponent<LicenseProps> = ({
   const onSubmit = async ({ licenseKey }: FieldValues) => {
     handleActivateLicense(licenseKey);
   };
+
   return (
     <Box component="form" onSubmit={handleSubmit(onSubmit)}>
       <FormContainer
         footerContent={
           <BottomFormContainer>
             <LearnMore href="" description="Learn more about" linkTitle="your license key" />
-            <Button
-              type="submit"
-              variant="contained"
-              color="primary"
-              disabled={!isValid && !hasLicenseKey}
-            >
-              {isLoading && <CircularProgress size={20} sx={{ mr: '8px' }} />}
-              {hasLicenseKey ? 'Update' : 'Activate'}
-            </Button>
+            {!hasLicenseKey && (
+              <Button type="submit" variant="contained" color="primary" disabled={!isValid}>
+                {isLoading && <CircularProgress size={20} sx={{ mr: '8px' }} />}
+                Activate
+              </Button>
+            )}
           </BottomFormContainer>
         }
       >
@@ -95,7 +96,12 @@ const License: FunctionComponent<LicenseProps> = ({
                   description="If you’re having any issues with kubefirst, "
                   linkTitle="please reach out to us."
                 />
-                <Button variant="contained" color="error" onClick={handleCancelSubscription}>
+                <Button
+                  variant="contained"
+                  color="error"
+                  onClick={handleCancelSubscription}
+                  disabled={!!cancelRequest?.id}
+                >
                   {isLoading && <CircularProgress size={20} sx={{ mr: '8px' }} />}
                   Cancel subscription
                 </Button>
@@ -105,6 +111,16 @@ const License: FunctionComponent<LicenseProps> = ({
             <Typography variant="subtitle2" color={VOLCANIC_SAND} sx={{ mb: 1 }}>
               Cancel my subscription
             </Typography>
+            {!!cancelRequest?.id && (
+              <CancelContainer>
+                <InfoOutlinedIcon fontSize="small" htmlColor={ORANGEALICIOUS} />
+                <Typography variant="body2" color={COAL_MINE}>
+                  {`Your request to cancel your subscription was submitted ${moment(
+                    cancelRequest.createdAt,
+                  ).format('DD MMM YYYY, HH:MM:SS')}`}
+                </Typography>
+              </CancelContainer>
+            )}
 
             <Typography variant="body2" color={VOLCANIC_SAND}>
               What to expect:

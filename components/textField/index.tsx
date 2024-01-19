@@ -59,6 +59,7 @@ const TextField: FunctionComponent<TextFieldProps> = ({
               display: 'flex',
               gap: '4px',
               whiteSpace: 'pre-line',
+              ...props.sx,
             }}
           >
             {label} {required && <Required>*</Required>}
@@ -75,7 +76,7 @@ const TextField: FunctionComponent<TextFieldProps> = ({
         endAdornment={error ? errorIcon : endAdornment}
       />
       {helperText && (
-        <FormHelperText disabled={disabled} error={error}>
+        <FormHelperText disabled={disabled} error={error} sx={props.sx}>
           <div dangerouslySetInnerHTML={{ __html: helperText }}></div>
         </FormHelperText>
       )}

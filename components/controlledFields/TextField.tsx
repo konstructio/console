@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Control, Controller, FieldValues, UseControllerProps } from 'react-hook-form';
+import { SxProps } from '@mui/material';
 
 import TextFieldWithRef from '../textField/index';
 
@@ -10,6 +11,7 @@ export interface ControlledTextFieldProps<T extends FieldValues> extends UseCont
   control: Control<T>;
   helperText?: string;
   onErrorText?: string;
+  sx?: SxProps;
 }
 
 function ControlledTextField<T extends FieldValues>({
@@ -35,6 +37,7 @@ function ControlledTextField<T extends FieldValues>({
           fullWidth
           required={required}
           label={label}
+          sx={props.sx}
           error={isBlur && error !== undefined}
           helperText={error && isBlur ? props.onErrorText : props.helperText}
         />
