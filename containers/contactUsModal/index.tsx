@@ -7,7 +7,6 @@ import { CancelSubscriptionFields, UserRequest } from '@/types/subscription';
 import Modal from '@/components/modal';
 import { useAppDispatch } from '@/redux/store';
 import { createUserRequest, validateLicenseKey } from '@/redux/thunks/subscription.thunk';
-import { createNotification } from '@/redux/slices/notifications.slice';
 
 export interface ContactUsProps {
   isOpen: boolean;
@@ -26,16 +25,6 @@ const ContactUs: FunctionComponent<ContactUsProps> = ({ isOpen, closeModal }) =>
       dispatch(createUserRequest(userRequest)).then(() => {
         dispatch(validateLicenseKey());
         closeModal();
-        dispatch(
-          createNotification({
-            message: 'Your message is on it’s way',
-            type: 'success',
-            snackBarOrigin: {
-              vertical: 'bottom',
-              horizontal: 'right',
-            },
-          }),
-        );
       });
     },
     [closeModal, dispatch],

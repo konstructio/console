@@ -103,7 +103,7 @@ const ContactUsFormProps: FunctionComponent<ContactUsFormProps> = ({
         <Button color="text" variant="text" onClick={closeModal}>
           Cancel
         </Button>
-        <Button color="error" variant="contained" type="submit" disabled={!isValid}>
+        <Button color="primary" variant="contained" type="submit" disabled={!isValid}>
           Submit
         </Button>
       </Footer>

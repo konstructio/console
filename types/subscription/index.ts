@@ -14,7 +14,7 @@ export enum LicenseStatus {
 export interface License {
   id: string;
   plan: Plan;
-  isActive: boolean;
+  is_active: boolean;
   status: LicenseStatus;
   /**
    * Price id from stripe

@@ -2,6 +2,7 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
 import { RootState } from '../store';
+import { createNotification } from '../slices/notifications.slice';
 
 import { ClusterUsage, License, UserRequest } from '@/types/subscription';
 
@@ -58,13 +59,22 @@ export const createUserRequest = createAsyncThunk<
   {
     state: RootState;
   }
->('subscription/createUserRequest', async (userRequest) => {
-  return (
-    await axios.post('/api/proxy?target=ee', {
-      url: '/subscription/user-request',
-      body: {
-        ...userRequest,
+>('subscription/createUserRequest', async (userRequest, { dispatch }) => {
+  await axios.post('/api/proxy?target=ee', {
+    url: '/subscription/user-request',
+    body: {
+      ...userRequest,
+    },
+  });
+
+  dispatch(
+    createNotification({
+      message: 'Your message is on it’s way',
+      type: 'success',
+      snackBarOrigin: {
+        vertical: 'bottom',
+        horizontal: 'right',
       },
-    })
-  ).data;
+    }),
+  );
 });

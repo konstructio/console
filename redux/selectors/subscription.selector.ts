@@ -12,7 +12,7 @@ export const selectSubscriptionPlan = () =>
   createSelector(subscriptionSelector, ({ license }) => license?.plan?.name);
 
 export const selectIsLicenseActive = () =>
-  createSelector(subscriptionSelector, ({ license }) => !!license?.isActive);
+  createSelector(subscriptionSelector, ({ license }) => !!license?.is_active);
 
 export const selectPendingInvoice = () =>
   createSelector(
