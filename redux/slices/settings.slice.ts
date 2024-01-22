@@ -32,6 +32,7 @@ const settingsSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(getClusterTourStatus.rejected, () => {
+        // eslint-disable-next-line no-console
         console.error('unable to retrieve console tour secret');
       })
       .addCase(getClusterTourStatus.fulfilled, (state, { payload }) => {
@@ -39,6 +40,7 @@ const settingsSlice = createSlice({
         state.takenConsoleTour = tourStatus;
       })
       .addCase(updateClusterTourStatus.rejected, () => {
+        // eslint-disable-next-line no-console
         console.error('unable to update cluster tour status');
       });
   },

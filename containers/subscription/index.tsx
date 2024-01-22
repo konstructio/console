@@ -4,7 +4,6 @@ import Box from '@mui/material/Box';
 import Tabs from '@mui/material/Tabs';
 import { FormProvider, useForm } from 'react-hook-form';
 
-import Plans from '../plans';
 import License from '../license';
 import CancelSubscription from '../cancelSubscription';
 import Billing from '../billing';
@@ -23,6 +22,7 @@ import { activateLicenseKey, validateLicenseKey } from '@/redux/thunks/subscript
 import useModal from '@/hooks/useModal';
 import { SaasPlans } from '@/types/subscription';
 import { selectHasLicenseKey } from '@/redux/selectors/subscription.selector';
+import Pricing from '@/components/pricing';
 
 interface SubscriptionProps {
   activeTabParam?: string;
@@ -132,7 +132,7 @@ const Subscription: FunctionComponent<SubscriptionProps> = ({ activeTabParam, pl
         <TabPanel value={activeTab} index={SettingsTab.PLANS}>
           <PlansContainer>
             {plans.map((plan, index) => (
-              <Plans
+              <Pricing
                 key={plan.id}
                 plan={plan}
                 hideButton={currentPlanIndex > index}
