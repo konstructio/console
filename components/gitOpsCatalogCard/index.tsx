@@ -86,7 +86,7 @@ const GitOpsCatalogCard: FunctionComponent<GitOpsCatalogCardProps> = ({
       </Header>
       <Body>
         {showTooltip ? (
-          <Tooltip title={description} maxWidth="375px" whiteSpace="wrap">
+          <Tooltip title={description} maxWidth="375px" whiteSpace="wrap" placement="top">
             <Description variant="body2">{description || children}</Description>
           </Tooltip>
         ) : (
