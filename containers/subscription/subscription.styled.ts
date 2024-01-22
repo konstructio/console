@@ -9,6 +9,6 @@ export const Container = styled(Column)`
 export const PlansContainer = styled.div`
   align-items: center;
   display: flex;
-  gap: 12px;
+  gap: 40px;
   height: 100%;
 `;

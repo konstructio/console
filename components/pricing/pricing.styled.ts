@@ -1,14 +1,13 @@
 import styled from 'styled-components';
 
-import Column from '@/components/column';
+import Column from '../column';
 
 export const Container = styled.div<{ isActive?: boolean }>`
   border: 1px solid ${({ theme }) => theme.colors.pastelLightBlue};
   border-radius: 12px;
-  height: calc(100% - 48px);
-  max-height: 607px;
+  height: 650px;
   padding: 24px;
-  width: 225px;
+  width: 219px;
 
   ${({ isActive, theme }) =>
     isActive &&
@@ -18,3 +17,7 @@ export const Container = styled.div<{ isActive?: boolean }>`
 `;
 
 export const Features = styled(Column)``;
+
+export const PriceImage = styled.img`
+  object-fit: cover;
+`;
