@@ -3,6 +3,7 @@ import EventSource from 'eventsource';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   const { API_URL = '' } = process.env;
+  const { logFile } = req.query;
 
   res.writeHead(200, {
     'Connection': 'keep-alive',
@@ -13,14 +14,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   res.flushHeaders();
   res.write('\n');
 
-  const eventSource = new EventSource(`${API_URL}/api/v1/stream`);
+  const eventSource = new EventSource(`${API_URL}/api/v1/stream/${logFile}`);
   try {
     eventSource.addEventListener('open', () => {
       // eslint-disable-next-line no-console
       console.log('connection established from console api');
     });
     eventSource.addEventListener('message', (e) => {
-      res.write(`data: ${e.data}\n\n`);
+      const { message } = JSON.parse(e.data);
+      res.write(`data: ${message}\n\n`);
     });
 
     eventSource.addEventListener('error', (e) => {

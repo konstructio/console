@@ -45,7 +45,10 @@ const Header: FunctionComponent<HeaderProps> = ({ handleOpenFlappy, handleOpenKu
   const { isOpen: isProfileMenuOpen, open: openProfileMenu, close: closeProfileMenu } = useToggle();
 
   const { data: session } = useSession();
-  const { managementCluster } = useAppSelector(({ api }) => api);
+  const { isClusterZero, managementCluster } = useAppSelector(({ api, config }) => ({
+    isClusterZero: config.isClusterZero,
+    managementCluster: api.managementCluster,
+  }));
   const { isEnabled: isSubscriptionEnabled } = useFeatureFlag(FeatureFlag.SAAS_SUBSCRIPTION);
 
   const helpItems = useMemo(
@@ -88,7 +91,7 @@ const Header: FunctionComponent<HeaderProps> = ({ handleOpenFlappy, handleOpenKu
 
   return (
     <Container>
-      {isSubscriptionEnabled && (
+      {isSubscriptionEnabled && !isClusterZero && (
         <>
           <HelpOutlineOutlinedIcon
             onClick={open}
@@ -130,7 +133,9 @@ const Header: FunctionComponent<HeaderProps> = ({ handleOpenFlappy, handleOpenKu
           )}
         </>
       )}
-      <Avatar {...stringAvatar(session?.user?.email)} onClick={openProfileMenu} />
+      {session?.user && (
+        <Avatar {...stringAvatar(session?.user?.email)} onClick={openProfileMenu} />
+      )}
       {isProfileMenuOpen && (
         <ClickAwayListener onClickAway={closeProfileMenu}>
           <ProfileMenu>

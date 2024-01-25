@@ -27,6 +27,8 @@ import { ANSI_COLORS, ECHO_BLUE, LIBERTY_BLUE } from '../../constants/colors';
 
 import { Container, Search, SearchTextField, TerminalView, Tools } from './terminalLogs.styled';
 
+import { parseJSON } from '@/utils/isJson';
+
 import 'xterm/css/xterm.css';
 
 const UNSCAPE_STRING_REGEX = /\\x([0-9A-Fa-f]{2})/g;
@@ -72,16 +74,16 @@ const TerminalLogs: FunctionComponent = () => {
 
       terminal.loadAddon(fitAddon);
       terminal.loadAddon(searchAddon);
+
       searchAddonRef.current = searchAddon;
     }
   }, []);
 
   useEffect(() => {
-    if (terminalRef.current) {
+    if (terminalRef.current && managementCluster?.logFile) {
       const terminal = new XTerminal({
         convertEol: true,
         cols: 105,
-        rows: 5000,
         disableStdin: true,
         logLevel: 'off',
         scrollback: 5000,
@@ -95,27 +97,30 @@ const TerminalLogs: FunctionComponent = () => {
 
       terminal.open(terminalRef.current);
 
-      const eventSource = new EventSource('/api/stream');
+      const eventSource = new EventSource(`/api/stream/${managementCluster?.logFile}`);
       eventSource.addEventListener('open', () => {
         // eslint-disable-next-line no-console
         console.log('connection established');
       });
       eventSource.addEventListener('message', (e) => {
-        const log = JSON.parse(e.data);
+        if (!e.data && !e.data.length) {
+          return terminal.writeln('');
+        }
 
-        if (
-          log.message.includes('time=') &&
-          log.message.includes('level=') &&
-          log.message.includes('msg=')
-        ) {
-          const [, time] = log.message.match(/time="([^"]*)"/) || [null, ''];
-          const [, level] = log.message.match(/level=([^"]*)/) || [null, ''];
-          const [, msg] = log.message.match(/msg="([^"]*)"/) || [null, ''];
+        const { isValid, value: log } = parseJSON(e.data);
 
-          const logLevel = level.replace(' msg=', '').toUpperCase();
-          const logStyle = logLevel.includes('ERROR') ? brightRed : darkBlue;
+        if (!isValid) {
+          return terminal.writeln(log);
+        }
 
-          const decodedMessage = msg
+        if (log.message) {
+          const { message, level, time } = log;
+
+          const logLevel = level.toUpperCase();
+
+          const logStyle = logLevel.includes('ERR') ? brightRed : darkBlue;
+
+          const decodedMessage = message
             .replace(UNSCAPE_STRING_REGEX, (match: string, hex: string) =>
               String.fromCharCode(parseInt(hex, 16)),
             )
@@ -127,11 +132,11 @@ const TerminalLogs: FunctionComponent = () => {
             localTime = moment(uctDate).local().format('YYYY-MM-DD HH:mm:ss');
           }
 
-          terminal.write(
-            `${gray}${localTime} ${logStyle}${logLevel}:${brightWhite} ${decodedMessage} \n`,
+          terminal.writeln(
+            `${gray}${localTime} ${logStyle}${logLevel}:${brightWhite} ${decodedMessage}`,
           );
 
-          setLogs((logs) => [...logs, `${localTime} ${logLevel} ${decodedMessage} \n`]);
+          setLogs((logs) => [...logs, `${localTime} ${level} ${decodedMessage} \n`]);
         }
       });
 
@@ -146,7 +151,7 @@ const TerminalLogs: FunctionComponent = () => {
         eventSource.close();
       };
     }
-  }, [loadAddons]);
+  }, [loadAddons, managementCluster?.logFile]);
 
   useEffect(() => {
     if (managementCluster && managementCluster?.checks) {

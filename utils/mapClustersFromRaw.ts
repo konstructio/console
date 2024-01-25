@@ -17,6 +17,7 @@ export const mapClusterFromRaw = (cluster: ClusterResponse) => {
     domainName: cluster.domain_name,
     subDomainName: cluster.subdomain_name,
     dnsProvider: cluster.dns_provider,
+    logFile: cluster.log_file,
     gitAuth: {
       gitOwner: cluster.git_auth.git_owner,
       gitToken: cluster.git_auth.git_token,

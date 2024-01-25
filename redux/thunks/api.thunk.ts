@@ -71,6 +71,7 @@ export const createCluster = createAsyncThunk<
     google_auth: {
       ...values?.google_auth,
     },
+    log_file: `log_${new Date().getTime()}.log`,
   };
 
   await axios.post<{ message: string }>('/api/proxy', {
