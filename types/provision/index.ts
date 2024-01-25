@@ -67,6 +67,7 @@ export interface ClusterResponse {
   git_user: string;
   node_type: string;
   node_count: number;
+  log_file: string;
   workload_clusters?: {
     admin_email: string;
     cloud_provider: InstallationType;
@@ -157,6 +158,7 @@ export interface Cluster {
   instanceSize?: string;
   nodeCount?: number;
   status: ClusterStatus;
+  logFile?: string;
   gitAuth: {
     gitOwner?: string;
     gitToken?: string;

@@ -90,7 +90,7 @@ const Navigation: FunctionComponent<NavigationProps> = ({
 
   const footerItems = useMemo(
     () =>
-      isSubscriptionEnabled
+      isSubscriptionEnabled && !isClusterZero
         ? nextLicenseUpgradeTitle && [
             {
               icon: <StarBorderOutlinedIcon htmlColor={ASMANI_SKY} />,
@@ -113,7 +113,7 @@ const Navigation: FunctionComponent<NavigationProps> = ({
               color: '',
             },
           ],
-    [isSubscriptionEnabled, nextLicenseUpgradeTitle],
+    [isClusterZero, isSubscriptionEnabled, nextLicenseUpgradeTitle],
   );
 
   const handleIsActiveItem = useCallback(

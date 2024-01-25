@@ -22,6 +22,7 @@ export const mockClusterResponse: ClusterResponse = {
   git_user: 'D-B-Hawk',
   node_type: 'g3.large',
   node_count: 4,
+  log_file: 'log_123.log',
   workload_clusters: [
     {
       admin_email: 'derrick@kubeshop.io',
