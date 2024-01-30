@@ -76,9 +76,19 @@ export const CreateClusterFlow: FunctionComponent<CreateClusterFlowProps> = ({
     <FormProvider {...methods}>
       <Form onSubmit={methods.handleSubmit(onSubmit)}>
         <MenuHeader>
-          <CloseButton onClick={onMenuClose} type="button">
-            <CloseIcon htmlColor={SALTBOX_BLUE} />
-          </CloseButton>
+          <Row style={{ alignItems: 'center', gap: '24px' }}>
+            <CloseButton
+              style={{ display: 'flex', alignItems: 'center' }}
+              onClick={onMenuClose}
+              type="button"
+            >
+              <CloseIcon htmlColor={SALTBOX_BLUE} />
+            </CloseButton>
+            {showingClusterDetails && (
+              <Typography variant="subtitle1">{cluster?.clusterName}</Typography>
+            )}
+          </Row>
+
           {!showingClusterDetails ? (
             <Button
               variant="contained"
@@ -126,7 +136,6 @@ export const CreateClusterFlow: FunctionComponent<CreateClusterFlowProps> = ({
               cluster={cluster}
               host={managementCluster?.gitHost as string}
               gitOwner={managementCluster?.gitAuth.gitOwner}
-              style={{ marginTop: '24px' }}
             />
           )}
         </FormContent>
