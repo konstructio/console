@@ -16,7 +16,7 @@ export const installGitOpsApp = createAsyncThunk<
     dispatch: AppDispatch;
     state: RootState;
   }
->('cluster/installGitOpsApp', async ({ app, clusterName, values }, { dispatch, getState }) => {
+>('cluster/installGitOpsApp', async ({ app, clusterName, values }, { dispatch }) => {
   dispatch(addAppToQueue(app));
   const formValues = values && transformObjectToStringKey(values);
 
