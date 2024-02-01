@@ -8,6 +8,7 @@ import Typography from '../typography';
 import ControlledPassword from '../controlledFields/Password';
 import { GitOpsCatalogApp } from '../../types/gitOpsCatalog';
 import { BISCAY, SALTBOX_BLUE } from '../../constants/colors';
+import ControlledTextField from '../controlledFields/TextField';
 
 import { Container, Content, Close, Footer, Header } from './gitopsAppModal.styled';
 
@@ -26,12 +27,13 @@ const GitopsAppModal: FunctionComponent<GitopsAppModalProps> = ({
   isValid,
   name,
   image_url,
+  config_keys,
   secret_keys,
   onSubmit,
   ...rest
 }) => {
   const handleSubmit = () => {
-    onSubmit({ name, image_url, secret_keys, ...rest });
+    onSubmit({ name, image_url, config_keys, secret_keys, ...rest });
   };
 
   return (
@@ -48,6 +50,20 @@ const GitopsAppModal: FunctionComponent<GitopsAppModalProps> = ({
           {secret_keys &&
             secret_keys.map(({ label, name }) => (
               <ControlledPassword
+                key={label}
+                control={control}
+                name={name}
+                label={label}
+                rules={{
+                  required: true,
+                }}
+                required
+              />
+            ))}
+
+          {config_keys &&
+            config_keys.map(({ label, name }) => (
+              <ControlledTextField
                 key={label}
                 control={control}
                 name={name}

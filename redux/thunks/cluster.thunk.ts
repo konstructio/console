@@ -16,26 +16,38 @@ export const installGitOpsApp = createAsyncThunk<
     dispatch: AppDispatch;
     state: RootState;
   }
->('cluster/installGitOpsApp', async ({ app, clusterName, values }, { dispatch }) => {
+>('cluster/installGitOpsApp', async ({ app, clusterName, values }, { dispatch, getState }) => {
   dispatch(addAppToQueue(app));
-
   const formValues = values && transformObjectToStringKey(values);
+
+  const keys = formValues && Object.keys(formValues);
+
   const secret_keys =
-    formValues &&
-    Object.keys(formValues).map((key) => {
-      return {
+    app.secret_keys &&
+    app.secret_keys
+      .filter(({ name }) => keys?.includes(name))
+      .map(({ name: key }) => ({
         name: key,
-        value: formValues[key],
-      };
-    });
+        value: formValues && formValues[key],
+      }));
+
+  const config_keys =
+    app.config_keys &&
+    app.config_keys
+      .filter(({ name }) => keys?.includes(name))
+      .map(({ name: key }) => ({
+        name: key,
+        value: formValues && formValues[key],
+      }));
 
   const params = {
+    config_keys,
     secret_keys,
   };
 
   const res = await axios.post('/api/proxy', {
     url: `/services/${clusterName}/${app.name}`,
-    body: secret_keys?.length ? params : undefined,
+    body: secret_keys?.length || config_keys?.length ? params : undefined,
   });
 
   if ('error' in res) {

@@ -21,6 +21,7 @@ export interface GitOpsCatalogApp {
   name: string;
   display_name: string;
   secret_keys?: Array<{ name: string; label: string }>;
+  config_keys?: Array<{ name: string; label: string }>;
   image_url: string;
   description?: string;
   /**
