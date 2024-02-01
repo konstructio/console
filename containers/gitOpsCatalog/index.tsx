@@ -92,7 +92,7 @@ const gitOpsCatalog: FunctionComponent = () => {
 
   const handleSelectedApp = (app: GitOpsCatalogApp) => {
     setSelectedApp(app);
-    if (app.secret_keys?.length) {
+    if (app.secret_keys?.length || app.config_keys?.length) {
       openModal();
     } else {
       handleAddApp(app);
