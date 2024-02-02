@@ -8,7 +8,7 @@ import Modal from '../modal';
 import { LAUGHING_ORANGE, TRUE_BLUE } from '../../constants/colors';
 import Button from '../button';
 import { ClusterEnvironment } from '../../types/provision';
-import CopyText from '../copyText';
+import CopyButton from '../copyButton';
 
 import { Content, CopyTextContainer, Footer, Header, NextLink } from './deleteEnvironment.styled';
 
@@ -57,7 +57,7 @@ const DeleteEnvironment: FunctionComponent<DeleteEnvironmentProps> = ({
             <>
               <CopyTextContainer>
                 <Typography>Are you sure you want to delete the</Typography>
-                <CopyText textToCopy={environment.name} />
+                <CopyButton buttonText={environment.name} textToCopy={environment.name} />
                 <Typography>environment? This action cannot be undone.</Typography>
               </CopyTextContainer>
               <TextFieldWithRef
