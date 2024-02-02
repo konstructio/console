@@ -4,7 +4,7 @@ import LaunchOutlinedIcon from '@mui/icons-material/LaunchOutlined';
 import Modal, { IModalProps } from '../modal';
 import Button from '../button';
 import { Cluster, ClusterType, DraftCluster } from '../../types/provision';
-import CopyText from '../copyText';
+import CopyButton from '../copyButton';
 
 import {
   Container,
@@ -54,8 +54,8 @@ const DeleteCluster: FunctionComponent<DeleteClusterProps> = ({ cluster, onDelet
               <>
                 <Text>
                   Are you sure you want to delete the cluster{' '}
-                  <CopyText textToCopy={cluster.clusterName as string} /> ? This action cannot be
-                  undone.
+                  <CopyButton buttonText={cluster.clusterName} textToCopy={cluster.clusterName} /> ?
+                  This action cannot be undone.
                 </Text>
                 <Text>
                   <strong>Note:</strong> You will still need to manually delete the cluster folder

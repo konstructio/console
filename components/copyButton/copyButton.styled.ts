@@ -3,7 +3,7 @@ import styled from 'styled-components';
 
 import { LIGHT_GREY } from '../../constants/colors';
 
-export const CopyButton = styled.button`
+export const Button = styled.button`
   border: none;
   cursor: pointer;
   background-color: ${LIGHT_GREY};
