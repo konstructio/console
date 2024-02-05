@@ -1,5 +1,6 @@
 'use client';
 import React, { FunctionComponent, useCallback, useEffect, useMemo, useState } from 'react';
+import axios from 'axios';
 import Box from '@mui/material/Box';
 import Tabs from '@mui/material/Tabs';
 import Joyride, { ACTIONS, CallBackProps } from 'react-joyride';
@@ -16,7 +17,7 @@ import {
 import Button from '@/components/button';
 import Typography from '@/components/typography';
 import { useAppDispatch, useAppSelector } from '@/redux/store';
-import { createWorkloadCluster, deleteCluster } from '@/redux/thunks/api.thunk';
+import { createWorkloadCluster, deleteCluster, downloadKubeconfig } from '@/redux/thunks/api.thunk';
 import {
   ClusterCreationStep,
   ClusterStatus,
@@ -42,6 +43,7 @@ import { setClusterManagamentTab } from '@/redux/slices/config.slice';
 import { ClusterManagementTab } from '@/types/config';
 import {
   DEFAULT_CLOUD_INSTANCE_SIZES,
+  KUBECONFIG_CLI_DETAILS,
   RESERVED_DRAFT_CLUSTER_NAME,
   SUGGESTED_WORKLOAD_NODE_COUNT,
 } from '@/constants';
@@ -52,6 +54,9 @@ import { getClusterTourStatus, updateClusterTourStatus } from '@/redux/thunks/se
 import usePaywall from '@/hooks/usePaywall';
 import UpgradeModal from '@/components/upgradeModal';
 import { selectUpgradeLicenseDefinition } from '@/redux/selectors/subscription.selector';
+import { getCloudProviderAuth } from '@/utils/getCloudProviderAuth';
+import KubeConfigModal from '@/components/kubeConfigModal';
+import { createNotification } from '@/redux/slices/notifications.slice';
 
 const ClusterManagement: FunctionComponent = () => {
   const {
@@ -120,6 +125,12 @@ const ClusterManagement: FunctionComponent = () => {
     isOpen: isDeleteModalOpen,
     openModal: openDeleteModal,
     closeModal: closeDeleteModal,
+  } = useModal();
+
+  const {
+    isOpen: isKubeconfigModalOpen,
+    openModal: openKubeconfigModal,
+    closeModal: closeKubeconfigModal,
   } = useModal();
 
   const handleMenuClose = useCallback(() => {
@@ -221,6 +232,36 @@ const ClusterManagement: FunctionComponent = () => {
     [dispatch, openDeleteModal],
   );
 
+  const handleDownloadKubeconfig = useCallback(async () => {
+    if ([InstallationType.AWS, InstallationType.GOOGLE].includes(presentedCluster.cloudProvider)) {
+      openKubeconfigModal();
+    } else if (presentedCluster) {
+      const { clusterName } = presentedCluster;
+      dispatch(downloadKubeconfig({ presentedCluster }))
+        .unwrap()
+        .then((encodedString) => {
+          const downloadLink = document.createElement('a');
+          downloadLink.href = encodedString;
+          downloadLink.download = `${clusterName}-kubeconfig`;
+
+          document.body.appendChild(downloadLink);
+
+          downloadLink.click();
+
+          document.body.removeChild(downloadLink);
+        })
+        .catch((error) => {
+          dispatch(
+            createNotification({
+              message: `Unable to download kubeconfig: ${error.message}`,
+              type: 'error',
+              snackBarOrigin: { vertical: 'top', horizontal: 'center' },
+            }),
+          );
+        });
+    }
+  }, [dispatch, presentedCluster, openKubeconfigModal]);
+
   const handleTakeTour = useCallback(() => {
     closeModal();
     setStartTour(true);
@@ -245,6 +286,9 @@ const ClusterManagement: FunctionComponent = () => {
     },
     [dispatch, managementCluster],
   );
+
+  const { command, commandDocLink } =
+    KUBECONFIG_CLI_DETAILS[managementCluster?.cloudProvider ?? InstallationType.AWS];
 
   useEffect(() => {
     if (managementCluster) {
@@ -332,6 +376,7 @@ const ClusterManagement: FunctionComponent = () => {
           clusterCreationStep={clusterCreationStep}
           onMenuClose={handleMenuClose}
           onClusterDelete={openDeleteModal}
+          onDownloadKubeconfig={handleDownloadKubeconfig}
           onSubmit={handleCreateCluster}
           defaultValues={{
             type: defaultClusterType,
@@ -356,6 +401,15 @@ const ClusterManagement: FunctionComponent = () => {
           clusterLimitDescription={upgradeLicenseDefinition?.description as string}
           ctaText={upgradeLicenseDefinition?.ctaText as string}
           closeModal={closeUpgradeModal}
+        />
+      )}
+      {isKubeconfigModalOpen && (
+        <KubeConfigModal
+          isOpen={isKubeconfigModalOpen}
+          onAcceptance={closeKubeconfigModal}
+          onCloseModal={closeKubeconfigModal}
+          command={command}
+          commandDocLink={commandDocLink}
         />
       )}
     </Container>

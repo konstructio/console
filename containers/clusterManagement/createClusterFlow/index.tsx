@@ -30,6 +30,7 @@ interface CreateClusterFlowProps {
   cluster?: Cluster | DraftCluster;
   managementCluster?: ManagementCluster;
   onClusterDelete: () => void;
+  onDownloadKubeconfig: () => void;
   onMenuClose: () => void;
   onSubmit: () => void;
   clusterCreationStep: ClusterCreationStep;
@@ -40,6 +41,7 @@ interface CreateClusterFlowProps {
 export const CreateClusterFlow: FunctionComponent<CreateClusterFlowProps> = ({
   cluster,
   onClusterDelete,
+  onDownloadKubeconfig,
   onMenuClose,
   onSubmit,
   clusterCreationStep,
@@ -77,11 +79,7 @@ export const CreateClusterFlow: FunctionComponent<CreateClusterFlowProps> = ({
       <Form onSubmit={methods.handleSubmit(onSubmit)}>
         <MenuHeader>
           <Row style={{ alignItems: 'center', gap: '24px' }}>
-            <CloseButton
-              style={{ display: 'flex', alignItems: 'center' }}
-              onClick={onMenuClose}
-              type="button"
-            >
+            <CloseButton onClick={onMenuClose} type="button">
               <CloseIcon htmlColor={SALTBOX_BLUE} />
             </CloseButton>
             {showingClusterDetails && (
@@ -115,6 +113,11 @@ export const CreateClusterFlow: FunctionComponent<CreateClusterFlowProps> = ({
                 <ClickAwayListener onClickAway={close}>
                   <Menu>
                     <List>
+                      <ListItem disablePadding>
+                        <ListItemButton onClick={onDownloadKubeconfig}>
+                          <Typography variant="body2">Download kubeconfig</Typography>
+                        </ListItemButton>
+                      </ListItem>
                       <ListItem disablePadding>
                         <ListItemButton onClick={onClusterDelete}>
                           <Typography variant="body2" style={{ color: `${FIRE_BRICK}` }}>

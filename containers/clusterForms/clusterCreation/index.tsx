@@ -18,12 +18,7 @@ import ControlledAutocomplete from '@/components/controlledFields/autoComplete/A
 import ControlledTextField from '@/components/controlledFields/TextField';
 import { useAppDispatch, useAppSelector } from '@/redux/store';
 import Typography from '@/components/typography';
-import {
-  ClusterType,
-  NewWorkloadClusterConfig,
-  ClusterEnvironment,
-  ManagementCluster,
-} from '@/types/provision';
+import { ClusterType, NewWorkloadClusterConfig, ClusterEnvironment } from '@/types/provision';
 import { ASMANI_SKY, BISCAY, EXCLUSIVE_PLUM } from '@/constants/colors';
 import ControlledNumberInput from '@/components/controlledFields/numberInput';
 import ControlledRadioGroup from '@/components/controlledFields/radio';
@@ -53,6 +48,7 @@ import {
   selectIsLicenseActive,
 } from '@/redux/selectors/subscription.selector';
 import Tag from '@/components/tag';
+import { getCloudProviderAuth } from '@/utils/getCloudProviderAuth';
 
 const ClusterCreationForm: FunctionComponent<Omit<ComponentPropsWithoutRef<'div'>, 'key'>> = (
   props,
@@ -246,15 +242,6 @@ const ClusterCreationForm: FunctionComponent<Omit<ComponentPropsWithoutRef<'div'
     // initial load/hard refresh/cloudRegion update is sufficient.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cloudRegion]);
-
-  function getCloudProviderAuth(managamentCluster: ManagementCluster): {
-    key?: string;
-    value?: unknown;
-  } {
-    const installType = managamentCluster.cloudProvider;
-    const key = installType === InstallationType.DIGITAL_OCEAN ? 'do' : installType;
-    return { key, value: key ? managamentCluster[`${key}_auth`] : undefined };
-  }
 
   return (
     <Container {...props}>

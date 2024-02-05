@@ -98,3 +98,24 @@ export const CLOUD_PROVIDER_DISPLAY_NAME: Record<InstallationType, string> = {
   [InstallationType.VULTR]: 'Vultr',
   [InstallationType.LOCAL]: 'K3D',
 };
+
+export const KUBECONFIG_CLI_DETAILS: Record<
+  InstallationType,
+  { command: string; commandDocLink: string }
+> = {
+  [InstallationType.AWS]: {
+    command: 'aws eks update-kubeconfig --name example',
+    commandDocLink:
+      'https://awscli.amazonaws.com/v2/documentation/api/latest/reference/eks/update-kubeconfig.html',
+  },
+  [InstallationType.CIVO]: { command: '', commandDocLink: '' },
+  [InstallationType.DIGITAL_OCEAN]: { command: '', commandDocLink: '' },
+  [InstallationType.GOOGLE]: {
+    command:
+      'gcloud container clusters get-credentials NAME [--internal-ip] [--location=LOCATION | --region=REGION | --zone=ZONE, -z ZONE] [GCLOUD_WIDE_FLAG …]',
+    commandDocLink:
+      'https://cloud.google.com/sdk/gcloud/reference/container/clusters/get-credentials',
+  },
+  [InstallationType.LOCAL]: { command: '', commandDocLink: '' },
+  [InstallationType.VULTR]: { command: '', commandDocLink: '' },
+};
