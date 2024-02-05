@@ -1,6 +1,6 @@
 'use client';
 import styled from 'styled-components';
-import { Box } from '@mui/material';
+import { styled as muiStyled, Box } from '@mui/material';
 
 import Row from '@/components/row';
 import Column from '@/components/column';
@@ -8,6 +8,8 @@ import HeadsUpNotification from '@/components/headsUpNotification';
 import { CHEFS_HAT } from '@/constants/colors';
 
 export const CloseButton = styled.button`
+  display: flex;
+  align-items: center;
   border: none;
   background-color: transparent;
   cursor: pointer;
@@ -29,17 +31,20 @@ export const FormContent = styled(Column)`
   }
 `;
 
-export const Menu = styled(Box)`
+export const Menu = muiStyled(Box)(
+  () => `
+  min-width: 210px;
   position: absolute;
-  bottom: -60px;
-  left: -95px;
+  bottom: -90px;
+  left: -148px;
   width: 160px;
   background-color: white;
   border: 1px solid ${CHEFS_HAT};
   border-radius: 8px;
   box-shadow: 0px 2px 4px 0px rgba(100, 116, 139, 0.25);
   z-index: 1;
-`;
+`,
+);
 
 export const MenuHeader = styled(Row)`
   flex-shrink: 0;
