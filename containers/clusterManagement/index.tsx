@@ -17,7 +17,7 @@ import {
 import Button from '@/components/button';
 import Typography from '@/components/typography';
 import { useAppDispatch, useAppSelector } from '@/redux/store';
-import { createWorkloadCluster, deleteCluster } from '@/redux/thunks/api.thunk';
+import { createWorkloadCluster, deleteCluster, downloadKubeconfig } from '@/redux/thunks/api.thunk';
 import {
   ClusterCreationStep,
   ClusterStatus,
@@ -56,6 +56,7 @@ import UpgradeModal from '@/components/upgradeModal';
 import { selectUpgradeLicenseDefinition } from '@/redux/selectors/subscription.selector';
 import { getCloudProviderAuth } from '@/utils/getCloudProviderAuth';
 import KubeConfigModal from '@/components/kubeConfigModal';
+import { createNotification } from '@/redux/slices/notifications.slice';
 
 const ClusterManagement: FunctionComponent = () => {
   const {
@@ -234,39 +235,32 @@ const ClusterManagement: FunctionComponent = () => {
   const handleDownloadKubeconfig = useCallback(async () => {
     if ([InstallationType.AWS, InstallationType.GOOGLE].includes(presentedCluster.cloudProvider)) {
       openKubeconfigModal();
-    } else if (managementCluster && presentedCluster) {
-      const { clusterName, cloudProvider, cloudRegion, type } = presentedCluster;
-      const { key, value } = getCloudProviderAuth(managementCluster);
-      try {
-        const {
-          data: { config },
-        } = await axios.post<{ config: string }>(`/api/proxy`, {
-          url: `/kubeconfig/${cloudProvider}`,
-          body: {
-            cluster_name: clusterName,
-            man_clust_name: managementCluster.clusterName,
-            vcluster: type !== ClusterType.MANAGEMENT,
-            cloud_region: cloudRegion,
-            [`${key}_auth`]: value,
-          },
+    } else if (presentedCluster) {
+      const { clusterName } = presentedCluster;
+      dispatch(downloadKubeconfig({ presentedCluster }))
+        .unwrap()
+        .then((encodedString) => {
+          const downloadLink = document.createElement('a');
+          downloadLink.href = encodedString;
+          downloadLink.download = `${clusterName}-kubeconfig`;
+
+          document.body.appendChild(downloadLink);
+
+          downloadLink.click();
+
+          document.body.removeChild(downloadLink);
+        })
+        .catch((error) => {
+          dispatch(
+            createNotification({
+              message: `Unable to download kubeconfig: ${error.message}`,
+              type: 'error',
+              snackBarOrigin: { vertical: 'top', horizontal: 'center' },
+            }),
+          );
         });
-
-        const encoded = `data:text/yaml;chatset=utf-8,${encodeURIComponent(config)}`;
-
-        const downloadLink = document.createElement('a');
-        downloadLink.href = encoded;
-        downloadLink.download = `${clusterName}-kubeconfig`;
-
-        document.body.appendChild(downloadLink);
-
-        downloadLink.click();
-
-        document.body.removeChild(downloadLink);
-      } catch (error) {
-        console.error('Error downloading file:', error);
-      }
     }
-  }, [managementCluster, presentedCluster, openKubeconfigModal]);
+  }, [dispatch, presentedCluster, openKubeconfigModal]);
 
   const handleTakeTour = useCallback(() => {
     closeModal();

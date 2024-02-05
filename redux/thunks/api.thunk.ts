@@ -11,6 +11,7 @@ import {
   ClusterEnvironment,
   WorkloadCluster,
   ClusterQueue,
+  DraftCluster,
 } from '@/types/provision';
 import { createQueryString } from '@/utils/url/formatDomain';
 import { InstallValues, InstallationType } from '@/types/redux';
@@ -18,6 +19,7 @@ import { TelemetryClickEvent } from '@/types/telemetry';
 import { mapClusterFromRaw } from '@/utils/mapClustersFromRaw';
 import { GitProtocol } from '@/types';
 import { RESERVED_DRAFT_CLUSTER_NAME } from '@/constants';
+import { getCloudProviderAuth } from '@/utils/getCloudProviderAuth';
 
 export const createCluster = createAsyncThunk<
   ClusterQueue,
@@ -304,4 +306,36 @@ export const sendTelemetryEvent = createAsyncThunk<
     url: `/telemetry/${selectedCluster?.clusterName}`,
     body,
   });
+});
+
+export const downloadKubeconfig = createAsyncThunk<
+  string,
+  { presentedCluster: Cluster | DraftCluster },
+  {
+    dispatch: AppDispatch;
+    state: RootState;
+  }
+>('api/downloadKubeconfig', async ({ presentedCluster }, { getState }) => {
+  const { managementCluster } = getState().api;
+
+  const { clusterName, cloudProvider, cloudRegion, type } = presentedCluster;
+  if (managementCluster) {
+    const { key, value } = getCloudProviderAuth(managementCluster);
+    const {
+      data: { config },
+    } = await axios.post<{ config: string }>(`/api/proxy`, {
+      url: `/kubeconfig/${cloudProvider}`,
+      body: {
+        cluster_name: clusterName,
+        man_clust_name: managementCluster.clusterName,
+        vcluster: type !== ClusterType.MANAGEMENT,
+        cloud_region: cloudRegion,
+        [`${key}_auth`]: value,
+      },
+    });
+
+    return `data:text/yaml;chatset=utf-8,${encodeURIComponent(config)}`;
+  } else {
+    throw new Error('no management cluster found');
+  }
 });
