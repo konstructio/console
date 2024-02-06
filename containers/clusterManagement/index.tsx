@@ -1,6 +1,5 @@
 'use client';
 import React, { FunctionComponent, useCallback, useEffect, useMemo, useState } from 'react';
-import axios from 'axios';
 import Box from '@mui/material/Box';
 import Tabs from '@mui/material/Tabs';
 import Joyride, { ACTIONS, CallBackProps } from 'react-joyride';
@@ -54,7 +53,6 @@ import { getClusterTourStatus, updateClusterTourStatus } from '@/redux/thunks/se
 import usePaywall from '@/hooks/usePaywall';
 import UpgradeModal from '@/components/upgradeModal';
 import { selectUpgradeLicenseDefinition } from '@/redux/selectors/subscription.selector';
-import { getCloudProviderAuth } from '@/utils/getCloudProviderAuth';
 import KubeConfigModal from '@/components/kubeConfigModal';
 import { createNotification } from '@/redux/slices/notifications.slice';
 
