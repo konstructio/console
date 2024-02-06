@@ -41,6 +41,7 @@ import Column from '@/components/column';
 import { hasProjectId } from '@/utils/hasProjectId';
 import { getDigitalOceanUser } from '@/redux/thunks/digitalOcean.thunk';
 import { GIT_PROVIDER_DISPLAY_NAME } from '@/constants';
+import { useDebouncedPromise } from '@/hooks/useDebouncedPromise';
 
 const AuthForm: FunctionComponent = () => {
   const [showGoogleKeyFile, setShowGoogleKeyFile] = useState(false);
@@ -53,9 +54,6 @@ const AuthForm: FunctionComponent = () => {
     githubUserOrganizations,
     gitlabUser,
     gitlabGroups,
-    doUser,
-    doStateLoading,
-    doTokenValid,
     gitStateLoading,
     installationType,
     isGitSelected,
@@ -90,7 +88,7 @@ const AuthForm: FunctionComponent = () => {
     formState: { errors },
   } = useFormContext<InstallValues>();
 
-  const [googleKeyFile, doToken] = watch(['google_auth.key_file', 'do_auth.token']);
+  const [googleKeyFile] = watch(['google_auth.key_file']);
 
   const isGitHub = useMemo(() => gitProvider === GitProvider.GITHUB, [gitProvider]);
 
@@ -143,11 +141,28 @@ const AuthForm: FunctionComponent = () => {
     setShowGoogleKeyFile(e.target.checked);
   }, []);
 
-  const validateDoToken = useCallback(
+  const validateDOToken = useCallback(
     (token: string) => {
-      dispatch(getDigitalOceanUser(token));
+      if (token) {
+        return dispatch(getDigitalOceanUser(token))
+          .unwrap()
+          .then(() => true)
+          .catch(() => false);
+      }
+      return new Promise<boolean>((resolve) => resolve(true));
     },
     [dispatch],
+  );
+
+  const debouncedDOTokenValidate = useDebouncedPromise(validateDOToken, 1000);
+
+  const handleDoTokenBlur = useCallback(
+    (value: string) => {
+      if (!value) {
+        resetField('do_auth.token', { keepError: false, keepDirty: false, keepTouched: false });
+      }
+    },
+    [resetField],
   );
 
   const gitLabel = useMemo(
@@ -324,11 +339,14 @@ const AuthForm: FunctionComponent = () => {
               helperText={helperText}
               required
               rules={{
-                required: true,
+                required: 'Required.',
+                validate: {
+                  validDOToken: async (token) =>
+                    (await debouncedDOTokenValidate(token as string)) || 'Invalid token.',
+                },
               }}
-              onChange={validateDoToken}
-              error={!!doToken && !doUser && !doStateLoading && !doTokenValid}
-              onErrorText="Invalid Token"
+              onBlur={handleDoTokenBlur}
+              onErrorText={errors.do_auth?.token?.message}
             />
           ) : (
             <ControlledPassword
@@ -341,7 +359,7 @@ const AuthForm: FunctionComponent = () => {
               helperText={helperText}
               required
               rules={{
-                required: true,
+                required: 'Required.',
               }}
             />
           ),
