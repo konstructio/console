@@ -21,6 +21,10 @@ export interface TextFieldProps extends InputProps {
 }
 
 const getInputPadding = (type: string, startAdornment: boolean, endAdornment: boolean) => {
+  if (!!startAdornment && !!endAdornment) {
+    return '8px 40px 8px 50px';
+  }
+
   if (type === 'password' || !!endAdornment) {
     return '8px 40px 8px 12px';
   }
