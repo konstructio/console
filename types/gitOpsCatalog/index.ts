@@ -24,10 +24,6 @@ export interface GitOpsCatalogApp {
   config_keys?: Array<{ name: string; label: string }>;
   image_url: string;
   description?: string;
-  /**
-   * @deprecated categories - use category instead
-   */
-  categories: AppCategory[];
   category?: AppCategory;
 }
 

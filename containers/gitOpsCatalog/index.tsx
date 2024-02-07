@@ -27,7 +27,6 @@ const STATIC_HELP_CARD: GitOpsCatalogApp = {
   name: '',
   display_name: 'Can’t find what you need?',
   image_url: 'https://assets.kubefirst.com/console/help.png',
-  categories: [],
 };
 
 const gitOpsCatalog: FunctionComponent = () => {

@@ -42,6 +42,5 @@ export const mockGitopsCatalogApp: GitOpsCatalogApp = {
   image_url: 'https://kutt.it/images/logo.svg',
   description:
     'Kutt is a modern URL shortener with support for custom domains. Shorten URLs, manage your links and view the click rate statistics.',
-  categories: [AppCategory.APPLICATIONS],
   category: AppCategory.APPLICATIONS,
 };
