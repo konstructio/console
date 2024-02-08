@@ -1,14 +1,13 @@
 import React, { FunctionComponent } from 'react';
 import CloseIcon from '@mui/icons-material/Close';
 
-import Typography from '../typography';
 import checkImageSrc from '../../assets/check-circle.svg';
 import autoRenewImageSrc from '../../assets/auto-renew.svg';
 import trashImageSrc from '../../assets/trash.svg';
 import warningImageSrc from '../../assets/warning.svg';
 import { noop } from '../../utils/noop';
 
-import { TagContainer, IconImage, RemovalButton } from './tag.styled';
+import { TagContainer, IconImage, RemovalButton, StyledText } from './tag.styled';
 
 import { ASMANI_SKY, CHEFS_DARK_HAT, EXCLUSIVE_PLUM, MOONLESS_MYTERY } from '@/constants/colors';
 
@@ -87,18 +86,10 @@ const Tag: FunctionComponent<TagProps> = ({
       {icon && (
         <IconImage src={TAG_ICON_OPTONS[icon]} alt={icon} width={16} height={16} spin={spinImage} />
       )}
-      <Typography
-        variant="body3"
-        sx={{
-          textTransform: 'initial',
-          display: 'flex',
-          alignItems: 'center',
-          gap: 1,
-        }}
-      >
+      <StyledText variant="body3">
         {iconComponent && iconComponent}
         {text}
-      </Typography>
+      </StyledText>
       {removable && (
         <RemovalButton onClick={onDelete}>
           <CloseIcon />

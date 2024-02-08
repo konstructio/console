@@ -3,21 +3,23 @@ import styled from 'styled-components';
 import NextLink from 'next/link';
 
 import Card from '../card';
+import Column from '../column';
 
 export const CardContainer = styled(Card)`
   display: flex;
   align-items: center;
   max-width: 540px;
-  min-width: 365px;
+  min-width: 200px;
   padding: 24px;
   height: 84px;
+  overflow: hidden;
 `;
 
-export const DetailsContainer = styled.div`
+export const DetailsContainer = styled(Column)`
   align-items: flex-start;
-  display: flex;
-  flex-direction: column;
   margin-left: 24px;
+  height: 100%;
+  overflow-y: scroll;
 
   p {
     color: ${({ theme }) => theme.colors.saltboxBlue};

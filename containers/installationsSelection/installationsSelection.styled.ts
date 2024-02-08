@@ -3,7 +3,6 @@ import styled from 'styled-components';
 
 import { media } from '../../utils/media';
 import Column from '../../components/column';
-import Row from '../../components/row';
 import Typography from '../../components/typography';
 
 export const ContentContainer = styled(Column)`
@@ -12,9 +11,13 @@ export const ContentContainer = styled(Column)`
   width: calc(100% - 80px);
 `;
 
-export const ButtonContainer = styled(Row)`
+export const ButtonContainer = styled(Column)`
   justify-content: center;
   gap: 24px;
+
+  ${media.greaterThan('sm')`
+    flex-direction: row;
+  `}
 `;
 
 export const AdventureContent = styled(Column)`
