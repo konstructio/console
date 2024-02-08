@@ -25,7 +25,14 @@ import { useAppDispatch, useAppSelector } from '../../redux/store';
 import { CLUSTER_CHECKS } from '../../constants/cluster';
 import { ANSI_COLORS, ECHO_BLUE, LIBERTY_BLUE } from '../../constants/colors';
 
-import { Container, Search, SearchTextField, TerminalView, Tools } from './terminalLogs.styled';
+import {
+  Container,
+  Search,
+  SearchTextField,
+  TerminalHead,
+  TerminalView,
+  Tools,
+} from './terminalLogs.styled';
 
 import { parseJSON } from '@/utils/isJson';
 
@@ -169,64 +176,66 @@ const TerminalLogs: FunctionComponent = () => {
 
   return (
     <Container>
-      <Box>
-        <Tabs
-          value={activeTab}
-          onChange={handleChange}
-          textColor="secondary"
-          indicatorColor="secondary"
-          variant="fullWidth"
-          sx={{
-            [`.${tabsClasses.scroller}`]: {
-              height: 30,
-            },
-          }}
-        >
-          <Tab
-            label="Concise"
-            {...a11yProps(TERMINAL_TABS.CONCISE)}
-            sx={{ minHeight: 'auto !important' }}
-          />
-          <Tab
-            label="Verbose"
-            {...a11yProps(TERMINAL_TABS.VERBOSE)}
-            sx={{ minHeight: 'auto !important' }}
-          />
-        </Tabs>
-      </Box>
+      <TerminalHead>
+        <Box>
+          <Tabs
+            value={activeTab}
+            onChange={handleChange}
+            textColor="secondary"
+            indicatorColor="secondary"
+            variant="fullWidth"
+            sx={{
+              [`.${tabsClasses.scroller}`]: {
+                height: 30,
+              },
+            }}
+          >
+            <Tab
+              label="Concise"
+              {...a11yProps(TERMINAL_TABS.CONCISE)}
+              sx={{ minHeight: 'auto !important' }}
+            />
+            <Tab
+              label="Verbose"
+              {...a11yProps(TERMINAL_TABS.VERBOSE)}
+              sx={{ minHeight: 'auto !important' }}
+            />
+          </Tabs>
+        </Box>
+        <Tools>
+          <Search>
+            <SearchIcon htmlColor={ECHO_BLUE} />
+            <SearchTextField
+              placeholder="Search"
+              onChange={handleSearch}
+              size="small"
+              fullWidth
+              value={searchTerm}
+              onKeyDown={(e) => {
+                if (e.keyCode === 13) {
+                  searchAddonRef.current?.findNext(searchTerm, SEARCH_OPTIONS);
+                }
+              }}
+            />
+          </Search>
+          <Tooltip title="Help documentation" placement="top">
+            <HelpOutlineIcon htmlColor={ECHO_BLUE} />
+          </Tooltip>
+          <CopyToClipboard text={logs.join('\n')}>
+            <Tooltip title="Copy" placement="top">
+              <ContentCopyIcon htmlColor={ECHO_BLUE} />
+            </Tooltip>
+          </CopyToClipboard>
+          {/* <OpenInFullIcon htmlColor={ECHO_BLUE} /> */}
+        </Tools>
+      </TerminalHead>
+
       <TabPanel value={activeTab} index={TERMINAL_TABS.CONCISE}>
         <ConciseLogs completedSteps={completedSteps} />
       </TabPanel>
       <TabPanel value={activeTab} index={TERMINAL_TABS.VERBOSE}>
         <TerminalView ref={terminalRef} />
       </TabPanel>
-
-      <Tools>
-        <Search>
-          <SearchIcon htmlColor={ECHO_BLUE} />
-          <SearchTextField
-            placeholder="Search"
-            onChange={handleSearch}
-            size="small"
-            fullWidth
-            value={searchTerm}
-            onKeyDown={(e) => {
-              if (e.keyCode === 13) {
-                searchAddonRef.current?.findNext(searchTerm, SEARCH_OPTIONS);
-              }
-            }}
-          />
-        </Search>
-        <Tooltip title="Help documentation" placement="top">
-          <HelpOutlineIcon htmlColor={ECHO_BLUE} />
-        </Tooltip>
-        <CopyToClipboard text={logs.join('\n')}>
-          <Tooltip title="Copy" placement="top">
-            <ContentCopyIcon htmlColor={ECHO_BLUE} />
-          </Tooltip>
-        </CopyToClipboard>
-        {/* <OpenInFullIcon htmlColor={ECHO_BLUE} /> */}
-      </Tools>
     </Container>
   );
 };

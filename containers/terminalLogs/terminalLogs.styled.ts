@@ -2,6 +2,9 @@
 import styled from 'styled-components';
 import TextField from '@mui/material/TextField';
 
+import { media } from '@/utils/media';
+import Column from '@/components/column';
+
 export const Container = styled.div`
   align-items: flex-start;
   background: #1e293b;
@@ -11,7 +14,7 @@ export const Container = styled.div`
   gap: 8px;
   padding: 16px;
   position: relative;
-  height: 551px;
+  min-height: 551px;
   width: calc(100% - 30px);
 `;
 
@@ -82,11 +85,17 @@ export const Tools = styled.div`
   align-items: center;
   display: flex;
   gap: 24px;
-  position: absolute;
-  top: 16px;
-  right: 16px;
 
   & svg {
     cursor: pointer;
   }
+`;
+
+export const TerminalHead = styled(Column)`
+  justify-content: space-between;
+  width: 100%;
+
+  ${media.greaterThan('sm')`
+    flex-direction: row;
+  `}
 `;

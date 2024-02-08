@@ -1,8 +1,10 @@
 'use client';
 import styled, { css, keyframes } from 'styled-components';
+import { styled as muiStyled } from '@mui/material';
 import Image from 'next/image';
 
 import Row from '../row/';
+import Typography from '../typography';
 
 const spinAnimation = keyframes`
   from {
@@ -41,6 +43,7 @@ export const TagContainer = styled(Row)<{ bg?: string; textColor?: string }>`
   background-color: ${({ bg }) => bg};
   color: ${({ textColor }) => textColor};
   width: fit-content;
+  height: fit-content;
 
   ${RemovalButton} {
     & svg {
@@ -50,4 +53,11 @@ export const TagContainer = styled(Row)<{ bg?: string; textColor?: string }>`
       color: ${({ textColor }) => textColor};
     }
   }
+`;
+
+export const StyledText = muiStyled(Typography)`
+  textTransform: 'initial',
+  display: 'flex',
+  alignItems: 'center',
+  gap: 1,
 `;

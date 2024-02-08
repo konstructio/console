@@ -32,7 +32,13 @@ import {
 } from '../../../../redux/slices/git.slice';
 import { setGitProvider } from '../../../../redux/slices/installation.slice';
 
-import { FormContainer, GitContainer, GitUserField, GitUserFieldInput } from './authForm.styled';
+import {
+  FormContainer,
+  GitContainer,
+  GitFieldsContainer,
+  GitUserField,
+  GitUserFieldInput,
+} from './authForm.styled';
 
 import Tooltip from '@/components/tooltip';
 import Row from '@/components/row';
@@ -229,7 +235,7 @@ const AuthForm: FunctionComponent = () => {
         </div>
       )}
       <FormContainer isVisible={!isMarketplace || (isMarketplace && isGitSelected)}>
-        <Row style={{ justifyContent: 'space-between', gap: '24px' }}>
+        <GitFieldsContainer>
           <Row style={{ width: '100%' }}>
             <ControlledPassword
               control={control}
@@ -243,7 +249,7 @@ const AuthForm: FunctionComponent = () => {
               onErrorText={errors.gitToken?.message}
             />
           </Row>
-          <GitUserField data-test-id="gitUser" style={{ width: '216px' }}>
+          <GitUserField data-test-id="gitUser">
             <Typography
               variant="labelLarge"
               sx={{ display: 'flex', gap: '4px' }}
@@ -257,7 +263,7 @@ const AuthForm: FunctionComponent = () => {
               <GitUserFieldInput>{gitUserName}</GitUserFieldInput>
             )}
           </GitUserField>
-        </Row>
+        </GitFieldsContainer>
 
         {isGitHub ? (
           <ControlledAutocomplete

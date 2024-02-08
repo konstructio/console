@@ -4,6 +4,7 @@ import styled from 'styled-components';
 
 import FormContainer from '../../components/formContainer';
 import { media } from '../../utils/media';
+import { GitFieldsContainer } from '../clusterForms/shared/authForm/authForm.styled';
 
 import { FormContent as Content } from '@/components/formContainer/formContainer.styled';
 import { LIGHT_GREY } from '@/constants/colors';
@@ -16,10 +17,6 @@ export const AdvancedOptionsContainer = styled(FormContainer)`
   ${Content} {
     gap: 32px;
   }
-
-  ${media.greaterThan<{ hasInfo: boolean }>('lg')`
-    width: 1024px;
-  `};
 `;
 
 export const Form = styled(Box)<BoxProps>`
@@ -45,16 +42,20 @@ export const FormContent = styled(FormContainer)<{
 }>`
   background-color: ${({ isLastStep, theme }) => (isLastStep ? 'transparent' : theme.colors.white)};
   box-shadow: ${({ isProvisionStep, isLastStep }) => (isLastStep || isProvisionStep) && 'none'};
+  width: calc(100% - 80px);
 
   ${Content} {
     gap: 32px;
   }
 
-  ${({ hasInfo }) =>
-    hasInfo &&
-    `
+  ${({ hasInfo }) => {
+    return (
+      hasInfo &&
+      media.greaterThan('lg')`
       width: 680px;
-  `}
+    `
+    );
+  }}
 
   ${({ isProvisionStep }) =>
     isProvisionStep &&
@@ -62,13 +63,9 @@ export const FormContent = styled(FormContainer)<{
       background-color: transparent;
   `}
 
-  ${media.greaterThan('lg')`
-    width: 1024px;
-
-    ${({ hasInfo }: { hasInfo: boolean }) =>
-      hasInfo &&
-      `
-        width: 680px;
-    `}
+  ${media.greaterThan('xs')`
+    ${GitFieldsContainer}{
+      flex-direction: row;
+    }
   `};
 `;

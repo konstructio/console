@@ -3,6 +3,8 @@ import styled from 'styled-components';
 
 import { BISCAY } from '../../../../constants/colors';
 
+import Column from '@/components/column';
+
 export const GitContainer = styled.div`
   display: flex;
   gap: 16px;
@@ -33,7 +35,14 @@ export const FormContainer = styled.div<{ isVisible?: boolean }>`
   gap: 32px;
 `;
 
-export const GitUserField = styled.div``;
+export const GitFieldsContainer = styled(Column)`
+  gap: 12px;
+`;
+
+export const GitUserField = styled(Column)`
+  width: 216px;
+  justify-content: space-between;
+`;
 
 export const GitUserFieldInput = styled.div`
   background-color: #fafafa;

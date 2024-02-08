@@ -34,16 +34,14 @@ const ClusterReady: FunctionComponent<ClusterRunningMessageProps> = ({
   return (
     <Container>
       <Image alt="box" src={Box} width={170} height={160} />
-      <Title>
-        <Typography variant="body1">
-          Cluster <strong>{clusterName || '<cluster identifier>'}</strong> is now up and running.
-        </Typography>
+      <Title variant="body1">
+        Cluster <strong>{clusterName || '<cluster identifier>'}</strong> is now up and running.
       </Title>
-      <Typography variant="body2">
+      <Typography variant="body2" style={{ textAlign: 'center' }}>
         Copy the kbot user password and log into the kubefirst console UI.
       </Typography>
       <PasswordContainer>
-        <Password value={kbotPassword} sx={{ width: '398px' }} />
+        <Password value={kbotPassword} sx={{ width: '100%' }} />
         <CopyToClipboard text={kbotPassword as string} onCopy={handleOnCopy}>
           <Button color="text" variant="text">
             {copyLabel}

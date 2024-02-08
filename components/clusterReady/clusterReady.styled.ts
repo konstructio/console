@@ -1,8 +1,11 @@
 'use client';
 import styled from 'styled-components';
+import { styled as muiStyled } from '@mui/material';
 
 import Column from '../column';
-import Row from '../row';
+import Typography from '../typography';
+
+import { media } from '@/utils/media';
 
 export const Container = styled(Column)`
   align-items: center;
@@ -16,18 +19,23 @@ export const Link = styled.a`
   text-decoration: none;
 `;
 
-export const Title = styled.div`
-  margin: 40px 0 16px 0;
-  text-align: center;
-  width: 382px;
+export const Title = muiStyled(Typography)(() => ({
+  'margin': '40px 0 16px 0',
+  'textAlign': 'center',
 
-  strong {
-    font-size: 16px;
-  }
-`;
+  '& strong': {
+    fontSize: '16px',
+  },
+}));
 
-export const PasswordContainer = styled(Row)`
+export const PasswordContainer = styled(Column)`
   align-items: center;
   gap: 8px;
   margin: 18px 0 32px 0;
+  width: 100%;
+  max-width: 470px;
+
+  ${media.greaterThan('sm')`
+    flex-direction: row;
+  `}
 `;
