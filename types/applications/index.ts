@@ -27,8 +27,22 @@ export interface GitOpsCatalogApp {
   category?: AppCategory;
 }
 
+export interface ClusterApplication {
+  name: string;
+  default: boolean;
+  description: string;
+  image: string;
+  links: Array<string>;
+  status?: string;
+}
+
 export interface GitOpsCatalogProps {
   app: GitOpsCatalogApp;
   clusterName: string;
   values?: FieldValues;
+}
+
+export enum Target {
+  TEMPLATE = 'Template',
+  CLUSTER = 'Cluster',
 }

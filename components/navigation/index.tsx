@@ -22,6 +22,7 @@ import { ECHO_BLUE } from '@/constants/colors';
 import Ray from '@/assets/ray.svg';
 import TitleLogo from '@/assets/title.svg';
 import Youtube from '@/assets/youtube.svg';
+import { Route } from '@/constants';
 
 export interface FooterItem {
   icon: ReactNode;
@@ -71,7 +72,7 @@ const Navigation: FunctionComponent<NavigationProps> = ({
   return (
     <Container>
       <div>
-        <KubefirstTitle onClick={() => push('/')}>
+        <KubefirstTitle onClick={() => push(Route.HOME)}>
           <Image alt="k1-image" src={Ray} height={40} width={48} id="ray" />
           {/* Only visible above md breakpoint 👇 */}
           <Image alt="k1-image" src={TitleLogo} height={40} width={160} id="title" />

@@ -3,11 +3,13 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 
 import { AppDispatch, RootState } from '../store';
 import { createQueryString } from '../../utils/url/formatDomain';
-import { ClusterRequestProps, ClusterServices } from '../../types/provision';
-import { GitOpsCatalogApp, GitOpsCatalogProps } from '../../types/gitOpsCatalog';
-import { addAppToQueue, removeAppFromQueue } from '../slices/cluster.slice';
+import { ClusterRequestProps } from '../../types/provision';
+import { GitOpsCatalogApp, GitOpsCatalogProps, ClusterApplication } from '../../types/applications';
+import { addAppToQueue, removeAppFromQueue } from '../slices/applications.slice';
 import { transformObjectToStringKey } from '../../utils/transformObjectToStringKey';
-import { createNotification } from '../../redux/slices/notifications.slice';
+import { createNotification } from '../slices/notifications.slice';
+
+// isTemplate
 
 export const installGitOpsApp = createAsyncThunk<
   GitOpsCatalogApp,
@@ -16,7 +18,7 @@ export const installGitOpsApp = createAsyncThunk<
     dispatch: AppDispatch;
     state: RootState;
   }
->('cluster/installGitOpsApp', async ({ app, clusterName, values }, { dispatch }) => {
+>('applications/installGitOpsApp', async ({ app, clusterName, values }, { dispatch }) => {
   dispatch(addAppToQueue(app));
   const formValues = values && transformObjectToStringKey(values);
 
@@ -43,10 +45,14 @@ export const installGitOpsApp = createAsyncThunk<
   const params = {
     config_keys,
     secret_keys,
+    // sending both management and workload cluster name with request for workload
+    // workload_cluster_name?: String
+    // is_template: boolean
   };
 
   const res = await axios.post('/api/proxy', {
-    url: `/services/${clusterName}/${app.name}`,
+    // same for delete gitops app
+    url: `/services/${clusterName}/${app.name}`, // always management
     body: secret_keys?.length || config_keys?.length ? params : undefined,
   });
 
@@ -66,34 +72,32 @@ export const installGitOpsApp = createAsyncThunk<
   return app;
 });
 
-export const getClusterServices = createAsyncThunk<
-  Array<ClusterServices>,
+export const getClusterApplications = createAsyncThunk<
+  ClusterApplication[],
   ClusterRequestProps,
   {
     dispatch: AppDispatch;
     state: RootState;
   }
->('cluster/cluster/getClusterServices', async ({ clusterName }) => {
-  const res = await axios.get(`/api/proxy?${createQueryString('url', `/services/${clusterName}`)}`);
-
-  if ('error' in res) {
-    throw res.error;
-  }
-  return res.data?.services;
+>('applications/getClusterApplications', async ({ clusterName }) => {
+  return (
+    await axios.get<{ services: ClusterApplication[] }>(
+      `/api/proxy?${createQueryString('url', `/services/${clusterName}`)}`,
+    )
+  ).data.services;
 });
 
 export const getGitOpsCatalogApps = createAsyncThunk<
-  Array<GitOpsCatalogApp>,
+  GitOpsCatalogApp[],
   void,
   {
     dispatch: AppDispatch;
     state: RootState;
   }
->('cluster/getGitOpsCatalogApps', async () => {
-  const res = await axios.get(`/api/proxy?${createQueryString('url', `/gitops-catalog/apps`)}`);
-
-  if ('error' in res) {
-    throw res.error;
-  }
-  return res.data?.apps;
+>('applications/getGitOpsCatalogApps', async () => {
+  return (
+    await axios.get<{ apps: GitOpsCatalogApp[] }>(
+      `/api/proxy?${createQueryString('url', `/gitops-catalog/apps`)}`,
+    )
+  ).data.apps;
 });

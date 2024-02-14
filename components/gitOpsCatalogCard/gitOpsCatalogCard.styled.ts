@@ -1,19 +1,19 @@
 'use client';
 import styled from 'styled-components';
+import { styled as muiStyled } from '@mui/material';
 
 import Typography from '../typography';
 import { textTruncate } from '../../utils/theme';
-import { CHEFS_HAT, DR_WHITE } from '../../constants/colors';
+import { CHEFS_HAT, DR_WHITE, VOLCANIC_SAND } from '../../constants/colors';
+import Row from '../row';
+import Column from '../column';
 
-export const App = styled.div`
+export const App = styled(Row)`
   align-items: center;
-  display: flex;
   gap: 16px;
 `;
 
-export const Body = styled.div`
-  display: flex;
-  flex-direction: column;
+export const Body = styled(Column)`
   height: calc(100% - 30px);
   justify-content: space-between;
 `;
@@ -27,9 +27,7 @@ export const Card = styled.div`
   width: 372px;
 `;
 
-export const Category = styled.div`
-  display: flex;
-`;
+export const Category = styled(Row)``;
 
 export const Description = styled(Typography)`
   color: ${({ theme }) => theme.colors.saltboxBlue};
@@ -50,17 +48,21 @@ export const Description = styled(Typography)`
   }
 `;
 
-export const Header = styled.div`
+export const DisplayName = muiStyled(Typography)(() => ({
+  textTransform: 'capitalize',
+  fontWeight: 600,
+  color: VOLCANIC_SAND,
+}));
+
+export const Header = styled(Row)`
   align-items: center;
-  display: flex;
   justify-content: space-between;
   gap: 16px;
 `;
 
-export const Installing = styled.div`
+export const Installing = styled(Row)`
   background-color: ${DR_WHITE};
   border: 1px solid ${CHEFS_HAT};
-  display: flex;
   gap: 16px;
   height: 40px;
   padding: 16px;

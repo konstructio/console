@@ -6,6 +6,7 @@ import Typography from '../typography';
 import { formatDomain } from '../../utils/url/formatDomain';
 import Tooltip from '../tooltip';
 import { MINT_GREEN, PASTEL_LIGHT_BLUE } from '../../constants/colors';
+import Button from '../button';
 
 import {
   AppConnector,
@@ -17,28 +18,34 @@ import {
   Links,
   LiveAppIcon,
   Title,
-} from './service.styled';
+} from './application.styled';
 
-export interface ServiceProps {
+import { noop } from '@/utils/noop';
+
+export interface ApplicationProps {
   description?: string;
+  default: boolean;
   children?: React.ReactNode;
   image: string;
   name: string;
   links?: { [url: string]: boolean };
-  onClickLink: (link: string, name: string) => void;
+  onLinkClick: (link: string, name: string) => void;
+  onUninstall?: () => void;
 }
 
-const Service: FunctionComponent<ServiceProps> = ({
+const Application: FunctionComponent<ApplicationProps> = ({
   description,
+  default: defaultApp,
   children,
   image,
   name,
   links,
-  onClickLink,
+  onLinkClick,
+  onUninstall = noop,
 }) => {
   const isMetaphor = useMemo(() => name === 'Metaphor', [name]);
 
-  const serviceLink = useCallback(
+  const ApplicationLink = useCallback(
     (link: string, isAvailable?: boolean) => {
       return link ? (
         <Link
@@ -46,7 +53,7 @@ const Service: FunctionComponent<ServiceProps> = ({
           href={link}
           onClick={(e) => {
             if (isAvailable) {
-              onClickLink(link, name);
+              onLinkClick(link, name);
             } else {
               e.preventDefault();
               e.stopPropagation();
@@ -69,7 +76,7 @@ const Service: FunctionComponent<ServiceProps> = ({
         <div />
       );
     },
-    [isMetaphor, name, onClickLink],
+    [isMetaphor, name, onLinkClick],
   );
 
   const linksComponent = useMemo(
@@ -83,7 +90,7 @@ const Service: FunctionComponent<ServiceProps> = ({
               pathname: '',
             };
             const shouldUseTooltip = pathname.length > 40 || origin.length > 40;
-            const linkComponent = serviceLink(url, isAvailable);
+            const linkComponent = ApplicationLink(url, isAvailable);
 
             return shouldUseTooltip ? (
               <Tooltip title={url} placement="top" key={url}>
@@ -95,7 +102,7 @@ const Service: FunctionComponent<ServiceProps> = ({
           })}
       </Links>
     ),
-    [links, serviceLink],
+    [links, ApplicationLink],
   );
 
   return (
@@ -103,17 +110,21 @@ const Service: FunctionComponent<ServiceProps> = ({
       <Header>
         <Image src={image} alt={name} width="32" height="32" />
         <Title variant="subtitle2">{name}</Title>
-        {/* <NextImage
-          src={`https://argocd.mgmt-20.kubefirst.com/api/badge?name=${name.toLowerCase()}`}
-          width={120}
-          height={20}
-          alt={name}
-        /> */}
       </Header>
       <Description variant="body2">{description}</Description>
       {links && !children ? linksComponent : children}
+      {!defaultApp && (
+        <Button
+          variant="outlined"
+          color="secondary"
+          style={{ marginTop: '16px' }}
+          onClick={onUninstall}
+        >
+          Uninstall
+        </Button>
+      )}
     </Container>
   );
 };
 
-export default Service;
+export default Application;

@@ -11,17 +11,11 @@ import GitOpsCatalogCard from '../../components/gitOpsCatalogCard';
 import GitopsAppModal from '../../components/gitopsAppModal';
 import useModal from '../../hooks/useModal';
 import { useAppDispatch, useAppSelector } from '../../redux/store';
-import { installGitOpsApp } from '../../redux/thunks/cluster.thunk';
-import { AppCategory, GitOpsCatalogApp } from '../../types/gitOpsCatalog';
+import { installGitOpsApp } from '../../redux/thunks/applications.thunk';
+import { AppCategory, GitOpsCatalogApp } from '../../types/applications';
 import { VOLCANIC_SAND } from '../../constants/colors';
 
-import {
-  CardsByCategory,
-  CardsContainer,
-  Container,
-  Content,
-  Filter,
-} from './gitOpsCatalog.styled';
+import { CardsContainer, Container, Content, Filter } from './gitOpsCatalog.styled';
 
 const STATIC_HELP_CARD: GitOpsCatalogApp = {
   name: '',
@@ -33,16 +27,14 @@ const gitOpsCatalog: FunctionComponent = () => {
   const [selectedCategories, setSelectedCategories] = useState<AppCategory[]>([]);
   const [selectedApp, setSelectedApp] = useState<GitOpsCatalogApp>();
 
-  const { appsQueue, selectedCluster } = useAppSelector(({ cluster }) => cluster);
-
-  const { gitOpsCatalogApps, clusterServices } = useAppSelector(({ cluster }) => ({
-    gitOpsCatalogApps: cluster.gitOpsCatalogApps,
-    clusterServices: cluster.clusterServices,
-  }));
+  const { appsQueue, selectedCluster, gitOpsCatalogApps, clusterApplications } = useAppSelector(
+    ({ applications }) => applications,
+  );
 
   const filteredCatalogApps = useMemo(
-    () => gitOpsCatalogApps.filter((app) => !clusterServices.map((s) => s.name).includes(app.name)),
-    [clusterServices, gitOpsCatalogApps],
+    () =>
+      gitOpsCatalogApps.filter((app) => !clusterApplications.map((s) => s.name).includes(app.name)),
+    [clusterApplications, gitOpsCatalogApps],
   );
 
   const dispatch = useAppDispatch();
@@ -133,29 +125,8 @@ const gitOpsCatalog: FunctionComponent = () => {
         ))}
       </Filter>
       <Content>
-        {!selectedCategories.length && <Typography variant="subtitle2">All</Typography>}
-        <CardsByCategory>
-          {sortBy(selectedCategories).map((category) => (
-            <div key={category}>
-              <Typography variant="subtitle2">{category}</Typography>
-              <CardsContainer>
-                {filteredApps
-                  .filter((app) => app.category === category)
-                  .map((app) => (
-                    <GitOpsCatalogCard
-                      key={app.name}
-                      {...app}
-                      onClick={() => handleSelectedApp(app)}
-                      isInstalling={appsQueue.includes(app.name)}
-                    />
-                  ))}
-              </CardsContainer>
-            </div>
-          ))}
-        </CardsByCategory>
         <CardsContainer>
-          {!selectedCategories.length &&
-            filteredApps &&
+          {filteredApps &&
             filteredApps.map((app) => (
               <GitOpsCatalogCard
                 key={app.name}

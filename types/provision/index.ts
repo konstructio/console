@@ -224,15 +224,6 @@ export type DraftCluster = Omit<WorkloadCluster, 'environment'> & {
   environment?: Partial<WorkloadCluster['environment']>;
 };
 
-export interface ClusterServices {
-  name: string;
-  default: boolean;
-  description: string;
-  image: string;
-  links: Array<string>;
-  status?: string;
-}
-
 export interface ClusterQueue {
   clusterName: string;
   status: ClusterStatus;

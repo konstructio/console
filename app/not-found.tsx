@@ -10,6 +10,7 @@ import NotFoundIcon from '@/assets/404.svg';
 import Button from '@/components/button';
 import { VOLCANIC_SAND } from '@/constants/colors';
 import Column from '@/components/column';
+import { Route } from '@/constants';
 
 const Container = styled(Column)`
   align-items: center;
@@ -35,7 +36,7 @@ const NotFound: FunctionComponent = () => {
   const { push } = useRouter();
 
   const goHomePage = () => {
-    push('/');
+    push(Route.HOME);
   };
 
   return (

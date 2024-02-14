@@ -100,11 +100,6 @@ const ClusterManagement: FunctionComponent = () => {
     return ClusterType.WORKLOAD_V_CLUSTER;
   }, [managementCluster, hasPermissions, canUseFeature]);
 
-  const tabColor = useMemo(
-    () => (clusterManagementTab === ClusterManagementTab.LIST_VIEW ? BISCAY : SALTBOX_BLUE),
-    [clusterManagementTab],
-  );
-
   const { instanceSize } =
     DEFAULT_CLOUD_INSTANCE_SIZES[managementCluster?.cloudProvider ?? InstallationType.LOCAL];
 
@@ -302,13 +297,17 @@ const ClusterManagement: FunctionComponent = () => {
           <Box>
             <Tabs value={clusterManagementTab} onChange={handleChange} indicatorColor="primary">
               <Tab
-                color={tabColor}
+                color={
+                  clusterManagementTab === ClusterManagementTab.GRAPH_VIEW ? BISCAY : SALTBOX_BLUE
+                }
                 label={<Typography variant="buttonSmall">Graph view</Typography>}
                 {...a11yProps(ClusterManagementTab.GRAPH_VIEW)}
                 sx={{ textTransform: 'initial', marginRight: '24px' }}
               />
               <Tab
-                color={tabColor}
+                color={
+                  clusterManagementTab === ClusterManagementTab.LIST_VIEW ? BISCAY : SALTBOX_BLUE
+                }
                 label={<Typography variant="buttonSmall">List view</Typography>}
                 {...a11yProps(ClusterManagementTab.LIST_VIEW)}
                 sx={{ textTransform: 'initial', marginRight: 0 }}

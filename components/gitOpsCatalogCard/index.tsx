@@ -7,7 +7,7 @@ import Tag, { TagColor } from '../tag';
 import Tooltip from '../tooltip';
 import Button from '../button';
 import Typography from '../typography';
-import { AppCategory, GitOpsCatalogApp } from '../../types/gitOpsCatalog';
+import { AppCategory, GitOpsCatalogApp } from '../../types/applications';
 import { VOLCANIC_SAND } from '../../constants/colors';
 
 import {
@@ -16,6 +16,7 @@ import {
   Card,
   Category,
   Description,
+  DisplayName,
   Header,
   Installing,
 } from './gitOpsCatalogCard.styled';
@@ -41,6 +42,7 @@ export type GitOpsCatalogCardProps = PropsWithChildren<GitOpsCatalogApp> & {
   isInstalling?: boolean;
   onClick?: () => void;
   showSubmitButton?: boolean;
+  isDeletable?: boolean;
 };
 
 const GitOpsCatalogCard: FunctionComponent<GitOpsCatalogCardProps> = ({
@@ -51,6 +53,7 @@ const GitOpsCatalogCard: FunctionComponent<GitOpsCatalogCardProps> = ({
   isInstalling,
   onClick,
   showSubmitButton = true,
+  isDeletable = false,
   children,
 }) => {
   const tagColor = CATEGORY_COLOR_CONFIG[category ?? AppCategory.APP_MANAGEMENT] ?? {};
@@ -70,13 +73,7 @@ const GitOpsCatalogCard: FunctionComponent<GitOpsCatalogCardProps> = ({
             src={image_url}
             style={{ objectFit: 'contain' }}
           />
-          <Typography
-            variant="subtitle2"
-            sx={{ textTransform: 'capitalize', fontWeight: 600 }}
-            color={VOLCANIC_SAND}
-          >
-            {display_name}
-          </Typography>
+          <DisplayName variant="subtitle2">{display_name}</DisplayName>
         </App>
         {category && (
           <Category>
@@ -94,7 +91,7 @@ const GitOpsCatalogCard: FunctionComponent<GitOpsCatalogCardProps> = ({
         )}
         {showSubmitButton && !isInstalling && (
           <Button variant="outlined" color="secondary" onClick={onClick}>
-            Install
+            {isDeletable ? 'Uninstall' : 'Install'}
           </Button>
         )}
         {isInstalling && (

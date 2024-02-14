@@ -6,7 +6,7 @@ import Modal from '../modal';
 import Button from '../button';
 import Typography from '../typography';
 import ControlledPassword from '../controlledFields/Password';
-import { GitOpsCatalogApp } from '../../types/gitOpsCatalog';
+import { GitOpsCatalogApp } from '../../types/applications';
 import { BISCAY, SALTBOX_BLUE } from '../../constants/colors';
 import ControlledTextField from '../controlledFields/TextField';
 

@@ -1,4 +1,4 @@
-import { AppCategory, GitOpsCatalogApp } from '../../types/gitOpsCatalog';
+import { AppCategory, GitOpsCatalogApp } from '../../types/applications';
 
 export const mockGitopsCatalogApp: GitOpsCatalogApp = {
   name: 'kutt',

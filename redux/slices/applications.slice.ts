@@ -1,32 +1,41 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 import {
-  getClusterServices,
+  getClusterApplications,
   getGitOpsCatalogApps,
   installGitOpsApp,
-} from '@/redux/thunks/cluster.thunk';
-import { ManagementCluster, ClusterServices, WorkloadCluster } from '@/types/provision';
-import { GitOpsCatalogApp } from '@/types/gitOpsCatalog';
+} from '@/redux/thunks/applications.thunk';
+import { ManagementCluster, WorkloadCluster } from '@/types/provision';
+import { GitOpsCatalogApp, ClusterApplication, Target } from '@/types/applications';
 
-export interface ConfigState {
+export interface ApplicationsState {
+  target: Target;
   selectedCluster?: ManagementCluster | WorkloadCluster;
-  clusterServices: Array<ClusterServices>;
+  clusterApplications: Array<ClusterApplication>;
   gitOpsCatalogApps: Array<GitOpsCatalogApp>;
   appsQueue: Array<string>;
 }
 
-export const initialState: ConfigState = {
+export const initialState: ApplicationsState = {
+  target: Target.CLUSTER,
   selectedCluster: undefined,
-  clusterServices: [],
+  clusterApplications: [],
   gitOpsCatalogApps: [],
   appsQueue: [],
 };
 
-const clusterSlice = createSlice({
-  name: 'cluster',
+const applicationsSlice = createSlice({
+  name: 'applications',
   initialState,
   reducers: {
-    setSelectedCluster: (state, { payload }: PayloadAction<ConfigState['selectedCluster']>) => {
+    setTarget: (state, { payload }: PayloadAction<Target>) => {
+      state.target = payload;
+      state.selectedCluster = undefined;
+    },
+    setSelectedCluster: (
+      state,
+      { payload }: PayloadAction<ApplicationsState['selectedCluster']>,
+    ) => {
       state.selectedCluster = payload;
     },
     addAppToQueue: (state, { payload }: PayloadAction<GitOpsCatalogApp>) => {
@@ -35,23 +44,23 @@ const clusterSlice = createSlice({
     removeAppFromQueue: (state, { payload }: PayloadAction<GitOpsCatalogApp>) => {
       state.appsQueue = state.appsQueue.filter((name) => name !== payload.name);
     },
-    resetClusterServices: (state) => {
-      state.clusterServices = [];
+    resetClusterApplications: (state) => {
+      state.clusterApplications = [];
     },
   },
   extraReducers: (builder) => {
     builder
-      .addCase(getClusterServices.fulfilled, (state, { payload }) => {
-        state.clusterServices = payload;
+      .addCase(getClusterApplications.fulfilled, (state, { payload }) => {
+        state.clusterApplications = payload;
       })
-      .addCase(getClusterServices.rejected, (state) => {
-        state.clusterServices = [];
+      .addCase(getClusterApplications.rejected, (state) => {
+        state.clusterApplications = [];
       })
       .addCase(installGitOpsApp.fulfilled, (state, { payload }) => {
         state.appsQueue = state.appsQueue.filter((name) => name !== payload.name);
 
         const { name, description, image_url } = payload;
-        state.clusterServices.push({
+        state.clusterApplications.push({
           default: false,
           description: description as string,
           name,
@@ -76,7 +85,12 @@ const clusterSlice = createSlice({
   },
 });
 
-export const { addAppToQueue, removeAppFromQueue, resetClusterServices, setSelectedCluster } =
-  clusterSlice.actions;
+export const {
+  addAppToQueue,
+  removeAppFromQueue,
+  resetClusterApplications,
+  setSelectedCluster,
+  setTarget,
+} = applicationsSlice.actions;
 
-export const clusterReducer = clusterSlice.reducer;
+export const applicationsReducer = applicationsSlice.reducer;

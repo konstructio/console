@@ -1,25 +1,25 @@
 import React, { FunctionComponent, useCallback, useEffect, useState } from 'react';
 
-import ServiceComponent from '../../components/service';
+import ApplicationComponent, {
+  ApplicationProps as AppCompProps,
+} from '../../components/application';
 import { useAppDispatch, useAppSelector } from '../../redux/store';
 import { checkSiteReadiness } from '../../redux/thunks/readiness.thunk';
 
-export interface ServiceProps {
-  description?: string;
-  children?: React.ReactNode;
-  image: string;
-  name: string;
+export interface ApplicationProps extends Omit<AppCompProps, 'links'> {
   links?: Array<string>;
-  onClickLink: (link: string, name: string) => void;
 }
 
 const isGitLink = (url: string) => url.includes('github') || url.includes('gitlab');
 
-const Service: FunctionComponent<ServiceProps> = ({ links: serviceLinks, ...props }) => {
+const Application: FunctionComponent<ApplicationProps> = ({
+  links: applicationLinks,
+  ...props
+}) => {
   const [firstLoad, setFirstLoad] = useState(false);
 
   const [links, setLinks] = useState<{ [url: string]: boolean } | undefined>(
-    serviceLinks?.reduce((previous, current) => {
+    applicationLinks?.reduce((previous, current) => {
       return { ...previous, [current]: isGitLink(current) };
     }, {}),
   );
@@ -82,7 +82,7 @@ const Service: FunctionComponent<ServiceProps> = ({ links: serviceLinks, ...prop
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  return <ServiceComponent {...props} links={links} />;
+  return <ApplicationComponent {...props} links={links} />;
 };
 
-export default Service;
+export default Application;
