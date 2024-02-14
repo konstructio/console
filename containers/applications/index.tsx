@@ -47,19 +47,13 @@ const Applications: FunctionComponent = () => {
   const [activeTab, setActiveTab] = useState<number>(0);
   const [searchTerm, setSearchTerm] = useState('');
 
-  const {
-    clusterApplications,
-    isTelemetryDisabled,
-    selectedCluster,
-    selectedApplication,
-    target,
-    clusterMap,
-  } = useAppSelector(({ config, applications, api }) => ({
-    isTelemetryDisabled: config.isTelemetryDisabled,
-    clusterMap: api.clusterMap,
-    managementCluster: api.managementCluster,
-    ...applications,
-  }));
+  const { clusterApplications, isTelemetryDisabled, selectedApplication, target, clusterMap } =
+    useAppSelector(({ config, applications, api }) => ({
+      isTelemetryDisabled: config.isTelemetryDisabled,
+      clusterMap: api.clusterMap,
+      managementCluster: api.managementCluster,
+      ...applications,
+    }));
 
   const { isEnabled: isGitOpsCatalogEnabled } = useFeatureFlag(FeatureFlag.GITOPS_CATALOG);
 
