@@ -29,8 +29,7 @@ import {
 
 import { FeatureFlag } from '@/types/config';
 import { noop } from '@/utils/noop';
-import { setSelectedCluster, setTarget } from '@/redux/slices/applications.slice';
-import { ManagementCluster } from '@/types/provision';
+import { setSelectedApplication, setTarget } from '@/redux/slices/applications.slice';
 
 enum APPLICATION_TAB {
   PROVISIONED,
@@ -52,9 +51,9 @@ const Applications: FunctionComponent = () => {
     clusterApplications,
     isTelemetryDisabled,
     selectedCluster,
+    selectedApplication,
     target,
     clusterMap,
-    managementCluster,
   } = useAppSelector(({ config, applications, api }) => ({
     isTelemetryDisabled: config.isTelemetryDisabled,
     clusterMap: api.clusterMap,
@@ -90,17 +89,18 @@ const Applications: FunctionComponent = () => {
 
   const handleClusterSelectChange = useCallback(
     (val: string) => {
-      const cluster = target === Target.TEMPLATE ? managementCluster : clusterMap[val];
-      dispatch(setSelectedCluster(cluster as ManagementCluster));
+      const cluster = target === Target.TEMPLATE ? val : clusterMap[val].clusterName;
+      dispatch(setSelectedApplication(cluster));
+      dispatch(getClusterApplications({ clusterName: cluster }));
     },
-    [dispatch, target, managementCluster, clusterMap],
+    [target, clusterMap, dispatch],
   );
 
   const clusterSelectOptions = useMemo((): { label: string; value: string }[] => {
     if (target === Target.TEMPLATE) {
       return [
         { label: 'workload-vcluster', value: 'workload-vcluster' },
-        { label: 'workload-physicalcluster', value: 'workload-physicalcluster' },
+        { label: 'workload-physicalcluster', value: 'workload-cluster' },
       ];
     }
     return Object.keys(clusterMap).map((clusterName) => ({
@@ -114,10 +114,10 @@ const Applications: FunctionComponent = () => {
   }, [dispatch]);
 
   useEffect(() => {
-    if (selectedCluster?.clusterName) {
-      dispatch(getClusterApplications({ clusterName: selectedCluster.clusterName }));
+    if (selectedApplication) {
+      dispatch(getClusterApplications({ clusterName: selectedApplication }));
     }
-  }, [dispatch, router, selectedCluster?.clusterName]);
+  }, [dispatch, router, selectedApplication]);
 
   const Apps = useMemo(
     () => (
@@ -147,7 +147,7 @@ const Applications: FunctionComponent = () => {
           onTargetChange={handleTargetChange}
           onClusterSelectChange={handleClusterSelectChange}
           clusterSelectOptions={clusterSelectOptions}
-          clusterSelectValue={selectedCluster?.clusterName ?? ''}
+          clusterSelectValue={selectedApplication ?? ''}
         />
         <ApplicationsContainer>
           {clusterApplications.map(({ name, ...rest }) => (
@@ -157,14 +157,14 @@ const Applications: FunctionComponent = () => {
       </>
     ),
     [
-      clusterApplications,
-      handleLinkClick,
       searchTerm,
       target,
-      clusterSelectOptions,
       handleTargetChange,
       handleClusterSelectChange,
-      selectedCluster?.clusterName,
+      clusterSelectOptions,
+      selectedApplication,
+      clusterApplications,
+      handleLinkClick,
     ],
   );
 

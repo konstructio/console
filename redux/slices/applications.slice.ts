@@ -11,6 +11,7 @@ import { GitOpsCatalogApp, ClusterApplication, Target } from '@/types/applicatio
 export interface ApplicationsState {
   target: Target;
   selectedCluster?: ManagementCluster | WorkloadCluster;
+  selectedApplication?: string;
   clusterApplications: Array<ClusterApplication>;
   gitOpsCatalogApps: Array<GitOpsCatalogApp>;
   appsQueue: Array<string>;
@@ -37,6 +38,12 @@ const applicationsSlice = createSlice({
       { payload }: PayloadAction<ApplicationsState['selectedCluster']>,
     ) => {
       state.selectedCluster = payload;
+    },
+    setSelectedApplication: (
+      state,
+      { payload }: PayloadAction<ApplicationsState['selectedApplication']>,
+    ) => {
+      state.selectedApplication = payload;
     },
     addAppToQueue: (state, { payload }: PayloadAction<GitOpsCatalogApp>) => {
       state.appsQueue.push(payload.name);
@@ -89,6 +96,7 @@ export const {
   addAppToQueue,
   removeAppFromQueue,
   resetClusterApplications,
+  setSelectedApplication,
   setSelectedCluster,
   setTarget,
 } = applicationsSlice.actions;
