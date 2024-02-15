@@ -1,4 +1,5 @@
 import React, { FunctionComponent, useMemo, useState } from 'react';
+import { useSession } from 'next-auth/react';
 import { useForm } from 'react-hook-form';
 import NextLink from 'next/link';
 import sortBy from 'lodash/sortBy';
@@ -26,6 +27,7 @@ const STATIC_HELP_CARD: GitOpsCatalogApp = {
 const gitOpsCatalog: FunctionComponent = () => {
   const [selectedCategories, setSelectedCategories] = useState<AppCategory[]>([]);
   const [selectedApp, setSelectedApp] = useState<GitOpsCatalogApp>();
+  const { data: session } = useSession();
 
   const { appsQueue, selectedCluster, gitOpsCatalogApps, clusterApplications } = useAppSelector(
     ({ applications }) => applications,
@@ -75,7 +77,12 @@ const gitOpsCatalog: FunctionComponent = () => {
   const handleAddApp = async (app: GitOpsCatalogApp) => {
     const values = getValues();
     dispatch(
-      installGitOpsApp({ app, clusterName: selectedCluster?.clusterName as string, values }),
+      installGitOpsApp({
+        app,
+        clusterName: selectedCluster?.clusterName as string,
+        values,
+        user: session?.user?.email as string,
+      }),
     );
     reset();
     closeModal();

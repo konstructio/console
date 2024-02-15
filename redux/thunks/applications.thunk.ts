@@ -18,7 +18,7 @@ export const installGitOpsApp = createAsyncThunk<
     dispatch: AppDispatch;
     state: RootState;
   }
->('applications/installGitOpsApp', async ({ app, clusterName, values }, { dispatch }) => {
+>('applications/installGitOpsApp', async ({ app, clusterName, values, user }, { dispatch }) => {
   dispatch(addAppToQueue(app));
   const formValues = values && transformObjectToStringKey(values);
 
@@ -45,6 +45,7 @@ export const installGitOpsApp = createAsyncThunk<
   const params = {
     config_keys,
     secret_keys,
+    user,
     // sending both management and workload cluster name with request for workload
     // workload_cluster_name?: String
     // is_template: boolean

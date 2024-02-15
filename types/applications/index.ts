@@ -40,6 +40,7 @@ export interface GitOpsCatalogProps {
   app: GitOpsCatalogApp;
   clusterName: string;
   values?: FieldValues;
+  user: string;
 }
 
 export enum Target {
