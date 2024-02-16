@@ -39,7 +39,7 @@ import { setPresentedClusterName } from '@/redux/slices/api.slice';
 import { usePhysicalClustersPermissions } from '@/hooks/usePhysicalClustersPermission';
 import { InstallationType } from '@/types/redux';
 import { setClusterManagamentTab } from '@/redux/slices/config.slice';
-import { ClusterManagementTab } from '@/types/config';
+import { ClusterManagementTab, FeatureFlag } from '@/types/config';
 import {
   DEFAULT_CLOUD_INSTANCE_SIZES,
   KUBECONFIG_CLI_DETAILS,
@@ -55,6 +55,7 @@ import UpgradeModal from '@/components/upgradeModal';
 import { selectUpgradeLicenseDefinition } from '@/redux/selectors/subscription.selector';
 import KubeConfigModal from '@/components/kubeConfigModal';
 import { createNotification } from '@/redux/slices/notifications.slice';
+import useFeatureFlag from '@/hooks/useFeatureFlag';
 
 const ClusterManagement: FunctionComponent = () => {
   const {
@@ -79,6 +80,7 @@ const ClusterManagement: FunctionComponent = () => {
 
   const dispatch = useAppDispatch();
   const upgradeLicenseDefinition = useAppSelector(selectUpgradeLicenseDefinition());
+  const { isEnabled: isSubscriptionEnabled } = useFeatureFlag(FeatureFlag.SAAS_SUBSCRIPTION);
 
   const {
     isOpen: isUpgradeModalOpen,
@@ -90,6 +92,7 @@ const ClusterManagement: FunctionComponent = () => {
 
   const defaultClusterType = useMemo(() => {
     if (
+      isSubscriptionEnabled &&
       managementCluster &&
       managementCluster.cloudProvider &&
       hasPermissions &&
@@ -98,12 +101,7 @@ const ClusterManagement: FunctionComponent = () => {
       return ClusterType.WORKLOAD;
     }
     return ClusterType.WORKLOAD_V_CLUSTER;
-  }, [managementCluster, hasPermissions, canUseFeature]);
-
-  const tabColor = useMemo(
-    () => (clusterManagementTab === ClusterManagementTab.LIST_VIEW ? BISCAY : SALTBOX_BLUE),
-    [clusterManagementTab],
-  );
+  }, [isSubscriptionEnabled, managementCluster, hasPermissions, canUseFeature]);
 
   const { instanceSize } =
     DEFAULT_CLOUD_INSTANCE_SIZES[managementCluster?.cloudProvider ?? InstallationType.LOCAL];
@@ -212,7 +210,7 @@ const ClusterManagement: FunctionComponent = () => {
     ) {
       const canCreatePhysicalClusters = canUseFeature('physicalClusters');
 
-      if (!canCreatePhysicalClusters) {
+      if (isSubscriptionEnabled && !canCreatePhysicalClusters) {
         return openUpgradeModal();
       }
     }
@@ -302,13 +300,17 @@ const ClusterManagement: FunctionComponent = () => {
           <Box>
             <Tabs value={clusterManagementTab} onChange={handleChange} indicatorColor="primary">
               <Tab
-                color={tabColor}
+                color={
+                  clusterManagementTab === ClusterManagementTab.GRAPH_VIEW ? BISCAY : SALTBOX_BLUE
+                }
                 label={<Typography variant="buttonSmall">Graph view</Typography>}
                 {...a11yProps(ClusterManagementTab.GRAPH_VIEW)}
                 sx={{ textTransform: 'initial', marginRight: '24px' }}
               />
               <Tab
-                color={tabColor}
+                color={
+                  clusterManagementTab === ClusterManagementTab.LIST_VIEW ? BISCAY : SALTBOX_BLUE
+                }
                 label={<Typography variant="buttonSmall">List view</Typography>}
                 {...a11yProps(ClusterManagementTab.LIST_VIEW)}
                 sx={{ textTransform: 'initial', marginRight: 0 }}

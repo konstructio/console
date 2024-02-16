@@ -16,6 +16,11 @@ export enum ClusterType {
   WORKLOAD_V_CLUSTER = 'workload-vcluster',
 }
 
+export const CLUSTER_TYPES = Object.values(ClusterType);
+export const WORKLOAD_CLUSTER_TYPES = CLUSTER_TYPES.filter(
+  (type) => type !== ClusterType.MANAGEMENT,
+);
+
 export type ClusterEnvironment = {
   id: string;
   name: string;
@@ -223,15 +228,6 @@ export interface WorkloadCluster extends Cluster {
 export type DraftCluster = Omit<WorkloadCluster, 'environment'> & {
   environment?: Partial<WorkloadCluster['environment']>;
 };
-
-export interface ClusterServices {
-  name: string;
-  default: boolean;
-  description: string;
-  image: string;
-  links: Array<string>;
-  status?: string;
-}
 
 export interface ClusterQueue {
   clusterName: string;

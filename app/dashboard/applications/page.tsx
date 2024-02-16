@@ -2,14 +2,16 @@
 import React, { FunctionComponent, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 
-import Services from '../../../containers/services';
+import Applications from '../../../containers/applications';
 import { useAppSelector } from '../../../redux/store';
 
-export interface ServicesPageProps {
+import { Route } from '@/constants';
+
+export interface ApplicationsPageProps {
   isClusterZero: boolean;
 }
 
-const ServicesPage: FunctionComponent<ServicesPageProps> = ({ isClusterZero }) => {
+const ApplicationsPage: FunctionComponent<ApplicationsPageProps> = ({ isClusterZero }) => {
   const { push } = useRouter();
 
   const { managementCluster } = useAppSelector(({ api }) => api);
@@ -20,9 +22,9 @@ const ServicesPage: FunctionComponent<ServicesPageProps> = ({ isClusterZero }) =
   );
 
   if (!hasExistingCluster) {
-    push('/');
+    push(Route.HOME);
   }
 
-  return hasExistingCluster ? <Services /> : null;
+  return hasExistingCluster ? <Applications /> : null;
 };
-export default ServicesPage;
+export default ApplicationsPage;

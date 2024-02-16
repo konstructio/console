@@ -2,6 +2,7 @@ import React, { ForwardedRef, FunctionComponent, useMemo } from 'react';
 import CircularProgress from '@mui/material/CircularProgress';
 import AddIcon from '@mui/icons-material/Add';
 import AutocompleteMUI from '@mui/material/Autocomplete';
+import SearchIcon from '@mui/icons-material/Search';
 import { SxProps } from '@mui/system';
 import { ControllerRenderProps, FieldValues } from 'react-hook-form';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
@@ -65,7 +66,7 @@ const AutocompleteComponent: FunctionComponent<IAutocompleteProps> = ({
       loading={loading}
       fullWidth
       options={options}
-      popupIcon={<KeyboardArrowDownIcon />}
+      popupIcon={<SearchIcon />}
       noOptionsText={noOptionsText}
       filterOptions={filterOptions}
       sx={sx}

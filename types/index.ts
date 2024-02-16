@@ -36,3 +36,8 @@ export enum GitProtocol {
   HTTPS = 'https',
   SSH = 'ssh',
 }
+
+export interface LabelValue {
+  label: string;
+  value: string;
+}

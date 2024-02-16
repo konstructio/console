@@ -1,6 +1,8 @@
 import NextAuth, { NextAuthOptions } from 'next-auth';
 import { OAuthConfig } from 'next-auth/providers';
 
+import { Route } from '@/constants';
+
 interface User {
   id: string;
   name: string;
@@ -48,7 +50,7 @@ export const authOptions: NextAuthOptions = {
     },
   },
   pages: {
-    signIn: '/auth/signin',
+    signIn: Route.SIGN_IN,
   },
 };
 

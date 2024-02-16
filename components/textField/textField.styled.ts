@@ -30,9 +30,14 @@ export const Required = styled.div`
   color: ${({ theme }) => theme.colors.danger};
 `;
 
-export const InputAdornmentError = styled(InputAdornment)`
+export const InputAdornmentContainer = styled(InputAdornment)`
   position: absolute;
   right: 15px;
+`;
+
+export const StartAdornmentContainer = styled(InputAdornment)`
+  position: absolute;
+  left: 15px;
 `;
 
 export const FormHelperText = styled(FormHelperTextMui)`

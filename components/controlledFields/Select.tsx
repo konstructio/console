@@ -1,7 +1,8 @@
 import React from 'react';
+import { SxProps } from '@mui/material';
 import { Control, Controller, UseControllerProps, FieldValues } from 'react-hook-form';
 
-import Select from '../select/index';
+import Select from '../select/';
 
 export interface ControlledTextFieldProps<T extends FieldValues> extends UseControllerProps<T> {
   label: string;
@@ -12,6 +13,7 @@ export interface ControlledTextFieldProps<T extends FieldValues> extends UseCont
     pattern?: RegExp;
   };
   options: Array<{ value: string; label: string }>;
+  sx?: SxProps;
 }
 
 function ControlledSelect<T extends FieldValues>({
@@ -20,6 +22,7 @@ function ControlledSelect<T extends FieldValues>({
   required,
   rules,
   options,
+  sx,
   ...rest
 }: ControlledTextFieldProps<T>) {
   return (
@@ -36,6 +39,7 @@ function ControlledSelect<T extends FieldValues>({
           error={error !== undefined}
           required={required}
           options={options}
+          sx={sx}
         />
       )}
     />

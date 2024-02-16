@@ -4,7 +4,7 @@ import { styled as muiStyled } from '@mui/material/styles';
 import { TextField as MUITextField, MenuItem as MUIMenuItem } from '@mui/material';
 import InputAdornment from '@mui/material/InputAdornment';
 
-import { SPUN_PEARL, WHITE_SMOKE } from '../../constants/colors';
+import { LINK_WATER, SPUN_PEARL, WHITE_SMOKE } from '../../constants/colors';
 import Typography from '../typography';
 
 export const AutoTextField = muiStyled(MUITextField)(({ theme, error, type, InputProps }) => ({
@@ -15,11 +15,11 @@ export const AutoTextField = muiStyled(MUITextField)(({ theme, error, type, Inpu
     'width': '100%',
 
     'fieldset': {
-      borderColor: `${error ? theme.palette.error.main : '#ced4da'}`,
+      borderColor: `${error ? theme.palette.error.main : LINK_WATER}`,
     },
 
     '&:hover fieldset': {
-      borderColor: '#ced4da',
+      borderColor: LINK_WATER,
     },
 
     '&.Mui-focused fieldset': {

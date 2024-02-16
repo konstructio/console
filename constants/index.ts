@@ -119,3 +119,14 @@ export const KUBECONFIG_CLI_DETAILS: Record<
   [InstallationType.LOCAL]: { command: '', commandDocLink: '' },
   [InstallationType.VULTR]: { command: '', commandDocLink: '' },
 };
+
+export enum Route {
+  HOME = '/',
+  SIGN_IN = '/auth/signin',
+  CLUSTER_MANAGEMENT = '/dashboard/cluster-management',
+  APPLICATIONS = '/dashboard/applications',
+  ENVIRONMENTS = '/dashboard/environments',
+  PROVISION = '/provision',
+  SUBSCRIPTION = '/settings/subscription',
+  SUBSCRIPTION_PLANS = '/settings/subscription/plans',
+}

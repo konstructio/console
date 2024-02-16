@@ -27,7 +27,7 @@ export const Container = styled.div`
   background: ${({ theme }) => theme.colors.white};
   border: 1px solid ${PASTEL_LIGHT_BLUE};
   border-radius: 12px;
-  height: 194px;
+  min-height: 194px;
   padding: 24px;
   width: 310px;
 `;
@@ -35,6 +35,8 @@ export const Container = styled.div`
 export const Description = styled(Typography)`
   color: ${({ theme }) => theme.colors.saltboxBlue};
   height: 60px;
+
+  ${textTruncate(3)};
 `;
 
 export const Header = styled.div`

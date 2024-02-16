@@ -2,6 +2,10 @@
 import Link from 'next/link';
 import styled from 'styled-components';
 
+import Row from '@/components/row';
+import ApplicationsFilterComp from '@/components/applicationsFilter';
+import { media } from '@/utils/media';
+
 export const Container = styled.div`
   height: calc(100vh - 64px);
   margin: 0 auto;
@@ -25,9 +29,18 @@ export const LearnMoreLink = styled(Link)`
   text-decoration: none;
 `;
 
-export const ServicesContainer = styled.div`
-  display: flex;
+export const ApplicationsContainer = styled(Row)`
   gap: 16px;
   flex-wrap: wrap;
   margin-bottom: 16px;
+`;
+
+export const ApplicationsFilter = styled(ApplicationsFilterComp)`
+  width: fit-content;
+  min-width: 310px;
+  margin-bottom: 16px;
+
+  ${media.greaterThan('sm')`
+    width: calc(100% - 70px);
+  `}
 `;

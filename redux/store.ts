@@ -9,7 +9,6 @@ import { getPersistConfig } from 'redux-deep-persist';
 import { consoleApi } from './api';
 import {
   apiReducer,
-  clusterReducer,
   configReducer,
   featureFlagsReducer,
   gitReducer,
@@ -22,6 +21,7 @@ import {
   settingsReducer,
   subscriptionReducer,
   digitalOceanReducer,
+  applicationsReducer,
 } from './slices';
 
 const rootReducer = combineReducers({
@@ -32,7 +32,7 @@ const rootReducer = combineReducers({
   readiness: readinessReducer,
   api: apiReducer,
   featureFlags: featureFlagsReducer,
-  cluster: clusterReducer,
+  applications: applicationsReducer,
   reactFlow: reactFlowReducer,
   queue: queueReducer,
   environments: environmentsReducer,
@@ -52,7 +52,7 @@ const config = getPersistConfig({
     'installation.values.do_auth',
     'installation.values.vultr_auth',
     'installation.values.google_auth',
-    'cluster',
+    'applications',
     'api',
     'featureFlags',
     'git',

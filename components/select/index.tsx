@@ -14,10 +14,6 @@ import { StyledFormHelperText } from '../textArea/textArea.styled';
 
 import { Container } from './select.styled';
 
-export interface ISelectProps extends SelectProps<string> {
-  options: Array<{ value: string | number; label: string }>;
-}
-
 const MenuProps = {
   PaperProps: {
     sx: {
@@ -71,11 +67,13 @@ const TagSelect: FunctionComponent<TagSelectProps> = ({
 }) => {
   return (
     <Container>
-      <InputLabel sx={{ marginBottom: '8px' }}>
-        <Typography variant="labelLarge" sx={{ display: 'flex', gap: '4px' }}>
-          {label} {required && <Required>*</Required>}
-        </Typography>
-      </InputLabel>
+      {label && (
+        <InputLabel sx={{ marginBottom: '8px' }}>
+          <Typography variant="labelLarge" sx={{ display: 'flex', gap: '4px' }}>
+            {label} {required && <Required>*</Required>}
+          </Typography>
+        </InputLabel>
+      )}
       <SelectMUI
         {...props}
         IconComponent={KeyboardArrowDownIcon}
@@ -102,19 +100,27 @@ const TagSelect: FunctionComponent<TagSelectProps> = ({
   );
 };
 
+export interface ISelectProps extends SelectProps<string> {
+  options: Array<{ value: string | number; label: string }>;
+  className?: string;
+}
+
 const Select: FunctionComponent<ISelectProps> = ({
   label,
   required,
   placeholder,
   options,
+  className,
   ...props
 }) => (
-  <Container>
-    <InputLabel sx={{ marginBottom: '8px' }}>
-      <Typography variant="labelLarge" sx={{ display: 'flex', gap: '4px' }}>
-        {label} {required && <Required>*</Required>}
-      </Typography>
-    </InputLabel>
+  <Container className={className}>
+    {label && (
+      <InputLabel sx={{ marginBottom: '8px' }}>
+        <Typography variant="labelLarge" sx={{ display: 'flex', gap: '4px' }}>
+          {label} {required && <Required>*</Required>}
+        </Typography>
+      </InputLabel>
+    )}
     <SelectMUI
       {...props}
       IconComponent={KeyboardArrowDownIcon}
@@ -123,7 +129,6 @@ const Select: FunctionComponent<ISelectProps> = ({
       input={<Input sx={{ height: '36px' }} />}
       MenuProps={MenuProps}
       displayEmpty
-      sx={{ mb: '24px', width: '100%' }}
       renderValue={(selected: string) => {
         if (!selected) {
           return (

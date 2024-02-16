@@ -49,6 +49,8 @@ import {
 } from '@/redux/selectors/subscription.selector';
 import Tag from '@/components/tag';
 import { getCloudProviderAuth } from '@/utils/getCloudProviderAuth';
+import { FeatureFlag } from '@/types/config';
+import useFeatureFlag from '@/hooks/useFeatureFlag';
 
 const ClusterCreationForm: FunctionComponent<Omit<ComponentPropsWithoutRef<'div'>, 'key'>> = (
   props,
@@ -66,6 +68,7 @@ const ClusterCreationForm: FunctionComponent<Omit<ComponentPropsWithoutRef<'div'
   } = useAppSelector(({ api, environments }) => ({ ...api, ...environments }));
   const hasLicenseKey = useAppSelector(selectHasLicenseKey());
   const isLicenseActive = useAppSelector(selectIsLicenseActive());
+  const { isEnabled: isSubscriptionEnabled } = useFeatureFlag(FeatureFlag.SAAS_SUBSCRIPTION);
 
   const dispatch = useAppDispatch();
 
@@ -180,6 +183,10 @@ const ClusterCreationForm: FunctionComponent<Omit<ComponentPropsWithoutRef<'div'
       );
     }
 
+    if (!isSubscriptionEnabled) {
+      return clusterTypes;
+    }
+
     return hasLicenseKey && isLicenseActive
       ? clusterTypes
       : clusterTypes.map((option) => {
@@ -200,7 +207,7 @@ const ClusterCreationForm: FunctionComponent<Omit<ComponentPropsWithoutRef<'div'
 
           return option;
         });
-  }, [hasLicenseKey, hasPermissions, isLicenseActive]);
+  }, [hasLicenseKey, hasPermissions, isLicenseActive, isSubscriptionEnabled]);
 
   useEffect(() => {
     const subscription = watch((values) => {

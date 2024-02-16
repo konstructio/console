@@ -1,4 +1,5 @@
-import React, { FunctionComponent, useMemo, useState } from 'react';
+import React, { FunctionComponent, useCallback, useMemo } from 'react';
+import { useSession } from 'next-auth/react';
 import { useForm } from 'react-hook-form';
 import NextLink from 'next/link';
 import sortBy from 'lodash/sortBy';
@@ -11,17 +12,17 @@ import GitOpsCatalogCard from '../../components/gitOpsCatalogCard';
 import GitopsAppModal from '../../components/gitopsAppModal';
 import useModal from '../../hooks/useModal';
 import { useAppDispatch, useAppSelector } from '../../redux/store';
-import { installGitOpsApp } from '../../redux/thunks/cluster.thunk';
-import { AppCategory, GitOpsCatalogApp } from '../../types/gitOpsCatalog';
+import { installGitOpsApp } from '../../redux/thunks/applications.thunk';
+import { AppCategory, GitOpsCatalogApp } from '../../types/applications';
 import { VOLCANIC_SAND } from '../../constants/colors';
 
+import { CardsContainer, Container, Content, Filter } from './gitOpsCatalog.styled';
+
 import {
-  CardsByCategory,
-  CardsContainer,
-  Container,
-  Content,
-  Filter,
-} from './gitOpsCatalog.styled';
+  addCategory,
+  removeCategory,
+  setSelectedCatalogApp,
+} from '@/redux/slices/applications.slice';
 
 const STATIC_HELP_CARD: GitOpsCatalogApp = {
   name: '',
@@ -29,23 +30,21 @@ const STATIC_HELP_CARD: GitOpsCatalogApp = {
   image_url: 'https://assets.kubefirst.com/console/help.png',
 };
 
-const gitOpsCatalog: FunctionComponent = () => {
-  const [selectedCategories, setSelectedCategories] = useState<AppCategory[]>([]);
-  const [selectedApp, setSelectedApp] = useState<GitOpsCatalogApp>();
+interface GitOpsCatalogProps {
+  catalogApplications: GitOpsCatalogApp[];
+}
 
-  const { appsQueue, selectedCluster } = useAppSelector(({ cluster }) => cluster);
+const GitOpsCatalog: FunctionComponent<GitOpsCatalogProps> = ({ catalogApplications }) => {
+  const {
+    appsQueue,
+    gitOpsCatalogApps,
+    selectedCategories,
+    clusterApplications,
+    selectedCatalogApp,
+    filter,
+  } = useAppSelector(({ applications }) => applications);
 
-  const { gitOpsCatalogApps, clusterServices } = useAppSelector(({ cluster }) => ({
-    gitOpsCatalogApps: cluster.gitOpsCatalogApps,
-    clusterServices: cluster.clusterServices,
-  }));
-
-  const filteredCatalogApps = useMemo(
-    () => gitOpsCatalogApps.filter((app) => !clusterServices.map((s) => s.name).includes(app.name)),
-    [clusterServices, gitOpsCatalogApps],
-  );
-
-  const dispatch = useAppDispatch();
+  const { data: session } = useSession();
 
   const { isOpen, openModal, closeModal } = useModal();
 
@@ -56,61 +55,63 @@ const gitOpsCatalog: FunctionComponent = () => {
     reset,
   } = useForm();
 
+  const dispatch = useAppDispatch();
+
+  const handleCategoryClick = useCallback(
+    (category: AppCategory) => {
+      const isCategorySelected = selectedCategories.includes(category);
+
+      if (isCategorySelected) {
+        dispatch(removeCategory(category));
+      } else {
+        dispatch(addCategory(category));
+      }
+    },
+    [selectedCategories, dispatch],
+  );
+
+  const handleAddApp = useCallback(() => {
+    const values = getValues();
+
+    dispatch(
+      installGitOpsApp({
+        values,
+        user: session?.user?.email as string,
+      }),
+    );
+    reset();
+    closeModal();
+  }, [dispatch, closeModal, getValues, reset, session]);
+
+  const handleSelectedApp = useCallback(
+    (app: GitOpsCatalogApp) => {
+      dispatch(setSelectedCatalogApp(app));
+
+      if (app.secret_keys?.length || app.config_keys?.length) {
+        openModal();
+      } else {
+        handleAddApp();
+      }
+    },
+    [dispatch, handleAddApp, openModal],
+  );
+
+  const uninstalledCatalogApps = useMemo(
+    () =>
+      gitOpsCatalogApps.filter((app) => !clusterApplications.map((s) => s.name).includes(app.name)),
+    [clusterApplications, gitOpsCatalogApps],
+  );
+
   const sortedAvailableCategories = useMemo(
     () =>
-      filteredCatalogApps &&
-      filteredCatalogApps.reduce<AppCategory[]>((previous, current) => {
+      uninstalledCatalogApps.reduce<AppCategory[]>((previous, current) => {
         if (current.category && !previous.includes(current.category)) {
           previous.push(current.category);
         }
         return sortBy(previous);
       }, []),
-    [filteredCatalogApps],
+    [uninstalledCatalogApps],
   );
-
-  const onClickCategory = (category: AppCategory) => {
-    const isCategorySelected = selectedCategories.includes(category);
-
-    if (isCategorySelected) {
-      setSelectedCategories(
-        selectedCategories.filter((selectedCategory) => selectedCategory !== category),
-      );
-    } else {
-      setSelectedCategories([...selectedCategories, category]);
-    }
-  };
-
-  const handleAddApp = async (app: GitOpsCatalogApp) => {
-    const values = getValues();
-    dispatch(
-      installGitOpsApp({ app, clusterName: selectedCluster?.clusterName as string, values }),
-    );
-    reset();
-    closeModal();
-  };
-
-  const handleSelectedApp = (app: GitOpsCatalogApp) => {
-    setSelectedApp(app);
-    if (app.secret_keys?.length || app.config_keys?.length) {
-      openModal();
-    } else {
-      handleAddApp(app);
-    }
-  };
-
-  const filteredApps = useMemo(() => {
-    let apps: GitOpsCatalogApp[] = [];
-
-    if (!selectedCategories.length) {
-      apps = filteredCatalogApps;
-    } else {
-      apps = filteredCatalogApps.filter(
-        ({ category }) => category && selectedCategories.includes(category),
-      );
-    }
-
-    return sortBy(apps, (app) => app.display_name);
-  }, [filteredCatalogApps, selectedCategories]);
 
   return (
     <Container>
@@ -121,7 +122,7 @@ const gitOpsCatalog: FunctionComponent = () => {
         {sortedAvailableCategories.map((category) => (
           <FormGroup key={category} sx={{ mb: 2 }}>
             <FormControlLabel
-              control={<Checkbox sx={{ mr: 2 }} onClick={() => onClickCategory(category)} />}
+              control={<Checkbox sx={{ mr: 2 }} onClick={() => handleCategoryClick(category)} />}
               label={
                 <Typography variant="body2" color={VOLCANIC_SAND}>
                   {category}
@@ -133,38 +134,17 @@ const gitOpsCatalog: FunctionComponent = () => {
         ))}
       </Filter>
       <Content>
-        {!selectedCategories.length && <Typography variant="subtitle2">All</Typography>}
-        <CardsByCategory>
-          {sortBy(selectedCategories).map((category) => (
-            <div key={category}>
-              <Typography variant="subtitle2">{category}</Typography>
-              <CardsContainer>
-                {filteredApps
-                  .filter((app) => app.category === category)
-                  .map((app) => (
-                    <GitOpsCatalogCard
-                      key={app.name}
-                      {...app}
-                      onClick={() => handleSelectedApp(app)}
-                      isInstalling={appsQueue.includes(app.name)}
-                    />
-                  ))}
-              </CardsContainer>
-            </div>
-          ))}
-        </CardsByCategory>
         <CardsContainer>
-          {!selectedCategories.length &&
-            filteredApps &&
-            filteredApps.map((app) => (
-              <GitOpsCatalogCard
-                key={app.name}
-                {...app}
-                onClick={() => handleSelectedApp(app)}
-                isInstalling={appsQueue.includes(app.name)}
-              />
-            ))}
-          <GitOpsCatalogCard {...STATIC_HELP_CARD} showSubmitButton={false}>
+          {catalogApplications.map((app) => (
+            <GitOpsCatalogCard
+              key={app.name}
+              {...app}
+              onClick={() => handleSelectedApp(app)}
+              isInstalling={appsQueue.includes(app.name)}
+              isDisabled={!filter.cluster}
+            />
+          ))}
+          <GitOpsCatalogCard {...STATIC_HELP_CARD} showSubmitButton={false} excludeTruncate>
             <>
               To suggest an open source app that installs to your cluster, discuss your idea via an{' '}
               <NextLink href="https://github.com/kubefirst/kubefirst/issues" target="_blank">
@@ -186,18 +166,18 @@ const gitOpsCatalog: FunctionComponent = () => {
           </GitOpsCatalogCard>
         </CardsContainer>
       </Content>
-      {isOpen && selectedApp?.name && (
+      {isOpen && selectedCatalogApp && (
         <GitopsAppModal
           control={control}
           isValid={isValid}
           closeModal={closeModal}
           isOpen={isOpen}
           onSubmit={handleAddApp}
-          {...selectedApp}
+          {...selectedCatalogApp}
         />
       )}
     </Container>
   );
 };
 
-export default gitOpsCatalog;
+export default GitOpsCatalog;

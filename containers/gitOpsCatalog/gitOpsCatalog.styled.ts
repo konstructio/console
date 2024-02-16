@@ -1,22 +1,21 @@
 'use client';
 import styled from 'styled-components';
 
-export const CardsContainer = styled.div`
-  display: flex;
+import Row from '@/components/row';
+import Column from '@/components/column';
+
+export const CardsContainer = styled(Row)`
   flex-wrap: wrap;
   gap: 16px;
-  margin-top: 24px;
 `;
 
-export const Container = styled.div`
-  display: flex;
+export const Container = styled(Row)`
   height: calc(100% - 80px);
-  width: 100%;
 `;
 
 export const Content = styled.div`
   height: calc(100% - 30px);
-  padding: 24px;
+  padding: 0 24px;
   width: 100%;
 `;
 
@@ -32,8 +31,6 @@ export const Filter = styled.div`
   width: 266px;
 `;
 
-export const CardsByCategory = styled.div`
-  display: flex;
-  flex-direction: column;
+export const CardsByCategory = styled(Column)`
   gap: 24px;
 `;

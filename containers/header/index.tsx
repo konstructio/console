@@ -1,5 +1,5 @@
 'use client';
-import React, { FunctionComponent, useEffect, useMemo } from 'react';
+import React, { FunctionComponent, useMemo } from 'react';
 import { useSession } from 'next-auth/react';
 import { signOut } from 'next-auth/react';
 import HelpOutlineOutlinedIcon from '@mui/icons-material/HelpOutlineOutlined';
@@ -16,8 +16,7 @@ import { Avatar, Container, Menu, ProfileMenu } from './header.styled';
 
 import { noop } from '@/utils/noop';
 import Youtube from '@/assets/youtube-dark.svg';
-import { setSelectedCluster } from '@/redux/slices/cluster.slice';
-import { useAppDispatch, useAppSelector } from '@/redux/store';
+import { useAppSelector } from '@/redux/store';
 import Typography from '@/components/typography';
 import { ECHO_BLUE, PRIMARY, VOLCANIC_SAND } from '@/constants/colors';
 import useToggle from '@/hooks/useToggle';
@@ -40,12 +39,11 @@ export interface HeaderProps {
 }
 
 const Header: FunctionComponent<HeaderProps> = ({ handleOpenFlappy, handleOpenKubefirstModal }) => {
-  const dispatch = useAppDispatch();
   const { isOpen: isHelpMenuOpen, open, close } = useToggle();
   const { isOpen: isProfileMenuOpen, open: openProfileMenu, close: closeProfileMenu } = useToggle();
 
   const { data: session } = useSession();
-  const { isClusterZero, managementCluster } = useAppSelector(({ api, config }) => ({
+  const { isClusterZero } = useAppSelector(({ api, config }) => ({
     isClusterZero: config.isClusterZero,
     managementCluster: api.managementCluster,
   }));
@@ -82,12 +80,6 @@ const Header: FunctionComponent<HeaderProps> = ({ handleOpenFlappy, handleOpenKu
   const handleOpenItem = (path: string | undefined, action: typeof noop | undefined) => {
     path ? window.open(path, '_blank') : action && action();
   };
-
-  useEffect(() => {
-    if (managementCluster && managementCluster.clusterName) {
-      dispatch(setSelectedCluster(managementCluster));
-    }
-  }, [dispatch, managementCluster]);
 
   return (
     <Container>

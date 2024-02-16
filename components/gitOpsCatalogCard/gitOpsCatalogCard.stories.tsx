@@ -11,5 +11,8 @@ const meta: Meta<typeof GitOpsCatalogCard> = {
 export default meta;
 
 export const Default: StoryObj<typeof GitOpsCatalogCard> = {
-  args: mockGitopsCatalogApp,
+  args: {
+    ...mockGitopsCatalogApp,
+    isDeletable: false,
+  },
 };

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Control, Controller, FieldValues, UseControllerProps } from 'react-hook-form';
+import { SxProps } from '@mui/material';
 
 import Autocomplete from '../../autocomplete/index';
 
@@ -20,6 +21,7 @@ export interface ControlledAutocompleteProps<T extends FieldValues> extends UseC
   onChange?: (value: string) => void;
   options: Array<{ value: string; label: string }>;
   onClick?: () => void;
+  sx?: SxProps;
 }
 
 function ControlledAutocomplete<T extends FieldValues>({
@@ -34,6 +36,7 @@ function ControlledAutocomplete<T extends FieldValues>({
   placeholder,
   loading,
   onClick,
+  sx,
   ...props
 }: ControlledAutocompleteProps<T>) {
   const [isBlur, setIsBlur] = useState(false);
@@ -65,6 +68,7 @@ function ControlledAutocomplete<T extends FieldValues>({
           label={label}
           error={isBlur && error !== undefined}
           onClick={onClick}
+          sx={sx}
         />
       )}
     />

@@ -15,11 +15,12 @@ import { useAppSelector } from '../../redux/store';
 import { noop } from '@/utils/noop';
 import { selectConfig } from '@/redux/selectors/config.selector';
 import useFeatureFlag from '@/hooks/useFeatureFlag';
-import { selectCluster } from '@/redux/selectors/cluster.selector';
+import { selectApplications } from '@/redux/selectors/applications.selector';
 import { InstallationType } from '@/types/redux';
 import { FeatureFlag } from '@/types/config';
 import { ASMANI_SKY } from '@/constants/colors';
 import { SaasPlans } from '@/types/subscription';
+import { Route } from '@/constants';
 
 export interface NavigationProps {
   handleOpenFlappy: typeof noop;
@@ -34,7 +35,7 @@ const Navigation: FunctionComponent<NavigationProps> = ({
 
   const asPath = usePathname();
   const { kubefirstVersion, isClusterZero } = useAppSelector(selectConfig());
-  const { selectedCluster } = useAppSelector(selectCluster());
+  const { selectedCluster } = useAppSelector(selectApplications());
   const license = useAppSelector(({ subscription }) => subscription.license);
 
   const { isEnabled: isMultiClusterEnabled } = useFeatureFlag(FeatureFlag.MULTICLUSTER_MANAGEMENT);
@@ -45,7 +46,7 @@ const Navigation: FunctionComponent<NavigationProps> = ({
       [
         {
           icon: <ScatterPlotIcon />,
-          path: '/dashboard/cluster-management',
+          path: Route.CLUSTER_MANAGEMENT,
           title: 'Cluster Management',
           isEnabled:
             isMultiClusterEnabled &&
@@ -54,19 +55,19 @@ const Navigation: FunctionComponent<NavigationProps> = ({
         },
         {
           icon: <GridViewOutlinedIcon />,
-          path: '/dashboard/services',
-          title: 'Services',
+          path: Route.APPLICATIONS,
+          title: 'Applications',
           isEnabled: !isClusterZero,
         },
         {
           icon: <CollectionsOutlinedIcon />,
-          path: '/dashboard/environments',
+          path: Route.ENVIRONMENTS,
           title: 'Environments',
           isEnabled: !isClusterZero && selectedCluster?.cloudProvider !== InstallationType.LOCAL,
         },
         {
           icon: <ReceiptLongIcon />,
-          path: '/settings/subscription',
+          path: Route.SUBSCRIPTION,
           title: 'Subscription',
           group: 'Admin settings',
           groupOrder: 2,
@@ -94,7 +95,7 @@ const Navigation: FunctionComponent<NavigationProps> = ({
         ? nextLicenseUpgradeTitle && [
             {
               icon: <StarBorderOutlinedIcon htmlColor={ASMANI_SKY} />,
-              path: '/settings/subscription/plans',
+              path: Route.SUBSCRIPTION_PLANS,
               title: nextLicenseUpgradeTitle,
               color: ASMANI_SKY,
             },
