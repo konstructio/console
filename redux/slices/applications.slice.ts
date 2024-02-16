@@ -5,45 +5,54 @@ import {
   getGitOpsCatalogApps,
   installGitOpsApp,
 } from '@/redux/thunks/applications.thunk';
+import { GitOpsCatalogApp, ClusterApplication, Target, AppCategory } from '@/types/applications';
 import { ManagementCluster, WorkloadCluster } from '@/types/provision';
-import { GitOpsCatalogApp, ClusterApplication, Target } from '@/types/applications';
 
 export interface ApplicationsState {
-  target: Target;
   selectedCluster?: ManagementCluster | WorkloadCluster;
-  selectedApplication?: string;
+  selectedCategories: AppCategory[];
+  selectedApplicationName?: string;
+  selectedCatalogApp?: GitOpsCatalogApp;
   clusterApplications: Array<ClusterApplication>;
+  installedClusterAppNames: ClusterApplication['name'][];
   gitOpsCatalogApps: Array<GitOpsCatalogApp>;
   appsQueue: Array<string>;
+  filter: { target?: Target; cluster?: string; searchTerm?: string };
 }
 
 export const initialState: ApplicationsState = {
-  target: Target.CLUSTER,
   selectedCluster: undefined,
+  selectedCategories: [],
   clusterApplications: [],
+  installedClusterAppNames: [],
   gitOpsCatalogApps: [],
   appsQueue: [],
+  filter: {
+    target: undefined,
+    cluster: '',
+    searchTerm: '',
+  },
 };
 
 const applicationsSlice = createSlice({
   name: 'applications',
   initialState,
   reducers: {
-    setTarget: (state, { payload }: PayloadAction<Target>) => {
-      state.target = payload;
-      state.selectedCluster = undefined;
-    },
     setSelectedCluster: (
       state,
       { payload }: PayloadAction<ApplicationsState['selectedCluster']>,
     ) => {
       state.selectedCluster = payload;
     },
-    setSelectedApplication: (
-      state,
-      { payload }: PayloadAction<ApplicationsState['selectedApplication']>,
-    ) => {
-      state.selectedApplication = payload;
+    setFilterState: (state, { payload }: PayloadAction<ApplicationsState['filter']>) => {
+      const targetChanged = payload.target !== state.filter.target;
+      if (targetChanged) {
+        state.clusterApplications = [];
+      }
+      state.filter = {
+        ...payload,
+        cluster: targetChanged ? undefined : payload.cluster,
+      };
     },
     addAppToQueue: (state, { payload }: PayloadAction<GitOpsCatalogApp>) => {
       state.appsQueue.push(payload.name);
@@ -54,14 +63,30 @@ const applicationsSlice = createSlice({
     resetClusterApplications: (state) => {
       state.clusterApplications = [];
     },
+    addCategory: (state, { payload }: PayloadAction<AppCategory>) => {
+      state.selectedCategories = [...state.selectedCategories, payload];
+    },
+    removeCategory: (state, { payload }: PayloadAction<AppCategory>) => {
+      state.selectedCategories = state.selectedCategories.filter(
+        (selectedCategory) => selectedCategory !== payload,
+      );
+    },
+    setSelectedCatalogApp: (
+      state,
+      { payload }: PayloadAction<ApplicationsState['selectedCatalogApp']>,
+    ) => {
+      state.selectedCatalogApp = payload;
+    },
   },
   extraReducers: (builder) => {
     builder
       .addCase(getClusterApplications.fulfilled, (state, { payload }) => {
         state.clusterApplications = payload;
+        state.installedClusterAppNames = payload.map((app) => app.name);
       })
       .addCase(getClusterApplications.rejected, (state) => {
         state.clusterApplications = [];
+        state.installedClusterAppNames = [];
       })
       .addCase(installGitOpsApp.fulfilled, (state, { payload }) => {
         state.appsQueue = state.appsQueue.filter((name) => name !== payload.name);
@@ -74,6 +99,7 @@ const applicationsSlice = createSlice({
           image: image_url,
           links: [],
         });
+        state.installedClusterAppNames.push(name);
       })
       .addCase(installGitOpsApp.rejected, (state) => {
         const queue = Object.assign(state.appsQueue, []);
@@ -96,9 +122,11 @@ export const {
   addAppToQueue,
   removeAppFromQueue,
   resetClusterApplications,
-  setSelectedApplication,
+  setFilterState,
+  addCategory,
+  removeCategory,
+  setSelectedCatalogApp,
   setSelectedCluster,
-  setTarget,
 } = applicationsSlice.actions;
 
 export const applicationsReducer = applicationsSlice.reducer;

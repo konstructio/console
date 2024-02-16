@@ -16,6 +16,11 @@ export enum ClusterType {
   WORKLOAD_V_CLUSTER = 'workload-vcluster',
 }
 
+export const CLUSTER_TYPES = Object.values(ClusterType);
+export const WORKLOAD_CLUSTER_TYPES = CLUSTER_TYPES.filter(
+  (type) => type !== ClusterType.MANAGEMENT,
+);
+
 export type ClusterEnvironment = {
   id: string;
   name: string;

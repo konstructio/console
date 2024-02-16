@@ -2,7 +2,6 @@ import styled from 'styled-components';
 import { styled as muiStyled } from '@mui/material';
 
 import Column from '../column';
-import SelectWithRef from '../select';
 import Autocomplete from '../autocomplete';
 import Row from '../row';
 
@@ -43,13 +42,6 @@ export const TargetContainer = styled(Row)`
   gap: 8px;
   align-items: center;
 `;
-
-export const TargetSelect = styled(SelectWithRef)`
-  width: 248px;
-  height: 36px;
-`;
-
-export const ClusterSelect = styled(TargetSelect)``;
 
 export const StyledAutoComplete = muiStyled(Autocomplete)(() => ({
   'width': '248px',

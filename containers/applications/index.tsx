@@ -2,7 +2,7 @@
 import React, { FunctionComponent, useEffect, useCallback, useState, useMemo } from 'react';
 import Box from '@mui/material/Box';
 import Tabs from '@mui/material/Tabs';
-import { useRouter } from 'next/navigation';
+import sortBy from 'lodash/sortBy';
 
 import Application from '../application';
 import GitOpsCatalog from '../gitOpsCatalog';
@@ -28,8 +28,9 @@ import {
 } from './applications.styled';
 
 import { FeatureFlag } from '@/types/config';
-import { noop } from '@/utils/noop';
-import { setSelectedApplication, setTarget } from '@/redux/slices/applications.slice';
+import { setFilterState } from '@/redux/slices/applications.slice';
+import { WORKLOAD_CLUSTER_TYPES } from '@/types/provision';
+import { GitOpsCatalogApp } from '@/types/applications';
 
 enum APPLICATION_TAB {
   PROVISIONED,
@@ -45,19 +46,24 @@ const TARGET_OPTIONS = Object.values(Target);
 
 const Applications: FunctionComponent = () => {
   const [activeTab, setActiveTab] = useState<number>(0);
-  const [searchTerm, setSearchTerm] = useState('');
 
-  const { clusterApplications, isTelemetryDisabled, selectedApplication, target, clusterMap } =
-    useAppSelector(({ config, applications, api }) => ({
-      isTelemetryDisabled: config.isTelemetryDisabled,
-      clusterMap: api.clusterMap,
-      managementCluster: api.managementCluster,
-      ...applications,
-    }));
+  const {
+    clusterApplications,
+    isTelemetryDisabled,
+    clusterMap,
+    filter,
+    selectedCategories,
+    gitOpsCatalogApps,
+    installedClusterAppNames,
+  } = useAppSelector(({ config, applications, api }) => ({
+    isTelemetryDisabled: config.isTelemetryDisabled,
+    clusterMap: api.clusterMap,
+    managementCluster: api.managementCluster,
+    ...applications,
+  }));
 
   const { isEnabled: isGitOpsCatalogEnabled } = useFeatureFlag(FeatureFlag.GITOPS_CATALOG);
 
-  const router = useRouter();
   const dispatch = useAppDispatch();
 
   const handleLinkClick = useCallback(
@@ -74,44 +80,60 @@ const Applications: FunctionComponent = () => {
     setActiveTab(newValue);
   };
 
-  const handleTargetChange = useCallback(
-    (target: Target) => {
-      dispatch(setTarget(target));
-    },
-    [dispatch],
-  );
-
-  const handleClusterSelectChange = useCallback(
-    (val: string) => {
-      const cluster = target === Target.TEMPLATE ? val : clusterMap[val].clusterName;
-      dispatch(setSelectedApplication(cluster));
-      dispatch(getClusterApplications({ clusterName: cluster }));
-    },
-    [target, clusterMap, dispatch],
-  );
-
   const clusterSelectOptions = useMemo((): { label: string; value: string }[] => {
-    if (target === Target.TEMPLATE) {
-      return [
-        { label: 'workload-vcluster', value: 'workload-vcluster' },
-        { label: 'workload-physicalcluster', value: 'workload-cluster' },
-      ];
+    if (!filter.target) {
+      return [];
+    }
+    if (filter.target === Target.TEMPLATE) {
+      return WORKLOAD_CLUSTER_TYPES.map((type) => ({ label: type, value: type }));
     }
     return Object.keys(clusterMap).map((clusterName) => ({
       label: clusterName,
       value: clusterName,
     }));
-  }, [target, clusterMap]);
+  }, [filter.target, clusterMap]);
+
+  const filteredApps = useMemo(() => {
+    const { searchTerm } = filter;
+    if (!searchTerm) {
+      return clusterApplications;
+    }
+    return clusterApplications.filter((app) => app.name.includes(searchTerm));
+  }, [clusterApplications, filter]);
+
+  const uninstalledCatalogApps = useMemo(
+    () =>
+      gitOpsCatalogApps.filter((app) => !clusterApplications.map((s) => s.name).includes(app.name)),
+    [clusterApplications, gitOpsCatalogApps],
+  );
+
+  const filteredCatalogApps = useMemo(() => {
+    let apps: GitOpsCatalogApp[] = [];
+
+    if (!selectedCategories.length) {
+      apps = uninstalledCatalogApps;
+    } else {
+      apps = uninstalledCatalogApps.filter(
+        ({ category, name }) =>
+          category &&
+          selectedCategories.includes(category) &&
+          !installedClusterAppNames.includes(name),
+      );
+    }
+
+    return sortBy(apps, (app) => app.display_name);
+  }, [uninstalledCatalogApps, selectedCategories, installedClusterAppNames]);
 
   useEffect(() => {
     dispatch(getGitOpsCatalogApps());
   }, [dispatch]);
 
   useEffect(() => {
-    if (selectedApplication) {
-      dispatch(getClusterApplications({ clusterName: selectedApplication }));
+    const { cluster } = filter;
+    if (cluster) {
+      dispatch(getClusterApplications({ clusterName: cluster }));
     }
-  }, [dispatch, router, selectedApplication]);
+  }, [dispatch, filter]);
 
   const Apps = useMemo(
     () => (
@@ -127,39 +149,20 @@ const Applications: FunctionComponent = () => {
           </LearnMoreLink>
         </Typography>
         <ApplicationsFilter
-          autoCompleteProps={{
-            value: searchTerm,
-            label: '',
-            options: [{ value: 'yes', label: 'yes' }],
-            onChange: (e) => setSearchTerm(e.target.value as string),
-            onBlur: noop,
-            name: '',
-            placeholder: 'Search app name',
-          }}
-          targetValue={target}
           targetOptions={TARGET_OPTIONS.map((target) => ({ label: target, value: target }))}
-          onTargetChange={handleTargetChange}
-          onClusterSelectChange={handleClusterSelectChange}
           clusterSelectOptions={clusterSelectOptions}
-          clusterSelectValue={selectedApplication ?? ''}
+          searchOptions={filteredApps.map((app) => ({ label: app.name, value: app.name }))}
+          onFilterChange={(filter) => dispatch(setFilterState(filter))}
+          defaultValues={filter}
         />
         <ApplicationsContainer>
-          {clusterApplications.map(({ name, ...rest }) => (
+          {filteredApps.map(({ name, ...rest }) => (
             <Application key={name} name={name} {...rest} onLinkClick={handleLinkClick} />
           ))}
         </ApplicationsContainer>
       </>
     ),
-    [
-      searchTerm,
-      target,
-      handleTargetChange,
-      handleClusterSelectChange,
-      clusterSelectOptions,
-      selectedApplication,
-      clusterApplications,
-      handleLinkClick,
-    ],
+    [clusterSelectOptions, filteredApps, handleLinkClick, filter, dispatch],
   );
 
   return (
@@ -202,23 +205,13 @@ const Applications: FunctionComponent = () => {
                 </LearnMoreLink>
               </Typography>
               <ApplicationsFilter
-                autoCompleteProps={{
-                  value: searchTerm,
-                  label: '',
-                  options: [{ value: 'yes', label: 'yes' }],
-                  onChange: (e) => setSearchTerm(e.target.value as string),
-                  onBlur: noop,
-                  name: '',
-                  placeholder: 'Search app name',
-                }}
-                targetValue={target}
                 targetOptions={TARGET_OPTIONS.map((target) => ({ label: target, value: target }))}
-                onTargetChange={handleTargetChange}
-                // onClusterSelectChange={(val) => setClusterSelectVal(val)}
                 clusterSelectOptions={clusterSelectOptions}
-                clusterSelectValue={''}
+                searchOptions={filteredApps.map((app) => ({ label: app.name, value: app.name }))}
+                onFilterChange={(filter) => dispatch(setFilterState(filter))}
+                defaultValues={filter}
               />
-              <GitOpsCatalog />
+              <GitOpsCatalog catalogApplications={filteredCatalogApps} />
             </TabPanel>
           </Content>
         </>

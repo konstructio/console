@@ -1,32 +1,41 @@
 import axios from 'axios';
 import { createAsyncThunk } from '@reduxjs/toolkit';
+import { FieldValues } from 'react-hook-form';
 
 import { AppDispatch, RootState } from '../store';
 import { createQueryString } from '../../utils/url/formatDomain';
 import { ClusterRequestProps } from '../../types/provision';
-import { GitOpsCatalogApp, GitOpsCatalogProps, ClusterApplication } from '../../types/applications';
+import { GitOpsCatalogApp, ClusterApplication } from '../../types/applications';
 import { addAppToQueue, removeAppFromQueue } from '../slices/applications.slice';
 import { transformObjectToStringKey } from '../../utils/transformObjectToStringKey';
 import { createNotification } from '../slices/notifications.slice';
 
-// isTemplate
-
 export const installGitOpsApp = createAsyncThunk<
   GitOpsCatalogApp,
-  GitOpsCatalogProps,
+  { values: FieldValues; user: string },
   {
     dispatch: AppDispatch;
     state: RootState;
   }
->('applications/installGitOpsApp', async ({ app, clusterName, values, user }, { dispatch }) => {
-  dispatch(addAppToQueue(app));
-  const formValues = values && transformObjectToStringKey(values);
+>('applications/installGitOpsApp', async ({ values, user }, { dispatch, getState }) => {
+  const { selectedCatalogApp, selectedCluster } = getState().applications;
+  if (!selectedCatalogApp) {
+    throw new Error('missing selected catalog app');
+  }
+  if (!selectedCluster) {
+    throw new Error('missing selected cluster');
+  }
+  if (!values) {
+    throw new Error('missing form values for selected catalog app');
+  }
 
-  const keys = formValues && Object.keys(formValues);
+  const formValues = transformObjectToStringKey(values);
+
+  const keys = Object.keys(formValues);
 
   const secret_keys =
-    app.secret_keys &&
-    app.secret_keys
+    selectedCatalogApp.secret_keys &&
+    selectedCatalogApp.secret_keys
       .filter(({ name }) => keys?.includes(name))
       .map(({ name: key }) => ({
         name: key,
@@ -34,8 +43,8 @@ export const installGitOpsApp = createAsyncThunk<
       }));
 
   const config_keys =
-    app.config_keys &&
-    app.config_keys
+    selectedCatalogApp.config_keys &&
+    selectedCatalogApp.config_keys
       .filter(({ name }) => keys?.includes(name))
       .map(({ name: key }) => ({
         name: key,
@@ -46,31 +55,30 @@ export const installGitOpsApp = createAsyncThunk<
     config_keys,
     secret_keys,
     user,
-    // sending both management and workload cluster name with request for workload
-    // workload_cluster_name?: String
-    // is_template: boolean
   };
+
+  dispatch(addAppToQueue(selectedCatalogApp));
 
   const res = await axios.post('/api/proxy', {
     // same for delete gitops app
-    url: `/services/${clusterName}/${app.name}`, // always management
+    url: `/services/${selectedCluster.clusterName}/${selectedCatalogApp.name}`, // always management
     body: secret_keys?.length || config_keys?.length ? params : undefined,
   });
 
   if ('error' in res) {
-    dispatch(removeAppFromQueue(app));
+    dispatch(removeAppFromQueue(selectedCatalogApp));
     throw res.error;
   }
 
   dispatch(
     createNotification({
-      message: `${app.display_name} successfully added to provisioned services in cluster ${clusterName}!`,
+      message: `${selectedCatalogApp.display_name} successfully added to provisioned services in cluster ${selectedCluster.clusterName}!`,
       type: 'success',
       snackBarOrigin: { vertical: 'bottom', horizontal: 'right' },
     }),
   );
 
-  return app;
+  return selectedCatalogApp;
 });
 
 export const getClusterApplications = createAsyncThunk<

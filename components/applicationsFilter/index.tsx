@@ -1,69 +1,105 @@
-import React, { ComponentPropsWithoutRef, FunctionComponent } from 'react';
+import React, { ComponentPropsWithoutRef, FunctionComponent, useEffect } from 'react';
 import styled from 'styled-components';
+import { useForm } from 'react-hook-form';
 
 import Row from '../row';
 import Typography from '../typography';
 import { IAutocompleteProps } from '../autocomplete';
-import { ISelectProps } from '../select';
+import ControlledAutocomplete from '../controlledFields/autoComplete/AutoComplete';
+import ControlledSelect from '../controlledFields/Select';
 
 import {
-  ClusterSelect,
   Container,
   Content,
   DropdownContainer,
-  StyledAutoComplete,
   TargetContainer,
-  TargetSelect,
 } from './applicationsFilter.styled';
 
 import { VOLCANIC_SAND } from '@/constants/colors';
+import { LabelValue } from '@/types';
 import { noop } from '@/utils/noop';
-import { Target } from '@/types/applications';
+import { ApplicationsState } from '@/redux/slices/applications.slice';
 
 export interface ApplicationsFilterProps extends ComponentPropsWithoutRef<'div'> {
-  autoCompleteProps: Omit<IAutocompleteProps, 'ref'>;
-  targetOptions: ISelectProps['options'];
-  clusterSelectOptions: ISelectProps['options'];
-  clusterSelectValue: string;
-  targetValue: string;
-  onTargetChange?: (target: Target) => void;
-  onClusterSelectChange?: (value: string) => void;
+  searchOptions: IAutocompleteProps['options'];
+  targetOptions: LabelValue[];
+  clusterSelectOptions: LabelValue[];
+  onFilterChange?: (filter: ApplicationsState['filter']) => void;
+  defaultValues?: ApplicationsState['filter'];
 }
 
 const ApplicationsFilter: FunctionComponent<ApplicationsFilterProps> = ({
-  autoCompleteProps,
+  searchOptions,
   targetOptions,
   clusterSelectOptions,
-  clusterSelectValue,
-  targetValue,
-  onTargetChange = noop,
-  onClusterSelectChange = noop,
+  onFilterChange = noop,
+  defaultValues,
   ...rest
-}) => (
-  <Container {...rest}>
-    <Content>
-      <DropdownContainer>
-        <TargetContainer>
-          <Typography variant="labelLarge" color={VOLCANIC_SAND}>
-            Target:
-          </Typography>
-          <TargetSelect
-            value={targetValue}
-            options={targetOptions}
-            onChange={(e) => onTargetChange(e.target.value as Target)}
-          />
-        </TargetContainer>
-        <Row>
-          <ClusterSelect
-            value={clusterSelectValue}
-            options={clusterSelectOptions}
-            onChange={(e) => onClusterSelectChange(e.target.value)}
+}) => {
+  const { control, watch, setValue } = useForm<ApplicationsState['filter']>({
+    defaultValues,
+  });
+
+  const target = watch('target');
+  const cluster = watch('cluster');
+
+  useEffect(() => {
+    const subscription = watch(onFilterChange);
+    return () => subscription.unsubscribe();
+  }, [watch, onFilterChange]);
+
+  useEffect(() => {
+    // reset cluster value any time target is changed
+    setValue('cluster', '');
+    setValue('searchTerm', '');
+  }, [target, setValue]);
+
+  useEffect(() => {
+    // reset search any time cluster is changed
+    setValue('searchTerm', '');
+  }, [cluster, setValue]);
+
+  return (
+    <Container {...rest}>
+      <Content>
+        <DropdownContainer>
+          <TargetContainer>
+            <Typography variant="labelLarge" color={VOLCANIC_SAND}>
+              Target:
+            </Typography>
+            <ControlledSelect
+              name="target"
+              control={control}
+              label=""
+              rules={{ required: false }}
+              options={targetOptions}
+            />
+          </TargetContainer>
+          <Row>
+            <ControlledSelect
+              name="cluster"
+              control={control}
+              label=""
+              rules={{ required: false }}
+              options={clusterSelectOptions}
+            />
+          </Row>
+        </DropdownContainer>
+        <Row style={{ width: '248px' }}>
+          <ControlledAutocomplete
+            control={control}
+            name="searchTerm"
+            label=""
+            rules={{ required: false }}
+            options={searchOptions}
+            sx={{
+              '& .MuiAutocomplete-popupIndicator': { transform: 'none' },
+            }}
           />
         </Row>
-      </DropdownContainer>
-      <StyledAutoComplete {...autoCompleteProps} />
-    </Content>
-  </Container>
-);
+      </Content>
+    </Container>
+  );
+};
 
 export default styled(ApplicationsFilter)<ApplicationsFilterProps>``;
