@@ -13,6 +13,5 @@ export const Default: StoryObj<typeof ApplicationsFilter> = {
     targetOptions: [{ value: 'yes', label: 'yes' }],
     clusterSelectOptions: [{ value: 'yes', label: 'yes' }],
     searchOptions: [{ value: 'yes', label: 'yes' }],
-    onFilterChange: (filter) => console.log('filter =>', filter),
   },
 };
