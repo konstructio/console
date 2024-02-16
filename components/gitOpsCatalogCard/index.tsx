@@ -44,6 +44,7 @@ export type GitOpsCatalogCardProps = PropsWithChildren<GitOpsCatalogApp> & {
   showSubmitButton?: boolean;
   isDeletable?: boolean;
   isDisabled?: boolean;
+  excludeTruncate?: boolean;
 };
 
 const GitOpsCatalogCard: FunctionComponent<GitOpsCatalogCardProps> = ({
@@ -51,6 +52,7 @@ const GitOpsCatalogCard: FunctionComponent<GitOpsCatalogCardProps> = ({
   category,
   image_url,
   description,
+  excludeTruncate = false,
   isInstalling,
   onClick,
   showSubmitButton = true,
@@ -89,7 +91,9 @@ const GitOpsCatalogCard: FunctionComponent<GitOpsCatalogCardProps> = ({
             <Description variant="body2">{description || children}</Description>
           </Tooltip>
         ) : (
-          <Description variant="body2">{description || children}</Description>
+          <Description variant="body2" excludeTruncate={excludeTruncate}>
+            {description || children}
+          </Description>
         )}
         {showSubmitButton && !isInstalling && (
           <Button variant="outlined" color="secondary" onClick={onClick} disabled={isDisabled}>

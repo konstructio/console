@@ -29,14 +29,14 @@ export const Card = styled.div`
 
 export const Category = styled(Row)``;
 
-export const Description = styled(Typography)`
+export const Description = styled(Typography)<{ excludeTruncate: boolean }>`
   color: ${({ theme }) => theme.colors.saltboxBlue};
   margin-top: 8px !important;
   margin-bottom: 16px !important;
   overflow: hidden;
   text-overflow: ellipsis;
 
-  ${textTruncate(3)};
+  ${({ excludeTruncate }) => !excludeTruncate && textTruncate(3)}
 
   & a {
     color: ${({ theme }) => theme.colors.primary};

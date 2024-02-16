@@ -107,10 +107,10 @@ const Applications: FunctionComponent = () => {
 
   const filteredApps = useMemo(() => {
     const { searchTerm } = filter;
-    if (!searchTerm) {
-      return clusterApplications;
-    }
-    return clusterApplications.filter((app) => app.name.includes(searchTerm));
+
+    return clusterApplications.filter((app) =>
+      app.name.toLowerCase().includes(searchTerm?.toLowerCase() as string),
+    );
   }, [clusterApplications, filter]);
 
   const uninstalledCatalogApps = useMemo(
@@ -120,6 +120,7 @@ const Applications: FunctionComponent = () => {
 
   const filteredCatalogApps = useMemo(() => {
     let apps: GitOpsCatalogApp[] = [];
+    const { searchTerm } = filter;
 
     if (!selectedCategories.length) {
       apps = uninstalledCatalogApps;
@@ -132,8 +133,10 @@ const Applications: FunctionComponent = () => {
       );
     }
 
-    return sortBy(apps, (app) => app.display_name);
-  }, [uninstalledCatalogApps, selectedCategories, installedClusterAppNames]);
+    return sortBy(apps, (app) => app.display_name).filter((app) =>
+      app.name.toLowerCase().includes(searchTerm?.toLowerCase() as string),
+    );
+  }, [filter, selectedCategories, uninstalledCatalogApps, installedClusterAppNames]);
 
   const handleOpenUninstallModalConfirmation = useCallback(
     (application: ClusterApplication) => {

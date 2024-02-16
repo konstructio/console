@@ -144,7 +144,7 @@ const GitOpsCatalog: FunctionComponent<GitOpsCatalogProps> = ({ catalogApplicati
               isDisabled={!filter.cluster}
             />
           ))}
-          <GitOpsCatalogCard {...STATIC_HELP_CARD} showSubmitButton={false}>
+          <GitOpsCatalogCard {...STATIC_HELP_CARD} showSubmitButton={false} excludeTruncate>
             <>
               To suggest an open source app that installs to your cluster, discuss your idea via an{' '}
               <NextLink href="https://github.com/kubefirst/kubefirst/issues" target="_blank">

@@ -20,7 +20,7 @@ export const Content = styled(Column)`
   width: fit-content;
   align-items: flex-end;
 
-  ${media.greaterThan('sm')`
+  ${media.greaterThan('md')`
     flex-direction: row;
     width: unset;
     justify-content: space-between;
@@ -33,7 +33,7 @@ export const DropdownContainer = styled(Column)`
   width: fit-content;
   gap: 16px;
 
-  ${media.greaterThan('sm')`
+  ${media.greaterThan('md')`
     flex-direction: row;
   `}
 `;

@@ -1,10 +1,19 @@
-import React, { ComponentPropsWithoutRef, FunctionComponent, useEffect, useState } from 'react';
+import React, {
+  ChangeEvent,
+  ComponentPropsWithoutRef,
+  FunctionComponent,
+  useEffect,
+  useState,
+} from 'react';
 import styled from 'styled-components';
+import SearchIcon from '@mui/icons-material/Search';
 
 import Row from '../row';
 import Typography from '../typography';
 import { IAutocompleteProps } from '../autocomplete';
 import Select from '../select';
+import TextFieldWithRef from '../textField';
+import { InputAdornmentContainer } from '../textField/textField.styled';
 
 import {
   Container,
@@ -34,6 +43,7 @@ const ApplicationsFilter: FunctionComponent<ApplicationsFilterProps> = ({
   targetOptions,
   ...rest
 }) => {
+  const [searchTerm, setSearchTerm] = useState('');
   const [target, setTarget] = useState<Target>(Target.CLUSTER);
   const [cluster, setCluster] = useState(defaultCluster);
 
@@ -41,17 +51,22 @@ const ApplicationsFilter: FunctionComponent<ApplicationsFilterProps> = ({
     setTarget(value);
     setCluster('');
 
-    onFilterChange({ target: value, cluster, searchTerm: '' });
+    onFilterChange({ target: value, cluster, searchTerm });
   };
 
   const handleChangeCluster = (value: string) => {
     setCluster(value);
-    onFilterChange({ target, cluster: value, searchTerm: '' });
+    onFilterChange({ target, cluster: value, searchTerm });
+  };
+
+  const handleOnChangeSearch = (event: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
+    setSearchTerm(event.target.value);
+    onFilterChange({ target, cluster, searchTerm: event.target.value });
   };
 
   useEffect(() => {
     if (defaultCluster && clusterSelectOptions.length) {
-      onFilterChange({ target, cluster: defaultCluster, searchTerm: '' });
+      onFilterChange({ target, cluster: defaultCluster, searchTerm });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -86,13 +101,20 @@ const ApplicationsFilter: FunctionComponent<ApplicationsFilterProps> = ({
             )}
           </Row>
         </DropdownContainer>
-        <Row style={{ width: '248px' }}>
-          {/* <Autocomplete
-            options={searchOptions}
-            sx={{
-              '& .MuiAutocomplete-popupIndicator': { transform: 'none' },
-            }}
-          /> */}
+        <Row>
+          <TextFieldWithRef
+            autoComplete="off"
+            size="small"
+            endAdornment={
+              <InputAdornmentContainer position="end">
+                <SearchIcon />
+              </InputAdornmentContainer>
+            }
+            placeholder="Search app name"
+            value={searchTerm}
+            onChange={handleOnChangeSearch}
+            sx={{ width: '248px' }}
+          />
         </Row>
       </Content>
     </Container>
