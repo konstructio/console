@@ -4,6 +4,7 @@ import {
   getClusterApplications,
   getGitOpsCatalogApps,
   installGitOpsApp,
+  uninstallGitOpsApp,
 } from '@/redux/thunks/applications.thunk';
 import { GitOpsCatalogApp, ClusterApplication, Target, AppCategory } from '@/types/applications';
 import { ManagementCluster, WorkloadCluster } from '@/types/provision';
@@ -15,6 +16,7 @@ export interface ApplicationsState {
   selectedCatalogApp?: GitOpsCatalogApp;
   clusterApplications: Array<ClusterApplication>;
   installedClusterAppNames: ClusterApplication['name'][];
+  isLoading: boolean;
   gitOpsCatalogApps: Array<GitOpsCatalogApp>;
   appsQueue: Array<string>;
   filter: { target?: Target; cluster?: string; searchTerm?: string };
@@ -25,10 +27,11 @@ export const initialState: ApplicationsState = {
   selectedCategories: [],
   clusterApplications: [],
   installedClusterAppNames: [],
+  isLoading: false,
   gitOpsCatalogApps: [],
   appsQueue: [],
   filter: {
-    target: undefined,
+    target: Target.CLUSTER,
     cluster: '',
     searchTerm: '',
   },
@@ -80,6 +83,10 @@ const applicationsSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
+      .addCase(getClusterApplications.pending, (state) => {
+        state.clusterApplications = [];
+        state.installedClusterAppNames = [];
+      })
       .addCase(getClusterApplications.fulfilled, (state, { payload }) => {
         state.clusterApplications = payload;
         state.installedClusterAppNames = payload.map((app) => app.name);
@@ -114,6 +121,15 @@ const applicationsSlice = createSlice({
       )
       .addCase(getGitOpsCatalogApps.rejected, (state) => {
         state.gitOpsCatalogApps = [];
+      })
+      .addCase(uninstallGitOpsApp.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(uninstallGitOpsApp.fulfilled, (state) => {
+        state.isLoading = false;
+      })
+      .addCase(uninstallGitOpsApp.rejected, (state) => {
+        state.isLoading = false;
       });
   },
 });

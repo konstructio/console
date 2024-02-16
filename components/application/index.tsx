@@ -30,7 +30,7 @@ export interface ApplicationProps {
   name: string;
   links?: { [url: string]: boolean };
   onLinkClick: (link: string, name: string) => void;
-  onUninstall?: () => void;
+  onUninstall: () => void;
 }
 
 const Application: FunctionComponent<ApplicationProps> = ({
@@ -44,6 +44,11 @@ const Application: FunctionComponent<ApplicationProps> = ({
   onUninstall = noop,
 }) => {
   const isMetaphor = useMemo(() => name === 'Metaphor', [name]);
+
+  const showTooltip = useMemo(
+    () => (description ? description.length > 167 : false),
+    [description],
+  );
 
   const ApplicationLink = useCallback(
     (link: string, isAvailable?: boolean) => {
@@ -111,7 +116,13 @@ const Application: FunctionComponent<ApplicationProps> = ({
         <Image src={image} alt={name} width="32" height="32" />
         <Title variant="subtitle2">{name}</Title>
       </Header>
-      <Description variant="body2">{description}</Description>
+      {showTooltip ? (
+        <Tooltip title={description} maxWidth="375px" whiteSpace="wrap" placement="top">
+          <Description variant="body2">{description}</Description>
+        </Tooltip>
+      ) : (
+        <Description variant="body2">{description}</Description>
+      )}{' '}
       {links && !children ? linksComponent : children}
       {!defaultApp && (
         <Button

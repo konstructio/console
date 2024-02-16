@@ -41,6 +41,7 @@ const GitOpsCatalog: FunctionComponent<GitOpsCatalogProps> = ({ catalogApplicati
     selectedCategories,
     clusterApplications,
     selectedCatalogApp,
+    filter,
   } = useAppSelector(({ applications }) => applications);
 
   const { data: session } = useSession();
@@ -71,6 +72,7 @@ const GitOpsCatalog: FunctionComponent<GitOpsCatalogProps> = ({ catalogApplicati
 
   const handleAddApp = useCallback(() => {
     const values = getValues();
+
     dispatch(
       installGitOpsApp({
         values,
@@ -139,6 +141,7 @@ const GitOpsCatalog: FunctionComponent<GitOpsCatalogProps> = ({ catalogApplicati
               {...app}
               onClick={() => handleSelectedApp(app)}
               isInstalling={appsQueue.includes(app.name)}
+              isDisabled={!filter.cluster}
             />
           ))}
           <GitOpsCatalogCard {...STATIC_HELP_CARD} showSubmitButton={false}>

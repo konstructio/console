@@ -43,6 +43,7 @@ export type GitOpsCatalogCardProps = PropsWithChildren<GitOpsCatalogApp> & {
   onClick?: () => void;
   showSubmitButton?: boolean;
   isDeletable?: boolean;
+  isDisabled?: boolean;
 };
 
 const GitOpsCatalogCard: FunctionComponent<GitOpsCatalogCardProps> = ({
@@ -54,6 +55,7 @@ const GitOpsCatalogCard: FunctionComponent<GitOpsCatalogCardProps> = ({
   onClick,
   showSubmitButton = true,
   isDeletable = false,
+  isDisabled = false,
   children,
 }) => {
   const tagColor = CATEGORY_COLOR_CONFIG[category ?? AppCategory.APP_MANAGEMENT] ?? {};
@@ -90,7 +92,7 @@ const GitOpsCatalogCard: FunctionComponent<GitOpsCatalogCardProps> = ({
           <Description variant="body2">{description || children}</Description>
         )}
         {showSubmitButton && !isInstalling && (
-          <Button variant="outlined" color="secondary" onClick={onClick}>
+          <Button variant="outlined" color="secondary" onClick={onClick} disabled={isDisabled}>
             {isDeletable ? 'Uninstall' : 'Install'}
           </Button>
         )}

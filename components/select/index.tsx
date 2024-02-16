@@ -129,7 +129,6 @@ const Select: FunctionComponent<ISelectProps> = ({
       input={<Input sx={{ height: '36px' }} />}
       MenuProps={MenuProps}
       displayEmpty
-      sx={{ width: '100%' }}
       renderValue={(selected: string) => {
         if (!selected) {
           return (

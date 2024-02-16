@@ -3,15 +3,16 @@ import React, { FunctionComponent, useEffect, useCallback, useState, useMemo } f
 import Box from '@mui/material/Box';
 import Tabs from '@mui/material/Tabs';
 import sortBy from 'lodash/sortBy';
+import { useSession } from 'next-auth/react';
 
 import Application from '../application';
 import GitOpsCatalog from '../gitOpsCatalog';
 import TabPanel, { Tab, a11yProps } from '../../components/tab';
 import Typography from '../../components/typography';
-import useFeatureFlag from '../../hooks/useFeatureFlag';
 import {
   getClusterApplications,
   getGitOpsCatalogApps,
+  uninstallGitOpsApp,
 } from '../../redux/thunks/applications.thunk';
 import { sendTelemetryEvent } from '../../redux/thunks/api.thunk';
 import { useAppDispatch, useAppSelector } from '../../redux/store';
@@ -27,10 +28,11 @@ import {
   ApplicationsFilter,
 } from './applications.styled';
 
-import { FeatureFlag } from '@/types/config';
 import { setFilterState } from '@/redux/slices/applications.slice';
 import { WORKLOAD_CLUSTER_TYPES } from '@/types/provision';
-import { GitOpsCatalogApp } from '@/types/applications';
+import { ClusterApplication, GitOpsCatalogApp } from '@/types/applications';
+import useModal from '@/hooks/useModal';
+import UninstallApplication from '@/components/uninstallApplication';
 
 enum APPLICATION_TAB {
   PROVISIONED,
@@ -46,6 +48,9 @@ const TARGET_OPTIONS = Object.values(Target);
 
 const Applications: FunctionComponent = () => {
   const [activeTab, setActiveTab] = useState<number>(0);
+  const [selectedApplication, setSelectedApplication] = useState<ClusterApplication>();
+  const { isOpen, openModal: openDeleteModal, closeModal: closeDeleteModal } = useModal();
+  const { data: session } = useSession();
 
   const {
     clusterApplications,
@@ -55,14 +60,14 @@ const Applications: FunctionComponent = () => {
     selectedCategories,
     gitOpsCatalogApps,
     installedClusterAppNames,
+    isLoading,
+    managementCluster,
   } = useAppSelector(({ config, applications, api }) => ({
     isTelemetryDisabled: config.isTelemetryDisabled,
     clusterMap: api.clusterMap,
     managementCluster: api.managementCluster,
     ...applications,
   }));
-
-  const { isEnabled: isGitOpsCatalogEnabled } = useFeatureFlag(FeatureFlag.GITOPS_CATALOG);
 
   const dispatch = useAppDispatch();
 
@@ -79,6 +84,13 @@ const Applications: FunctionComponent = () => {
   const handleChange = (_: React.SyntheticEvent, newValue: number) => {
     setActiveTab(newValue);
   };
+  const catalogApps = useMemo(
+    () =>
+      filter.target === Target.TEMPLATE
+        ? gitOpsCatalogApps.filter((app) => !app.secret_keys?.length)
+        : gitOpsCatalogApps,
+    [filter.target, gitOpsCatalogApps],
+  );
 
   const clusterSelectOptions = useMemo((): { label: string; value: string }[] => {
     if (!filter.target) {
@@ -102,9 +114,8 @@ const Applications: FunctionComponent = () => {
   }, [clusterApplications, filter]);
 
   const uninstalledCatalogApps = useMemo(
-    () =>
-      gitOpsCatalogApps.filter((app) => !clusterApplications.map((s) => s.name).includes(app.name)),
-    [clusterApplications, gitOpsCatalogApps],
+    () => catalogApps.filter((app) => !clusterApplications.map((s) => s.name).includes(app.name)),
+    [clusterApplications, catalogApps],
   );
 
   const filteredCatalogApps = useMemo(() => {
@@ -124,6 +135,23 @@ const Applications: FunctionComponent = () => {
     return sortBy(apps, (app) => app.display_name);
   }, [uninstalledCatalogApps, selectedCategories, installedClusterAppNames]);
 
+  const handleOpenUninstallModalConfirmation = useCallback(
+    (application: ClusterApplication) => {
+      setSelectedApplication(application);
+      openDeleteModal();
+    },
+    [openDeleteModal],
+  );
+
+  const handleUninstallApplication = useCallback(() => {
+    dispatch(
+      uninstallGitOpsApp({
+        application: selectedApplication as ClusterApplication,
+        user: session?.user?.email as string,
+      }),
+    ).then(() => closeDeleteModal());
+  }, [closeDeleteModal, dispatch, selectedApplication, session?.user?.email]);
+
   useEffect(() => {
     dispatch(getGitOpsCatalogApps());
   }, [dispatch]);
@@ -138,31 +166,19 @@ const Applications: FunctionComponent = () => {
   const Apps = useMemo(
     () => (
       <>
-        <Typography variant="body2" sx={{ mb: 3 }} color={VOLCANIC_SAND}>
-          Click on a link to access the service Kubefirst has provisioned for you.{' '}
-          <LearnMoreLink
-            href={DOCS_LINK}
-            target="_blank"
-            onClick={() => handleLinkClick(DOCS_LINK, 'docs')}
-          >
-            Learn more
-          </LearnMoreLink>
-        </Typography>
-        <ApplicationsFilter
-          targetOptions={TARGET_OPTIONS.map((target) => ({ label: target, value: target }))}
-          clusterSelectOptions={clusterSelectOptions}
-          searchOptions={filteredApps.map((app) => ({ label: app.name, value: app.name }))}
-          onFilterChange={(filter) => dispatch(setFilterState(filter))}
-          defaultValues={filter}
-        />
         <ApplicationsContainer>
-          {filteredApps.map(({ name, ...rest }) => (
-            <Application key={name} name={name} {...rest} onLinkClick={handleLinkClick} />
+          {filteredApps.map((application: ClusterApplication) => (
+            <Application
+              key={application.name}
+              {...application}
+              onLinkClick={handleLinkClick}
+              onUninstall={() => handleOpenUninstallModalConfirmation(application)}
+            />
           ))}
         </ApplicationsContainer>
       </>
     ),
-    [clusterSelectOptions, filteredApps, handleLinkClick, filter, dispatch],
+    [filteredApps, handleLinkClick, handleOpenUninstallModalConfirmation],
   );
 
   return (
@@ -170,53 +186,75 @@ const Applications: FunctionComponent = () => {
       <Header>
         <Typography variant="h6">Applications Overview</Typography>
       </Header>
-      {isGitOpsCatalogEnabled ? (
-        <>
-          <Box sx={{ width: 'fit-content', mb: 4 }}>
-            <Tabs value={activeTab} onChange={handleChange} indicatorColor="primary">
-              <Tab
-                color={activeTab === APPLICATION_TAB.PROVISIONED ? BISCAY : SALTBOX_BLUE}
-                label={<Typography variant="buttonSmall">Installed applications</Typography>}
-                {...a11yProps(APPLICATION_TAB.PROVISIONED)}
-                sx={{ textTransform: 'initial', mr: 3 }}
-              />
+      <>
+        <Box sx={{ width: 'fit-content', mb: 4 }}>
+          <Tabs value={activeTab} onChange={handleChange} indicatorColor="primary">
+            <Tab
+              color={activeTab === APPLICATION_TAB.PROVISIONED ? BISCAY : SALTBOX_BLUE}
+              label={<Typography variant="buttonSmall">Installed applications</Typography>}
+              {...a11yProps(APPLICATION_TAB.PROVISIONED)}
+              sx={{ textTransform: 'initial', mr: 3 }}
+            />
 
-              <Tab
-                color={activeTab === APPLICATION_TAB.GITOPS_CATALOG ? BISCAY : SALTBOX_BLUE}
-                label={<Typography variant="buttonSmall">GitOps catalog</Typography>}
-                {...a11yProps(APPLICATION_TAB.GITOPS_CATALOG)}
-                sx={{ textTransform: 'initial' }}
-              />
-            </Tabs>
-          </Box>
-          <Content>
-            <TabPanel value={activeTab} index={APPLICATION_TAB.PROVISIONED}>
-              {Apps}
-            </TabPanel>
-            <TabPanel value={activeTab} index={APPLICATION_TAB.GITOPS_CATALOG}>
-              <Typography variant="body2" sx={{ mb: 3 }} color={VOLCANIC_SAND}>
-                Add the latest version of your favourite application to your cluster.{' '}
-                <LearnMoreLink
-                  href={DOCS_LINK}
-                  target="_blank"
-                  onClick={() => handleLinkClick(DOCS_LINK, 'docs')}
-                >
-                  Learn more
-                </LearnMoreLink>
-              </Typography>
-              <ApplicationsFilter
-                targetOptions={TARGET_OPTIONS.map((target) => ({ label: target, value: target }))}
-                clusterSelectOptions={clusterSelectOptions}
-                searchOptions={filteredApps.map((app) => ({ label: app.name, value: app.name }))}
-                onFilterChange={(filter) => dispatch(setFilterState(filter))}
-                defaultValues={filter}
-              />
-              <GitOpsCatalog catalogApplications={filteredCatalogApps} />
-            </TabPanel>
-          </Content>
-        </>
-      ) : (
-        Apps
+            <Tab
+              color={activeTab === APPLICATION_TAB.GITOPS_CATALOG ? BISCAY : SALTBOX_BLUE}
+              label={<Typography variant="buttonSmall">GitOps catalog</Typography>}
+              {...a11yProps(APPLICATION_TAB.GITOPS_CATALOG)}
+              sx={{ textTransform: 'initial' }}
+            />
+          </Tabs>
+        </Box>
+        <Content>
+          {activeTab === APPLICATION_TAB.PROVISIONED ? (
+            <Typography variant="body2" sx={{ mb: 3 }} color={VOLCANIC_SAND}>
+              Click on a link to access the service Kubefirst has provisioned for you.{' '}
+              <LearnMoreLink
+                href={DOCS_LINK}
+                target="_blank"
+                onClick={() => handleLinkClick(DOCS_LINK, 'docs')}
+              >
+                Learn more
+              </LearnMoreLink>
+            </Typography>
+          ) : (
+            <Typography variant="body2" sx={{ mb: 3 }} color={VOLCANIC_SAND}>
+              Add the latest version of your favourite application to your cluster.{' '}
+              <LearnMoreLink
+                href={DOCS_LINK}
+                target="_blank"
+                onClick={() => handleLinkClick(DOCS_LINK, 'docs')}
+              >
+                Learn more
+              </LearnMoreLink>
+            </Typography>
+          )}
+
+          {managementCluster?.clusterName && (
+            <ApplicationsFilter
+              targetOptions={TARGET_OPTIONS.map((target) => ({ label: target, value: target }))}
+              clusterSelectOptions={clusterSelectOptions}
+              searchOptions={filteredApps.map((app) => ({ label: app.name, value: app.name }))}
+              onFilterChange={(filter) => dispatch(setFilterState(filter))}
+              defaultCluster={managementCluster?.clusterName as string}
+            />
+          )}
+          <TabPanel value={activeTab} index={APPLICATION_TAB.PROVISIONED}>
+            {Apps}
+          </TabPanel>
+          <TabPanel value={activeTab} index={APPLICATION_TAB.GITOPS_CATALOG}>
+            <GitOpsCatalog catalogApplications={filteredCatalogApps} />
+          </TabPanel>
+        </Content>
+      </>
+      {isOpen && (
+        <UninstallApplication
+          isOpen
+          application={selectedApplication?.name as string}
+          cluster={filter.cluster as string}
+          onDelete={handleUninstallApplication}
+          onCloseModal={closeDeleteModal}
+          isLoading={isLoading}
+        />
       )}
     </Container>
   );

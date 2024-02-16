@@ -35,6 +35,8 @@ export const Container = styled.div`
 export const Description = styled(Typography)`
   color: ${({ theme }) => theme.colors.saltboxBlue};
   height: 60px;
+
+  ${textTruncate(3)};
 `;
 
 export const Header = styled.div`

@@ -8,12 +8,14 @@ import { checkSiteReadiness } from '../../redux/thunks/readiness.thunk';
 
 export interface ApplicationProps extends Omit<AppCompProps, 'links'> {
   links?: Array<string>;
+  onUninstall: () => void;
 }
 
 const isGitLink = (url: string) => url.includes('github') || url.includes('gitlab');
 
 const Application: FunctionComponent<ApplicationProps> = ({
   links: applicationLinks,
+  onUninstall,
   ...props
 }) => {
   const [firstLoad, setFirstLoad] = useState(false);
@@ -82,7 +84,7 @@ const Application: FunctionComponent<ApplicationProps> = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  return <ApplicationComponent {...props} links={links} />;
+  return <ApplicationComponent {...props} links={links} onUninstall={onUninstall} />;
 };
 
 export default Application;

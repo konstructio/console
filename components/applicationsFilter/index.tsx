@@ -1,12 +1,10 @@
-import React, { ComponentPropsWithoutRef, FunctionComponent, useEffect } from 'react';
+import React, { ComponentPropsWithoutRef, FunctionComponent, useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { useForm } from 'react-hook-form';
 
 import Row from '../row';
 import Typography from '../typography';
 import { IAutocompleteProps } from '../autocomplete';
-import ControlledAutocomplete from '../controlledFields/autoComplete/AutoComplete';
-import ControlledSelect from '../controlledFields/Select';
+import Select from '../select';
 
 import {
   Container,
@@ -19,45 +17,44 @@ import { VOLCANIC_SAND } from '@/constants/colors';
 import { LabelValue } from '@/types';
 import { noop } from '@/utils/noop';
 import { ApplicationsState } from '@/redux/slices/applications.slice';
+import { Target } from '@/types/applications';
 
 export interface ApplicationsFilterProps extends ComponentPropsWithoutRef<'div'> {
   searchOptions: IAutocompleteProps['options'];
   targetOptions: LabelValue[];
   clusterSelectOptions: LabelValue[];
   onFilterChange?: (filter: ApplicationsState['filter']) => void;
-  defaultValues?: ApplicationsState['filter'];
+  defaultCluster: string;
 }
 
 const ApplicationsFilter: FunctionComponent<ApplicationsFilterProps> = ({
-  searchOptions,
-  targetOptions,
   clusterSelectOptions,
+  defaultCluster,
   onFilterChange = noop,
-  defaultValues,
+  targetOptions,
   ...rest
 }) => {
-  const { control, watch, setValue } = useForm<ApplicationsState['filter']>({
-    defaultValues,
-  });
+  const [target, setTarget] = useState<Target>(Target.CLUSTER);
+  const [cluster, setCluster] = useState(defaultCluster);
 
-  const target = watch('target');
-  const cluster = watch('cluster');
+  const handleChangeTarget = (value: Target) => {
+    setTarget(value);
+    setCluster('');
 
-  useEffect(() => {
-    const subscription = watch(onFilterChange);
-    return () => subscription.unsubscribe();
-  }, [watch, onFilterChange]);
+    onFilterChange({ target: value, cluster, searchTerm: '' });
+  };
 
-  useEffect(() => {
-    // reset cluster value any time target is changed
-    setValue('cluster', '');
-    setValue('searchTerm', '');
-  }, [target, setValue]);
+  const handleChangeCluster = (value: string) => {
+    setCluster(value);
+    onFilterChange({ target, cluster: value, searchTerm: '' });
+  };
 
   useEffect(() => {
-    // reset search any time cluster is changed
-    setValue('searchTerm', '');
-  }, [cluster, setValue]);
+    if (defaultCluster && clusterSelectOptions.length) {
+      onFilterChange({ target, cluster: defaultCluster, searchTerm: '' });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <Container {...rest}>
@@ -67,35 +64,35 @@ const ApplicationsFilter: FunctionComponent<ApplicationsFilterProps> = ({
             <Typography variant="labelLarge" color={VOLCANIC_SAND}>
               Target:
             </Typography>
-            <ControlledSelect
-              name="target"
-              control={control}
+            <Select
               label=""
-              rules={{ required: false }}
               options={targetOptions}
+              value={target}
+              onChange={(e) => handleChangeTarget(e.target.value as Target)}
+              sx={{ width: '248px' }}
             />
           </TargetContainer>
           <Row>
-            <ControlledSelect
-              name="cluster"
-              control={control}
-              label=""
-              rules={{ required: false }}
-              options={clusterSelectOptions}
-            />
+            {defaultCluster && (
+              <Select
+                fullWidth
+                label=""
+                options={clusterSelectOptions}
+                value={cluster}
+                onChange={(e) => handleChangeCluster(e.target.value)}
+                defaultValue={defaultCluster}
+                sx={{ width: '248px' }}
+              />
+            )}
           </Row>
         </DropdownContainer>
         <Row style={{ width: '248px' }}>
-          <ControlledAutocomplete
-            control={control}
-            name="searchTerm"
-            label=""
-            rules={{ required: false }}
+          {/* <Autocomplete
             options={searchOptions}
             sx={{
               '& .MuiAutocomplete-popupIndicator': { transform: 'none' },
             }}
-          />
+          /> */}
         </Row>
       </Content>
     </Container>
