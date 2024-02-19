@@ -29,7 +29,7 @@ import {
 } from './applications.styled';
 
 import { setFilterState } from '@/redux/slices/applications.slice';
-import { WORKLOAD_CLUSTER_TYPES } from '@/types/provision';
+import { ClusterStatus, WORKLOAD_CLUSTER_TYPES } from '@/types/provision';
 import { ClusterApplication, GitOpsCatalogApp } from '@/types/applications';
 import useModal from '@/hooks/useModal';
 import UninstallApplication from '@/components/uninstallApplication';
@@ -96,13 +96,20 @@ const Applications: FunctionComponent = () => {
     if (!filter.target) {
       return [];
     }
+
     if (filter.target === Target.TEMPLATE) {
       return WORKLOAD_CLUSTER_TYPES.map((type) => ({ label: type, value: type }));
     }
-    return Object.keys(clusterMap).map((clusterName) => ({
-      label: clusterName,
-      value: clusterName,
-    }));
+
+    return Object.keys(clusterMap)
+      .filter((key) => {
+        const cluster = clusterMap[key];
+        return cluster.status === ClusterStatus.PROVISIONED;
+      })
+      .map((clusterName) => ({
+        label: clusterName,
+        value: clusterName,
+      }));
   }, [filter.target, clusterMap]);
 
   const filteredApps = useMemo(() => {
@@ -117,6 +124,15 @@ const Applications: FunctionComponent = () => {
     () => catalogApps.filter((app) => !clusterApplications.map((s) => s.name).includes(app.name)),
     [clusterApplications, catalogApps],
   );
+
+  const targetOptions = useMemo(() => {
+    const options = TARGET_OPTIONS.map((target) => ({ label: target, value: target }));
+    if (managementCluster?.cloudProvider === 'k3d') {
+      return options.filter(({ value }) => value !== Target.TEMPLATE);
+    }
+
+    return options;
+  }, [managementCluster?.cloudProvider]);
 
   const filteredCatalogApps = useMemo(() => {
     let apps: GitOpsCatalogApp[] = [];
@@ -234,7 +250,7 @@ const Applications: FunctionComponent = () => {
 
           {managementCluster?.clusterName && (
             <ApplicationsFilter
-              targetOptions={TARGET_OPTIONS.map((target) => ({ label: target, value: target }))}
+              targetOptions={targetOptions}
               clusterSelectOptions={clusterSelectOptions}
               searchOptions={filteredApps.map((app) => ({ label: app.name, value: app.name }))}
               onFilterChange={(filter) => dispatch(setFilterState(filter))}
