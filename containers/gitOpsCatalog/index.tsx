@@ -76,7 +76,7 @@ const GitOpsCatalog: FunctionComponent<GitOpsCatalogProps> = ({ catalogApplicati
     dispatch(
       installGitOpsApp({
         values,
-        user: session?.user?.email as string,
+        user: (session?.user?.email as string) || 'kbot',
       }),
     );
     reset();

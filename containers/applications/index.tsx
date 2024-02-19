@@ -166,7 +166,7 @@ const Applications: FunctionComponent = () => {
     dispatch(
       uninstallGitOpsApp({
         application: selectedApplication as ClusterApplication,
-        user: session?.user?.email as string,
+        user: (session?.user?.email as string) || 'kbot',
       }),
     ).then(() => closeDeleteModal());
   }, [closeDeleteModal, dispatch, selectedApplication, session?.user?.email]);
