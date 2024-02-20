@@ -298,10 +298,10 @@ export const sendTelemetryEvent = createAsyncThunk<
     state: RootState;
   }
 >('api/sendTelemetryEvent', async (body, { getState }) => {
-  const { selectedCluster } = getState().applications;
+  const { managementCluster } = getState().api;
 
   await axios.post('/api/proxy', {
-    url: `/telemetry/${selectedCluster?.clusterName}`,
+    url: `/telemetry/${managementCluster?.clusterName}`,
     body,
   });
 });
