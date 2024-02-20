@@ -20,7 +20,7 @@ export const installGitOpsApp = createAsyncThunk<
 >('applications/installGitOpsApp', async ({ values, user }, { dispatch, getState }) => {
   const {
     applications: { selectedCatalogApp, filter },
-    api: { managementCluster },
+    api: { managementCluster, clusterMap },
   } = getState();
 
   if (!selectedCatalogApp) {
@@ -43,12 +43,15 @@ export const installGitOpsApp = createAsyncThunk<
   const secret_keys = getMapValues(selectedCatalogApp.secret_keys);
   const config_keys = getMapValues(selectedCatalogApp.config_keys);
 
+  const cluster = clusterMap[filter.cluster as string];
+
   const params = {
     config_keys,
     secret_keys,
     user,
     is_template: filter.target === Target.TEMPLATE,
     workload_cluster_name: filter.cluster,
+    environment: cluster?.environment?.name,
   };
 
   // Removing workload_cluster_name for management cluster installations
