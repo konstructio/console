@@ -11,7 +11,7 @@ export const Container = styled(Row)`
 
 export const Content = styled(Column)`
   overflow: auto;
-  width: 100%;
+  flex: 1;
 `;
 
 export const Link = styled.a`
