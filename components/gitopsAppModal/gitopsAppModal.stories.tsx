@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form';
 import { Meta, StoryObj } from '@storybook/react';
 
 import useModal from '../../hooks/useModal';
-import Button from '../button';
+import Button from '../Button/Button';
 import { noop } from '../../utils/noop';
 import { mockGitopsCatalogApp } from '../../tests/mocks/mockGitopsCatalogApp';
 

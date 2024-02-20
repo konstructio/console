@@ -9,7 +9,7 @@ import clusterAvailable from '../../assets/clusterAvailable.svg';
 import { BUBBLE_GUM_BABY_GIRL } from '../../constants/colors';
 import { CLUSTER_TAG_CONFIG, RESERVED_DRAFT_CLUSTER_NAME } from '../../constants';
 import { Cluster, ClusterStatus, ClusterType, DraftCluster } from '../../types/provision';
-import Typography from '../typography';
+import Typography from '../Typography/Typography';
 
 import {
   Container,

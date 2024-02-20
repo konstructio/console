@@ -4,7 +4,7 @@ import Image from 'next/image';
 import { GitProvider } from '../../types';
 import gitlabLogo from '../../assets/gitlab.svg';
 import githubLogo from '../../assets/github.svg';
-import Typography from '../typography';
+import Typography from '../Typography/Typography';
 
 import { Button } from './gitProviderButton.styled';
 

@@ -1,13 +1,13 @@
 import React from 'react';
 import { Meta, StoryObj } from '@storybook/react';
 
-import { LocalFormStep } from '../../constants/installation';
+import { K3DFormStep } from '../../constants/installation';
 import { GitProvider } from '../../types';
 import { useInstallation } from '../../hooks/useInstallation';
 import useStep from '../../hooks/useStep';
 import { InstallationType } from '../../types/redux';
 
-import InstallationStepContainer from '.';
+import InstallationStepContainer from './InstallationStepContainer';
 
 const meta: Meta<typeof InstallationStepContainer> = {
   component: InstallationStepContainer,
@@ -19,7 +19,7 @@ const InstallationStepContainerWithHooks = () => {
   const { stepTitles, installTitles } = useInstallation(
     InstallationType.LOCAL,
     GitProvider.GITHUB,
-    LocalFormStep.SETUP,
+    K3DFormStep.SETUP,
   );
   const { currentStep, goToPrev } = useStep(0);
 

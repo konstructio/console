@@ -2,7 +2,7 @@
 import React, { FunctionComponent, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 
-import Applications from '../../../containers/applications';
+import Applications from '../../../containers/Applications/Applications';
 import { useAppSelector } from '../../../redux/store';
 
 import { Route } from '@/constants';

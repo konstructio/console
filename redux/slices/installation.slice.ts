@@ -15,7 +15,7 @@ export interface InstallationState {
   errorDetails?: string;
 }
 export const initialState: InstallationState = {
-  installationStep: 0,
+  installationStep: 3,
 };
 
 const installationSlice = createSlice({

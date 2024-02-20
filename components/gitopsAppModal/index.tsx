@@ -2,13 +2,13 @@ import React, { FunctionComponent } from 'react';
 import Image from 'next/image';
 import { Control } from 'react-hook-form';
 
-import Modal from '../modal';
-import Button from '../button';
-import Typography from '../typography';
-import ControlledPassword from '../controlledFields/Password';
+import Modal from '../Modal/Modal';
+import Button from '../Button/Button';
+import Typography from '../Typography/Typography';
+import ControlledPassword from '../controlledFields/ControlledPassword';
 import { GitOpsCatalogApp } from '../../types/applications';
 import { BISCAY, SALTBOX_BLUE } from '../../constants/colors';
-import ControlledTextField from '../controlledFields/TextField';
+import ControlledTextField from '../controlledFields/ControlledTextField/ControlledTextField';
 
 import { Container, Content, Close, Footer, Header } from './gitopsAppModal.styled';
 

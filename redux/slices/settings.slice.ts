@@ -2,7 +2,7 @@ import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 
 import { getClusterTourStatus, updateClusterTourStatus } from '../thunks/settings.thunk';
 
-import { SettingsTab } from '@/constants/setttings';
+import { SettingsTab } from '@/constants/settings';
 
 export interface SettingsState {
   isLoading: boolean;
