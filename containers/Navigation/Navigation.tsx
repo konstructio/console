@@ -34,9 +34,7 @@ const Navigation: FunctionComponent<NavigationProps> = ({
 
   const asPath = usePathname();
   const { kubefirstVersion, isClusterZero } = useAppSelector(selectConfig());
-  const { managementCluster } = useAppSelector(({ api }) => ({
-    managementCluster: api.managementCluster,
-  }));
+  const managementCluster = useAppSelector(({ api }) => api.managementCluster);
   const license = useAppSelector(({ subscription }) => subscription.license);
 
   const { isEnabled: isMultiClusterEnabled } = useFeatureFlag(FeatureFlag.MULTICLUSTER_MANAGEMENT);
