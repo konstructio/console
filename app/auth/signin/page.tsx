@@ -5,6 +5,10 @@ import Image from 'next/image';
 import { useSearchParams } from 'next/navigation';
 import { useMemo } from 'react';
 
+import Button from '../../../components/Button/Button';
+import Typography from '../../../components/Typography/Typography';
+import NextLink from '../../../components/NextLink/NextLink';
+
 import {
   Background,
   Container,
@@ -19,10 +23,7 @@ import {
 import Ray from '@/assets/ray.svg';
 import TitleDark from '@/assets/titleDark.svg';
 import Vault from '@/assets/vault.svg';
-import Button from '@/components/Button/Button';
-import Typography from '@/components/Typography/Typography';
 import { VOLCANIC_SAND } from '@/constants/colors';
-import NextLink from '@/components/NextLink/NextLink';
 
 export default function SignIn() {
   const searchParams = useSearchParams();

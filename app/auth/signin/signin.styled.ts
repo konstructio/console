@@ -3,8 +3,7 @@ import styled from 'styled-components';
 import Box from '@mui/material/Box';
 import Link from 'next/link';
 
-import Typography from '../../../components/Typography/Typography';
-
+import Typography from '@/components/Typography/Typography';
 import { CELERY_MOUSSE } from '@/constants/colors';
 import { media } from '@/utils/media';
 import Column from '@/components/Column/Column';
