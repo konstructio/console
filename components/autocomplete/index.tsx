@@ -15,7 +15,7 @@ import { Required } from '../textField/textField.styled';
 import Row from '../row';
 import Tag from '../tag';
 
-import { AutoTextField, InputAdornmentContainer, Label, MenuItem } from './autocomplete.styled';
+import { AutoTextField, InputAdornmentContainer, Label, MenuItem } from './Autocomplete.styled';
 
 import { ClusterEnvironment } from '@/types/provision';
 import { noop } from '@/utils/noop';

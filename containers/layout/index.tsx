@@ -25,7 +25,7 @@ import {
   selectIsLicenseActive,
   selectPendingInvoice,
 } from '@/redux/selectors/subscription.selector';
-import Banner from '@/components/banner';
+import Banner from '@/components/Banner/Banner';
 import { WHITE } from '@/constants/colors';
 import { setIsBannerOpen } from '@/redux/slices/settings.slice';
 

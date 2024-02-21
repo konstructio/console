@@ -4,7 +4,7 @@ import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import { SvgIconTypeMap } from '@mui/material';
 import { OverridableComponent } from '@mui/material/OverridableComponent';
 
-import { Close, Container, Text } from './banner.styled';
+import { Close, Container, Text } from './Banner.styled';
 
 import { IVY_LEAGUE, RED_VITALITY, WHITE } from '@/constants/colors';
 
