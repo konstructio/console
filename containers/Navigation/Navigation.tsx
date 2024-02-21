@@ -15,7 +15,6 @@ import { useAppSelector } from '../../redux/store';
 import { noop } from '@/utils/noop';
 import { selectConfig } from '@/redux/selectors/config.selector';
 import useFeatureFlag from '@/hooks/useFeatureFlag';
-import { selectApplications } from '@/redux/selectors/applications.selector';
 import { InstallationType } from '@/types/redux';
 import { FeatureFlag } from '@/types/config';
 import { ASMANI_SKY } from '@/constants/colors';
@@ -35,7 +34,9 @@ const Navigation: FunctionComponent<NavigationProps> = ({
 
   const asPath = usePathname();
   const { kubefirstVersion, isClusterZero } = useAppSelector(selectConfig());
-  const { selectedCluster } = useAppSelector(selectApplications());
+  const { managementCluster } = useAppSelector(({ api }) => ({
+    managementCluster: api.managementCluster,
+  }));
   const license = useAppSelector(({ subscription }) => subscription.license);
 
   const { isEnabled: isMultiClusterEnabled } = useFeatureFlag(FeatureFlag.MULTICLUSTER_MANAGEMENT);
@@ -51,7 +52,7 @@ const Navigation: FunctionComponent<NavigationProps> = ({
           isEnabled:
             isMultiClusterEnabled &&
             !isClusterZero &&
-            selectedCluster?.cloudProvider !== InstallationType.LOCAL,
+            managementCluster?.cloudProvider !== InstallationType.LOCAL,
         },
         {
           icon: <GridViewOutlinedIcon />,
@@ -63,7 +64,7 @@ const Navigation: FunctionComponent<NavigationProps> = ({
           icon: <CollectionsOutlinedIcon />,
           path: Route.ENVIRONMENTS,
           title: 'Environments',
-          isEnabled: !isClusterZero && selectedCluster?.cloudProvider !== InstallationType.LOCAL,
+          isEnabled: !isClusterZero && managementCluster?.cloudProvider !== InstallationType.LOCAL,
         },
         {
           icon: <ReceiptLongIcon />,
@@ -74,7 +75,7 @@ const Navigation: FunctionComponent<NavigationProps> = ({
           isEnabled: !isClusterZero && isSubscriptionEnabled,
         },
       ].filter(({ isEnabled }) => isEnabled),
-    [isMultiClusterEnabled, isClusterZero, selectedCluster?.cloudProvider, isSubscriptionEnabled],
+    [isMultiClusterEnabled, isClusterZero, managementCluster?.cloudProvider, isSubscriptionEnabled],
   );
 
   const nextLicenseUpgradeTitle = useMemo<string | undefined>(() => {
