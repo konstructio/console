@@ -19,7 +19,7 @@ import {
   DisplayName,
   Header,
   Installing,
-} from './gitOpsCatalogCard.styled';
+} from './GitOpsCatalogCard.styled';
 
 export const CATEGORY_COLOR_CONFIG: Record<AppCategory, TagColor> = {
   [AppCategory.APP_MANAGEMENT]: 'purple',

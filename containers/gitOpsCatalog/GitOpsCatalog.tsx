@@ -8,8 +8,8 @@ import FormGroup from '@mui/material/FormGroup';
 
 import Checkbox from '../../components/Checkbox/Checkbox';
 import Typography from '../../components/Typography/Typography';
-import GitOpsCatalogCard from '../../components/gitOpsCatalogCard';
-import GitopsAppModal from '../../components/gitopsAppModal';
+import GitOpsCatalogCard from '../../components/GitOpsCatalogCard/GitOpsCatalogCard';
+import GitopsAppModal from '../../components/GitopsAppModal/GitopsAppModal';
 import useModal from '../../hooks/useModal';
 import { useAppDispatch, useAppSelector } from '../../redux/store';
 import { installGitOpsApp } from '../../redux/thunks/applications.thunk';

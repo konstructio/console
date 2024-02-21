@@ -2,7 +2,7 @@
 import styled from 'styled-components';
 
 import Row from '../../../../components/Row/Row';
-import FormContainer from '../../../../components/formContainer';
+import FormContainer from '../../../../components/FormContainer/FormContainer';
 
 export const Form = styled(FormContainer)`
   gap: 32px;

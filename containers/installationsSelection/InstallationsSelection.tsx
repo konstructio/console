@@ -2,7 +2,7 @@ import React, { FunctionComponent, useCallback } from 'react';
 import { useFormContext } from 'react-hook-form';
 
 import { clearError, setGitProvider, setInstallType } from '../../redux/slices/installation.slice';
-import GitProviderButton from '../../components/gitProviderButton';
+import GitProviderButton from '../../components/GitProviderButton/GitProviderButton';
 import CloudProviderCard from '../../components/CloudProviderCard/CloudProviderCard';
 import { useAppDispatch, useAppSelector } from '../../redux/store';
 import { INSTALLATION_TYPES, InstallValues, InstallationType } from '../../types/redux';

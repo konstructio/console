@@ -3,7 +3,7 @@ import { useFormContext } from 'react-hook-form';
 import FormControlLabel from '@mui/material/FormControlLabel';
 
 import { Required } from '../../../../components/TextField/TextField.styled';
-import GitProviderButton from '../../../../components/gitProviderButton';
+import GitProviderButton from '../../../../components/GitProviderButton/GitProviderButton';
 import Typography from '../../../../components/Typography/Typography';
 import { useInstallation } from '../../../../hooks/useInstallation';
 import ControlledPassword from '../../../../components/controlledFields/ControlledPassword';

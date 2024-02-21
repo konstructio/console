@@ -23,7 +23,7 @@ import {
   LeftPanel,
   Nodes,
   Img,
-} from './graphNode.styled';
+} from './GraphNode.styled';
 
 const GRAPH_NODE_CONFIG: Record<
   ClusterType,

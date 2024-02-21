@@ -10,7 +10,7 @@ import { GitOpsCatalogApp } from '../../types/applications';
 import { BISCAY, SALTBOX_BLUE } from '../../constants/colors';
 import ControlledTextField from '../controlledFields/ControlledTextField/ControlledTextField';
 
-import { Container, Content, Close, Footer, Header } from './gitopsAppModal.styled';
+import { Container, Content, Close, Footer, Header } from './GitopsAppModal.styled';
 
 export interface GitopsAppModalProps extends GitOpsCatalogApp {
   control: Control;

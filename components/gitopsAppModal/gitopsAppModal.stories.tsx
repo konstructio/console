@@ -7,7 +7,7 @@ import Button from '../Button/Button';
 import { noop } from '../../utils/noop';
 import { mockGitopsCatalogApp } from '../../tests/mocks/mockGitopsCatalogApp';
 
-import GitopsAppModal from '.';
+import GitopsAppModal from './GitopsAppModal';
 
 const meta: Meta<typeof GitopsAppModal> = {
   component: GitopsAppModal,
