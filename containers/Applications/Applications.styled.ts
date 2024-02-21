@@ -3,7 +3,7 @@ import Link from 'next/link';
 import styled from 'styled-components';
 
 import Row from '@/components/row';
-import ApplicationsFilterComp from '@/components/applicationsFilter';
+import ApplicationsFilterComp from '@/components/ApplicationsFilter/ApplicationsFilter';
 import { media } from '@/utils/media';
 
 export const Container = styled.div`

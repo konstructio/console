@@ -20,7 +20,7 @@ import {
   Content,
   DropdownContainer,
   TargetContainer,
-} from './applicationsFilter.styled';
+} from './ApplicationsFilter.styled';
 
 import { VOLCANIC_SAND } from '@/constants/colors';
 import { LabelValue } from '@/types';
