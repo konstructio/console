@@ -2,9 +2,9 @@ import React, { FunctionComponent, useCallback, useEffect, useState } from 'reac
 
 import ApplicationComponent, {
   ApplicationProps as AppCompProps,
-} from '../../components/Application/Application';
-import { useAppDispatch, useAppSelector } from '../../redux/store';
-import { checkSiteReadiness } from '../../redux/thunks/readiness.thunk';
+} from '@/components/Application/Application';
+import { useAppDispatch, useAppSelector } from '@/redux/store';
+import { checkSiteReadiness } from '@/redux/thunks/readiness.thunk';
 
 export interface ApplicationProps extends Omit<AppCompProps, 'links'> {
   links?: Array<string>;
