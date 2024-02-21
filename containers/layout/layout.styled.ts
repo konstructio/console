@@ -10,8 +10,8 @@ export const Container = styled(Row)`
 `;
 
 export const Content = styled(Column)`
-  overflow: auto;
   flex: 1;
+  min-width: 0px;
 `;
 
 export const Link = styled.a`

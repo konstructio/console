@@ -4,7 +4,6 @@ import TableBody, { tableBodyClasses } from '@mui/material/TableBody';
 import TableRow, { tableRowClasses } from '@mui/material/TableRow';
 import IconButton from '@mui/material/IconButton';
 import Box from '@mui/material/Box';
-import TableContainer from '@mui/material/TableContainer';
 import Table from '@mui/material/Table';
 import { typographyClasses } from '@mui/material/Typography';
 
@@ -108,12 +107,4 @@ export const StyledCellText = muiStyled(Typography)(() => ({
 
 export const StyledTable = styled(Table)`
   border-collapse: collapse;
-  margin: 5px;
-  height: fit-content;
-  margin: 0 28px;
-`;
-
-export const StyledTableContainer = styled(TableContainer)`
-  display: flex;
-  height: 100%;
 `;

@@ -5,13 +5,7 @@ import Tabs from '@mui/material/Tabs';
 import Joyride, { ACTIONS, CallBackProps } from 'react-joyride';
 
 import { CreateClusterFlow } from './CreateClusterFlow/CreateClusterFlow';
-import {
-  Container,
-  Content,
-  Header,
-  LeftContainer,
-  StyledDrawer,
-} from './ClusterManagement.styled';
+import { Content, Header, LeftContainer, StyledDrawer } from './ClusterManagement.styled';
 
 import Button from '@/components/Button/Button';
 import Typography from '@/components/Typography/Typography';
@@ -56,6 +50,7 @@ import { selectUpgradeLicenseDefinition } from '@/redux/selectors/subscription.s
 import KubeConfigModal from '@/components/KubeConfigModal/KubeConfigModal';
 import { createNotification } from '@/redux/slices/notifications.slice';
 import useFeatureFlag from '@/hooks/useFeatureFlag';
+import Column from '@/components/Column/Column';
 
 const ClusterManagement: FunctionComponent = () => {
   const {
@@ -293,7 +288,7 @@ const ClusterManagement: FunctionComponent = () => {
   }, [dispatch, managementCluster]);
 
   return (
-    <Container>
+    <>
       <Header>
         <LeftContainer>
           <Typography variant="subtitle1">Clusters</Typography>
@@ -330,16 +325,27 @@ const ClusterManagement: FunctionComponent = () => {
         </Button>
       </Header>
       <Content>
-        <TabPanel value={clusterManagementTab} index={ClusterManagementTab.LIST_VIEW}>
-          {managementCluster && (
-            <ClusterTable
-              clusters={clusterMap}
-              managementCluster={managementCluster}
-              onDeleteCluster={handleDeleteMenuClick}
-              selectedClusterName={presentedCluster?.clusterName}
-              onClusterRowSelected={handleClusterSelect}
-            />
-          )}
+        <TabPanel
+          value={clusterManagementTab}
+          index={ClusterManagementTab.LIST_VIEW}
+          sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            flex: 1,
+            overflowX: 'auto',
+          }}
+        >
+          <Column style={{ margin: 24 }}>
+            {managementCluster && (
+              <ClusterTable
+                clusters={clusterMap}
+                managementCluster={managementCluster}
+                onDeleteCluster={handleDeleteMenuClick}
+                selectedClusterName={presentedCluster?.clusterName}
+                onClusterRowSelected={handleClusterSelect}
+              />
+            )}
+          </Column>
         </TabPanel>
         <TabPanel value={clusterManagementTab} index={ClusterManagementTab.GRAPH_VIEW}>
           <Joyride
@@ -412,7 +418,7 @@ const ClusterManagement: FunctionComponent = () => {
           commandDocLink={commandDocLink}
         />
       )}
-    </Container>
+    </>
   );
 };
 

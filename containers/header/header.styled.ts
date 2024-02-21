@@ -2,7 +2,7 @@
 import styled from 'styled-components';
 import { Avatar as AvatarMui, Box } from '@mui/material';
 
-import row from '../../components/Row/Row';
+import Row from '../../components/Row/Row';
 
 import { CHEFS_HAT } from '@/constants/colors';
 
@@ -10,16 +10,14 @@ export const Avatar = styled(AvatarMui)`
   cursor: pointer;
 `;
 
-export const Container = styled(row)`
+export const Container = styled(Row)`
   align-items: center;
   background-color: ${({ theme }) => theme.colors.white};
   box-shadow: 0px 2px 4px rgba(31, 41, 55, 0.06);
-  display: flex;
   gap: 16px;
   justify-content: flex-end;
   min-height: 64px;
   padding: 0 24px;
-  width: calc(100% - 50px);
 
   & > svg {
     cursor: pointer;
