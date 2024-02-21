@@ -18,7 +18,7 @@ import {
   Links,
   LiveAppIcon,
   Title,
-} from './application.styled';
+} from './Application.styled';
 
 import { noop } from '@/utils/noop';
 
