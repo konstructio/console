@@ -47,7 +47,7 @@ import {
   SUGGESTED_WORKLOAD_NODE_COUNT,
 } from '@/constants';
 import TourModal from '@/components/tourModal';
-import JoyrideTooltip from '@/components/joyrideTooltip';
+import JoyrideTooltip from '@/components/JoyRideTooltip/JoyRideTooltip';
 import { JOYRIDE_STEPS } from '@/constants/joyride';
 import { getClusterTourStatus, updateClusterTourStatus } from '@/redux/thunks/settings.thunk';
 import usePaywall from '@/hooks/usePaywall';

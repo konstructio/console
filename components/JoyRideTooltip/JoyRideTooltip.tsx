@@ -3,7 +3,7 @@ import { TooltipRenderProps } from 'react-joyride';
 
 import Button from '../Button/Button';
 
-import { TooltipBody, TooltipContent, TooltipFooter, TooltipTitle } from './joyrideTooltip.styled';
+import { TooltipBody, TooltipContent, TooltipFooter, TooltipTitle } from './JoyRideTooltip.styled';
 
 const JoyrideTooltip: FunctionComponent<TooltipRenderProps> = ({
   continuous,
