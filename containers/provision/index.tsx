@@ -15,7 +15,7 @@ import {
 } from './provision.styled';
 
 import InstallationStepContainer from '@/components/installationStepContainer';
-import InstallationInfoCard from '@/components/installationInfoCard';
+import InstallationInfoCard from '@/components/InstallationInfoCard/InstallationInfoCard';
 import ErrorBanner from '@/components/ErrorBanner/ErrorBanner';
 import Button from '@/components/Button/Button';
 import {
