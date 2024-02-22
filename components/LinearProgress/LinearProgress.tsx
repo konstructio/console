@@ -3,9 +3,9 @@ import LinearProgressMui, { LinearProgressProps } from '@mui/material/LinearProg
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 
-import { ASMANI_SKY, LIGHT_GREY, PRIMARY, VOLCANIC_SAND } from '../../constants/colors';
+import { Container } from './LinearProgress.styled';
 
-import { Container } from './linearProgress.styled';
+import { ASMANI_SKY, LIGHT_GREY, PRIMARY, VOLCANIC_SAND } from '@/constants/colors';
 
 const LinearProgressWithLabel = (props: LinearProgressProps & { value: number }) => {
   const isCompleted = props.value === 100;

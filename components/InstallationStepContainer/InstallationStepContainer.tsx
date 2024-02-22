@@ -2,7 +2,7 @@ import React, { FunctionComponent, PropsWithChildren, useMemo } from 'react';
 
 import Progress, { ProgressProps } from '../progress';
 import { InstallationButtonsProps } from '../InstallationButtons/InstallationButtons';
-import LinearProgress from '../linearProgress';
+import LinearProgress from '../LinearProgress/LinearProgress';
 
 import {
   Container,
