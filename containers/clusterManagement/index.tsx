@@ -29,7 +29,7 @@ import DeleteCluster from '@/components/deleteCluster';
 import TabPanel, { Tab, a11yProps } from '@/components/tab';
 import { BISCAY, MIDNIGHT_EXPRESS, SALTBOX_BLUE } from '@/constants/colors';
 import { Flow } from '@/components/flow';
-import ClusterTable from '@/components/clusterTable/clusterTable';
+import ClusterTable from '@/components/ClusterTable/ClusterTable';
 import {
   createDraftCluster,
   removeDraftCluster,

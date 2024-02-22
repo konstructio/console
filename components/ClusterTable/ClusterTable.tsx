@@ -34,7 +34,7 @@ import {
   DraftCluster,
 } from '../../types/provision';
 import { ClusterCache, InstallationType } from '../../types/redux';
-import Typography from '../../components/typography';
+import Typography from '../typography';
 import { noop } from '../../utils/noop';
 import Tag from '../tag';
 import { NestedKeyOf } from '../../types';
@@ -52,7 +52,7 @@ import {
   StyledIconButton,
   StyledTableContainer,
   StyledTable,
-} from './clusterTable.styled';
+} from './ClusterTable.styled';
 
 import useToggle from '@/hooks/useToggle';
 

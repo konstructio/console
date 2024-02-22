@@ -1,10 +1,10 @@
 import { Meta, StoryObj } from '@storybook/react';
 
-import { noop } from '../../utils/noop';
-import { mapClusterFromRaw } from '../../utils/mapClustersFromRaw';
-import { mockClusterResponse } from '../../tests/mocks/mockClusterResponse';
+import { ClusterTable } from './ClusterTable';
 
-import { ClusterTable } from './clusterTable';
+import { noop } from '@/utils/noop';
+import { mapClusterFromRaw } from '@/utils/mapClustersFromRaw';
+import { mockClusterResponse } from '@/tests/mocks/mockClusterResponse';
 
 const { managementCluster } = mapClusterFromRaw(mockClusterResponse);
 
