@@ -15,7 +15,7 @@ import {
   MenuItem,
   Title,
   BreakpointTooltip,
-} from './navigation.styled';
+} from './Navigation.styled';
 
 import { noop } from '@/utils/noop';
 import { ECHO_BLUE } from '@/constants/colors';

@@ -9,9 +9,8 @@ import ReceiptLongIcon from '@mui/icons-material/ReceiptLong';
 import HelpOutlineOutlinedIcon from '@mui/icons-material/HelpOutlineOutlined';
 import StarBorderOutlinedIcon from '@mui/icons-material/StarBorderOutlined';
 
-import NavigationComponent, { FooterItem } from '../../components/navigation';
-import { useAppSelector } from '../../redux/store';
-
+import NavigationComponent, { FooterItem } from '@/components/Navigation/Navigation';
+import { useAppSelector } from '@/redux/store';
 import { noop } from '@/utils/noop';
 import { selectConfig } from '@/redux/selectors/config.selector';
 import useFeatureFlag from '@/hooks/useFeatureFlag';
