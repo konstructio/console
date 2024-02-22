@@ -6,7 +6,8 @@ import { typographyClasses } from '@mui/material/Typography';
 import Row from '../row';
 import Column from '../Column/Column';
 import Typography from '../typography';
-import { ECHO_BLUE, MOONLESS_MYTERY } from '../../constants/colors';
+
+import { ECHO_BLUE, MOONLESS_MYTERY } from '@/constants/colors';
 
 export const CloseButton = styled.button`
   border: none;

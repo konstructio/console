@@ -4,7 +4,7 @@ import { styled as muiStyled, Box } from '@mui/material';
 
 import Row from '@/components/row';
 import Column from '@/components/Column/Column';
-import HeadsUpNotification from '@/components/headsUpNotification';
+import HeadsUpNotification from '@/components/HeadsUpNotification/HeadsUpNotification';
 import { CHEFS_HAT } from '@/constants/colors';
 
 export const CloseButton = styled.button`

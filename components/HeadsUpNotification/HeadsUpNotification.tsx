@@ -4,8 +4,6 @@ import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
 import Image from 'next/image';
 import styled from 'styled-components';
 
-import lightningBolt from '../../assets/lightningBolt.svg';
-
 import {
   CloseButton,
   HeadsUp,
@@ -13,7 +11,9 @@ import {
   LogoContainer,
   Message,
   Root,
-} from './headsUpNotification.styled';
+} from './HeadsUpNotification.styled';
+
+import lightningBolt from '@/assets/lightningBolt.svg';
 
 interface HeadsUpNotificationProps extends Omit<ComponentPropsWithoutRef<'div'>, 'key'> {
   onClose: () => void;
