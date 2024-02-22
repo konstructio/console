@@ -16,7 +16,7 @@ import {
 
 import InstallationStepContainer from '@/components/installationStepContainer';
 import InstallationInfoCard from '@/components/installationInfoCard';
-import ErrorBanner from '@/components/errorBanner';
+import ErrorBanner from '@/components/ErrorBanner/ErrorBanner';
 import Button from '@/components/Button/Button';
 import {
   clearError,

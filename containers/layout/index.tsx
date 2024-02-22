@@ -18,7 +18,7 @@ import { setLicense } from '@/redux/slices/subscription.slice';
 import { EnvironmentVariables, FeatureFlag } from '@/types/config';
 import { setFlags } from '@/redux/slices/featureFlags.slice';
 import { setConfigValues } from '@/redux/slices/config.slice';
-import FlappyKray from '@/components/flappyKray';
+import FlappyKray from '@/components/FlappyKRay/FlappyKRay';
 import useModal from '@/hooks/useModal';
 import {
   selectHasLicenseKey,

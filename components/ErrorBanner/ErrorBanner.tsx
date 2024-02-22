@@ -4,7 +4,7 @@ import ErrorIcon from '@mui/icons-material/Error';
 import Typography from '../typography';
 import { VOLCANIC_SAND } from '../../constants/colors';
 
-import { Container, ErrorContainer, Header, List, ListItem } from './errorBanner.styled';
+import { Container, ErrorContainer, Header, List, ListItem } from './ErrorBanner.styled';
 
 export interface ErrorBannerProps {
   details?: string;

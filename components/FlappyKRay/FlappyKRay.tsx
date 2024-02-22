@@ -1,9 +1,9 @@
 import React, { FunctionComponent, useRef } from 'react';
 
-import Modal, { Close } from '../../components/modal';
+import Modal, { Close } from '../modal';
 import { FLAPPY_TWEET } from '../../constants';
 
-import { ShareInTwitter } from './flappyKray.styled';
+import { ShareInTwitter } from './FlappyKRay.styled';
 
 export interface FlappyKrayProps {
   closeModal: () => void;
