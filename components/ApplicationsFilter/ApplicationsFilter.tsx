@@ -10,7 +10,7 @@ import SearchIcon from '@mui/icons-material/Search';
 
 import Row from '../row';
 import Typography from '../typography';
-import { IAutocompleteProps } from '../autocomplete/Autocomplete';
+import { IAutocompleteProps } from '../AutoComplete/Autocomplete';
 import Select from '../select';
 import TextFieldWithRef from '../textField';
 import { InputAdornmentContainer } from '../textField/textField.styled';
