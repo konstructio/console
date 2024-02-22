@@ -10,7 +10,7 @@ import LearnMore from '@/components/LearnMore/LearnMore';
 import Button from '@/components/Button/Button';
 import compDisplayImage from '@/assets/comp_display.svg';
 import useToggle from '@/hooks/useToggle';
-import Modal from '@/components/modal';
+import Modal from '@/components/Modal/Modal';
 import { CreateEnvironmentMenu } from '@/components/CreateEnvironmentMenu/CreateEnvironmentMenu';
 import { useAppDispatch, useAppSelector } from '@/redux/store';
 import {

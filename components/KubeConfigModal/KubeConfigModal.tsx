@@ -1,6 +1,6 @@
 import React, { FunctionComponent } from 'react';
 
-import Modal, { IModalProps } from '../modal';
+import Modal, { IModalProps } from '../Modal/Modal';
 import Column from '../Column/Column';
 import CopyCommand, { CopyCommandProps } from '../CopyCommand/CopyCommand';
 import Button from '../Button/Button';

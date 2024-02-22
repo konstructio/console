@@ -4,11 +4,12 @@ import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import { CircularProgress } from '@mui/material';
 
 import Typography from '../typography';
-import Modal from '../modal';
-import { LAUGHING_ORANGE } from '../../constants/colors';
+import Modal from '../Modal/Modal';
 import Button from '../Button/Button';
 
 import { Content, Footer, Header } from './uninstallApplication.styled';
+
+import { LAUGHING_ORANGE } from '@/constants/colors';
 
 export interface UninstallApplicationProps extends PropsWithChildren {
   cluster: string;

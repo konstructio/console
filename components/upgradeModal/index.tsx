@@ -2,7 +2,7 @@ import React, { FunctionComponent } from 'react';
 import Image from 'next/image';
 import StarBorderOutlinedIcon from '@mui/icons-material/StarBorderOutlined';
 
-import Modal from '../modal';
+import Modal from '../Modal/Modal';
 import Button from '../Button/Button';
 import Typography from '../typography';
 

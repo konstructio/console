@@ -4,7 +4,7 @@ import { FormProvider, useForm } from 'react-hook-form';
 import ContactUsForm from './contactUsForm';
 
 import { CancelSubscriptionFields, UserRequest } from '@/types/subscription';
-import Modal from '@/components/modal';
+import Modal from '@/components/Modal/Modal';
 import { useAppDispatch } from '@/redux/store';
 import { createUserRequest, validateLicenseKey } from '@/redux/thunks/subscription.thunk';
 

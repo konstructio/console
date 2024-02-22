@@ -3,7 +3,7 @@ import React from 'react';
 import { Meta, StoryObj } from '@storybook/react';
 import styled from 'styled-components';
 
-import Modal from './index';
+import Modal from './Modal';
 
 import Button from '@/components/Button/Button';
 import useModal from '@/hooks/useModal';

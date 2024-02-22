@@ -1,6 +1,6 @@
 import React, { FunctionComponent } from 'react';
 
-import Modal, { IModalProps } from '../modal';
+import Modal, { IModalProps } from '../Modal/Modal';
 import Typography from '../typography';
 import Button from '../Button/Button';
 

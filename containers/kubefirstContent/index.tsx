@@ -5,15 +5,14 @@ import { InstantSearch } from 'react-instantsearch';
 
 const KUBEFIRST_CONTENT_INDEX_NAME = 'kubefirst-content';
 
-import Modal, { Close } from '../../components/modal';
-import Typography from '../../components/typography';
-import { BISCAY, SALTBOX_BLUE } from '../../constants/colors';
-
 import { Body, Container, Filter, Header } from './kubefirstContent.styled';
 import Hits from './hits';
 import RefinementList from './refinementList';
 import RangeSlider from './slider';
 
+import Modal, { Close } from '@/components/Modal/Modal';
+import Typography from '@/components/typography';
+import { BISCAY, SALTBOX_BLUE } from '@/constants/colors';
 export interface KubefirstContentProps {
   closeModal: () => void;
   isOpen: boolean;

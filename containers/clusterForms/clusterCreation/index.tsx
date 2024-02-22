@@ -29,7 +29,7 @@ import {
   WORKLOAD_CLUSTER_OPTIONS,
 } from '@/constants';
 import { updateDraftCluster } from '@/redux/slices/api.slice';
-import Modal from '@/components/modal';
+import Modal from '@/components/Modal/Modal';
 import useModal from '@/hooks/useModal';
 import { CreateEnvironmentMenu } from '@/components/CreateEnvironmentMenu/CreateEnvironmentMenu';
 import { createEnvironment, getAllEnvironments } from '@/redux/thunks/environments.thunk';

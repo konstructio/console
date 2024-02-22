@@ -6,7 +6,7 @@ import CancelSubscriptionConfirmation from './cancelSubscriptionConfirmation';
 
 import useStep from '@/hooks/useStep';
 import { CancelSubscriptionFields, UserRequest } from '@/types/subscription';
-import Modal from '@/components/modal';
+import Modal from '@/components/Modal/Modal';
 import { useAppDispatch } from '@/redux/store';
 import { createUserRequest, validateLicenseKey } from '@/redux/thunks/subscription.thunk';
 
