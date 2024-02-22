@@ -2,7 +2,7 @@ import { Meta, StoryObj } from '@storybook/react';
 
 import { noop } from '../../utils/noop';
 
-import { Flow } from './index';
+import { Flow } from './Flow';
 
 const meta: Meta<typeof Flow> = {
   component: Flow,

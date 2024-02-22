@@ -2,7 +2,7 @@
 import styled from 'styled-components';
 import { ControlButton } from 'reactflow';
 
-import { PASTEL_LIGHT_BLUE, ROCK_BLUE } from '../../../constants/colors';
+import { PASTEL_LIGHT_BLUE, ROCK_BLUE } from '@/constants/colors';
 
 export const StyledControlButton = styled(ControlButton)`
   height: 36px;

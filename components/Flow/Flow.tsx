@@ -14,7 +14,7 @@ import {
 import 'reactflow/dist/style.css';
 import { generateNodesConfig } from '../../utils/reactFlow';
 
-import CustomReactFlowControls from './controls';
+import CustomReactFlowControls from './Controls/Controls';
 
 import { RESERVED_DRAFT_CLUSTER_NAME } from '@/constants';
 

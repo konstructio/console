@@ -6,7 +6,7 @@ import FullscreenIcon from '@mui/icons-material/Fullscreen';
 import ZoomInIcon from '@mui/icons-material/ZoomIn';
 import ZoomOutIcon from '@mui/icons-material/ZoomOut';
 
-import { FitViewButton, ZoomInButton, ZoomOutButton } from './controls.styled';
+import { FitViewButton, ZoomInButton, ZoomOutButton } from './Controls.styled';
 
 const CustomReactFlowControls: FunctionComponent<ControlProps> = ({
   onFitView,
