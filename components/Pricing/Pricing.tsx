@@ -1,13 +1,13 @@
 import React, { FunctionComponent, useMemo } from 'react';
 import Image from 'next/image';
 
-import CheckIcon from '../../assets/check.png';
 import Typography from '../typography';
 import Button from '../Button/Button';
 
-import { Container, Features, PriceImage } from './pricing.styled';
+import { Container, Features, PriceImage } from './Pricing.styled';
 
 import { Plan } from '@/types/plan';
+import CheckIcon from '@/assets/check.png';
 import { BISCAY, SALTBOX_BLUE } from '@/constants/colors';
 
 export interface PricingProps {

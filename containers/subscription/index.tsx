@@ -22,7 +22,7 @@ import { activateLicenseKey, validateLicenseKey } from '@/redux/thunks/subscript
 import useModal from '@/hooks/useModal';
 import { SaasPlans } from '@/types/subscription';
 import { selectHasLicenseKey } from '@/redux/selectors/subscription.selector';
-import Pricing from '@/components/pricing';
+import Pricing from '@/components/Pricing/Pricing';
 
 interface SubscriptionProps {
   activeTabParam?: string;
