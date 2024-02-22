@@ -4,7 +4,7 @@ import CopyToClipboard from 'react-copy-to-clipboard';
 
 import Typography from '../typography';
 import Button from '../Button/Button';
-import Password from '../password';
+import Password from '../Password/Password';
 
 import { Container, Link, PasswordContainer, Title } from './ClusterReady.styled';
 

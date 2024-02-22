@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Control, Controller, FieldValues, UseControllerProps } from 'react-hook-form';
 
-import Password from '../password/index';
+import Password from '../Password/Password';
 
 export interface ControlledTextFieldProps<T extends FieldValues> extends UseControllerProps<T> {
   label: string;

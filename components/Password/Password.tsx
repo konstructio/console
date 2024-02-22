@@ -6,7 +6,7 @@ import { InputProps } from '@mui/material/Input';
 
 import TextField from '../textField';
 
-import { InputAdornmentContainer } from './password.styled';
+import { InputAdornmentContainer } from './Password.styled';
 
 export interface PasswordProps extends InputProps {
   label?: string;
