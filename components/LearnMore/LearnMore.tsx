@@ -1,7 +1,7 @@
 import React, { FunctionComponent } from 'react';
 import styled from 'styled-components';
 
-import NextLink from '../nextLink';
+import NextLink from '../NextLink/NextLink';
 import { ITypographyProps, Variant } from '../typography';
 
 import { Text } from './LearnMore.styled';

@@ -1,7 +1,7 @@
 import React, { FunctionComponent, PropsWithChildren } from 'react';
 import Link, { LinkProps } from 'next/link';
 
-import { LinkContainer } from './nextLink.styled';
+import { LinkContainer } from './NextLink.styled';
 
 interface NextLinkProps extends Omit<LinkProps, 'onClick' | 'onTouchStart' | 'onMouseEnter'> {
   target?: string;

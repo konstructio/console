@@ -2,7 +2,7 @@ import NextImage from 'next/image';
 
 import styled, { css } from '@/app/lib/styled-components';
 import Row from '@/components/row';
-import NextLink from '@/components/nextLink';
+import NextLink from '@/components/NextLink/NextLink';
 import { PASTEL_LIGHT_BLUE, ROCK_BLUE } from '@/constants/colors';
 
 export const Card = styled.div`

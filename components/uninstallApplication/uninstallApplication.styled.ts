@@ -2,7 +2,7 @@
 import styled from 'styled-components';
 
 import Column from '../Column/Column';
-import NextLinkComp from '../nextLink';
+import NextLinkComp from '../NextLink/NextLink';
 import Row from '../row';
 
 export const Content = styled(Column)`

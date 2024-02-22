@@ -22,7 +22,7 @@ import Vault from '@/assets/vault.svg';
 import Button from '@/components/Button/Button';
 import Typography from '@/components/typography';
 import { VOLCANIC_SAND } from '@/constants/colors';
-import NextLink from '@/components/nextLink';
+import NextLink from '@/components/NextLink/NextLink';
 
 export default function SignIn() {
   const searchParams = useSearchParams();
