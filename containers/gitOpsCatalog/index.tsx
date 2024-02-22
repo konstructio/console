@@ -10,7 +10,7 @@ import { CardsContainer, Container, Content, Filter } from './gitOpsCatalog.styl
 
 import Checkbox from '@/components/Checkbox/Checkbox';
 import Typography from '@/components/typography';
-import GitOpsCatalogCard from '@/components/gitOpsCatalogCard';
+import GitOpsCatalogCard from '@/components/GitOpsCatalogCard/GitOpsCatalogCard';
 import GitopsAppModal from '@/components/GitOpsAppModal/GitOpsAppModal';
 import useModal from '@/hooks/useModal';
 import { useAppDispatch, useAppSelector } from '@/redux/store';

@@ -7,8 +7,6 @@ import Tag, { TagColor } from '../tag';
 import Tooltip from '../tooltip';
 import Button from '../Button/Button';
 import Typography from '../typography';
-import { AppCategory, GitOpsCatalogApp } from '../../types/applications';
-import { VOLCANIC_SAND } from '../../constants/colors';
 
 import {
   App,
@@ -19,7 +17,10 @@ import {
   DisplayName,
   Header,
   Installing,
-} from './gitOpsCatalogCard.styled';
+} from './GitOpsCatalogCard.styled';
+
+import { AppCategory, GitOpsCatalogApp } from '@/types/applications';
+import { VOLCANIC_SAND } from '@/constants/colors';
 
 export const CATEGORY_COLOR_CONFIG: Record<AppCategory, TagColor> = {
   [AppCategory.APP_MANAGEMENT]: 'purple',
