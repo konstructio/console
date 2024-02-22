@@ -4,7 +4,7 @@ import VisibilityOffOutlinedIcon from '@mui/icons-material/VisibilityOffOutlined
 import IconButton from '@mui/material/IconButton';
 import { InputProps } from '@mui/material/Input';
 
-import TextField from '../textField';
+import TextField from '../TextField/TextField';
 
 import { InputAdornmentContainer } from './Password.styled';
 

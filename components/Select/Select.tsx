@@ -5,7 +5,7 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import MenuItem from '@mui/material/MenuItem';
 
 import Typography from '../typography';
-import { Required } from '../textField/textField.styled';
+import { Required } from '../TextField/TextField.styled';
 import Tag, { TagColor } from '../Tag/Tag';
 import { DOLPHIN, LIGHT_GREY } from '../../constants/colors';
 import { StyledFormHelperText } from '../TextArea/TextArea.styled';

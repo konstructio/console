@@ -12,8 +12,8 @@ import Row from '../Row/Row';
 import Typography from '../typography';
 import { IAutocompleteProps } from '../Autocomplete/Autocomplete';
 import Select from '../Select/Select';
-import TextFieldWithRef from '../textField';
-import { InputAdornmentContainer } from '../textField/textField.styled';
+import TextFieldWithRef from '../TextField/TextField';
+import { InputAdornmentContainer } from '../TextField/TextField.styled';
 
 import {
   Container,

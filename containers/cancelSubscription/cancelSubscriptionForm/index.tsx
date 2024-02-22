@@ -17,7 +17,7 @@ import ControlledCheckbox from '@/components/controlledFields/checkbox';
 import Button from '@/components/Button/Button';
 import { CancelSubscriptionFields, UserRequest } from '@/types/subscription';
 import ControlledTextArea from '@/components/controlledFields/textArea';
-import { Required } from '@/components/textField/textField.styled';
+import { Required } from '@/components/TextField/TextField.styled';
 
 export const CANCEL_SUBSCRIPTION_OPTIONS = [
   {

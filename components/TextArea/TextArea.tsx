@@ -3,7 +3,7 @@ import InputLabel from '@mui/material/InputLabel';
 import { TextareaAutosizeProps } from '@mui/base/TextareaAutosize';
 import { SxProps } from '@mui/material';
 
-import { Required } from '../textField/textField.styled';
+import { Required } from '../TextField/TextField.styled';
 
 import {
   Container,

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Control, Controller, FieldValues, UseControllerProps } from 'react-hook-form';
 import { SxProps } from '@mui/material';
 
-import TextFieldWithRef from '../textField/index';
+import TextFieldWithRef from '../TextField/TextField';
 
 export interface ControlledTextFieldProps<T extends FieldValues> extends UseControllerProps<T> {
   disabled?: boolean;

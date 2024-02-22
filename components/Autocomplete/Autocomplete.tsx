@@ -8,10 +8,10 @@ import { ControllerRenderProps, FieldValues } from 'react-hook-form';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import { InputLabel } from '@mui/material';
 
-import TextField from '../textField';
+import TextField from '../TextField/TextField';
 import Column from '../Column/Column';
 import Typography from '../typography';
-import { Required } from '../textField/textField.styled';
+import { Required } from '../TextField/TextField.styled';
 import Row from '../Row/Row';
 import Tag from '../Tag/Tag';
 

@@ -10,7 +10,7 @@ import {
   GitUserFieldInput,
 } from './authForm.styled';
 
-import { Required } from '@/components/textField/textField.styled';
+import { Required } from '@/components/TextField/TextField.styled';
 import GitProviderButton from '@/components/GitProviderButton/GitProviderButton';
 import Typography from '@/components/typography';
 import { useInstallation } from '@/hooks/useInstallation';

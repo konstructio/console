@@ -3,7 +3,7 @@ import Box from '@mui/material/Box';
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 
 import Typography from '../typography';
-import TextFieldWithRef from '../textField';
+import TextFieldWithRef from '../TextField/TextField';
 import Modal from '../Modal/Modal';
 import { LAUGHING_ORANGE, TRUE_BLUE } from '../../constants/colors';
 import Button from '../Button/Button';

@@ -13,7 +13,7 @@ import {
   InputAdornmentContainer,
   Required,
   StartAdornmentContainer,
-} from './textField.styled';
+} from './TextField.styled';
 
 export interface TextFieldProps extends InputProps {
   label?: string;

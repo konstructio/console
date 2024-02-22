@@ -6,7 +6,7 @@ import Column from '../Column/Column';
 import NextLinkComp from '../NextLink/NextLink';
 import Row from '../Row/Row';
 import Typography from '../typography';
-import TextFieldWithRef from '../textField';
+import TextFieldWithRef from '../TextField/TextField';
 
 import { LAUGHING_ORANGE, VOLCANIC_SAND } from '@/constants/colors';
 
