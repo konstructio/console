@@ -6,7 +6,7 @@ import Image from 'next/image';
 import Row from '@/components/row';
 import Column from '@/components/Column/Column';
 import Typography from '@/components/typography';
-import LearnMore from '@/components/learnMore';
+import LearnMore from '@/components/LearnMore/LearnMore';
 import Button from '@/components/Button/Button';
 import compDisplayImage from '@/assets/comp_display.svg';
 import useToggle from '@/hooks/useToggle';

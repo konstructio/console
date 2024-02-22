@@ -33,7 +33,7 @@ import { InstallValues, InstallationType } from '@/types/redux';
 import { GitProvider } from '@/types';
 import { AUTHENTICATION_ERROR_MSG, DEFAULT_CLOUD_INSTANCE_SIZES } from '@/constants';
 import { useQueue } from '@/hooks/useQueue';
-import LearnMore from '@/components/learnMore';
+import LearnMore from '@/components/LearnMore/LearnMore';
 
 const FOOTER_LINKS_INFO: Record<number, { linkTitle: string; href: string }> = {
   1: {

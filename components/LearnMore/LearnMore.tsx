@@ -1,11 +1,12 @@
 import React, { FunctionComponent } from 'react';
 import styled from 'styled-components';
 
-import NextLink from '../../components/nextLink';
-import { InstallationType } from '../../types/redux';
+import NextLink from '../nextLink';
 import { ITypographyProps, Variant } from '../typography';
 
-import { Text } from './learnMore.styled';
+import { Text } from './LearnMore.styled';
+
+import { InstallationType } from '@/types/redux';
 
 export interface LearnMoreProps extends Omit<ITypographyProps, 'variant' | 'children'> {
   description: string;

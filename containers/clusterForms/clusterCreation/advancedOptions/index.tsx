@@ -1,17 +1,17 @@
 import React, { FunctionComponent, useState } from 'react';
 import { useFormContext } from 'react-hook-form';
 
-import LearnMore from '../../../../components/learnMore';
-import Typography from '../../../../components/typography';
-import Checkbox from '../../../../components/controlledFields/checkbox';
-import ControlledTextField from '../../../../components/controlledFields/TextField';
-import ControlledAutocomplete from '../../../../components/controlledFields/autoComplete/AutoComplete';
-import ControlledRadioGroup from '../../../../components/controlledFields/radio/';
-import { useAppSelector } from '../../../../redux/store';
-import { ImageRepository, NewWorkloadClusterConfig } from '../../../../types/provision';
-import { EXCLUSIVE_PLUM } from '../../../../constants/colors';
-
 import { InputContainer } from './advancedOptions.styled';
+
+import LearnMore from '@/components/LearnMore/LearnMore';
+import Typography from '@/components/typography';
+import Checkbox from '@/components/controlledFields/checkbox';
+import ControlledTextField from '@/components/controlledFields/TextField';
+import ControlledAutocomplete from '@/components/controlledFields/autoComplete/AutoComplete';
+import ControlledRadioGroup from '@/components/controlledFields/radio/';
+import { useAppSelector } from '@/redux/store';
+import { ImageRepository, NewWorkloadClusterConfig } from '@/types/provision';
+import { EXCLUSIVE_PLUM } from '@/constants/colors';
 
 const AdvancedOptions: FunctionComponent = () => {
   const [isCloudFlareSelected, setIsCloudFlareSelected] = useState<boolean>(false);

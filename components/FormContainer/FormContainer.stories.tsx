@@ -2,7 +2,7 @@ import { Meta, StoryObj } from '@storybook/react';
 import React from 'react';
 
 import Row from '../row';
-import LearnMore from '../learnMore';
+import LearnMore from '../LearnMore/LearnMore';
 
 import FormContainer from './FormContainer';
 

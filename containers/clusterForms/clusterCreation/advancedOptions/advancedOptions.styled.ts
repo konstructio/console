@@ -2,7 +2,7 @@
 import styled from 'styled-components';
 
 import Column from '@/components/Column/Column';
-import LearnMore from '@/components/learnMore';
+import LearnMore from '@/components/LearnMore/LearnMore';
 import { EXCLUSIVE_PLUM } from '@/constants/colors';
 
 export const InputContainer = styled(Column)`
