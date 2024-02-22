@@ -18,27 +18,8 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import Image from 'next/image';
 import moment from 'moment';
 
-import k3dLogo from '../../assets/k3d_logo.svg';
-import awsLogo from '../../assets/aws_logo.svg';
-import civoLogo from '../../assets/civo_logo.svg';
-import digitalOceanLogo from '../../assets/digital_ocean_logo.svg';
-import vultrLogo from '../../assets/vultr_logo.svg';
-import googleCloudLogo from '../../assets/googleCloud.svg';
-import { CLUSTER_TAG_CONFIG } from '../../constants';
-import { DODGER_BLUE, FIRE_BRICK } from '../../constants/colors';
-import {
-  ManagementCluster,
-  ClusterStatus,
-  ClusterType,
-  Cluster,
-  DraftCluster,
-} from '../../types/provision';
-import { ClusterCache, InstallationType } from '../../types/redux';
+import Tag from '../Tag/Tag';
 import Typography from '../typography';
-import { noop } from '../../utils/noop';
-import Tag from '../tag';
-import { NestedKeyOf } from '../../types';
-import { descendingComparator } from '../../utils/descendingComparator';
 
 import {
   StyledTableRow,
@@ -54,6 +35,25 @@ import {
   StyledTable,
 } from './ClusterTable.styled';
 
+import k3dLogo from '@/assets/k3d_logo.svg';
+import awsLogo from '@/assets/aws_logo.svg';
+import civoLogo from '@/assets/civo_logo.svg';
+import digitalOceanLogo from '@/assets/digital_ocean_logo.svg';
+import vultrLogo from '@/assets/vultr_logo.svg';
+import googleCloudLogo from '@/assets/googleCloud.svg';
+import { CLUSTER_TAG_CONFIG } from '@/constants';
+import { DODGER_BLUE, FIRE_BRICK } from '@/constants/colors';
+import {
+  ManagementCluster,
+  ClusterStatus,
+  ClusterType,
+  Cluster,
+  DraftCluster,
+} from '@/types/provision';
+import { ClusterCache, InstallationType } from '@/types/redux';
+import { noop } from '@/utils/noop';
+import { NestedKeyOf } from '@/types';
+import { descendingComparator } from '@/utils/descendingComparator';
 import useToggle from '@/hooks/useToggle';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

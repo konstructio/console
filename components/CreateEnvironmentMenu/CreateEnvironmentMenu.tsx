@@ -4,7 +4,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import Alert from '@mui/material/Alert';
 
 import Typography from '../typography';
-import { TagColor } from '../tag';
+import { TagColor } from '../Tag/Tag';
 import ControlledTextField from '../controlledFields/TextField';
 import ControlledTagSelect from '../controlledFields/tagSelect';
 import ControlledTextArea from '../controlledFields/textArea';

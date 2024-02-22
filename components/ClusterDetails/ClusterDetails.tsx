@@ -28,7 +28,7 @@ import {
 } from '@/types/provision';
 import StatusIndicator from '@/components/StatusIndicator/StatusIndicator';
 import { CLOUD_PROVIDER_DISPLAY_NAME, GIT_PROVIDER_DISPLAY_NAME } from '@/constants';
-import Tag from '@/components/tag';
+import Tag from '@/components/Tag/Tag';
 
 export interface ClusterDetailsProps extends Omit<ComponentPropsWithoutRef<'div'>, 'key'> {
   cluster: Cluster | DraftCluster;

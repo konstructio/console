@@ -1,6 +1,4 @@
 import React, { FunctionComponent } from 'react';
-import { styled } from '@mui/material/styles';
-import InputBase from '@mui/material/InputBase';
 import InputLabel from '@mui/material/InputLabel';
 import SelectMUI, { SelectProps } from '@mui/material/Select';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
@@ -8,11 +6,11 @@ import MenuItem from '@mui/material/MenuItem';
 
 import Typography from '../typography';
 import { Required } from '../textField/textField.styled';
-import Tag, { TagColor } from '../tag';
-import { DOLPHIN, LIGHT_GREY, LINK_WATER } from '../../constants/colors';
+import Tag, { TagColor } from '../Tag/Tag';
+import { DOLPHIN, LIGHT_GREY } from '../../constants/colors';
 import { StyledFormHelperText } from '../textArea/textArea.styled';
 
-import { Container } from './Select.styled';
+import { Container, Input } from './Select.styled';
 
 const MenuProps = {
   PaperProps: {
@@ -35,21 +33,6 @@ const MenuProps = {
     },
   },
 };
-
-export const Input = styled(InputBase)(({ theme, error }) => ({
-  '& .MuiInputBase-input': {
-    'borderRadius': 4,
-    'border': `1px solid ${error ? theme.palette.error.main : LINK_WATER}`,
-    'fontSize': 14,
-    'lineHeight': '20px',
-    'letterSpacing': '0.25px',
-    'padding': '8px 12px',
-    'width': '100%',
-    '&:focus': {
-      border: `1px solid ${theme.palette.primary.main}`,
-    },
-  },
-}));
 
 interface TagSelectProps extends Omit<SelectProps<TagColor>, 'key'> {
   options: readonly string[];

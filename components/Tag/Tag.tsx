@@ -1,14 +1,13 @@
 import React, { FunctionComponent } from 'react';
 import CloseIcon from '@mui/icons-material/Close';
 
-import checkImageSrc from '../../assets/check-circle.svg';
-import autoRenewImageSrc from '../../assets/auto-renew.svg';
-import trashImageSrc from '../../assets/trash.svg';
-import warningImageSrc from '../../assets/warning.svg';
-import { noop } from '../../utils/noop';
+import { TagContainer, IconImage, RemovalButton, StyledText } from './Tag.styled';
 
-import { TagContainer, IconImage, RemovalButton, StyledText } from './tag.styled';
-
+import checkImageSrc from '@/assets/check-circle.svg';
+import autoRenewImageSrc from '@/assets/auto-renew.svg';
+import trashImageSrc from '@/assets/trash.svg';
+import warningImageSrc from '@/assets/warning.svg';
+import { noop } from '@/utils/noop';
 import { ASMANI_SKY, CHEFS_DARK_HAT, EXCLUSIVE_PLUM, MOONLESS_MYTERY } from '@/constants/colors';
 
 export const TAG_COLOR_OPTIONS = [

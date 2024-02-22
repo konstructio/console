@@ -3,17 +3,18 @@ import Image from 'next/image';
 
 import { CardProps } from '../Card/Card';
 import Typography from '../typography';
-import Tag from '../tag';
-import { InstallationType } from '../../types/redux';
-import k3dLogo from '../../assets/k3d_logo.svg';
-import awsLogo from '../../assets/aws_logo.svg';
-import civoLogo from '../../assets/civo_logo.svg';
-import digitalOceanLogo from '../../assets/digital_ocean_logo.svg';
-import vultrLogo from '../../assets/vultr_logo.svg';
-import googleCloudLogo from '../../assets/googleCloud.svg';
-import { BISCAY } from '../../constants/colors';
+import Tag from '../Tag/Tag';
 
 import { CardContainer, DetailsContainer, Link, LabelContainer } from './CloudProviderCard.styled';
+
+import { InstallationType } from '@/types/redux';
+import k3dLogo from '@/assets/k3d_logo.svg';
+import awsLogo from '@/assets/aws_logo.svg';
+import civoLogo from '@/assets/civo_logo.svg';
+import digitalOceanLogo from '@/assets/digital_ocean_logo.svg';
+import vultrLogo from '@/assets/vultr_logo.svg';
+import googleCloudLogo from '@/assets/googleCloud.svg';
+import { BISCAY } from '@/constants/colors';
 
 const PROVIDER_OPTIONS: Record<
   InstallationType,

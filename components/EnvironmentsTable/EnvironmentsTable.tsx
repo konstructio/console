@@ -11,12 +11,8 @@ import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import ClickAwayListener from '@mui/material/ClickAwayListener';
 import moment from 'moment';
 
-import { ECHO_BLUE, FIRE_BRICK, MAGNOLIA, PRIMARY, SALTBOX_BLUE } from '../../constants/colors';
-import { ClusterEnvironment } from '../../types/provision';
 import Typography from '../typography';
-import Tag from '../tag';
-import { descendingComparator } from '../../utils/descendingComparator';
-import { EnvMap } from '../../redux/slices/environments.slice';
+import Tag from '../Tag/Tag';
 
 import {
   StyledTableRow,
@@ -30,6 +26,10 @@ import {
   StyledTable,
 } from './EnvironmentsTable.styled';
 
+import { ECHO_BLUE, FIRE_BRICK, MAGNOLIA, PRIMARY, SALTBOX_BLUE } from '@/constants/colors';
+import { ClusterEnvironment } from '@/types/provision';
+import { descendingComparator } from '@/utils/descendingComparator';
+import { EnvMap } from '@/redux/slices/environments.slice';
 import useToggle from '@/hooks/useToggle';
 
 const MyButton = styled.button<{ selected?: boolean }>`

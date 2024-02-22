@@ -3,7 +3,7 @@ import Image from 'next/image';
 import Box from '@mui/material/Box';
 import CircularProgress from '@mui/material/CircularProgress';
 
-import Tag, { TagColor } from '../tag';
+import Tag, { TagColor } from '../Tag/Tag';
 import Tooltip from '../tooltip';
 import Button from '../Button/Button';
 import Typography from '../typography';

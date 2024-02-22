@@ -9,15 +9,15 @@ import Table from '@mui/material/Table';
 import { typographyClasses } from '@mui/material/Typography';
 
 import Typography from '../typography';
-import Tag from '../tag';
+import Tag from '../Tag/Tag';
+
 import {
   CHEFS_HAT,
   PASTEL_LIGHT_BLUE,
   ROCK_BLUE,
   SALTBOX_BLUE,
   VOLCANIC_SAND,
-} from '../../constants/colors';
-
+} from '@/constants/colors';
 import styled, { css } from '@/app/lib/styled-components';
 
 export const Menu = styled(Box)`

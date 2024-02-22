@@ -47,7 +47,7 @@ import {
   selectHasLicenseKey,
   selectIsLicenseActive,
 } from '@/redux/selectors/subscription.selector';
-import Tag from '@/components/tag';
+import Tag from '@/components/Tag/Tag';
 import { getCloudProviderAuth } from '@/utils/getCloudProviderAuth';
 import { FeatureFlag } from '@/types/config';
 import useFeatureFlag from '@/hooks/useFeatureFlag';

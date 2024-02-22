@@ -5,7 +5,7 @@ import StarBorderOutlinedIcon from '@mui/icons-material/StarBorderOutlined';
 
 import Radio from './';
 
-import Tag from '@/components/tag';
+import Tag from '@/components/Tag/Tag';
 import { ASMANI_SKY } from '@/constants/colors';
 
 const meta: Meta<typeof Radio> = {

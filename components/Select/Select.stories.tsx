@@ -1,7 +1,7 @@
 import React from 'react';
 import { Meta, StoryObj } from '@storybook/react';
 
-import { TAG_COLOR_OPTIONS } from '../tag';
+import { TAG_COLOR_OPTIONS } from '../Tag/Tag';
 
 import SelectComponent, { TagSelectWithRef } from './Select';
 

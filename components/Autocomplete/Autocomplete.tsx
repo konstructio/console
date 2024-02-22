@@ -13,7 +13,7 @@ import Column from '../Column/Column';
 import Typography from '../typography';
 import { Required } from '../textField/textField.styled';
 import Row from '../Row/Row';
-import Tag from '../tag';
+import Tag from '../Tag/Tag';
 
 import { AutoTextField, InputAdornmentContainer, Label, MenuItem } from './Autocomplete.styled';
 

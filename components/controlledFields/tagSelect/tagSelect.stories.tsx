@@ -2,7 +2,7 @@ import React from 'react';
 import { Meta, StoryObj } from '@storybook/react';
 import { useForm } from 'react-hook-form';
 
-import { TAG_COLOR_OPTIONS, TagColor } from '../../tag';
+import { TAG_COLOR_OPTIONS, TagColor } from '../../Tag/Tag';
 
 import ControlledTagSelect from './index';
 

@@ -4,7 +4,7 @@ import { sample } from 'lodash';
 
 import Row from '../Row/Row';
 
-import Tag, { TAG_COLOR_OPTIONS, TAG_ICON_OPTONS } from '.';
+import Tag, { TAG_COLOR_OPTIONS, TAG_ICON_OPTONS } from './Tag';
 
 const meta: Meta<typeof Tag> = {
   component: Tag,
