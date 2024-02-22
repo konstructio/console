@@ -2,19 +2,27 @@ import React, { FunctionComponent, useCallback, useEffect, useMemo, useState } f
 import { useFormContext } from 'react-hook-form';
 import FormControlLabel from '@mui/material/FormControlLabel';
 
-import { Required } from '../../../../components/textField/textField.styled';
-import GitProviderButton from '../../../../components/gitProviderButton';
-import Typography from '../../../../components/typography';
-import { useInstallation } from '../../../../hooks/useInstallation';
-import ControlledPassword from '../../../../components/controlledFields/Password';
-import ControlledAutocomplete from '../../../../components/controlledFields/autoComplete/AutoComplete';
-import ControlledTextArea from '../../../../components/controlledFields/textArea';
-import ControlledTextField from '../../../../components/controlledFields/TextField';
-import { useAppDispatch, useAppSelector } from '../../../../redux/store';
-import { GIT_PROVIDERS, GitProvider } from '../../../../types';
-import { InstallValues, InstallationType } from '../../../../types/redux/index';
-import { FormStep } from '../../../../constants/installation';
-import { EXCLUSIVE_PLUM, VOLCANIC_SAND } from '../../../../constants/colors';
+import {
+  FormContainer,
+  GitContainer,
+  GitFieldsContainer,
+  GitUserField,
+  GitUserFieldInput,
+} from './authForm.styled';
+
+import { Required } from '@/components/textField/textField.styled';
+import GitProviderButton from '@/components/GitProviderButton/GitProviderButton';
+import Typography from '@/components/typography';
+import { useInstallation } from '@/hooks/useInstallation';
+import ControlledPassword from '@/components/controlledFields/Password';
+import ControlledAutocomplete from '@/components/controlledFields/autoComplete/AutoComplete';
+import ControlledTextArea from '@/components/controlledFields/textArea';
+import ControlledTextField from '@/components/controlledFields/TextField';
+import { useAppDispatch, useAppSelector } from '@/redux/store';
+import { GIT_PROVIDERS, GitProvider } from '@/types';
+import { InstallValues, InstallationType } from '@/types/redux/index';
+import { FormStep } from '@/constants/installation';
+import { EXCLUSIVE_PLUM, VOLCANIC_SAND } from '@/constants/colors';
 import {
   getGitHubOrgRepositories,
   getGitHubOrgTeams,
@@ -24,22 +32,9 @@ import {
   getGithubUserOrganizations,
   getGitlabGroups,
   getGitlabUser,
-} from '../../../../redux/thunks/git.thunk';
-import {
-  clearUserError,
-  clearGitState,
-  setIsGitSelected,
-} from '../../../../redux/slices/git.slice';
-import { setGitProvider } from '../../../../redux/slices/installation.slice';
-
-import {
-  FormContainer,
-  GitContainer,
-  GitFieldsContainer,
-  GitUserField,
-  GitUserFieldInput,
-} from './authForm.styled';
-
+} from '@/redux/thunks/git.thunk';
+import { clearUserError, clearGitState, setIsGitSelected } from '@/redux/slices/git.slice';
+import { setGitProvider } from '@/redux/slices/installation.slice';
 import Tooltip from '@/components/tooltip';
 import Row from '@/components/row';
 import CheckBoxWithRef from '@/components/Checkbox/Checkbox';

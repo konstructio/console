@@ -1,8 +1,8 @@
 import { Meta, StoryObj } from '@storybook/react';
 
-import { GitProvider } from '../../types';
+import GitProviderButton from './GitProviderButton';
 
-import GitProviderButton from '.';
+import { GitProvider } from '@/types';
 
 const meta: Meta<typeof GitProviderButton> = {
   component: GitProviderButton,

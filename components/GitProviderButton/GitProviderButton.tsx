@@ -6,7 +6,7 @@ import gitlabLogo from '../../assets/gitlab.svg';
 import githubLogo from '../../assets/github.svg';
 import Typography from '../typography';
 
-import { Button } from './gitProviderButton.styled';
+import { Button } from './GitProviderButton.styled';
 
 const PROVIDER_OPTIONS: Record<
   GitProvider,
