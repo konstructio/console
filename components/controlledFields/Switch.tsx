@@ -2,7 +2,7 @@ import React from 'react';
 import FormGroup from '@mui/material/FormGroup';
 import { Control, Controller, UseControllerProps, FieldValues } from 'react-hook-form';
 
-import Switch from '../switch';
+import Switch from '../Switch/Switch';
 
 export interface ControlledSwitchProps<T extends FieldValues> extends UseControllerProps<T> {
   control: Control<T>;

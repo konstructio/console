@@ -2,7 +2,7 @@ import React, { FunctionComponent } from 'react';
 import SwitchMui, { SwitchProps } from '@mui/material/Switch';
 import { styled } from '@mui/material/styles';
 
-import { PRIMARY } from '../../constants/colors';
+import { PRIMARY } from '@/constants/colors';
 
 interface CustomSwitchProps extends Omit<SwitchProps, 'key' | 'onChange'> {
   onChange: (checked: boolean) => void;

@@ -1,18 +1,18 @@
 import React, { FunctionComponent, useMemo } from 'react';
 import { useFormContext } from 'react-hook-form';
 
-import { Required } from '../../../../components/textField/textField.styled';
-import Typography from '../../../../components/typography';
-import SwitchComponent from '../../../../components/switch';
-import Checkbox from '../../../../components/controlledFields/checkbox';
-import ControlledTextField from '../../../../components/controlledFields/TextField';
-import ControlledRadio from '../../../../components/controlledFields/radio/';
-import { useAppSelector } from '../../../../redux/store';
-import { InstallValues, InstallationType } from '../../../../types/redux';
-import { GitProvider } from '../../../../types';
-import { EXCLUSIVE_PLUM } from '../../../../constants/colors';
-
 import { CheckboxContainer, Switch } from './advancedOptions.styled';
+
+import { Required } from '@/components/textField/textField.styled';
+import Typography from '@/components/typography';
+import SwitchComponent from '@/components/Switch/Switch';
+import Checkbox from '@/components/controlledFields/checkbox';
+import ControlledTextField from '@/components/controlledFields/TextField';
+import ControlledRadio from '@/components/controlledFields/radio/';
+import { useAppSelector } from '@/redux/store';
+import { InstallValues, InstallationType } from '@/types/redux';
+import { GitProvider } from '@/types';
+import { EXCLUSIVE_PLUM } from '@/constants/colors';
 
 interface AdvancedOptionsProps {
   advancedOptionsChecked: boolean;
