@@ -4,7 +4,7 @@ import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 
 import Column from '../Column/Column';
 import NextLinkComp from '../NextLink/NextLink';
-import Row from '../row';
+import Row from '../Row/Row';
 import Typography from '../typography';
 import TextFieldWithRef from '../textField';
 

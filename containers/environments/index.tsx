@@ -3,7 +3,7 @@ import React, { FunctionComponent, useEffect, useState, useCallback } from 'reac
 import styled from 'styled-components';
 import Image from 'next/image';
 
-import Row from '@/components/row';
+import Row from '@/components/Row/Row';
 import Column from '@/components/Column/Column';
 import Typography from '@/components/typography';
 import LearnMore from '@/components/LearnMore/LearnMore';

@@ -23,7 +23,7 @@ import {
 } from '@/types/provision';
 import { RESERVED_DRAFT_CLUSTER_NAME } from '@/constants';
 import useToggle from '@/hooks/useToggle';
-import Row from '@/components/row';
+import Row from '@/components/Row/Row';
 import Typography from '@/components/typography';
 
 interface CreateClusterFlowProps {

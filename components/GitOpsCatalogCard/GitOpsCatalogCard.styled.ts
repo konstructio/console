@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { styled as muiStyled } from '@mui/material';
 
 import Typography from '../typography';
-import Row from '../row';
+import Row from '../Row/Row';
 import Column from '../Column/Column';
 
 import { textTruncate } from '@/utils/theme';

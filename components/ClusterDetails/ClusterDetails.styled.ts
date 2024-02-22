@@ -5,7 +5,7 @@ import { typographyClasses } from '@mui/material/Typography';
 import { Divider } from '@mui/material';
 
 import ColumnComponent from '@/components/Column/Column';
-import RowComponent from '@/components/row';
+import RowComponent from '@/components/Row/Row';
 import Typography from '@/components/typography';
 import {
   EXCLUSIVE_PLUM,

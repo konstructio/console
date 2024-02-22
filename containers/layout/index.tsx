@@ -9,7 +9,7 @@ import { Link } from './layout.styled';
 
 import Header from '@/containers/header';
 import Navigation from '@/containers/navigation';
-import Row from '@/components/row';
+import Row from '@/components/Row/Row';
 import Column from '@/components/Column/Column';
 import { useAppDispatch, useAppSelector } from '@/redux/store';
 import { getClusters } from '@/redux/thunks/api.thunk';

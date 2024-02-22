@@ -5,7 +5,7 @@ import { styled as muiStyled } from '@mui/material/styles';
 
 import Typography from '@/components/typography';
 import Column from '@/components/Column/Column';
-import Row from '@/components/row';
+import Row from '@/components/Row/Row';
 import Drawer from '@/components/Drawer/Drawer';
 
 export const Container = styled(Column)`

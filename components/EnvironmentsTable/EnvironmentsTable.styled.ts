@@ -8,15 +8,16 @@ import TableRow from '@mui/material/TableRow';
 import TableBody, { tableBodyClasses } from '@mui/material/TableBody';
 import { typographyClasses } from '@mui/material/Typography';
 
-import Row from '../row';
+import Row from '../Row/Row';
 import Typography from '../typography';
+
 import {
   CHEFS_DARK_HAT,
   CHEFS_HAT,
   CHILD_OF_LIGHT,
   SALTBOX_BLUE,
   VOLCANIC_SAND,
-} from '../../constants/colors';
+} from '@/constants/colors';
 
 export const Menu = styled(Box)`
   position: absolute;

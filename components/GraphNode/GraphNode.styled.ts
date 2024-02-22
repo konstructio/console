@@ -5,7 +5,7 @@ import Image from 'next/image';
 
 import Typography from '../typography';
 import Column from '../Column/Column';
-import Row from '../row';
+import Row from '../Row/Row';
 import Tag from '../tag';
 
 import { BLUE_REFLECTION, EXCLUSIVE_PLUM } from '@/constants/colors';

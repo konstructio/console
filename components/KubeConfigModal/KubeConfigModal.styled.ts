@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import { styled as muiStyled } from '@mui/material';
 import { ErrorOutlineOutlined } from '@mui/icons-material';
 
-import Row from '../row';
+import Row from '../Row/Row';
 import Column from '../Column/Column';
 import Typography from '../typography';
 

@@ -1,7 +1,7 @@
 'use client';
 import styled from 'styled-components';
 
-import Row from '../row';
+import Row from '../Row/Row';
 import Column from '../Column/Column';
 import { LIGHT_GREY } from '../../constants/colors';
 

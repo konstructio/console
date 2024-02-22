@@ -8,7 +8,7 @@ import { Container, InfoIcon } from './radio.styled';
 
 import Typography from '@/components/typography';
 import { VOLCANIC_SAND } from '@/constants/colors';
-import Row from '@/components/row';
+import Row from '@/components/Row/Row';
 import Tooltip from '@/components/tooltip';
 
 export type RadioOptionsType = Array<{

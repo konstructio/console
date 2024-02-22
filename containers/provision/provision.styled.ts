@@ -8,7 +8,7 @@ import FormContainer from '@/components/FormContainer/FormContainer';
 import { media } from '@/utils/media';
 import { FormContent as Content } from '@/components/FormContainer/FormContainer.styled';
 import { LIGHT_GREY } from '@/constants/colors';
-import Row from '@/components/row';
+import Row from '@/components/Row/Row';
 
 export const AdvancedOptionsContainer = styled(FormContainer)`
   margin: 16px 0;

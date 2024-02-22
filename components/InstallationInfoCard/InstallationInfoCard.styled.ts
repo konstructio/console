@@ -1,7 +1,7 @@
 import NextImage from 'next/image';
 
 import styled, { css } from '@/app/lib/styled-components';
-import Row from '@/components/row';
+import Row from '@/components/Row/Row';
 import NextLink from '@/components/NextLink/NextLink';
 import { PASTEL_LIGHT_BLUE, ROCK_BLUE } from '@/constants/colors';
 

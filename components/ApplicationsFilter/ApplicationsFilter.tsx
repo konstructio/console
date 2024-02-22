@@ -8,7 +8,7 @@ import React, {
 import styled from 'styled-components';
 import SearchIcon from '@mui/icons-material/Search';
 
-import Row from '../row';
+import Row from '../Row/Row';
 import Typography from '../typography';
 import { IAutocompleteProps } from '../Autocomplete/Autocomplete';
 import Select from '../select';

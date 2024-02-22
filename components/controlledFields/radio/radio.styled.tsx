@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 
 import { PRIMARY, ROCK_BLUE } from '@/constants/colors';
-import Row from '@/components/row';
+import Row from '@/components/Row/Row';
 
 export const Container = styled(Row)`
   align-items: center;

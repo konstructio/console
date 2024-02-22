@@ -2,7 +2,7 @@ import React, { useCallback, useState } from 'react';
 import { Meta, StoryObj } from '@storybook/react';
 import { sample } from 'lodash';
 
-import Row from '../row';
+import Row from '../Row/Row';
 
 import Tag, { TAG_COLOR_OPTIONS, TAG_ICON_OPTONS } from '.';
 

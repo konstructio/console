@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import CloseIcon from '@mui/icons-material/Close';
 
 import Column from '../Column/Column';
-import Row from '../row';
+import Row from '../Row/Row';
 
 import { MIDNIGHT_EXPRESS } from '@/constants/colors';
 

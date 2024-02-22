@@ -3,7 +3,7 @@ import { styled as muiStyled } from '@mui/material';
 
 import Column from '../Column/Column';
 import Autocomplete from '../Autocomplete/Autocomplete';
-import Row from '../row';
+import Row from '../Row/Row';
 
 import { PASTEL_LIGHT_BLUE, WHITE } from '@/constants/colors';
 import { media } from '@/utils/media';

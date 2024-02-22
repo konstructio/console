@@ -12,7 +12,7 @@ import TextField from '../textField';
 import Column from '../Column/Column';
 import Typography from '../typography';
 import { Required } from '../textField/textField.styled';
-import Row from '../row';
+import Row from '../Row/Row';
 import Tag from '../tag';
 
 import { AutoTextField, InputAdornmentContainer, Label, MenuItem } from './Autocomplete.styled';

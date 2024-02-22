@@ -1,7 +1,7 @@
 'use client';
 import styled from 'styled-components';
 
-import Row from '@/components/row';
+import Row from '@/components/Row/Row';
 import Column from '@/components/Column/Column';
 
 export const CardsContainer = styled(Row)`

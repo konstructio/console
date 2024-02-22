@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import { styled as muiStyled } from '@mui/material';
 
 import Typography from '../typography';
-import Row from '../row';
+import Row from '../Row/Row';
 
 import { SALTBOX_BLUE, VOLCANIC_SAND, WASH_ME } from '@/constants/colors';
 

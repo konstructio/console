@@ -2,7 +2,7 @@
 import Link from 'next/link';
 import styled from 'styled-components';
 
-import Row from '@/components/row';
+import Row from '@/components/Row/Row';
 import ApplicationsFilterComp from '@/components/ApplicationsFilter/ApplicationsFilter';
 import { media } from '@/utils/media';
 
