@@ -4,16 +4,17 @@ import CloseIcon from '@mui/icons-material/Close';
 import Alert from '@mui/material/Alert';
 
 import Typography from '../typography';
-import Button from '../Button/Button';
-import { SALTBOX_BLUE } from '../../constants/colors';
 import { TagColor } from '../tag';
 import ControlledTextField from '../controlledFields/TextField';
 import ControlledTagSelect from '../controlledFields/tagSelect';
 import ControlledTextArea from '../controlledFields/textArea';
-import { ClusterEnvironment } from '../../types/provision';
-import { EnvMap } from '../../redux/slices/environments.slice';
+import Button from '../Button/Button';
 
-import { CloseButton, Content, Footer, Header, Root } from './createEnvironmentMenu.styled';
+import { CloseButton, Content, Footer, Header, Root } from './CreateEnvironmentMenu.styled';
+
+import { SALTBOX_BLUE } from '@/constants/colors';
+import { ClusterEnvironment } from '@/types/provision';
+import { EnvMap } from '@/redux/slices/environments.slice';
 
 const ENVIRONMENT_MENU_COLOR_OPTIONS: TagColor[] = [
   'gray',

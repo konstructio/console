@@ -31,7 +31,7 @@ import {
 import { updateDraftCluster } from '@/redux/slices/api.slice';
 import Modal from '@/components/modal';
 import useModal from '@/hooks/useModal';
-import { CreateEnvironmentMenu } from '@/components/createEnvironmentMenu';
+import { CreateEnvironmentMenu } from '@/components/CreateEnvironmentMenu/CreateEnvironmentMenu';
 import { createEnvironment, getAllEnvironments } from '@/redux/thunks/environments.thunk';
 import { noop } from '@/utils/noop';
 import { clearEnvironmentError } from '@/redux/slices/environments.slice';
