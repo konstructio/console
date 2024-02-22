@@ -7,17 +7,6 @@ import { useSession } from 'next-auth/react';
 
 import Application from '../application';
 import GitOpsCatalog from '../gitOpsCatalog';
-import TabPanel, { Tab, a11yProps } from '../../components/tab';
-import Typography from '../../components/typography';
-import {
-  getClusterApplications,
-  getGitOpsCatalogApps,
-  uninstallGitOpsApp,
-} from '../../redux/thunks/applications.thunk';
-import { sendTelemetryEvent } from '../../redux/thunks/api.thunk';
-import { useAppDispatch, useAppSelector } from '../../redux/store';
-import { DOCS_LINK } from '../../constants';
-import { BISCAY, SALTBOX_BLUE, VOLCANIC_SAND } from '../../constants/colors';
 
 import {
   Container,
@@ -28,6 +17,17 @@ import {
   ApplicationsFilter,
 } from './Applications.styled';
 
+import TabPanel, { Tab, a11yProps } from '@/components/Tab/Tab';
+import Typography from '@/components/typography';
+import {
+  getClusterApplications,
+  getGitOpsCatalogApps,
+  uninstallGitOpsApp,
+} from '@/redux/thunks/applications.thunk';
+import { sendTelemetryEvent } from '@/redux/thunks/api.thunk';
+import { useAppDispatch, useAppSelector } from '@/redux/store';
+import { DOCS_LINK } from '@/constants';
+import { BISCAY, SALTBOX_BLUE, VOLCANIC_SAND } from '@/constants/colors';
 import { setFilterState } from '@/redux/slices/applications.slice';
 import { ClusterStatus, WORKLOAD_CLUSTER_TYPES } from '@/types/provision';
 import { ClusterApplication, GitOpsCatalogApp } from '@/types/applications';

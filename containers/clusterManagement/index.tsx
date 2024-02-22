@@ -26,7 +26,7 @@ import {
 import useToggle from '@/hooks/useToggle';
 import useModal from '@/hooks/useModal';
 import DeleteCluster from '@/components/DeleteCluster/DeleteCluster';
-import TabPanel, { Tab, a11yProps } from '@/components/tab';
+import TabPanel, { Tab, a11yProps } from '@/components/Tab/Tab';
 import { BISCAY, MIDNIGHT_EXPRESS, SALTBOX_BLUE } from '@/constants/colors';
 import { Flow } from '@/components/Flow/Flow';
 import ClusterTable from '@/components/ClusterTable/ClusterTable';

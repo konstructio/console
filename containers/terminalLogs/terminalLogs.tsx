@@ -17,13 +17,7 @@ import SearchIcon from '@mui/icons-material/Search';
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 
-import Tooltip from '../../components/tooltip';
-import TabPanel, { Tab, a11yProps } from '../../components/tab';
 import ConciseLogs from '../conciseLogs';
-import { setCompletedSteps } from '../../redux/slices/api.slice';
-import { useAppDispatch, useAppSelector } from '../../redux/store';
-import { CLUSTER_CHECKS } from '../../constants/cluster';
-import { ANSI_COLORS, ECHO_BLUE, LIBERTY_BLUE } from '../../constants/colors';
 
 import {
   Container,
@@ -34,6 +28,12 @@ import {
   Tools,
 } from './terminalLogs.styled';
 
+import Tooltip from '@/components/tooltip';
+import TabPanel, { Tab, a11yProps } from '@/components/Tab/Tab';
+import { setCompletedSteps } from '@/redux/slices/api.slice';
+import { useAppDispatch, useAppSelector } from '@/redux/store';
+import { CLUSTER_CHECKS } from '@/constants/cluster';
+import { ANSI_COLORS, ECHO_BLUE, LIBERTY_BLUE } from '@/constants/colors';
 import { parseJSON } from '@/utils/isJson';
 
 import 'xterm/css/xterm.css';

@@ -11,7 +11,7 @@ import ContactUs from '../contactUsModal';
 
 import { Container, PlansContainer } from './subscription.styled';
 
-import TabPanel, { Tab, a11yProps } from '@/components/tab';
+import TabPanel, { Tab, a11yProps } from '@/components/Tab/Tab';
 import { BISCAY, VOLCANIC_SAND } from '@/constants/colors';
 import { useAppDispatch, useAppSelector } from '@/redux/store';
 import Typography from '@/components/typography';

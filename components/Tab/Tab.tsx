@@ -2,9 +2,9 @@ import React, { FunctionComponent, ReactNode } from 'react';
 import { styled } from '@mui/material/styles';
 import MuiTab, { tabClasses } from '@mui/material/Tab';
 
-import { ECHO_BLUE } from '../../constants/colors';
+import { TabContainer } from './Tab.styled';
 
-import { TabContainer } from './tab.styled';
+import { ECHO_BLUE } from '@/constants/colors';
 
 interface TabPanelProps {
   backgroundColor?: string;
