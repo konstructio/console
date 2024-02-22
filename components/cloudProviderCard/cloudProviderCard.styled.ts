@@ -2,7 +2,7 @@
 import styled from 'styled-components';
 import NextLink from 'next/link';
 
-import Card from '../card';
+import Card from '../Card/Card';
 import Column from '../column';
 
 export const CardContainer = styled(Card)`

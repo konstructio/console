@@ -1,7 +1,7 @@
 import React, { FunctionComponent } from 'react';
 import Image from 'next/image';
 
-import { CardProps } from '../card';
+import { CardProps } from '../Card/Card';
 import Typography from '../typography';
 import Tag from '../tag';
 import { InstallationType } from '../../types/redux';

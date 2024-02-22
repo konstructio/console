@@ -1,6 +1,6 @@
 import React, { ComponentPropsWithoutRef, FunctionComponent } from 'react';
 
-import { CardContainer } from './card.styled';
+import { CardContainer } from './Card.styled';
 
 export interface CardProps extends Omit<ComponentPropsWithoutRef<'div'>, 'key'> {
   active?: boolean;
