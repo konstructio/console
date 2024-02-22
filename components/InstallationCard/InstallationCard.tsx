@@ -1,9 +1,10 @@
 import React, { ComponentPropsWithoutRef, FunctionComponent } from 'react';
 
 import Typography from '../typography';
-import { CardOptionInfo } from '../../types';
 
-import { Card, CardTitle, CardDescription } from './installationCard.styled';
+import { Card, CardTitle, CardDescription } from './InstallationCard.styled';
+
+import { CardOptionInfo } from '@/types';
 
 export interface InstallationCardProps extends Omit<ComponentPropsWithoutRef<'div'>, 'key'> {
   active: boolean;
