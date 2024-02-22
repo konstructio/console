@@ -2,7 +2,7 @@
 import React, { ComponentPropsWithoutRef, FunctionComponent, ReactNode } from 'react';
 import styled from 'styled-components';
 
-import { Container, FormContent } from './formContainer.styled';
+import { Container, FormContent } from './FormContainer.styled';
 
 interface FormContainerProps extends ComponentPropsWithoutRef<'div'> {
   footerContent?: ReactNode;

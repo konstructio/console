@@ -2,11 +2,11 @@
 import Box, { BoxProps } from '@mui/material/Box';
 import styled from 'styled-components';
 
-import FormContainer from '../../components/formContainer';
-import { media } from '../../utils/media';
 import { GitFieldsContainer } from '../clusterForms/shared/authForm/authForm.styled';
 
-import { FormContent as Content } from '@/components/formContainer/formContainer.styled';
+import FormContainer from '@/components/FormContainer/FormContainer';
+import { media } from '@/utils/media';
+import { FormContent as Content } from '@/components/FormContainer/FormContainer.styled';
 import { LIGHT_GREY } from '@/constants/colors';
 import Row from '@/components/row';
 

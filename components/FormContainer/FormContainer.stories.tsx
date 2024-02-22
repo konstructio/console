@@ -4,7 +4,7 @@ import React from 'react';
 import Row from '../row';
 import LearnMore from '../learnMore';
 
-import FormContainer from '.';
+import FormContainer from './FormContainer';
 
 import { LIGHT_GREY } from '@/constants/colors';
 
