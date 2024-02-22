@@ -51,7 +51,7 @@ import JoyrideTooltip from '@/components/JoyRideTooltip/JoyRideTooltip';
 import { JOYRIDE_STEPS } from '@/constants/joyride';
 import { getClusterTourStatus, updateClusterTourStatus } from '@/redux/thunks/settings.thunk';
 import usePaywall from '@/hooks/usePaywall';
-import UpgradeModal from '@/components/upgradeModal';
+import UpgradeModal from '@/components/UpgradeModal/UpgradeModal';
 import { selectUpgradeLicenseDefinition } from '@/redux/selectors/subscription.selector';
 import KubeConfigModal from '@/components/KubeConfigModal/KubeConfigModal';
 import { createNotification } from '@/redux/slices/notifications.slice';

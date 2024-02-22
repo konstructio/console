@@ -6,7 +6,7 @@ import Modal from '../Modal/Modal';
 import Button from '../Button/Button';
 import Typography from '../Typography/Typography';
 
-import { Container, Content, Close, Footer, Header } from './upgradeModal.styled';
+import { Container, Content, Close, Footer, Header } from './UpgradeModal.styled';
 
 import { ASMANI_SKY, ECHO_BLUE, MIDNIGHT_EXPRESS, WHITE } from '@/constants/colors';
 import RocketIcon from '@/assets/rocket.svg';

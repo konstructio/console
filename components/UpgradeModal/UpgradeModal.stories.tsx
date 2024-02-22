@@ -3,7 +3,7 @@ import { Meta, StoryObj } from '@storybook/react';
 
 import Button from '../Button/Button';
 
-import UpgradeModalComponent from '.';
+import UpgradeModalComponent from './UpgradeModal';
 
 import useModal from '@/hooks/useModal';
 
