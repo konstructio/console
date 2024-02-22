@@ -8,7 +8,7 @@ import Modal from '../modal';
 import { LAUGHING_ORANGE, TRUE_BLUE } from '../../constants/colors';
 import Button from '../Button/Button';
 import { ClusterEnvironment } from '../../types/provision';
-import CopyButton from '../copyButton';
+import CopyButton from '../CopyButton/CopyButton';
 
 import { Content, CopyTextContainer, Footer, Header, NextLink } from './deleteEnvironment.styled';
 

@@ -7,7 +7,7 @@ import { TooltipProps } from '@mui/material';
 import Typography from '../typography';
 import Tooltip from '../tooltip';
 
-import { Button } from './copyButton.styled';
+import { Button } from './CopyButton.styled';
 
 import { noop } from '@/utils/noop';
 

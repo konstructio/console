@@ -1,7 +1,7 @@
 'use client';
 import styled from 'styled-components';
 
-import { LIGHT_GREY } from '../../constants/colors';
+import { LIGHT_GREY } from '@/constants/colors';
 
 export const Button = styled.button`
   border: none;

@@ -1,6 +1,6 @@
 import React, { FunctionComponent } from 'react';
 
-import CopyButton from '../copyButton';
+import CopyButton from '../CopyButton/CopyButton';
 
 import { Command, Container } from './copyCommand.styled';
 
