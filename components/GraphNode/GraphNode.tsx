@@ -1,14 +1,6 @@
 import React, { FunctionComponent, useMemo } from 'react';
 import { Node, NodeProps, Position, HandleType } from 'reactflow';
 
-import managementCluster from '../../assets/managementIcon.svg';
-import vCluster from '../../assets/vCluster.svg';
-import vClusterAvailable from '../../assets/vClusterAvailable.svg';
-import cluster from '../../assets/cluster.svg';
-import clusterAvailable from '../../assets/clusterAvailable.svg';
-import { BUBBLE_GUM_BABY_GIRL } from '../../constants/colors';
-import { CLUSTER_TAG_CONFIG, RESERVED_DRAFT_CLUSTER_NAME } from '../../constants';
-import { Cluster, ClusterStatus, ClusterType, DraftCluster } from '../../types/provision';
 import Typography from '../typography';
 
 import {
@@ -23,7 +15,16 @@ import {
   LeftPanel,
   Nodes,
   Img,
-} from './graphNode.styled';
+} from './GraphNode.styled';
+
+import managementCluster from '@/assets/managementIcon.svg';
+import vCluster from '@/assets/vCluster.svg';
+import vClusterAvailable from '@/assets/vClusterAvailable.svg';
+import cluster from '@/assets/cluster.svg';
+import clusterAvailable from '@/assets/clusterAvailable.svg';
+import { BUBBLE_GUM_BABY_GIRL } from '@/constants/colors';
+import { CLUSTER_TAG_CONFIG, RESERVED_DRAFT_CLUSTER_NAME } from '@/constants';
+import { Cluster, ClusterStatus, ClusterType, DraftCluster } from '@/types/provision';
 
 const GRAPH_NODE_CONFIG: Record<
   ClusterType,

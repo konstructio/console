@@ -1,8 +1,12 @@
 import React, { type FunctionComponent, useEffect } from 'react';
 import ReactFlow, { NodeTypes, ReactFlowProvider, useReactFlow } from 'reactflow';
 
-import { CustomGraphNode, GraphNode } from '../graphNode';
-import { useAppDispatch, useAppSelector } from '../../redux/store';
+import { CustomGraphNode, GraphNode } from '../GraphNode/GraphNode';
+
+import CustomReactFlowControls from './Controls/Controls';
+
+import { generateNodesConfig } from '@/utils/reactFlow';
+import { useAppDispatch, useAppSelector } from '@/redux/store';
 import {
   onConnect,
   onEdgesChange,
@@ -10,13 +14,10 @@ import {
   selectNodeById,
   setEdges,
   setNodes,
-} from '../../redux/slices/reactFlow.slice';
-import 'reactflow/dist/style.css';
-import { generateNodesConfig } from '../../utils/reactFlow';
-
-import CustomReactFlowControls from './Controls/Controls';
-
+} from '@/redux/slices/reactFlow.slice';
 import { RESERVED_DRAFT_CLUSTER_NAME } from '@/constants';
+
+import 'reactflow/dist/style.css';
 
 const nodeTypes: NodeTypes = {
   custom: GraphNode,

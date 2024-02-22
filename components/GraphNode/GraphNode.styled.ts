@@ -7,8 +7,8 @@ import Typography from '../typography';
 import Column from '../Column/Column';
 import Row from '../row';
 import Tag from '../tag';
-import { BLUE_REFLECTION, EXCLUSIVE_PLUM } from '../../constants/colors';
 
+import { BLUE_REFLECTION, EXCLUSIVE_PLUM } from '@/constants/colors';
 import styled, { css } from '@/app/lib/styled-components';
 
 export const StatusTag = styled(Tag)`
