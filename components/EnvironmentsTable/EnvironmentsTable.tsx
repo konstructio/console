@@ -13,7 +13,7 @@ import moment from 'moment';
 
 import { ECHO_BLUE, FIRE_BRICK, MAGNOLIA, PRIMARY, SALTBOX_BLUE } from '../../constants/colors';
 import { ClusterEnvironment } from '../../types/provision';
-import Typography from '../../components/typography';
+import Typography from '../typography';
 import Tag from '../tag';
 import { descendingComparator } from '../../utils/descendingComparator';
 import { EnvMap } from '../../redux/slices/environments.slice';
@@ -28,7 +28,7 @@ import {
   StyledHeaderCell,
   StyledTableContainer,
   StyledTable,
-} from './environmentsTable.styled';
+} from './EnvironmentsTable.styled';
 
 import useToggle from '@/hooks/useToggle';
 

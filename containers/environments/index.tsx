@@ -18,7 +18,7 @@ import {
   deleteEnvironment,
   getAllEnvironments,
 } from '@/redux/thunks/environments.thunk';
-import EnvironmentsTable from '@/components/environmentsTable';
+import EnvironmentsTable from '@/components/EnvironmentsTable/EnvironmentsTable';
 import { ClusterEnvironment } from '@/types/provision';
 import DeleteEnvironment from '@/components/DeleteEnvironment/DeleteEnvironment';
 import { clearEnvironmentError } from '@/redux/slices/environments.slice';
