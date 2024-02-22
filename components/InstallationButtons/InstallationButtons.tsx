@@ -3,7 +3,7 @@ import CircularProgress from '@mui/material/CircularProgress';
 
 import Button from '../Button/Button';
 
-import { Container } from './installationButtons.styled';
+import { Container } from './InstallationButtons.styled';
 
 export interface InstallationButtonsProps {
   isLoading?: boolean;

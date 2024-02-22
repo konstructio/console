@@ -2,9 +2,10 @@
 import styled from 'styled-components';
 
 import Column from '../Column/Column';
-import InstallationButtonsComp from '../installationButtons';
+import InstallationButtonsComp from '../InstallationButtons/InstallationButtons';
 import Typography from '../typography';
-import { media } from '../../utils/media';
+
+import { media } from '@/utils/media';
 
 export const Container = styled(Column)`
   align-items: center;

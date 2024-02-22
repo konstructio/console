@@ -1,11 +1,8 @@
 import React, { FunctionComponent, PropsWithChildren, useMemo } from 'react';
 
 import Progress, { ProgressProps } from '../progress';
-import { noop } from '../../utils/noop';
-import { InstallationButtonsProps } from '../installationButtons';
+import { InstallationButtonsProps } from '../InstallationButtons/InstallationButtons';
 import LinearProgress from '../linearProgress';
-import { useAppSelector } from '../../redux/store';
-import { CLUSTER_CHECKS } from '../../constants/cluster';
 
 import {
   Container,
@@ -14,6 +11,10 @@ import {
   Content,
   FormContent,
 } from './installationStepContainer.styled';
+
+import { noop } from '@/utils/noop';
+import { useAppSelector } from '@/redux/store';
+import { CLUSTER_CHECKS } from '@/constants/cluster';
 
 interface InstallationStepContainerProps
   extends PropsWithChildren,

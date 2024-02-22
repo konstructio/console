@@ -1,13 +1,13 @@
 import React from 'react';
 import { Meta, StoryObj } from '@storybook/react';
 
-import { LocalFormStep } from '../../constants/installation';
-import { GitProvider } from '../../types';
-import { useInstallation } from '../../hooks/useInstallation';
-import useStep from '../../hooks/useStep';
-import { InstallationType } from '../../types/redux';
-
 import InstallationStepContainer from '.';
+
+import { LocalFormStep } from '@/constants/installation';
+import { GitProvider } from '@/types';
+import { useInstallation } from '@/hooks/useInstallation';
+import useStep from '@/hooks/useStep';
+import { InstallationType } from '@/types/redux';
 
 const meta: Meta<typeof InstallationStepContainer> = {
   component: InstallationStepContainer,
