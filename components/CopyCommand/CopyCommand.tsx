@@ -2,7 +2,7 @@ import React, { FunctionComponent } from 'react';
 
 import CopyButton from '../CopyButton/CopyButton';
 
-import { Command, Container } from './copyCommand.styled';
+import { Command, Container } from './CopyCommand.styled';
 
 export interface CopyCommandProps {
   command: string;
