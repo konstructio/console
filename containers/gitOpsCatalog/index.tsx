@@ -11,7 +11,7 @@ import { CardsContainer, Container, Content, Filter } from './gitOpsCatalog.styl
 import Checkbox from '@/components/Checkbox/Checkbox';
 import Typography from '@/components/typography';
 import GitOpsCatalogCard from '@/components/gitOpsCatalogCard';
-import GitopsAppModal from '@/components/gitopsAppModal';
+import GitopsAppModal from '@/components/GitOpsAppModal/GitOpsAppModal';
 import useModal from '@/hooks/useModal';
 import { useAppDispatch, useAppSelector } from '@/redux/store';
 import { installGitOpsApp } from '@/redux/thunks/applications.thunk';

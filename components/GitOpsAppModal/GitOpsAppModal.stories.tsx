@@ -2,12 +2,13 @@ import React from 'react';
 import { useForm } from 'react-hook-form';
 import { Meta, StoryObj } from '@storybook/react';
 
-import useModal from '../../hooks/useModal';
 import Button from '../Button/Button';
-import { noop } from '../../utils/noop';
-import { mockGitopsCatalogApp } from '../../tests/mocks/mockGitopsCatalogApp';
 
-import GitopsAppModal from '.';
+import GitopsAppModal from './GitOpsAppModal';
+
+import useModal from '@/hooks/useModal';
+import { noop } from '@/utils/noop';
+import { mockGitopsCatalogApp } from '@/tests/mocks/mockGitopsCatalogApp';
 
 const meta: Meta<typeof GitopsAppModal> = {
   component: GitopsAppModal,
