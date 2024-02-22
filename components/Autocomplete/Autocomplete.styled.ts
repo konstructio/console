@@ -4,8 +4,9 @@ import { styled as muiStyled } from '@mui/material/styles';
 import { TextField as MUITextField, MenuItem as MUIMenuItem } from '@mui/material';
 import InputAdornment from '@mui/material/InputAdornment';
 
-import { LINK_WATER, SPUN_PEARL, WHITE_SMOKE } from '../../constants/colors';
-import Typography from '../typography';
+import Typography from '../Typography/Typography';
+
+import { LINK_WATER, SPUN_PEARL, WHITE_SMOKE } from '@/constants/colors';
 
 export const AutoTextField = muiStyled(MUITextField)(({ theme, error, type, InputProps }) => ({
   '& .MuiOutlinedInput-root': {

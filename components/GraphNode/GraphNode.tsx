@@ -1,7 +1,7 @@
 import React, { FunctionComponent, useMemo } from 'react';
 import { Node, NodeProps, Position, HandleType } from 'reactflow';
 
-import Typography from '../typography';
+import Typography from '../Typography/Typography';
 
 import {
   Container,

@@ -1,7 +1,7 @@
 import { styled as muiStyled } from '@mui/material/styles';
 
 import styled, { css } from '@/app/lib/styled-components';
-import Typography from '@/components/typography';
+import Typography from '@/components/Typography/Typography';
 import { MIDNIGHT_EXPRESS } from '@/constants/colors';
 import { media } from '@/utils/media';
 import Tooltip from '@/components/Tooltip/Tooltip';

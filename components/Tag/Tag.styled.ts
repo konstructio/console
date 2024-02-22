@@ -4,7 +4,7 @@ import { styled as muiStyled } from '@mui/material';
 import Image from 'next/image';
 
 import Row from '../Row/Row';
-import Typography from '../typography';
+import Typography from '../Typography/Typography';
 
 const spinAnimation = keyframes`
   from {

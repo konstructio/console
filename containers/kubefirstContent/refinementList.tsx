@@ -7,7 +7,7 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import { RefinementContainer } from './kubefirstContent.styled';
 
 import Checkbox from '@/components/Checkbox/Checkbox';
-import Typography from '@/components/typography';
+import Typography from '@/components/Typography/Typography';
 import { VOLCANIC_SAND } from '@/constants/colors';
 
 const RefinementList: FunctionComponent = () => {

@@ -4,7 +4,7 @@ import styled from 'styled-components';
 
 import useToggle from '../../hooks/useToggle';
 import Button from '../Button/Button';
-import Typography from '../typography';
+import Typography from '../Typography/Typography';
 
 import BannerComponent from './Banner';
 

@@ -5,7 +5,7 @@ import FormHelperText from '@mui/material/FormHelperText';
 import ErrorIcon from '@mui/icons-material/Error';
 import styled from 'styled-components';
 
-import Typography from '../typography';
+import Typography from '../Typography/Typography';
 import Column from '../Column/Column';
 
 import { LIGHT_GREY, VOLCANIC_SAND } from '@/constants/colors';

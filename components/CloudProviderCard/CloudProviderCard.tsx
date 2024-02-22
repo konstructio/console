@@ -2,7 +2,7 @@ import React, { FunctionComponent } from 'react';
 import Image from 'next/image';
 
 import { CardProps } from '../Card/Card';
-import Typography from '../typography';
+import Typography from '../Typography/Typography';
 import Tag from '../Tag/Tag';
 
 import { CardContainer, DetailsContainer, Link, LabelContainer } from './CloudProviderCard.styled';

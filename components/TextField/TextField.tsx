@@ -5,7 +5,7 @@ import ErrorIcon from '@mui/icons-material/Error';
 import InputBase from '@mui/material/InputBase';
 import InputLabel from '@mui/material/InputLabel';
 
-import Typography from '../typography';
+import Typography from '../Typography/Typography';
 
 import {
   Container,

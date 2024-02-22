@@ -6,7 +6,7 @@ import { Divider } from '@mui/material';
 
 import ColumnComponent from '@/components/Column/Column';
 import RowComponent from '@/components/Row/Row';
-import Typography from '@/components/typography';
+import Typography from '@/components/Typography/Typography';
 import {
   EXCLUSIVE_PLUM,
   PASTEL_LIGHT_BLUE,

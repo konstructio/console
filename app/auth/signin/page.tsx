@@ -20,7 +20,7 @@ import Ray from '@/assets/ray.svg';
 import TitleDark from '@/assets/titleDark.svg';
 import Vault from '@/assets/vault.svg';
 import Button from '@/components/Button/Button';
-import Typography from '@/components/typography';
+import Typography from '@/components/Typography/Typography';
 import { VOLCANIC_SAND } from '@/constants/colors';
 import NextLink from '@/components/NextLink/NextLink';
 

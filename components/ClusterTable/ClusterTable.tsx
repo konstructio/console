@@ -19,7 +19,7 @@ import Image from 'next/image';
 import moment from 'moment';
 
 import Tag from '../Tag/Tag';
-import Typography from '../typography';
+import Typography from '../Typography/Typography';
 
 import {
   StyledTableRow,

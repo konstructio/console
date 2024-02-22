@@ -9,7 +9,7 @@ import { BottomFormContainer, CancelContainer, FormContainer, UList } from './li
 import { COAL_MINE, EXCLUSIVE_PLUM, ORANGEALICIOUS, VOLCANIC_SAND } from '@/constants/colors';
 import Button from '@/components/Button/Button';
 import LearnMore from '@/components/LearnMore/LearnMore';
-import Typography from '@/components/typography';
+import Typography from '@/components/Typography/Typography';
 import { useAppSelector } from '@/redux/store';
 import ControlledPassword from '@/components/controlledFields/Password';
 import { selectHasLicenseKey, selectRequestByType } from '@/redux/selectors/subscription.selector';

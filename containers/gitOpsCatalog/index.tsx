@@ -9,7 +9,7 @@ import FormGroup from '@mui/material/FormGroup';
 import { CardsContainer, Container, Content, Filter } from './gitOpsCatalog.styled';
 
 import Checkbox from '@/components/Checkbox/Checkbox';
-import Typography from '@/components/typography';
+import Typography from '@/components/Typography/Typography';
 import GitOpsCatalogCard from '@/components/GitOpsCatalogCard/GitOpsCatalogCard';
 import GitopsAppModal from '@/components/GitOpsAppModal/GitOpsAppModal';
 import useModal from '@/hooks/useModal';

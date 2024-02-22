@@ -6,7 +6,7 @@ import CircularProgress from '@mui/material/CircularProgress';
 import Tag, { TagColor } from '../Tag/Tag';
 import Tooltip from '../Tooltip/Tooltip';
 import Button from '../Button/Button';
-import Typography from '../typography';
+import Typography from '../Typography/Typography';
 
 import {
   App,

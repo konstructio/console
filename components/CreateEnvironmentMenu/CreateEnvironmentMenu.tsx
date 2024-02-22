@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form';
 import CloseIcon from '@mui/icons-material/Close';
 import Alert from '@mui/material/Alert';
 
-import Typography from '../typography';
+import Typography from '../Typography/Typography';
 import { TagColor } from '../Tag/Tag';
 import ControlledTextField from '../controlledFields/TextField';
 import ControlledTagSelect from '../controlledFields/tagSelect';

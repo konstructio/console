@@ -2,7 +2,7 @@
 import styled from 'styled-components';
 import { styled as muiStyled } from '@mui/material';
 
-import Typography from '../typography';
+import Typography from '../Typography/Typography';
 import Row from '../Row/Row';
 import Column from '../Column/Column';
 

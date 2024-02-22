@@ -4,7 +4,7 @@ import { useFormContext } from 'react-hook-form';
 import { CheckboxContainer, Switch } from './advancedOptions.styled';
 
 import { Required } from '@/components/TextField/TextField.styled';
-import Typography from '@/components/typography';
+import Typography from '@/components/Typography/Typography';
 import SwitchComponent from '@/components/Switch/Switch';
 import Checkbox from '@/components/controlledFields/checkbox';
 import ControlledTextField from '@/components/controlledFields/TextField';

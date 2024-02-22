@@ -5,7 +5,7 @@ import Image from 'next/image';
 
 import Row from '@/components/Row/Row';
 import Column from '@/components/Column/Column';
-import Typography from '@/components/typography';
+import Typography from '@/components/Typography/Typography';
 import LearnMore from '@/components/LearnMore/LearnMore';
 import Button from '@/components/Button/Button';
 import compDisplayImage from '@/assets/comp_display.svg';

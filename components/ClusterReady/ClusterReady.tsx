@@ -2,7 +2,7 @@ import React, { FunctionComponent, useState } from 'react';
 import Image from 'next/image';
 import CopyToClipboard from 'react-copy-to-clipboard';
 
-import Typography from '../typography';
+import Typography from '../Typography/Typography';
 import Button from '../Button/Button';
 import Password from '../Password/Password';
 

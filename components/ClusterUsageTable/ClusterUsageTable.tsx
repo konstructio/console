@@ -5,7 +5,7 @@ import TableSortLabel from '@mui/material/TableSortLabel';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import moment from 'moment';
 
-import Typography from '../typography';
+import Typography from '../Typography/Typography';
 
 import {
   StyledTableRow,

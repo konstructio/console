@@ -4,7 +4,7 @@ import { useFormContext } from 'react-hook-form';
 import { InputContainer } from './advancedOptions.styled';
 
 import LearnMore from '@/components/LearnMore/LearnMore';
-import Typography from '@/components/typography';
+import Typography from '@/components/Typography/Typography';
 import Checkbox from '@/components/controlledFields/checkbox';
 import ControlledTextField from '@/components/controlledFields/TextField';
 import ControlledAutocomplete from '@/components/controlledFields/autoComplete/AutoComplete';

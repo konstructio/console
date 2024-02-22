@@ -8,7 +8,7 @@ import TableContainer from '@mui/material/TableContainer';
 import Table from '@mui/material/Table';
 import { typographyClasses } from '@mui/material/Typography';
 
-import Typography from '../typography';
+import Typography from '../Typography/Typography';
 import Tag from '../Tag/Tag';
 
 import {

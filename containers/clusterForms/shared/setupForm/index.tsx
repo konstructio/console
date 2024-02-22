@@ -18,7 +18,7 @@ import {
 import ControlledTextField from '@/components/controlledFields/TextField';
 import ControlledAutocomplete from '@/components/controlledFields/autoComplete/AutoComplete';
 import Column from '@/components/Column/Column';
-import Typography from '@/components/typography';
+import Typography from '@/components/Typography/Typography';
 import ControlledCheckbox from '@/components/controlledFields/checkbox';
 import {
   EMAIL_REGEX,

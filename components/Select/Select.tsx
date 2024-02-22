@@ -4,7 +4,7 @@ import SelectMUI, { SelectProps } from '@mui/material/Select';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import MenuItem from '@mui/material/MenuItem';
 
-import Typography from '../typography';
+import Typography from '../Typography/Typography';
 import { Required } from '../TextField/TextField.styled';
 import Tag, { TagColor } from '../Tag/Tag';
 import { DOLPHIN, LIGHT_GREY } from '../../constants/colors';

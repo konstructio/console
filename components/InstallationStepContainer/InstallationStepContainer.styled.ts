@@ -3,7 +3,7 @@ import styled from 'styled-components';
 
 import Column from '../Column/Column';
 import InstallationButtonsComp from '../InstallationButtons/InstallationButtons';
-import Typography from '../typography';
+import Typography from '../Typography/Typography';
 
 import { media } from '@/utils/media';
 

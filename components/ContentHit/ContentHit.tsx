@@ -2,12 +2,11 @@ import React, { FunctionComponent, useMemo } from 'react';
 import moment from 'moment';
 import Image from 'next/image';
 
-import { Content } from '../../types/algolia/content';
-import { BISCAY } from '../../constants/colors';
-
 import { CardDetails, CardImage, CardStats, Container, Duration, Title } from './ContentHit.styled';
 
-import Typography from '@/components/typography';
+import { Content } from '@/types/algolia/content';
+import { BISCAY } from '@/constants/colors';
+import Typography from '@/components/Typography/Typography';
 
 export interface ContentHitProps {
   hit: Content;

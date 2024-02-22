@@ -3,7 +3,7 @@ import React, { ComponentPropsWithoutRef, InputHTMLAttributes, useState, forward
 import Image from 'next/image';
 import styled from 'styled-components';
 
-import Typography from '../typography';
+import Typography from '../Typography/Typography';
 
 import { Root, NumInput, InputContainer, LabelContainer, Asterisk } from './NumberInput.styled';
 

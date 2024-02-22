@@ -1,6 +1,6 @@
 import React, { ComponentPropsWithoutRef, FunctionComponent } from 'react';
 
-import Typography from '../typography';
+import Typography from '../Typography/Typography';
 
 import { Card, CardTitle, CardDescription } from './InstallationCard.styled';
 

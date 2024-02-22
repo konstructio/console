@@ -4,7 +4,7 @@ import Step from '@mui/material/Step';
 import { StepIconProps } from '@mui/material/StepIcon';
 import CheckIcon from '@mui/icons-material/Check';
 
-import Typography from '../typography';
+import Typography from '../Typography/Typography';
 
 import {
   CompletedStep,

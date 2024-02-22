@@ -9,7 +9,7 @@ import styled from 'styled-components';
 import SearchIcon from '@mui/icons-material/Search';
 
 import Row from '../Row/Row';
-import Typography from '../typography';
+import Typography from '../Typography/Typography';
 import { IAutocompleteProps } from '../Autocomplete/Autocomplete';
 import Select from '../Select/Select';
 import TextFieldWithRef from '../TextField/TextField';

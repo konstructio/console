@@ -14,7 +14,7 @@ import {
 } from './clusterManagement.styled';
 
 import Button from '@/components/Button/Button';
-import Typography from '@/components/typography';
+import Typography from '@/components/Typography/Typography';
 import { useAppDispatch, useAppSelector } from '@/redux/store';
 import { createWorkloadCluster, deleteCluster, downloadKubeconfig } from '@/redux/thunks/api.thunk';
 import {

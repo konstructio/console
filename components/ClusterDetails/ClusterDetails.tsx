@@ -18,7 +18,7 @@ import {
   StatusContainer,
 } from './ClusterDetails.styled';
 
-import Typography from '@/components/typography';
+import Typography from '@/components/Typography/Typography';
 import {
   Cluster,
   ClusterStatus,

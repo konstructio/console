@@ -6,7 +6,7 @@ import { Control, Controller, UseControllerProps, FieldValues } from 'react-hook
 
 import { Container, InfoIcon } from './radio.styled';
 
-import Typography from '@/components/typography';
+import Typography from '@/components/Typography/Typography';
 import { VOLCANIC_SAND } from '@/constants/colors';
 import Row from '@/components/Row/Row';
 import Tooltip from '@/components/Tooltip/Tooltip';

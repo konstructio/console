@@ -3,8 +3,9 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import { Control, Controller, UseControllerProps, FieldValues } from 'react-hook-form';
 
 import Checkbox from '../../Checkbox/Checkbox';
-import Typography from '../../typography/index';
-import { VOLCANIC_SAND } from '../../../constants/colors';
+import Typography from '../../Typography/Typography';
+
+import { VOLCANIC_SAND } from '@/constants/colors';
 
 export interface ControlledCheckboxProps<T extends FieldValues> extends UseControllerProps<T> {
   label?: string;

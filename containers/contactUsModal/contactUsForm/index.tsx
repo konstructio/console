@@ -5,7 +5,7 @@ import CloseIcon from '@mui/icons-material/Close';
 
 import { Container, FieldsContainer, Footer, Header, NameSection } from './contactUsForm.styled';
 
-import Typography from '@/components/typography';
+import Typography from '@/components/Typography/Typography';
 import { BISCAY, SALTBOX_BLUE, VOLCANIC_SAND } from '@/constants/colors';
 import Button from '@/components/Button/Button';
 import { ContactUsFields, UserRequest } from '@/types/subscription';

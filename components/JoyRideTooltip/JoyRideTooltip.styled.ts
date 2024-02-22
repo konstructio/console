@@ -3,7 +3,7 @@ import { styled as muiStyled } from '@mui/material';
 
 import Column from '../Column/Column';
 import Row from '../Row/Row';
-import Typography from '../typography';
+import Typography from '../Typography/Typography';
 
 import { ECHO_BLUE, MIDNIGHT_EXPRESS, WHITE } from '@/constants/colors';
 

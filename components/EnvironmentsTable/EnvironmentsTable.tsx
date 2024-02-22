@@ -11,7 +11,7 @@ import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import ClickAwayListener from '@mui/material/ClickAwayListener';
 import moment from 'moment';
 
-import Typography from '../typography';
+import Typography from '../Typography/Typography';
 import Tag from '../Tag/Tag';
 
 import {

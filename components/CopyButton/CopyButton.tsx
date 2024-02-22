@@ -4,7 +4,7 @@ import CopyToClipboard from 'react-copy-to-clipboard';
 import styled from 'styled-components';
 import { TooltipProps } from '@mui/material';
 
-import Typography from '../typography';
+import Typography from '../Typography/Typography';
 import Tooltip from '../Tooltip/Tooltip';
 
 import { Button } from './CopyButton.styled';

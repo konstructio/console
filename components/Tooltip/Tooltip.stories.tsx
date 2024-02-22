@@ -3,7 +3,7 @@ import React from 'react';
 import { Meta, StoryObj } from '@storybook/react';
 import styled from 'styled-components';
 
-import Typography from '../typography';
+import Typography from '../Typography/Typography';
 import Button from '../Button/Button';
 
 import TooltipComponent from './Tooltip';

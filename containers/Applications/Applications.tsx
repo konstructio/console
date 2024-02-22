@@ -18,7 +18,7 @@ import {
 } from './Applications.styled';
 
 import TabPanel, { Tab, a11yProps } from '@/components/Tab/Tab';
-import Typography from '@/components/typography';
+import Typography from '@/components/Typography/Typography';
 import {
   getClusterApplications,
   getGitOpsCatalogApps,

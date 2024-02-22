@@ -10,7 +10,7 @@ import { InputLabel } from '@mui/material';
 
 import TextField from '../TextField/TextField';
 import Column from '../Column/Column';
-import Typography from '../typography';
+import Typography from '../Typography/Typography';
 import { Required } from '../TextField/TextField.styled';
 import Row from '../Row/Row';
 import Tag from '../Tag/Tag';

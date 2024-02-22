@@ -2,7 +2,7 @@ import React, { FunctionComponent, useCallback, useMemo } from 'react';
 import Box from '@mui/material/Box';
 import CircularProgress from '@mui/material/CircularProgress';
 
-import Typography from '../typography';
+import Typography from '../Typography/Typography';
 import Tooltip from '../Tooltip/Tooltip';
 import Button from '../Button/Button';
 

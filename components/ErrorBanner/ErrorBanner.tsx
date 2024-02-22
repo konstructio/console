@@ -1,7 +1,7 @@
 import React, { FunctionComponent } from 'react';
 import ErrorIcon from '@mui/icons-material/Error';
 
-import Typography from '../typography';
+import Typography from '../Typography/Typography';
 import { VOLCANIC_SAND } from '../../constants/colors';
 
 import { Container, ErrorContainer, Header, List, ListItem } from './ErrorBanner.styled';

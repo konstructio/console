@@ -11,7 +11,7 @@ import {
   SubscriptionOptions,
 } from './cancelSubscriptionForm.styled';
 
-import Typography from '@/components/typography';
+import Typography from '@/components/Typography/Typography';
 import { BISCAY, SALTBOX_BLUE, VOLCANIC_SAND } from '@/constants/colors';
 import ControlledCheckbox from '@/components/controlledFields/checkbox';
 import Button from '@/components/Button/Button';

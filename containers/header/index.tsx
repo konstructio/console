@@ -17,7 +17,7 @@ import { Avatar, Container, Menu, ProfileMenu } from './header.styled';
 import { noop } from '@/utils/noop';
 import Youtube from '@/assets/youtube-dark.svg';
 import { useAppSelector } from '@/redux/store';
-import Typography from '@/components/typography';
+import Typography from '@/components/Typography/Typography';
 import { ECHO_BLUE, PRIMARY, VOLCANIC_SAND } from '@/constants/colors';
 import useToggle from '@/hooks/useToggle';
 import useFeatureFlag from '@/hooks/useFeatureFlag';

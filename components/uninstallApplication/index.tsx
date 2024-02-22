@@ -3,7 +3,7 @@ import Box from '@mui/material/Box';
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import { CircularProgress } from '@mui/material';
 
-import Typography from '../typography';
+import Typography from '../Typography/Typography';
 import Modal from '../Modal/Modal';
 import Button from '../Button/Button';
 

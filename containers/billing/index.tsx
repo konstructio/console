@@ -3,7 +3,7 @@ import Image from 'next/image';
 
 import { Container, Header, NoLicenseContainer } from './billing.styled';
 
-import Typography from '@/components/typography';
+import Typography from '@/components/Typography/Typography';
 import NextLink from '@/components/NextLink/NextLink';
 import Loading from '@/components/Loading/Loading';
 import { ClusterUsageTable } from '@/components/ClusterUsageTable/ClusterUsageTable';

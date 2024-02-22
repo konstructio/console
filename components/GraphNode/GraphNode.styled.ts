@@ -3,7 +3,7 @@ import { typographyClasses } from '@mui/material/Typography';
 import { Handle } from 'reactflow';
 import Image from 'next/image';
 
-import Typography from '../typography';
+import Typography from '../Typography/Typography';
 import Column from '../Column/Column';
 import Row from '../Row/Row';
 import Tag from '../Tag/Tag';

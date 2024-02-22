@@ -3,7 +3,7 @@ import Link from 'next/link';
 import styled from 'styled-components';
 import { styled as muiStyled } from '@mui/material/styles';
 
-import Typography from '@/components/typography';
+import Typography from '@/components/Typography/Typography';
 import Column from '@/components/Column/Column';
 import Row from '@/components/Row/Row';
 import Drawer from '@/components/Drawer/Drawer';

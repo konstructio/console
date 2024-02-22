@@ -24,7 +24,7 @@ import {
 import { RESERVED_DRAFT_CLUSTER_NAME } from '@/constants';
 import useToggle from '@/hooks/useToggle';
 import Row from '@/components/Row/Row';
-import Typography from '@/components/typography';
+import Typography from '@/components/Typography/Typography';
 
 interface CreateClusterFlowProps {
   cluster?: Cluster | DraftCluster;

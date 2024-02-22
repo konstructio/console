@@ -1,7 +1,7 @@
 import React, { FunctionComponent } from 'react';
 
 import Modal, { IModalProps } from '../Modal/Modal';
-import Typography from '../typography';
+import Typography from '../Typography/Typography';
 import Button from '../Button/Button';
 
 import { CardContent, CardFooter, Content, K1Ray } from './TourModal.styled';

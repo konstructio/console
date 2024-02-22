@@ -2,7 +2,7 @@ import React, { FunctionComponent } from 'react';
 import Fade from '@mui/material/Fade';
 import { TooltipProps } from '@mui/material/Tooltip';
 
-import Typography from '../typography';
+import Typography from '../Typography/Typography';
 
 import { StyledTooltip } from './Tooltip.styled';
 

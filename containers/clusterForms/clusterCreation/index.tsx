@@ -17,7 +17,7 @@ import { InputContainer } from './advancedOptions/advancedOptions.styled';
 import ControlledAutocomplete from '@/components/controlledFields/autoComplete/AutoComplete';
 import ControlledTextField from '@/components/controlledFields/TextField';
 import { useAppDispatch, useAppSelector } from '@/redux/store';
-import Typography from '@/components/typography';
+import Typography from '@/components/Typography/Typography';
 import { ClusterType, NewWorkloadClusterConfig, ClusterEnvironment } from '@/types/provision';
 import { ASMANI_SKY, BISCAY, EXCLUSIVE_PLUM } from '@/constants/colors';
 import ControlledNumberInput from '@/components/controlledFields/numberInput';

@@ -4,7 +4,7 @@ import ContentCopyOutlinedIcon from '@mui/icons-material/ContentCopyOutlined';
 import LaunchOutlinedIcon from '@mui/icons-material/LaunchOutlined';
 import CopyToClipboard from 'react-copy-to-clipboard';
 
-import Typography from '../typography/index';
+import Typography from '../Typography/Typography';
 
 import {
   Card,

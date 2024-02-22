@@ -3,7 +3,7 @@ import styled from 'styled-components';
 
 import { media } from '@/utils/media';
 import Column from '@/components/Column/Column';
-import Typography from '@/components/typography';
+import Typography from '@/components/Typography/Typography';
 
 export const ContentContainer = styled(Column)`
   align-items: center;

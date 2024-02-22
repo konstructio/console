@@ -12,7 +12,7 @@ import {
 
 import { Required } from '@/components/TextField/TextField.styled';
 import GitProviderButton from '@/components/GitProviderButton/GitProviderButton';
-import Typography from '@/components/typography';
+import Typography from '@/components/Typography/Typography';
 import { useInstallation } from '@/hooks/useInstallation';
 import ControlledPassword from '@/components/controlledFields/Password';
 import ControlledAutocomplete from '@/components/controlledFields/autoComplete/AutoComplete';

@@ -4,7 +4,7 @@ import StarBorderOutlinedIcon from '@mui/icons-material/StarBorderOutlined';
 
 import Modal from '../Modal/Modal';
 import Button from '../Button/Button';
-import Typography from '../typography';
+import Typography from '../Typography/Typography';
 
 import { Container, Content, Close, Footer, Header } from './upgradeModal.styled';
 

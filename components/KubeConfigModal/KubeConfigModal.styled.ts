@@ -4,7 +4,7 @@ import { ErrorOutlineOutlined } from '@mui/icons-material';
 
 import Row from '../Row/Row';
 import Column from '../Column/Column';
-import Typography from '../typography';
+import Typography from '../Typography/Typography';
 
 import { PRIMARY, TRUE_BLUE, VOLCANIC_SAND } from '@/constants/colors';
 

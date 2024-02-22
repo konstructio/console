@@ -1,12 +1,13 @@
 import React, { ComponentPropsWithoutRef, FunctionComponent } from 'react';
 import Image from 'next/image';
 
-import { GitProvider } from '../../types';
-import gitlabLogo from '../../assets/gitlab.svg';
-import githubLogo from '../../assets/github.svg';
-import Typography from '../typography';
+import Typography from '../Typography/Typography';
 
 import { Button } from './GitProviderButton.styled';
+
+import { GitProvider } from '@/types';
+import gitlabLogo from '@/assets/gitlab.svg';
+import githubLogo from '@/assets/github.svg';
 
 const PROVIDER_OPTIONS: Record<
   GitProvider,

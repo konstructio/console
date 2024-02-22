@@ -1,7 +1,7 @@
 import React, { FunctionComponent, useMemo } from 'react';
 import Image from 'next/image';
 
-import Typography from '../typography';
+import Typography from '../Typography/Typography';
 import Button from '../Button/Button';
 
 import { Container, Features, PriceImage } from './Pricing.styled';

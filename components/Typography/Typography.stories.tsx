@@ -10,9 +10,9 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 
-import { typographies } from '../../theme/muiTheme';
+import Typography, { Variant } from './Typography';
 
-import Typography, { Variant } from './index';
+import { typographies } from '@/theme/muiTheme';
 
 const meta: Meta<typeof Typography> = {
   title: 'Layout/Typography',

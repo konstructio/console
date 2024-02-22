@@ -5,7 +5,7 @@ import { typographyClasses } from '@mui/material/Typography';
 
 import Row from '../Row/Row';
 import Column from '../Column/Column';
-import Typography from '../typography';
+import Typography from '../Typography/Typography';
 
 import { ECHO_BLUE, MOONLESS_MYTERY } from '@/constants/colors';
 

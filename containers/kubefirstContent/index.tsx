@@ -11,7 +11,7 @@ import RefinementList from './refinementList';
 import RangeSlider from './slider';
 
 import Modal, { Close } from '@/components/Modal/Modal';
-import Typography from '@/components/typography';
+import Typography from '@/components/Typography/Typography';
 import { BISCAY, SALTBOX_BLUE } from '@/constants/colors';
 export interface KubefirstContentProps {
   closeModal: () => void;
