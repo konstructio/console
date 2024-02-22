@@ -3,13 +3,14 @@ import React, { ComponentPropsWithoutRef, InputHTMLAttributes, useState, forward
 import Image from 'next/image';
 import styled from 'styled-components';
 
-import removeIconSrc from '../../assets/remove.svg';
-import addIconSrc from '../../assets/add.svg';
-import { noop } from '../../utils/noop';
-import Typography from '../../components/typography';
-import { EXCLUSIVE_PLUM } from '../../constants/colors';
+import Typography from '../typography';
 
-import { Root, NumInput, InputContainer, LabelContainer, Asterisk } from './numberInput.styled';
+import { Root, NumInput, InputContainer, LabelContainer, Asterisk } from './NumberInput.styled';
+
+import removeIconSrc from '@/assets/remove.svg';
+import addIconSrc from '@/assets/add.svg';
+import { noop } from '@/utils/noop';
+import { EXCLUSIVE_PLUM } from '@/constants/colors';
 
 export interface NumberInputProps
   extends Omit<ComponentPropsWithoutRef<'label'>, 'onChange' | 'key'> {

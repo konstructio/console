@@ -2,7 +2,8 @@
 import styled from 'styled-components';
 
 import Row from '../row';
-import { DANGER } from '../../constants/colors';
+
+import { DANGER } from '@/constants/colors';
 
 export const Asterisk = styled.span`
   color: ${DANGER};

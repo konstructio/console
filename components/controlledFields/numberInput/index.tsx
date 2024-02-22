@@ -1,7 +1,7 @@
 import React from 'react';
 import { Control, Controller, FieldValues, UseControllerProps } from 'react-hook-form';
 
-import NumberInput, { NumberInputProps } from '../../numberInput';
+import NumberInput, { NumberInputProps } from '../../NumberInput/NumberInput';
 
 export interface ControlledTextFieldProps<T extends FieldValues> extends UseControllerProps<T> {
   disabled?: boolean;
