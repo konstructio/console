@@ -4,7 +4,7 @@ import { Meta, StoryObj } from '@storybook/react';
 import styled from 'styled-components';
 
 import Typography from '../typography';
-import Button from '../button';
+import Button from '../Button/Button';
 
 import TooltipComponent from '.';
 

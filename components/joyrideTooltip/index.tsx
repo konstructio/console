@@ -1,7 +1,7 @@
 import React, { FunctionComponent } from 'react';
 import { TooltipRenderProps } from 'react-joyride';
 
-import Button from '../button';
+import Button from '../Button/Button';
 
 import { TooltipBody, TooltipContent, TooltipFooter, TooltipTitle } from './joyrideTooltip.styled';
 

@@ -7,7 +7,7 @@ import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import { BottomFormContainer, CancelContainer, FormContainer, UList } from './license.styled';
 
 import { COAL_MINE, EXCLUSIVE_PLUM, ORANGEALICIOUS, VOLCANIC_SAND } from '@/constants/colors';
-import Button from '@/components/button';
+import Button from '@/components/Button/Button';
 import LearnMore from '@/components/learnMore';
 import Typography from '@/components/typography';
 import { useAppSelector } from '@/redux/store';

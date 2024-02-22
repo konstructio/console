@@ -14,7 +14,7 @@ import {
 import Typography from '@/components/typography';
 import { BISCAY, SALTBOX_BLUE, VOLCANIC_SAND } from '@/constants/colors';
 import ControlledCheckbox from '@/components/controlledFields/checkbox';
-import Button from '@/components/button';
+import Button from '@/components/Button/Button';
 import { CancelSubscriptionFields, UserRequest } from '@/types/subscription';
 import ControlledTextArea from '@/components/controlledFields/textArea';
 import { Required } from '@/components/textField/textField.styled';

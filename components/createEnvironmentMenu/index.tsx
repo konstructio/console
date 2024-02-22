@@ -4,7 +4,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import Alert from '@mui/material/Alert';
 
 import Typography from '../typography';
-import Button from '../button';
+import Button from '../Button/Button';
 import { SALTBOX_BLUE } from '../../constants/colors';
 import { TagColor } from '../tag';
 import ControlledTextField from '../controlledFields/TextField';

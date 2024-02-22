@@ -13,7 +13,7 @@ import {
   StyledDrawer,
 } from './clusterManagement.styled';
 
-import Button from '@/components/button';
+import Button from '@/components/Button/Button';
 import Typography from '@/components/typography';
 import { useAppDispatch, useAppSelector } from '@/redux/store';
 import { createWorkloadCluster, deleteCluster, downloadKubeconfig } from '@/redux/thunks/api.thunk';

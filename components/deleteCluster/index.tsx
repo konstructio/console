@@ -2,7 +2,7 @@ import React, { FunctionComponent, useState } from 'react';
 import LaunchOutlinedIcon from '@mui/icons-material/LaunchOutlined';
 
 import Modal, { IModalProps } from '../modal';
-import Button from '../button';
+import Button from '../Button/Button';
 import { Cluster, ClusterType, DraftCluster } from '../../types/provision';
 import CopyButton from '../copyButton';
 

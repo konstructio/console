@@ -1,7 +1,7 @@
 import React, { FunctionComponent } from 'react';
 import CircularProgress from '@mui/material/CircularProgress';
 
-import Button from '../button';
+import Button from '../Button/Button';
 
 import { Container } from './installationButtons.styled';
 

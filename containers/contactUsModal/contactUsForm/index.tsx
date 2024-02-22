@@ -7,7 +7,7 @@ import { Container, FieldsContainer, Footer, Header, NameSection } from './conta
 
 import Typography from '@/components/typography';
 import { BISCAY, SALTBOX_BLUE, VOLCANIC_SAND } from '@/constants/colors';
-import Button from '@/components/button';
+import Button from '@/components/Button/Button';
 import { ContactUsFields, UserRequest } from '@/types/subscription';
 import ControlledTextArea from '@/components/controlledFields/textArea';
 import ControlledTextField from '@/components/controlledFields/TextField';

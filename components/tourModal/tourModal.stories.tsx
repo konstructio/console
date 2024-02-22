@@ -5,11 +5,10 @@ import Joyride, { Step } from 'react-joyride';
 import styled from 'styled-components';
 import Image from 'next/image';
 
-import Button from '../../components/button';
-import useModal from '../../hooks/useModal';
-
 import TourModal from './index';
 
+import Button from '@/components/Button/Button';
+import useModal from '@/hooks/useModal';
 import kubefirstRay from '@/assets/ray.svg';
 
 const meta: Meta<typeof TourModal> = {

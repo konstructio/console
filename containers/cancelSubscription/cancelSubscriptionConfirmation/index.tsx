@@ -7,7 +7,7 @@ import { Container, Footer } from './cancelSubscriptionConfirmation.styled';
 import Cancel from '@/assets/cancel.svg';
 import Typography from '@/components/typography';
 import { BISCAY, VOLCANIC_SAND } from '@/constants/colors';
-import Button from '@/components/button';
+import Button from '@/components/Button/Button';
 
 export interface CancelSubscriptionConfirmationProps {
   closeModal: () => void;

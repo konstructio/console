@@ -6,7 +6,7 @@ import Typography from '../typography';
 import { formatDomain } from '../../utils/url/formatDomain';
 import Tooltip from '../tooltip';
 import { MINT_GREEN, PASTEL_LIGHT_BLUE } from '../../constants/colors';
-import Button from '../button';
+import Button from '../Button/Button';
 
 import {
   AppConnector,

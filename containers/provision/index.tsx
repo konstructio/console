@@ -2,28 +2,9 @@
 import React, { FunctionComponent, useCallback, useEffect, useMemo, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 
-import InstallationStepContainer from '../../components/installationStepContainer';
-import InstallationInfoCard from '../../components/installationInfoCard';
-import ErrorBanner from '../../components/errorBanner';
-import Button from '../../components/button';
 import { InstallationsSelection } from '../installationsSelection';
 import { FormFlow } from '../clusterForms';
 import AdvancedOptions from '../clusterForms/shared/advancedOptions';
-import {
-  clearError,
-  setError,
-  setInstallType,
-  setInstallValues,
-  setInstallationStep,
-} from '../../redux/slices/installation.slice';
-import { clearClusterState, clearValidation } from '../../redux/slices/api.slice';
-import { useAppDispatch, useAppSelector } from '../../redux/store';
-import { createCluster, resetClusterProgress } from '../../redux/thunks/api.thunk';
-import { useInstallation } from '../../hooks/useInstallation';
-import { InstallValues, InstallationType } from '../../types/redux';
-import { GitProvider } from '../../types';
-import { AUTHENTICATION_ERROR_MSG, DEFAULT_CLOUD_INSTANCE_SIZES } from '../../constants';
-import { useQueue } from '../../hooks/useQueue';
 
 import {
   AdvancedOptionsContainer,
@@ -33,6 +14,25 @@ import {
   FormFooter,
 } from './provision.styled';
 
+import InstallationStepContainer from '@/components/installationStepContainer';
+import InstallationInfoCard from '@/components/installationInfoCard';
+import ErrorBanner from '@/components/errorBanner';
+import Button from '@/components/Button/Button';
+import {
+  clearError,
+  setError,
+  setInstallType,
+  setInstallValues,
+  setInstallationStep,
+} from '@/redux/slices/installation.slice';
+import { clearClusterState, clearValidation } from '@/redux/slices/api.slice';
+import { useAppDispatch, useAppSelector } from '@/redux/store';
+import { createCluster, resetClusterProgress } from '@/redux/thunks/api.thunk';
+import { useInstallation } from '@/hooks/useInstallation';
+import { InstallValues, InstallationType } from '@/types/redux';
+import { GitProvider } from '@/types';
+import { AUTHENTICATION_ERROR_MSG, DEFAULT_CLOUD_INSTANCE_SIZES } from '@/constants';
+import { useQueue } from '@/hooks/useQueue';
 import LearnMore from '@/components/learnMore';
 
 const FOOTER_LINKS_INFO: Record<number, { linkTitle: string; href: string }> = {

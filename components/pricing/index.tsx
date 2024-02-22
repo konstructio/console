@@ -3,7 +3,7 @@ import Image from 'next/image';
 
 import CheckIcon from '../../assets/check.png';
 import Typography from '../typography';
-import Button from '../button';
+import Button from '../Button/Button';
 
 import { Container, Features, PriceImage } from './pricing.styled';
 

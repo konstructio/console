@@ -5,7 +5,7 @@ import CircularProgress from '@mui/material/CircularProgress';
 
 import Tag, { TagColor } from '../tag';
 import Tooltip from '../tooltip';
-import Button from '../button';
+import Button from '../Button/Button';
 import Typography from '../typography';
 import { AppCategory, GitOpsCatalogApp } from '../../types/applications';
 import { VOLCANIC_SAND } from '../../constants/colors';

@@ -3,7 +3,7 @@ import Image from 'next/image';
 import { Control } from 'react-hook-form';
 
 import Modal from '../modal';
-import Button from '../button';
+import Button from '../Button/Button';
 import Typography from '../typography';
 import ControlledPassword from '../controlledFields/Password';
 import { GitOpsCatalogApp } from '../../types/applications';

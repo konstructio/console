@@ -6,7 +6,7 @@ import { CircularProgress } from '@mui/material';
 import Typography from '../typography';
 import Modal from '../modal';
 import { LAUGHING_ORANGE } from '../../constants/colors';
-import Button from '../button';
+import Button from '../Button/Button';
 
 import { Content, Footer, Header } from './uninstallApplication.styled';
 

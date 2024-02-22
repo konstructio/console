@@ -3,26 +3,25 @@ import React, { FunctionComponent, useEffect, useState, useCallback } from 'reac
 import styled from 'styled-components';
 import Image from 'next/image';
 
-import Row from '../../components/row';
-import Column from '../../components/column';
-import Typography from '../../components/typography';
-import LearnMore from '../../components/learnMore';
-import Button from '../../components/button';
-import compDisplayImage from '../../assets/comp_display.svg';
-import useToggle from '../../hooks/useToggle';
-import Modal from '../../components/modal';
-import { CreateEnvironmentMenu } from '../../components/createEnvironmentMenu';
-import { useAppDispatch, useAppSelector } from '../../redux/store';
+import Row from '@/components/row';
+import Column from '@/components/column';
+import Typography from '@/components/typography';
+import LearnMore from '@/components/learnMore';
+import Button from '@/components/Button/Button';
+import compDisplayImage from '@/assets/comp_display.svg';
+import useToggle from '@/hooks/useToggle';
+import Modal from '@/components/modal';
+import { CreateEnvironmentMenu } from '@/components/createEnvironmentMenu';
+import { useAppDispatch, useAppSelector } from '@/redux/store';
 import {
   createEnvironment,
   deleteEnvironment,
   getAllEnvironments,
-} from '../../redux/thunks/environments.thunk';
-import EnvironmentsTable from '../../components/environmentsTable';
-import { ClusterEnvironment } from '../../types/provision';
-import DeleteEnvironment from '../../components/deleteEnvironment';
-import { clearEnvironmentError } from '../../redux/slices/environments.slice';
-
+} from '@/redux/thunks/environments.thunk';
+import EnvironmentsTable from '@/components/environmentsTable';
+import { ClusterEnvironment } from '@/types/provision';
+import DeleteEnvironment from '@/components/deleteEnvironment';
+import { clearEnvironmentError } from '@/redux/slices/environments.slice';
 import { noop } from '@/utils/noop';
 import { VOLCANIC_SAND } from '@/constants/colors';
 

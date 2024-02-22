@@ -3,7 +3,7 @@ import Image from 'next/image';
 import CopyToClipboard from 'react-copy-to-clipboard';
 
 import Typography from '../typography';
-import Button from '../button';
+import Button from '../Button/Button';
 import Password from '../password';
 
 import { Container, Link, PasswordContainer, Title } from './clusterReady.styled';

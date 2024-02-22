@@ -3,7 +3,7 @@ import { Meta, StoryObj } from '@storybook/react';
 
 import DeleteCluster, { DeleteClusterProps } from '.';
 
-import Button from '@/components/button';
+import Button from '@/components/Button/Button';
 import { noop } from '@/utils/noop';
 import { Cluster, ClusterStatus, ClusterType } from '@/types/provision';
 import { InstallationType } from '@/types/redux';

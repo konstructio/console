@@ -9,7 +9,7 @@ import { FormProvider, useForm } from 'react-hook-form';
 
 import { CloseButton, Form, FormContent, Menu, MenuHeader } from './createClusterFlow.styled';
 
-import Button from '@/components/button';
+import Button from '@/components/Button/Button';
 import { FIRE_BRICK, SALTBOX_BLUE } from '@/constants/colors';
 import ClusterCreationForm from '@/containers/clusterForms/clusterCreation';
 import ClusterDetails from '@/components/clusterDetails';

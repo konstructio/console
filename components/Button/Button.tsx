@@ -10,7 +10,7 @@ import {
   InfoButton,
   TextButton,
   SubscriptionButton,
-} from './button.styled';
+} from './Button.styled';
 
 const BUTTONS_MAP = {
   ['primary']: PrimaryButton,

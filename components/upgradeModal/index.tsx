@@ -3,7 +3,7 @@ import Image from 'next/image';
 import StarBorderOutlinedIcon from '@mui/icons-material/StarBorderOutlined';
 
 import Modal from '../modal';
-import Button from '../button';
+import Button from '../Button/Button';
 import Typography from '../typography';
 
 import { Container, Content, Close, Footer, Header } from './upgradeModal.styled';

@@ -6,7 +6,7 @@ import Typography from '../typography';
 import TextFieldWithRef from '../textField';
 import Modal from '../modal';
 import { LAUGHING_ORANGE, TRUE_BLUE } from '../../constants/colors';
-import Button from '../button';
+import Button from '../Button/Button';
 import { ClusterEnvironment } from '../../types/provision';
 import CopyButton from '../copyButton';
 

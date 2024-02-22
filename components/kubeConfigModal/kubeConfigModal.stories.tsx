@@ -2,10 +2,10 @@
 import React, { FunctionComponent } from 'react';
 import { Meta, StoryObj } from '@storybook/react';
 
-import Button from '../../components/button';
-import useModal from '../../hooks/useModal';
-
 import KubeConfigModal, { KubeConfigModalProps } from './index';
+
+import Button from '@/components/Button/Button';
+import useModal from '@/hooks/useModal';
 
 const meta: Meta<typeof KubeConfigModal> = {
   component: KubeConfigModal,

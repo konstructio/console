@@ -1,6 +1,5 @@
-import Column from '../../../components/column';
-import Button from '../../../components/button';
-
+import Column from '@/components/column';
+import Button from '@/components/Button/Button';
 import styled, { css } from '@/app/lib/styled-components';
 
 export const AdvancedOptionsButton = styled.button.attrs({ type: 'button' })<{
