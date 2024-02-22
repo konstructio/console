@@ -1,8 +1,9 @@
 'use client';
 import styled from 'styled-components';
 
-import Typography from '../../components/typography';
-import { textTruncate } from '../../utils/theme';
+import Typography from '../typography';
+
+import { textTruncate } from '@/utils/theme';
 
 export const Container = styled.div`
   border: 1px solid ${({ theme }) => theme.colors.pastelLightBlue};

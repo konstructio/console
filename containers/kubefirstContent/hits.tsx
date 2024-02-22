@@ -2,10 +2,10 @@ import React, { FunctionComponent } from 'react';
 import { useHits } from 'react-instantsearch';
 import { Box, CircularProgress } from '@mui/material';
 
-import ContentHit from '../../components/contentHit';
-import { Content } from '../../types/algolia/content';
-
 import { HitsContainer } from './kubefirstContent.styled';
+
+import ContentHit from '@/components/ContentHit/ContentHit';
+import { Content } from '@/types/algolia/content';
 
 const Hits: FunctionComponent = () => {
   const { hits } = useHits<Content>();

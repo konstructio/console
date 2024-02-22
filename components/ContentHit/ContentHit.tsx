@@ -5,7 +5,7 @@ import Image from 'next/image';
 import { Content } from '../../types/algolia/content';
 import { BISCAY } from '../../constants/colors';
 
-import { CardDetails, CardImage, CardStats, Container, Duration, Title } from './contentHit.styled';
+import { CardDetails, CardImage, CardStats, Container, Duration, Title } from './ContentHit.styled';
 
 import Typography from '@/components/typography';
 
