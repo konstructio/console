@@ -6,7 +6,7 @@ import { FormProvider, useForm } from 'react-hook-form';
 
 import License from '../license';
 import CancelSubscription from '../cancelSubscription';
-import Billing from '../billing';
+import Billing from '../Billing/Billing';
 import ContactUs from '../contactUsModal';
 
 import { Container, PlansContainer } from './subscription.styled';

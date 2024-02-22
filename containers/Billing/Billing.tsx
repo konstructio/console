@@ -1,7 +1,7 @@
 import React, { FunctionComponent, useEffect, useMemo } from 'react';
 import Image from 'next/image';
 
-import { Container, Header, NoLicenseContainer } from './billing.styled';
+import { Container, Header, NoLicenseContainer } from './Billing.styled';
 
 import Typography from '@/components/Typography/Typography';
 import NextLink from '@/components/NextLink/NextLink';
