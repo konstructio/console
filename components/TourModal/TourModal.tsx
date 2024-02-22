@@ -4,7 +4,7 @@ import Modal, { IModalProps } from '../Modal/Modal';
 import Typography from '../typography';
 import Button from '../Button/Button';
 
-import { CardContent, CardFooter, Content, K1Ray } from './tourModal.styled';
+import { CardContent, CardFooter, Content, K1Ray } from './TourModal.styled';
 
 import kubefirstRay from '@/assets/ray.svg';
 import { BISCAY, DOLPHIN } from '@/constants/colors';

@@ -5,7 +5,7 @@ import Joyride, { Step } from 'react-joyride';
 import styled from 'styled-components';
 import Image from 'next/image';
 
-import TourModal from './index';
+import TourModal from './TourModal';
 
 import Button from '@/components/Button/Button';
 import useModal from '@/hooks/useModal';

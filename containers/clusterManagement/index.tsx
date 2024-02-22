@@ -46,7 +46,7 @@ import {
   RESERVED_DRAFT_CLUSTER_NAME,
   SUGGESTED_WORKLOAD_NODE_COUNT,
 } from '@/constants';
-import TourModal from '@/components/tourModal';
+import TourModal from '@/components/TourModal/TourModal';
 import JoyrideTooltip from '@/components/JoyRideTooltip/JoyRideTooltip';
 import { JOYRIDE_STEPS } from '@/constants/joyride';
 import { getClusterTourStatus, updateClusterTourStatus } from '@/redux/thunks/settings.thunk';
