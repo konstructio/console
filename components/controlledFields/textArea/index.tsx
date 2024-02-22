@@ -2,7 +2,7 @@ import React from 'react';
 import { Control, Controller, FieldValues, UseControllerProps } from 'react-hook-form';
 import { SxProps } from '@mui/material';
 
-import TextAreaWithRef from '../../textArea/';
+import TextAreaWithRef from '../../TextArea/TextArea';
 
 export interface ControlledTextAreaProps<T extends FieldValues> extends UseControllerProps<T> {
   label: string;

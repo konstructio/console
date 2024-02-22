@@ -8,7 +8,7 @@ import Typography from '../typography';
 import { Required } from '../textField/textField.styled';
 import Tag, { TagColor } from '../Tag/Tag';
 import { DOLPHIN, LIGHT_GREY } from '../../constants/colors';
-import { StyledFormHelperText } from '../textArea/textArea.styled';
+import { StyledFormHelperText } from '../TextArea/TextArea.styled';
 
 import { Container, Input } from './Select.styled';
 

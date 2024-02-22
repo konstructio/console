@@ -12,7 +12,7 @@ import {
   StyledLabel,
   StyledTextArea,
   TextAreaContainer,
-} from './textArea.styled';
+} from './TextArea.styled';
 
 interface TextAreaProps extends TextareaAutosizeProps {
   label?: string;
