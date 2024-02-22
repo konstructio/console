@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import { TooltipProps } from '@mui/material';
 
 import Typography from '../typography';
-import Tooltip from '../tooltip';
+import Tooltip from '../Tooltip/Tooltip';
 
 import { Button } from './CopyButton.styled';
 

@@ -28,7 +28,7 @@ import {
   Tools,
 } from './terminalLogs.styled';
 
-import Tooltip from '@/components/tooltip';
+import Tooltip from '@/components/Tooltip/Tooltip';
 import TabPanel, { Tab, a11yProps } from '@/components/Tab/Tab';
 import { setCompletedSteps } from '@/redux/slices/api.slice';
 import { useAppDispatch, useAppSelector } from '@/redux/store';

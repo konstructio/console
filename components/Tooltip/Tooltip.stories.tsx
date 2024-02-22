@@ -6,7 +6,7 @@ import styled from 'styled-components';
 import Typography from '../typography';
 import Button from '../Button/Button';
 
-import TooltipComponent from '.';
+import TooltipComponent from './Tooltip';
 
 const Wrapper = styled.div`
   background: rgb(255, 255, 255);

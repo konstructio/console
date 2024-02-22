@@ -9,7 +9,7 @@ import { Container, InfoIcon } from './radio.styled';
 import Typography from '@/components/typography';
 import { VOLCANIC_SAND } from '@/constants/colors';
 import Row from '@/components/Row/Row';
-import Tooltip from '@/components/tooltip';
+import Tooltip from '@/components/Tooltip/Tooltip';
 
 export type RadioOptionsType = Array<{
   label: string;

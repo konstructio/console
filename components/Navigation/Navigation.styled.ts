@@ -4,7 +4,7 @@ import styled, { css } from '@/app/lib/styled-components';
 import Typography from '@/components/typography';
 import { MIDNIGHT_EXPRESS } from '@/constants/colors';
 import { media } from '@/utils/media';
-import Tooltip from '@/components/tooltip';
+import Tooltip from '@/components/Tooltip/Tooltip';
 
 export const Container = styled.nav`
   background-color: ${({ theme }) => theme.colors.moonlessMystery};

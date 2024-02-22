@@ -3,9 +3,7 @@ import Box from '@mui/material/Box';
 import CircularProgress from '@mui/material/CircularProgress';
 
 import Typography from '../typography';
-import { formatDomain } from '../../utils/url/formatDomain';
-import Tooltip from '../tooltip';
-import { MINT_GREEN, PASTEL_LIGHT_BLUE } from '../../constants/colors';
+import Tooltip from '../Tooltip/Tooltip';
 import Button from '../Button/Button';
 
 import {
@@ -20,6 +18,8 @@ import {
   Title,
 } from './Application.styled';
 
+import { formatDomain } from '@/utils/url/formatDomain';
+import { MINT_GREEN, PASTEL_LIGHT_BLUE } from '@/constants/colors';
 import { noop } from '@/utils/noop';
 
 export interface ApplicationProps {

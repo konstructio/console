@@ -4,7 +4,7 @@ import { TooltipProps } from '@mui/material/Tooltip';
 
 import Typography from '../typography';
 
-import { StyledTooltip } from './tooltip.styled';
+import { StyledTooltip } from './Tooltip.styled';
 
 export interface ITooltipProps extends TooltipProps {
   maxWidth?: string;

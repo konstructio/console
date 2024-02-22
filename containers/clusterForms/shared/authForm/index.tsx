@@ -35,7 +35,7 @@ import {
 } from '@/redux/thunks/git.thunk';
 import { clearUserError, clearGitState, setIsGitSelected } from '@/redux/slices/git.slice';
 import { setGitProvider } from '@/redux/slices/installation.slice';
-import Tooltip from '@/components/tooltip';
+import Tooltip from '@/components/Tooltip/Tooltip';
 import Row from '@/components/Row/Row';
 import CheckBoxWithRef from '@/components/Checkbox/Checkbox';
 import Column from '@/components/Column/Column';
