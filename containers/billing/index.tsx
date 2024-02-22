@@ -6,7 +6,7 @@ import { Container, Header, NoLicenseContainer } from './billing.styled';
 import Typography from '@/components/typography';
 import NextLink from '@/components/nextLink';
 import Loading from '@/components/loading';
-import { ClusterUsageTable } from '@/components/clusterUsageTable';
+import { ClusterUsageTable } from '@/components/ClusterUsageTable/ClusterUsageTable';
 import { ASWAD_BLACK, BISCAY, VOLCANIC_SAND } from '@/constants/colors';
 import { useAppDispatch, useAppSelector } from '@/redux/store';
 import { getClusterUsage } from '@/redux/thunks/subscription.thunk';

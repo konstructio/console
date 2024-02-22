@@ -5,9 +5,7 @@ import TableSortLabel from '@mui/material/TableSortLabel';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import moment from 'moment';
 
-import { ECHO_BLUE, VOLCANIC_SAND } from '../../constants/colors';
 import Typography from '../typography';
-import { descendingComparator } from '../../utils/descendingComparator';
 
 import {
   StyledTableRow,
@@ -18,8 +16,10 @@ import {
   StyledHeaderCell,
   StyledTableContainer,
   StyledTable,
-} from './clusterUsageTable.styled';
+} from './ClusterUsageTable.styled';
 
+import { ECHO_BLUE, VOLCANIC_SAND } from '@/constants/colors';
+import { descendingComparator } from '@/utils/descendingComparator';
 import { ClusterUsage } from '@/types/subscription';
 
 interface ClusterUsageProps {
