@@ -6,7 +6,7 @@ import { styled as muiStyled } from '@mui/material/styles';
 import Typography from '@/components/typography';
 import Column from '@/components/Column/Column';
 import Row from '@/components/row';
-import Drawer from '@/components/drawer';
+import Drawer from '@/components/Drawer/Drawer';
 
 export const Container = styled(Column)`
   flex: 1;
