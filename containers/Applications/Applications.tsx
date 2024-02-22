@@ -5,7 +5,7 @@ import Tabs from '@mui/material/Tabs';
 import sortBy from 'lodash/sortBy';
 import { useSession } from 'next-auth/react';
 
-import Application from '../application';
+import Application from '../Application/Application';
 import GitOpsCatalog from '../gitOpsCatalog';
 
 import {
