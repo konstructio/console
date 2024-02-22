@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { styled as muiStyled } from '@mui/material';
 
-import Column from '../column';
+import Column from '../Column/Column';
 import Row from '../row';
 import Typography from '../typography';
 

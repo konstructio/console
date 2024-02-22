@@ -1,9 +1,9 @@
 'use client';
 import styled from 'styled-components';
 
-import Column from '../../../../components/column';
-import LearnMore from '../../../../components/learnMore';
-import { EXCLUSIVE_PLUM } from '../../../../constants/colors';
+import Column from '@/components/Column/Column';
+import LearnMore from '@/components/learnMore';
+import { EXCLUSIVE_PLUM } from '@/constants/colors';
 
 export const InputContainer = styled(Column)`
   .MuiFormGroup-root {

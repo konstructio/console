@@ -9,7 +9,7 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import { InputLabel } from '@mui/material';
 
 import TextField from '../textField';
-import Column from '../column';
+import Column from '../Column/Column';
 import Typography from '../typography';
 import { Required } from '../textField/textField.styled';
 import Row from '../row';

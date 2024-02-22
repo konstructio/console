@@ -2,7 +2,7 @@
 import styled from 'styled-components';
 
 import Row from '../row';
-import Column from '../column';
+import Column from '../Column/Column';
 import { LIGHT_GREY } from '../../constants/colors';
 
 export const CloseButton = styled.button`

@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import Image from 'next/image';
 
 import Row from '@/components/row';
-import Column from '@/components/column';
+import Column from '@/components/Column/Column';
 import Typography from '@/components/typography';
 import LearnMore from '@/components/learnMore';
 import Button from '@/components/Button/Button';

@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import NextLink from 'next/link';
 
 import Card from '../Card/Card';
-import Column from '../column';
+import Column from '../Column/Column';
 
 export const CardContainer = styled(Card)`
   display: flex;

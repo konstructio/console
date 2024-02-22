@@ -10,7 +10,7 @@ import { Link } from './layout.styled';
 import Header from '@/containers/header';
 import Navigation from '@/containers/navigation';
 import Row from '@/components/row';
-import Column from '@/components/column';
+import Column from '@/components/Column/Column';
 import { useAppDispatch, useAppSelector } from '@/redux/store';
 import { getClusters } from '@/redux/thunks/api.thunk';
 import { License } from '@/types/subscription';

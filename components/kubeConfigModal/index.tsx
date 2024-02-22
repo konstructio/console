@@ -1,7 +1,7 @@
 import React, { FunctionComponent } from 'react';
 
 import Modal, { IModalProps } from '../modal';
-import Column from '../column';
+import Column from '../Column/Column';
 import CopyCommand, { CopyCommandProps } from '../copyCommand';
 import Button from '../Button/Button';
 

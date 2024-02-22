@@ -43,7 +43,7 @@ import {
 import Tooltip from '@/components/tooltip';
 import Row from '@/components/row';
 import CheckBoxWithRef from '@/components/Checkbox/Checkbox';
-import Column from '@/components/column';
+import Column from '@/components/Column/Column';
 import { hasProjectId } from '@/utils/hasProjectId';
 import { getDigitalOceanUser } from '@/redux/thunks/digitalOcean.thunk';
 import { GIT_PROVIDER_DISPLAY_NAME } from '@/constants';

@@ -4,7 +4,7 @@ import { Handle } from 'reactflow';
 import Image from 'next/image';
 
 import Typography from '../typography';
-import Column from '../column';
+import Column from '../Column/Column';
 import Row from '../row';
 import Tag from '../tag';
 import { BLUE_REFLECTION, EXCLUSIVE_PLUM } from '../../constants/colors';

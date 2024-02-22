@@ -1,7 +1,7 @@
 'use client';
 import styled from 'styled-components';
 
-import Column from '../column';
+import Column from '../Column/Column';
 import InstallationButtonsComp from '../installationButtons';
 import Typography from '../typography';
 import { media } from '../../utils/media';

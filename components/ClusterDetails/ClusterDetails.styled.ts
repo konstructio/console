@@ -4,7 +4,7 @@ import { styled as muiStyled } from '@mui/material/styles';
 import { typographyClasses } from '@mui/material/Typography';
 import { Divider } from '@mui/material';
 
-import ColumnComponent from '@/components/column';
+import ColumnComponent from '@/components/Column/Column';
 import RowComponent from '@/components/row';
 import Typography from '@/components/typography';
 import {

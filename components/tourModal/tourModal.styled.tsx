@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import Image from 'next/image';
 
-import Column from '../column';
+import Column from '../Column/Column';
 import Row from '../row';
 
 export const CardContent = styled(Column)`

@@ -2,7 +2,7 @@
 import styled from 'styled-components';
 
 import Row from '@/components/row';
-import Column from '@/components/column';
+import Column from '@/components/Column/Column';
 
 export const CardsContainer = styled(Row)`
   flex-wrap: wrap;

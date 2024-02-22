@@ -3,7 +3,7 @@ import { styled as muiStyled } from '@mui/material';
 import { ErrorOutlineOutlined } from '@mui/icons-material';
 
 import Row from '../row';
-import Column from '../column';
+import Column from '../Column/Column';
 import Typography from '../typography';
 
 import { PRIMARY, TRUE_BLUE, VOLCANIC_SAND } from '@/constants/colors';

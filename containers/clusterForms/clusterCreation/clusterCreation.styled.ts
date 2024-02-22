@@ -1,4 +1,4 @@
-import Column from '@/components/column';
+import Column from '@/components/Column/Column';
 import Button from '@/components/Button/Button';
 import styled, { css } from '@/app/lib/styled-components';
 

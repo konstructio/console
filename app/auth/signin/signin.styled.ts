@@ -7,7 +7,7 @@ import Typography from '../../../components/typography';
 
 import { CELERY_MOUSSE } from '@/constants/colors';
 import { media } from '@/utils/media';
-import Column from '@/components/column';
+import Column from '@/components/Column/Column';
 
 export const Background = styled.div`
   align-items: center;

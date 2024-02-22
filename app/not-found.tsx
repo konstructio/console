@@ -9,7 +9,7 @@ import Typography from '@/components/typography';
 import NotFoundIcon from '@/assets/404.svg';
 import Button from '@/components/Button/Button';
 import { VOLCANIC_SAND } from '@/constants/colors';
-import Column from '@/components/column';
+import Column from '@/components/Column/Column';
 import { Route } from '@/constants';
 
 const Container = styled(Column)`
