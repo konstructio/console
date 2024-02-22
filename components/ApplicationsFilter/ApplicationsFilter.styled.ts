@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import { styled as muiStyled } from '@mui/material';
 
 import Column from '../column';
-import Autocomplete from '../AutoComplete/Autocomplete';
+import Autocomplete from '../Autocomplete/Autocomplete';
 import Row from '../row';
 
 import { PASTEL_LIGHT_BLUE, WHITE } from '@/constants/colors';

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Control, Controller, FieldValues, UseControllerProps } from 'react-hook-form';
 import { SxProps } from '@mui/material';
 
-import Autocomplete from '../../AutoComplete/Autocomplete';
+import Autocomplete from '../../Autocomplete/Autocomplete';
 
 export interface ControlledAutocompleteProps<T extends FieldValues> extends UseControllerProps<T> {
   label: string;

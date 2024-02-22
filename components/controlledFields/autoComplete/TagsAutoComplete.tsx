@@ -1,7 +1,7 @@
 import React from 'react';
 import { Control, Controller, FieldValues, UseControllerProps } from 'react-hook-form';
 
-import { AutocompleteTags } from '../../AutoComplete/Autocomplete';
+import { AutocompleteTags } from '../../Autocomplete/Autocomplete';
 
 import { ClusterEnvironment } from '@/types/provision';
 
