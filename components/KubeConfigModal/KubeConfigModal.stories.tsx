@@ -2,7 +2,7 @@
 import React, { FunctionComponent } from 'react';
 import { Meta, StoryObj } from '@storybook/react';
 
-import KubeConfigModal, { KubeConfigModalProps } from './index';
+import KubeConfigModal, { KubeConfigModalProps } from './KubeConfigModal';
 
 import Button from '@/components/Button/Button';
 import useModal from '@/hooks/useModal';

@@ -53,7 +53,7 @@ import { getClusterTourStatus, updateClusterTourStatus } from '@/redux/thunks/se
 import usePaywall from '@/hooks/usePaywall';
 import UpgradeModal from '@/components/upgradeModal';
 import { selectUpgradeLicenseDefinition } from '@/redux/selectors/subscription.selector';
-import KubeConfigModal from '@/components/kubeConfigModal';
+import KubeConfigModal from '@/components/KubeConfigModal/KubeConfigModal';
 import { createNotification } from '@/redux/slices/notifications.slice';
 import useFeatureFlag from '@/hooks/useFeatureFlag';
 

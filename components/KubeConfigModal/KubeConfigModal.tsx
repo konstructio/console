@@ -12,7 +12,7 @@ import {
   ExternalLink,
   Main,
   StyledTypography,
-} from './kubeConfigModal.styled';
+} from './KubeConfigModal.styled';
 
 export interface KubeConfigModalProps extends Omit<IModalProps, 'children'>, CopyCommandProps {
   onAcceptance: () => void;
