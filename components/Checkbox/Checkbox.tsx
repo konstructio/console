@@ -3,7 +3,7 @@ import CheckboxMUI, { CheckboxProps } from '@mui/material/Checkbox';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
 
-import { QUARTZ, SPUN_PEARL } from '../../constants/colors';
+import { QUARTZ, SPUN_PEARL } from '@/constants/colors';
 
 type ICheckBoxProps = Omit<CheckboxProps, 'key'>;
 

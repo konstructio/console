@@ -2,7 +2,7 @@ import React from 'react';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import { Control, Controller, UseControllerProps, FieldValues } from 'react-hook-form';
 
-import Checkbox from '../../checkbox/index';
+import Checkbox from '../../Checkbox/Checkbox';
 import Typography from '../../typography/index';
 import { VOLCANIC_SAND } from '../../../constants/colors';
 

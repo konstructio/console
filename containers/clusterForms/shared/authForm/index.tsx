@@ -42,7 +42,7 @@ import {
 
 import Tooltip from '@/components/tooltip';
 import Row from '@/components/row';
-import CheckBoxWithRef from '@/components/checkbox';
+import CheckBoxWithRef from '@/components/Checkbox/Checkbox';
 import Column from '@/components/column';
 import { hasProjectId } from '@/utils/hasProjectId';
 import { getDigitalOceanUser } from '@/redux/thunks/digitalOcean.thunk';

@@ -6,18 +6,17 @@ import sortBy from 'lodash/sortBy';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormGroup from '@mui/material/FormGroup';
 
-import Checkbox from '../../components/checkbox';
-import Typography from '../../components/typography';
-import GitOpsCatalogCard from '../../components/gitOpsCatalogCard';
-import GitopsAppModal from '../../components/gitopsAppModal';
-import useModal from '../../hooks/useModal';
-import { useAppDispatch, useAppSelector } from '../../redux/store';
-import { installGitOpsApp } from '../../redux/thunks/applications.thunk';
-import { AppCategory, GitOpsCatalogApp } from '../../types/applications';
-import { VOLCANIC_SAND } from '../../constants/colors';
-
 import { CardsContainer, Container, Content, Filter } from './gitOpsCatalog.styled';
 
+import Checkbox from '@/components/Checkbox/Checkbox';
+import Typography from '@/components/typography';
+import GitOpsCatalogCard from '@/components/gitOpsCatalogCard';
+import GitopsAppModal from '@/components/gitopsAppModal';
+import useModal from '@/hooks/useModal';
+import { useAppDispatch, useAppSelector } from '@/redux/store';
+import { installGitOpsApp } from '@/redux/thunks/applications.thunk';
+import { AppCategory, GitOpsCatalogApp } from '@/types/applications';
+import { VOLCANIC_SAND } from '@/constants/colors';
 import {
   addCategory,
   removeCategory,
