@@ -32,7 +32,7 @@ import { setFilterState } from '@/redux/slices/applications.slice';
 import { ClusterStatus, WORKLOAD_CLUSTER_TYPES } from '@/types/provision';
 import { ClusterApplication, GitOpsCatalogApp } from '@/types/applications';
 import useModal from '@/hooks/useModal';
-import UninstallApplication from '@/components/uninstallApplication';
+import UninstallApplication from '@/components/UninstallApplication/UninstallApplication';
 
 enum APPLICATION_TAB {
   PROVISIONED,

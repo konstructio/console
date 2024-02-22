@@ -7,7 +7,7 @@ import Typography from '../Typography/Typography';
 import Modal from '../Modal/Modal';
 import Button from '../Button/Button';
 
-import { Content, Footer, Header } from './uninstallApplication.styled';
+import { Content, Footer, Header } from './UninstallApplication.styled';
 
 import { LAUGHING_ORANGE } from '@/constants/colors';
 
