@@ -6,7 +6,8 @@ import ListItemText from '@mui/material/ListItemText';
 import ListItemIcon from '@mui/material/ListItemIcon';
 
 import Typography from '../typography';
-import { VOLCANIC_SAND } from '../../constants/colors';
+
+import { VOLCANIC_SAND } from '@/constants/colors';
 
 export interface MenuProps {
   isDisabled?: boolean;
