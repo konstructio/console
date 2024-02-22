@@ -6,7 +6,7 @@ import Typography from '../typography';
 import Button from '../Button/Button';
 import Password from '../password';
 
-import { Container, Link, PasswordContainer, Title } from './clusterReady.styled';
+import { Container, Link, PasswordContainer, Title } from './ClusterReady.styled';
 
 import Box from '@/assets/box.svg';
 

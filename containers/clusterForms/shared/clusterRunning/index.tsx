@@ -1,8 +1,8 @@
 import React, { FunctionComponent, useCallback } from 'react';
 
-import ClusterReady from '../../../../components/clusterReady';
-import { useAppDispatch, useAppSelector } from '../../../../redux/store';
-import { setSelectedCluster } from '../../../../redux/slices/applications.slice';
+import ClusterReady from '@/components/ClusterReady/ClusterReady';
+import { useAppDispatch, useAppSelector } from '@/redux/store';
+import { setSelectedCluster } from '@/redux/slices/applications.slice';
 
 const ClusterRunning: FunctionComponent = () => {
   const dispatch = useAppDispatch();
