@@ -2,7 +2,7 @@ import React, { ComponentPropsWithoutRef, FunctionComponent } from 'react';
 import styled from 'styled-components';
 import CircularProgress from '@mui/material/CircularProgress';
 
-import { AvailabilityIdicator, Container } from './statusIndicator.styled';
+import { AvailabilityIdicator, Container } from './StatusIndicator.styled';
 
 import { MINT_GREEN, PASTEL_LIGHT_BLUE } from '@/constants/colors';
 

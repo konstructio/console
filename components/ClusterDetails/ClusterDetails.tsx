@@ -26,7 +26,7 @@ import {
   DraftCluster,
   ManagementCluster,
 } from '@/types/provision';
-import StatusIndicator from '@/components/statusIndicator';
+import StatusIndicator from '@/components/StatusIndicator/StatusIndicator';
 import { CLOUD_PROVIDER_DISPLAY_NAME, GIT_PROVIDER_DISPLAY_NAME } from '@/constants';
 import Tag from '@/components/tag';
 
