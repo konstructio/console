@@ -3,7 +3,7 @@ import { Meta, StoryObj } from '@storybook/react';
 import { useForm } from 'react-hook-form';
 import StarBorderOutlinedIcon from '@mui/icons-material/StarBorderOutlined';
 
-import Radio from './';
+import Radio from './ControlledRadioGroup';
 
 import Tag from '@/components/Tag/Tag';
 import { ASMANI_SKY } from '@/constants/colors';

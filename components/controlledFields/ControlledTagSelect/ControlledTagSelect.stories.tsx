@@ -4,7 +4,7 @@ import { useForm } from 'react-hook-form';
 
 import { TAG_COLOR_OPTIONS, TagColor } from '../../Tag/Tag';
 
-import ControlledTagSelect from './index';
+import ControlledTagSelect from './ControlledTagSelect';
 
 const meta: Meta<typeof ControlledTagSelect> = {
   component: ControlledTagSelect,

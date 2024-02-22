@@ -5,8 +5,8 @@ import { Control } from 'react-hook-form';
 import Modal from '../Modal/Modal';
 import Button from '../Button/Button';
 import Typography from '../Typography/Typography';
-import ControlledPassword from '../controlledFields/Password';
-import ControlledTextField from '../controlledFields/TextField';
+import ControlledPassword from '../controlledFields/ControlledPassword';
+import ControlledTextField from '../controlledFields/ControlledTextField/ControlledTextField';
 
 import { Container, Content, Close, Footer, Header } from './GitOpsAppModal.styled';
 

@@ -9,8 +9,8 @@ import Typography from '@/components/Typography/Typography';
 import { BISCAY, SALTBOX_BLUE, VOLCANIC_SAND } from '@/constants/colors';
 import Button from '@/components/Button/Button';
 import { ContactUsFields, UserRequest } from '@/types/subscription';
-import ControlledTextArea from '@/components/controlledFields/textArea';
-import ControlledTextField from '@/components/controlledFields/TextField';
+import ControlledTextArea from '@/components/controlledFields/ControlledTextArea/ControlledTextArea';
+import ControlledTextField from '@/components/controlledFields/ControlledTextField/ControlledTextField';
 import { EMAIL_REGEX } from '@/constants';
 
 export interface ContactUsFormProps {

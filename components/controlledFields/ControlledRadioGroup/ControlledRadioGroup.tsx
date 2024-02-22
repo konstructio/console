@@ -4,7 +4,7 @@ import Radio from '@mui/material/Radio';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import { Control, Controller, UseControllerProps, FieldValues } from 'react-hook-form';
 
-import { Container, InfoIcon } from './radio.styled';
+import { Container, InfoIcon } from './ControlledRadioGroup.styled';
 
 import Typography from '@/components/Typography/Typography';
 import { VOLCANIC_SAND } from '@/constants/colors';

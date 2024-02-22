@@ -3,7 +3,7 @@ import { Meta, StoryObj } from '@storybook/react';
 import { action } from '@storybook/addon-actions';
 import { useForm } from 'react-hook-form';
 
-import ControlledNumberInput from '.';
+import ControlledNumberInput from './ControlledNumberInput';
 
 const meta: Meta<typeof ControlledNumberInput> = {
   component: ControlledNumberInput,

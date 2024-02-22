@@ -13,10 +13,10 @@ import {
 
 import Typography from '@/components/Typography/Typography';
 import { BISCAY, SALTBOX_BLUE, VOLCANIC_SAND } from '@/constants/colors';
-import ControlledCheckbox from '@/components/controlledFields/checkbox';
+import ControlledCheckbox from '@/components/controlledFields/ControlledCheckbox/ControlledCheckbox';
 import Button from '@/components/Button/Button';
 import { CancelSubscriptionFields, UserRequest } from '@/types/subscription';
-import ControlledTextArea from '@/components/controlledFields/textArea';
+import ControlledTextArea from '@/components/controlledFields/ControlledTextArea/ControlledTextArea';
 import { Required } from '@/components/TextField/TextField.styled';
 
 export const CANCEL_SUBSCRIPTION_OPTIONS = [

@@ -4,7 +4,7 @@ import { Control, Controller, UseControllerProps, FieldValues } from 'react-hook
 
 import Select from '../Select/Select';
 
-export interface ControlledTextFieldProps<T extends FieldValues> extends UseControllerProps<T> {
+export interface ControlledSelectFieldProps<T extends FieldValues> extends UseControllerProps<T> {
   label: string;
   required?: boolean;
   control: Control<T>;
@@ -24,7 +24,7 @@ function ControlledSelect<T extends FieldValues>({
   options,
   sx,
   ...rest
-}: ControlledTextFieldProps<T>) {
+}: ControlledSelectFieldProps<T>) {
   return (
     <Controller
       name={name}

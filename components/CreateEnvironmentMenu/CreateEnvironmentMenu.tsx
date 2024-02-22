@@ -5,9 +5,9 @@ import Alert from '@mui/material/Alert';
 
 import Typography from '../Typography/Typography';
 import { TagColor } from '../Tag/Tag';
-import ControlledTextField from '../controlledFields/TextField';
-import ControlledTagSelect from '../controlledFields/tagSelect';
-import ControlledTextArea from '../controlledFields/textArea';
+import ControlledTextField from '../controlledFields/ControlledTextField/ControlledTextField';
+import ControlledTagSelect from '../controlledFields/ControlledTagSelect/ControlledTagSelect';
+import ControlledTextArea from '../controlledFields/ControlledTextArea/ControlledTextArea';
 import Button from '../Button/Button';
 
 import { CloseButton, Content, Footer, Header, Root } from './CreateEnvironmentMenu.styled';

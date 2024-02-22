@@ -11,7 +11,7 @@ import Button from '@/components/Button/Button';
 import LearnMore from '@/components/LearnMore/LearnMore';
 import Typography from '@/components/Typography/Typography';
 import { useAppSelector } from '@/redux/store';
-import ControlledPassword from '@/components/controlledFields/Password';
+import ControlledPassword from '@/components/controlledFields/ControlledPassword';
 import { selectHasLicenseKey, selectRequestByType } from '@/redux/selectors/subscription.selector';
 
 export interface LicenseProps {

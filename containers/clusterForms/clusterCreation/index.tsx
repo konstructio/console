@@ -14,14 +14,14 @@ import { usePhysicalClustersPermissions } from '../../../hooks/usePhysicalCluste
 import { Container } from './clusterCreation.styled';
 import { InputContainer } from './advancedOptions/advancedOptions.styled';
 
-import ControlledAutocomplete from '@/components/controlledFields/autoComplete/AutoComplete';
-import ControlledTextField from '@/components/controlledFields/TextField';
+import ControlledAutocomplete from '@/components/controlledFields/ControlledAutoComplete/ControlledAutoComplete';
+import ControlledTextField from '@/components/controlledFields/ControlledTextField/ControlledTextField';
 import { useAppDispatch, useAppSelector } from '@/redux/store';
 import Typography from '@/components/Typography/Typography';
 import { ClusterType, NewWorkloadClusterConfig, ClusterEnvironment } from '@/types/provision';
 import { ASMANI_SKY, BISCAY, EXCLUSIVE_PLUM } from '@/constants/colors';
-import ControlledNumberInput from '@/components/controlledFields/numberInput';
-import ControlledRadioGroup from '@/components/controlledFields/radio';
+import ControlledNumberInput from '@/components/controlledFields/ControlledNumberInput/ControlledNumberInput';
+import ControlledRadioGroup from '@/components/controlledFields/ControlledRadioGroup/ControlledRadioGroup';
 import {
   LOWER_KEBAB_CASE_REGEX,
   MIN_NODE_COUNT,
@@ -42,7 +42,7 @@ import {
   getInstanceSizes,
   getRegionZones,
 } from '@/redux/thunks/api.thunk';
-import ControlledTagsAutocomplete from '@/components/controlledFields/autoComplete/TagsAutoComplete';
+import ControlledTagsAutocomplete from '@/components/controlledFields/ControlledAutoComplete/ControlledTagsAutoComplete';
 import {
   selectHasLicenseKey,
   selectIsLicenseActive,

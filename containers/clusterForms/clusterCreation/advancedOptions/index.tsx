@@ -5,10 +5,10 @@ import { InputContainer } from './advancedOptions.styled';
 
 import LearnMore from '@/components/LearnMore/LearnMore';
 import Typography from '@/components/Typography/Typography';
-import Checkbox from '@/components/controlledFields/checkbox';
-import ControlledTextField from '@/components/controlledFields/TextField';
-import ControlledAutocomplete from '@/components/controlledFields/autoComplete/AutoComplete';
-import ControlledRadioGroup from '@/components/controlledFields/radio/';
+import Checkbox from '@/components/controlledFields/ControlledCheckbox/ControlledCheckbox';
+import ControlledTextField from '@/components/controlledFields/ControlledTextField/ControlledTextField';
+import ControlledAutocomplete from '@/components/controlledFields/ControlledAutoComplete/ControlledAutoComplete';
+import ControlledRadioGroup from '@/components/controlledFields/ControlledRadioGroup/ControlledRadioGroup';
 import { useAppSelector } from '@/redux/store';
 import { ImageRepository, NewWorkloadClusterConfig } from '@/types/provision';
 import { EXCLUSIVE_PLUM } from '@/constants/colors';

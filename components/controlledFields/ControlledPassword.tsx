@@ -3,7 +3,7 @@ import { Control, Controller, FieldValues, UseControllerProps } from 'react-hook
 
 import Password from '../Password/Password';
 
-export interface ControlledTextFieldProps<T extends FieldValues> extends UseControllerProps<T> {
+export interface ControlledPasswordProps<T extends FieldValues> extends UseControllerProps<T> {
   label: string;
   required?: boolean;
   control: Control<T>;
@@ -25,7 +25,7 @@ function ControlledPassword<T extends FieldValues>({
   onBlur,
   onChange,
   ...props
-}: ControlledTextFieldProps<T>) {
+}: ControlledPasswordProps<T>) {
   const [isBlur, setIsBlur] = useState(false);
 
   return (

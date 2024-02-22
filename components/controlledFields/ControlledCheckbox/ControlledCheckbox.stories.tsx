@@ -2,7 +2,7 @@ import React from 'react';
 import { Meta, StoryObj } from '@storybook/react';
 import { useForm } from 'react-hook-form';
 
-import ControlledCheckbox from './index';
+import ControlledCheckbox from './ControlledCheckbox';
 
 const meta: Meta<typeof ControlledCheckbox> = {
   component: ControlledCheckbox,

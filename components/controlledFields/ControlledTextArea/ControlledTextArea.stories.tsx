@@ -2,7 +2,7 @@ import React from 'react';
 import { Meta, StoryObj } from '@storybook/react';
 import { useForm } from 'react-hook-form';
 
-import ControlledTextArea from './index';
+import ControlledTextArea from './ControlledTextArea';
 
 const meta: Meta<typeof ControlledTextArea> = {
   component: ControlledTextArea,
