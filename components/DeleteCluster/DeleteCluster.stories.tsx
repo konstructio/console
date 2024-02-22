@@ -1,7 +1,7 @@
 import React, { FunctionComponent, useState } from 'react';
 import { Meta, StoryObj } from '@storybook/react';
 
-import DeleteCluster, { DeleteClusterProps } from '.';
+import DeleteCluster, { DeleteClusterProps } from './DeleteCluster';
 
 import Button from '@/components/Button/Button';
 import { noop } from '@/utils/noop';

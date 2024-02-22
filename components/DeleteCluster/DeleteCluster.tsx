@@ -16,7 +16,7 @@ import {
   NextLink,
   Text,
   TextField,
-} from './deleteCluster.styled';
+} from './DeleteCluster.styled';
 
 export interface DeleteClusterProps extends Omit<IModalProps, 'children'> {
   cluster: Cluster | DraftCluster;
