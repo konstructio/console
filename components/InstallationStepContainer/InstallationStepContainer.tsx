@@ -1,6 +1,6 @@
 import React, { FunctionComponent, PropsWithChildren, useMemo } from 'react';
 
-import Progress, { ProgressProps } from '../progress';
+import Progress, { ProgressProps } from '../Progress/Progress';
 import { InstallationButtonsProps } from '../InstallationButtons/InstallationButtons';
 import LinearProgress from '../LinearProgress/LinearProgress';
 

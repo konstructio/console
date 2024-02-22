@@ -12,7 +12,7 @@ import {
   Container,
   Label,
   ColorlibConnector,
-} from './progress.styled';
+} from './Progress.styled';
 
 export interface ProgressProps {
   activeStep: number;

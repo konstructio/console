@@ -4,8 +4,8 @@ import StepConnector, { stepConnectorClasses } from '@mui/material/StepConnector
 import { styled as muiStyled } from '@mui/material/styles';
 import styled from 'styled-components';
 
-import { theme } from '../../theme';
-import { BISCAY, PORT_GORE } from '../../constants/colors';
+import { theme } from '@/theme';
+import { BISCAY, PORT_GORE } from '@/constants/colors';
 
 export const Label = muiStyled(StepLabel)(() => ({
   [`& .${stepLabelClasses.completed}`]: {
