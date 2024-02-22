@@ -10,7 +10,7 @@ import Button from '../Button/Button';
 import { ClusterEnvironment } from '../../types/provision';
 import CopyButton from '../CopyButton/CopyButton';
 
-import { Content, CopyTextContainer, Footer, Header, NextLink } from './deleteEnvironment.styled';
+import { Content, CopyTextContainer, Footer, Header, NextLink } from './DeleteEnvironment.styled';
 
 export interface DeleteEnvironmentProps extends PropsWithChildren {
   environment: ClusterEnvironment;

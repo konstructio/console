@@ -20,7 +20,7 @@ import {
 } from '@/redux/thunks/environments.thunk';
 import EnvironmentsTable from '@/components/environmentsTable';
 import { ClusterEnvironment } from '@/types/provision';
-import DeleteEnvironment from '@/components/deleteEnvironment';
+import DeleteEnvironment from '@/components/DeleteEnvironment/DeleteEnvironment';
 import { clearEnvironmentError } from '@/redux/slices/environments.slice';
 import { noop } from '@/utils/noop';
 import { VOLCANIC_SAND } from '@/constants/colors';
