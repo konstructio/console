@@ -1,7 +1,7 @@
 import React from 'react';
 import { Meta, StoryObj } from '@storybook/react';
 
-import InstallationStepContainer from '.';
+import InstallationStepContainer from './InstallationStepContainer';
 
 import { LocalFormStep } from '@/constants/installation';
 import { GitProvider } from '@/types';

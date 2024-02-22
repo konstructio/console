@@ -10,7 +10,7 @@ import {
   InstallTitle,
   Content,
   FormContent,
-} from './installationStepContainer.styled';
+} from './InstallationStepContainer.styled';
 
 import { noop } from '@/utils/noop';
 import { useAppSelector } from '@/redux/store';

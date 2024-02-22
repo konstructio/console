@@ -14,7 +14,7 @@ import {
   FormFooter,
 } from './provision.styled';
 
-import InstallationStepContainer from '@/components/installationStepContainer';
+import InstallationStepContainer from '@/components/InstallationStepContainer/InstallationStepContainer';
 import InstallationInfoCard from '@/components/InstallationInfoCard/InstallationInfoCard';
 import ErrorBanner from '@/components/ErrorBanner/ErrorBanner';
 import Button from '@/components/Button/Button';
