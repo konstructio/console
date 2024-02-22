@@ -16,7 +16,7 @@ import {
   ExternalLink,
   StyledDivider,
   StatusContainer,
-} from './clusterDetails.styled';
+} from './ClusterDetails.styled';
 
 import Typography from '@/components/typography';
 import {

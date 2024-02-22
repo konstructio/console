@@ -12,7 +12,7 @@ import { CloseButton, Form, FormContent, Menu, MenuHeader } from './createCluste
 import Button from '@/components/Button/Button';
 import { FIRE_BRICK, SALTBOX_BLUE } from '@/constants/colors';
 import ClusterCreationForm from '@/containers/clusterForms/clusterCreation';
-import ClusterDetails from '@/components/clusterDetails';
+import ClusterDetails from '@/components/ClusterDetails/ClusterDetails';
 import {
   Cluster,
   ClusterCreationStep,
