@@ -13,7 +13,7 @@ import vultrLogo from '../../assets/vultr_logo.svg';
 import googleCloudLogo from '../../assets/googleCloud.svg';
 import { BISCAY } from '../../constants/colors';
 
-import { CardContainer, DetailsContainer, Link, LabelContainer } from './cloudProviderCard.styled';
+import { CardContainer, DetailsContainer, Link, LabelContainer } from './CloudProviderCard.styled';
 
 const PROVIDER_OPTIONS: Record<
   InstallationType,

@@ -1,14 +1,6 @@
 import React, { FunctionComponent, useCallback } from 'react';
 import { useFormContext } from 'react-hook-form';
 
-import { clearError, setGitProvider, setInstallType } from '../../redux/slices/installation.slice';
-import GitProviderButton from '../../components/gitProviderButton';
-import CloudProviderCard from '../../components/cloudProviderCard';
-import { useAppDispatch, useAppSelector } from '../../redux/store';
-import { INSTALLATION_TYPES, InstallValues, InstallationType } from '../../types/redux';
-import { clearGitState } from '../../redux/slices/git.slice';
-import { GIT_PROVIDERS, GitProvider } from '../../types';
-
 import {
   ContentContainer,
   ButtonContainer,
@@ -16,6 +8,14 @@ import {
   Subtitle,
   CloudProviderContainer,
 } from './installationsSelection.styled';
+
+import { clearError, setGitProvider, setInstallType } from '@/redux/slices/installation.slice';
+import GitProviderButton from '@/components/gitProviderButton';
+import CloudProviderCard from '@/components/CloudProviderCard/CloudProviderCard';
+import { useAppDispatch, useAppSelector } from '@/redux/store';
+import { INSTALLATION_TYPES, InstallValues, InstallationType } from '@/types/redux';
+import { clearGitState } from '@/redux/slices/git.slice';
+import { GIT_PROVIDERS, GitProvider } from '@/types';
 
 export const InstallationsSelection: FunctionComponent = () => {
   const dispatch = useAppDispatch();
