@@ -1,7 +1,7 @@
 import React from 'react';
 import { Control, Controller, UseControllerProps, FieldValues } from 'react-hook-form';
 
-import { TagSelectWithRef } from '../../select/';
+import { TagSelectWithRef } from '../../Select/Select';
 
 export interface ControlledTagSelectProps<T extends FieldValues> extends UseControllerProps<T> {
   label: string;

@@ -2,7 +2,7 @@ import React from 'react';
 import { SxProps } from '@mui/material';
 import { Control, Controller, UseControllerProps, FieldValues } from 'react-hook-form';
 
-import Select from '../select/';
+import Select from '../Select/Select';
 
 export interface ControlledTextFieldProps<T extends FieldValues> extends UseControllerProps<T> {
   label: string;

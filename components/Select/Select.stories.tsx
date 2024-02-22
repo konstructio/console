@@ -3,7 +3,7 @@ import { Meta, StoryObj } from '@storybook/react';
 
 import { TAG_COLOR_OPTIONS } from '../tag';
 
-import SelectComponent, { TagSelectWithRef } from './index';
+import SelectComponent, { TagSelectWithRef } from './Select';
 
 const meta: Meta<typeof SelectComponent> = {
   title: 'Form Elements/Select',

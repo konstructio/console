@@ -11,7 +11,7 @@ import SearchIcon from '@mui/icons-material/Search';
 import Row from '../Row/Row';
 import Typography from '../typography';
 import { IAutocompleteProps } from '../Autocomplete/Autocomplete';
-import Select from '../select';
+import Select from '../Select/Select';
 import TextFieldWithRef from '../textField';
 import { InputAdornmentContainer } from '../textField/textField.styled';
 

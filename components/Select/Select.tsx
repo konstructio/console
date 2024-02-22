@@ -12,7 +12,7 @@ import Tag, { TagColor } from '../tag';
 import { DOLPHIN, LIGHT_GREY, LINK_WATER } from '../../constants/colors';
 import { StyledFormHelperText } from '../textArea/textArea.styled';
 
-import { Container } from './select.styled';
+import { Container } from './Select.styled';
 
 const MenuProps = {
   PaperProps: {
