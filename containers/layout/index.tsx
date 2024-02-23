@@ -3,7 +3,7 @@ import React, { PropsWithChildren, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { Typography } from '@mui/material';
 
-import KubefirstContent from '../kubefirstContent';
+import KubefirstContent from '../KubefirstContent/KubefirstContent';
 
 import { Link } from './layout.styled';
 

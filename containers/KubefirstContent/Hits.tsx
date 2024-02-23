@@ -2,7 +2,7 @@ import React, { FunctionComponent } from 'react';
 import { useHits } from 'react-instantsearch';
 import { Box, CircularProgress } from '@mui/material';
 
-import { HitsContainer } from './kubefirstContent.styled';
+import { HitsContainer } from './KubefirstContent.styled';
 
 import ContentHit from '@/components/ContentHit/ContentHit';
 import { Content } from '@/types/algolia/content';

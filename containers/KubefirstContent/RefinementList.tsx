@@ -4,7 +4,7 @@ import sortBy from 'lodash/sortBy';
 import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 
-import { RefinementContainer } from './kubefirstContent.styled';
+import { RefinementContainer } from './KubefirstContent.styled';
 
 import Checkbox from '@/components/Checkbox/Checkbox';
 import Typography from '@/components/Typography/Typography';

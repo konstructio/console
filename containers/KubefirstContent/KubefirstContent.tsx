@@ -5,10 +5,10 @@ import { InstantSearch } from 'react-instantsearch';
 
 const KUBEFIRST_CONTENT_INDEX_NAME = 'kubefirst-content';
 
-import { Body, Container, Filter, Header } from './kubefirstContent.styled';
-import Hits from './hits';
-import RefinementList from './refinementList';
-import RangeSlider from './slider';
+import { Body, Container, Filter, Header } from './KubefirstContent.styled';
+import Hits from './Hits';
+import RefinementList from './RefinementList';
+import RangeSlider from './Slider';
 
 import Modal, { Close } from '@/components/Modal/Modal';
 import Typography from '@/components/Typography/Typography';
