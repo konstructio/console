@@ -9,7 +9,7 @@ import {
   Footer,
   Header,
   SubscriptionOptions,
-} from './cancelSubscriptionForm.styled';
+} from './CancelSubscriptionForm.styled';
 
 import Typography from '@/components/Typography/Typography';
 import { BISCAY, SALTBOX_BLUE, VOLCANIC_SAND } from '@/constants/colors';

@@ -1,8 +1,8 @@
 import React, { FunctionComponent, ReactNode, useCallback, useMemo } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 
-import CancelSubscriptionForm from './cancelSubscriptionForm';
-import CancelSubscriptionConfirmation from './cancelSubscriptionConfirmation';
+import CancelSubscriptionForm from './CancelSubscriptionForm/CancelSubscriptionForm';
+import CancelSubscriptionConfirmation from './CancelSubscriptionConfirmation/CancelSubscriptionConfirmation';
 
 import useStep from '@/hooks/useStep';
 import { CancelSubscriptionFields, UserRequest } from '@/types/subscription';

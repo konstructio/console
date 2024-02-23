@@ -2,7 +2,7 @@ import React, { FunctionComponent } from 'react';
 import { Divider } from '@mui/material';
 import Image from 'next/image';
 
-import { Container, Footer } from './cancelSubscriptionConfirmation.styled';
+import { Container, Footer } from './CancelSubscriptionConfirmation.styled';
 
 import Cancel from '@/assets/cancel.svg';
 import Typography from '@/components/Typography/Typography';
