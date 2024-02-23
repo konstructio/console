@@ -12,7 +12,7 @@ import {
   Form,
   FormContent,
   FormFooter,
-} from './provision.styled';
+} from './Provision.styled';
 
 import InstallationStepContainer from '@/components/InstallationStepContainer/InstallationStepContainer';
 import InstallationInfoCard from '@/components/InstallationInfoCard/InstallationInfoCard';
