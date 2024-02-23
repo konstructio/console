@@ -8,7 +8,7 @@ import KubefirstContent from '../KubefirstContent/KubefirstContent';
 import { Link } from './Layout.styled';
 
 import Header from '@/containers/Header/Header';
-import Navigation from '@/containers/navigation';
+import Navigation from '@/containers/Navigation/Navigation';
 import Row from '@/components/Row/Row';
 import Column from '@/components/Column/Column';
 import { useAppDispatch, useAppSelector } from '@/redux/store';
