@@ -7,7 +7,7 @@ import {
   AdventureContent,
   Subtitle,
   CloudProviderContainer,
-} from './installationsSelection.styled';
+} from './InstallationsSelection.styled';
 
 import { clearError, setGitProvider, setInstallType } from '@/redux/slices/installation.slice';
 import GitProviderButton from '@/components/GitProviderButton/GitProviderButton';

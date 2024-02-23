@@ -2,7 +2,7 @@
 import React, { FunctionComponent, useCallback, useEffect, useMemo, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 
-import { InstallationsSelection } from '../installationsSelection';
+import { InstallationsSelection } from '../InstallationsSelection/InstallationsSelection';
 import { ClusterForms } from '../ClusterForms/ClusterForms';
 import AdvancedOptions from '../ClusterForms/shared/AdvancedOptions/AdvancedOptions';
 
