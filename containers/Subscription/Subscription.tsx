@@ -9,7 +9,7 @@ import CancelSubscription from '../CancelSubscription/CancelSubscription';
 import Billing from '../Billing/Billing';
 import ContactUs from '../ContactUsModal/ContactUsModal';
 
-import { Container, PlansContainer } from './subscription.styled';
+import { Container, PlansContainer } from './Subscription.styled';
 
 import TabPanel, { Tab, a11yProps } from '@/components/Tab/Tab';
 import { BISCAY, VOLCANIC_SAND } from '@/constants/colors';
