@@ -4,7 +4,7 @@ import Box from '@mui/material/Box';
 import Tabs from '@mui/material/Tabs';
 import { FormProvider, useForm } from 'react-hook-form';
 
-import License from '../license';
+import License from '../License/License';
 import CancelSubscription from '../CancelSubscription/CancelSubscription';
 import Billing from '../Billing/Billing';
 import ContactUs from '../ContactUsModal/ContactUsModal';

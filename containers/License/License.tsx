@@ -4,7 +4,7 @@ import { Box, CircularProgress } from '@mui/material';
 import { FieldValues, useFormContext } from 'react-hook-form';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 
-import { BottomFormContainer, CancelContainer, FormContainer, UList } from './license.styled';
+import { BottomFormContainer, CancelContainer, FormContainer, UList } from './License.styled';
 
 import { COAL_MINE, EXCLUSIVE_PLUM, ORANGEALICIOUS, VOLCANIC_SAND } from '@/constants/colors';
 import Button from '@/components/Button/Button';
