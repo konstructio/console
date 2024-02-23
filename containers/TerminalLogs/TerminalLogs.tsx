@@ -26,7 +26,7 @@ import {
   TerminalHead,
   TerminalView,
   Tools,
-} from './terminalLogs.styled';
+} from './TerminalLogs.styled';
 
 import Tooltip from '@/components/Tooltip/Tooltip';
 import TabPanel, { Tab, a11yProps } from '@/components/Tab/Tab';

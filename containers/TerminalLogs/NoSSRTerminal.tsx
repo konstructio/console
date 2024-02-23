@@ -8,6 +8,6 @@ const DynamicComponentWithNoSSR = dynamic(
   },
 );
 
-const Terminal = () => <DynamicComponentWithNoSSR />;
+const NoSSRTerminal = () => <DynamicComponentWithNoSSR />;
 
-export default Terminal;
+export default NoSSRTerminal;

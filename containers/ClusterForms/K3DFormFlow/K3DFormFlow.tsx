@@ -1,7 +1,7 @@
 import React, { FunctionComponent } from 'react';
 
 import ClusterRunningMessage from '../shared/ClusterRunning';
-import TerminalLogs from '../../terminalLogs';
+import NoSSRTerminal from '../../TerminalLogs/NoSSRTerminal';
 
 import { K3DSetupForm } from './K3DSetupForm/K3DSetupForm';
 import { ContentContainer } from './K3DFormFlow.styled';
@@ -10,7 +10,7 @@ import { LocalFormStep } from '@/constants/installation';
 
 const K3D_FORM_FLOW = {
   [LocalFormStep.SETUP]: K3DSetupForm,
-  [LocalFormStep.PROVISIONING]: TerminalLogs,
+  [LocalFormStep.PROVISIONING]: NoSSRTerminal,
   [LocalFormStep.READY]: ClusterRunningMessage,
 };
 

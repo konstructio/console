@@ -1,6 +1,6 @@
 import React, { FunctionComponent } from 'react';
 
-import TerminalLogs from '../terminalLogs';
+import NoSSRTerminal from '../TerminalLogs/NoSSRTerminal';
 
 import AuthForm from './shared/AuthForm/AuthForm';
 import ClusterRunning from './shared/ClusterRunning';
@@ -11,7 +11,7 @@ import { FormStep } from '@/constants/installation';
 const FORM_FLOW_MAP = {
   [FormStep.AUTHENTICATION]: AuthForm,
   [FormStep.SETUP]: SetupForm,
-  [FormStep.PROVISIONING]: TerminalLogs,
+  [FormStep.PROVISIONING]: NoSSRTerminal,
   [FormStep.READY]: ClusterRunning,
 };
 
