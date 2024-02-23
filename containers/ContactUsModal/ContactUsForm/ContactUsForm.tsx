@@ -3,7 +3,7 @@ import { useFormContext } from 'react-hook-form';
 import { Divider } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 
-import { Container, FieldsContainer, Footer, Header, NameSection } from './contactUsForm.styled';
+import { Container, FieldsContainer, Footer, Header, NameSection } from './ContactUsForm.styled';
 
 import Typography from '@/components/Typography/Typography';
 import { BISCAY, SALTBOX_BLUE, VOLCANIC_SAND } from '@/constants/colors';

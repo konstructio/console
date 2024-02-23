@@ -1,7 +1,7 @@
 import React, { FunctionComponent, useCallback } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 
-import ContactUsForm from './contactUsForm';
+import ContactUsForm from './ContactUsForm/ContactUsForm';
 
 import { CancelSubscriptionFields, UserRequest } from '@/types/subscription';
 import Modal from '@/components/Modal/Modal';
