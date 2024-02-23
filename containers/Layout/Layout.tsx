@@ -5,7 +5,7 @@ import { Typography } from '@mui/material';
 
 import KubefirstContent from '../KubefirstContent/KubefirstContent';
 
-import { Link } from './layout.styled';
+import { Link } from './Layout.styled';
 
 import Header from '@/containers/Header/Header';
 import Navigation from '@/containers/navigation';
