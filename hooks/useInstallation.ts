@@ -6,7 +6,7 @@ import {
   INSTALLATION_TYPE_API_KEYS,
   INSTALL_TYPE_STEPS,
   LOCAL_INSTALL_TITLES,
-  LocalFormStep,
+  K3DFormStep,
   MARKETPLACE_STEPS,
   MarketplaceFormStep,
 } from '../constants/installation';
@@ -57,7 +57,7 @@ const getStepTitles = (installType: InstallationType, isMarketplace: boolean) =>
 
 const getIsAuthStep = (
   type: InstallationType,
-  step: FormStep | LocalFormStep | MarketplaceFormStep,
+  step: FormStep | K3DFormStep | MarketplaceFormStep,
   isMarketplace: boolean,
 ) => {
   if (isMarketplace) {
@@ -69,14 +69,14 @@ const getIsAuthStep = (
 
 const getIsSetupStep = (
   type: InstallationType,
-  step: FormStep | LocalFormStep | MarketplaceFormStep,
+  step: FormStep | K3DFormStep | MarketplaceFormStep,
   isMarketplace: boolean,
 ) => {
   if (isMarketplace) {
     return ![InstallationType.LOCAL].includes(type) && step === MarketplaceFormStep.SETUP;
   }
 
-  const isLocalSetupStep = type === InstallationType.LOCAL && step === LocalFormStep.SETUP;
+  const isLocalSetupStep = type === InstallationType.LOCAL && step === K3DFormStep.SETUP;
 
   const isSetupStep = ![InstallationType.LOCAL].includes(type) && step === FormStep.SETUP;
 
@@ -85,15 +85,14 @@ const getIsSetupStep = (
 
 const getIsProvisionStep = (
   type: InstallationType,
-  step: FormStep | LocalFormStep | MarketplaceFormStep,
+  step: FormStep | K3DFormStep | MarketplaceFormStep,
   isMarketplace: boolean,
 ) => {
   if (isMarketplace) {
     return ![InstallationType.LOCAL].includes(type) && step === MarketplaceFormStep.PROVISIONING;
   }
 
-  const isLocalProvisionStep =
-    type === InstallationType.LOCAL && step === LocalFormStep.PROVISIONING;
+  const isLocalProvisionStep = type === InstallationType.LOCAL && step === K3DFormStep.PROVISIONING;
 
   const isProvisionStep =
     ![InstallationType.LOCAL].includes(type) && step === FormStep.PROVISIONING;

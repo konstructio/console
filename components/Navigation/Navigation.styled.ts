@@ -5,6 +5,8 @@ import Typography from '@/components/Typography/Typography';
 import { MIDNIGHT_EXPRESS } from '@/constants/colors';
 import { media } from '@/utils/media';
 import Tooltip from '@/components/Tooltip/Tooltip';
+import Column from '@/components/Column/Column';
+import Row from '@/components/Row/Row';
 
 export const Container = styled.nav`
   background-color: ${({ theme }) => theme.colors.moonlessMystery};
@@ -17,14 +19,12 @@ export const Container = styled.nav`
   transition: width 0.5s ease;
 
   ${media.greaterThan('md')`
-    width: 304px;
+    width: 256px;
     overflow: auto;
   `}
 `;
 
-export const FooterContainer = styled.div`
-  display: flex;
-  flex-direction: column;
+export const FooterContainer = styled(Column)`
   gap: 10px;
   margin-bottom: 24px;
 
@@ -33,9 +33,7 @@ export const FooterContainer = styled.div`
   }
 `;
 
-export const MenuContainer = styled.div`
-  display: flex;
-  flex-direction: column;
+export const MenuContainer = styled(Column)`
   gap: 10px;
 
   & a {
@@ -43,13 +41,12 @@ export const MenuContainer = styled.div`
   }
 `;
 
-export const MenuItem = styled.div<{ isActive?: boolean }>`
+export const MenuItem = styled(Row)<{ isActive?: boolean }>`
   align-items: center;
   justify-content: center;
   border-radius: 12px;
   color: #9ea2c6;
   cursor: pointer;
-  display: flex;
   gap: 18px;
   height: 24px;
   margin: 0 8px;

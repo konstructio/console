@@ -108,12 +108,4 @@ export const StyledCellText = muiStyled(Typography)(() => ({
 
 export const StyledTable = styled(Table)`
   border-collapse: collapse;
-  margin: 5px;
-  height: fit-content;
-  margin: 0 28px;
-`;
-
-export const StyledTableContainer = styled(TableContainer)`
-  display: flex;
-  height: 100%;
 `;

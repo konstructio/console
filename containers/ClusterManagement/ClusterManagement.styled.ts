@@ -8,12 +8,6 @@ import Column from '@/components/Column/Column';
 import Row from '@/components/Row/Row';
 import Drawer from '@/components/Drawer/Drawer';
 
-export const Container = styled(Column)`
-  flex: 1;
-  margin: 0 auto;
-  width: 100%;
-`;
-
 export const Content = styled(Column)`
   flex: 1;
   width: 100%;

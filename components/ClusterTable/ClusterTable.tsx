@@ -31,7 +31,6 @@ import {
   Menu,
   StyledHeaderCell,
   StyledIconButton,
-  StyledTableContainer,
   StyledTable,
 } from './ClusterTable.styled';
 
@@ -291,7 +290,6 @@ interface ClusterTableProps extends Omit<ComponentPropsWithRef<'tbody'>, 'key'> 
   managementCluster: ManagementCluster;
   clusters: ClusterCache;
   onDeleteCluster: (clusterName: string) => void;
-  customRef?: React.Ref<HTMLTableSectionElement>;
   selectedClusterName?: string;
   onClusterRowSelected: (clusterName: string) => void;
 }
@@ -302,7 +300,6 @@ export const ClusterTable: FunctionComponent<ClusterTableProps> = ({
   onDeleteCluster,
   selectedClusterName,
   onClusterRowSelected,
-  ...rest
 }) => {
   const [expanded, setExpanded] = useState(true);
   const [orderBy, setOrderBy] = useState<NestedKeyOfCluster>('clusterName');
@@ -328,38 +325,32 @@ export const ClusterTable: FunctionComponent<ClusterTableProps> = ({
   }, [clusters, order, orderBy]);
 
   return (
-    <StyledTableContainer {...rest}>
-      <StyledTable aria-label="collapsible table">
-        <ClusterTableHead onSort={handleRequestSort} order={order} orderBy={orderBy} />
-        <StyledTableBody>
-          <ClusterRow
-            cluster={managementCluster}
-            onDeleteCluster={onDeleteCluster}
-            expanded={expanded}
-            showExpandButton={!!filteredWorkloadClusters.length}
-            onExpanseClick={() => setExpanded(!expanded)}
-            selected={selectedClusterName === managementCluster.clusterName}
-            onClusterRowSelected={onClusterRowSelected}
-          />
+    <StyledTable aria-label="collapsible table">
+      <ClusterTableHead onSort={handleRequestSort} order={order} orderBy={orderBy} />
+      <StyledTableBody>
+        <ClusterRow
+          cluster={managementCluster}
+          onDeleteCluster={onDeleteCluster}
+          expanded={expanded}
+          showExpandButton={!!filteredWorkloadClusters.length}
+          onExpanseClick={() => setExpanded(!expanded)}
+          selected={selectedClusterName === managementCluster.clusterName}
+          onClusterRowSelected={onClusterRowSelected}
+        />
 
-          {expanded &&
-            filteredWorkloadClusters.map((cluster) => (
-              <ClusterRow
-                key={cluster.clusterName}
-                cluster={cluster}
-                onDeleteCluster={onDeleteCluster}
-                selected={selectedClusterName === cluster.clusterName}
-                onClusterRowSelected={onClusterRowSelected}
-              />
-            ))}
-        </StyledTableBody>
-      </StyledTable>
-    </StyledTableContainer>
+        {expanded &&
+          filteredWorkloadClusters.map((cluster) => (
+            <ClusterRow
+              key={cluster.clusterName}
+              cluster={cluster}
+              onDeleteCluster={onDeleteCluster}
+              selected={selectedClusterName === cluster.clusterName}
+              onClusterRowSelected={onClusterRowSelected}
+            />
+          ))}
+      </StyledTableBody>
+    </StyledTable>
   );
 };
 
-const ClusterTableWithRef = React.forwardRef<HTMLTableSectionElement, ClusterTableProps>(
-  (props, ref) => <ClusterTable customRef={ref} {...props} />,
-);
-
-export default ClusterTableWithRef;
+export default ClusterTable;

@@ -1,5 +1,5 @@
 import React, { FunctionComponent, ReactNode } from 'react';
-import { styled } from '@mui/material/styles';
+import { SxProps, styled } from '@mui/material/styles';
 import MuiTab, { tabClasses } from '@mui/material/Tab';
 
 import { TabContainer } from './Tab.styled';
@@ -11,6 +11,7 @@ interface TabPanelProps {
   children?: React.ReactNode;
   index: number;
   value: number;
+  sx?: SxProps;
 }
 
 export const a11yProps = (index: number) => {
@@ -38,6 +39,7 @@ const TabPanel: FunctionComponent<TabPanelProps> = ({
   children,
   value,
   index,
+  sx = {},
   ...other
 }) => (
   <TabContainer
@@ -46,7 +48,7 @@ const TabPanel: FunctionComponent<TabPanelProps> = ({
     hidden={value !== index}
     id={`simple-tabpanel-${index}`}
     aria-labelledby={`simple-tab-${index}`}
-    sx={{ visibility: value === index ? 'visible' : 'hidden' }}
+    sx={{ visibility: value === index ? 'visible' : 'hidden', ...sx }}
     {...other}
   >
     {children}

@@ -10,7 +10,7 @@ import {
   INSTALLATION_TYPE_API_KEYS,
   INSTALL_TYPE_STEPS,
   LOCAL_INSTALL_TITLES,
-  LocalFormStep,
+  K3DFormStep,
   MARKETPLACE_STEPS,
   MarketplaceFormStep,
 } from '../../constants/installation';
@@ -19,7 +19,7 @@ describe('useInstallation', () => {
   describe('local installation', () => {
     test('Setup step', () => {
       const { result } = renderHook(() =>
-        useInstallation(InstallationType.LOCAL, GitProvider.GITHUB, LocalFormStep.SETUP),
+        useInstallation(InstallationType.LOCAL, GitProvider.GITHUB, K3DFormStep.SETUP),
       );
 
       const {
@@ -39,13 +39,13 @@ describe('useInstallation', () => {
       expect(isProvisionStep).toBe(false);
       expect(isSetupStep).toBe(true);
       expect(info).toStrictEqual(
-        INFO_INSTALLATION_TYPES[InstallationType.LOCAL][LocalFormStep.SETUP],
+        INFO_INSTALLATION_TYPES[InstallationType.LOCAL][K3DFormStep.SETUP],
       );
     });
 
     test('Provisioning step', () => {
       const { result } = renderHook(() =>
-        useInstallation(InstallationType.LOCAL, GitProvider.GITHUB, LocalFormStep.PROVISIONING),
+        useInstallation(InstallationType.LOCAL, GitProvider.GITHUB, K3DFormStep.PROVISIONING),
       );
 
       const {
@@ -69,7 +69,7 @@ describe('useInstallation', () => {
 
     test('Ready step', () => {
       const { result } = renderHook(() =>
-        useInstallation(InstallationType.LOCAL, GitProvider.GITHUB, LocalFormStep.READY),
+        useInstallation(InstallationType.LOCAL, GitProvider.GITHUB, K3DFormStep.READY),
       );
 
       const {
