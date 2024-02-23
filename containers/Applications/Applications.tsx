@@ -6,7 +6,7 @@ import sortBy from 'lodash/sortBy';
 import { useSession } from 'next-auth/react';
 
 import Application from '../Application/Application';
-import GitOpsCatalog from '../gitOpsCatalog';
+import GitOpsCatalog from '../GitOpsCatalog/GitOpsCatalog';
 
 import {
   Container,

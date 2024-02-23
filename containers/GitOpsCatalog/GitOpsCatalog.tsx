@@ -6,7 +6,7 @@ import sortBy from 'lodash/sortBy';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormGroup from '@mui/material/FormGroup';
 
-import { CardsContainer, Container, Content, Filter } from './gitOpsCatalog.styled';
+import { CardsContainer, Container, Content, Filter } from './GitOpsCatalog.styled';
 
 import Checkbox from '@/components/Checkbox/Checkbox';
 import Typography from '@/components/Typography/Typography';

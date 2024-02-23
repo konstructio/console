@@ -7,7 +7,7 @@ import KubefirstContent from '../kubefirstContent';
 
 import { Link } from './layout.styled';
 
-import Header from '@/containers/header';
+import Header from '@/containers/Header/Header';
 import Navigation from '@/containers/navigation';
 import Row from '@/components/Row/Row';
 import Column from '@/components/Column/Column';

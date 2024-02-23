@@ -12,7 +12,7 @@ import VideogameAssetOutlinedIcon from '@mui/icons-material/VideogameAssetOutlin
 import LogoutIcon from '@mui/icons-material/Logout';
 import { BsSlack } from 'react-icons/bs';
 
-import { Avatar, Container, Menu, ProfileMenu } from './header.styled';
+import { Avatar, Container, Menu, ProfileMenu } from './Header.styled';
 
 import { noop } from '@/utils/noop';
 import Youtube from '@/assets/youtube-dark.svg';
