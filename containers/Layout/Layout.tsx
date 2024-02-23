@@ -1,16 +1,13 @@
 'use client';
 import React, { PropsWithChildren, useEffect, useState } from 'react';
-import styled from 'styled-components';
 import { Typography } from '@mui/material';
 
 import KubefirstContent from '../KubefirstContent/KubefirstContent';
 
-import { Link } from './Layout.styled';
+import { Link, Container, Content } from './Layout.styled';
 
 import Header from '@/containers/Header/Header';
 import Navigation from '@/containers/Navigation/Navigation';
-import Row from '@/components/Row/Row';
-import Column from '@/components/Column/Column';
 import { useAppDispatch, useAppSelector } from '@/redux/store';
 import { getClusters } from '@/redux/thunks/api.thunk';
 import { License } from '@/types/subscription';
@@ -28,17 +25,6 @@ import {
 import Banner from '@/components/Banner/Banner';
 import { WHITE } from '@/constants/colors';
 import { setIsBannerOpen } from '@/redux/slices/settings.slice';
-
-const Container = styled(Row)`
-  background-color: ${({ theme }) => theme.colors.washMe};
-  height: 100vh;
-  width: 100vw;
-`;
-
-export const Content = styled(Column)`
-  overflow: auto;
-  width: 100%;
-`;
 
 export interface LayoutProps extends PropsWithChildren {
   license: License;

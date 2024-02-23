@@ -7,7 +7,7 @@ export enum MarketplaceFormStep {
   READY = 3,
 }
 
-export enum LocalFormStep {
+export enum K3DFormStep {
   SETUP = 1,
   PROVISIONING = 2,
   READY = 3,
@@ -22,7 +22,7 @@ export enum FormStep {
 
 export const INFO_INSTALLATION_TYPES: Record<InstallationType, Record<number, InstallationInfo>> = {
   [InstallationType.LOCAL]: {
-    [LocalFormStep.SETUP]: {
+    [K3DFormStep.SETUP]: {
       title: 'Tip',
       description: `Once you’re ready to start your Cloud version you can delete your local cluster by running:`,
       code: 'kubefirst k3d destroy',
@@ -90,7 +90,7 @@ export const INFO_MARKETPLACE_INSTALLATION_TYPES: Record<
   Record<number, InstallationInfo>
 > = {
   [InstallationType.LOCAL]: {
-    [LocalFormStep.SETUP]: {
+    [K3DFormStep.SETUP]: {
       title: 'Tip',
       description: `Once you’re ready to start your Cloud version you can delete your local cluster by running:`,
       code: 'kubefirst k3d destroy',

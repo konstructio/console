@@ -138,18 +138,16 @@ const Navigation: FunctionComponent<NavigationProps> = ({
   }, []);
 
   return (
-    <>
-      <NavigationComponent
-        domLoaded={domLoaded}
-        kubefirstVersion={kubefirstVersion}
-        routes={routes}
-        handleIsActiveItem={handleIsActiveItem}
-        handleOpenGame={handleOpenFlappy}
-        handleOpenContent={handleOpenKubefirstModal}
-        footerItems={footerItems as Array<FooterItem>}
-        isSubscriptionEnabled={isSubscriptionEnabled}
-      />
-    </>
+    <NavigationComponent
+      domLoaded={domLoaded}
+      kubefirstVersion={kubefirstVersion}
+      routes={routes}
+      handleIsActiveItem={handleIsActiveItem}
+      handleOpenGame={handleOpenFlappy}
+      handleOpenContent={handleOpenKubefirstModal}
+      footerItems={footerItems as Array<FooterItem>}
+      isSubscriptionEnabled={isSubscriptionEnabled}
+    />
   );
 };
 
