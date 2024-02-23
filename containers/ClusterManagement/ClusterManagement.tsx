@@ -4,14 +4,14 @@ import Box from '@mui/material/Box';
 import Tabs from '@mui/material/Tabs';
 import Joyride, { ACTIONS, CallBackProps } from 'react-joyride';
 
-import { CreateClusterFlow } from './createClusterFlow';
+import { CreateClusterFlow } from './CreateClusterFlow/CreateClusterFlow';
 import {
   Container,
   Content,
   Header,
   LeftContainer,
   StyledDrawer,
-} from './clusterManagement.styled';
+} from './ClusterManagement.styled';
 
 import Button from '@/components/Button/Button';
 import Typography from '@/components/Typography/Typography';

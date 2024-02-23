@@ -7,7 +7,7 @@ import ListItemButton from '@mui/material/ListItemButton';
 import { ClickAwayListener } from '@mui/material';
 import { FormProvider, useForm } from 'react-hook-form';
 
-import { CloseButton, Form, FormContent, Menu, MenuHeader } from './createClusterFlow.styled';
+import { CloseButton, Form, FormContent, Menu, MenuHeader } from './CreateClusterFlow.styled';
 
 import Button from '@/components/Button/Button';
 import { FIRE_BRICK, SALTBOX_BLUE } from '@/constants/colors';
