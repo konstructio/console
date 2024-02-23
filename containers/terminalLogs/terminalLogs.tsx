@@ -17,7 +17,7 @@ import SearchIcon from '@mui/icons-material/Search';
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 
-import ConciseLogs from '../conciseLogs';
+import ConciseLogs from '../ConciseLogs/ConciseLogs';
 
 import {
   Container,

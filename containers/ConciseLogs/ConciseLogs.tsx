@@ -3,10 +3,6 @@ import sortBy from 'lodash/sortBy';
 import Box from '@mui/material/Box';
 import CircularProgress from '@mui/material/CircularProgress';
 
-import { CLUSTER_CHECKS } from '../../constants/cluster';
-import { useAppSelector } from '../../redux/store';
-import { InstallationType } from '../../types/redux';
-
 import {
   Container,
   EstimatedTime,
@@ -15,7 +11,11 @@ import {
   StepNumber,
   Success,
   SuccessText,
-} from './conciseLogs.styled';
+} from './ConciseLogs.styled';
+
+import { CLUSTER_CHECKS } from '@/constants/cluster';
+import { useAppSelector } from '@/redux/store';
+import { InstallationType } from '@/types/redux';
 
 const ESTIMATED_TIMES_BY_CLOUD: Record<InstallationType, number> = {
   [InstallationType.LOCAL]: 7,
