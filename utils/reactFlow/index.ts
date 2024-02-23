@@ -6,10 +6,9 @@ import {
   Cluster,
   ClusterType,
   DraftCluster,
-} from '../../types/provision';
-import { ClusterCache } from '../../types/redux';
-import { CustomGraphNode } from '../../components/graphNode';
-
+} from '@/types/provision';
+import { ClusterCache } from '@/types/redux';
+import { CustomGraphNode } from '@/components/GraphNode/GraphNode';
 import { RESERVED_DRAFT_CLUSTER_NAME } from '@/constants';
 
 const WORKLOAD_CLUSTER_Y_SPACE = 60;
