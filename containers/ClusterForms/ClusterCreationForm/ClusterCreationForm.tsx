@@ -11,8 +11,8 @@ import StarBorderOutlinedIcon from '@mui/icons-material/StarBorderOutlined';
 
 import { usePhysicalClustersPermissions } from '../../../hooks/usePhysicalClustersPermission';
 
-import { Container } from './clusterCreation.styled';
-import { InputContainer } from './advancedOptions/advancedOptions.styled';
+import { Container } from './ClusterCreationForm.styled';
+import { InputContainer } from './AdvancedOptions/AdvancedOptions.styled';
 
 import ControlledAutocomplete from '@/components/controlledFields/ControlledAutoComplete/ControlledAutoComplete';
 import ControlledTextField from '@/components/controlledFields/ControlledTextField/ControlledTextField';

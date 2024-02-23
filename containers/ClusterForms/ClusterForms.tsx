@@ -1,11 +1,12 @@
 import React, { FunctionComponent } from 'react';
 
 import TerminalLogs from '../terminalLogs';
-import { FormStep } from '../../constants/installation';
 
-import AuthForm from './shared/authForm';
-import ClusterRunning from './shared/clusterRunning';
-import SetupForm from './shared/setupForm';
+import AuthForm from './shared/AuthForm/AuthForm';
+import ClusterRunning from './shared/ClusterRunning';
+import SetupForm from './shared/SetupForm';
+
+import { FormStep } from '@/constants/installation';
 
 const FORM_FLOW_MAP = {
   [FormStep.AUTHENTICATION]: AuthForm,
@@ -14,7 +15,7 @@ const FORM_FLOW_MAP = {
   [FormStep.READY]: ClusterRunning,
 };
 
-export const FormFlow: FunctionComponent<{ currentStep: FormStep }> = ({ currentStep }) => {
+export const ClusterForms: FunctionComponent<{ currentStep: FormStep }> = ({ currentStep }) => {
   const ActiveFormStep = FORM_FLOW_MAP[currentStep];
 
   if (!ActiveFormStep) {

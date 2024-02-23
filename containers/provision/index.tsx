@@ -3,8 +3,8 @@ import React, { FunctionComponent, useCallback, useEffect, useMemo, useState } f
 import { FormProvider, useForm } from 'react-hook-form';
 
 import { InstallationsSelection } from '../installationsSelection';
-import { FormFlow } from '../clusterForms';
-import AdvancedOptions from '../clusterForms/shared/advancedOptions';
+import { ClusterForms } from '../ClusterForms/ClusterForms';
+import AdvancedOptions from '../ClusterForms/shared/AdvancedOptions/AdvancedOptions';
 
 import {
   AdvancedOptionsContainer,
@@ -234,7 +234,7 @@ const Provision: FunctionComponent = () => {
               )}
             </ErrorContainer>
           ) : null}
-          <FormFlow currentStep={isMarketplace ? installationStep + 1 : installationStep} />
+          <ClusterForms currentStep={isMarketplace ? installationStep + 1 : installationStep} />
         </FormContent>
         {isSetupStep && installType && ![InstallationType.LOCAL].includes(installType) && (
           <AdvancedOptionsContainer

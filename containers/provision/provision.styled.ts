@@ -2,7 +2,7 @@
 import Box, { BoxProps } from '@mui/material/Box';
 import styled from 'styled-components';
 
-import { GitFieldsContainer } from '../clusterForms/shared/authForm/authForm.styled';
+import { GitFieldsContainer } from '../ClusterForms/shared/AuthForm/AuthForm.styled';
 
 import FormContainer from '@/components/FormContainer/FormContainer';
 import { media } from '@/utils/media';

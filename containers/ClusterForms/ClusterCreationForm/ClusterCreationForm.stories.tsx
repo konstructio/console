@@ -5,7 +5,7 @@ import { FormProvider, useForm } from 'react-hook-form';
 
 import { NewWorkloadClusterConfig } from '../../../types/provision';
 
-import ClusterCreationForm from '.';
+import ClusterCreationForm from './ClusterCreationForm';
 
 const meta: Meta<typeof ClusterCreationForm> = {
   title: 'Forms/ClusterCreationForm',

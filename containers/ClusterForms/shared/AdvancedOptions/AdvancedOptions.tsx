@@ -1,7 +1,7 @@
 import React, { FunctionComponent, useMemo } from 'react';
 import { useFormContext } from 'react-hook-form';
 
-import { CheckboxContainer, Switch } from './advancedOptions.styled';
+import { CheckboxContainer, Switch } from './AdvancedOptions.styled';
 
 import { Required } from '@/components/TextField/TextField.styled';
 import Typography from '@/components/Typography/Typography';

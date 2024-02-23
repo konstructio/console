@@ -1,8 +1,7 @@
 'use client';
 import styled from 'styled-components';
 
-import { BISCAY } from '../../../../constants/colors';
-
+import { BISCAY } from '@/constants/colors';
 import Column from '@/components/Column/Column';
 
 export const GitContainer = styled.div`

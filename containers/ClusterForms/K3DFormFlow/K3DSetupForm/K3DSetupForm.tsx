@@ -5,7 +5,7 @@ import ControlledTextField from '../../../../components/controlledFields/Control
 import ControlledPassword from '../../../../components/controlledFields/ControlledPassword';
 import { InstallValues } from '../../../../types/redux';
 
-export const LocalSetupForm: FunctionComponent = () => {
+export const K3DSetupForm: FunctionComponent = () => {
   const { control } = useFormContext<InstallValues>();
   return (
     <>

@@ -1,7 +1,7 @@
 import React, { FunctionComponent, useState } from 'react';
 import { useFormContext } from 'react-hook-form';
 
-import { InputContainer } from './advancedOptions.styled';
+import { InputContainer } from './AdvancedOptions.styled';
 
 import LearnMore from '@/components/LearnMore/LearnMore';
 import Typography from '@/components/Typography/Typography';

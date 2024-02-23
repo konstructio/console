@@ -8,7 +8,7 @@ import {
   GitFieldsContainer,
   GitUserField,
   GitUserFieldInput,
-} from './authForm.styled';
+} from './AuthForm.styled';
 
 import { Required } from '@/components/TextField/TextField.styled';
 import GitProviderButton from '@/components/GitProviderButton/GitProviderButton';
