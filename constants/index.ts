@@ -129,4 +129,5 @@ export enum Route {
   PROVISION = '/provision',
   SUBSCRIPTION = '/settings/subscription',
   SUBSCRIPTION_PLANS = '/settings/subscription/plans',
+  GIT_ACCOUNT = '/settings/git-account',
 }
