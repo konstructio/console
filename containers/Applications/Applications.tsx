@@ -47,6 +47,7 @@ enum Target {
 const TARGET_OPTIONS = Object.values(Target);
 
 const Applications: FunctionComponent = () => {
+  const [searchTerm, setSearchTerm] = useState<string>('');
   const [activeTab, setActiveTab] = useState<number>(0);
   const [selectedApplication, setSelectedApplication] = useState<ClusterApplication>();
   const { isOpen, openModal: openDeleteModal, closeModal: closeDeleteModal } = useModal();
@@ -113,12 +114,10 @@ const Applications: FunctionComponent = () => {
   }, [filter.target, clusterMap]);
 
   const filteredApps = useMemo(() => {
-    const { searchTerm } = filter;
-
     return clusterApplications.filter((app) =>
       app.name.toLowerCase().includes(searchTerm?.toLowerCase() as string),
     );
-  }, [clusterApplications, filter]);
+  }, [clusterApplications, searchTerm]);
 
   const uninstalledCatalogApps = useMemo(
     () => catalogApps.filter((app) => !clusterApplications.map((s) => s.name).includes(app.name)),
@@ -136,8 +135,6 @@ const Applications: FunctionComponent = () => {
 
   const filteredCatalogApps = useMemo(() => {
     let apps: GitOpsCatalogApp[] = [];
-    const { searchTerm } = filter;
-
     if (!selectedCategories.length) {
       apps = uninstalledCatalogApps;
     } else {
@@ -152,7 +149,7 @@ const Applications: FunctionComponent = () => {
     return sortBy(apps, (app) => app.display_name).filter((app) =>
       app.name.toLowerCase().includes(searchTerm?.toLowerCase() as string),
     );
-  }, [filter, selectedCategories, uninstalledCatalogApps, installedClusterAppNames]);
+  }, [selectedCategories, uninstalledCatalogApps, installedClusterAppNames, searchTerm]);
 
   const handleOpenUninstallModalConfirmation = useCallback(
     (application: ClusterApplication) => {
@@ -172,8 +169,10 @@ const Applications: FunctionComponent = () => {
   }, [closeDeleteModal, dispatch, selectedApplication, session?.user?.email]);
 
   useEffect(() => {
-    dispatch(getGitOpsCatalogApps());
-  }, [dispatch]);
+    if (managementCluster?.cloudProvider) {
+      dispatch(getGitOpsCatalogApps(managementCluster?.cloudProvider));
+    }
+  }, [dispatch, managementCluster?.cloudProvider]);
 
   useEffect(() => {
     const { cluster } = filter;
@@ -254,6 +253,7 @@ const Applications: FunctionComponent = () => {
               clusterSelectOptions={clusterSelectOptions}
               searchOptions={filteredApps.map((app) => ({ label: app.name, value: app.name }))}
               onFilterChange={(filter) => dispatch(setFilterState(filter))}
+              onSearchChange={setSearchTerm}
               defaultCluster={managementCluster?.clusterName as string}
             />
           )}

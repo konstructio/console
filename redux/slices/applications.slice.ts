@@ -19,7 +19,7 @@ export interface ApplicationsState {
   isLoading: boolean;
   gitOpsCatalogApps: Array<GitOpsCatalogApp>;
   appsQueue: Array<string>;
-  filter: { target?: Target; cluster?: string; searchTerm?: string };
+  filter: { target?: Target; cluster?: string };
 }
 
 export const initialState: ApplicationsState = {
@@ -33,7 +33,6 @@ export const initialState: ApplicationsState = {
   filter: {
     target: Target.CLUSTER,
     cluster: '',
-    searchTerm: '',
   },
 };
 
