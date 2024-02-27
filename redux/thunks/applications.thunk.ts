@@ -102,15 +102,22 @@ export const getClusterApplications = createAsyncThunk<
 
 export const getGitOpsCatalogApps = createAsyncThunk<
   GitOpsCatalogApp[],
-  void,
+  string,
   {
     dispatch: AppDispatch;
     state: RootState;
   }
->('applications/getGitOpsCatalogApps', async () => {
+>('applications/getGitOpsCatalogApps', async (cloudProvider, { getState }) => {
+  const {
+    api: { managementCluster },
+  } = getState();
+
   return (
     await axios.get<{ apps: GitOpsCatalogApp[] }>(
-      `/api/proxy?${createQueryString('url', `/gitops-catalog/apps`)}`,
+      `/api/proxy?${createQueryString(
+        'url',
+        `/gitops-catalog/${managementCluster?.clusterName}/${cloudProvider}/apps`,
+      )}`,
     )
   ).data.apps;
 });

@@ -33,6 +33,7 @@ export interface ApplicationsFilterProps extends ComponentPropsWithoutRef<'div'>
   targetOptions: LabelValue[];
   clusterSelectOptions: LabelValue[];
   onFilterChange?: (filter: ApplicationsState['filter']) => void;
+  onSearchChange: (filter: string) => void;
   defaultCluster: string;
 }
 
@@ -40,6 +41,7 @@ const ApplicationsFilter: FunctionComponent<ApplicationsFilterProps> = ({
   clusterSelectOptions,
   defaultCluster,
   onFilterChange = noop,
+  onSearchChange,
   targetOptions,
   ...rest
 }) => {
@@ -51,22 +53,22 @@ const ApplicationsFilter: FunctionComponent<ApplicationsFilterProps> = ({
     setTarget(value);
     setCluster('');
 
-    onFilterChange({ target: value, cluster, searchTerm });
+    onFilterChange({ target: value, cluster });
   };
 
   const handleChangeCluster = (value: string) => {
     setCluster(value);
-    onFilterChange({ target, cluster: value, searchTerm });
+    onFilterChange({ target, cluster: value });
   };
 
   const handleOnChangeSearch = (event: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
     setSearchTerm(event.target.value);
-    onFilterChange({ target, cluster, searchTerm: event.target.value });
+    onSearchChange(event.target.value);
   };
 
   useEffect(() => {
     if (defaultCluster && clusterSelectOptions.length) {
-      onFilterChange({ target, cluster: defaultCluster, searchTerm });
+      onFilterChange({ target, cluster: defaultCluster });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
