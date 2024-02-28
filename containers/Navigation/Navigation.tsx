@@ -2,7 +2,7 @@
 import React, { FunctionComponent, useCallback, useEffect, useMemo, useState } from 'react';
 import { usePathname } from 'next/navigation';
 import { BsSlack } from 'react-icons/bs';
-import { FaGitAlt } from 'react-icons/fa';
+// import { FaGitAlt } from 'react-icons/fa';
 import ScatterPlotIcon from '@mui/icons-material/ScatterPlot';
 import GridViewOutlinedIcon from '@mui/icons-material/GridViewOutlined';
 import CollectionsOutlinedIcon from '@mui/icons-material/CollectionsOutlined';
@@ -74,14 +74,14 @@ const Navigation: FunctionComponent<NavigationProps> = ({
           groupOrder: 2,
           isEnabled: !isClusterZero && isSubscriptionEnabled,
         },
-        {
-          icon: <FaGitAlt size={24} />,
-          path: Route.GIT_ACCOUNT,
-          title: 'Git account',
-          group: 'Admin settings',
-          groupOrder: 3,
-          isEnabled: !isClusterZero && managementCluster?.cloudProvider !== InstallationType.LOCAL,
-        },
+        // {
+        //   icon: <FaGitAlt size={24} />,
+        //   path: Route.GIT_ACCOUNT,
+        //   title: 'Git account',
+        //   group: 'Admin settings',
+        //   groupOrder: 3,
+        //   isEnabled: !isClusterZero && managementCluster?.cloudProvider !== InstallationType.LOCAL,
+        // },
       ].filter(({ isEnabled }) => isEnabled),
     [isMultiClusterEnabled, isClusterZero, managementCluster?.cloudProvider, isSubscriptionEnabled],
   );
