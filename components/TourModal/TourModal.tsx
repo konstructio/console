@@ -7,7 +7,7 @@ import Button from '../Button/Button';
 import { CardContent, CardFooter, Content, K1Ray } from './TourModal.styled';
 
 import kubefirstRay from '@/assets/ray.svg';
-import { BISCAY, DOLPHIN } from '@/constants/colors';
+import { BISCAY, VOLCANIC_SAND } from '@/constants/colors';
 
 interface TourModalProps extends Omit<IModalProps, 'children'> {
   onSkip: () => void;
@@ -23,7 +23,7 @@ const TourCard: FunctionComponent<TourModalProps> = ({ onSkip, onTakeTour, ...mo
             Welcome to kubefirst!
           </Typography>
           <K1Ray src={kubefirstRay} alt="Kubefirst k ray" />
-          <Typography variant="body2" color={DOLPHIN} textAlign="center">
+          <Typography variant="body2" color={VOLCANIC_SAND} textAlign="center">
             We’d like to show you a couple of the features we’ve included to get you started.
           </Typography>
         </CardContent>

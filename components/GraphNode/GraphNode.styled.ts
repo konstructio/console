@@ -8,7 +8,7 @@ import Column from '../Column/Column';
 import Row from '../Row/Row';
 import Tag from '../Tag/Tag';
 
-import { BLUE_REFLECTION, EXCLUSIVE_PLUM } from '@/constants/colors';
+import { BLUE_REFLECTION, EXCLUSIVE_PLUM, VOLCANIC_SAND } from '@/constants/colors';
 import styled, { css } from '@/app/lib/styled-components';
 
 export const StatusTag = styled(Tag)`
@@ -42,7 +42,7 @@ export const Container = styled(Row)<{ selected: boolean; managementCluster: boo
   border: 2px solid ${BLUE_REFLECTION};
   border-radius: 8px;
   align-items: center;
-  color: #3f3f46;
+  color: ${VOLCANIC_SAND};
 
   ${({ selected }) =>
     selected &&

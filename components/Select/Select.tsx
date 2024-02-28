@@ -7,7 +7,7 @@ import MenuItem from '@mui/material/MenuItem';
 import Typography from '../Typography/Typography';
 import { Required } from '../TextField/TextField.styled';
 import Tag, { TagColor } from '../Tag/Tag';
-import { DOLPHIN, LIGHT_GREY } from '../../constants/colors';
+import { LIGHT_GREY, VOLCANIC_SAND } from '../../constants/colors';
 import { StyledFormHelperText } from '../TextArea/TextArea.styled';
 
 import { Container, Input } from './Select.styled';
@@ -25,7 +25,7 @@ const MenuProps = {
     },
     style: {
       backgroundColor: 'white',
-      color: `${DOLPHIN}`,
+      color: `${VOLCANIC_SAND}`,
       marginTop: '4px',
       border: `1px solid ${LIGHT_GREY}`,
       boxShadow: '0px 4px 12px rgba(0, 0, 0, 0.04)',
@@ -115,7 +115,7 @@ const Select: FunctionComponent<ISelectProps> = ({
       renderValue={(selected: string) => {
         if (!selected) {
           return (
-            <Typography variant="body2" color={DOLPHIN}>
+            <Typography variant="body2" color={VOLCANIC_SAND}>
               {placeholder || 'Select'}
             </Typography>
           );
