@@ -31,6 +31,7 @@ export const YELLOW_ORANGE = '#FAB203';
 export const VOLCANIC_SAND = '#3F3F46';
 export const WASH_ME = '#F8FAFC';
 export const WHITE = '#FFFFFF';
+export const TRAFFIC_WHITE = '#FAFAFA';
 export const WHITE_SMOKE = '#F5F5F5';
 export const LIGHT_GREY = '#E4E4E7';
 export const BISCAY = '#334155';

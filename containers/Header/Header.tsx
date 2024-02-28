@@ -18,7 +18,7 @@ import { noop } from '@/utils/noop';
 import Youtube from '@/assets/youtube-dark.svg';
 import { useAppSelector } from '@/redux/store';
 import Typography from '@/components/Typography/Typography';
-import { ECHO_BLUE, PRIMARY, VOLCANIC_SAND } from '@/constants/colors';
+import { ECHO_BLUE, PRIMARY, TRAFFIC_WHITE, VOLCANIC_SAND } from '@/constants/colors';
 import useToggle from '@/hooks/useToggle';
 import useFeatureFlag from '@/hooks/useFeatureFlag';
 import { FeatureFlag } from '@/types/config';
@@ -26,7 +26,7 @@ import { FeatureFlag } from '@/types/config';
 function stringAvatar(name?: string | null) {
   return {
     sx: {
-      bgcolor: '#FAFAFA',
+      bgcolor: TRAFFIC_WHITE,
       color: '#94A3B8',
     },
     children: `${name && name[0]}`,
