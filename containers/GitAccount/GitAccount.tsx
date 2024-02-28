@@ -23,7 +23,7 @@ import Button from '@/components/Button/Button';
 import useToggle from '@/hooks/useToggle';
 import GitProviderLabel from '@/components/GitProviderLabel/GitProviderLabel';
 import { GitProvider } from '@/types';
-import { EXCLUSIVE_PLUM } from '@/constants/colors';
+import { EXCLUSIVE_PLUM, VOLCANIC_SAND } from '@/constants/colors';
 import ControlledPassword from '@/components/controlledFields/ControlledPassword';
 import { GIT_PROVIDER_DISPLAY_NAME } from '@/constants';
 import Tooltip from '@/components/Tooltip/Tooltip';
@@ -84,16 +84,20 @@ const GitAccount: FunctionComponent = () => {
     <Form onSubmit={handleSubmit(handleFormSubmit)}>
       <Header>
         <HeadingContainer>
-          <Typography variant="h6">Git account</Typography>
+          <Typography variant="h6" color={VOLCANIC_SAND}>
+            Git account
+          </Typography>
           <LearnMore description="Manage your git account." linkTitle="Learn more" href="#" />
         </HeadingContainer>
       </Header>
       <FormContainer
         headerContent={
           <FormHeader>
-            <Typography variant="subtitle2">Account details</Typography>
+            <Typography variant="subtitle2" color={VOLCANIC_SAND}>
+              Account details
+            </Typography>
             {!isOpen && (
-              <Button variant="outlined" type="button" color="primary" onClick={handleEdit}>
+              <Button color="secondary" variant="outlined" type="button" onClick={handleEdit}>
                 Edit
               </Button>
             )}
@@ -102,10 +106,10 @@ const GitAccount: FunctionComponent = () => {
         footerContent={
           isOpen ? (
             <FormFooter>
-              <Button variant="outlined" color="primary" type="button" onClick={toggle}>
+              <Button color="text" type="button" onClick={toggle}>
                 Cancel
               </Button>
-              <Button variant="outlined" color="primary" type="submit">
+              <Button color="secondary" variant="outlined" type="submit">
                 Save
               </Button>
             </FormFooter>
