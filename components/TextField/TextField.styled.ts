@@ -1,7 +1,7 @@
 import InputAdornment from '@mui/material/InputAdornment';
 import FormHelperTextMui from '@mui/material/FormHelperText';
 
-import { SPUN_PEARL } from '../../constants/colors';
+import { SPUN_PEARL, TRAFFIC_WHITE } from '../../constants/colors';
 
 import styled, { css } from '@/app/lib/styled-components';
 
@@ -21,6 +21,7 @@ export const Container = styled.div<{ isDisabled?: boolean }>`
 
       & > div > input {
         border-color: ${theme.colors.lightGrey} !important;
+        background-color: ${TRAFFIC_WHITE};
         cursor: not-allowed;
       }
     `}

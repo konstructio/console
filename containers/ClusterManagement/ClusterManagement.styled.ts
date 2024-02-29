@@ -7,6 +7,7 @@ import Typography from '@/components/Typography/Typography';
 import Column from '@/components/Column/Column';
 import Row from '@/components/Row/Row';
 import Drawer from '@/components/Drawer/Drawer';
+import { VOLCANIC_SAND } from '@/constants/colors';
 
 export const Content = styled(Column)`
   flex: 1;
@@ -14,7 +15,7 @@ export const Content = styled(Column)`
 `;
 
 export const Description = styled(Typography)`
-  color: #3f3f46;
+  color: ${VOLCANIC_SAND};
   margin-top: 8px;
 `;
 

@@ -3,7 +3,7 @@ import styled from 'styled-components';
 
 import Row from '../Row/Row';
 
-import { DANGER } from '@/constants/colors';
+import { DANGER, VOLCANIC_SAND } from '@/constants/colors';
 
 export const Asterisk = styled.span`
   color: ${DANGER};
@@ -30,7 +30,7 @@ export const NumInput = styled.input`
   text-align: end;
   padding-right: 10px;
   border: 1px solid #e4e4e7;
-  color: #3f3f46;
+  color: ${VOLCANIC_SAND};
 `;
 
 export const Root = styled.label`

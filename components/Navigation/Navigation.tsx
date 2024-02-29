@@ -1,10 +1,11 @@
 import React, { FunctionComponent, ReactNode, useMemo } from 'react';
 import Image from 'next/image';
 import VideogameAssetOutlinedIcon from '@mui/icons-material/VideogameAssetOutlined';
-import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import groupBy from 'lodash/groupBy';
 import { sortBy } from 'lodash';
+
+import NavigationRoute from '../NavigationRoute/NavigationRoute';
 
 import {
   Container,
@@ -12,9 +13,7 @@ import {
   MenuContainer,
   KubefirstTitle,
   KubefirstVersion,
-  MenuItem,
   Title,
-  BreakpointTooltip,
 } from './Navigation.styled';
 
 import { noop } from '@/utils/noop';
@@ -95,14 +94,13 @@ const Navigation: FunctionComponent<NavigationProps> = ({
                       </Title>
                     )}
                     {value.map(({ icon, path, title }) => (
-                      <Link href={path} key={path}>
-                        <BreakpointTooltip title={title} placement="right-end">
-                          <MenuItem isActive={handleIsActiveItem(path)}>
-                            {icon}
-                            <Title variant="body1">{title}</Title>
-                          </MenuItem>
-                        </BreakpointTooltip>
-                      </Link>
+                      <NavigationRoute
+                        key={path}
+                        icon={icon}
+                        href={path}
+                        title={title}
+                        menuItemIsActive={handleIsActiveItem(path)}
+                      />
                     ))}
                   </>
                 );
@@ -113,31 +111,27 @@ const Navigation: FunctionComponent<NavigationProps> = ({
       <FooterContainer>
         {footerItems &&
           footerItems.map(({ icon, path, title, color }) => (
-            <Link href={path} key={path} target={path.includes('http') ? '_blank' : '_self'}>
-              <BreakpointTooltip title={title} placement="right-end">
-                <MenuItem>
-                  {icon}
-                  <Title variant="body1" color={color}>
-                    {title}
-                  </Title>
-                </MenuItem>
-              </BreakpointTooltip>
-            </Link>
+            <NavigationRoute
+              href={path}
+              key={path}
+              target={path.includes('http') ? '_blank' : '_self'}
+              title={title}
+              titleColor={color}
+              icon={icon}
+            />
           ))}
         {!isSubscriptionEnabled && (
           <>
-            <BreakpointTooltip title="Kubefirst channel" placement="right-end">
-              <MenuItem onClick={handleOpenContent}>
-                <Image src={Youtube} alt="youtube" />
-                <Title variant="body1">Kubefirst channel</Title>
-              </MenuItem>
-            </BreakpointTooltip>
-            <BreakpointTooltip title="Flappy K-ray" placement="right-end">
-              <MenuItem onClick={handleOpenGame}>
-                <VideogameAssetOutlinedIcon />
-                <Title variant="body1">Flappy K-ray</Title>
-              </MenuItem>
-            </BreakpointTooltip>
+            <NavigationRoute
+              title="Kubefirst channel"
+              icon={<Image src={Youtube} alt="youtube" />}
+              onMenuItemClick={handleOpenContent}
+            />
+            <NavigationRoute
+              title="Flappy K-ray"
+              icon={<VideogameAssetOutlinedIcon />}
+              onMenuItemClick={handleOpenGame}
+            />
           </>
         )}
       </FooterContainer>
