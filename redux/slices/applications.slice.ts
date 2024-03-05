@@ -5,6 +5,7 @@ import {
   getGitOpsCatalogApps,
   installGitOpsApp,
   uninstallGitOpsApp,
+  validateGitOpsApplication,
 } from '@/redux/thunks/applications.thunk';
 import { GitOpsCatalogApp, ClusterApplication, Target, AppCategory } from '@/types/applications';
 import { ManagementCluster, WorkloadCluster } from '@/types/provision';
@@ -14,9 +15,12 @@ export interface ApplicationsState {
   selectedCategories: AppCategory[];
   selectedApplicationName?: string;
   selectedCatalogApp?: GitOpsCatalogApp;
+  canDeleteSelectedApp: boolean;
   clusterApplications: Array<ClusterApplication>;
   installedClusterAppNames: ClusterApplication['name'][];
+  selectedClusterApplication?: ClusterApplication;
   isLoading: boolean;
+  isValidating: boolean;
   gitOpsCatalogApps: Array<GitOpsCatalogApp>;
   appsQueue: Array<string>;
   filter: { target?: Target; cluster?: string };
@@ -24,11 +28,14 @@ export interface ApplicationsState {
 
 export const initialState: ApplicationsState = {
   selectedCluster: undefined,
+  selectedClusterApplication: undefined,
   selectedCategories: [],
   clusterApplications: [],
   installedClusterAppNames: [],
   isLoading: false,
+  isValidating: false,
   gitOpsCatalogApps: [],
+  canDeleteSelectedApp: true,
   appsQueue: [],
   filter: {
     target: Target.CLUSTER,
@@ -56,11 +63,11 @@ const applicationsSlice = createSlice({
         cluster: targetChanged ? undefined : payload.cluster,
       };
     },
-    addAppToQueue: (state, { payload }: PayloadAction<GitOpsCatalogApp>) => {
-      state.appsQueue.push(payload.name);
+    addAppToQueue: (state, { payload }: PayloadAction<string>) => {
+      state.appsQueue.push(payload);
     },
-    removeAppFromQueue: (state, { payload }: PayloadAction<GitOpsCatalogApp>) => {
-      state.appsQueue = state.appsQueue.filter((name) => name !== payload.name);
+    removeAppFromQueue: (state, { payload }: PayloadAction<string>) => {
+      state.appsQueue = state.appsQueue.filter((name) => name !== payload);
     },
     resetClusterApplications: (state) => {
       state.clusterApplications = [];
@@ -78,6 +85,12 @@ const applicationsSlice = createSlice({
       { payload }: PayloadAction<ApplicationsState['selectedCatalogApp']>,
     ) => {
       state.selectedCatalogApp = payload;
+    },
+    setSelectedClusterApplication: (
+      state,
+      { payload }: PayloadAction<ApplicationsState['selectedClusterApplication']>,
+    ) => {
+      state.selectedClusterApplication = payload;
     },
   },
   extraReducers: (builder) => {
@@ -129,6 +142,17 @@ const applicationsSlice = createSlice({
       })
       .addCase(uninstallGitOpsApp.rejected, (state) => {
         state.isLoading = false;
+      })
+      .addCase(validateGitOpsApplication.pending, (state) => {
+        state.isValidating = true;
+      })
+      .addCase(validateGitOpsApplication.fulfilled, (state, { payload }) => {
+        state.canDeleteSelectedApp = !!payload.can_delete_service;
+        state.isValidating = false;
+      })
+      .addCase(validateGitOpsApplication.rejected, (state) => {
+        state.canDeleteSelectedApp = true;
+        state.isValidating = false;
       });
   },
 });
@@ -142,6 +166,7 @@ export const {
   removeCategory,
   setSelectedCatalogApp,
   setSelectedCluster,
+  setSelectedClusterApplication,
 } = applicationsSlice.actions;
 
 export const applicationsReducer = applicationsSlice.reducer;

@@ -34,6 +34,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     res.status(response.status).json(response.data);
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
-    res.status(500).send(error?.response?.data || error?.message);
+    res.status(error?.response?.status || 500).send(error?.response?.data || error?.message);
   }
 }

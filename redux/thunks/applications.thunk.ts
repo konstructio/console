@@ -5,7 +5,12 @@ import { FieldValues } from 'react-hook-form';
 import { AppDispatch, RootState } from '../store';
 import { createQueryString } from '../../utils/url/formatDomain';
 import { ClusterRequestProps } from '../../types/provision';
-import { GitOpsCatalogApp, ClusterApplication, Target } from '../../types/applications';
+import {
+  GitOpsCatalogApp,
+  ClusterApplication,
+  Target,
+  ValidateGitOpsCatalog,
+} from '../../types/applications';
 import { addAppToQueue, removeAppFromQueue } from '../slices/applications.slice';
 import { transformObjectToStringKey } from '../../utils/transformObjectToStringKey';
 import { createNotification } from '../slices/notifications.slice';
@@ -59,7 +64,7 @@ export const installGitOpsApp = createAsyncThunk<
     delete params.workload_cluster_name;
   }
 
-  dispatch(addAppToQueue(selectedCatalogApp));
+  dispatch(addAppToQueue(selectedCatalogApp.name));
 
   const res = await axios.post('/api/proxy', {
     // same for delete gitops app
@@ -68,7 +73,7 @@ export const installGitOpsApp = createAsyncThunk<
   });
 
   if ('error' in res) {
-    dispatch(removeAppFromQueue(selectedCatalogApp));
+    dispatch(removeAppFromQueue(selectedCatalogApp?.name));
     throw res.error;
   }
 
@@ -122,6 +127,41 @@ export const getGitOpsCatalogApps = createAsyncThunk<
   ).data.apps;
 });
 
+export const validateGitOpsApplication = createAsyncThunk<
+  ValidateGitOpsCatalog,
+  { application: ClusterApplication },
+  {
+    dispatch: AppDispatch;
+    state: RootState;
+  }
+>('applications/validateGitOpsApplication', async ({ application }, { getState }) => {
+  const {
+    applications: { filter },
+    api: { managementCluster },
+  } = getState();
+
+  if (!application) {
+    throw new Error('missing selected catalog app');
+  }
+
+  const params = {
+    is_template: filter.target === Target.TEMPLATE,
+    workload_cluster_name: filter.cluster,
+  };
+
+  // Removing workload_cluster_name for management cluster installations
+  if (managementCluster?.clusterName === filter.cluster) {
+    delete params.workload_cluster_name;
+  }
+
+  return (
+    await axios.post<ValidateGitOpsCatalog>('/api/proxy', {
+      url: `/services/${managementCluster?.clusterName}/${application.name}/validate`,
+      body: params,
+    })
+  ).data;
+});
+
 export const uninstallGitOpsApp = createAsyncThunk<
   void,
   { application: ClusterApplication; user: string },
@@ -131,7 +171,7 @@ export const uninstallGitOpsApp = createAsyncThunk<
   }
 >('applications/uninstallGitOpsApp', async ({ application, user }, { dispatch, getState }) => {
   const {
-    applications: { filter },
+    applications: { filter, canDeleteSelectedApp, selectedClusterApplication },
     api: { managementCluster },
   } = getState();
 
@@ -143,6 +183,7 @@ export const uninstallGitOpsApp = createAsyncThunk<
     user,
     is_template: filter.target === Target.TEMPLATE,
     workload_cluster_name: filter.cluster,
+    skip_files: !canDeleteSelectedApp,
   };
 
   // Removing workload_cluster_name for management cluster installations
@@ -157,6 +198,7 @@ export const uninstallGitOpsApp = createAsyncThunk<
     },
   });
 
+  dispatch(removeAppFromQueue(selectedClusterApplication?.name as string));
   dispatch(getClusterApplications({ clusterName: filter.cluster }));
   dispatch(
     createNotification({

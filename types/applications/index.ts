@@ -43,6 +43,10 @@ export interface GitOpsCatalogProps {
   user: string;
 }
 
+export interface ValidateGitOpsCatalog {
+  can_delete_service: boolean;
+}
+
 export enum Target {
   TEMPLATE = 'Template',
   CLUSTER = 'Cluster',
