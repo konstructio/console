@@ -23,12 +23,18 @@ import {
   getClusterApplications,
   getGitOpsCatalogApps,
   uninstallGitOpsApp,
+  validateGitOpsApplication,
 } from '@/redux/thunks/applications.thunk';
 import { sendTelemetryEvent } from '@/redux/thunks/api.thunk';
 import { useAppDispatch, useAppSelector } from '@/redux/store';
 import { DOCS_LINK } from '@/constants';
 import { BISCAY, SALTBOX_BLUE, VOLCANIC_SAND } from '@/constants/colors';
-import { setFilterState } from '@/redux/slices/applications.slice';
+import {
+  addAppToQueue,
+  removeAppFromQueue,
+  setFilterState,
+  setSelectedClusterApplication,
+} from '@/redux/slices/applications.slice';
 import { ClusterStatus, WORKLOAD_CLUSTER_TYPES } from '@/types/provision';
 import { ClusterApplication, GitOpsCatalogApp } from '@/types/applications';
 import useModal from '@/hooks/useModal';
@@ -49,7 +55,6 @@ const TARGET_OPTIONS = Object.values(Target);
 const Applications: FunctionComponent = () => {
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [activeTab, setActiveTab] = useState<number>(0);
-  const [selectedApplication, setSelectedApplication] = useState<ClusterApplication>();
   const { isOpen, openModal: openDeleteModal, closeModal: closeDeleteModal } = useModal();
   const { data: session } = useSession();
 
@@ -63,6 +68,9 @@ const Applications: FunctionComponent = () => {
     installedClusterAppNames,
     isLoading,
     managementCluster,
+    selectedClusterApplication,
+    canDeleteSelectedApp,
+    appsQueue,
   } = useAppSelector(({ config, applications, api }) => ({
     isTelemetryDisabled: config.isTelemetryDisabled,
     clusterMap: api.clusterMap,
@@ -151,22 +159,44 @@ const Applications: FunctionComponent = () => {
     );
   }, [selectedCategories, uninstalledCatalogApps, installedClusterAppNames, searchTerm]);
 
-  const handleOpenUninstallModalConfirmation = useCallback(
+  const handleOpenUninstallModalConfirmation = useCallback(() => {
+    openDeleteModal();
+  }, [openDeleteModal]);
+
+  const handleCloseUninstallModalConfirmation = useCallback(() => {
+    if (!isLoading) {
+      dispatch(removeAppFromQueue(selectedClusterApplication?.name as string));
+    }
+    closeDeleteModal();
+  }, [closeDeleteModal, dispatch, isLoading, selectedClusterApplication?.name]);
+
+  const validateUninstallApplication = useCallback(
     (application: ClusterApplication) => {
-      setSelectedApplication(application);
-      openDeleteModal();
+      dispatch(addAppToQueue(application?.name as string));
+      dispatch(setSelectedClusterApplication(application));
+
+      dispatch(
+        validateGitOpsApplication({
+          application,
+        }),
+      ).then(() => {
+        dispatch(removeAppFromQueue(selectedClusterApplication?.name as string));
+        handleOpenUninstallModalConfirmation();
+      });
     },
-    [openDeleteModal],
+    [dispatch, handleOpenUninstallModalConfirmation, selectedClusterApplication?.name],
   );
 
   const handleUninstallApplication = useCallback(() => {
+    dispatch(addAppToQueue(selectedClusterApplication?.name as string));
+    closeDeleteModal();
     dispatch(
       uninstallGitOpsApp({
-        application: selectedApplication as ClusterApplication,
+        application: selectedClusterApplication as ClusterApplication,
         user: (session?.user?.email as string) || 'kbot',
       }),
-    ).then(() => closeDeleteModal());
-  }, [closeDeleteModal, dispatch, selectedApplication, session?.user?.email]);
+    );
+  }, [closeDeleteModal, dispatch, selectedClusterApplication, session?.user?.email]);
 
   useEffect(() => {
     if (managementCluster?.cloudProvider) {
@@ -188,15 +218,16 @@ const Applications: FunctionComponent = () => {
           {filteredApps.map((application: ClusterApplication) => (
             <Application
               key={application.name}
+              isUninstalling={appsQueue.includes(application?.name as string)}
               {...application}
               onLinkClick={handleLinkClick}
-              onUninstall={() => handleOpenUninstallModalConfirmation(application)}
+              onUninstall={() => validateUninstallApplication(application)}
             />
           ))}
         </ApplicationsContainer>
       </>
     ),
-    [filteredApps, handleLinkClick, handleOpenUninstallModalConfirmation],
+    [appsQueue, filteredApps, handleLinkClick, validateUninstallApplication],
   );
 
   return (
@@ -268,10 +299,11 @@ const Applications: FunctionComponent = () => {
       {isOpen && (
         <UninstallApplication
           isOpen
-          application={selectedApplication?.name as string}
+          canDeleteSelectedApp={canDeleteSelectedApp}
+          application={selectedClusterApplication?.name as string}
           cluster={filter.cluster as string}
           onDelete={handleUninstallApplication}
-          onCloseModal={closeDeleteModal}
+          onCloseModal={handleCloseUninstallModalConfirmation}
           isLoading={isLoading}
         />
       )}

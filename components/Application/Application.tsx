@@ -31,6 +31,7 @@ export interface ApplicationProps {
   links?: { [url: string]: boolean };
   onLinkClick: (link: string, name: string) => void;
   onUninstall: () => void;
+  isUninstalling: boolean;
 }
 
 const Application: FunctionComponent<ApplicationProps> = ({
@@ -42,6 +43,7 @@ const Application: FunctionComponent<ApplicationProps> = ({
   links,
   onLinkClick,
   onUninstall = noop,
+  isUninstalling,
 }) => {
   const isMetaphor = useMemo(() => name === 'Metaphor', [name]);
 
@@ -131,7 +133,7 @@ const Application: FunctionComponent<ApplicationProps> = ({
           style={{ marginTop: '16px' }}
           onClick={onUninstall}
         >
-          Uninstall
+          {isUninstalling ? 'Uninstalling...' : 'Uninstall'}
         </Button>
       )}
     </Container>
