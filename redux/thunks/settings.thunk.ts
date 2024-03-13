@@ -25,7 +25,7 @@ export const updateClusterTourStatus = createAsyncThunk<
   { clusterName: string; takenTour: boolean },
   { state: RootState }
 >('settings/updateClusterTourStatus', async ({ clusterName, takenTour }) => {
-  await axios.post<void>('/api/proxy', {
+  await axios.put<void>('/api/proxy', {
     url: `/secret/${clusterName}/kubefirst-state`,
     body: {
       'console-tour': `${takenTour}`,
