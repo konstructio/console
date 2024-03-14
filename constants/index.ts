@@ -75,6 +75,7 @@ export const DEFAULT_CLOUD_INSTANCE_SIZES: Record<
   InstallationType,
   { instanceSize: string; nodeCount: number }
 > = {
+  [InstallationType.AKAMAI]: { instanceSize: 'g6-standard-4', nodeCount: 4 },
   [InstallationType.AWS]: { instanceSize: 'm5.large', nodeCount: 6 },
   [InstallationType.CIVO]: { instanceSize: 'g4s.kube.large', nodeCount: 6 },
   [InstallationType.DIGITAL_OCEAN]: { instanceSize: 's-4vcpu-8gb', nodeCount: 4 },
@@ -91,6 +92,8 @@ export const GIT_PROVIDER_DISPLAY_NAME: Record<GitProvider, string> = {
 };
 
 export const CLOUD_PROVIDER_DISPLAY_NAME: Record<InstallationType, string> = {
+  [InstallationType.AKAMAI]: 'Akamai',
+
   [InstallationType.AWS]: 'AWS',
   [InstallationType.CIVO]: 'Civo',
   [InstallationType.DIGITAL_OCEAN]: 'DigitalOcean',
@@ -103,6 +106,7 @@ export const KUBECONFIG_CLI_DETAILS: Record<
   InstallationType,
   { command: string; commandDocLink: string }
 > = {
+  [InstallationType.AKAMAI]: { command: '', commandDocLink: '' },
   [InstallationType.AWS]: {
     command: 'aws eks update-kubeconfig --name example',
     commandDocLink:

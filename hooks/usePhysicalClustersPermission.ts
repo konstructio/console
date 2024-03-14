@@ -24,6 +24,7 @@ export function usePhysicalClustersPermissions(installationType?: InstallationTy
       [InstallationType.VULTR]: canProvisionVultrPhysicalClusters,
       [InstallationType.CIVO]: true,
       [InstallationType.LOCAL]: true,
+      [InstallationType.AKAMAI]: true,
     }),
     [
       canProvisionAwsPhysicalClusters,

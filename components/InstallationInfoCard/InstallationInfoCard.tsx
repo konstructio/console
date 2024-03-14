@@ -20,6 +20,7 @@ import {
 import { TRUE_BLUE, VOLCANIC_SAND } from '@/constants/colors';
 import { InstallationInfo, InstallationType } from '@/types/redux';
 import CivoLogo from '@/assets/civo.svg';
+import akamaiLogo from '@/assets/akamai_logo.svg';
 import AwsLogo from '@/assets/aws_logo.svg';
 import DigitalOceanLogo from '@/assets/digital_ocean_logo.svg';
 import VultrLogo from '@/assets/vultr_logo.svg';
@@ -29,6 +30,7 @@ import { createNotification } from '@/redux/slices/notifications.slice';
 
 const MARKETPLACE_LOGOS: Record<InstallationType, unknown | null> = {
   [InstallationType.LOCAL]: null,
+  [InstallationType.AKAMAI]: akamaiLogo,
   [InstallationType.AWS]: AwsLogo,
   [InstallationType.CIVO]: CivoLogo,
   [InstallationType.DIGITAL_OCEAN]: DigitalOceanLogo,
