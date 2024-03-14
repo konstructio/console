@@ -32,6 +32,7 @@ import { BISCAY } from '@/constants/colors';
 import ControlledNumberInput from '@/components/controlledFields/ControlledNumberInput/ControlledNumberInput';
 
 const CLOUD_REGION_LABELS: Record<InstallationType, string | null> = {
+  [InstallationType.AKAMAI]: 'Cloud region',
   [InstallationType.AWS]: 'Cloud region',
   [InstallationType.CIVO]: 'Cloud region',
   [InstallationType.DIGITAL_OCEAN]: 'Datacenter region',

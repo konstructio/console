@@ -21,6 +21,15 @@ export enum FormStep {
 }
 
 export const INFO_INSTALLATION_TYPES: Record<InstallationType, Record<number, InstallationInfo>> = {
+  [InstallationType.AKAMAI]: {
+    [FormStep.AUTHENTICATION]: {
+      title: 'Akamai Prerequisites',
+      description: [
+        '<a href="https://login.linode.com/login" target="_blank">Create an Akamai account</a> in which you are an account owner.',
+        'Establish a publicly routable DNS. <a href="https://www.linode.com/docs/products/networking/dns-manager/guides/create-domain/" target="_blank">Learn more</a>',
+      ],
+    },
+  },
   [InstallationType.LOCAL]: {
     [K3DFormStep.SETUP]: {
       title: 'Tip',
@@ -89,6 +98,15 @@ export const INFO_MARKETPLACE_INSTALLATION_TYPES: Record<
   InstallationType,
   Record<number, InstallationInfo>
 > = {
+  [InstallationType.AKAMAI]: {
+    [FormStep.AUTHENTICATION]: {
+      title: 'Akamai Prerequisites',
+      description: [
+        '<a href="https://login.linode.com/login" target="_blank">Create an Akamai account</a> in which you are an account owner.',
+        'Establish a publicly routable DNS. <a href="https://www.linode.com/docs/products/networking/dns-manager/guides/create-domain/" target="_blank">Learn more</a>',
+      ],
+    },
+  },
   [InstallationType.LOCAL]: {
     [K3DFormStep.SETUP]: {
       title: 'Tip',
@@ -153,6 +171,17 @@ export const INFO_MARKETPLACE_INSTALLATION_TYPES: Record<
 };
 
 export const INSTALLATION_TYPE_API_KEYS: Record<InstallationType, AuthKeys | null> = {
+  [InstallationType.AKAMAI]: {
+    authKey: 'akamai_auth',
+    fieldKeys: [
+      {
+        name: 'token',
+        label: 'Akamai API key',
+        helperText:
+          'Retrieve your key at <a href="https://cloud.linode.com/profile/tokens" target="_blank">https://cloud.linode.com/profile/tokens</a>',
+      },
+    ],
+  },
   [InstallationType.LOCAL]: null,
   [InstallationType.AWS]: {
     authKey: 'aws_auth',
@@ -236,6 +265,7 @@ export const MARKETPLACE_STEPS = ['Authentication', 'Cluster details', 'Provisio
 
 export const INSTALL_TYPE_STEPS: Record<InstallationType, Array<string>> = {
   [InstallationType.LOCAL]: ['Select platform', 'Cluster details', 'Provisioning', 'Ready'],
+  [InstallationType.AKAMAI]: DEFAULT_STEPS,
   [InstallationType.AWS]: DEFAULT_STEPS,
   [InstallationType.CIVO]: DEFAULT_STEPS,
   [InstallationType.DIGITAL_OCEAN]: DEFAULT_STEPS,

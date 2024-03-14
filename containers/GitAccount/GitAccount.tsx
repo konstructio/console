@@ -59,7 +59,7 @@ const GitAccount: FunctionComponent = () => {
     mode: 'onSubmit',
   });
 
-  const handleFormSubmit = useCallback((values: GitAccountFields) => {
+  const handleFormSubmit = useCallback(() => {
     // TODO: Handle submit
   }, []);
 

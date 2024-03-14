@@ -98,6 +98,13 @@ const INSTALLATION_CONFIG: Record<
     CLOUD_REGION: '',
     INSTANCE_SIZE: '',
   },
+  // Needs to be implemented
+  [InstallationType.AKAMAI]: {
+    AUTH_TOKEN: '',
+    DOMAIN_NAME: '',
+    CLOUD_REGION: '',
+    INSTANCE_SIZE: '',
+  },
 };
 
 describe('provision management cluster using any git provider, cloud provider, and dns provider', () => {
