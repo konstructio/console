@@ -23,6 +23,13 @@ This is the Kubefirst Frontend project that shows all the Kubefirst installed se
 - Test the image with `docker run -p 8001:8080 -t public.ecr.aws/kubefirst/console:{version}`
 - Go to `http://localhost:8001` to see if the docker image is working
 
+
+#### Multiplatform build
+
+```bash
+docker buildx build --platform linux/amd64,linux/arm64 -t public.ecr.aws/kubefirst/console:{version} --push .
+```
+
 ### Push Docker Image to ECR
 
 Note: You might need an AWS Managament Account
