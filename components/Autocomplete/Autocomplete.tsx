@@ -1,7 +1,7 @@
 import React, { ForwardedRef, FunctionComponent, useMemo } from 'react';
 import CircularProgress from '@mui/material/CircularProgress';
 import AddIcon from '@mui/icons-material/Add';
-import AutocompleteMUI from '@mui/material/Autocomplete';
+import AutocompleteMUI, { autocompleteClasses } from '@mui/material/Autocomplete';
 import SearchIcon from '@mui/icons-material/Search';
 import { SxProps } from '@mui/system';
 import { ControllerRenderProps, FieldValues } from 'react-hook-form';
@@ -69,7 +69,7 @@ const AutocompleteComponent: FunctionComponent<IAutocompleteProps> = ({
       popupIcon={<SearchIcon />}
       noOptionsText={noOptionsText}
       filterOptions={filterOptions}
-      sx={sx}
+      sx={{ ...sx, [`& .${autocompleteClasses.popupIndicator}`]: { transform: 'none' } }}
       disabled={disabled}
       ListboxProps={{
         style: {
