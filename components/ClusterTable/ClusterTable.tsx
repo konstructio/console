@@ -341,9 +341,9 @@ export const ClusterTable: FunctionComponent<ClusterTableProps> = ({
         />
 
         {expanded &&
-          filteredWorkloadClusters.map((cluster) => (
+          filteredWorkloadClusters.map((cluster, index) => (
             <ClusterRow
-              key={cluster.clusterName}
+              key={cluster.clusterName ?? `cluster-row-${index}`}
               cluster={cluster}
               onDeleteCluster={onDeleteCluster}
               selected={selectedClusterName === cluster.clusterName}

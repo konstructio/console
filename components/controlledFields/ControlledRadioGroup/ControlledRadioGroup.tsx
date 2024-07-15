@@ -11,27 +11,28 @@ import { VOLCANIC_SAND } from '@/constants/colors';
 import Row from '@/components/Row/Row';
 import Tooltip from '@/components/Tooltip/Tooltip';
 
-export type RadioOptionsType = Array<{
+export type RadioOptionsType = {
   label: string;
   value: string;
   isDisabled?: boolean;
   tooltipInfo?: string;
   tag?: React.ReactNode;
-}>;
+};
 
-export interface ControlledRadioGroupProps<T extends FieldValues> extends UseControllerProps<T> {
+export interface ControlledRadioGroupProps<T extends FieldValues, K extends RadioOptionsType>
+  extends UseControllerProps<T> {
   control: Control<T>;
   required?: boolean;
   rules: {
     required: boolean;
     pattern?: RegExp;
   };
-  options: RadioOptionsType;
-  onChange?: (value: string) => void;
+  options: K[];
+  onChange?: (value: K['value']) => void;
   inLine?: boolean;
 }
 
-function ControlledRadioGroup<T extends FieldValues>({
+function ControlledRadioGroup<T extends FieldValues, K extends RadioOptionsType>({
   defaultValue,
   inLine = false,
   name,
@@ -39,7 +40,7 @@ function ControlledRadioGroup<T extends FieldValues>({
   onChange,
   required,
   ...props
-}: ControlledRadioGroupProps<T>) {
+}: ControlledRadioGroupProps<T, K>) {
   return (
     <Controller
       {...props}
@@ -47,6 +48,7 @@ function ControlledRadioGroup<T extends FieldValues>({
       render={({ field }) => (
         <RadioGroup
           defaultValue={defaultValue}
+          value={field.value}
           name={name}
           sx={{ display: 'flex', flexDirection: inLine ? 'row' : 'column' }}
         >
@@ -87,6 +89,7 @@ function ControlledRadioGroup<T extends FieldValues>({
                     {label}
                     {Tag}
                   </Typography>
+
                   {tooltipInfo && (
                     <Tooltip placement="top" title={tooltipInfo} maxWidth="280px" whiteSpace="wrap">
                       <Row style={{ alignItems: 'center' }}>

@@ -1,24 +1,21 @@
-import { useCallback, useMemo } from 'react';
+import { useMemo } from 'react';
 
-import { useAppSelector } from '@/redux/store';
 import { selectFeatureFlags } from '@/redux/selectors/featureFlags.selector';
+import { useAppSelector } from '@/redux/store';
 import { FeatureFlag } from '@/types/config';
 
-const useFeatureFlag = (flagName?: FeatureFlag) => {
+const useFeatureFlag = (flagName: FeatureFlag) => {
   const { flags } = useAppSelector(selectFeatureFlags());
 
-  const flag = useMemo(() => {
+  const isFeatureEnabled = useMemo(() => {
     if (flagName) {
-      return flags && flags[flagName];
+      return flags?.[flagName];
     }
+
     return false;
   }, [flagName, flags]);
 
-  const isFeatureEnabled = useCallback(() => {
-    return flag;
-  }, [flag]);
-
-  return { isEnabled: isFeatureEnabled() };
+  return { isEnabled: isFeatureEnabled };
 };
 
 export default useFeatureFlag;
