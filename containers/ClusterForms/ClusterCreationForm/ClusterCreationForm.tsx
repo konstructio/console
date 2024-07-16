@@ -316,7 +316,7 @@ const ClusterCreationForm: FC<ComponentProps<'div'>> = (props) => {
             name="cloudRegion"
             label="Cloud region"
             defaultValue={draftCluster?.cloudRegion}
-            required={true}
+            required
             rules={{ required: true }}
             options={cloudRegions?.map((region) => ({ label: region, value: region }))}
             onChange={handleRegionOnSelect}
