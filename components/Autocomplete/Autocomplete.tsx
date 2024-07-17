@@ -7,6 +7,7 @@ import { SxProps } from '@mui/system';
 import { ControllerRenderProps, FieldValues } from 'react-hook-form';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import { InputLabel } from '@mui/material';
+import omit from 'lodash/omit';
 
 import TextField from '../TextField/TextField';
 import Column from '../Column/Column';
@@ -28,12 +29,14 @@ const NEW_ENV: ClusterEnvironment = {
   creationDate: 'now',
 };
 
+type AutocompleteOption = { value: unknown; label: string };
+
 export interface IAutocompleteProps extends ControllerRenderProps<FieldValues> {
   label: string;
   inputRef?: ForwardedRef<unknown>;
   loading?: boolean;
   noOptionsText?: string;
-  options: Array<{ value: string; label: string }>;
+  options: Array<AutocompleteOption>;
   placeholder?: string;
   sx?: SxProps;
   error?: boolean;
@@ -45,6 +48,7 @@ export interface IAutocompleteProps extends ControllerRenderProps<FieldValues> {
 }
 
 const AutocompleteComponent: FunctionComponent<IAutocompleteProps> = ({
+  inputRef,
   label,
   loading,
   noOptionsText,
@@ -53,8 +57,8 @@ const AutocompleteComponent: FunctionComponent<IAutocompleteProps> = ({
   required,
   error,
   sx,
-  filterOptions,
   disabled,
+  filterOptions,
   onClick,
   ...props
 }) => {
@@ -77,10 +81,12 @@ const AutocompleteComponent: FunctionComponent<IAutocompleteProps> = ({
         },
       }}
       {...props}
-      isOptionEqualToValue={(option: string, value: string) => option === value}
+      ref={inputRef}
+      isOptionEqualToValue={(option: AutocompleteOption, value: string) => option.value === value}
       renderInput={(params) => (
         <TextField
-          {...params}
+          {...omit(params, ['InputLabelProps', 'InputProps'])}
+          key={params.id}
           ref={params.InputProps.ref}
           required={required}
           placeholder={placeholder}
@@ -115,13 +121,13 @@ export interface AutocompleteTagsProps
 const AutocompleteTagsComponent: FunctionComponent<AutocompleteTagsProps> = ({
   options,
   value,
-  onChange,
-  onTagDelete,
-  onAddNewEnvironment = noop,
   required,
   disabled,
   createEnvironment,
   label,
+  onChange,
+  onTagDelete,
+  onAddNewEnvironment = noop,
 }) => {
   return (
     <AutocompleteMUI
@@ -155,9 +161,11 @@ const AutocompleteTagsComponent: FunctionComponent<AutocompleteTagsProps> = ({
       )}
       renderOption={({ onClick = noop, ...rest }, option) => {
         const createNewEnvironment = option.name === NEW_ENV.name;
+
         return (
           <MenuItem
             {...rest}
+            key={option.id}
             disableRipple
             onClick={(e) => {
               if (createNewEnvironment) {

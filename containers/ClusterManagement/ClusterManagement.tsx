@@ -29,7 +29,6 @@ import {
   setClusterCreationStep,
 } from '@/redux/slices/api.slice';
 import { setPresentedClusterName } from '@/redux/slices/api.slice';
-import { usePhysicalClustersPermissions } from '@/hooks/usePhysicalClustersPermission';
 import { InstallationType } from '@/types/redux';
 import { setClusterManagamentTab } from '@/redux/slices/config.slice';
 import { ClusterManagementTab, FeatureFlag } from '@/types/config';
@@ -67,29 +66,14 @@ const ClusterManagement: FunctionComponent = () => {
 
   const dispatch = useAppDispatch();
   const upgradeLicenseDefinition = useAppSelector(selectUpgradeLicenseDefinition());
-  const { isEnabled: isSubscriptionEnabled } = useFeatureFlag(FeatureFlag.SAAS_SUBSCRIPTION);
+  const { isEnabled: isSassSubscriptionEnabled } = useFeatureFlag(FeatureFlag.SAAS_SUBSCRIPTION);
 
   const {
     isOpen: isUpgradeModalOpen,
     openModal: openUpgradeModal,
     closeModal: closeUpgradeModal,
   } = useModal();
-  const { hasPermissions } = usePhysicalClustersPermissions(managementCluster?.cloudProvider);
   const { canUseFeature } = usePaywall();
-
-  const defaultClusterType = useMemo(() => {
-    if (
-      isSubscriptionEnabled &&
-      managementCluster &&
-      managementCluster.cloudProvider &&
-      hasPermissions &&
-      canUseFeature('physicalClusters')
-    ) {
-      return ClusterType.WORKLOAD;
-    }
-    return ClusterType.WORKLOAD_V_CLUSTER;
-  }, [isSubscriptionEnabled, managementCluster, hasPermissions, canUseFeature]);
-
   const { instanceSize } =
     DEFAULT_CLOUD_INSTANCE_SIZES[managementCluster?.cloudProvider ?? InstallationType.LOCAL];
 
@@ -172,7 +156,7 @@ const ClusterManagement: FunctionComponent = () => {
         clusterId: RESERVED_DRAFT_CLUSTER_NAME,
         clusterName: RESERVED_DRAFT_CLUSTER_NAME,
         status: ClusterStatus.PROVISIONING,
-        type: defaultClusterType,
+        type: ClusterType.WORKLOAD,
         nodeCount: SUGGESTED_WORKLOAD_NODE_COUNT,
         cloudProvider,
         cloudRegion,
@@ -186,7 +170,7 @@ const ClusterManagement: FunctionComponent = () => {
       dispatch(createDraftCluster(draftCluster));
     }
     openCreateClusterFlow();
-  }, [managementCluster, dispatch, openCreateClusterFlow, clusterCreationStep, defaultClusterType]);
+  }, [clusterCreationStep, managementCluster, dispatch, openCreateClusterFlow]);
 
   const handleCreateCluster = () => {
     const draftCluster = clusterMap[RESERVED_DRAFT_CLUSTER_NAME];
@@ -197,7 +181,7 @@ const ClusterManagement: FunctionComponent = () => {
     ) {
       const canCreatePhysicalClusters = canUseFeature('physicalClusters');
 
-      if (isSubscriptionEnabled && !canCreatePhysicalClusters) {
+      if (isSassSubscriptionEnabled && !canCreatePhysicalClusters) {
         return openUpgradeModal();
       }
     }
@@ -333,7 +317,7 @@ const ClusterManagement: FunctionComponent = () => {
           onDownloadKubeconfig={handleDownloadKubeconfig}
           onSubmit={handleCreateCluster}
           defaultValues={{
-            type: defaultClusterType,
+            type: ClusterType.WORKLOAD,
             nodeCount: SUGGESTED_WORKLOAD_NODE_COUNT,
             instanceSize,
           }}

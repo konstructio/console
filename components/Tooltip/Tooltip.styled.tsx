@@ -6,9 +6,12 @@ import { BISCAY } from '../../constants/colors';
 
 import { ITooltipProps } from './Tooltip';
 
-export const StyledTooltip = muiStyled(({ className, ...rest }: ITooltipProps) => (
-  <Tooltip {...rest} arrow classes={{ popper: className }} />
-))(({ maxWidth, whiteSpace }) => ({
+export const StyledTooltip = muiStyled(
+  ({ className, ...delegated }: ITooltipProps) => (
+    <Tooltip {...delegated} arrow classes={{ popper: className }} />
+  ),
+  { shouldForwardProp: (propName) => !['maxWidth', 'whiteSpace'].includes(String(propName)) },
+)(({ maxWidth, whiteSpace }) => ({
   [`& .${tooltipClasses.arrow}`]: {
     color: `${BISCAY}`,
   },
