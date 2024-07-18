@@ -96,6 +96,8 @@ const AuthForm: FunctionComponent = () => {
   const validateGitOwner = useCallback(
     async (gitOwner: string) => {
       if (gitOwner) {
+        await dispatch(clearUserError());
+
         if (isGitHub) {
           await dispatch(getGitHubOrgRepositories({ token, organization: gitOwner })).unwrap();
           await dispatch(getGitHubOrgTeams({ token, organization: gitOwner }));
