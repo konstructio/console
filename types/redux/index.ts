@@ -16,6 +16,7 @@ export interface AdvancedOptions extends GitValues {
   subDomain?: string;
   imageRepository?: ImageRepository;
   cloudZone?: string;
+  skipInstallPro?: boolean;
 }
 
 export interface AuthValues {
