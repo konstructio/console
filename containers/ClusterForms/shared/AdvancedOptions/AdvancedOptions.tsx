@@ -76,6 +76,20 @@ const AdvancedOptions: FunctionComponent<AdvancedOptionsProps> = ({
               }}
             />
           </CheckboxContainer>
+          <CheckboxContainer>
+            <Typography variant="labelLarge" color={EXCLUSIVE_PLUM}>
+              By default the kubefirst installation includes the kubefirst UI component. If you do
+              not wish to install the UI please check the below.
+            </Typography>
+            <Checkbox
+              control={control}
+              name="skipInstallPro"
+              label="Do not install the UI component"
+              rules={{
+                required: false,
+              }}
+            />
+          </CheckboxContainer>
           {isAwsInstallation && (
             <CheckboxContainer>
               <Typography
