@@ -31,7 +31,9 @@ export const Menu = styled(Box)`
   z-index: 1;
 `;
 
-export const StyledIconButton = styled(IconButton)<{ expanded?: boolean }>`
+export const StyledIconButton = styled(IconButton).withConfig({
+  shouldForwardProp: (prop) => prop !== 'expanded',
+})<{ expanded?: boolean }>`
   svg {
     color: ${ROCK_BLUE};
     transition: transform 0.3s ease;

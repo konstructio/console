@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useCallback } from 'react';
+import React, { FC, useCallback } from 'react';
 import CloseIcon from '@mui/icons-material/Close';
 import MoreHoriz from '@mui/icons-material/MoreHoriz';
 import List from '@mui/material/List';
@@ -28,26 +28,26 @@ import Typography from '@/components/Typography/Typography';
 
 interface CreateClusterFlowProps {
   cluster?: Cluster | DraftCluster;
+  clusterCreationStep: ClusterCreationStep;
+  defaultValues?: NewWorkloadClusterConfig;
+  loading: boolean;
   managementCluster?: ManagementCluster;
   onClusterDelete: () => void;
   onDownloadKubeconfig: () => void;
   onMenuClose: () => void;
   onSubmit: () => void;
-  clusterCreationStep: ClusterCreationStep;
-  defaultValues?: NewWorkloadClusterConfig;
-  loading: boolean;
 }
 
-export const CreateClusterFlow: FunctionComponent<CreateClusterFlowProps> = ({
+export const CreateClusterFlow: FC<CreateClusterFlowProps> = ({
   cluster,
+  clusterCreationStep,
+  defaultValues,
+  loading,
+  managementCluster,
   onClusterDelete,
   onDownloadKubeconfig,
   onMenuClose,
   onSubmit,
-  clusterCreationStep,
-  defaultValues,
-  managementCluster,
-  loading,
 }) => {
   const { isOpen, close, toggle } = useToggle();
 

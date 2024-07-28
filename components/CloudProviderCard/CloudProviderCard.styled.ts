@@ -19,7 +19,6 @@ export const DetailsContainer = styled(Column)`
   align-items: flex-start;
   margin-left: 24px;
   height: 100%;
-  overflow-y: scroll;
 
   p {
     color: ${({ theme }) => theme.colors.saltboxBlue};

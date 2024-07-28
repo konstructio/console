@@ -20,10 +20,11 @@ export interface NumberInputProps
 }
 
 const NumberInput = forwardRef<HTMLLabelElement | null, NumberInputProps>(function NumberInput(
-  { label, onChange = noop, inputProps = {}, ...rest },
+  { label, onChange = noop, inputProps: { defaultValue, ...inputProps } = {}, ...rest },
   ref,
 ) {
-  const [value, setValue] = useState(Number(inputProps.defaultValue ?? 0));
+  const [value, setValue] = useState(Number(defaultValue ?? 0));
+
   return (
     <Root {...rest} ref={ref}>
       {label && (

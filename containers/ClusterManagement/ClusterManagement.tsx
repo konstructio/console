@@ -1,8 +1,7 @@
 'use client';
-import React, { FunctionComponent, useCallback, useEffect, useMemo, useState } from 'react';
+import React, { FunctionComponent, useCallback, useEffect, useMemo } from 'react';
 import Box from '@mui/material/Box';
 import Tabs from '@mui/material/Tabs';
-import Joyride, { ACTIONS, CallBackProps } from 'react-joyride';
 
 import { CreateClusterFlow } from './CreateClusterFlow/CreateClusterFlow';
 import { Content, Header, LeftContainer, StyledDrawer } from './ClusterManagement.styled';
@@ -21,7 +20,7 @@ import useToggle from '@/hooks/useToggle';
 import useModal from '@/hooks/useModal';
 import DeleteCluster from '@/components/DeleteCluster/DeleteCluster';
 import TabPanel, { Tab, a11yProps } from '@/components/Tab/Tab';
-import { BISCAY, MIDNIGHT_EXPRESS, SALTBOX_BLUE } from '@/constants/colors';
+import { BISCAY, SALTBOX_BLUE } from '@/constants/colors';
 import { Flow } from '@/components/Flow/Flow';
 import ClusterTable from '@/components/ClusterTable/ClusterTable';
 import {
@@ -30,7 +29,6 @@ import {
   setClusterCreationStep,
 } from '@/redux/slices/api.slice';
 import { setPresentedClusterName } from '@/redux/slices/api.slice';
-import { usePhysicalClustersPermissions } from '@/hooks/usePhysicalClustersPermission';
 import { InstallationType } from '@/types/redux';
 import { setClusterManagamentTab } from '@/redux/slices/config.slice';
 import { ClusterManagementTab, FeatureFlag } from '@/types/config';
@@ -40,10 +38,7 @@ import {
   RESERVED_DRAFT_CLUSTER_NAME,
   SUGGESTED_WORKLOAD_NODE_COUNT,
 } from '@/constants';
-import TourModal from '@/components/TourModal/TourModal';
-import JoyrideTooltip from '@/components/JoyRideTooltip/JoyRideTooltip';
-import { JOYRIDE_STEPS } from '@/constants/joyride';
-import { getClusterTourStatus, updateClusterTourStatus } from '@/redux/thunks/settings.thunk';
+import { getClusterTourStatus } from '@/redux/thunks/settings.thunk';
 import usePaywall from '@/hooks/usePaywall';
 import UpgradeModal from '@/components/UpgradeModal/UpgradeModal';
 import { selectUpgradeLicenseDefinition } from '@/redux/selectors/subscription.selector';
@@ -61,7 +56,6 @@ const ClusterManagement: FunctionComponent = () => {
     managementCluster,
     presentedClusterName,
     loading,
-    takenConsoleTour,
   } = useAppSelector(({ api, queue, config, featureFlags, settings }) => ({
     clusterQueue: queue.clusterQueue,
     clusterManagementTab: config.clusterManagementTab,
@@ -70,34 +64,16 @@ const ClusterManagement: FunctionComponent = () => {
     ...settings,
   }));
 
-  const { isOpen, closeModal } = useModal(!takenConsoleTour);
-  const [startTour, setStartTour] = useState(false);
-
   const dispatch = useAppDispatch();
   const upgradeLicenseDefinition = useAppSelector(selectUpgradeLicenseDefinition());
-  const { isEnabled: isSubscriptionEnabled } = useFeatureFlag(FeatureFlag.SAAS_SUBSCRIPTION);
+  const { isEnabled: isSassSubscriptionEnabled } = useFeatureFlag(FeatureFlag.SAAS_SUBSCRIPTION);
 
   const {
     isOpen: isUpgradeModalOpen,
     openModal: openUpgradeModal,
     closeModal: closeUpgradeModal,
   } = useModal();
-  const { hasPermissions } = usePhysicalClustersPermissions(managementCluster?.cloudProvider);
   const { canUseFeature } = usePaywall();
-
-  const defaultClusterType = useMemo(() => {
-    if (
-      isSubscriptionEnabled &&
-      managementCluster &&
-      managementCluster.cloudProvider &&
-      hasPermissions &&
-      canUseFeature('physicalClusters')
-    ) {
-      return ClusterType.WORKLOAD;
-    }
-    return ClusterType.WORKLOAD_V_CLUSTER;
-  }, [isSubscriptionEnabled, managementCluster, hasPermissions, canUseFeature]);
-
   const { instanceSize } =
     DEFAULT_CLOUD_INSTANCE_SIZES[managementCluster?.cloudProvider ?? InstallationType.LOCAL];
 
@@ -180,7 +156,7 @@ const ClusterManagement: FunctionComponent = () => {
         clusterId: RESERVED_DRAFT_CLUSTER_NAME,
         clusterName: RESERVED_DRAFT_CLUSTER_NAME,
         status: ClusterStatus.PROVISIONING,
-        type: defaultClusterType,
+        type: ClusterType.WORKLOAD,
         nodeCount: SUGGESTED_WORKLOAD_NODE_COUNT,
         cloudProvider,
         cloudRegion,
@@ -194,7 +170,7 @@ const ClusterManagement: FunctionComponent = () => {
       dispatch(createDraftCluster(draftCluster));
     }
     openCreateClusterFlow();
-  }, [managementCluster, dispatch, openCreateClusterFlow, clusterCreationStep, defaultClusterType]);
+  }, [clusterCreationStep, managementCluster, dispatch, openCreateClusterFlow]);
 
   const handleCreateCluster = () => {
     const draftCluster = clusterMap[RESERVED_DRAFT_CLUSTER_NAME];
@@ -205,7 +181,7 @@ const ClusterManagement: FunctionComponent = () => {
     ) {
       const canCreatePhysicalClusters = canUseFeature('physicalClusters');
 
-      if (isSubscriptionEnabled && !canCreatePhysicalClusters) {
+      if (isSassSubscriptionEnabled && !canCreatePhysicalClusters) {
         return openUpgradeModal();
       }
     }
@@ -252,31 +228,6 @@ const ClusterManagement: FunctionComponent = () => {
         });
     }
   }, [dispatch, presentedCluster, openKubeconfigModal]);
-
-  const handleTakeTour = useCallback(() => {
-    closeModal();
-    setStartTour(true);
-  }, [closeModal]);
-
-  const handleTourSkip = useCallback(() => {
-    closeModal();
-    if (managementCluster) {
-      dispatch(
-        updateClusterTourStatus({ clusterName: managementCluster.clusterName, takenTour: true }),
-      );
-    }
-  }, [closeModal, dispatch, managementCluster]);
-
-  const handleJoyrideCallback = useCallback(
-    ({ action }: CallBackProps) => {
-      if (action === ACTIONS.RESET && managementCluster) {
-        dispatch(
-          updateClusterTourStatus({ clusterName: managementCluster.clusterName, takenTour: true }),
-        );
-      }
-    },
-    [dispatch, managementCluster],
-  );
 
   const { command, commandDocLink } =
     KUBECONFIG_CLI_DETAILS[managementCluster?.cloudProvider ?? InstallationType.AWS];
@@ -348,25 +299,6 @@ const ClusterManagement: FunctionComponent = () => {
           </Column>
         </TabPanel>
         <TabPanel value={clusterManagementTab} index={ClusterManagementTab.GRAPH_VIEW}>
-          <Joyride
-            steps={JOYRIDE_STEPS}
-            run={startTour}
-            tooltipComponent={JoyrideTooltip}
-            callback={handleJoyrideCallback}
-            continuous
-            styles={{
-              options: {
-                arrowColor: MIDNIGHT_EXPRESS,
-              },
-            }}
-          />
-          <TourModal
-            isOpen={isOpen}
-            onCloseModal={handleTourSkip}
-            onSkip={handleTourSkip}
-            onTakeTour={handleTakeTour}
-            styleOverrides={{ width: '500px', padding: 0 }}
-          />
           <Flow onNodeClick={handleClusterSelect} />
         </TabPanel>
       </Content>
@@ -385,7 +317,7 @@ const ClusterManagement: FunctionComponent = () => {
           onDownloadKubeconfig={handleDownloadKubeconfig}
           onSubmit={handleCreateCluster}
           defaultValues={{
-            type: defaultClusterType,
+            type: ClusterType.WORKLOAD,
             nodeCount: SUGGESTED_WORKLOAD_NODE_COUNT,
             instanceSize,
           }}

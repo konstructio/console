@@ -16,9 +16,13 @@ export interface AdvancedOptions extends GitValues {
   subDomain?: string;
   imageRepository?: ImageRepository;
   cloudZone?: string;
+  skipInstallPro?: boolean;
 }
 
 export interface AuthValues {
+  akamai_auth?: {
+    token: string;
+  };
   aws_auth?: {
     access_key_id: string;
     secret_access_key: string;
@@ -69,6 +73,7 @@ export type CivoClusterValues = CivoInstallValues & ClusterValues & GitValues;
 export type InstallValues = AwsClusterValues & AdvancedOptions & CivoInstallValues;
 
 export enum InstallationType {
+  AKAMAI = 'akamai',
   LOCAL = 'k3d',
   AWS = 'aws',
   CIVO = 'civo',

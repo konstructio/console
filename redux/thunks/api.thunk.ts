@@ -73,7 +73,11 @@ export const createCluster = createAsyncThunk<
     google_auth: {
       ...values?.google_auth,
     },
+    akamai_auth: {
+      ...values?.akamai_auth,
+    },
     log_file: `log_${new Date().getTime()}.log`,
+    install_kubefirst_pro: !values?.skipInstallPro,
   };
 
   await axios.post<{ message: string }>('/api/proxy', {

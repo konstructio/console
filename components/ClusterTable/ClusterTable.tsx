@@ -36,6 +36,7 @@ import {
 
 import k3dLogo from '@/assets/k3d_logo.svg';
 import awsLogo from '@/assets/aws_logo.svg';
+import akamaiLogo from '@/assets/akamai_logo.svg';
 import civoLogo from '@/assets/civo_logo.svg';
 import digitalOceanLogo from '@/assets/digital_ocean_logo.svg';
 import vultrLogo from '@/assets/vultr_logo.svg';
@@ -58,6 +59,7 @@ import useToggle from '@/hooks/useToggle';
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const CLOUD_LOGO_OPTIONS: Record<InstallationType, any> = {
   [InstallationType.LOCAL]: k3dLogo,
+  [InstallationType.AKAMAI]: akamaiLogo,
   [InstallationType.AWS]: awsLogo,
   [InstallationType.CIVO]: civoLogo,
   [InstallationType.DIGITAL_OCEAN]: digitalOceanLogo,
@@ -339,9 +341,9 @@ export const ClusterTable: FunctionComponent<ClusterTableProps> = ({
         />
 
         {expanded &&
-          filteredWorkloadClusters.map((cluster) => (
+          filteredWorkloadClusters.map((cluster, index) => (
             <ClusterRow
-              key={cluster.clusterName}
+              key={cluster.clusterName ?? `cluster-row-${index}`}
               cluster={cluster}
               onDeleteCluster={onDeleteCluster}
               selected={selectedClusterName === cluster.clusterName}

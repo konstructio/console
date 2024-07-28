@@ -19,6 +19,7 @@ import { InstallationType } from '@/types/redux';
 
 const ESTIMATED_TIMES_BY_CLOUD: Record<InstallationType, number> = {
   [InstallationType.LOCAL]: 7,
+  [InstallationType.AKAMAI]: 25,
   [InstallationType.AWS]: 40,
   [InstallationType.CIVO]: 15,
   [InstallationType.DIGITAL_OCEAN]: 35,

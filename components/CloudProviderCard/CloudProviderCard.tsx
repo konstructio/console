@@ -9,6 +9,7 @@ import { CardContainer, DetailsContainer, Link, LabelContainer } from './CloudPr
 
 import { InstallationType } from '@/types/redux';
 import k3dLogo from '@/assets/k3d_logo.svg';
+import akamaiLogo from '@/assets/akamai_logo.svg';
 import awsLogo from '@/assets/aws_logo.svg';
 import civoLogo from '@/assets/civo_logo.svg';
 import digitalOceanLogo from '@/assets/digital_ocean_logo.svg';
@@ -29,6 +30,16 @@ const PROVIDER_OPTIONS: Record<
     beta?: boolean;
   } | null
 > = {
+  [InstallationType.AKAMAI]: {
+    logoSrc: akamaiLogo,
+    label: 'Akamai',
+    description:
+      'The newest beta cloud provider supported by the kubefirst platform offering Linode managed clusters.',
+    learnMoreLink: 'https://cloud.linode.com',
+    height: 30,
+    width: 50,
+    beta: true,
+  },
   [InstallationType.LOCAL]: {
     logoSrc: k3dLogo,
     label: 'Run Locally',

@@ -1,10 +1,4 @@
-import React, {
-  ComponentPropsWithoutRef,
-  FunctionComponent,
-  useCallback,
-  useEffect,
-  useMemo,
-} from 'react';
+import React, { ComponentProps, FC, useCallback, useEffect, useMemo } from 'react';
 import { useFormContext } from 'react-hook-form';
 import Box from '@mui/material/Box';
 import StarBorderOutlinedIcon from '@mui/icons-material/StarBorderOutlined';
@@ -51,21 +45,15 @@ import Tag from '@/components/Tag/Tag';
 import { getCloudProviderAuth } from '@/utils/getCloudProviderAuth';
 import { FeatureFlag } from '@/types/config';
 import useFeatureFlag from '@/hooks/useFeatureFlag';
+import { selectApiState } from '@/redux/selectors/api.selector';
+import { selectEnvironmentsState } from '@/redux/selectors/environments.selector';
 
-const ClusterCreationForm: FunctionComponent<Omit<ComponentPropsWithoutRef<'div'>, 'key'>> = (
-  props,
-) => {
+const ClusterCreationForm: FC<ComponentProps<'div'>> = (props) => {
   const { isOpen, openModal, closeModal } = useModal(false);
-
-  const {
-    managementCluster,
-    cloudRegions,
-    cloudZones,
-    clusterMap,
-    environments,
-    instanceSizes,
-    error,
-  } = useAppSelector(({ api, environments }) => ({ ...api, ...environments }));
+  const { managementCluster, cloudRegions, cloudZones, clusterMap, instanceSizes } = useAppSelector(
+    selectApiState(),
+  );
+  const { environments, error } = useAppSelector(selectEnvironmentsState());
   const hasLicenseKey = useAppSelector(selectHasLicenseKey());
   const isLicenseActive = useAppSelector(selectIsLicenseActive());
   const { isEnabled: isSubscriptionEnabled } = useFeatureFlag(FeatureFlag.SAAS_SUBSCRIPTION);
@@ -164,17 +152,16 @@ const ClusterCreationForm: FunctionComponent<Omit<ComponentPropsWithoutRef<'div'
   }, [setValue]);
 
   const { hasPermissions } = usePhysicalClustersPermissions(managementCluster?.cloudProvider);
+  const draftCluster = clusterMap[RESERVED_DRAFT_CLUSTER_NAME];
+  const isVCluster = type === ClusterType.WORKLOAD_V_CLUSTER;
 
-  const draftCluster = useMemo(() => clusterMap[RESERVED_DRAFT_CLUSTER_NAME], [clusterMap]);
-
-  const isVCluster = useMemo(() => type === ClusterType.WORKLOAD_V_CLUSTER, [type]);
-
-  const handleRedirect = () => {
-    return window.open(`${location.origin}/settings/subscription/plans`, '_blank');
+  const handleRedirect = (): void => {
+    window.open(`${location.origin}/settings/subscription/plans`, '_blank');
   };
 
   const clusterOptions = useMemo(() => {
     let clusterTypes;
+
     if (hasPermissions) {
       clusterTypes = WORKLOAD_CLUSTER_OPTIONS;
     } else {
@@ -255,47 +242,47 @@ const ClusterCreationForm: FunctionComponent<Omit<ComponentPropsWithoutRef<'div'
       <Typography variant="subtitle1" color={BISCAY}>
         Create workload cluster
       </Typography>
+
       <InputContainer>
         <Typography variant="labelLarge" color={EXCLUSIVE_PLUM}>
           Cluster type
         </Typography>
         <ControlledRadioGroup
-          control={control}
           name="type"
-          rules={{
-            required: false,
-          }}
+          control={control}
+          rules={{ required: false }}
           options={clusterOptions}
           defaultValue={type}
-          onChange={(clusterType) => setValue('type', clusterType as ClusterType)}
+          onChange={(clusterType) => setValue('type', clusterType)}
         />
       </InputContainer>
-      <>
-        <ControlledTagsAutocomplete
-          createEnvironment
-          control={control}
-          name="environment"
-          label="Environment cluster will host"
-          options={Object.values(environments)}
-          onChange={handleEnvChange}
-          onTagDelete={handleTagDelete}
-          onAddNewEnvironment={openModal}
+
+      <ControlledTagsAutocomplete
+        createEnvironment
+        control={control}
+        name="environment"
+        label="Environment cluster will host"
+        options={Object.values(environments)}
+        onChange={handleEnvChange}
+        onTagDelete={handleTagDelete}
+        onAddNewEnvironment={openModal}
+      />
+
+      <Modal
+        padding={0}
+        isOpen={isOpen}
+        styleOverrides={{ width: '100%', maxWidth: '630px' }}
+        onCloseModal={handleModalClose}
+      >
+        <CreateEnvironmentMenu
+          onSubmit={handleAddEnvironment}
+          onClose={closeModal}
+          previouslyCreatedEnvironments={environments}
+          errorMessage={error}
+          onErrorClose={clearEnvError}
         />
-        <Modal
-          padding={0}
-          isOpen={isOpen}
-          styleOverrides={{ width: '100%', maxWidth: '630px' }}
-          onCloseModal={handleModalClose}
-        >
-          <CreateEnvironmentMenu
-            onSubmit={handleAddEnvironment}
-            onClose={closeModal}
-            previouslyCreatedEnvironments={environments}
-            errorMessage={error}
-            onErrorClose={clearEnvError}
-          />
-        </Modal>
-      </>
+      </Modal>
+
       <ControlledTextField
         control={control}
         name="clusterName"
@@ -321,6 +308,7 @@ const ClusterCreationForm: FunctionComponent<Omit<ComponentPropsWithoutRef<'div'
         }}
         onErrorText={errors.clusterName?.message}
       />
+
       {!isVCluster && (
         <>
           <ControlledAutocomplete
@@ -330,11 +318,10 @@ const ClusterCreationForm: FunctionComponent<Omit<ComponentPropsWithoutRef<'div'
             defaultValue={draftCluster?.cloudRegion}
             required
             rules={{ required: true }}
-            options={
-              cloudRegions && cloudRegions.map((region) => ({ label: region, value: region }))
-            }
+            options={cloudRegions?.map((region) => ({ label: region, value: region }))}
             onChange={handleRegionOnSelect}
           />
+
           {managementCluster?.cloudProvider === InstallationType.GOOGLE && (
             <ControlledAutocomplete
               control={control}
@@ -362,6 +349,7 @@ const ClusterCreationForm: FunctionComponent<Omit<ComponentPropsWithoutRef<'div'
             }))}
             defaultValue={instanceSize}
           />
+
           <Box sx={{ width: 136 }}>
             <ControlledNumberInput
               label="Number of nodes"

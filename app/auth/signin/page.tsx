@@ -38,7 +38,7 @@ export default function SignIn() {
     <Container>
       <Background>
         <Header>
-          <Title variant="h3">Get started with your instant Kubernetes Platforms!</Title>
+          <Title variant="h3">Get started with your instant Kubernetes Platform!</Title>
           <Image alt="k1-ray-image" src={Ray} height={280} width={320} />
         </Header>
         <Typography color="white" variant="labelLarge" sx={{ width: '445px', textAlign: 'center' }}>

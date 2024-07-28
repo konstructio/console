@@ -6,11 +6,11 @@ import { ThemeProvider } from 'styled-components';
 import { theme } from '../theme';
 import { makeStore } from '../redux/store';
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-function setupComponent<T>(Component: any, defaultProps?: T) {
+function setupComponent<T>(Component: () => React.ReactNode, defaultProps?: T) {
   return async function (testProps?: Partial<T>) {
     const store = makeStore();
-    return await render(
+
+    return render(
       <ThemeProvider theme={theme}>
         <Provider store={store}>
           <Component {...defaultProps} {...testProps} />

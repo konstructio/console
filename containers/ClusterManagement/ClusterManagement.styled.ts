@@ -39,7 +39,9 @@ export const LeftContainer = styled(Row)`
   gap: 42px;
 `;
 
-export const StyledDrawer = muiStyled(Drawer)(({ isBannerOpen }: { isBannerOpen: boolean }) => ({
+export const StyledDrawer = muiStyled(Drawer, {
+  shouldForwardProp: (prop) => prop !== 'isBannerOpen',
+})(({ isBannerOpen }: { isBannerOpen: boolean }) => ({
   '&.MuiDrawer-root': {
     '.MuiBackdrop-root': {
       backgroundColor: 'transparent',

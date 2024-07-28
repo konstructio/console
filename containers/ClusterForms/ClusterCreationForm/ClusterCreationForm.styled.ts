@@ -2,7 +2,11 @@ import Column from '@/components/Column/Column';
 import Button from '@/components/Button/Button';
 import styled, { css } from '@/app/lib/styled-components';
 
-export const AdvancedOptionsButton = styled.button.attrs({ type: 'button' })<{
+export const AdvancedOptionsButton = styled('button')
+  .withConfig({
+    shouldForwardProp: (prop) => prop !== 'expanded',
+  })
+  .attrs({ type: 'button' })<{
   expanded?: boolean;
 }>`
   border: none;
