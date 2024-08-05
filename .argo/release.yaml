@@ -186,7 +186,7 @@ spec:
             arguments:
               artifacts:
                 - name: repo-source
-                  from: '{{steps.set-app-version-and-bump-macro-chartz.outputs.artifacts.repo-source}}'
+                  from: '{{steps.helm-dependency-update.outputs.artifacts.repo-source}}'
               parameters:
                 - name: chartDir
                   value: "charts/kubefirst"
@@ -199,7 +199,7 @@ spec:
             arguments:
               artifacts:
                 - name: repo-source
-                  from: '{{steps.set-app-version-and-bump-macro-chartz.outputs.artifacts.repo-source}}'
+                  from: '{{steps.helm-dependency-update.outputs.artifacts.repo-source}}'
               parameters:
                 - name: commitMessage
                   value: 'tagged {{workflow.parameters.appName}} in charts kubefirst-v{{{{steps.get-current-macro-chart-version.outputs.result}}'
