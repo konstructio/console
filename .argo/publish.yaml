@@ -127,19 +127,6 @@ spec:
                 - name: chartDir
                   value: 'charts/kubefirst'
 
-        # - - name: get-current-macro-chart-version
-        #     templateRef:
-        #       name: cwft-helm
-        #       template: get-macro-chart-version
-        #       clusterScope: true
-        #     arguments:
-        #       artifacts:
-        #         - name: repo-source
-        #           from: '{{steps.set-app-version-and-bump-macro-chartz.outputs.artifacts.repo-source}}'
-        #       parameters:
-        #         - name: chartDir
-        #           value: "charts/kubefirst"
-
         - - name: pull-commit-push-tag-charts
             templateRef:
               name: cwft-git
