@@ -188,8 +188,8 @@ spec:
                 - name: repo-source
                   from: '{{steps.set-app-version-and-bump-macro-chartz.outputs.artifacts.repo-source}}'
               parameters:
-                - name: chartDir
-                  value: "charts/kubefirst"
+                - name: gitopsSourceFile
+                  value: 'registry/mgmt-20-kubefirst-com/components/staging/kubefirst.yaml'
 
         - - name: pull-commit-push-tag-charts
             templateRef:
