@@ -202,7 +202,7 @@ spec:
                   from: '{{steps.set-app-version-and-bump-macro-chartz.outputs.artifacts.repo-source}}'
               parameters:
                 - name: commitMessage
-                  value: 'tagged {{workflow.parameters.appName}} in charts kubefirst-v{{{{steps.get-initial-chart-version.outputs.result}}'
+                  value: 'tagged {{workflow.parameters.appName}} in charts kubefirst-v{{{{steps.get-current-macro-chart-version.outputs.result}}'
                 - name: gitUrlNoProtocol
                   value: '{{workflow.parameters.gitUrlNoProtocol}}'
                 - name: repoName
