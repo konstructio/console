@@ -6,7 +6,7 @@ This is the Kubefirst Frontend project that shows all the Kubefirst installed se
 
 ## Setup Instructions
 
-- Clone this repository. You will need `node` and `yarn` installed globally on your machine.
+- Clone this repository. You will need `node` and `yarn` installed globally on your machine. A [.devcontainer](https://containers.dev/) configuration is provided to allow for a full-featured development environment.
 - Create a .env file in the root of the project
 - You can copy the env values from `.env.local.example` to have a local installation experience or you can use `.env.cluster.example` to have a cluster install experience.
 - Make sure you are using **NodeJS** >= v16.15.1
