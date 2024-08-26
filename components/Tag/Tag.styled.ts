@@ -56,8 +56,9 @@ export const TagContainer = styled(Row)<{ bg?: string; textColor?: string }>`
 `;
 
 export const StyledText = muiStyled(Typography)`
-  textTransform: 'initial',
-  display: 'flex',
-  alignItems: 'center',
-  gap: 1,
+  text-transform: initial;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
 `;

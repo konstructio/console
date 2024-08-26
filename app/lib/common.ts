@@ -8,7 +8,10 @@ const { ENTERPRISE_API_URL } = process.env;
 
 export async function validateLicense() {
   try {
-    return (await axios.post<License>(`${ENTERPRISE_API_URL}/api/v1/subscription/validate`)).data;
+    const response = await axios.post<License>(
+      `${ENTERPRISE_API_URL}/api/v1/subscription/validate`,
+    );
+    return response.data;
   } catch (error) {
     // supressing error. license not found
     return {} as License;

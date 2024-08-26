@@ -1,7 +1,6 @@
 import React, { ComponentProps, FC, useCallback, useEffect, useMemo } from 'react';
 import { useFormContext } from 'react-hook-form';
 import Box from '@mui/material/Box';
-import StarBorderOutlinedIcon from '@mui/icons-material/StarBorderOutlined';
 
 import { usePhysicalClustersPermissions } from '../../../hooks/usePhysicalClustersPermission';
 
@@ -13,7 +12,7 @@ import ControlledTextField from '@/components/controlledFields/ControlledTextFie
 import { useAppDispatch, useAppSelector } from '@/redux/store';
 import Typography from '@/components/Typography/Typography';
 import { ClusterType, NewWorkloadClusterConfig, ClusterEnvironment } from '@/types/provision';
-import { ASMANI_SKY, BISCAY, EXCLUSIVE_PLUM } from '@/constants/colors';
+import { BISCAY, EXCLUSIVE_PLUM } from '@/constants/colors';
 import ControlledNumberInput from '@/components/controlledFields/ControlledNumberInput/ControlledNumberInput';
 import ControlledRadioGroup from '@/components/controlledFields/ControlledRadioGroup/ControlledRadioGroup';
 import {
@@ -37,14 +36,7 @@ import {
   getRegionZones,
 } from '@/redux/thunks/api.thunk';
 import ControlledTagsAutocomplete from '@/components/controlledFields/ControlledAutoComplete/ControlledTagsAutoComplete';
-import {
-  selectHasLicenseKey,
-  selectIsLicenseActive,
-} from '@/redux/selectors/subscription.selector';
-import Tag from '@/components/Tag/Tag';
 import { getCloudProviderAuth } from '@/utils/getCloudProviderAuth';
-import { FeatureFlag } from '@/types/config';
-import useFeatureFlag from '@/hooks/useFeatureFlag';
 import { selectApiState } from '@/redux/selectors/api.selector';
 import { selectEnvironmentsState } from '@/redux/selectors/environments.selector';
 
@@ -54,9 +46,6 @@ const ClusterCreationForm: FC<ComponentProps<'div'>> = (props) => {
     selectApiState(),
   );
   const { environments, error } = useAppSelector(selectEnvironmentsState());
-  const hasLicenseKey = useAppSelector(selectHasLicenseKey());
-  const isLicenseActive = useAppSelector(selectIsLicenseActive());
-  const { isEnabled: isSubscriptionEnabled } = useFeatureFlag(FeatureFlag.SAAS_SUBSCRIPTION);
 
   const dispatch = useAppDispatch();
 
@@ -155,10 +144,6 @@ const ClusterCreationForm: FC<ComponentProps<'div'>> = (props) => {
   const draftCluster = clusterMap[RESERVED_DRAFT_CLUSTER_NAME];
   const isVCluster = type === ClusterType.WORKLOAD_V_CLUSTER;
 
-  const handleRedirect = (): void => {
-    window.open(`${location.origin}/settings/subscription/plans`, '_blank');
-  };
-
   const clusterOptions = useMemo(() => {
     let clusterTypes;
 
@@ -170,31 +155,8 @@ const ClusterCreationForm: FC<ComponentProps<'div'>> = (props) => {
       );
     }
 
-    if (!isSubscriptionEnabled) {
-      return clusterTypes;
-    }
-
-    return hasLicenseKey && isLicenseActive
-      ? clusterTypes
-      : clusterTypes.map((option) => {
-          if (option.value === ClusterType.WORKLOAD) {
-            return {
-              ...option,
-              isDisabled: true,
-              tag: (
-                <Tag
-                  onClick={handleRedirect}
-                  text="Upgrade to use this feature"
-                  bgColor="mistery"
-                  iconComponent={<StarBorderOutlinedIcon htmlColor={ASMANI_SKY} fontSize="small" />}
-                />
-              ),
-            };
-          }
-
-          return option;
-        });
-  }, [hasLicenseKey, hasPermissions, isLicenseActive, isSubscriptionEnabled]);
+    return clusterTypes;
+  }, [hasPermissions]);
 
   useEffect(() => {
     const subscription = watch((values) => {
