@@ -22,9 +22,17 @@ export const selectPendingInvoice = () =>
 
 export const selectUpgradeLicenseDefinition = () =>
   createSelector(subscriptionSelector, ({ license }) => {
+    if (!license?.licenseKey) {
+      return {
+        text: 'You’ve reached the workload clusters limit.',
+        description: 'Upgrade to a Pro plan to provision the number of clusters you need.',
+        ctaText: 'Upgrade to a Pro plan',
+      };
+    }
+
     if (license?.plan?.name === SaasPlans.Pro) {
       return {
-        text: 'You’ve reached the 10 physical clusters limit.',
+        text: 'You’ve reached the workload clusters limit.',
         description: 'Upgrade to an Enterprise plan to provision the number of clusters you need.',
         ctaText: 'Contact us to upgrade',
       };

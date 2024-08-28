@@ -46,6 +46,7 @@ import KubeConfigModal from '@/components/KubeConfigModal/KubeConfigModal';
 import { createNotification } from '@/redux/slices/notifications.slice';
 import useFeatureFlag from '@/hooks/useFeatureFlag';
 import Column from '@/components/Column/Column';
+import { SaasFeatures } from '@/types/subscription';
 
 const ClusterManagement: FunctionComponent = () => {
   const {
@@ -173,22 +174,17 @@ const ClusterManagement: FunctionComponent = () => {
   }, [clusterCreationStep, managementCluster, dispatch, openCreateClusterFlow]);
 
   const handleCreateCluster = () => {
-    const draftCluster = clusterMap[RESERVED_DRAFT_CLUSTER_NAME];
+    if (clusterCreationStep !== ClusterCreationStep.DETAILS) {
+      const canCreateWorkloadClusters = canUseFeature(SaasFeatures.WorkloadClustersLimit);
 
-    if (
-      draftCluster?.type === ClusterType.WORKLOAD &&
-      clusterCreationStep !== ClusterCreationStep.DETAILS
-    ) {
-      const canCreatePhysicalClusters = canUseFeature('physicalClusters');
-
-      if (isSassSubscriptionEnabled && !canCreatePhysicalClusters) {
+      if (isSassSubscriptionEnabled && !canCreateWorkloadClusters) {
         return openUpgradeModal();
       }
     }
 
-    if (clusterCreationStep !== ClusterCreationStep.DETAILS) {
-      dispatch(createWorkloadCluster());
-    }
+    // if (clusterCreationStep !== ClusterCreationStep.DETAILS) {
+    //   dispatch(createWorkloadCluster());
+    // }
   };
 
   const handleDeleteMenuClick = useCallback(

@@ -4,6 +4,10 @@ export enum SaasPlans {
   Enterprise = 'Enterprise',
 }
 
+export enum SaasFeatures {
+  WorkloadClustersLimit = 'workloadClustersLimit',
+}
+
 export enum LicenseStatus {
   Active = 'active',
   UpToDate = 'up-todate',
@@ -34,11 +38,16 @@ export interface Plan {
   licenses: License[];
 }
 
+export interface ClusterLimitPlan {
+  limit: number;
+}
 export interface PlanFeatures {
   id: string;
   code: string;
   name: string;
+  data: ClusterLimitPlan;
   plan: Plan;
+  isActive: boolean;
 }
 
 export interface Cluster {
