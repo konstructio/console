@@ -182,9 +182,9 @@ const ClusterManagement: FunctionComponent = () => {
       }
     }
 
-    // if (clusterCreationStep !== ClusterCreationStep.DETAILS) {
-    //   dispatch(createWorkloadCluster());
-    // }
+    if (clusterCreationStep !== ClusterCreationStep.DETAILS) {
+      dispatch(createWorkloadCluster());
+    }
   };
 
   const handleDeleteMenuClick = useCallback(
