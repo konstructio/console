@@ -5,7 +5,7 @@
 replicaCount: 1
 
 image:
-  repository: public.ecr.aws/kubefirst/console
+  repository: ghcr.io/konstructio/console
   pullPolicy: IfNotPresent
 
 imagePullSecrets: []
