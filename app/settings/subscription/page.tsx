@@ -5,12 +5,18 @@ import sortBy from 'lodash/sortBy';
 import Subscription from '@/containers/Subscription/Subscription';
 import { Plan } from '@/types/plan';
 
-async function getProductPlans() {
+export async function getProductPlans() {
   const { SAAS_API_URL = '' } = process.env;
 
-  const { data } = await axios.get<Array<Plan>>(`${SAAS_API_URL}/api/v1/payment/plans`);
+  try {
+    const { data } = await axios.get<Array<Plan>>(`${SAAS_API_URL}/api/v1/payment/plans`);
 
-  return sortBy(data, (product) => product && product.metadata && product.metadata['order']);
+    return sortBy(data, (product) => product && product.metadata && product.metadata['order']);
+  } catch (error) {
+    // eslint-disable-next-line no-console
+    console.log('error getting product plans', error);
+    return [];
+  }
 }
 
 export default async function Page() {

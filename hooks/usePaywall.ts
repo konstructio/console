@@ -4,7 +4,7 @@ import { useAppSelector } from '@/redux/store';
 import { SaasFeatures, SaasPlans } from '@/types/subscription';
 
 export const CLUSTERS_LIMIT_FALLBACK: { [key: string]: number } = {
-  [SaasPlans.Community]: 3,
+  [SaasPlans.Community]: 4,
   [SaasPlans.Pro]: 10,
   [SaasPlans.Enterprise]: Infinity,
 };
@@ -30,9 +30,12 @@ export default function usePaywall() {
     }
 
     if (!license?.licenseKey) {
+      // Gets and checks number of clusters to allow workload creation
       return (
-        Object.keys(clusterMap).filter((clusterKey) => clusterKey != 'draft').length <
-        CLUSTERS_LIMIT_FALLBACK[SaasPlans.Community]
+        Object.keys(clusterMap).filter((clusterKey) => {
+          const { status } = clusterMap[clusterKey];
+          return clusterKey != 'draft' && status != 'deleted';
+        }).length < CLUSTERS_LIMIT_FALLBACK[SaasPlans.Community]
       );
     }
 
