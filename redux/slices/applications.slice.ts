@@ -100,8 +100,14 @@ const applicationsSlice = createSlice({
         state.installedClusterAppNames = [];
       })
       .addCase(getClusterApplications.fulfilled, (state, { payload }) => {
-        state.clusterApplications = payload;
-        state.installedClusterAppNames = payload.map((app) => app.name);
+        if (payload) {
+          state.clusterApplications = payload;
+
+          state.installedClusterAppNames = payload.map((app) => app.name);
+        } else {
+          state.installedClusterAppNames = [];
+          state.clusterApplications = [];
+        }
       })
       .addCase(getClusterApplications.rejected, (state) => {
         state.clusterApplications = [];
