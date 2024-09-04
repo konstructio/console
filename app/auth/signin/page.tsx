@@ -43,15 +43,11 @@ export default function SignIn() {
         </Header>
         <Typography color="white" variant="labelLarge" sx={{ width: '445px', textAlign: 'center' }}>
           By using the Kubefirst platform, you agree to our{' '}
-          <ExternalLink href="https://kubeshop.io/terms-of-service" target="_blank">
-            Terms of Service
+          <ExternalLink href="https://konstruct.io/terms-and-conditions" target="_blank">
+            Terms of Service{' '}
           </ExternalLink>
-          ,<br />
-          <ExternalLink href="https://kubeshop.io/end-user-license-agreement" target="_blank">
-            End User Licence Agreement
-          </ExternalLink>{' '}
           and{' '}
-          <ExternalLink href="https://kubeshop.io/privacy" target="_blank">
+          <ExternalLink href="https://konstruct.io/privacy" target="_blank">
             Privacy Policy.
           </ExternalLink>
         </Typography>
