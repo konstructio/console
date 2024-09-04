@@ -89,4 +89,6 @@ extraEnvSecrets: []
 
 global:
   kubefirstVersion: "development"
+  saasAPIUrl: "https://saas-api-development.mgmt-24.konstruct.io/"
+  saasUrl: "https://saas-development.mgmt-24.konstruct.io"
 domain: "example.com"
