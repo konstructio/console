@@ -50,7 +50,11 @@ const License: FunctionComponent<LicenseProps> = ({
       <FormContainer
         footerContent={
           <BottomFormContainer>
-            <LearnMore href="" description="Learn more about" linkTitle="your license key" />
+            <LearnMore
+              href="https://kubefirst.io/slack"
+              description="Should you need assistance reach out to us on our"
+              linkTitle="Slack channel."
+            />
             {!hasLicenseKey && (
               <Button type="submit" variant="contained" color="primary" disabled={!isValid}>
                 {isLoading && <CircularProgress size={20} sx={{ mr: '8px' }} />}
