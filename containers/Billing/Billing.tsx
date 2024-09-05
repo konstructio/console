@@ -51,7 +51,7 @@ const Billing: FunctionComponent = () => {
               Cluster usage for current month
             </Typography>
             <Typography variant="subtitle2" color={VOLCANIC_SAND}>
-              ${total}
+              ${total && total.toFixed(2)}
             </Typography>
           </Header>
           {isLoading ? <Loading /> : <ClusterUsageTable clusters={clusterUsageList} />}
