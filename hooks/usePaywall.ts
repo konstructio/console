@@ -4,7 +4,7 @@ import { useAppSelector } from '@/redux/store';
 import { SaasFeatures, SaasPlans } from '@/types/subscription';
 
 export const CLUSTERS_LIMIT_FALLBACK: { [key: string]: number } = {
-  [SaasPlans.Community]: 4,
+  [SaasPlans.Community]: 3,
   [SaasPlans.Pro]: 10,
   [SaasPlans.Enterprise]: Infinity,
 };
