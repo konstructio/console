@@ -55,7 +55,7 @@ const Header: FunctionComponent<HeaderProps> = ({ handleOpenFlappy, handleOpenKu
       {
         icon: <BsSlack color={VOLCANIC_SAND} />,
         title: 'Slack',
-        path: 'https://kubefirst.io/slack',
+        path: 'http://konstruct.io/slack',
       },
       {
         icon: <Image src={Youtube} alt="youtube" />,

@@ -146,18 +146,18 @@ const GitOpsCatalog: FunctionComponent<GitOpsCatalogProps> = ({ catalogApplicati
           <GitOpsCatalogCard {...STATIC_HELP_CARD} showSubmitButton={false} excludeTruncate>
             <>
               To suggest an open source app that installs to your cluster, discuss your idea via an{' '}
-              <NextLink href="https://github.com/kubefirst/kubefirst/issues" target="_blank">
+              <NextLink href="https://github.com/konstructio/kubefirst/issues" target="_blank">
                 issue
               </NextLink>
               . Learn how you can do this on our{' '}
-              <NextLink href="https://github.com/kubefirst/gitops-catalog" target="_blank">
+              <NextLink href="https://github.com/konstructio/gitops-catalog" target="_blank">
                 Contributing file
               </NextLink>
               .
               <br />
               <br />
               Alternatively contact us via our{' '}
-              <NextLink href="https://kubefirst.io/slack" target="_blank">
+              <NextLink href="http://konstruct.io/slack" target="_blank">
                 Slack Community
               </NextLink>{' '}
               in the #helping-hands or #contributors channels.

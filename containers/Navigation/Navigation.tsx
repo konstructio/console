@@ -118,7 +118,7 @@ const Navigation: FunctionComponent<NavigationProps> = ({
             },
             {
               icon: <BsSlack size={24} />,
-              path: 'https://kubefirst.io/slack',
+              path: 'http://konstruct.io/slack',
               title: 'Slack',
               color: '',
             },

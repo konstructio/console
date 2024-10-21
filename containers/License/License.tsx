@@ -51,7 +51,7 @@ const License: FunctionComponent<LicenseProps> = ({
         footerContent={
           <BottomFormContainer>
             <LearnMore
-              href="https://kubefirst.io/slack"
+              href="http://konstruct.io/slack"
               description="Should you need assistance reach out to us on our"
               linkTitle="Slack channel."
             />

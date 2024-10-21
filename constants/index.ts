@@ -37,7 +37,7 @@ export const FLAPPY_TWEET = `The @kubefirst team is making kubernetes platform p
 <note: add a screenshot of your high score for a chance to win a monthly prize!>`;
 
 export const AUTHENTICATION_ERROR_MSG = `
-  Please check that your cloud provider authentication inputs are correct, then click Next to retry. If the issue persists please <a href="https://kubefirst.io/slack" target="_blank">contact the kubefirst team via Slack</a>.
+  Please check that your cloud provider authentication inputs are correct, then click Next to retry. If the issue persists please <a href="http://konstruct.io/slack" target="_blank">contact the kubefirst team via Slack</a>.
 `;
 
 export const CLUSTER_TAG_CONFIG: Record<

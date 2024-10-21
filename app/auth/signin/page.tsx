@@ -94,7 +94,7 @@ export default function SignIn() {
               </Typography>
             </Button>
           </Content>
-          <NextLink href="https://kubefirst.io/slack" target="_blank">
+          <NextLink href="http://konstruct.io/slack" target="_blank">
             <Typography variant="body2">Help and Support</Typography>
           </NextLink>
         </Form>
