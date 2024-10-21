@@ -17,7 +17,9 @@ export const CIVO_REGIONS = [
   { label: 'London', value: 'lon1' },
 ];
 
-export const DOCS_LINK = 'https://docs.kubefirst.io';
+export const DOCS_LINK = 'https://kubefirst.konstruct.io/docs';
+
+export const SLACK_LINK = 'http://konstruct.io/slack';
 
 export const ANALYTICS_ID = '0gAYkX5RV3vt7s4pqCOOsDb6WHPLT30M';
 
@@ -32,7 +34,7 @@ export const FIRST_CHAR_ALPHABETICAL = /^[A-Za-z].*/;
 export const KUBEFIRST_REPOSITORIES = ['gitops', 'metaphor'];
 export const KUBEFIRST_TEAMS = ['admins', 'developers'];
 
-export const FLAPPY_TWEET = `The @kubefirst team is making kubernetes platform provisioning so much fun! Check out this Flappy K-Ray game that they let you play while your cluster provisions! https://kray.kubefirst.io
+export const FLAPPY_TWEET = `The @kubefirst team is making kubernetes platform provisioning so much fun! Check out this Flappy K-Ray game that they let you play while your cluster provisions! https://kray.konstruct.io
 
 <note: add a screenshot of your high score for a chance to win a monthly prize!>`;
 

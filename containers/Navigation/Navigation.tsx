@@ -19,7 +19,7 @@ import { InstallationType } from '@/types/redux';
 import { FeatureFlag } from '@/types/config';
 import { ASMANI_SKY } from '@/constants/colors';
 import { SaasPlans } from '@/types/subscription';
-import { Route } from '@/constants';
+import { DOCS_LINK, Route } from '@/constants';
 
 export interface NavigationProps {
   handleOpenFlappy: typeof noop;
@@ -112,7 +112,7 @@ const Navigation: FunctionComponent<NavigationProps> = ({
         : [
             {
               icon: <HelpOutlineOutlinedIcon />,
-              path: 'https://docs.kubefirst.io',
+              path: DOCS_LINK,
               title: 'Documentation',
               color: '',
             },

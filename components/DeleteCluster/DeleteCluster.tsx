@@ -18,6 +18,8 @@ import {
   TextField,
 } from './DeleteCluster.styled';
 
+import { DOCS_LINK } from '@/constants';
+
 export interface DeleteClusterProps extends Omit<IModalProps, 'children'> {
   cluster: Cluster | DraftCluster;
   onDelete: () => void;
@@ -43,7 +45,7 @@ const DeleteCluster: FunctionComponent<DeleteClusterProps> = ({ cluster, onDelet
                   {`deleting a management cluster will also delete all it's
                   corresponding worker clusters`}
                 </Text>
-                <NextLink href="https://docs.kubefirst.io/common/deprovision" target="_blank">
+                <NextLink href={`${DOCS_LINK}/common/deprovision`} target="_blank">
                   <>
                     How to delete a management cluster
                     <LaunchOutlinedIcon />

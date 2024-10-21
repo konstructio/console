@@ -22,6 +22,7 @@ import { ECHO_BLUE, PRIMARY, TRAFFIC_WHITE, VOLCANIC_SAND } from '@/constants/co
 import useToggle from '@/hooks/useToggle';
 import useFeatureFlag from '@/hooks/useFeatureFlag';
 import { FeatureFlag } from '@/types/config';
+import { DOCS_LINK } from '@/constants';
 
 function stringAvatar(name?: string | null) {
   return {
@@ -51,7 +52,7 @@ const Header: FunctionComponent<HeaderProps> = ({ handleOpenFlappy, handleOpenKu
 
   const helpItems = useMemo(
     () => [
-      { icon: <MenuBookOutlinedIcon />, title: 'Documentation', path: 'https://docs.kubefirst.io' },
+      { icon: <MenuBookOutlinedIcon />, title: 'Documentation', path: DOCS_LINK },
       {
         icon: <BsSlack color={VOLCANIC_SAND} />,
         title: 'Slack',

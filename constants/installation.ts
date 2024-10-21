@@ -1,5 +1,7 @@
 import { AuthKeys, InstallationInfo, InstallationType } from '../types/redux';
 
+import { DOCS_LINK } from '@/constants';
+
 export enum MarketplaceFormStep {
   AUTHENTICATION = 0,
   SETUP = 1,
@@ -45,7 +47,7 @@ export const INFO_INSTALLATION_TYPES: Record<InstallationType, Record<number, In
       description: [
         'Create an AWS account with billing enabled.',
         'Establish a public hosted zone with dns routing established (<a href="https://docs.aws.amazon.com/route53/" target="_blank">docs</a>).',
-        'Connect with AdministratorAccess IAM credentials to your AWS account (<a href="https://docs.kubefirst.io/aws/quick-start/install/cli#aws-prerequisites" target="_blank">docs</a>).',
+        `Connect with AdministratorAccess IAM credentials to your AWS account (<a href="${DOCS_LINK}/aws/quick-start/install/cli#aws-prerequisites" target="_blank">docs</a>).`,
       ],
       ctaDescription: 'Learn more',
       ctaLink: 'https://docs.aws.amazon.com',
@@ -122,7 +124,7 @@ export const INFO_MARKETPLACE_INSTALLATION_TYPES: Record<
       description: [
         'Create an AWS account with billing enabled.',
         'Establish a public hosted zone with dns routing established (<a href="https://docs.aws.amazon.com/route53/" target="_blank">docs</a>).',
-        'Connect with AdministratorAccess IAM credentials to your AWS account (<a href="https://docs.kubefirst.io/aws/quick-start/install/cli#aws-prerequisites" target="_blank">docs</a>).',
+        `Connect with AdministratorAccess IAM credentials to your AWS account (<a href="${DOCS_LINK}/aws/quick-start/install/cli#aws-prerequisites" target="_blank">docs</a>).`,
       ],
       ctaDescription: 'Learn more',
       ctaLink: 'https://docs.aws.amazon.com',

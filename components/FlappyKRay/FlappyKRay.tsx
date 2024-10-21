@@ -20,7 +20,7 @@ const FlappyKray: FunctionComponent<FlappyKrayProps> = ({ closeModal, isOpen }) 
         <iframe
           id="flappy-kray"
           title="Flappy KRay"
-          src="https://kray.kubefirst.io"
+          src="https://kray.konstruct.io"
           ref={flappyKRayRef}
           style={{
             border: 0,
