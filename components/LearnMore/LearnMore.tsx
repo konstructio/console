@@ -7,6 +7,7 @@ import { ITypographyProps, Variant } from '../Typography/Typography';
 import { Text } from './LearnMore.styled';
 
 import { InstallationType } from '@/types/redux';
+import { DOCS_LINK } from '@/constants';
 
 export interface LearnMoreProps extends Omit<ITypographyProps, 'variant' | 'children'> {
   description: string;
@@ -24,11 +25,7 @@ const LearnMore: FunctionComponent<LearnMoreProps> = ({
   variant = 'labelLarge',
   ...rest
 }) => {
-  const docsDomainLink = `https://docs.kubefirst.io/${
-    installType && [InstallationType.DIGITAL_OCEAN, InstallationType.VULTR].includes(installType)
-      ? 'k3d'
-      : installType
-  }`;
+  const docsDomainLink = `${DOCS_LINK}/${installType}`;
 
   return (
     <Text variant={variant} {...rest}>

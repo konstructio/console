@@ -24,6 +24,7 @@ import DeleteEnvironment from '@/components/DeleteEnvironment/DeleteEnvironment'
 import { clearEnvironmentError } from '@/redux/slices/environments.slice';
 import { noop } from '@/utils/noop';
 import { VOLCANIC_SAND } from '@/constants/colors';
+import { DOCS_LINK } from '@/constants';
 
 const Environments: FunctionComponent = () => {
   const { isOpen, close, open } = useToggle();
@@ -92,7 +93,7 @@ const Environments: FunctionComponent = () => {
           <LearnMore
             description="Define and add you environments."
             linkTitle="Learn more"
-            href="https://docs.kubefirst.io/civo/quick-start/cluster-management"
+            href={`${DOCS_LINK}/civo/quick-start/cluster-management`}
           />
         </HeadingContainer>
         <Button variant="contained" color="primary" onClick={open}>

@@ -31,18 +31,18 @@ import { createCluster, resetClusterProgress } from '@/redux/thunks/api.thunk';
 import { useInstallation } from '@/hooks/useInstallation';
 import { InstallValues, InstallationType } from '@/types/redux';
 import { GitProvider } from '@/types';
-import { AUTHENTICATION_ERROR_MSG, DEFAULT_CLOUD_INSTANCE_SIZES } from '@/constants';
+import { AUTHENTICATION_ERROR_MSG, DEFAULT_CLOUD_INSTANCE_SIZES, DOCS_LINK } from '@/constants';
 import { useQueue } from '@/hooks/useQueue';
 import LearnMore from '@/components/LearnMore/LearnMore';
 
 const FOOTER_LINKS_INFO: Record<number, { linkTitle: string; href: string }> = {
   1: {
     linkTitle: 'authentication',
-    href: 'https://docs.kubefirst.io/do/quick-start/install/cli/#github-prerequisites',
+    href: `${DOCS_LINK}/do/quick-start/install/cli/#github-prerequisites`,
   },
   2: {
     linkTitle: 'configuring your cluster',
-    href: 'https://docs.kubefirst.io/do/quick-start/install/ui#step-2-install-your-kubefirst-management-cluster',
+    href: `${DOCS_LINK}/do/quick-start/install/ui#step-2-install-your-kubefirst-management-cluster`,
   },
 };
 
@@ -242,7 +242,7 @@ const Provision: FunctionComponent = () => {
               showAdvancedOptions ? (
                 <FormFooter>
                   <LearnMore
-                    href="https://docs.kubefirst.io/do/explore/gitops#using-your-own-gitops-template-repository-fork "
+                    href={`${DOCS_LINK}/do/explore/gitops#using-your-own-gitops-template-repository-fork`}
                     linkTitle="Customizing the GitOps template"
                     description="Learn more about"
                   />
