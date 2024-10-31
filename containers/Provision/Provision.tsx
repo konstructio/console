@@ -27,7 +27,7 @@ import {
 } from '@/redux/slices/installation.slice';
 import { clearClusterState, clearValidation } from '@/redux/slices/api.slice';
 import { useAppDispatch, useAppSelector } from '@/redux/store';
-import { createCluster, resetClusterProgress } from '@/redux/thunks/api.thunk';
+import { createCluster, getCloudRegions, resetClusterProgress } from '@/redux/thunks/api.thunk';
 import { useInstallation } from '@/hooks/useInstallation';
 import { InstallValues, InstallationType } from '@/types/redux';
 import { GitProvider } from '@/types';
@@ -162,6 +162,11 @@ const Provision: FunctionComponent = () => {
   }, [dispatch, installationStep, trigger]);
 
   const onSubmit = async (values: InstallValues) => {
+    // this step validates the authentication provided
+    if (isAuthStep) {
+      return dispatch(getCloudRegions({ installType: installType as InstallationType, values }));
+    }
+
     if (installationStep === 0 && !isMarketplace) {
       // reset and pass suggested instance size and nodeCount
       // so if user does change install type/cloud provider

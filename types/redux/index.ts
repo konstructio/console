@@ -1,4 +1,4 @@
-import { Cluster, ClusterEnvironment, DraftCluster, ImageRepository } from '../provision';
+import { ImageRepository } from '../provision';
 
 export interface GitValues {
   gitToken?: string;
@@ -105,8 +105,6 @@ export type AuthKeys = {
     name: string;
     label: string;
     helperText?: string;
+    defaultValue?: string;
   }>;
 };
-
-export type EnvCache = Record<ClusterEnvironment['name'], boolean>;
-export type ClusterCache = Record<Cluster['clusterName'], Cluster | DraftCluster>;

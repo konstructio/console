@@ -14,14 +14,8 @@ import {
   gitReducer,
   installationReducer,
   queueReducer,
-  reactFlowReducer,
-  readinessReducer,
-  environmentsReducer,
   notificationsReducer,
-  settingsReducer,
-  subscriptionReducer,
   digitalOceanReducer,
-  applicationsReducer,
 } from './slices';
 
 const rootReducer = combineReducers({
@@ -29,16 +23,10 @@ const rootReducer = combineReducers({
   config: configReducer,
   installation: installationReducer,
   git: gitReducer,
-  readiness: readinessReducer,
   api: apiReducer,
   featureFlags: featureFlagsReducer,
-  applications: applicationsReducer,
-  reactFlow: reactFlowReducer,
   queue: queueReducer,
-  environments: environmentsReducer,
   notifications: notificationsReducer,
-  settings: settingsReducer,
-  subscription: subscriptionReducer,
   digitalOcean: digitalOceanReducer,
 });
 
@@ -52,7 +40,6 @@ const config = getPersistConfig({
     'installation.values.do_auth',
     'installation.values.vultr_auth',
     'installation.values.google_auth',
-    'applications',
     'api',
     'featureFlags',
     'git',
@@ -63,9 +50,6 @@ const config = getPersistConfig({
     'config.installMethod',
     'config.isLoading',
     'internalApi',
-    'readiness',
-    'environments',
-    'subscription',
   ],
   rootReducer,
 });

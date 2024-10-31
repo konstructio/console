@@ -1,11 +1,9 @@
 import React, { PropsWithChildren } from 'react';
-import { getServerSession } from 'next-auth/next';
-import { Session } from 'next-auth';
 
 import { Providers } from '@/app/lib/providers';
 import StyledComponentsRegistry from '@/app/lib/registry';
-import { authOptions } from '@/pages/api/auth/[...nextauth]';
-
+import { Layout } from '@/containers/Layout/Layout';
+import { getEnvVars, getFeatureFlags } from '@/app/lib/common';
 import '../styles/globals.css';
 
 export const metadata = {
@@ -20,13 +18,18 @@ export const metadata = {
 };
 
 export default async function RootLayout({ children }: PropsWithChildren) {
-  const session = await getServerSession<typeof authOptions, Session>(authOptions);
+  const envVariables = await getEnvVars();
+  const featureFlags = await getFeatureFlags();
 
   return (
     <html lang="en">
       <body suppressHydrationWarning={true}>
-        <Providers session={session}>
-          <StyledComponentsRegistry>{children}</StyledComponentsRegistry>
+        <Providers>
+          <StyledComponentsRegistry>
+            <Layout envVariables={envVariables} featureFlags={featureFlags}>
+              {children}
+            </Layout>
+          </StyledComponentsRegistry>
         </Providers>
       </body>
     </html>

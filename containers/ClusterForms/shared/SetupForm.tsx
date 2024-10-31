@@ -53,7 +53,6 @@ const SetupForm: FunctionComponent = () => {
     installationStep,
     installType,
     values,
-    clusterMap,
     showCloudflareCaIssuerField,
   } = useAppSelector(({ api, installation, featureFlags }) => ({
     ...api,
@@ -318,7 +317,7 @@ const SetupForm: FunctionComponent = () => {
           },
           validate: {
             previouslyUsedClusterNames: (value) =>
-              (typeof value === 'string' && !clusterMap[value]) ||
+              typeof value === 'string' ||
               'Please use a unique name that has not been previously provisioned',
             civoClusterName: (value) => {
               if (installType === InstallationType.CIVO) {

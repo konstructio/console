@@ -215,6 +215,7 @@ export const INSTALLATION_TYPE_API_KEYS: Record<InstallationType, AuthKeys | nul
         label: 'CIVO API key',
         helperText:
           'Retrieve your key at <a href="https://dashboard.civo.com/security" target="_blank">https://dashboard.civo.com/security</a>',
+        defaultValue: '',
       },
     ],
   },
