@@ -33,8 +33,6 @@ spec:
           env: 
             - name: API_URL
               value: {{ .Values.apiURL | default (printf "http://%s-kubefirst-api.%s.svc.cluster.local" (.Release.Name ) (.Release.Namespace ))  }}
-            - name: ENTERPRISE_API_URL
-              value: {{ .Values.enterpriseApiURL | default (printf "http://%s-kubefirst-api-ee.%s.svc.cluster.local" (.Release.Name ) (.Release.Namespace ))  }}
             - name: KUBEFIRST_VERSION
               value: {{ .Values.global.kubefirstVersion }}
             - name: IS_CLUSTER_ZERO
@@ -49,10 +47,6 @@ spec:
               value: "0.0.0.0"
             - name: NEXTAUTH_URL
               value: "{{ .Values.authURL | default (printf "https://kubefirst.%s" (.Values.domain )) }}"
-            - name: SAAS_API_URL
-              value: "{{ .Values.global.saasAPIUrl | default "https://api.konstruct.io" }}"
-            - name: SAAS_URL
-              value: "{{ .Values.global.saasUrl | default "https://dashboard.konstruct.io" }}"
             - name: K1_ACCESS_TOKEN
               valueFrom:
                 secretKeyRef:

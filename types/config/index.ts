@@ -18,7 +18,6 @@ export interface EnvironmentVariables {
   isClusterZero: boolean;
   kubefirstVersion?: string;
   installMethod?: string;
-  saasURL?: string;
 }
 
 export enum ClusterManagementTab {

@@ -162,11 +162,6 @@ const Provision: FunctionComponent = () => {
   }, [dispatch, installationStep, trigger]);
 
   const onSubmit = async (values: InstallValues) => {
-    // this step validates the authentication provided
-    if (isAuthStep) {
-      return dispatch(getCloudRegions({ installType: installType as InstallationType, values }));
-    }
-
     if (installationStep === 0 && !isMarketplace) {
       // reset and pass suggested instance size and nodeCount
       // so if user does change install type/cloud provider
@@ -178,6 +173,13 @@ const Provision: FunctionComponent = () => {
 
     if (isValid) {
       dispatch(setInstallValues(values));
+
+      // this step validates the authentication provided
+      if (isAuthStep) {
+        return dispatch(
+          getCloudRegions({ installType: installType as InstallationType, values, validate: true }),
+        );
+      }
 
       if (isSetupStep) {
         try {
@@ -279,14 +281,6 @@ const Provision: FunctionComponent = () => {
     linkTitle,
     href,
   ]);
-
-  useEffect(() => {
-    if (isAuthStep && isAuthenticationValid === false) {
-      dispatch(setError({ error: AUTHENTICATION_ERROR_MSG }));
-    } else if (isAuthStep && isAuthenticationValid) {
-      handleGoNext();
-    }
-  }, [dispatch, handleGoNext, isAuthStep, isAuthenticationValid]);
 
   useEffect(() => {
     if (isMarketplace && installMethod) {

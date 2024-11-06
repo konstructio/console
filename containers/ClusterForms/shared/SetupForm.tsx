@@ -175,7 +175,7 @@ const SetupForm: FunctionComponent = () => {
   useEffect(() => {
     checkAuth();
     if (installType && values) {
-      dispatch(getCloudRegions({ installType, values }));
+      dispatch(getCloudRegions({ installType, values, validate: false }));
     }
   }, [checkAuth, dispatch, installType, values, trigger]);
 

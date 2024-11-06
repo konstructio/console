@@ -1,6 +1,8 @@
 import axios from 'axios';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
+import { clearError, setError, setInstallationStep } from '../slices/installation.slice';
+
 import { AppDispatch, RootState } from '@/redux/store';
 import {
   ClusterResponse,
@@ -16,6 +18,7 @@ import { InstallValues, InstallationType } from '@/types/redux';
 import { TelemetryClickEvent } from '@/types/telemetry';
 import { mapClusterFromRaw } from '@/utils/mapClustersFromRaw';
 import { GitProtocol } from '@/types';
+import { AUTHENTICATION_ERROR_MSG } from '@/constants';
 
 export const createCluster = createAsyncThunk<
   ClusterQueue,
@@ -106,21 +109,31 @@ export const getClusters = createAsyncThunk<
 
 export const getCloudRegions = createAsyncThunk<
   Array<string>,
-  { values: InstallValues | Cluster; installType?: InstallationType },
+  { values: InstallValues | Cluster; installType?: InstallationType; validate: boolean },
   {
     dispatch: AppDispatch;
     state: RootState;
   }
->('api/getCloudRegions', async ({ values, installType }) => {
-  const { regions } = (
-    await axios.post<{ regions: Array<string> }>('/api/proxy', {
-      url: `/region/${installType || (values as Cluster).cloudProvider}`,
-      body:
-        installType === InstallationType.AWS ? { ...values, cloud_region: 'us-east-1' } : values,
-    })
-  ).data;
+>('api/getCloudRegions', async ({ values, installType, validate }, { getState, dispatch }) => {
+  try {
+    const { installation } = getState();
+    const { regions } = (
+      await axios.post<{ regions: Array<string> }>('/api/proxy', {
+        url: `/region/${installType || (values as Cluster).cloudProvider}`,
+        body:
+          installType === InstallationType.AWS ? { ...values, cloud_region: 'us-east-1' } : values,
+      })
+    ).data;
 
-  return regions;
+    if (validate) {
+      dispatch(setInstallationStep(installation.installationStep + 1));
+      dispatch(clearError());
+    }
+    return regions;
+  } catch (error) {
+    dispatch(setError({ error: AUTHENTICATION_ERROR_MSG }));
+    throw new Error('Failed to fetch cloud regions');
+  }
 });
 
 export const getCloudDomains = createAsyncThunk<

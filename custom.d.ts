@@ -172,6 +172,5 @@ declare namespace NodeJS {
     readonly CLIENT_ID: string;
     readonly SECRET_ID: string;
     readonly DOMAIN: string;
-    readonly SAAS_URL: string;
   }
 }

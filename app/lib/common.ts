@@ -36,7 +36,6 @@ export async function getEnvVars() {
       IS_CLUSTER_ZERO = '',
       KUBEFIRST_VERSION = '',
       POSTHOG_KEY = '',
-      SAAS_URL = '',
     } = process.env;
 
     return {
@@ -48,7 +47,6 @@ export async function getEnvVars() {
       isClusterZero: IS_CLUSTER_ZERO === 'true',
       kubefirstVersion: KUBEFIRST_VERSION,
       installMethod: INSTALL_METHOD,
-      saasURL: SAAS_URL,
       POSTHOG_KEY,
     };
   } catch (error) {
