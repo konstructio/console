@@ -20,7 +20,6 @@ import ErrorBanner from '@/components/ErrorBanner/ErrorBanner';
 import Button from '@/components/Button/Button';
 import {
   clearError,
-  setError,
   setInstallType,
   setInstallValues,
   setInstallationStep,
@@ -31,7 +30,7 @@ import { createCluster, getCloudRegions, resetClusterProgress } from '@/redux/th
 import { useInstallation } from '@/hooks/useInstallation';
 import { InstallValues, InstallationType } from '@/types/redux';
 import { GitProvider } from '@/types';
-import { AUTHENTICATION_ERROR_MSG, DEFAULT_CLOUD_INSTANCE_SIZES, DOCS_LINK } from '@/constants';
+import { DEFAULT_CLOUD_INSTANCE_SIZES, DOCS_LINK } from '@/constants';
 import { useQueue } from '@/hooks/useQueue';
 import LearnMore from '@/components/LearnMore/LearnMore';
 
