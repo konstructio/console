@@ -76,6 +76,7 @@ export enum InstallationType {
   AKAMAI = 'akamai',
   LOCAL = 'k3d',
   AWS = 'aws',
+  AZURE = 'azure',
   CIVO = 'civo',
   DIGITAL_OCEAN = 'digitalocean',
   GOOGLE = 'google',

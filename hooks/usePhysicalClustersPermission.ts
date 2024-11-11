@@ -8,6 +8,7 @@ import { FeatureFlag } from '@/types/config';
 export function usePhysicalClustersPermissions(installationType?: InstallationType) {
   const { flags } = useAppSelector(selectFeatureFlags());
   const canProvisionAwsPhysicalClusters = flags[FeatureFlag.PROVISION_AWS_PYHS_CLUSTERS];
+  const canProvisionAzurePhysicalClusters = flags[FeatureFlag.PROVISION_AZURE_PYHS_CLUSTERS];
   const canProvisionDOPhysicalClusters = flags[FeatureFlag.PROVISION_DO_PYHS_CLUSTERS];
   const canProvisionGCPPhysicalClusters = flags[FeatureFlag.PROVISION_GCP_PYHS_CLUSTERS];
   const canProvisionVultrPhysicalClusters = flags[FeatureFlag.PROVISION_VULTR_PYHS_CLUSTERS];
@@ -17,6 +18,7 @@ export function usePhysicalClustersPermissions(installationType?: InstallationTy
   const physicalClustersPermission = useMemo(
     (): Record<InstallationType, boolean> => ({
       [InstallationType.AWS]: canProvisionAwsPhysicalClusters,
+      [InstallationType.AZURE]: canProvisionAzurePhysicalClusters,
       [InstallationType.DIGITAL_OCEAN]: canProvisionDOPhysicalClusters,
       [InstallationType.GOOGLE]: canProvisionGCPPhysicalClusters,
       [InstallationType.VULTR]: canProvisionVultrPhysicalClusters,
@@ -26,6 +28,7 @@ export function usePhysicalClustersPermissions(installationType?: InstallationTy
     }),
     [
       canProvisionAwsPhysicalClusters,
+      canProvisionAzurePhysicalClusters,
       canProvisionDOPhysicalClusters,
       canProvisionGCPPhysicalClusters,
       canProvisionVultrPhysicalClusters,
