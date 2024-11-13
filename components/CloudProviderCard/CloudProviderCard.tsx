@@ -90,7 +90,7 @@ const PROVIDER_OPTIONS: Record<
   },
   [InstallationType.GOOGLE]: {
     logoSrc: googleCloudLogo,
-    label: 'Google Cloud Platform (GCP)',
+    label: 'Google Cloud',
     description:
       'High-performance infrastructure for cloud computing, data analytics & machine learning. Secure, reliable and high performance cloud services.',
     learnMoreLink: 'https://cloud.google.com/',

@@ -18,7 +18,7 @@ import { getClusters } from '@/redux/thunks/api.thunk';
 import { RESERVED_DRAFT_CLUSTER_NAME } from '@/constants';
 
 const QueueProvider: FunctionComponent<PropsWithChildren> = ({ children }) => {
-  const { clusterQueue, clusterMap } = useAppSelector(({ queue, api }) => ({ ...queue, ...api }));
+  const { clusterQueue } = useAppSelector(({ queue }) => ({ ...queue }));
   const dispatch = useAppDispatch();
 
   const queue: { [key: string]: NodeJS.Timer } = useMemo(() => ({}), []);
@@ -26,9 +26,7 @@ const QueueProvider: FunctionComponent<PropsWithChildren> = ({ children }) => {
   const getClusterInterval = useCallback(
     ({ clusterName }: ClusterQueue) => {
       return setInterval(async () => {
-        const { clusterCache } = await dispatch(getClusters()).unwrap();
-
-        const { status } = clusterCache[clusterName];
+        const { status } = await dispatch(getClusters()).unwrap();
 
         dispatch(
           setClusterQueue({
@@ -83,23 +81,6 @@ const QueueProvider: FunctionComponent<PropsWithChildren> = ({ children }) => {
   };
 
   useEffect(() => {
-    // Look inside of clusterMap as well for the workload clusters that have been provisioned
-    // during the during the creation of the management cluster.
-    // omit draft cluster that is a part of the clusterMap during provisioning of a
-    // new workload cluster
-    Object.values(clusterMap).forEach(({ clusterId, clusterName, status }) => {
-      if (
-        clusterId !== RESERVED_DRAFT_CLUSTER_NAME &&
-        !queue[clusterName] &&
-        [ClusterStatus.DELETING, ClusterStatus.PROVISIONING].includes(status)
-      ) {
-        queue[clusterName] = getClusterInterval({ clusterName, status });
-      }
-      if (status === ClusterStatus.DELETED) {
-        dispatch(removeClusterFromQueue(clusterName));
-      }
-    });
-
     Object.values(clusterQueue).forEach(({ clusterName, status }) => {
       if (
         clusterName !== RESERVED_DRAFT_CLUSTER_NAME &&
@@ -112,7 +93,7 @@ const QueueProvider: FunctionComponent<PropsWithChildren> = ({ children }) => {
         dispatch(removeClusterFromQueue(clusterName));
       }
     });
-  }, [clusterQueue, getClusterInterval, queue, dispatch, clusterMap]);
+  }, [clusterQueue, getClusterInterval, queue, dispatch]);
 
   return (
     <QueueContext.Provider

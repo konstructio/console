@@ -1,6 +1,6 @@
-import { GitProvider } from '@/types';
-import { ClusterResponse, ClusterStatus, ClusterType } from '@/types/provision';
-import { InstallationType } from '@/types/redux';
+import { GitProvider } from '../../types';
+import { ClusterResponse, ClusterStatus, ClusterType } from '../../types/provision';
+import { InstallationType } from '../../types/redux';
 
 export const mockClusterResponse: ClusterResponse = {
   _id: '64c2ec0b057c0e84e1738aaa',
@@ -36,12 +36,6 @@ export const mockClusterResponse: ClusterResponse = {
       cloud_region: 'LON1',
       instance_size: '8 GPU',
       node_count: 3,
-      environment: {
-        _id: '1',
-        creation_timestamp: '1693932566',
-        name: 'preprod',
-        color: 'gold',
-      },
       status: ClusterStatus.PROVISIONING,
       cluster_type: ClusterType.WORKLOAD_V_CLUSTER,
       git_auth: {
@@ -63,12 +57,6 @@ export const mockClusterResponse: ClusterResponse = {
       cloud_region: 'LON1',
       instance_size: '8 GPU',
       node_count: 3,
-      environment: {
-        _id: '2',
-        creation_timestamp: '1693932566',
-        name: 'preprod',
-        color: 'gold',
-      },
       status: ClusterStatus.PROVISIONED,
       cluster_type: ClusterType.WORKLOAD,
       git_auth: {
@@ -90,12 +78,6 @@ export const mockClusterResponse: ClusterResponse = {
       cloud_region: 'LON1',
       instance_size: '8 GPU',
       node_count: 3,
-      environment: {
-        _id: '3',
-        creation_timestamp: '1693932566',
-        name: 'preprod',
-        color: 'gold',
-      },
       status: ClusterStatus.PROVISIONED,
       cluster_type: ClusterType.WORKLOAD,
       git_auth: {
@@ -117,12 +99,6 @@ export const mockClusterResponse: ClusterResponse = {
       cloud_region: 'LON1',
       instance_size: '8 GPU',
       node_count: 3,
-      environment: {
-        _id: '4',
-        creation_timestamp: '1693932566',
-        name: 'preprod',
-        color: 'gold',
-      },
       status: ClusterStatus.PROVISIONED,
       cluster_type: ClusterType.WORKLOAD,
       git_auth: {

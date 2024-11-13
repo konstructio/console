@@ -1,6 +1,5 @@
 import React, { FunctionComponent, ReactNode, useMemo } from 'react';
 import Image from 'next/image';
-import VideogameAssetOutlinedIcon from '@mui/icons-material/VideogameAssetOutlined';
 import { useRouter } from 'next/navigation';
 import groupBy from 'lodash/groupBy';
 import { sortBy } from 'lodash';
@@ -20,7 +19,6 @@ import { noop } from '@/utils/noop';
 import { ECHO_BLUE } from '@/constants/colors';
 import Ray from '@/assets/ray.svg';
 import TitleLogo from '@/assets/title.svg';
-import Youtube from '@/assets/youtube.svg';
 import { Route } from '@/constants';
 
 export interface FooterItem {
@@ -34,7 +32,6 @@ export interface NavigationProps {
   handleIsActiveItem: (path: string) => boolean;
   handleOpenContent: typeof noop;
   handleOpenGame: typeof noop;
-  isSubscriptionEnabled: boolean;
   kubefirstVersion?: string;
   routes: Array<{
     group?: string;
@@ -50,9 +47,6 @@ export interface NavigationProps {
 const Navigation: FunctionComponent<NavigationProps> = ({
   domLoaded,
   handleIsActiveItem,
-  handleOpenContent,
-  handleOpenGame,
-  isSubscriptionEnabled,
   kubefirstVersion,
   routes,
   footerItems,
@@ -120,20 +114,6 @@ const Navigation: FunctionComponent<NavigationProps> = ({
               icon={icon}
             />
           ))}
-        {!isSubscriptionEnabled && (
-          <>
-            <NavigationRoute
-              title="Kubefirst channel"
-              icon={<Image src={Youtube} alt="youtube" />}
-              onMenuItemClick={handleOpenContent}
-            />
-            <NavigationRoute
-              title="Flappy K-ray"
-              icon={<VideogameAssetOutlinedIcon />}
-              onMenuItemClick={handleOpenGame}
-            />
-          </>
-        )}
       </FooterContainer>
     </Container>
   );

@@ -1,6 +1,8 @@
 import axios from 'axios';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
+import { clearError, setError, setInstallationStep } from '../slices/installation.slice';
+
 import { AppDispatch, RootState } from '@/redux/store';
 import {
   ClusterResponse,
@@ -8,18 +10,15 @@ import {
   ImageRepository,
   ClusterType,
   ClusterStatus,
-  ClusterEnvironment,
-  WorkloadCluster,
   ClusterQueue,
-  DraftCluster,
+  ManagementCluster,
 } from '@/types/provision';
 import { createQueryString } from '@/utils/url/formatDomain';
 import { InstallValues, InstallationType } from '@/types/redux';
 import { TelemetryClickEvent } from '@/types/telemetry';
 import { mapClusterFromRaw } from '@/utils/mapClustersFromRaw';
 import { GitProtocol } from '@/types';
-import { RESERVED_DRAFT_CLUSTER_NAME } from '@/constants';
-import { getCloudProviderAuth } from '@/utils/getCloudProviderAuth';
+import { AUTHENTICATION_ERROR_MSG } from '@/constants';
 
 export const createCluster = createAsyncThunk<
   ClusterQueue,
@@ -88,60 +87,8 @@ export const createCluster = createAsyncThunk<
   return { clusterName: values?.clusterName as string, status: ClusterStatus.PROVISIONING };
 });
 
-export const createWorkloadCluster = createAsyncThunk<
-  WorkloadCluster,
-  void,
-  {
-    dispatch: AppDispatch;
-    state: RootState;
-  }
->('api/cluster/createWorkloadCluster', async (_, { getState }) => {
-  const { managementCluster, clusterMap } = getState().api;
-
-  const draftCluster = clusterMap[RESERVED_DRAFT_CLUSTER_NAME];
-
-  if (!managementCluster) {
-    throw new Error('missing management cluster');
-  }
-
-  if (!draftCluster) {
-    throw new Error('missing draft cluster');
-  }
-
-  const clusterEnvironment = !draftCluster.environment
-    ? undefined
-    : {
-        name: draftCluster.environment?.name,
-        color: draftCluster.environment?.color,
-        description: draftCluster.environment?.description,
-      };
-
-  const { cluster_id } = (
-    await axios.post<{ cluster_id: string }>(`/api/proxy?target=ee`, {
-      url: `/cluster/${managementCluster?.clusterId}`,
-      body: {
-        cluster_name: draftCluster.clusterName,
-        cloud_region: draftCluster.cloudRegion,
-        node_type: draftCluster.instanceSize,
-        node_count: draftCluster.nodeCount,
-        environment: clusterEnvironment,
-        cluster_type: draftCluster.type,
-      },
-    })
-  ).data;
-
-  const provisioningWorkloadCluster: WorkloadCluster = {
-    ...draftCluster,
-    clusterId: cluster_id,
-    status: ClusterStatus.PROVISIONING,
-    environment: draftCluster.environment as ClusterEnvironment,
-  };
-
-  return provisioningWorkloadCluster;
-});
-
 export const getClusters = createAsyncThunk<
-  ReturnType<typeof mapClusterFromRaw>,
+  ManagementCluster,
   void,
   {
     dispatch: AppDispatch;
@@ -160,50 +107,33 @@ export const getClusters = createAsyncThunk<
   return mapClusterFromRaw(res.data[0]);
 });
 
-export const deleteCluster = createAsyncThunk<
-  ClusterQueue,
-  Cluster['clusterName'],
-  {
-    dispatch: AppDispatch;
-    state: RootState;
-  }
->('api/cluster/delete', async (clusterName, { getState }) => {
-  const {
-    api: { managementCluster, clusterMap },
-  } = getState();
-
-  const { clusterId } = clusterMap[clusterName];
-
-  // returned cluster_id is unused at this time.
-  if (managementCluster) {
-    await axios.delete<{ cluster_id: string }>(
-      `/api/proxy?${createQueryString(
-        'url',
-        `/cluster/${managementCluster.clusterId}/${clusterId}`,
-      )}&target=ee`,
-    );
-  }
-
-  return { clusterName, status: ClusterStatus.DELETING };
-});
-
 export const getCloudRegions = createAsyncThunk<
   Array<string>,
-  { values: InstallValues | Cluster; installType?: InstallationType },
+  { values: InstallValues | Cluster; installType?: InstallationType; validate: boolean },
   {
     dispatch: AppDispatch;
     state: RootState;
   }
->('api/getCloudRegions', async ({ values, installType }) => {
-  const { regions } = (
-    await axios.post<{ regions: Array<string> }>('/api/proxy', {
-      url: `/region/${installType || (values as Cluster).cloudProvider}`,
-      body:
-        installType === InstallationType.AWS ? { ...values, cloud_region: 'us-east-1' } : values,
-    })
-  ).data;
+>('api/getCloudRegions', async ({ values, installType, validate }, { getState, dispatch }) => {
+  try {
+    const { installation } = getState();
+    const { regions } = (
+      await axios.post<{ regions: Array<string> }>('/api/proxy', {
+        url: `/region/${installType || (values as Cluster).cloudProvider}`,
+        body:
+          installType === InstallationType.AWS ? { ...values, cloud_region: 'us-east-1' } : values,
+      })
+    ).data;
 
-  return regions;
+    if (validate) {
+      dispatch(setInstallationStep(installation.installationStep + 1));
+      dispatch(clearError());
+    }
+    return regions;
+  } catch (error) {
+    dispatch(setError({ error: AUTHENTICATION_ERROR_MSG }));
+    throw new Error('Failed to fetch cloud regions');
+  }
 });
 
 export const getCloudDomains = createAsyncThunk<
@@ -308,36 +238,4 @@ export const sendTelemetryEvent = createAsyncThunk<
     url: `/telemetry/${managementCluster?.clusterName}`,
     body,
   });
-});
-
-export const downloadKubeconfig = createAsyncThunk<
-  string,
-  { presentedCluster: Cluster | DraftCluster },
-  {
-    dispatch: AppDispatch;
-    state: RootState;
-  }
->('api/downloadKubeconfig', async ({ presentedCluster }, { getState }) => {
-  const { managementCluster } = getState().api;
-
-  const { clusterName, cloudProvider, cloudRegion, type } = presentedCluster;
-  if (managementCluster) {
-    const { key, value } = getCloudProviderAuth(managementCluster);
-    const {
-      data: { config },
-    } = await axios.post<{ config: string }>(`/api/proxy`, {
-      url: `/kubeconfig/${cloudProvider}`,
-      body: {
-        cluster_name: clusterName,
-        man_clust_name: managementCluster.clusterName,
-        vcluster: type !== ClusterType.MANAGEMENT,
-        cloud_region: cloudRegion,
-        [`${key}_auth`]: value,
-      },
-    });
-
-    return `data:text/yaml;chatset=utf-8,${encodeURIComponent(config)}`;
-  } else {
-    throw new Error('no management cluster found');
-  }
 });

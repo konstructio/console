@@ -53,21 +53,11 @@ const installationSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    builder.addCase(
-      getClusters.fulfilled,
-      (
-        state,
-        {
-          payload: {
-            managementCluster: { status, lastErrorCondition },
-          },
-        },
-      ) => {
-        if (status === ClusterStatus.ERROR) {
-          state.error = lastErrorCondition;
-        }
-      },
-    );
+    builder.addCase(getClusters.fulfilled, (state, { payload: { status, lastErrorCondition } }) => {
+      if (status === ClusterStatus.ERROR) {
+        state.error = lastErrorCondition;
+      }
+    });
   },
 });
 

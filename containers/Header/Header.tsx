@@ -1,7 +1,5 @@
 'use client';
 import React, { FunctionComponent, useMemo } from 'react';
-import { useSession } from 'next-auth/react';
-import { signOut } from 'next-auth/react';
 import HelpOutlineOutlinedIcon from '@mui/icons-material/HelpOutlineOutlined';
 import MenuBookOutlinedIcon from '@mui/icons-material/MenuBookOutlined';
 import List from '@mui/material/List';
@@ -9,30 +7,19 @@ import ListItem from '@mui/material/ListItem';
 import { ClickAwayListener, ListItemButton } from '@mui/material';
 import Image from 'next/image';
 import VideogameAssetOutlinedIcon from '@mui/icons-material/VideogameAssetOutlined';
-import LogoutIcon from '@mui/icons-material/Logout';
 import { BsSlack } from 'react-icons/bs';
 
-import { Avatar, Container, Menu, ProfileMenu } from './Header.styled';
+import { Container, Menu } from './Header.styled';
 
 import { noop } from '@/utils/noop';
 import Youtube from '@/assets/youtube-dark.svg';
 import { useAppSelector } from '@/redux/store';
 import Typography from '@/components/Typography/Typography';
-import { ECHO_BLUE, PRIMARY, TRAFFIC_WHITE, VOLCANIC_SAND } from '@/constants/colors';
+import { ECHO_BLUE, PRIMARY, VOLCANIC_SAND } from '@/constants/colors';
 import useToggle from '@/hooks/useToggle';
 import useFeatureFlag from '@/hooks/useFeatureFlag';
 import { FeatureFlag } from '@/types/config';
 import { DOCS_LINK } from '@/constants';
-
-function stringAvatar(name?: string | null) {
-  return {
-    sx: {
-      bgcolor: TRAFFIC_WHITE,
-      color: '#94A3B8',
-    },
-    children: `${name && name[0]}`,
-  };
-}
 
 export interface HeaderProps {
   handleOpenFlappy: typeof noop;
@@ -41,9 +28,7 @@ export interface HeaderProps {
 
 const Header: FunctionComponent<HeaderProps> = ({ handleOpenFlappy, handleOpenKubefirstModal }) => {
   const { isOpen: isHelpMenuOpen, open, close } = useToggle();
-  const { isOpen: isProfileMenuOpen, open: openProfileMenu, close: closeProfileMenu } = useToggle();
 
-  const { data: session } = useSession();
   const { isClusterZero } = useAppSelector(({ api, config }) => ({
     isClusterZero: config.isClusterZero,
     managementCluster: api.managementCluster,
@@ -125,37 +110,6 @@ const Header: FunctionComponent<HeaderProps> = ({ handleOpenFlappy, handleOpenKu
             </ClickAwayListener>
           )}
         </>
-      )}
-      {session?.user && (
-        <Avatar {...stringAvatar(session?.user?.email)} onClick={openProfileMenu} />
-      )}
-      {isProfileMenuOpen && (
-        <ClickAwayListener onClickAway={closeProfileMenu}>
-          <ProfileMenu>
-            <List>
-              <ListItem
-                disablePadding
-                sx={{
-                  pt: '2px',
-                  pb: '2px',
-                }}
-                onClick={() => signOut()}
-              >
-                <ListItemButton
-                  sx={{
-                    'display': 'grid',
-                    'grid-template-columns': '[first] 40px auto',
-                  }}
-                >
-                  <LogoutIcon />
-                  <Typography variant="body2" style={{ color: `${VOLCANIC_SAND}` }}>
-                    Logout
-                  </Typography>
-                </ListItemButton>
-              </ListItem>
-            </List>
-          </ProfileMenu>
-        </ClickAwayListener>
       )}
     </Container>
   );

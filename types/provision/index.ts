@@ -1,7 +1,5 @@
 import { GitProvider, Row } from '../';
-import { AdvancedOptions, InstallationType } from '../redux';
-
-import { TagColor } from '@/components/Tag/Tag';
+import { InstallationType } from '../redux';
 
 export enum ClusterStatus {
   DELETED = 'deleted',
@@ -18,22 +16,6 @@ export enum ClusterType {
 }
 
 export const CLUSTER_TYPES = Object.values(ClusterType);
-export const WORKLOAD_CLUSTER_TYPES = CLUSTER_TYPES.filter(
-  (type) => type !== ClusterType.MANAGEMENT,
-);
-
-export type ClusterEnvironment = {
-  id: string;
-  name: string;
-  color: TagColor;
-  description?: string;
-  creationDate: string;
-};
-
-export type EnvironmentResponse = Omit<ClusterEnvironment, 'id' | 'creationDate'> & {
-  _id: string;
-  creation_timestamp: string;
-};
 
 export enum ClusterCreationStep {
   CONFIG,
@@ -44,11 +26,6 @@ export enum ImageRepository {
   GIT = 'git',
   ECR = 'ecr',
 }
-
-export type NewWorkloadClusterConfig = Partial<
-  Pick<WorkloadCluster, 'clusterName' | 'cloudRegion' | 'instanceSize' | 'nodeCount' | 'type'>
-> &
-  AdvancedOptions & { environment?: Partial<WorkloadCluster['environment']> };
 
 export interface ClusterRequestProps {
   clusterName?: string;
@@ -85,7 +62,6 @@ export interface ClusterResponse {
     domain_name: string;
     subdomain_name: string;
     dns_provider: string;
-    environment?: EnvironmentResponse;
     git_auth: {
       git_owner?: string;
       git_token?: string;
@@ -159,7 +135,6 @@ export interface Cluster {
   domainName: string;
   subDomainName?: string;
   dnsProvider: string;
-  environment?: ClusterEnvironment;
   gitProvider: GitProvider;
   instanceSize?: string;
   nodeCount?: number;
@@ -174,7 +149,6 @@ export interface Cluster {
 
 export interface ManagementCluster extends Cluster, Row {
   lastErrorCondition: string;
-  workloadClusters: WorkloadCluster[];
   gitHost: string;
   vaultAuth: {
     kbotPassword: string;
@@ -220,15 +194,6 @@ export interface ManagementCluster extends Cluster, Row {
     token: string;
   };
 }
-
-export interface WorkloadCluster extends Cluster {
-  instanceSize?: string;
-  machineType?: string;
-}
-
-export type DraftCluster = Omit<WorkloadCluster, 'environment'> & {
-  environment?: Partial<WorkloadCluster['environment']>;
-};
 
 export interface ClusterQueue {
   clusterName: string;

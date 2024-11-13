@@ -1,13 +1,7 @@
-import {
-  ClusterResponse,
-  ManagementCluster,
-  WorkloadCluster,
-  ClusterStatus,
-} from '../types/provision';
-import { ClusterCache, EnvCache } from '../types/redux';
+import { ClusterResponse, ManagementCluster } from '@/types/provision';
 
-export const mapClusterFromRaw = (cluster: ClusterResponse) => {
-  const managementCluster: ManagementCluster = {
+export const mapClusterFromRaw = (cluster: ClusterResponse): ManagementCluster => {
+  return {
     id: cluster._id,
     clusterId: cluster.cluster_id,
     clusterName: cluster.cluster_name,
@@ -62,66 +56,5 @@ export const mapClusterFromRaw = (cluster: ClusterResponse) => {
       vault_terraform_apply_check: cluster.vault_terraform_apply_check,
       users_terraform_apply_check: cluster.users_terraform_apply_check,
     },
-  };
-
-  const { envCache, workloadClusters, clusterCache } = [
-    ...(cluster.workload_clusters ?? []),
-  ].reduce<{
-    envCache: EnvCache;
-    clusterCache: ClusterCache;
-    workloadClusters: WorkloadCluster[];
-  }>(
-    (acc, curVal) => {
-      const formattedWorkloadCluster: WorkloadCluster = {
-        clusterId: curVal.cluster_id,
-        clusterName: curVal.cluster_name,
-        cloudRegion: curVal.cloud_region,
-        cloudProvider: curVal.cloud_provider,
-        dnsProvider: curVal.dns_provider,
-        nodeCount: curVal.node_count,
-        instanceSize: curVal.node_type,
-        creationDate: curVal.creation_timestamp,
-        environment: {
-          id: curVal.environment?._id ?? '',
-          name: curVal.environment?.name ?? '',
-          creationDate: curVal.environment?.creation_timestamp ?? '',
-          color: curVal.environment?.color ?? 'gray',
-        },
-        status: curVal.status,
-        type: curVal.cluster_type,
-        domainName: curVal.domain_name,
-        subDomainName: cluster.subdomain_name, // take subdomain from management since we do not store it on the workload cluster
-        gitProvider: cluster.git_provider,
-        adminEmail: cluster.alerts_email,
-        gitAuth: {
-          gitOwner: curVal.git_auth.git_owner,
-          gitToken: curVal.git_auth.git_token,
-          gitUser: curVal.git_auth.git_username,
-        },
-      };
-
-      acc.workloadClusters.push(formattedWorkloadCluster);
-
-      if (
-        curVal.environment &&
-        curVal.environment.name &&
-        curVal.status !== ClusterStatus.DELETED
-      ) {
-        acc.envCache[curVal.environment.name] = true;
-      }
-
-      acc.clusterCache[curVal.cluster_name] = formattedWorkloadCluster;
-      return acc;
-    },
-    { clusterCache: {}, envCache: {}, workloadClusters: [] },
-  );
-
-  managementCluster.workloadClusters = workloadClusters;
-  clusterCache[managementCluster.clusterName] = managementCluster;
-
-  return {
-    managementCluster,
-    envCache,
-    clusterCache,
   };
 };

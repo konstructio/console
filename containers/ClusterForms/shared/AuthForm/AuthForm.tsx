@@ -330,7 +330,7 @@ const AuthForm: FunctionComponent = () => {
             />
           </>
         )}
-        {apiKeyInfo?.fieldKeys.map(({ label, name, helperText }) =>
+        {apiKeyInfo?.fieldKeys.map(({ label, name, helperText, defaultValue }) =>
           isDigitalOcean && name === 'token' ? (
             <ControlledPassword
               key={name}
@@ -358,6 +358,7 @@ const AuthForm: FunctionComponent = () => {
               // eslint-disable-next-line @typescript-eslint/ban-ts-comment
               //@ts-ignore
               name={`${apiKeyInfo.authKey}.${name}`}
+              defaultValue={defaultValue}
               label={label}
               helperText={helperText}
               required

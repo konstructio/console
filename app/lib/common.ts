@@ -1,22 +1,6 @@
-import axios from 'axios';
 import { PostHog } from 'posthog-node';
 
-import { License } from '@/types/subscription';
 import { EnvironmentVariables, FeatureFlag } from '@/types/config';
-
-const { ENTERPRISE_API_URL } = process.env;
-
-export async function validateLicense() {
-  try {
-    const response = await axios.post<License>(
-      `${ENTERPRISE_API_URL}/api/v1/subscription/validate`,
-    );
-    return response.data;
-  } catch (error) {
-    // supressing error. license not found
-    return {} as License;
-  }
-}
 
 export async function getFeatureFlags() {
   try {
@@ -52,7 +36,6 @@ export async function getEnvVars() {
       IS_CLUSTER_ZERO = '',
       KUBEFIRST_VERSION = '',
       POSTHOG_KEY = '',
-      SAAS_URL = '',
     } = process.env;
 
     return {
@@ -64,7 +47,6 @@ export async function getEnvVars() {
       isClusterZero: IS_CLUSTER_ZERO === 'true',
       kubefirstVersion: KUBEFIRST_VERSION,
       installMethod: INSTALL_METHOD,
-      saasURL: SAAS_URL,
       POSTHOG_KEY,
     };
   } catch (error) {

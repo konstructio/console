@@ -2,8 +2,6 @@
 
 import React, { PropsWithChildren } from 'react';
 import { Provider } from 'react-redux';
-import { Session } from 'next-auth';
-import { SessionProvider } from 'next-auth/react';
 import { ThemeProvider as ThemeProviderMUI } from '@mui/material/styles';
 import { PersistGate } from 'redux-persist/integration/react';
 
@@ -14,20 +12,18 @@ import { persistor, store } from '@/redux/store';
 import { muiTheme } from '@/theme/muiTheme';
 import { theme } from '@/theme/index';
 
-export function Providers({ children, session }: PropsWithChildren<{ session: Session | null }>) {
+export function Providers({ children }: PropsWithChildren) {
   return (
-    <SessionProvider session={session}>
-      <Provider store={store}>
-        <PersistGate persistor={persistor}>
-          <ThemeProviderMUI theme={muiTheme}>
-            <ThemeProvider theme={theme}>
-              <QueueProvider>
-                <NotificationsProvider>{children}</NotificationsProvider>
-              </QueueProvider>
-            </ThemeProvider>
-          </ThemeProviderMUI>
-        </PersistGate>
-      </Provider>
-    </SessionProvider>
+    <Provider store={store}>
+      <PersistGate persistor={persistor}>
+        <ThemeProviderMUI theme={muiTheme}>
+          <ThemeProvider theme={theme}>
+            <QueueProvider>
+              <NotificationsProvider>{children}</NotificationsProvider>
+            </QueueProvider>
+          </ThemeProvider>
+        </ThemeProviderMUI>
+      </PersistGate>
+    </Provider>
   );
 }
