@@ -32,7 +32,7 @@ spec:
         - name: {{ .Chart.Name }}
           env: 
             - name: API_URL
-              value: {{ .Values.apiURL | default (printf "http://%s-kubefirst-api.%s.svc.cluster.local" (.Release.Name ) (.Release.Namespace ))  }}
+              value: {{ .Values.apiURL | default (printf "http://%s.%s.svc.cluster.local" ( include "console.fullname" . ) (.Release.Namespace ))  }}
             - name: KUBEFIRST_VERSION
               value: {{ .Values.global.kubefirstVersion }}
             - name: IS_CLUSTER_ZERO
