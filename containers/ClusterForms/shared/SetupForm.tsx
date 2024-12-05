@@ -61,22 +61,13 @@ const SetupForm: FunctionComponent = () => {
     watch,
   } = useFormContext<InstallValues>();
 
-  const [
-    domainName,
-    subDomain,
-    dnsProvider,
-    cloudRegion,
-    cloudflareToken,
-    cloudZone,
-    resourceGroup,
-  ] = watch([
+  const [domainName, subDomain, dnsProvider, cloudRegion, cloudflareToken, cloudZone] = watch([
     'domainName',
     'subDomain',
     'dnsProvider',
     'cloudRegion',
     'cloudflareToken',
     'cloudZone',
-    'resourceGroup',
   ]);
 
   const { instanceSize, nodeCount } = getValues();
@@ -175,14 +166,6 @@ const SetupForm: FunctionComponent = () => {
       handleZoneSelect(cloudZone);
     }
   }, [cloudZone, handleZoneSelect]);
-
-  useEffect(() => {
-    if (resourceGroup && cloudRegion) {
-      const values = getValues();
-      dispatch(getCloudDomains({ region: cloudRegion, installType, values }));
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dispatch, getValues, resourceGroup]);
 
   useEffect(() => {
     checkAuth();
