@@ -32,6 +32,16 @@ export const INFO_INSTALLATION_TYPES: Record<InstallationType, Record<number, In
       ],
     },
   },
+  [InstallationType.AZURE]: {
+    [FormStep.AUTHENTICATION]: {
+      title: 'Azure Prerequisites',
+      description: [
+        'Create an <a href="https://portal.azure.com/#create/Microsoft.AzureSupport/createRequest/form/basic?WT.mc_id=Portal-Microsoft_Azure_Support" target="_blank">Azure account</a> in which you are an account owner.',
+        'Have a <a href="https://docs.microsoft.com/en-us/azure/dns/dns-overview" target="_blank">publicly routable DNS zone</a> available.',
+        'Have a <a href="https://docs.microsoft.com/en-us/azure/active-directory/develop/quickstart-register-app" target="_blank">Microsoft Entra app</a> and <a href="https://docs.microsoft.com/en-us/azure/active-directory/develop/howto-create-service-principal-portal" target="_blank">service principal</a> with Owner permissions on your subscription.',
+      ],
+    },
+  },
   [InstallationType.LOCAL]: {
     [K3DFormStep.SETUP]: {
       title: 'Tip',
@@ -109,6 +119,14 @@ export const INFO_MARKETPLACE_INSTALLATION_TYPES: Record<
       ],
     },
   },
+  [InstallationType.AZURE]: {
+    [FormStep.AUTHENTICATION]: {
+      title: 'Azure Prerequisites',
+      description: [
+        'Create an <a href="https://portal.azure.com/#create/Microsoft.AzureSupport/createRequest/form/basic?WT.mc_id=Portal-Microsoft_Azure_Support" target="_blank">Azure account</a> in which you are an account owner.',
+      ],
+    },
+  },
   [InstallationType.LOCAL]: {
     [K3DFormStep.SETUP]: {
       title: 'Tip',
@@ -181,6 +199,38 @@ export const INSTALLATION_TYPE_API_KEYS: Record<InstallationType, AuthKeys | nul
         label: 'Akamai API key',
         helperText:
           'Retrieve your key at <a href="https://cloud.linode.com/profile/tokens" target="_blank">https://cloud.linode.com/profile/tokens</a>',
+      },
+    ],
+  },
+  [InstallationType.AZURE]: {
+    authKey: 'azure_auth',
+    fieldKeys: [
+      {
+        name: 'client_id',
+        label: 'Client ID',
+        helperText:
+          'Retrieve the service principal’s Client ID in the Azure portal under Certificates & secrets.',
+        type: 'text',
+      },
+      {
+        name: 'client_secret',
+        label: 'Client Secret',
+        helperText:
+          'Retrieve the service principal’s Client secret in the Azure portal under Certificates & secrets.',
+      },
+      {
+        name: 'tenant_id',
+        label: 'Tenant ID',
+        helperText:
+          'Retrieve the Tenant ID by selecting Microsoft Entra ID from the menu on the Azure portal; Basic information section.',
+        type: 'text',
+      },
+      {
+        name: 'subscription_id',
+        label: 'Subscription ID',
+        helperText:
+          'Retrieve the Subscription ID in the Azure portal and selecting Subscriptions under the Azure services heading.',
+        type: 'text',
       },
     ],
   },
@@ -273,6 +323,7 @@ export const INSTALL_TYPE_STEPS: Record<InstallationType, Array<string>> = {
   [InstallationType.DIGITAL_OCEAN]: DEFAULT_STEPS,
   [InstallationType.VULTR]: DEFAULT_STEPS,
   [InstallationType.GOOGLE]: DEFAULT_STEPS,
+  [InstallationType.AZURE]: DEFAULT_STEPS,
 };
 
 export const LOCAL_INSTALL_TITLES = {
@@ -280,4 +331,26 @@ export const LOCAL_INSTALL_TITLES = {
   1: `Let’s configure your local cluster`,
   2: `Grab a cup of tea or coffee while we set up your cluster...`,
   3: 'You’re all set!',
+};
+
+export const CLOUD_REGION_LABELS: Record<InstallationType, string | null> = {
+  [InstallationType.AKAMAI]: 'Cloud region',
+  [InstallationType.AWS]: 'Cloud region',
+  [InstallationType.CIVO]: 'Cloud region',
+  [InstallationType.DIGITAL_OCEAN]: 'Datacenter region',
+  [InstallationType.VULTR]: 'Cloud location',
+  [InstallationType.LOCAL]: null,
+  [InstallationType.GOOGLE]: 'Cloud region',
+  [InstallationType.AZURE]: 'Cloud region',
+};
+
+export const CLUSTER_DOMAIN_LABELS: Record<InstallationType, string | null> = {
+  [InstallationType.AKAMAI]: 'Cluster domain name',
+  [InstallationType.AWS]: 'Hosted zone name',
+  [InstallationType.CIVO]: 'Cluster domain name',
+  [InstallationType.DIGITAL_OCEAN]: 'Cluster hostname',
+  [InstallationType.VULTR]: 'Cluster hostname',
+  [InstallationType.LOCAL]: null,
+  [InstallationType.GOOGLE]: 'Hosted zone name',
+  [InstallationType.AZURE]: 'DNS zone name',
 };

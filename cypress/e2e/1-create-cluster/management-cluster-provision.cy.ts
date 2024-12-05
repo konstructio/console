@@ -105,6 +105,12 @@ const INSTALLATION_CONFIG: Record<
     CLOUD_REGION: '',
     INSTANCE_SIZE: '',
   },
+  [InstallationType.AZURE]: {
+    AUTH_TOKEN: '',
+    DOMAIN_NAME: '',
+    CLOUD_REGION: '',
+    INSTANCE_SIZE: '',
+  },
 };
 
 describe('provision management cluster using any git provider, cloud provider, and dns provider', () => {

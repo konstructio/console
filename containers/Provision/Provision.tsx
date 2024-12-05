@@ -34,16 +34,18 @@ import { DEFAULT_CLOUD_INSTANCE_SIZES, DOCS_LINK } from '@/constants';
 import { useQueue } from '@/hooks/useQueue';
 import LearnMore from '@/components/LearnMore/LearnMore';
 
-const FOOTER_LINKS_INFO: Record<number, { linkTitle: string; href: string }> = {
+const getFooterLinksInfo = (
+  installType: InstallationType,
+): Record<number, { linkTitle: string; href: string }> => ({
   1: {
     linkTitle: 'authentication',
-    href: `${DOCS_LINK}/do/quick-start/install/cli/#github-prerequisites`,
+    href: `${DOCS_LINK}/${installType}/quick-start/install/cli/#github-prerequisites`,
   },
   2: {
     linkTitle: 'configuring your cluster',
-    href: `${DOCS_LINK}/do/quick-start/install/ui#step-2-install-your-kubefirst-management-cluster`,
+    href: `${DOCS_LINK}/${installType}/quick-start/install/ui#step-2-install-your-kubefirst-management-cluster`,
   },
-};
+});
 
 const Provision: FunctionComponent = () => {
   const [showAdvancedOptions, setShowAdvancedOptions] = useState(false);
@@ -209,7 +211,8 @@ const Provision: FunctionComponent = () => {
     await dispatch(createCluster());
   }, [deleteClusterFromQueue, dispatch, error, getValues, installValues?.clusterName]);
 
-  const { linkTitle = '', href = '#' } = FOOTER_LINKS_INFO[installationStep] ?? {};
+  const { linkTitle = '', href = '#' } =
+    getFooterLinksInfo(installType as InstallationType)[installationStep] ?? {};
 
   const form = useMemo(() => {
     if (installationStep === 0 && !isMarketplace) {

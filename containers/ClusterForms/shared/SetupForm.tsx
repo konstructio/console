@@ -30,16 +30,8 @@ import { InstallValues, InstallationType } from '@/types/redux';
 import { EXCLUSIVE_PLUM } from '@/constants/colors';
 import { BISCAY } from '@/constants/colors';
 import ControlledNumberInput from '@/components/controlledFields/ControlledNumberInput/ControlledNumberInput';
-
-const CLOUD_REGION_LABELS: Record<InstallationType, string | null> = {
-  [InstallationType.AKAMAI]: 'Cloud region',
-  [InstallationType.AWS]: 'Cloud region',
-  [InstallationType.CIVO]: 'Cloud region',
-  [InstallationType.DIGITAL_OCEAN]: 'Datacenter region',
-  [InstallationType.VULTR]: 'Cloud location',
-  [InstallationType.LOCAL]: null,
-  [InstallationType.GOOGLE]: 'Cloud region',
-};
+import { CLOUD_REGION_LABELS, CLUSTER_DOMAIN_LABELS } from '@/constants/installation';
+import ControlledSelect from '@/components/controlledFields/ControlledSelect';
 
 const SetupForm: FunctionComponent = () => {
   const [selectedRegion, setSelectedRegion] = useState<string>('');
@@ -84,9 +76,12 @@ const SetupForm: FunctionComponent = () => {
   const isCloudflareSelected = useMemo(() => dnsProvider === 'cloudflare', [dnsProvider]);
 
   const cloudRegionLabel = useMemo(
-    () =>
-      CLOUD_REGION_LABELS[installType as InstallationType] ||
-      (CLOUD_REGION_LABELS[InstallationType.AWS] as string),
+    () => CLOUD_REGION_LABELS[installType as InstallationType] || 'Cloud region',
+    [installType],
+  );
+
+  const clusterDomainLabel = useMemo(
+    () => CLUSTER_DOMAIN_LABELS[installType as InstallationType] || 'Cluster domain name',
     [installType],
   );
 
@@ -240,10 +235,10 @@ const SetupForm: FunctionComponent = () => {
           numberInputProps={{ min: MIN_NODE_COUNT, defaultValue: nodeCount }}
         />
       </Box>
-      <ControlledAutocomplete
+      <ControlledSelect
         control={control}
         name="dnsProvider"
-        label="Dns provider"
+        label="DNS provider"
         defaultValue={values?.dnsProvider}
         required
         rules={{ required: true }}
@@ -253,6 +248,7 @@ const SetupForm: FunctionComponent = () => {
         ]}
         onChange={handleDnsProviderChange}
       />
+
       {isCloudflareSelected && (
         <>
           <ControlledPassword
@@ -279,15 +275,26 @@ const SetupForm: FunctionComponent = () => {
           )}
         </>
       )}
-      <ControlledAutocomplete
-        control={control}
-        name="domainName"
-        label="Cluster domain name"
-        defaultValue={values?.domainName}
-        required
-        rules={{ required: true }}
-        options={cloudDomains && formatDomains(cloudDomains)}
-      />
+      <Box sx={{ display: 'flex', gap: 2 }}>
+        <ControlledAutocomplete
+          control={control}
+          name="domainName"
+          label={clusterDomainLabel}
+          defaultValue={values?.domainName}
+          required
+          rules={{ required: true }}
+          options={cloudDomains && formatDomains(cloudDomains)}
+        />
+        {installType === InstallationType.AZURE && !isCloudflareSelected && (
+          <ControlledTextField
+            control={control}
+            name="resourceGroup"
+            label="DNS resource group"
+            rules={{ required: false }}
+            helperText="The name of the resource group where the DNS zone exists."
+          />
+        )}
+      </Box>
       {isCloudflareSelected && (
         <ControlledTextField
           control={control}
@@ -332,7 +339,7 @@ const SetupForm: FunctionComponent = () => {
         }}
         onErrorText={errors.clusterName?.message}
       />
-      {installType === InstallationType.GOOGLE && (
+      {[InstallationType.GOOGLE].includes(installType as InstallationType) && (
         <CheckBoxContainer>
           <Typography variant="labelLarge" color={EXCLUSIVE_PLUM}>
             Automatically remove cloud provider resources such as buckets or kms keys when a worker

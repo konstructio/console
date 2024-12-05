@@ -1,14 +1,14 @@
 import { Meta, StoryObj } from '@storybook/react';
 
-import ClusterReady from './ClusterReady';
+import ClusterProReady from './ClusterProReady';
 
-const meta: Meta<typeof ClusterReady> = {
-  component: ClusterReady,
+const meta: Meta<typeof ClusterProReady> = {
+  component: ClusterProReady,
 };
 
 export default meta;
 
-export const Default: StoryObj<typeof ClusterReady> = {
+export const Default: StoryObj<typeof ClusterProReady> = {
   args: {
     kbotPassword: 'feedkray',
     cloudProvider: 'aws',

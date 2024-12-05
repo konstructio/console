@@ -25,6 +25,7 @@ const ESTIMATED_TIMES_BY_CLOUD: Record<InstallationType, number> = {
   [InstallationType.DIGITAL_OCEAN]: 35,
   [InstallationType.VULTR]: 25,
   [InstallationType.GOOGLE]: 25,
+  [InstallationType.AZURE]: 20,
 };
 export interface ConciseLogsProps {
   completedSteps: Array<{ label: string; order: number }>;
