@@ -35,7 +35,11 @@ export const CloudProviderContainer = styled.div`
   grid-template-columns: 1fr;
   gap: 24px;
 
-  ${media.greaterThan('lg')`
+  ${media.greaterThan('md')`
     grid-template-columns: 1fr 1fr;
+  `}
+
+  ${media.greaterThan('lg')`
+    grid-template-columns: 1fr 1fr 1fr 1fr;
   `}
 `;

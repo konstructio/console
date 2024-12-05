@@ -43,6 +43,12 @@ export interface AuthValues {
     key_file?: string;
     project_id?: string;
   };
+  azure_auth?: {
+    client_id: string;
+    client_secret: string;
+    tenant_id: string;
+    subscription_id: string;
+  };
 }
 
 export interface ClusterValues extends AuthValues {
@@ -54,6 +60,7 @@ export interface ClusterValues extends AuthValues {
   instanceSize?: string;
   cloudZone?: string;
   nodeCount?: number;
+  resourceGroup?: string;
 }
 
 export interface AwsInstallValues {
@@ -73,10 +80,11 @@ export type CivoClusterValues = CivoInstallValues & ClusterValues & GitValues;
 export type InstallValues = AwsClusterValues & AdvancedOptions & CivoInstallValues;
 
 export enum InstallationType {
-  AKAMAI = 'akamai',
-  LOCAL = 'k3d',
-  AWS = 'aws',
   CIVO = 'civo',
+  AKAMAI = 'akamai',
+  AWS = 'aws',
+  AZURE = 'azure',
+  LOCAL = 'k3d',
   DIGITAL_OCEAN = 'digitalocean',
   GOOGLE = 'google',
   VULTR = 'vultr',
@@ -106,5 +114,6 @@ export type AuthKeys = {
     label: string;
     helperText?: string;
     defaultValue?: string;
+    type?: string;
   }>;
 };

@@ -99,6 +99,7 @@ export interface ClusterResponse {
   vault_initialized_check: boolean;
   vault_terraform_apply_check: boolean;
   users_terraform_apply_check: boolean;
+  install_kubefirst_pro: boolean;
   cloudflare_auth?: {
     token: string;
   };

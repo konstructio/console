@@ -16,6 +16,7 @@ export const mockClusterResponse: ClusterResponse = {
   cluster_type: ClusterType.MANAGEMENT,
   domain_name: 'k-ray.space',
   subdomain_name: '',
+  install_kubefirst_pro: false,
   dns_provider: 'civo',
   git_provider: GitProvider.GITHUB,
   git_host: 'github.com',

@@ -330,29 +330,33 @@ const AuthForm: FunctionComponent = () => {
             />
           </>
         )}
-        {apiKeyInfo?.fieldKeys.map(({ label, name, helperText, defaultValue }) =>
-          isDigitalOcean && name === 'token' ? (
-            <ControlledPassword
-              key={name}
-              control={control}
-              // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-              //@ts-ignore
-              name={`${apiKeyInfo.authKey}.${name}`}
-              label={label}
-              helperText={helperText}
-              required
-              rules={{
-                required: 'Required.',
-                validate: {
-                  validDOToken: async (token) =>
-                    (await debouncedDOTokenValidate(token as string)) || 'Invalid token.',
-                },
-              }}
-              onBlur={handleDoTokenBlur}
-              onErrorText={errors.do_auth?.token?.message}
-            />
-          ) : (
-            <ControlledPassword
+        {apiKeyInfo?.fieldKeys.map(({ label, name, helperText, defaultValue, type }) => {
+          const Component = type === 'text' ? ControlledTextField : ControlledPassword;
+          if (isDigitalOcean && name === 'token') {
+            return (
+              <Component
+                key={name}
+                control={control}
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                //@ts-ignore
+                name={`${apiKeyInfo.authKey}.${name}`}
+                label={label}
+                helperText={helperText}
+                required
+                rules={{
+                  required: 'Required.',
+                  validate: {
+                    validDOToken: async (token) =>
+                      (await debouncedDOTokenValidate(token as string)) || 'Invalid token.',
+                  },
+                }}
+                onBlur={handleDoTokenBlur}
+                onErrorText={errors.do_auth?.token?.message}
+              />
+            );
+          }
+          return (
+            <Component
               key={name}
               control={control}
               // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -366,8 +370,8 @@ const AuthForm: FunctionComponent = () => {
                 required: 'Required.',
               }}
             />
-          ),
-        )}
+          );
+        })}
       </FormContainer>
     </>
   );

@@ -1,21 +1,20 @@
 import React, { FunctionComponent } from 'react';
 import Image from 'next/image';
+import StarRateRoundedIcon from '@mui/icons-material/StarRateRounded';
 
 import { CardProps } from '../Card/Card';
-import Typography from '../Typography/Typography';
-import Tag from '../Tag/Tag';
 
-import { CardContainer, DetailsContainer, Link, LabelContainer } from './CloudProviderCard.styled';
+import { CardContainer } from './CloudProviderCard.styled';
 
 import { InstallationType } from '@/types/redux';
 import k3dLogo from '@/assets/k3d_logo.svg';
 import akamaiLogo from '@/assets/akamai_logo.svg';
+import azureLogo from '@/assets/azure_logo.svg';
 import awsLogo from '@/assets/aws_logo.svg';
 import civoLogo from '@/assets/civo_logo.svg';
 import digitalOceanLogo from '@/assets/digital_ocean_logo.svg';
 import vultrLogo from '@/assets/vultr_logo.svg';
-import googleCloudLogo from '@/assets/googleCloud.svg';
-import { BISCAY } from '@/constants/colors';
+import googleCloudLogo from '@/assets/google_logo.svg';
 
 const PROVIDER_OPTIONS: Record<
   InstallationType,
@@ -28,6 +27,7 @@ const PROVIDER_OPTIONS: Record<
     width: number;
     learnMoreLink?: string;
     beta?: boolean;
+    isFeatured?: boolean;
   } | null
 > = {
   [InstallationType.AKAMAI]: {
@@ -36,8 +36,16 @@ const PROVIDER_OPTIONS: Record<
     description:
       'The newest beta cloud provider supported by the kubefirst platform offering Linode managed clusters.',
     learnMoreLink: 'https://cloud.linode.com',
-    height: 30,
-    width: 50,
+    height: 40,
+    width: 92,
+    beta: true,
+  },
+  [InstallationType.AZURE]: {
+    logoSrc: azureLogo,
+    label: 'Azure',
+    description: 'Microsoft Azure is a cloud computing service operated by Microsoft.',
+    height: 40,
+    width: 117,
     beta: true,
   },
   [InstallationType.LOCAL]: {
@@ -54,8 +62,8 @@ const PROVIDER_OPTIONS: Record<
     description:
       'Our AWS cloud platform can accommodate all of the needs of your enterprise and leverages the free GitHub system at github.com ',
     learnMoreLink: 'https://aws.amazon.com/console',
-    height: 30,
-    width: 50,
+    height: 40,
+    width: 67,
   },
   [InstallationType.CIVO]: {
     logoSrc: civoLogo,
@@ -64,8 +72,9 @@ const PROVIDER_OPTIONS: Record<
       'The cloud native service provider, specializing in managed Kubernetes. A faster, simpler and more cost-effective cloud platform. ',
     learnMoreLink:
       'https://www.civo.com/?utm_source=partner&utm_medium=kubefirstdeploy&utm_campaign=kubefirstdeploy',
-    height: 17,
-    width: 50,
+    height: 32,
+    width: 98,
+    isFeatured: true,
   },
   [InstallationType.DIGITAL_OCEAN]: {
     logoSrc: digitalOceanLogo,
@@ -75,7 +84,7 @@ const PROVIDER_OPTIONS: Record<
     learnMoreLink: 'https://www.digitalocean.com/',
 
     height: 50,
-    width: 50,
+    width: 180,
     beta: false,
   },
   [InstallationType.VULTR]: {
@@ -84,8 +93,8 @@ const PROVIDER_OPTIONS: Record<
     description:
       'A cloud hosting provider that offers high-performance SSD-based cloud servers, block storage, object storage, and dedicated servers in multiple locations worldwide. ',
     learnMoreLink: 'https://www.vultr.com/',
-    height: 43,
-    width: 50,
+    height: 40,
+    width: 168,
     beta: true,
   },
   [InstallationType.GOOGLE]: {
@@ -94,8 +103,8 @@ const PROVIDER_OPTIONS: Record<
     description:
       'High-performance infrastructure for cloud computing, data analytics & machine learning. Secure, reliable and high performance cloud services.',
     learnMoreLink: 'https://cloud.google.com/',
-    height: 50,
-    width: 51,
+    height: 32,
+    width: 180,
     beta: true,
   },
 };
@@ -110,28 +119,17 @@ const CloudProviderCard: FunctionComponent<CloudProviderCardProps> = ({
   withHoverEffect = true,
   ...rest
 }) => {
-  const { logoSrc, label, description, learnMoreLink, height, width, beta } =
-    PROVIDER_OPTIONS[option] || {};
+  const { logoSrc, height, width, isFeatured } = PROVIDER_OPTIONS[option] || {};
   return (
     <CardContainer {...rest} withHoverEffect={withHoverEffect} data-test-id={`${option}-button`}>
+      {isFeatured && (
+        <StarRateRoundedIcon
+          fontSize="small"
+          color="primary"
+          sx={{ position: 'absolute', top: 8, right: 8 }}
+        />
+      )}
       <Image src={logoSrc} alt="logo" width={width} height={height} />
-      <DetailsContainer>
-        <LabelContainer>
-          <Typography variant="subtitle2" color={BISCAY}>
-            {label}
-          </Typography>
-          {beta && <Tag text="BETA" bgColor="light-orange" />}
-        </LabelContainer>
-        <Typography variant="body2">
-          {description}
-          {learnMoreLink && (
-            <Link href={learnMoreLink} target="_blank">
-              {' '}
-              Learn more
-            </Link>
-          )}
-        </Typography>
-      </DetailsContainer>
     </CardContainer>
   );
 };

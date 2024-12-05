@@ -84,6 +84,7 @@ export const DEFAULT_CLOUD_INSTANCE_SIZES: Record<
   [InstallationType.GOOGLE]: { instanceSize: 'e2-medium', nodeCount: 3 },
   [InstallationType.VULTR]: { instanceSize: 'vc2-4c-8gb', nodeCount: 5 },
   [InstallationType.LOCAL]: { instanceSize: '', nodeCount: 3 },
+  [InstallationType.AZURE]: { instanceSize: 'Standard_D2s_v4', nodeCount: 3 },
 };
 
 export const RESERVED_DRAFT_CLUSTER_NAME = 'draft';
@@ -95,7 +96,7 @@ export const GIT_PROVIDER_DISPLAY_NAME: Record<GitProvider, string> = {
 
 export const CLOUD_PROVIDER_DISPLAY_NAME: Record<InstallationType, string> = {
   [InstallationType.AKAMAI]: 'Akamai',
-
+  [InstallationType.AZURE]: 'Azure',
   [InstallationType.AWS]: 'AWS',
   [InstallationType.CIVO]: 'Civo',
   [InstallationType.DIGITAL_OCEAN]: 'DigitalOcean',
@@ -124,6 +125,7 @@ export const KUBECONFIG_CLI_DETAILS: Record<
   },
   [InstallationType.LOCAL]: { command: '', commandDocLink: '' },
   [InstallationType.VULTR]: { command: '', commandDocLink: '' },
+  [InstallationType.AZURE]: { command: '', commandDocLink: '' },
 };
 
 export enum Route {

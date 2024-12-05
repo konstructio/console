@@ -106,6 +106,9 @@ const TextField: FunctionComponent<TextFieldProps> = ({
         size="small"
         endAdornment={error ? errorIcon : endAdornment}
         startAdornment={startAdormentIcon}
+        inputProps={{
+          'aria-label': label,
+        }}
       />
       {helperText && (
         <FormHelperText disabled={disabled} error={error} sx={props.sx}>

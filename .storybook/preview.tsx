@@ -7,10 +7,9 @@ import { ThemeProvider } from 'styled-components';
 import { makeStore } from '../redux/store';
 import { muiTheme } from '../theme/muiTheme';
 import { theme } from '../theme';
-import { setClusterMap, setManagementCluster } from '../redux/slices/api.slice';
+import { setManagementCluster } from '../redux/slices/api.slice';
 import { mapClusterFromRaw } from '../utils/mapClustersFromRaw';
 import { mockClusterResponse } from '../tests/mocks/mockClusterResponse';
-import { setBoundEnvironments } from '../redux/slices/environments.slice';
 
 export const parameters = {
   nextjs: {
@@ -38,8 +37,6 @@ const store = makeStore();
 const { managementCluster, clusterCache, envCache } = mapClusterFromRaw(mockClusterResponse);
 
 store.dispatch(setManagementCluster(managementCluster));
-store.dispatch(setClusterMap(clusterCache));
-store.dispatch(setBoundEnvironments(envCache));
 
 export const decorators = [
   (Story) => (

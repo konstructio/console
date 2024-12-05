@@ -6,7 +6,7 @@ import Typography from '../Typography/Typography';
 import Button from '../Button/Button';
 import Password from '../Password/Password';
 
-import { Container, Link, PasswordContainer, Title } from './ClusterReady.styled';
+import { Container, Link, PasswordContainer, Title } from './ClusterProReady.styled';
 
 import Box from '@/assets/box.svg';
 import { PRIMARY } from '@/constants/colors';
@@ -18,7 +18,8 @@ export interface ClusterRunningMessageProps {
   cloudProvider?: string;
 }
 
-const ClusterReady: FunctionComponent<ClusterRunningMessageProps> = ({
+const ClusterProReady: FunctionComponent<ClusterRunningMessageProps> = ({
+  clusterName,
   domainName,
   kbotPassword,
   cloudProvider,
@@ -33,7 +34,9 @@ const ClusterReady: FunctionComponent<ClusterRunningMessageProps> = ({
 
   return (
     <Container>
-      <Title variant="h6">You’re all set to use the Kubefirst platform!</Title>
+      <Title variant="h6">
+        Your management cluster {clusterName || '<cluster identifier>'} is now up and running!
+      </Title>
       <Image alt="kbot" src={Box} width={170} height={160} />
       <Typography variant="body1" sx={{ textAlign: 'center', mt: 5, maxWidth: '470px' }}>
         Simply copy your
@@ -44,7 +47,7 @@ const ClusterReady: FunctionComponent<ClusterRunningMessageProps> = ({
         >
           KBot
         </Link>
-        password below, then click Open Argo CD to view all of the applications Kubefirst manages.
+        password below, then click Open Kubefirst Pro to access the platform.
       </Typography>
       <PasswordContainer>
         <Password value={kbotPassword} sx={{ width: '100%' }} />
@@ -54,13 +57,13 @@ const ClusterReady: FunctionComponent<ClusterRunningMessageProps> = ({
           </Button>
         </CopyToClipboard>
       </PasswordContainer>
-      <Link href={`https://argocd.${domainName}/`} target="_blank">
+      <Link href={`https://kubefirst.${domainName}/`} target="_blank">
         <Button variant="contained" color="primary" data-test-id="launch-console">
-          Open Argo CD
+          Open Kubefirst Pro
         </Button>
       </Link>
     </Container>
   );
 };
 
-export default ClusterReady;
+export default ClusterProReady;
