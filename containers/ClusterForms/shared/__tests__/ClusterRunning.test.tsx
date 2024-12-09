@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { screen } from '@testing-library/react';
 
 import * as reduxHooks from '../../../../redux/store';
 import { getClusters } from '../../../../redux/thunks/api.thunk';
@@ -7,6 +7,7 @@ import { ManagementCluster } from '../../../../types/provision';
 import { InstallationType } from '../../../../types/redux';
 import ClusterRunning from '../ClusterRunning';
 import { mockClusterManagement } from '../../../../tests/mocks/mockClusterManagement';
+import customRender from '../../../../tests/setup';
 
 // Mock the redux hooks
 jest.mock('@/redux/store', () => ({
@@ -17,31 +18,6 @@ jest.mock('@/redux/store', () => ({
 // Mock the thunk
 jest.mock('@/redux/thunks/api.thunk', () => ({
   getClusters: jest.fn(),
-}));
-
-// Mock the components
-jest.mock('@/components/ClusterReady/ClusterReady', () => ({
-  __esModule: true,
-  default: jest.fn(({ clusterName, domainName, cloudProvider, kbotPassword }) => (
-    <div data-testid="cluster-ready">
-      <div data-testid="cluster-name">{clusterName}</div>
-      <div data-testid="domain-name">{domainName}</div>
-      <div data-testid="cloud-provider">{cloudProvider}</div>
-      <div data-testid="kbot-password">{kbotPassword}</div>
-    </div>
-  )),
-}));
-
-jest.mock('@/components/ClusterProReady/ClusterProReady', () => ({
-  __esModule: true,
-  default: jest.fn(({ clusterName, domainName, cloudProvider, kbotPassword }) => (
-    <div data-testid="cluster-pro-ready">
-      <div data-testid="cluster-name">{clusterName}</div>
-      <div data-testid="domain-name">{domainName}</div>
-      <div data-testid="cloud-provider">{cloudProvider}</div>
-      <div data-testid="kbot-password">{kbotPassword}</div>
-    </div>
-  )),
 }));
 
 describe('ClusterRunning', () => {
@@ -56,7 +32,7 @@ describe('ClusterRunning', () => {
   });
 
   it('dispatches getClusters on mount', () => {
-    render(<ClusterRunning />);
+    customRender(<ClusterRunning />);
     expect(mockDispatch).toHaveBeenCalledWith(getClusters());
   });
 
@@ -77,14 +53,12 @@ describe('ClusterRunning', () => {
       managementCluster: mockManagementCluster,
     });
 
-    render(<ClusterRunning />);
+    customRender(<ClusterRunning />);
 
-    expect(screen.getByTestId('cluster-ready')).toBeInTheDocument();
-    expect(screen.queryByTestId('cluster-pro-ready')).not.toBeInTheDocument();
-    expect(screen.getByTestId('cluster-name')).toHaveTextContent('test-cluster');
-    expect(screen.getByTestId('domain-name')).toHaveTextContent('test.com');
-    expect(screen.getByTestId('cloud-provider')).toHaveTextContent('aws');
-    expect(screen.getByTestId('kbot-password')).toHaveTextContent('test-password');
+    expect(screen.getByText(`You’re all set to use the Kubefirst platform!`)).toBeInTheDocument();
+    expect(screen.getByText('KBot')).toBeInTheDocument();
+    expect(screen.getByText('Open Argo CD')).toBeInTheDocument();
+    expect(screen.getByText('Copy')).toBeInTheDocument();
   });
 
   it('renders ClusterProReady when skipInstallPro is false', () => {
@@ -103,10 +77,14 @@ describe('ClusterRunning', () => {
       managementCluster: mockManagementCluster,
     });
 
-    render(<ClusterRunning />);
+    customRender(<ClusterRunning />);
 
-    expect(screen.getByTestId('cluster-pro-ready')).toBeInTheDocument();
-    expect(screen.queryByTestId('cluster-ready')).not.toBeInTheDocument();
+    expect(
+      screen.getByText(`Your management cluster test-cluster is now up and running!`),
+    ).toBeInTheDocument();
+    expect(screen.getByText('KBot')).toBeInTheDocument();
+    expect(screen.getByText('Open Kubefirst Pro')).toBeInTheDocument();
+    expect(screen.getByText('Copy')).toBeInTheDocument();
   });
 
   it('handles subdomain in domain name construction', () => {
@@ -126,9 +104,10 @@ describe('ClusterRunning', () => {
       managementCluster: mockManagementCluster,
     });
 
-    render(<ClusterRunning />);
+    customRender(<ClusterRunning />);
 
-    expect(screen.getByTestId('domain-name')).toHaveTextContent('sub.test.com');
+    const argocdLink = screen.getByRole('link', { name: 'Open Argo CD' });
+    expect(argocdLink).toHaveAttribute('href', `https://argocd.sub.test.com/`);
   });
 
   it('handles missing managementCluster data', () => {
@@ -136,12 +115,8 @@ describe('ClusterRunning', () => {
       managementCluster: null,
     });
 
-    render(<ClusterRunning />);
+    customRender(<ClusterRunning />);
 
-    expect(screen.getByTestId('cluster-pro-ready')).toBeInTheDocument();
-    expect(screen.getByTestId('cluster-name')).toBeInTheDocument();
-    expect(screen.getByTestId('domain-name')).toBeInTheDocument();
-    expect(screen.getByTestId('cloud-provider')).toBeInTheDocument();
-    expect(screen.getByTestId('kbot-password')).toBeInTheDocument();
+    expect(screen.getByText('KBot')).toBeInTheDocument();
   });
 });
