@@ -15,6 +15,7 @@ import civoLogo from '@/assets/civo_logo.svg';
 import digitalOceanLogo from '@/assets/digital_ocean_logo.svg';
 import vultrLogo from '@/assets/vultr_logo.svg';
 import googleCloudLogo from '@/assets/google_logo.svg';
+import Tag from '../Tag/Tag';
 
 const PROVIDER_OPTIONS: Record<
   InstallationType,
@@ -119,7 +120,7 @@ const CloudProviderCard: FunctionComponent<CloudProviderCardProps> = ({
   withHoverEffect = true,
   ...rest
 }) => {
-  const { logoSrc, height, width, isFeatured } = PROVIDER_OPTIONS[option] || {};
+  const { beta, height, isFeatured, logoSrc, width } = PROVIDER_OPTIONS[option] || {};
   return (
     <CardContainer {...rest} withHoverEffect={withHoverEffect} data-test-id={`${option}-button`}>
       {isFeatured && (
@@ -130,6 +131,7 @@ const CloudProviderCard: FunctionComponent<CloudProviderCardProps> = ({
         />
       )}
       <Image src={logoSrc} alt="logo" width={width} height={height} />
+      {beta && <Tag text="Beta" bgColor="light-orange" />}
     </CardContainer>
   );
 };
