@@ -3,6 +3,7 @@ import Image from 'next/image';
 import StarRateRoundedIcon from '@mui/icons-material/StarRateRounded';
 
 import { CardProps } from '../Card/Card';
+import Tag from '../Tag/Tag';
 
 import { CardContainer } from './CloudProviderCard.styled';
 
@@ -15,7 +16,6 @@ import civoLogo from '@/assets/civo_logo.svg';
 import digitalOceanLogo from '@/assets/digital_ocean_logo.svg';
 import vultrLogo from '@/assets/vultr_logo.svg';
 import googleCloudLogo from '@/assets/google_logo.svg';
-import Tag from '../Tag/Tag';
 
 const PROVIDER_OPTIONS: Record<
   InstallationType,
