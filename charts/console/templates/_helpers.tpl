@@ -50,7 +50,7 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 Selector labels
 */}}
 {{- define "console.selectorLabels" -}}
-app.kubernetes.io/name: {{ include "console.name" . }}
+app.kubernetes.io/name: {{ include "console.fullname" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
 
