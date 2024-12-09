@@ -49,6 +49,7 @@ export const createCluster = createAsyncThunk<
     force_destroy: values?.forceDestroyTerraform,
     node_type: values?.instanceSize,
     node_count: values?.nodeCount,
+    azure_dns_zone_resource_group: values?.resourceGroup,
     git_auth: {
       git_owner: values?.gitOwner,
       git_token: values?.gitToken,
@@ -74,6 +75,9 @@ export const createCluster = createAsyncThunk<
     },
     akamai_auth: {
       ...values?.akamai_auth,
+    },
+    azure_auth: {
+      ...values?.azure_auth,
     },
     log_file: `log_${new Date().getTime()}.log`,
     install_kubefirst_pro: !values?.skipInstallPro,
@@ -155,6 +159,7 @@ export const getCloudDomains = createAsyncThunk<
       body: {
         ...values,
         cloud_region: region,
+        resource_group: values?.resourceGroup,
         cloudflare_auth: {
           api_token: cloudflareToken,
         },

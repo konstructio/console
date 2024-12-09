@@ -14,6 +14,7 @@ export interface ControlledSelectFieldProps<T extends FieldValues> extends UseCo
   };
   options: Array<{ value: string; label: string }>;
   sx?: SxProps;
+  onChange?: (value: string) => void;
 }
 
 function ControlledSelect<T extends FieldValues>({
@@ -23,6 +24,7 @@ function ControlledSelect<T extends FieldValues>({
   rules,
   options,
   sx,
+  onChange,
   ...rest
 }: ControlledSelectFieldProps<T>) {
   return (
@@ -34,11 +36,18 @@ function ControlledSelect<T extends FieldValues>({
         <Select
           {...field}
           inputRef={field.ref}
+          inputProps={{
+            'aria-label': label,
+          }}
           fullWidth
           label={label}
           error={error !== undefined}
           required={required}
           options={options}
+          onChange={(optionValue) => {
+            field.onChange(optionValue);
+            onChange && onChange(optionValue.target.value);
+          }}
           sx={sx}
         />
       )}

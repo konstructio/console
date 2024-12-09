@@ -33,6 +33,7 @@ export const mapClusterFromRaw = (cluster: ClusterResponse): ManagementCluster =
     vultr_auth: cluster?.vultr_auth,
     google_auth: cluster?.google_auth,
     workloadClusters: [],
+    skipInstallPro: !cluster.install_kubefirst_pro,
     vaultAuth: {
       kbotPassword: cluster.vault_auth?.kbot_password,
     },

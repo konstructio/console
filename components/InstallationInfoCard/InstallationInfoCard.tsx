@@ -24,7 +24,8 @@ import akamaiLogo from '@/assets/akamai_logo.svg';
 import AwsLogo from '@/assets/aws_logo.svg';
 import DigitalOceanLogo from '@/assets/digital_ocean_logo.svg';
 import VultrLogo from '@/assets/vultr_logo.svg';
-import GoogleCloudLogo from '@/assets/googleCloud.svg';
+import GoogleCloudLogo from '@/assets/google_logo.svg';
+import AzureLogo from '@/assets/azure_logo.svg';
 import { useAppDispatch } from '@/redux/store';
 import { createNotification } from '@/redux/slices/notifications.slice';
 
@@ -36,6 +37,7 @@ const MARKETPLACE_LOGOS: Record<InstallationType, unknown | null> = {
   [InstallationType.DIGITAL_OCEAN]: DigitalOceanLogo,
   [InstallationType.VULTR]: VultrLogo,
   [InstallationType.GOOGLE]: GoogleCloudLogo,
+  [InstallationType.AZURE]: AzureLogo,
 };
 
 interface InstallationInfoCardProps {

@@ -78,13 +78,13 @@ const AdvancedOptions: FunctionComponent<AdvancedOptionsProps> = ({
           </CheckboxContainer>
           <CheckboxContainer>
             <Typography variant="labelLarge" color={EXCLUSIVE_PLUM}>
-              By default the kubefirst installation includes the kubefirst UI component. If you do
-              not wish to install the UI please check the below.
+              By default Kubefirst OSS installs Kubefirst Pro which allows you use the UI for free.
+              If you do not wish to install Kubefirst Pro please check below.
             </Typography>
             <Checkbox
               control={control}
               name="skipInstallPro"
-              label="Do not install the UI component"
+              label="Do not install Kubefirst Pro"
               rules={{
                 required: false,
               }}

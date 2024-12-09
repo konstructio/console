@@ -12,7 +12,7 @@ import Row from '@/components/Row/Row';
 
 export const AdvancedOptionsContainer = styled(FormContainer)`
   margin: 16px 0;
-  width: calc(100% - 80px);
+  width: 1024px;
 
   ${Content} {
     gap: 32px;
@@ -40,9 +40,10 @@ export const FormContent = styled(FormContainer)<{
   isLastStep: boolean;
   isProvisionStep: boolean;
 }>`
-  background-color: ${({ isLastStep, theme }) => (isLastStep ? 'transparent' : theme.colors.white)};
+  background-color: ${({ isLastStep, isProvisionStep, theme }) =>
+    isLastStep || isProvisionStep ? 'transparent' : theme.colors.white};
   box-shadow: ${({ isProvisionStep, isLastStep }) => (isLastStep || isProvisionStep) && 'none'};
-  width: calc(100% - 80px);
+  width: ${({ isLastStep }) => (isLastStep ? '100%' : '1024px')};
 
   ${Content} {
     gap: 32px;
