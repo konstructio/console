@@ -108,6 +108,7 @@ const TextField: FunctionComponent<TextFieldProps> = ({
         startAdornment={startAdormentIcon}
         inputProps={{
           'aria-label': label,
+          ...props.inputProps,
         }}
       />
       {helperText && (
