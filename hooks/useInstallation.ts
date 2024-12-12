@@ -27,7 +27,7 @@ const getInstallationTitles = (
       0: `Now, let’s get you authenticated`,
       1: `Let’s configure your ${installType} - ${gitProvider} cluster`,
       2: `Grab a cup of tea or coffee while we set up your cluster...`,
-      3: 'You’re all set!',
+      3: '',
     };
   }
 
@@ -36,7 +36,7 @@ const getInstallationTitles = (
     1: `Now, let’s get you authenticated`,
     2: `Let’s configure your ${installType} - ${gitProvider} cluster`,
     3: `Grab a cup of tea or coffee while we set up your cluster...`,
-    4: 'You’re all set!',
+    4: '',
   };
 };
 
