@@ -1,6 +1,6 @@
 apiVersion: v2
-appVersion: f33a6ad
+appVersion: 7ce6553
 description: A Helm chart for the Kubefirst Console
 name: console
 type: application
-version: 2.64.0
+version: 2.65.0
