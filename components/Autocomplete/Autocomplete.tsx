@@ -12,7 +12,7 @@ import { InputAdornmentContainer } from './Autocomplete.styled';
 
 type AutocompleteOption = { value: unknown; label: string };
 
-export interface IAutocompleteProps extends ControllerRenderProps<FieldValues> {
+export interface IAutocompleteProps extends Omit<ControllerRenderProps<FieldValues>, 'ref'> {
   label: string;
   inputRef?: ForwardedRef<unknown>;
   loading?: boolean;
