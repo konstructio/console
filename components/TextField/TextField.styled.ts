@@ -5,7 +5,7 @@ import { SPUN_PEARL, TRAFFIC_WHITE } from '../../constants/colors';
 
 import styled, { css } from '@/app/lib/styled-components';
 
-export const Container = styled.div.withConfig({
+export const Container = styled.div.withConfig<{ isDisabled?: boolean }>({
   shouldForwardProp: (prop) => prop !== 'isDisabled',
 })<{ isDisabled?: boolean }>`
   width: 100%;

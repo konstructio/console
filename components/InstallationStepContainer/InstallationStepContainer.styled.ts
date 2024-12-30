@@ -36,12 +36,11 @@ export const Content = styled(Column)<{ hasInfo?: boolean; isProvisionStep: bool
       height: 100%;
   `}
 
-  ${media.greaterThan('lg')`
-    flex-direction: ${({ hasInfo }: { hasInfo: boolean }) => hasInfo && 'row'};
+  ${media.greaterThan<{ hasInfo: boolean }>('lg')`
+    flex-direction: ${({ hasInfo }) => hasInfo && 'row'};
     height: calc(100% - 285px);
 
-
-    ${({ hasInfo }: { hasInfo: boolean }) =>
+    ${({ hasInfo }) =>
       hasInfo &&
       `
         align-items: flex-start;

@@ -96,7 +96,7 @@ const PROVIDER_OPTIONS: Record<
     learnMoreLink: 'https://www.vultr.com/',
     height: 40,
     width: 168,
-    beta: true,
+    beta: false,
   },
   [InstallationType.GOOGLE]: {
     logoSrc: googleCloudLogo,
@@ -106,7 +106,7 @@ const PROVIDER_OPTIONS: Record<
     learnMoreLink: 'https://cloud.google.com/',
     height: 32,
     width: 180,
-    beta: true,
+    beta: false,
   },
 };
 
