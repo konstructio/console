@@ -3,7 +3,6 @@ import Image from 'next/image';
 import StarRateRoundedIcon from '@mui/icons-material/StarRateRounded';
 
 import { CardProps } from '../Card/Card';
-import Tag from '../Tag/Tag';
 
 import { CardContainer } from './CloudProviderCard.styled';
 
@@ -39,7 +38,6 @@ const PROVIDER_OPTIONS: Record<
     learnMoreLink: 'https://cloud.linode.com',
     height: 40,
     width: 92,
-    beta: true,
   },
   [InstallationType.AZURE]: {
     logoSrc: azureLogo,
@@ -47,7 +45,6 @@ const PROVIDER_OPTIONS: Record<
     description: 'Microsoft Azure is a cloud computing service operated by Microsoft.',
     height: 40,
     width: 117,
-    beta: true,
   },
   [InstallationType.LOCAL]: {
     logoSrc: k3dLogo,
@@ -86,7 +83,6 @@ const PROVIDER_OPTIONS: Record<
 
     height: 50,
     width: 180,
-    beta: false,
   },
   [InstallationType.VULTR]: {
     logoSrc: vultrLogo,
@@ -96,7 +92,6 @@ const PROVIDER_OPTIONS: Record<
     learnMoreLink: 'https://www.vultr.com/',
     height: 40,
     width: 168,
-    beta: false,
   },
   [InstallationType.GOOGLE]: {
     logoSrc: googleCloudLogo,
@@ -106,7 +101,6 @@ const PROVIDER_OPTIONS: Record<
     learnMoreLink: 'https://cloud.google.com/',
     height: 32,
     width: 180,
-    beta: false,
   },
 };
 
@@ -120,7 +114,7 @@ const CloudProviderCard: FunctionComponent<CloudProviderCardProps> = ({
   withHoverEffect = true,
   ...rest
 }) => {
-  const { beta, height, isFeatured, logoSrc, width } = PROVIDER_OPTIONS[option] || {};
+  const { height, isFeatured, logoSrc, width } = PROVIDER_OPTIONS[option] || {};
   return (
     <CardContainer {...rest} withHoverEffect={withHoverEffect} data-test-id={`${option}-button`}>
       {isFeatured && (
@@ -131,7 +125,6 @@ const CloudProviderCard: FunctionComponent<CloudProviderCardProps> = ({
         />
       )}
       <Image src={logoSrc} alt="logo" width={width} height={height} />
-      {beta && <Tag text="Beta" bgColor="light-orange" />}
     </CardContainer>
   );
 };
