@@ -37,10 +37,10 @@ export const Content = styled(Column)<{ hasInfo?: boolean; isProvisionStep: bool
   `}
 
   ${media.greaterThan<{ hasInfo: boolean }>('lg')`
-    flex-direction: ${({ hasInfo }) => hasInfo && 'row'};
+    flex-direction: ${({ hasInfo }: { hasInfo: boolean }) => hasInfo && 'row'};
     height: calc(100% - 285px);
 
-    ${({ hasInfo }) =>
+    ${({ hasInfo }: { hasInfo: boolean }) =>
       hasInfo &&
       `
         align-items: flex-start;
