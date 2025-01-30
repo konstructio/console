@@ -67,6 +67,7 @@ export interface AwsInstallValues {
   profile?: string;
   domainName?: string;
   isValid?: boolean;
+  amiType?: string;
 }
 
 export type AwsClusterValues = AwsInstallValues & ClusterValues & GitValues;
