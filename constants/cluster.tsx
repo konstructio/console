@@ -23,3 +23,12 @@ export const CLUSTER_CHECKS: { [key: string]: { label: string; order: number } }
   vault_terraform_apply_check: { label: 'Vault Terraform apply', order: 13 },
   users_terraform_apply_check: { label: 'Users Terraform apply', order: 14 },
 };
+
+export const AWS_AMI_TYPES = [
+  'AL2_x86_64',
+  'AL2_ARM_64',
+  'BOTTLEROCKET_ARM_64',
+  'BOTTLEROCKET_x86_64',
+  'BOTTLEROCKET_ARM_64_NVIDIA',
+  'BOTTLEROCKET_x86_64_NVIDIA',
+];

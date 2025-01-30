@@ -32,6 +32,7 @@ import { BISCAY } from '@/constants/colors';
 import ControlledNumberInput from '@/components/controlledFields/ControlledNumberInput/ControlledNumberInput';
 import { CLOUD_REGION_LABELS, CLUSTER_DOMAIN_LABELS } from '@/constants/installation';
 import ControlledSelect from '@/components/controlledFields/ControlledSelect';
+import { AWS_AMI_TYPES } from '@/constants/cluster';
 
 const SetupForm: FunctionComponent = () => {
   const [selectedRegion, setSelectedRegion] = useState<string>('');
@@ -213,6 +214,20 @@ const SetupForm: FunctionComponent = () => {
             label: zone,
             value: zone,
           }))}
+        />
+      )}
+      {installType === InstallationType.AWS && (
+        <ControlledAutocomplete
+          control={control}
+          name="amiType"
+          label="AMI type"
+          required
+          rules={{ required: true }}
+          options={AWS_AMI_TYPES.map((amiType) => ({
+            label: amiType,
+            value: amiType,
+          }))}
+          defaultValue={AWS_AMI_TYPES[0]}
         />
       )}
       <ControlledAutocomplete

@@ -48,6 +48,7 @@ export const createCluster = createAsyncThunk<
     type: ClusterType.MANAGEMENT,
     force_destroy: values?.forceDestroyTerraform,
     node_type: values?.instanceSize,
+    ami_type: values?.amiType,
     node_count: values?.nodeCount,
     azure_dns_zone_resource_group: values?.resourceGroup,
     git_auth: {
