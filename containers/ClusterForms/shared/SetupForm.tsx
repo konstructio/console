@@ -95,6 +95,9 @@ const SetupForm: FunctionComponent = () => {
   const handleRegionChange = useCallback(
     (region: string) => {
       setSelectedRegion(region);
+      if (installType == InstallationType.AWS) {
+        return;
+      }
       // if using google hold off on grabbing instances
       // since it requires the zone as well
 
@@ -110,6 +113,20 @@ const SetupForm: FunctionComponent = () => {
       }
     },
     [dispatch, installType, values],
+  );
+
+  const handleAmiTypeSelect = useCallback(
+    (amiType: string) => {
+      dispatch(
+        getInstanceSizes({
+          installType,
+          region: selectedRegion as string,
+          values,
+          amiType,
+        }),
+      );
+    },
+    [dispatch, installType, selectedRegion, values],
   );
 
   const handleZoneSelect = useCallback(
@@ -228,6 +245,7 @@ const SetupForm: FunctionComponent = () => {
             value: amiType,
           }))}
           defaultValue={AWS_AMI_TYPES[0]}
+          onChange={handleAmiTypeSelect}
         />
       )}
       <ControlledAutocomplete
