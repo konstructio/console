@@ -173,12 +173,18 @@ export const getCloudDomains = createAsyncThunk<
 
 export const getInstanceSizes = createAsyncThunk<
   string[],
-  { region: string; installType?: InstallationType; values?: InstallValues; zone?: string },
+  {
+    region: string;
+    installType?: InstallationType;
+    values?: InstallValues;
+    zone?: string;
+    amiType?: string;
+  },
   {
     dispatch: AppDispatch;
     state: RootState;
   }
->('api/getInstanceSizes', async ({ region, installType, values, zone }) => {
+>('api/getInstanceSizes', async ({ region, installType, values, zone, amiType }) => {
   const { instance_sizes } = (
     await axios.post<{ instance_sizes: string[] }>('/api/proxy', {
       url: `/instance-sizes/${installType}`,
@@ -186,6 +192,7 @@ export const getInstanceSizes = createAsyncThunk<
         ...values,
         cloud_region: region,
         cloud_zone: zone,
+        ami_type: amiType,
       },
     })
   ).data;
