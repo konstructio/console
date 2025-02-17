@@ -39,7 +39,22 @@ const nextConfig = {
   eslint: {
     // eslint will be executed before we run build
     ignoreDuringBuilds: true,
-  }
+  },
+  poweredByHeader: false,
+  headers: async () => {
+    return [
+      {
+        source: '/:path*',
+        headers: [
+          { key: 'Cache-Control', value: 'no-cache, no-store' },
+          { key: 'Content-Security-Policy', value: 'frame-ancestors \'none\'' },
+          { key: 'X-Content-Type-Options', value: 'nosniff' },
+          { key: 'X-Frame-Options', value: 'DENY' },
+          { key: 'Referrer-Policy', value: 'no-referrer' },
+        ],
+      },
+    ];
+  },
 };
 
 module.exports = nextConfig;
