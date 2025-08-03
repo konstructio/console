@@ -54,6 +54,7 @@ const TerminalLogs: FunctionComponent = () => {
   const [logs, setLogs] = useState<Array<string>>([]);
 
   const terminalRef = useRef(null);
+  const terminalInstanceRef = useRef<XTerminal>();
   const searchAddonRef = useRef<SearchAddon>();
   const dispatch = useAppDispatch();
   const {
@@ -72,6 +73,27 @@ const TerminalLogs: FunctionComponent = () => {
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setActiveTab(newValue);
+  };
+
+  const getTextToCopy = () => {
+    if (activeTab === TERMINAL_TABS.VERBOSE && terminalInstanceRef.current) {
+      // Get text from XTerminal buffer for verbose tab
+      const terminal = terminalInstanceRef.current;
+      const buffer = terminal.buffer.active;
+      let text = '';
+      
+      for (let i = 0; i < buffer.length; i++) {
+        const line = buffer.getLine(i);
+        if (line) {
+          text += line.translateToString(true) + '\n';
+        }
+      }
+      
+      return text.trim();
+    } else {
+      // Use logs array for concise tab
+      return logs.join('\n');
+    }
   };
 
   const loadAddons = useCallback((terminal: XTerminal) => {
@@ -103,6 +125,7 @@ const TerminalLogs: FunctionComponent = () => {
       loadAddons(terminal);
 
       terminal.open(terminalRef.current);
+      terminalInstanceRef.current = terminal;
 
       const eventSource = new EventSource(`/api/stream/${managementCluster?.logFile}`);
       eventSource.addEventListener('open', () => {
@@ -221,7 +244,7 @@ const TerminalLogs: FunctionComponent = () => {
           <Tooltip title="Help documentation" placement="top">
             <HelpOutlineIcon htmlColor={ECHO_BLUE} />
           </Tooltip>
-          <CopyToClipboard text={logs.join('\n')}>
+          <CopyToClipboard text={getTextToCopy()}>
             <Tooltip title="Copy" placement="top">
               <ContentCopyIcon htmlColor={ECHO_BLUE} />
             </Tooltip>
