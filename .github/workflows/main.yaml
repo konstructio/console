@@ -10,7 +10,6 @@ on:
   push:
     branches:
       - main
-      - copy # todo: remove
 jobs:
   publish:
     runs-on: self-hosted
