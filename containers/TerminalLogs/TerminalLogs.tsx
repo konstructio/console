@@ -127,58 +127,104 @@ const TerminalLogs: FunctionComponent = () => {
       terminal.open(terminalRef.current);
       terminalInstanceRef.current = terminal;
 
-      const eventSource = new EventSource(`/api/stream/${managementCluster?.logFile}`);
-      eventSource.addEventListener('open', () => {
-        // eslint-disable-next-line no-console
-        console.log('connection established');
-      });
-      eventSource.addEventListener('message', (e) => {
-        if (!e.data && !e.data.length) {
-          return terminal.writeln('');
-        }
+      let eventSource: EventSource | null = null;
+      let reconnectTimer: NodeJS.Timeout | null = null;
+      let reconnectAttempts = 0;
+      const maxReconnectAttempts = 10;
+      const reconnectDelay = 3000; // 3 seconds
 
-        const { isValid, value: log } = parseJSON(e.data);
+      const connectToStream = () => {
+        eventSource = new EventSource(`/api/stream/${managementCluster?.logFile}`);
+        
+        eventSource.addEventListener('open', () => {
+          // eslint-disable-next-line no-console
+          console.log('connection established');
+          reconnectAttempts = 0; // Reset attempts on successful connection
+          
+          // Clear any pending reconnect timer
+          if (reconnectTimer) {
+            clearTimeout(reconnectTimer);
+            reconnectTimer = null;
+          }
+        });
 
-        if (!isValid) {
-          return terminal.writeln(log);
-        }
-
-        if (log.message) {
-          const { message, level, time } = log;
-
-          const logLevel = level.toUpperCase();
-
-          const logStyle = logLevel.includes('ERR') ? brightRed : darkBlue;
-
-          const decodedMessage = message
-            .replace(UNSCAPE_STRING_REGEX, (match: string, hex: string) =>
-              String.fromCharCode(parseInt(hex, 16)),
-            )
-            .replaceAll('\x1B[1m', brightWhite);
-
-          let localTime = time;
-          if (moment(time).isValid()) {
-            const uctDate = moment.utc(time).toDate();
-            localTime = moment(uctDate).local().format('YYYY-MM-DD HH:mm:ss');
+        eventSource.addEventListener('message', (e) => {
+          if (!e.data && !e.data.length) {
+            return terminal.writeln('');
           }
 
-          terminal.writeln(
-            `${gray}${localTime} ${logStyle}${logLevel}:${brightWhite} ${decodedMessage}`,
-          );
+          const { isValid, value: log } = parseJSON(e.data);
 
-          setLogs((logs) => [...logs, `${localTime} ${level} ${decodedMessage} \n`]);
-        }
-      });
+          if (!isValid) {
+            return terminal.writeln(log);
+          }
 
-      eventSource.addEventListener('error', (e) => {
-        // eslint-disable-next-line   no-console
-        console.log('An error ocurred in the stream logs ', e);
-        eventSource.close();
-      });
+          if (log.message) {
+            const { message, level, time } = log;
+
+            const logLevel = level.toUpperCase();
+
+            const logStyle = logLevel.includes('ERR') ? brightRed : darkBlue;
+
+            const decodedMessage = message
+              .replace(UNSCAPE_STRING_REGEX, (match: string, hex: string) =>
+                String.fromCharCode(parseInt(hex, 16)),
+              )
+              .replaceAll('\x1B[1m', brightWhite);
+
+            let localTime = time;
+            if (moment(time).isValid()) {
+              const uctDate = moment.utc(time).toDate();
+              localTime = moment(uctDate).local().format('YYYY-MM-DD HH:mm:ss');
+            }
+
+            terminal.writeln(
+              `${gray}${localTime} ${logStyle}${logLevel}:${brightWhite} ${decodedMessage}`,
+            );
+
+            setLogs((logs) => [...logs, `${localTime} ${level} ${decodedMessage} \n`]);
+          }
+        });
+
+        eventSource.addEventListener('error', (e: Event) => {
+          // eslint-disable-next-line no-console
+          console.log('Stream connection error:', e);
+          
+          // Check if this is a custom error event from the server
+          if (e.type === 'error' && (e as MessageEvent).data) {
+            try {
+              const errorData = JSON.parse((e as MessageEvent).data);
+              terminal.writeln(`${brightRed}Stream error: ${errorData.error}${brightWhite}`);
+            } catch (parseError) {
+              // Ignore parse errors
+            }
+          }
+
+          eventSource?.close();
+
+          // Attempt to reconnect if we haven't exceeded max attempts
+          if (reconnectAttempts < maxReconnectAttempts) {
+            reconnectAttempts++;
+            terminal.writeln(`${gray}Connection lost. Reconnecting (attempt ${reconnectAttempts}/${maxReconnectAttempts})...${brightWhite}`);
+            
+            reconnectTimer = setTimeout(() => {
+              connectToStream();
+            }, reconnectDelay);
+          } else {
+            terminal.writeln(`${brightRed}Failed to reconnect after ${maxReconnectAttempts} attempts. Please refresh the page.${brightWhite}`);
+          }
+        });
+      };
+
+      // Initial connection
+      connectToStream();
 
       return () => {
+        if (reconnectTimer) {
+          clearTimeout(reconnectTimer);
+        }
+        eventSource?.close();
         terminal.dispose();
-        eventSource.close();
       };
     }
   }, [loadAddons, managementCluster?.logFile]);
