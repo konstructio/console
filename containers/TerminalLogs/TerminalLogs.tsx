@@ -1,11 +1,4 @@
-
-I'll add all my entire suggestion here for your convenience:
-
-✅ cheking attemps exists some error and the attemp count doesn't work, always show 1/10
-
-I just move the connectToStream outside the useEffect taking care of context and simplifying the use
-
- useEffect(() => {
+useEffect(() => {
     if (terminalRef.current && managementCluster?.logFile) {
       const terminal = new XTerminal({
         convertEol: true,
