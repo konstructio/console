@@ -1,3 +1,44 @@
+
+I'll add all my entire suggestion here for your convenience:
+
+✅ cheking attemps exists some error and the attemp count doesn't work, always show 1/10
+
+I just move the connectToStream outside the useEffect taking care of context and simplifying the use
+
+ useEffect(() => {
+    if (terminalRef.current && managementCluster?.logFile) {
+      const terminal = new XTerminal({
+        convertEol: true,
+        cols: 105,
+        disableStdin: true,
+        logLevel: 'off',
+        scrollback: 5000,
+        theme: {
+          foreground: 'white',
+          background: LIBERTY_BLUE,
+        },
+      });
+
+      loadAddons(terminal);
+      terminal.open(terminalRef.current);
+      terminalInstanceRef.current = terminal;
+
+      setLogs([]);
+
+      const cleanup = connectToStream({
+        terminal,
+        logFile: managementCluster.logFile,
+        setLogs,
+      });
+
+      return () => {
+        cleanup();
+        terminal.dispose();
+      };
+    }
+CleanShot 2025-08-07 at 00 16 49
+All code here ☟
+
 import React, {
   ChangeEvent,
   FunctionComponent,
@@ -48,6 +89,125 @@ enum TERMINAL_TABS {
   VERBOSE = 1,
 }
 
+function connectToStream({
+  terminal,
+  logFile,
+  setLogs,
+  maxReconnectAttempts = 10,
+  reconnectDelay = 3000,
+}: {
+  terminal: XTerminal;
+  logFile: string;
+  setLogs: React.Dispatch<React.SetStateAction<string[]>>;
+  maxReconnectAttempts?: number;
+  reconnectDelay?: number;
+}) {
+  let eventSource: EventSource | null = null;
+  let reconnectTimer: NodeJS.Timeout | null = null;
+  let reconnectAttempts = 0;
+  let isInitialConnection = true;
+  let hasReceivedData = false;
+
+  const connect = () => {
+    if (eventSource) {
+      eventSource.close();
+    }
+
+    terminal.writeln(`${gray}Connecting to stream...${brightWhite}`);
+    eventSource = new EventSource(`/api/stream/${logFile}`);
+    hasReceivedData = false;
+
+    eventSource.addEventListener('open', () => {
+      if (isInitialConnection) {
+        terminal.writeln(`${gray}Stream connected.${brightWhite}`);
+        isInitialConnection = false;
+      }
+      if (reconnectTimer) {
+        clearTimeout(reconnectTimer);
+      }
+    });
+
+    eventSource.addEventListener('message', (e) => {
+      if (!hasReceivedData && reconnectAttempts > 0) {
+        terminal.writeln(`${gray}Connection restored successfully.${brightWhite}`);
+        reconnectAttempts = 0;
+      }
+      hasReceivedData = true;
+
+      const { isValid, value: log } = parseJSON(e.data);
+      if (!isValid) {
+        return terminal.writeln(log);
+      }
+
+      if (log.message) {
+        const { message, level, time } = log;
+        const logLevel = level.toUpperCase();
+        const logStyle = logLevel.includes('ERR') ? brightRed : darkBlue;
+
+        const decodedMessage = message
+          .replace(UNSCAPE_STRING_REGEX, (_: never, hex: string) =>
+            String.fromCharCode(parseInt(hex, 16)),
+          )
+          .replaceAll('\x1B[1m', brightWhite);
+
+        let localTime = time;
+        if (moment(time).isValid()) {
+          localTime = moment.utc(time).local().format('YYYY-MM-DD HH:mm:ss');
+        }
+
+        terminal.writeln(
+          `${gray}${localTime} ${logStyle}${logLevel}:${brightWhite} ${decodedMessage}`,
+        );
+        setLogs((prev) => [...prev, `${localTime} ${level} ${decodedMessage} \n`]);
+      }
+    });
+
+    eventSource.addEventListener('error', (e: Event) => {
+      if (eventSource) {
+        eventSource.close();
+        eventSource = null;
+      }
+      if (reconnectTimer) {
+        clearTimeout(reconnectTimer);
+        reconnectTimer = null;
+      }
+
+      if (e.type === 'error' && (e as MessageEvent).data) {
+        try {
+          const errorData = JSON.parse((e as MessageEvent).data);
+          terminal.writeln(`${brightRed}Stream error: ${errorData.error}${brightWhite}`);
+        } catch {
+          // Ignore parse errors
+        }
+      }
+
+      if (reconnectAttempts < maxReconnectAttempts) {
+        reconnectAttempts++;
+        terminal.writeln(
+          `${gray}Connection lost. Reconnecting (attempt ${reconnectAttempts}/${maxReconnectAttempts})...${brightWhite}`,
+        );
+
+        reconnectTimer = setTimeout(connect, reconnectDelay);
+      } else {
+        terminal.writeln(
+          `${brightRed}Failed to reconnect after ${maxReconnectAttempts} attempts. Please refresh the page.${brightWhite}`,
+        );
+      }
+    });
+  };
+
+  connect();
+
+  return () => {
+    if (reconnectTimer) {
+      clearTimeout(reconnectTimer);
+    }
+    if (eventSource) {
+      eventSource.close();
+    }
+  };
+}
+
 const TerminalLogs: FunctionComponent = () => {
   const [activeTab, setActiveTab] = useState<number>(0);
   const [searchTerm, setSearchTerm] = useState<string>('');
@@ -81,14 +241,14 @@ const TerminalLogs: FunctionComponent = () => {
       const terminal = terminalInstanceRef.current;
       const buffer = terminal.buffer.active;
       let text = '';
-      
+
       for (let i = 0; i < buffer.length; i++) {
         const line = buffer.getLine(i);
         if (line) {
-          text += line.translateToString(true) + '\n';
+          text += `${line.translateToString(true)}\n`;
         }
       }
-      
+
       return text.trim();
     } else {
       // Use logs array for concise tab
@@ -123,107 +283,19 @@ const TerminalLogs: FunctionComponent = () => {
       });
 
       loadAddons(terminal);
-
       terminal.open(terminalRef.current);
       terminalInstanceRef.current = terminal;
 
-      let eventSource: EventSource | null = null;
-      let reconnectTimer: NodeJS.Timeout | null = null;
-      let reconnectAttempts = 0;
-      const maxReconnectAttempts = 10;
-      const reconnectDelay = 3000; // 3 seconds
+      setLogs([]);
 
-      const connectToStream = () => {
-        eventSource = new EventSource(`/api/stream/${managementCluster?.logFile}`);
-        
-        eventSource.addEventListener('open', () => {
-          // eslint-disable-next-line no-console
-          console.log('connection established');
-          reconnectAttempts = 0; // Reset attempts on successful connection
-          
-          // Clear any pending reconnect timer
-          if (reconnectTimer) {
-            clearTimeout(reconnectTimer);
-            reconnectTimer = null;
-          }
-        });
-
-        eventSource.addEventListener('message', (e) => {
-          if (!e.data && !e.data.length) {
-            return terminal.writeln('');
-          }
-
-          const { isValid, value: log } = parseJSON(e.data);
-
-          if (!isValid) {
-            return terminal.writeln(log);
-          }
-
-          if (log.message) {
-            const { message, level, time } = log;
-
-            const logLevel = level.toUpperCase();
-
-            const logStyle = logLevel.includes('ERR') ? brightRed : darkBlue;
-
-            const decodedMessage = message
-              .replace(UNSCAPE_STRING_REGEX, (match: string, hex: string) =>
-                String.fromCharCode(parseInt(hex, 16)),
-              )
-              .replaceAll('\x1B[1m', brightWhite);
-
-            let localTime = time;
-            if (moment(time).isValid()) {
-              const uctDate = moment.utc(time).toDate();
-              localTime = moment(uctDate).local().format('YYYY-MM-DD HH:mm:ss');
-            }
-
-            terminal.writeln(
-              `${gray}${localTime} ${logStyle}${logLevel}:${brightWhite} ${decodedMessage}`,
-            );
-
-            setLogs((logs) => [...logs, `${localTime} ${level} ${decodedMessage} \n`]);
-          }
-        });
-
-        eventSource.addEventListener('error', (e: Event) => {
-          // eslint-disable-next-line no-console
-          console.log('Stream connection error:', e);
-          
-          // Check if this is a custom error event from the server
-          if (e.type === 'error' && (e as MessageEvent).data) {
-            try {
-              const errorData = JSON.parse((e as MessageEvent).data);
-              terminal.writeln(`${brightRed}Stream error: ${errorData.error}${brightWhite}`);
-            } catch (parseError) {
-              // Ignore parse errors
-            }
-          }
-
-          eventSource?.close();
-
-          // Attempt to reconnect if we haven't exceeded max attempts
-          if (reconnectAttempts < maxReconnectAttempts) {
-            reconnectAttempts++;
-            terminal.writeln(`${gray}Connection lost. Reconnecting (attempt ${reconnectAttempts}/${maxReconnectAttempts})...${brightWhite}`);
-            
-            reconnectTimer = setTimeout(() => {
-              connectToStream();
-            }, reconnectDelay);
-          } else {
-            terminal.writeln(`${brightRed}Failed to reconnect after ${maxReconnectAttempts} attempts. Please refresh the page.${brightWhite}`);
-          }
-        });
-      };
-
-      // Initial connection
-      connectToStream();
+      const cleanup = connectToStream({
+        terminal,
+        logFile: managementCluster.logFile,
+        setLogs,
+      });
 
       return () => {
-        if (reconnectTimer) {
-          clearTimeout(reconnectTimer);
-        }
-        eventSource?.close();
+        cleanup();
         terminal.dispose();
       };
     }
