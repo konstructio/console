@@ -48,6 +48,125 @@ enum TERMINAL_TABS {
   VERBOSE = 1,
 }
 
+function connectToStream({
+  terminal,
+  logFile,
+  setLogs,
+  maxReconnectAttempts = 10,
+  reconnectDelay = 3000,
+}: {
+  terminal: XTerminal;
+  logFile: string;
+  setLogs: React.Dispatch<React.SetStateAction<string[]>>;
+  maxReconnectAttempts?: number;
+  reconnectDelay?: number;
+}) {
+  let eventSource: EventSource | null = null;
+  let reconnectTimer: NodeJS.Timeout | null = null;
+  let reconnectAttempts = 0;
+  let isInitialConnection = true;
+  let hasReceivedData = false;
+
+  const connect = () => {
+    if (eventSource) {
+      eventSource.close();
+    }
+
+    terminal.writeln(`${gray}Connecting to stream...${brightWhite}`);
+    eventSource = new EventSource(`/api/stream/${logFile}`);
+    hasReceivedData = false;
+
+    eventSource.addEventListener('open', () => {
+      if (isInitialConnection) {
+        terminal.writeln(`${gray}Stream connected.${brightWhite}`);
+        isInitialConnection = false;
+      }
+      if (reconnectTimer) {
+        clearTimeout(reconnectTimer);
+      }
+    });
+
+    eventSource.addEventListener('message', (e) => {
+      if (!hasReceivedData && reconnectAttempts > 0) {
+        terminal.writeln(`${gray}Connection restored successfully.${brightWhite}`);
+        reconnectAttempts = 0;
+      }
+      hasReceivedData = true;
+
+      const { isValid, value: log } = parseJSON(e.data);
+      if (!isValid) {
+        return terminal.writeln(log);
+      }
+
+      if (log.message) {
+        const { message, level, time } = log;
+        const logLevel = level.toUpperCase();
+        const logStyle = logLevel.includes('ERR') ? brightRed : darkBlue;
+
+        const decodedMessage = message
+          .replace(UNSCAPE_STRING_REGEX, (_: never, hex: string) =>
+            String.fromCharCode(parseInt(hex, 16)),
+          )
+          .replaceAll('\x1B[1m', brightWhite);
+
+        let localTime = time;
+        if (moment(time).isValid()) {
+          localTime = moment.utc(time).local().format('YYYY-MM-DD HH:mm:ss');
+        }
+
+        terminal.writeln(
+          `${gray}${localTime} ${logStyle}${logLevel}:${brightWhite} ${decodedMessage}`,
+        );
+        setLogs((prev) => [...prev, `${localTime} ${level} ${decodedMessage} \n`]);
+      }
+    });
+
+    eventSource.addEventListener('error', (e: Event) => {
+      if (eventSource) {
+        eventSource.close();
+        eventSource = null;
+      }
+      if (reconnectTimer) {
+        clearTimeout(reconnectTimer);
+        reconnectTimer = null;
+      }
+
+      if (e.type === 'error' && (e as MessageEvent).data) {
+        try {
+          const errorData = JSON.parse((e as MessageEvent).data);
+          terminal.writeln(`${brightRed}Stream error: ${errorData.error}${brightWhite}`);
+        } catch {
+          // Ignore parse errors
+        }
+      }
+
+      if (reconnectAttempts < maxReconnectAttempts) {
+        reconnectAttempts++;
+        terminal.writeln(
+          `${gray}Connection lost. Reconnecting (attempt ${reconnectAttempts}/${maxReconnectAttempts})...${brightWhite}`,
+        );
+
+        reconnectTimer = setTimeout(connect, reconnectDelay);
+      } else {
+        terminal.writeln(
+          `${brightRed}Failed to reconnect after ${maxReconnectAttempts} attempts. Please refresh the page.${brightWhite}`,
+        );
+      }
+    });
+  };
+
+  connect();
+
+  return () => {
+    if (reconnectTimer) {
+      clearTimeout(reconnectTimer);
+    }
+    if (eventSource) {
+      eventSource.close();
+    }
+  };
+}
+
 const TerminalLogs: FunctionComponent = () => {
   const [activeTab, setActiveTab] = useState<number>(0);
   const [searchTerm, setSearchTerm] = useState<string>('');
@@ -81,14 +200,14 @@ const TerminalLogs: FunctionComponent = () => {
       const terminal = terminalInstanceRef.current;
       const buffer = terminal.buffer.active;
       let text = '';
-      
+
       for (let i = 0; i < buffer.length; i++) {
         const line = buffer.getLine(i);
         if (line) {
-          text += line.translateToString(true) + '\n';
+          text += `${line.translateToString(true)}\n`;
         }
       }
-      
+
       return text.trim();
     } else {
       // Use logs array for concise tab
@@ -123,62 +242,20 @@ const TerminalLogs: FunctionComponent = () => {
       });
 
       loadAddons(terminal);
-
       terminal.open(terminalRef.current);
       terminalInstanceRef.current = terminal;
 
-      const eventSource = new EventSource(`/api/stream/${managementCluster?.logFile}`);
-      eventSource.addEventListener('open', () => {
-        // eslint-disable-next-line no-console
-        console.log('connection established');
-      });
-      eventSource.addEventListener('message', (e) => {
-        if (!e.data && !e.data.length) {
-          return terminal.writeln('');
-        }
+      setLogs([]);
 
-        const { isValid, value: log } = parseJSON(e.data);
-
-        if (!isValid) {
-          return terminal.writeln(log);
-        }
-
-        if (log.message) {
-          const { message, level, time } = log;
-
-          const logLevel = level.toUpperCase();
-
-          const logStyle = logLevel.includes('ERR') ? brightRed : darkBlue;
-
-          const decodedMessage = message
-            .replace(UNSCAPE_STRING_REGEX, (match: string, hex: string) =>
-              String.fromCharCode(parseInt(hex, 16)),
-            )
-            .replaceAll('\x1B[1m', brightWhite);
-
-          let localTime = time;
-          if (moment(time).isValid()) {
-            const uctDate = moment.utc(time).toDate();
-            localTime = moment(uctDate).local().format('YYYY-MM-DD HH:mm:ss');
-          }
-
-          terminal.writeln(
-            `${gray}${localTime} ${logStyle}${logLevel}:${brightWhite} ${decodedMessage}`,
-          );
-
-          setLogs((logs) => [...logs, `${localTime} ${level} ${decodedMessage} \n`]);
-        }
-      });
-
-      eventSource.addEventListener('error', (e) => {
-        // eslint-disable-next-line   no-console
-        console.log('An error ocurred in the stream logs ', e);
-        eventSource.close();
+      const cleanup = connectToStream({
+        terminal,
+        logFile: managementCluster.logFile,
+        setLogs,
       });
 
       return () => {
+        cleanup();
         terminal.dispose();
-        eventSource.close();
       };
     }
   }, [loadAddons, managementCluster?.logFile]);
