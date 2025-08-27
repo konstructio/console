@@ -1,37 +1,3 @@
-useEffect(() => {
-    if (terminalRef.current && managementCluster?.logFile) {
-      const terminal = new XTerminal({
-        convertEol: true,
-        cols: 105,
-        disableStdin: true,
-        logLevel: 'off',
-        scrollback: 5000,
-        theme: {
-          foreground: 'white',
-          background: LIBERTY_BLUE,
-        },
-      });
-
-      loadAddons(terminal);
-      terminal.open(terminalRef.current);
-      terminalInstanceRef.current = terminal;
-
-      setLogs([]);
-
-      const cleanup = connectToStream({
-        terminal,
-        logFile: managementCluster.logFile,
-        setLogs,
-      });
-
-      return () => {
-        cleanup();
-        terminal.dispose();
-      };
-    }
-CleanShot 2025-08-07 at 00 16 49
-All code here ☟
-
 import React, {
   ChangeEvent,
   FunctionComponent,
