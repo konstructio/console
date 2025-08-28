@@ -41,15 +41,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     });
     
     eventSource.addEventListener('message', (e: MessageEvent) => {
-      try {
-        const { message } = JSON.parse(e.data);
-        res.write(`data: ${message}\n\n`);
-      } catch (parseError) {
-        // eslint-disable-next-line no-console
-        console.error('Error parsing message:', parseError);
-        // Send raw data if JSON parsing fails
-        res.write(`data: ${e.data}\n\n`);
-      }
+      // The backend sends raw log lines, not JSON objects
+      // We need to wrap them in a JSON structure that the frontend expects
+      const logData = JSON.stringify({ message: e.data });
+      res.write(`data: ${logData}\n\n`);
     });
 
     eventSource.addEventListener('error', (e: Event) => {
