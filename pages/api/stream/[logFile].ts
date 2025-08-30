@@ -41,10 +41,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     });
     
     eventSource.addEventListener('message', (e: MessageEvent) => {
-      // The backend sends raw log lines, not JSON objects
-      // We need to wrap them in a JSON structure that the frontend expects
-      const logData = JSON.stringify({ message: e.data });
-      res.write(`data: ${logData}\n\n`);
+      const { message } = JSON.parse(e.data);
+      res.write(`data: ${message}\n\n`);
     });
 
     eventSource.addEventListener('error', (e: Event) => {
