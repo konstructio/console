@@ -10,6 +10,7 @@ on:
   push:
     branches:
       - main
+      - liveness-stall # todo: remove before merge
 jobs:
   publish:
     runs-on: self-hosted
